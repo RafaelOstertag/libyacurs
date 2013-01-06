@@ -51,7 +51,7 @@ int main() {
     try {
 	AlrmHandler ahandler;
 
-	EventQueue::registerHandler(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
 
 	Curses::init();
 	alarm(4);

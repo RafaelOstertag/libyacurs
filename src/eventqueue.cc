@@ -34,6 +34,7 @@ struct sigaction EventQueue::old_alrm_act;
 bool EventQueue::signal_blocked = false;
 
 std::queue<EventBase*> EventQueue::evt_queue;
+std::queue<EventConnectorBase*> EventQueue::evtconn_rem_request;
 std::list<EventConnectorBase*> EventQueue::evtconn_list;
 
 //
@@ -229,41 +230,38 @@ EventQueue::unblocksignal() {
 #endif // defined(SIGWINCH) || defined(SIGALRM)
 }
 
+void
+EventQueue::proc_rem_request() {
+    while(!evtconn_rem_request.empty()) {
+
+	EventConnectorBase* ecb = evtconn_rem_request.front();
+
+	std::list<EventConnectorBase*>::iterator it =
+	    std::find_if(evtconn_list.begin(),
+			 evtconn_list.end(),
+			 EventConnectorEqual(*ecb));
+
+	delete ecb;
+	evtconn_rem_request.pop();
+
+	if (it == evtconn_list.end()) continue;
+
+	delete *it;
+	evtconn_list.erase(it);
+    }
+}
+
 //
 // Public
 //
 void
-EventQueue::registerHandler(const EventConnectorBase& ec) {
+EventQueue::connectEvent(const EventConnectorBase& ec) {
     evtconn_list.push_front(ec.clone());
 }
 
 void
-EventQueue::unregisterHandler(const EventConnectorBase& ec) {
-    std::list<EventConnectorBase*>::iterator it = 
-	std::find_if(evtconn_list.begin(),
-		  evtconn_list.end(),
-		  EventConnectorEqual(ec));
-
-    if (it == evtconn_list.end()) return;
-
-    delete *it;
-    evtconn_list.erase(it);
-    
-#if 0
-    // get the elements to be erased
-    std::list<EventConnectorBase*>::iterator it = 
-	std::remove_if(evtconn_list.begin(),
-		       evtconn_list.end(),
-		       EventConnectorEqual(ec));
-
-    // free the space occuppied
-    std::for_each(it,
-		  evtconn_list.end(),
-		  DestroyEventConnector());
-
-    // get rid of the element
-    evtconn_list.erase(it, evtconn_list.end());
-#endif
+EventQueue::disconnectEvent(const EventConnectorBase& ec) {
+    evtconn_rem_request.push(ec.clone());
 }
 
 void
@@ -299,21 +297,29 @@ EventQueue::run() {
 	    inject(EventKey(c));
 
 	blocksignal();
+
+	// process any pending EventConnector removal requests
+	proc_rem_request();
+
 	while(!evt_queue.empty()) {
 
 	    EventBase* evt = evt_queue.front();
-	    
+
 	    if (evt->type() == EVT_QUIT) {
 		unblocksignal();
 		goto QUIT;
 	    }
-	    
+
 	    std::for_each(evtconn_list.begin(),
 			  evtconn_list.end(),
 			  CallEventConnector(*evt));
 	    delete evt;
 	    evt_queue.pop();
 	}
+
+	// process any pending EventConnector removal requests
+	proc_rem_request();
+
 	unblocksignal();
 
     }

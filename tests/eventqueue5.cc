@@ -1,6 +1,6 @@
-// $Id$
+// $Id: eventqueue4.cc 4606 2013-01-06 11:36:38Z rafisol $
 //
-// Test several handler for event
+// Test handler disconnect when in handler.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -61,6 +61,7 @@ class AlrmHandler2: public AlrmHandler {
     public:
 	inline AlrmHandler2(): AlrmHandler() {}
 	inline int handler(EventBase& e) {
+	    EventQueue::disconnectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, this, &AlrmHandler2::handler));
 	    return Handler::handler(e);
 	}
 };
@@ -72,13 +73,13 @@ int main() {
 	AlrmHandler2 ahandler2_1;
 	AlrmHandler2 ahandler2_2;
 	AlrmHandler2 ahandler2_3;
-	AlrmHandler2 ahandler2_4;
 
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_1,&AlrmHandler2::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2,&AlrmHandler2::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_3,&AlrmHandler2::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_4,&AlrmHandler2::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_1, &AlrmHandler2::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_3, &AlrmHandler2::handler) );
+
+	EventQueue::disconnectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler) );
 
 	Curses::init();
 	alarm(4);
@@ -86,13 +87,11 @@ int main() {
 
 	if (ahandler.getCalls() != 4)
 	    goto _ERR;
-	if (ahandler2_1.getCalls() != 4)
+	if (ahandler2_1.getCalls() != 1)
 	    goto _ERR;
-	if (ahandler2_2.getCalls() != 4)
+	if (ahandler2_2.getCalls() != 0)
 	    goto _ERR;
-	if (ahandler2_3.getCalls() != 4)
-	    goto _ERR;
-	if (ahandler2_4.getCalls() != 4)
+	if (ahandler2_3.getCalls() != 1)
 	    goto _ERR;
 	Curses::end();
     } catch (std::exception& e) {

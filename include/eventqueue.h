@@ -40,6 +40,11 @@ class EventQueue {
 #endif // defined(SIGWINCH) || defined(SIGALRM)
 	static bool signal_blocked;
 	static std::queue<EventBase*> evt_queue;
+	/**
+	 * EventConnectors are not removed immediately, instead remove
+	 * requests are queue up for processing later.
+	 */
+	static std::queue<EventConnectorBase*> evtconn_rem_request;
 	static std::list<EventConnectorBase*> evtconn_list;
 
 	static void setupSignal();
@@ -53,10 +58,11 @@ class EventQueue {
 
 	static void blocksignal();
 	static void unblocksignal();
+	static void proc_rem_request();
 
     public:
-	static void registerHandler(const EventConnectorBase& ec);
-	static void unregisterHandler(const EventConnectorBase& ec);
+	static void connectEvent(const EventConnectorBase& ec);
+	static void disconnectEvent(const EventConnectorBase& ec);
 	static void inject(const EventBase& ev);
 	static void run();
 };

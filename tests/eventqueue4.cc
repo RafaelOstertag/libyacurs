@@ -21,16 +21,31 @@
 #include "eventconnector.h"
 #include "eventqueue.h"
 
-class AlrmHandler {
+class Handler {
     private:
 	EVENT_TYPE expected_evt;
 	int calls;
-
     public:
-	inline AlrmHandler(): expected_evt(EVT_ALARM), calls(0) {}
-	inline int handler(EventBase& e) {
+	inline Handler(EVENT_TYPE evt):
+	    expected_evt(evt), calls(0) {}
+	inline Handler(const Handler& _h) {
+	    expected_evt = _h.expected_evt;
+	    calls = _h.calls;
+	}
+	inline virtual ~Handler() {}
+	inline virtual int handler(EventBase& e) {
 	    if (e.type() != expected_evt) std::abort();
 	    calls++;
+	    return 0;
+	}
+	inline int getCalls() { return calls; }
+};
+
+class AlrmHandler: public Handler {
+    public:
+	inline AlrmHandler(): Handler(EVT_ALARM) {}
+	inline int handler(EventBase& e) {
+	    Handler::handler(e);
 	    if (getCalls() < 4) {
 		std::cout << "alarm(1)" << std::endl;
 		alarm(1);
@@ -40,22 +55,14 @@ class AlrmHandler {
 	    EventQueue::inject(EventBase(EVT_QUIT));
 	    return 0;
 	}
-	inline int getCalls() { return calls; }
 };
 
-class AlrmHandler2 {
-    private:
-	EVENT_TYPE expected_evt;
-	int calls;
-
+class AlrmHandler2: public AlrmHandler {
     public:
-	inline AlrmHandler2(): expected_evt(EVT_ALARM), calls(0) {}
+	inline AlrmHandler2(): AlrmHandler() {}
 	inline int handler(EventBase& e) {
-	    if (e.type() != expected_evt) std::abort();
-	    calls++;
-	    return 0;
+	    return Handler::handler(e);
 	}
-	inline int getCalls() { return calls; }
 };
 
 int main() {
@@ -66,12 +73,12 @@ int main() {
 	AlrmHandler2 ahandler2_2;
 	AlrmHandler2 ahandler2_3;
 
-	EventQueue::registerHandler(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
-	EventQueue::registerHandler(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_1, &AlrmHandler2::handler) );
-	EventQueue::registerHandler(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler) );
-	EventQueue::registerHandler(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_3, &AlrmHandler2::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_1, &AlrmHandler2::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_3, &AlrmHandler2::handler) );
 
-	EventQueue::unregisterHandler(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler) );
+	EventQueue::disconnectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler) );
 
 	Curses::init();
 	alarm(4);

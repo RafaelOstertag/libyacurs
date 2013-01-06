@@ -66,7 +66,7 @@ Curses::init() {
 
     scrdim = inquiryScreenSize();
 
-    EventQueue::registerHandler(EventConnectorFunction1(EVT_WINCH, resize));
+    EventQueue::connectEvent(EventConnectorFunction1(EVT_WINCH, resize));
 
     int retval;
 #if !(defined(_XOPEN_CURSES) || defined(NCURSES_VERSION))

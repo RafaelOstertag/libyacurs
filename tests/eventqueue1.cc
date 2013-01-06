@@ -57,8 +57,8 @@ int main() {
 	WinChHandler whandler;
 	WinAlrmHandler ahandler;
 
-	EventQueue::registerHandler(EventConnectorMethod1<WinChHandler>(EVT_WINCH, &whandler,&WinChHandler::handler) );
-	EventQueue::registerHandler(EventConnectorMethod1<WinAlrmHandler>(EVT_ALARM, &ahandler,&WinAlrmHandler::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<WinChHandler>(EVT_WINCH, &whandler,&WinChHandler::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<WinAlrmHandler>(EVT_ALARM, &ahandler,&WinAlrmHandler::handler) );
 
 	EventQueue::inject(EventWinCh(Rectangle<> ()));
 	EventQueue::inject(EventBase(EVT_ALARM));

@@ -71,6 +71,8 @@ class EventConnectorMethod1: public EventConnectorBase {
 	    assert( __obj_ptr != NULL );
 	    if (typeid(eb) == typeid(EventConnectorMethod1<T>)) {
 		EventConnectorMethod1<T> tmp(dynamic_cast<const EventConnectorMethod1<T>& >(eb));
+		assert(tmp.__func != NULL);
+		assert(tmp.__obj_ptr != NULL);
 		return tmp.__func == __func && tmp.__obj_ptr == __obj_ptr;
 	    }
 	    return false;
@@ -84,10 +86,13 @@ class EventConnectorMethod1: public EventConnectorBase {
 						  __obj_ptr(_obj_ptr) {
 	    assert(__func != NULL);
 	    assert(__obj_ptr != NULL);
-}
+	}
 	EventConnectorMethod1(const EventConnectorMethod1<T>& _ec): EventConnectorBase(_ec),
 								    __func(_ec.__func),
-								    __obj_ptr(_ec.__obj_ptr) {}
+								    __obj_ptr(_ec.__obj_ptr) {
+	    assert(__func != NULL);
+	    assert(__obj_ptr != NULL);
+	}
 	EventConnectorMethod1<T>& operator=(const EventConnectorMethod1<T>& _ec) {
 	    EventConnectorBase::operator=(_ec);
 	    __func = _ec.__func;
@@ -116,6 +121,7 @@ class EventConnectorFunction1: public EventConnectorBase {
 	    assert(__func != NULL);
 	    if (typeid(eb) == typeid(EventConnectorFunction1)) {
 		EventConnectorFunction1 tmp(dynamic_cast<const EventConnectorFunction1&>(eb));
+		assert(tmp.__func != NULL);
 		return tmp.__func == __func;
 	    }
 	    return false;

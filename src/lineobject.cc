@@ -4,7 +4,7 @@
 #include "config.h"
 #endif
 
-#include "curex.h"
+#include "cursex.h"
 #include "lineobject.h"
 
 //
@@ -95,3 +95,6 @@ LineObject::setLine(const std::string& _str) {
     line = _str;
     putLine();
 }
+
+std::string 
+LineObject::getLine() const { return line; }

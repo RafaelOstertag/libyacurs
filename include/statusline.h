@@ -22,8 +22,8 @@ class StatusLine: public LineObject {
 	void putTopMsg();
 
     public:
-	inline StatusLine() : LineObject(POS_BOTTOM, NULL) {}
-	inline StatusLine(const StatusLine& sl) : LineObject(sl) {}
+	StatusLine();
+	StatusLine(const StatusLine& sl);
 	void pushMsg(const std::string& m);
 	void popMsg();
 };

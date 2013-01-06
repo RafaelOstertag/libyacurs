@@ -24,7 +24,7 @@
 #include <algorithm>
 #endif // HAVE_ALGORITHM
 
-#include "curex.h"
+#include "cursex.h"
 #include "eventqueue.h"
 #include "curs.h"
 

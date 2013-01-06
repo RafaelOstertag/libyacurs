@@ -9,6 +9,10 @@
 #include "config.h"
 #endif
 
+#ifdef HAVE_CSTDLIB
+#include <cstdlib>
+#endif // HAVE_CSTDLIB
+
 #ifdef HAVE_CASSERT
 #include <cassert>
 #endif // HAVE_CASSERT
@@ -30,36 +34,24 @@ class EventConnectorBase {
 
     protected:
 	virtual bool compare(const EventConnectorBase& ) const = 0;
-	inline void setSuspended(bool _s) { suspended = _s; }
+	void setSuspended(bool _s);
 
     public:
-	inline EventConnectorBase(EVENT_TYPE _e, bool _s = false): evt(_e), suspended(_s) {}
-	inline EventConnectorBase(const EventConnectorBase& _ec) {
-	    evt = _ec.evt;
-	    suspended = _ec.suspended;
-	}
-	inline virtual ~EventConnectorBase() {}
-	inline EventConnectorBase& operator=(const EventConnectorBase& _ec) {
-	    evt = _ec.evt;
-	    suspended = _ec.suspended;
-	    return *this;
-	}
-	inline bool operator==(const EventConnectorBase& _ec) const {
-	    return evt == _ec.evt && this->compare(_ec);
-	}
-	inline bool operator!=(const EventConnectorBase& _ec) const {
-	    return !operator==(_ec);
-	}
-	inline bool operator==(const EventBase& _eb) const {
-	    return _eb.type() == evt;
-	}
-	inline bool operator!=(const EventBase& _eb) const {
-	    return !operator==(_eb);
-	}
-	inline EVENT_TYPE type() const { return evt; }
-	inline bool isSuspended() const { return suspended; }
-	inline void suspend() { setSuspended(true); }
-	inline void unsuspend() { setSuspended(false); }
+	EventConnectorBase(EVENT_TYPE _e, bool _s = false);
+	EventConnectorBase(const EventConnectorBase& _ec);
+	virtual ~EventConnectorBase() {}
+
+	EventConnectorBase& operator=(const EventConnectorBase& _ec);
+	bool operator==(const EventConnectorBase& _ec) const;
+	bool operator!=(const EventConnectorBase& _ec) const;
+	bool operator==(const EventBase& _eb) const;
+	bool operator!=(const EventBase& _eb) const;
+
+	EVENT_TYPE type() const;
+	bool isSuspended() const;
+	void suspend();
+	void unsuspend();
+
 	virtual int call(EventBase&) const = 0;
 	virtual EventConnectorBase* clone() const = 0;
 };
@@ -122,45 +114,20 @@ class EventConnectorMethod1: public EventConnectorBase {
 };
 
 class EventConnectorFunction1: public EventConnectorBase {
+    public:
 	typedef int (*fptr_t)(EventBase&);
     private:
 	fptr_t __func;
 
     protected:
-	bool compare(const EventConnectorBase& eb) const {
-	    assert(__func != NULL);
-	    if (typeid(eb) == typeid(EventConnectorFunction1)) {
-		EventConnectorFunction1 tmp(dynamic_cast<const EventConnectorFunction1&>(eb));
-		assert(tmp.__func != NULL);
-		return tmp.__func == __func;
-	    }
-	    return false;
-	}
+	bool compare(const EventConnectorBase& eb) const;
 
     public:
-	EventConnectorFunction1(EVENT_TYPE _e, fptr_t _func):
-	    EventConnectorBase(_e), __func(_func) {
-	    assert(__func != NULL);
-	}
-	EventConnectorFunction1(const EventConnectorFunction1& _ec):
-	    EventConnectorBase(_ec) {
-	    __func = _ec.__func;
-	    assert(__func != NULL);
-	}
-	EventConnectorFunction1& operator=(const EventConnectorFunction1& _ec) {
-	    EventConnectorBase::operator=(_ec);
-	    __func = _ec.__func;
-	    assert(__func != NULL);
-	    return *this;
-	}
-	int call(EventBase& _a) const {
-	    assert(__func != NULL);
-	    if (isSuspended()) return -1;
-	    return __func(_a);
-	}
-	EventConnectorBase* clone() const {
-	    return new EventConnectorFunction1(*this);
-	}
+	EventConnectorFunction1(EVENT_TYPE _e, fptr_t _func);
+	EventConnectorFunction1(const EventConnectorFunction1& _ec);
+	EventConnectorFunction1& operator=(const EventConnectorFunction1& _ec);
+	int call(EventBase& _a) const;
+	EventConnectorBase* clone() const;
 };
 
 #endif // EVENTCONNECTOR_H

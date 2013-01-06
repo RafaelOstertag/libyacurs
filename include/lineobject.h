@@ -47,7 +47,7 @@ class LineObject: public ScreenObject {
 	void realize(const Rectangle<>& r);
 
 	void setLine(const std::string& _str);
-	inline std::string getLine() const { return line; }
+	std::string getLine() const;
 };
 
 #endif // LINEOBJECT_H

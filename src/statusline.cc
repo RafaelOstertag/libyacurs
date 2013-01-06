@@ -5,7 +5,7 @@
 #endif
 
 #include "curs.h"
-#include "curex.h"
+#include "cursex.h"
 #include "statusline.h"
 
 
@@ -26,6 +26,12 @@ StatusLine::putTopMsg() {
 //
 // Public
 //
+
+StatusLine::StatusLine():
+    LineObject(POS_BOTTOM, NULL) {}
+
+StatusLine::StatusLine(const StatusLine& sl):
+    LineObject(sl) {}
 
 void
 StatusLine::pushMsg(const std::string& m) {

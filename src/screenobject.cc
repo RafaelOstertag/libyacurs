@@ -8,7 +8,7 @@
 #include <cerrno>
 #endif // HAVE_CERRNO
 
-#include "curex.h"
+#include "cursex.h"
 #include "screenobject.h"
 
 //
@@ -18,6 +18,13 @@
 //
 // Protected
 //
+WINDOW* 
+ScreenObject::getWindow() const { return *w; }
+
+unsigned int 
+ScreenObject::getInstanceCount() const {
+    return *instances;
+}
 
 //
 // Public

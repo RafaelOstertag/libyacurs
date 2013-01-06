@@ -45,6 +45,11 @@ Window::operator=(const Window& W) {
     return *this;
 }
 
+bool
+Window::operator==(const Window& W) const {
+    return getWindow() == W.getWindow();
+}
+
 void
 Window::realize(const Rectangle<>& r) {
     ScreenObject::realize(r);
@@ -54,4 +59,14 @@ Window::realize(const Rectangle<>& r) {
 	if (retval == ERR)
 	    throw BoxFailed();
     }
+}
+
+bool
+Window::getFrame() const {
+    return hasframe;
+}
+
+void
+Window::setFrame(bool b) {
+    hasframe = b;
 }

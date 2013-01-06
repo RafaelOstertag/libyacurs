@@ -23,12 +23,10 @@ class ScreenObject : public Realizeable {
 	WINDOW** w;
 
     protected:
-	inline WINDOW* getWindow() const { return *w; }
+	WINDOW* getWindow() const;
 
 	/// Keep this. Used by tests/windowrefs.cc.
-	inline unsigned int getInstanceCount() const {
-	    return *instances;
-	}
+	unsigned int getInstanceCount() const;
 
     public:
 	ScreenObject();

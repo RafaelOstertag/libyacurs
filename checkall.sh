@@ -359,5 +359,5 @@ host_starchild() {
 
 HOST="`uname -n | sed 's/\..*//'`"
 
-cd /home/rafisol/yapet/trunk/mockup
+cd /home/rafisol/libyacurs/trunk/
 host_$HOST

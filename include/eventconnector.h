@@ -26,18 +26,22 @@
 class EventConnectorBase {
     private:
 	EVENT_TYPE evt;
+	bool suspended;
 
     protected:
 	virtual bool compare(const EventConnectorBase& ) const = 0;
+	inline void setSuspended(bool _s) { suspended = _s; }
 
     public:
-	inline EventConnectorBase(EVENT_TYPE _e): evt(_e) {}
+	inline EventConnectorBase(EVENT_TYPE _e, bool _s = false): evt(_e), suspended(_s) {}
 	inline EventConnectorBase(const EventConnectorBase& _ec) {
 	    evt = _ec.evt;
+	    suspended = _ec.suspended;
 	}
 	inline virtual ~EventConnectorBase() {}
 	inline EventConnectorBase& operator=(const EventConnectorBase& _ec) {
 	    evt = _ec.evt;
+	    suspended = _ec.suspended;
 	    return *this;
 	}
 	inline bool operator==(const EventConnectorBase& _ec) const {
@@ -53,6 +57,9 @@ class EventConnectorBase {
 	    return !operator==(_eb);
 	}
 	inline EVENT_TYPE type() const { return evt; }
+	inline bool isSuspended() const { return suspended; }
+	inline void suspend() { setSuspended(true); }
+	inline void unsuspend() { setSuspended(false); }
 	virtual int call(EventBase&) const = 0;
 	virtual EventConnectorBase* clone() const = 0;
 };
@@ -104,6 +111,7 @@ class EventConnectorMethod1: public EventConnectorBase {
 	int call(EventBase& _a) const {
 	    assert(__obj_ptr != NULL);
 	    assert(__func != NULL);
+	    if (isSuspended()) return -1;
 	    return (__obj_ptr->*__func)(_a);
 	}
 	EventConnectorBase* clone() const {
@@ -145,6 +153,7 @@ class EventConnectorFunction1: public EventConnectorBase {
 	}
 	int call(EventBase& _a) const {
 	    assert(__func != NULL);
+	    if (isSuspended()) return -1;
 	    return __func(_a);
 	}
 	EventConnectorBase* clone() const {

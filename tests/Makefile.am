@@ -1,6 +1,8 @@
 # $Id$
 
-check_PROGRAMS = init windowrefs coordinates margin rectangle eventqueue1 eventqueue2 eventqueue3 eventqueue4 eventqueue5 basic1 basic2 resize1
+check_PROGRAMS = init windowrefs coordinates margin rectangle		\
+ eventconnector1 eventqueue1 eventqueue2 eventqueue3 eventqueue4	\
+ eventqueue5 basic1 basic2 resize1
 TESTS = $(check_PROGRAMS)
 AM_DEFAULT_SOURCE_EXT = .cc
 

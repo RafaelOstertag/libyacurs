@@ -66,6 +66,7 @@ class EventConnectorBase {
 
 template<class T /* Type of object called */>
 class EventConnectorMethod1: public EventConnectorBase {
+    public:
 	typedef int (T::*__mem_fun_t)(EventBase&);
 	typedef T* _obj_ptr_t;
     private:
@@ -77,7 +78,8 @@ class EventConnectorMethod1: public EventConnectorBase {
 	    assert( __func != NULL );
 	    assert( __obj_ptr != NULL );
 	    if (typeid(eb) == typeid(EventConnectorMethod1<T>)) {
-		EventConnectorMethod1<T> tmp(dynamic_cast<const EventConnectorMethod1<T>& >(eb));
+		const EventConnectorMethod1<T>& tmp =
+		    dynamic_cast<const EventConnectorMethod1<T>& >(eb);
 		assert(tmp.__func != NULL);
 		assert(tmp.__obj_ptr != NULL);
 		return tmp.__func == __func && tmp.__obj_ptr == __obj_ptr;

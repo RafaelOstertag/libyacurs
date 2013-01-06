@@ -15,11 +15,11 @@
 
 #ifdef HAVE_LIST
 #include <list>
-#endif
+#endif // HAVE_LIST
 
 #ifdef HAVE_QUEUE
 #include <queue>
-#endif
+#endif // HAVE_QUEUE
 
 #include "event.h"
 #include "eventconnector.h"

@@ -9,32 +9,19 @@
 #include "config.h"
 #endif
 
+#ifdef HAVE_CASSERT
+#include <cassert>
+#endif // HAVE_CASSERT
+
 #ifdef HAVE_FUNCTIONAL
 #include <functional>
-#endif
+#endif // HAVE_FUNCTIONAL
 
 #ifdef HAVE_TYPEINFO
 #include <typeinfo>
 #endif // HAVE_TYPEINFO
 
 #include "event.h"
-
-template <class _Arg, class _Tt, class _A> 
-class mem_fun1 : public std::binary_function<_Tt*,_A,_Arg> {
-    private:
-	_Arg (_Tt::*pmf)(_A);
-	
-    public:
-	explicit mem_fun1(_Arg (_Tt::*p)(_A)) : pmf(p) { }
-	bool operator==(const mem_fun1<_Arg,_Tt,_A>& _ref) const { return pmf == _ref.pmf; }
-	_Arg operator()(_Tt* p, _A a) const { return (p->*pmf)(a); }
-};
-
-template <class _Arg, class _Tt, class _A> 
-inline mem_fun1<_Arg,_Tt,_A> mem_fun(_Arg (_Tt::*f)(_A)) {
-    return mem_fun1<_Arg,_Tt,_A>(f);
-}
-
 
 class EventConnectorBase {
     private:
@@ -80,6 +67,8 @@ class EventConnectorMethod1: public EventConnectorBase {
 
     protected:
 	bool compare(const EventConnectorBase& eb) const {
+	    assert( __func != NULL );
+	    assert( __obj_ptr != NULL );
 	    if (typeid(eb) == typeid(EventConnectorMethod1<T>)) {
 		EventConnectorMethod1<T> tmp(dynamic_cast<const EventConnectorMethod1<T>& >(eb));
 		return tmp.__func == __func && tmp.__obj_ptr == __obj_ptr;
@@ -92,17 +81,24 @@ class EventConnectorMethod1: public EventConnectorBase {
 			      _obj_ptr_t _obj_ptr,
 			      __mem_fun_t _func): EventConnectorBase(_e),
 						  __func(_func),
-						  __obj_ptr(_obj_ptr) {}
+						  __obj_ptr(_obj_ptr) {
+	    assert(__func != NULL);
+	    assert(__obj_ptr != NULL);
+}
 	EventConnectorMethod1(const EventConnectorMethod1<T>& _ec): EventConnectorBase(_ec),
 								    __func(_ec.__func),
 								    __obj_ptr(_ec.__obj_ptr) {}
 	EventConnectorMethod1<T>& operator=(const EventConnectorMethod1<T>& _ec) {
 	    EventConnectorBase::operator=(_ec);
 	    __func = _ec.__func;
+	    assert(__func != NULL);
 	    __obj_ptr = _ec.__obj_ptr;
+	    assert(__obj_ptr != NULL);
 	    return *this;
 	}
 	int call(EventBase& _a) const {
+	    assert(__obj_ptr != NULL);
+	    assert(__func != NULL);
 	    return (__obj_ptr->*__func)(_a);
 	}
 	EventConnectorBase* clone() const {
@@ -117,6 +113,7 @@ class EventConnectorFunction1: public EventConnectorBase {
 
     protected:
 	bool compare(const EventConnectorBase& eb) const {
+	    assert(__func != NULL);
 	    if (typeid(eb) == typeid(EventConnectorFunction1)) {
 		EventConnectorFunction1 tmp(dynamic_cast<const EventConnectorFunction1&>(eb));
 		return tmp.__func == __func;
@@ -126,17 +123,22 @@ class EventConnectorFunction1: public EventConnectorBase {
 
     public:
 	EventConnectorFunction1(EVENT_TYPE _e, fptr_t _func):
-	    EventConnectorBase(_e), __func(_func) {}
+	    EventConnectorBase(_e), __func(_func) {
+	    assert(__func != NULL);
+	}
 	EventConnectorFunction1(const EventConnectorFunction1& _ec):
 	    EventConnectorBase(_ec) {
 	    __func = _ec.__func;
+	    assert(__func != NULL);
 	}
 	EventConnectorFunction1& operator=(const EventConnectorFunction1& _ec) {
 	    EventConnectorBase::operator=(_ec);
 	    __func = _ec.__func;
+	    assert(__func != NULL);
 	    return *this;
 	}
 	int call(EventBase& _a) const {
+	    assert(__func != NULL);
 	    return __func(_a);
 	}
 	EventConnectorBase* clone() const {

@@ -4,17 +4,21 @@
 #include "config.h"
 #endif
 
+#ifdef HAVE_CASSERT
+#include <cassert>
+#endif // HAVE_CASSERT
+
 #ifdef HAVE_CERRNO
 #include <cerrno>
 #endif // HAVE_CERRNO_H
 
 #ifdef HAVE_CSTDLIB
 #include <cstdlib>
-#endif
+#endif // HAVE_CSTDLIB
 
 #ifdef HAVE_IOSTREAM
 #include <iostream>
-#endif
+#endif // HAVE_IOSTREAM
 
 #ifdef HAVE_ALGORITHM
 #include <algorithm>
@@ -47,6 +51,7 @@ class EventConnectorEqual {
     public:
 	inline EventConnectorEqual(const EventConnectorBase& _eb) : __eb(_eb) {}
 	inline bool operator()(EventConnectorBase* eb) {
+	    assert( eb != NULL );
 	    return *eb == __eb;
 	}
 };
@@ -54,6 +59,7 @@ class EventConnectorEqual {
 class DestroyEventConnector {
     public:
 	inline void operator()(EventConnectorBase* eb) {
+	    assert( eb != NULL );
 	    delete eb;
 	}
 };
@@ -61,19 +67,13 @@ class DestroyEventConnector {
 class CallEventConnector {
     private:
 	EventBase& __eb;
-	bool key_processed;
 
     public:
-	inline CallEventConnector(EventBase& _eb) :
-	    __eb(_eb), key_processed(false) {}
+	inline CallEventConnector(EventBase& _eb): __eb(_eb) {}
 	inline void operator()(EventConnectorBase* _ec) {
+	    assert(_ec != NULL);
 	    if (_ec->type() == __eb.type()) {
-		// A key event will only be sent to the first connector
-		if (__eb.type() == EVT_KEY && key_processed) return;
-
 		_ec->call(__eb);
-
-		if (__eb.type() == EVT_KEY) key_processed = true;
 	    }
 	}
 };
@@ -272,8 +272,8 @@ EventQueue::inject(const EventBase& ev) {
     } catch(std::exception& e) {
 	// Intentionally empty
 #ifndef NDEBUG
-	    std::cerr << e.what() << std::endl;
-	    std::abort();
+	std::cerr << e.what() << std::endl;
+	std::abort();
 #endif
     }
     unblocksignal();
@@ -304,6 +304,7 @@ EventQueue::run() {
 	while(!evt_queue.empty()) {
 
 	    EventBase* evt = evt_queue.front();
+	    assert(evt != NULL);
 
 	    if (evt->type() == EVT_QUIT) {
 		unblocksignal();
@@ -334,8 +335,10 @@ QUIT:
     restoreSignal();
 
     std::list<EventConnectorBase*>::iterator it=evtconn_list.begin();
-    while(it != evtconn_list.end())
+    while(it != evtconn_list.end()) {
+	assert(*it != NULL);
 	delete *it++;
+    }
 
     evtconn_list.clear();
 }

@@ -74,7 +74,15 @@ class EventConnectorMethod1: public EventConnectorBase {
 		    dynamic_cast<const EventConnectorMethod1<T>& >(eb);
 		assert(tmp.__func != NULL);
 		assert(tmp.__obj_ptr != NULL);
-		return tmp.__func == __func && tmp.__obj_ptr == __obj_ptr;
+		// Please remember, the event type will be checked by the base
+		// class. This method is called from the base class'
+		// operator==().
+		//
+		// Because comparing the method pointer does not always work
+		// (i.e. SunCC, some clang++ versions), we only compare the obj
+		// ptr. It should be enough having one method pointer per
+		// object per event.
+		return tmp.__obj_ptr == __obj_ptr;
 	    }
 	    return false;
 	}

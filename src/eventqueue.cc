@@ -256,7 +256,19 @@ EventQueue::proc_rem_request() {
 //
 void
 EventQueue::connectEvent(const EventConnectorBase& ec) {
-    evtconn_list.push_front(ec.clone());
+    // Only one event handler per event per object can be connectd
+    std::list<EventConnectorBase*>::iterator it =
+	std::find_if(evtconn_list.begin(),
+		     evtconn_list.end(),
+		     EventConnectorEqual(ec));
+    if ( it != evtconn_list.end() ) {
+	// there is already a member function registered for the object for the
+	// given event. Replace that connection.
+	delete *it;
+	*it = ec.clone();
+    } else {
+	evtconn_list.push_front(ec.clone());
+    }
 }
 
 void

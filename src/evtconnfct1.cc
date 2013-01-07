@@ -15,6 +15,8 @@ EventConnectorFunction1::compare(const EventConnectorBase& eb) const {
     if (typeid(eb) == typeid(EventConnectorFunction1)) {
 	EventConnectorFunction1 tmp(dynamic_cast<const EventConnectorFunction1&>(eb));
 	assert(tmp.__func != NULL);
+	// Please remember, the event type will be checked by the base
+	// class. This method is called from the base class' operator==().
 	return tmp.__func == __func;
     }
     return false;

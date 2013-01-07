@@ -80,23 +80,30 @@ int main() {
 	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_3,&AlrmHandler2::handler) );
 	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_4,&AlrmHandler2::handler) );
 
+	Curses::init();
 	alarm(4);
 	EventQueue::run();
 
 	if (ahandler.getCalls() != 4)
-	    return 1;
+	    goto _ERR;
 	if (ahandler2_1.getCalls() != 4)
-	    return 1;
+	    goto _ERR;
 	if (ahandler2_2.getCalls() != 4)
-	    return 1;
+	    goto _ERR;
 	if (ahandler2_3.getCalls() != 4)
-	    return 1;
+	    goto _ERR;
 	if (ahandler2_4.getCalls() != 4)
-	    return 1;
+	    goto _ERR;
+
+	Curses::end();
     } catch (std::exception& e) {
 	std::cerr << e.what() << std::endl;
-	return 1;
+	goto _ERR;
     }
 
     return 0;
+
+ _ERR:
+    Curses::end();
+    return 1;
 }

@@ -82,19 +82,25 @@ int main() {
 	EventQueue::connectEvent(EventConnectorMethod1<Usr1Handler>(EVT_USR1, &u1handler, &Usr1Handler::handler) );
 	EventQueue::connectEvent(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler, &Usr2Handler::handler) );
 
+	Curses::init();
 	alarm(4);
 	EventQueue::run();
 
 	if (ahandler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u1handler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u2handler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
+	Curses::end();
     } catch (std::exception& e) {
 	std::cerr << e.what() << std::endl;
-	return 1;
+	goto _ERR;
     }
 
     return 0;
+
+ _ERR:
+    Curses::end();
+    return 1;
 }

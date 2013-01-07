@@ -91,20 +91,20 @@ int main() {
 	EventQueue::connectEvent(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler) );
 	EventQueue::connectEvent(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler3, &Usr2Handler::handler) );
 
-	std::cout << "\tPart 1" << std::endl;
+	Curses::init();
 	alarm(4);
 	EventQueue::run();
 
 	if (ahandler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u1handler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u2handler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u2handler2.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u2handler2.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 
 	ahandler.reset();
 	u1handler.reset();
@@ -125,20 +125,19 @@ int main() {
 	// u1handler must terminate queue loop
 	u1handler.setQuit(true);
 
-	std::cout << "\tPart 2" << std::endl;
 	alarm(4);
 	EventQueue::run();
 
 	if (ahandler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u1handler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u2handler.getCalls() != 0)
-	    return 1;
+	    goto _ERR;
 	if (u2handler2.getCalls() != 0)
-	    return 1;
+	    goto _ERR;
 	if (u2handler3.getCalls() != 0)
-	    return 1;
+	    goto _ERR;
 
 	ahandler.reset();
 	u1handler.reset();
@@ -156,22 +155,21 @@ int main() {
 	//
 	EventQueue::unsuspendAll(EVT_USR2);
 
-	std::cout << "\tPart 3" << std::endl;
 	u1handler.setQuit(false);
 
 	alarm(4);
 	EventQueue::run();
 
 	if (ahandler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u1handler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u2handler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u2handler2.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u2handler3.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 
 	ahandler.reset();
 	u1handler.reset();
@@ -189,22 +187,21 @@ int main() {
 	//
 	EventQueue::suspendExcept(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler));
 
-	std::cout << "\tPart 4" << std::endl;
 	u1handler.setQuit(false);
 
 	alarm(4);
 	EventQueue::run();
 
 	if (ahandler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u1handler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u2handler.getCalls() != 0)
-	    return 1;
+	    goto _ERR;
 	if (u2handler2.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u2handler3.getCalls() != 0)
-	    return 1;
+	    goto _ERR;
 
 	ahandler.reset();
 	u1handler.reset();
@@ -223,7 +220,6 @@ int main() {
 	//
 	// only u2handler2 must have no calls
 	//
-	std::cout << "\tPart 5" << std::endl;
 
 	EventQueue::suspendAll(EVT_USR2);
 	EventQueue::unsuspendExcept(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler));
@@ -232,15 +228,15 @@ int main() {
 	EventQueue::run();
 
 	if (ahandler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u1handler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u2handler.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 	if (u2handler2.getCalls() != 0)
-	    return 1;
+	    goto _ERR;
 	if (u2handler3.getCalls() != 1)
-	    return 1;
+	    goto _ERR;
 
 	ahandler.reset();
 	u1handler.reset();
@@ -249,10 +245,15 @@ int main() {
 	u2handler3.reset();
 
 	EventQueue::unsuspendAll(EVT_USR2);
+	Curses::end();
     } catch (std::exception& e) {
 	std::cerr << e.what() << std::endl;
-	return 1;
+	goto _ERR;
     }
 
     return 0;
+
+ _ERR:
+    Curses::end();
+    return 1;
 }

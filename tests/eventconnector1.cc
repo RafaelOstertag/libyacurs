@@ -1,4 +1,4 @@
-// $Id: eventqueue4.cc 4606 2013-01-06 11:36:38Z rafisol $
+// $Id$
 //
 // Test handler disconnect when in handler.
 #ifdef HAVE_CONFIG_H

@@ -1,4 +1,4 @@
-// $Id: eventqueue4.cc 4606 2013-01-06 11:36:38Z rafisol $
+// $Id$
 //
 // Test handler disconnect when in handler.
 #ifdef HAVE_CONFIG_H
@@ -81,27 +81,21 @@ int main() {
 
 	EventQueue::disconnectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler) );
 
-	Curses::init();
 	alarm(4);
 	EventQueue::run();
 
 	if (ahandler.getCalls() != 4)
-	    goto _ERR;
+	    return 1;
 	if (ahandler2_1.getCalls() != 1)
-	    goto _ERR;
+	    return 1;
 	if (ahandler2_2.getCalls() != 0)
-	    goto _ERR;
+	    return 1;
 	if (ahandler2_3.getCalls() != 1)
-	    goto _ERR;
-	Curses::end();
+	    return 1;
     } catch (std::exception& e) {
 	std::cerr << e.what() << std::endl;
-	sleep(2);
-	goto _ERR;
+	return 1;
     }
 
     return 0;
- _ERR:
-    Curses::end();
-    return 1;
 }

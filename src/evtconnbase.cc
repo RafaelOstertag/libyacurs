@@ -1,4 +1,4 @@
-// $Id: curs.cc 4611 2013-01-06 13:05:12Z rafisol $
+// $Id$
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

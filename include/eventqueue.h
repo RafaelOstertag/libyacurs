@@ -27,16 +27,19 @@
 
 class EventQueue {
     private:
-#if defined(SIGWINCH) || defined(SIGALRM)
-	// Used by blocksignal()/unblocksignal()
+#if defined(SIGWINCH) || defined(SIGALRM) || \
+    defined(SIGUSR1) || defined(SIGUSR2)
+	/// Used by blocksignal()/unblocksignal()
 	static sigset_t block_sigmask;
-	// Used by blocksignal()/unblocksignal()
+	/// Used by blocksignal()/unblocksignal()
 	static sigset_t tmp_old_sigmask;
-	// Used by setupSignal()/restoreSignal()
+	/// Used by setupSignal()/restoreSignal()
 	static sigset_t old_sigmask;
 
 	static struct sigaction old_winch_act;
 	static struct sigaction old_alrm_act;
+	static struct sigaction old_usr1_act;
+	static struct sigaction old_usr2_act;
 #endif // defined(SIGWINCH) || defined(SIGALRM)
 	static bool signal_blocked;
 	static std::queue<EventBase*> evt_queue;
@@ -61,8 +64,20 @@ class EventQueue {
 	static void proc_rem_request();
 
     public:
+	/// Connect a member function or function to an event
 	static void connectEvent(const EventConnectorBase& ec);
+	/// Disconnect from the event
 	static void disconnectEvent(const EventConnectorBase& ec);
+	/// Suspend all events equal to a given event
+	static void suspendAll(EVENT_TYPE _t);
+	/// Suspend all events except the one given
+	static void suspendExcept(const EventConnectorBase& ec);
+	/// Unsuspend all events equal to a given event
+	static void unsuspendAll(EVENT_TYPE _t);
+	/// Unsuspend all events except the one given
+	static void unsuspendExcept(const EventConnectorBase& ec);
+
+	/// Add an event to the qeue
 	static void inject(const EventBase& ev);
 	static void run();
 };

@@ -28,12 +28,15 @@
 #include "eventqueue.h"
 #include "curs.h"
 
-#if defined(SIGWINCH) || defined(SIGALRM)
+#if defined(SIGWINCH) || defined(SIGALRM) || \
+    defined(SIGUSR1) || defined(SIGUSR2)
 sigset_t EventQueue::block_sigmask;
 sigset_t EventQueue::tmp_old_sigmask;
 sigset_t EventQueue::old_sigmask;
 struct sigaction EventQueue::old_winch_act;
 struct sigaction EventQueue::old_alrm_act;
+struct sigaction EventQueue::old_usr1_act;
+struct sigaction EventQueue::old_usr2_act;		
 #endif // defined(SIGWINCH) || defined(SIGALRM)
 bool EventQueue::signal_blocked = false;
 
@@ -53,6 +56,62 @@ class EventConnectorEqual {
 	inline bool operator()(EventConnectorBase* eb) {
 	    assert( eb != NULL );
 	    return *eb == __eb;
+	}
+};
+
+class EvtConnSuspendAllEq {
+    private:
+	EVENT_TYPE __evt;
+
+    public:
+	inline EvtConnSuspendAllEq(EVENT_TYPE _e): __evt(_e) {}
+	inline void operator()(EventConnectorBase* eb) {
+	    assert ( eb != NULL );
+	    if (eb->type() == __evt)
+		eb->suspend();
+	}
+};
+
+class EvtConnSuspendExcept {
+    private:
+	const EventConnectorBase& __evt;
+
+    public:
+	inline EvtConnSuspendExcept(const EventConnectorBase& _e):
+	    __evt(_e) {}
+	inline void operator()(EventConnectorBase* eb) {
+	    assert ( eb != NULL );
+	    if (eb->type() == __evt.type() &&
+		! (__evt == *eb) )
+		eb->suspend();
+	}
+};
+
+class EvtConnUnsuspendAllEq {
+    private:
+	EVENT_TYPE __evt;
+
+    public:
+	inline EvtConnUnsuspendAllEq(EVENT_TYPE _e): __evt(_e) {}
+	inline void operator()(EventConnectorBase* eb) {
+	    assert ( eb != NULL );
+	    if (eb->type() == __evt)
+		eb->unsuspend();
+	}
+};
+
+class EvtConnUnsuspendExcept {
+    private:
+	const EventConnectorBase& __evt;
+
+    public:
+	inline EvtConnUnsuspendExcept(const EventConnectorBase& _e):
+	    __evt(_e) {}
+	inline void operator()(EventConnectorBase* eb) {
+	    assert ( eb != NULL );
+	    if (eb->type() == __evt.type() &&
+		! (__evt == *eb) )
+		eb->unsuspend();
 	}
 };
 
@@ -81,6 +140,11 @@ class CallEventConnector {
 //
 // Private
 //
+
+/////////////
+// Signals //
+/////////////
+
 void
 EventQueue::setupSignal() {
     int err;
@@ -125,6 +189,43 @@ EventQueue::setupSignal() {
 	throw SystemError(errno);
 #endif // SIGALRM
 
+    //
+    // Alarm handler
+    //
+#ifdef SIGUSR1
+    struct sigaction usr1act;
+
+    usr1act.sa_sigaction = signal_handler;
+#ifdef SA_SIGINFO
+    usr1act.sa_flags = SA_SIGINFO;
+#else // SA_SIGINFO
+    usr1act.sa_flags = 0;
+#endif // SA_SIGINFO
+
+    sigemptyset(&usr1act.sa_mask);
+
+    err = sigaction(SIGUSR1, &usr1act, &old_usr1_act);
+    if (err)
+	throw SystemError(errno);
+#endif // SIGUSR1
+
+#ifdef SIGUSR2
+    struct sigaction usr2act;
+
+    usr2act.sa_sigaction = signal_handler;
+#ifdef SA_SIGINFO
+    usr2act.sa_flags = SA_SIGINFO;
+#else // SA_SIGINFO
+    usr2act.sa_flags = 0;
+#endif // SA_SIGINFO
+
+    sigemptyset(&usr2act.sa_mask);
+
+    err = sigaction(SIGUSR2, &usr2act, &old_usr2_act);
+    if (err)
+	throw SystemError(errno);
+#endif // SIGUSR2
+
     sigset_t nset;
     sigemptyset(&nset);
 
@@ -134,8 +235,16 @@ EventQueue::setupSignal() {
 #ifdef SIGALRM
     sigaddset(&nset, SIGALRM);
 #endif // SIGALRM
+#ifdef SIGUSR1
+    sigaddset(&nset, SIGUSR1);
+#endif // SIGUSR1
+#ifdef SIGUSR2
+    sigaddset(&nset, SIGUSR2);
+#endif // SIGUSR1
 
-#if defined(SIGWINCH) || defined(SIGALRM)
+
+#if defined(SIGWINCH) || defined(SIGALRM) ||\
+    defined(SIGUSR1) || defined(SIGUSR2)
     err = sigprocmask(SIG_UNBLOCK, &nset, &old_sigmask);
     if (err)
 	throw SystemError(errno);
@@ -157,8 +266,19 @@ EventQueue::restoreSignal() {
     if (err)
 	throw SystemError(errno);
 #endif // SIGALRM
+#ifdef SIGUSR1
+    err = sigaction(SIGUSR1, &old_usr1_act, NULL);
+    if (err)
+	throw SystemError(errno);
+#endif // SIGUSR1
+#ifdef SIGUSR2
+    err = sigaction(SIGUSR2, &old_usr2_act, NULL);
+    if (err)
+	throw SystemError(errno);
+#endif // SIGUSR2
 
-#if defined(SIGWINCH) || defined(SIGALRM)
+#if defined(SIGWINCH) || defined(SIGALRM) ||\
+    defined(SIGUSR1) || defined(SIGUSR2)
     err = sigprocmask(SIG_SETMASK, &old_sigmask, NULL);
     if (err)
 	throw SystemError(errno);
@@ -200,7 +320,33 @@ EventQueue::signal_handler(int signo)
 #endif
 	}
 	break;
+#endif // SIGWINCH
+#ifdef SIGUSR1
+    case SIGUSR1:
+	try {
+	    evt_queue.push(new EventBase(EVT_USR1));
+	} catch(std::exception& e) {
+	    // Intentionally empty
+#ifndef NDEBUG
+	    std::cerr << e.what() << std::endl;
+	    std::abort();
 #endif
+	}
+	break;
+#endif // SIGUSR1
+#ifdef SIGUSR2
+    case SIGUSR2:
+	try {
+	    evt_queue.push(new EventBase(EVT_USR2));
+	} catch(std::exception& e) {
+	    // Intentionally empty
+#ifndef NDEBUG
+	    std::cerr << e.what() << std::endl;
+	    std::abort();
+#endif
+	}
+	break;
+#endif // SIGUSR2
     }
 
     errno = olderrno;
@@ -208,7 +354,8 @@ EventQueue::signal_handler(int signo)
 
 void
 EventQueue::blocksignal() {
-#if defined(SIGWINCH) || defined(SIGALRM)
+#if defined(SIGWINCH) || defined(SIGALRM) ||\
+    defined(SIGUSR1) || defined(SIGUSR2)
     if (signal_blocked) return;
 
     int err = sigprocmask(SIG_BLOCK, &block_sigmask, &tmp_old_sigmask);
@@ -220,7 +367,8 @@ EventQueue::blocksignal() {
 
 void
 EventQueue::unblocksignal() {
-#if defined(SIGWINCH) || defined(SIGALRM)
+#if defined(SIGWINCH) || defined(SIGALRM) ||\
+    defined(SIGUSR1) || defined(SIGUSR2)
     if (!signal_blocked) return;
     signal_blocked = false;
 
@@ -229,6 +377,10 @@ EventQueue::unblocksignal() {
 	throw SystemError(errno);
 #endif // defined(SIGWINCH) || defined(SIGALRM)
 }
+
+/////////////////
+// End Signals //
+/////////////////
 
 void
 EventQueue::proc_rem_request() {
@@ -262,8 +414,8 @@ EventQueue::connectEvent(const EventConnectorBase& ec) {
 		     evtconn_list.end(),
 		     EventConnectorEqual(ec));
     if ( it != evtconn_list.end() ) {
-	// there is already a member function registered for the object for the
-	// given event. Replace that connection.
+	// there is already a member function registered for the
+	// object on the given event. Replace that connection.
 	delete *it;
 	*it = ec.clone();
     } else {
@@ -274,6 +426,34 @@ EventQueue::connectEvent(const EventConnectorBase& ec) {
 void
 EventQueue::disconnectEvent(const EventConnectorBase& ec) {
     evtconn_rem_request.push(ec.clone());
+}
+
+void
+EventQueue::suspendAll(EVENT_TYPE _t) {
+    std::for_each(evtconn_list.begin(),
+		  evtconn_list.end(),
+		  EvtConnSuspendAllEq(_t));
+}
+
+void
+EventQueue::suspendExcept(const EventConnectorBase& ec) {
+    std::for_each(evtconn_list.begin(),
+		  evtconn_list.end(),
+		  EvtConnSuspendExcept(ec));
+}
+
+void
+EventQueue::unsuspendAll(EVENT_TYPE _t) {
+    std::for_each(evtconn_list.begin(),
+		  evtconn_list.end(),
+		  EvtConnUnsuspendAllEq(_t));
+}
+
+void
+EventQueue::unsuspendExcept(const EventConnectorBase& ec) {
+    std::for_each(evtconn_list.begin(),
+		  evtconn_list.end(),
+		  EvtConnUnsuspendExcept(ec));
 }
 
 void

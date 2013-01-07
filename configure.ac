@@ -2,7 +2,7 @@
 AC_INIT([libyacurs],[0.1], [rafi@guengel.ch])
 AC_CONFIG_SRCDIR([src/curs.cc])
 AM_INIT_AUTOMAKE
-AC_REVISION([$Revision$])
+AC_REVISION([$Revision: 4613 $])
 
 AC_CONFIG_MACRO_DIR([m4])
 

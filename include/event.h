@@ -12,10 +12,18 @@
 #include "rectangle.h"
 
 enum EVENT_TYPE {
+    /// Terminates the EventQueue main loop
     EVT_QUIT,
+    /// Notification of window size change
     EVT_WINCH,
+    /// Notification of alarm signal
     EVT_ALARM,
-    EVT_KEY
+    /// Key pressed
+    EVT_KEY,
+    /// Refresh request
+    EVT_REFRESH,
+    EVT_USR1,
+    EVT_USR2
 };
 
 class EventBase {
@@ -23,22 +31,13 @@ class EventBase {
 	EVENT_TYPE event_type;
     
     public:
-	inline EventBase(EVENT_TYPE _et): event_type(_et) {}
-	inline EventBase(const EventBase& _e) {
-	    event_type = _e.event_type;
-	}
-	inline EventBase& operator=(const EventBase& _e) {
-	    event_type = _e.event_type;
-	    return *this;
-	}
-	inline virtual ~EventBase() {}
-	inline virtual bool operator==(const EventBase& _e) const {
-	    return event_type == _e.event_type;
-	}
-	inline EVENT_TYPE type() const { return event_type; }
-	virtual inline EventBase* clone() const {
-	    return new EventBase(*this);
-	}
+	EventBase(EVENT_TYPE _et);
+	EventBase(const EventBase& _e);
+	EventBase& operator=(const EventBase& _e);
+	virtual ~EventBase();
+	virtual bool operator==(const EventBase& _e) const;
+	EVENT_TYPE type() const;
+	virtual EventBase* clone() const;
 };
 
 template<class T>
@@ -66,28 +65,18 @@ class Event: public EventBase {
 
 class EventWinCh: public Event<Rectangle<> > {
     public:
-	inline EventWinCh(const Rectangle<>& _r): Event<Rectangle<> >(EVT_WINCH, _r) {}
-	inline EventWinCh(const EventWinCh& _e): Event<Rectangle<> >(_e) {}
-	inline EventWinCh& operator=(const EventWinCh& _e) {
-	    Event<Rectangle<> >::operator=(_e);
-	    return *this;
-	}
-	inline EventWinCh* clone() const {
-	    return new EventWinCh(*this);
-	}
+	EventWinCh(const Rectangle<>& _r);
+	EventWinCh(const EventWinCh& _e);
+	EventWinCh& operator=(const EventWinCh& _e);
+	EventWinCh* clone() const;
 };
 
 class EventKey: public Event<int> {
     public:
-	EventKey(const int& _r): Event<int>(EVT_WINCH, _r) {}
-	EventKey(const EventKey& _e): Event<int>(_e) {}
-	EventKey& operator=(const EventKey& _e) {
-	    Event<int>::operator=(_e);
-	    return *this;
-	}
-	inline EventKey* clone() const {
-	    return new EventKey(*this);
-	}
+	EventKey(const int& _r);
+	EventKey(const EventKey& _e);
+	EventKey& operator=(const EventKey& _e);
+	EventKey* clone() const;
 };
 
 #endif // EVENT_H

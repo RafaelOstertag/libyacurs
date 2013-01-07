@@ -1,6 +1,6 @@
 // $Id$
 //
-// Test several handler for event
+// Test SIGUSR1/SIGUSR2
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -46,52 +46,50 @@ class AlrmHandler: public Handler {
 	inline AlrmHandler(): Handler(EVT_ALARM) {}
 	inline int handler(EventBase& e) {
 	    Handler::handler(e);
-	    if (getCalls() < 4) {
-		std::cout << "alarm(1)" << std::endl;
-		alarm(1);
-		return 0;
-	    }
-	    std::cout << "QUIT" << std::endl;
-	    EventQueue::inject(EventBase(EVT_QUIT));
+	    raise(SIGUSR1);
 	    return 0;
 	}
 };
 
-class AlrmHandler2: public AlrmHandler {
+class Usr1Handler: public Handler {
     public:
-	inline AlrmHandler2(): AlrmHandler() {}
+	inline Usr1Handler(): Handler(EVT_USR1) {}
 	inline int handler(EventBase& e) {
-	    return Handler::handler(e);
+	    Handler::handler(e);
+	    raise(SIGUSR2);
+	    return 0;
 	}
-};
+};	
+
+class Usr2Handler: public Handler {
+    public:
+	inline Usr2Handler(): Handler(EVT_USR2) {}
+	inline int handler(EventBase& e) {
+	    Handler::handler(e);
+	    EventQueue::inject(EventBase(EVT_QUIT));
+	    return 0;
+	}
+};	
 
 int main() {
 
     try {
 	AlrmHandler ahandler;
-	AlrmHandler2 ahandler2_1;
-	AlrmHandler2 ahandler2_2;
-	AlrmHandler2 ahandler2_3;
-	AlrmHandler2 ahandler2_4;
+	Usr1Handler u1handler;
+	Usr2Handler u2handler;
 
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_1,&AlrmHandler2::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2,&AlrmHandler2::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_3,&AlrmHandler2::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_4,&AlrmHandler2::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<Usr1Handler>(EVT_USR1, &u1handler, &Usr1Handler::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler, &Usr2Handler::handler) );
 
 	alarm(4);
 	EventQueue::run();
 
-	if (ahandler.getCalls() != 4)
+	if (ahandler.getCalls() != 1)
 	    return 1;
-	if (ahandler2_1.getCalls() != 4)
+	if (u1handler.getCalls() != 1)
 	    return 1;
-	if (ahandler2_2.getCalls() != 4)
-	    return 1;
-	if (ahandler2_3.getCalls() != 4)
-	    return 1;
-	if (ahandler2_4.getCalls() != 4)
+	if (u2handler.getCalls() != 1)
 	    return 1;
     } catch (std::exception& e) {
 	std::cerr << e.what() << std::endl;

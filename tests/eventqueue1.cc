@@ -64,25 +64,19 @@ int main() {
 	EventQueue::inject(EventBase(EVT_ALARM));
 	EventQueue::inject(EventBase(EVT_QUIT));
 
-	Curses::init();
 	// EventQueue:run() blocks in getch().
 	ungetch('a');
 
 	EventQueue::run();
 
 	if (whandler.getCalls() != 1)
-	    goto _ERR;
+	    return 1;
 	if (ahandler.getCalls() != 1)
-	    goto _ERR;
-	Curses::end();
+	    return 1;
     } catch (std::exception& e) {
 	std::cerr << e.what() << std::endl;
-	sleep(2);
-	goto _ERR;
+	return 1;
     }
 
     return 0;
- _ERR:
-    Curses::end();
-    return 1;
 }

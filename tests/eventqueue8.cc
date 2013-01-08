@@ -1,6 +1,6 @@
 // $Id$
 //
-//
+// Test (un)suspending of events
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -209,9 +209,6 @@ int main() {
 	u2handler2.reset();
 	u2handler3.reset();
 
-	EventQueue::unsuspendAll(EVT_USR2);
-
-
 	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
 	EventQueue::connectEvent(EventConnectorMethod1<Usr1Handler>(EVT_USR1, &u1handler, &Usr1Handler::handler) );
 	EventQueue::connectEvent(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler, &Usr2Handler::handler) );
@@ -244,7 +241,37 @@ int main() {
 	u2handler2.reset();
 	u2handler3.reset();
 
-	EventQueue::unsuspendAll(EVT_USR2);
+	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<Usr1Handler>(EVT_USR1, &u1handler, &Usr1Handler::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler, &Usr2Handler::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler3, &Usr2Handler::handler) );
+	//
+	// only u2handler2 must have no calls
+	//
+
+	EventQueue::suspend(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler));
+
+	alarm(4);
+	EventQueue::run();
+
+	if (ahandler.getCalls() != 1)
+	    goto _ERR;
+	if (u1handler.getCalls() != 1)
+	    goto _ERR;
+	if (u2handler.getCalls() != 1)
+	    goto _ERR;
+	if (u2handler2.getCalls() != 0)
+	    goto _ERR;
+	if (u2handler3.getCalls() != 1)
+	    goto _ERR;
+
+	ahandler.reset();
+	u1handler.reset();
+	u2handler.reset();
+	u2handler2.reset();
+	u2handler3.reset();
+
 	Curses::end();
     } catch (std::exception& e) {
 	std::cerr << e.what() << std::endl;

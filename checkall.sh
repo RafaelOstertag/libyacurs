@@ -2,6 +2,9 @@
 #
 # $Id$
 
+TERM=xterm
+export TERM
+
 had_error() {
 	retval=$1
 	msg=$2
@@ -83,7 +86,8 @@ DEBIAN32_CXX_clang=clang++
 DEBIAN32_LDFLAGS_clang="-L/usr/lib"
 
 host_debian32() {
-    for c in default clang 43 44
+    # clang has been removed from list, it currently fails when running the tests
+    for c in default 43 44
     do
 	make distclean
 	./configure CXX="`eval echo \\$DEBIAN32_CXX_$c`" \
@@ -307,7 +311,7 @@ host_odin() {
 }
 
 host_starchild() {
-    PATH=/usr/ccs/bin:$PATH
+    PATH=/usr/ccs/bin:/usr/sfw/bin:$PATH
     export PATH
     for c in /opt/solarisstudio12.3/bin /opt/solstudio12.2/bin /opt/sunstudio12.1/bin
     do

@@ -68,10 +68,14 @@ class EventQueue {
 	static void connectEvent(const EventConnectorBase& ec);
 	/// Disconnect from the event
 	static void disconnectEvent(const EventConnectorBase& ec);
+	/// Suspend event
+	static void suspend(const EventConnectorBase& ec);
 	/// Suspend all events equal to a given event
 	static void suspendAll(EVENT_TYPE _t);
 	/// Suspend all events except the one given
 	static void suspendExcept(const EventConnectorBase& ec);
+	/// Unsuspend event
+	static void unsuspend(const EventConnectorBase& ec);
 	/// Unsuspend all events equal to a given event
 	static void unsuspendAll(EVENT_TYPE _t);
 	/// Unsuspend all events except the one given

@@ -59,59 +59,43 @@ class EventConnectorEqual {
 	}
 };
 
-class EvtConnSuspendAllEq {
+class EvtConnSetSuspendAll {
     private:
 	EVENT_TYPE __evt;
+	bool suspend;
 
     public:
-	inline EvtConnSuspendAllEq(EVENT_TYPE _e): __evt(_e) {}
+	inline EvtConnSetSuspendAll(EVENT_TYPE _e, bool _s):
+	    __evt(_e), suspend(_s) {}
 	inline void operator()(EventConnectorBase* eb) {
 	    assert ( eb != NULL );
-	    if (eb->type() == __evt)
-		eb->suspend();
+	    if ( eb->type() == __evt) {
+		if (suspend)
+		    eb->suspend();
+		else
+		    eb->unsuspend();
+	    }
 	}
 };
 
-class EvtConnSuspendExcept {
+class EvtConnSetSuspendExcept {
     private:
 	const EventConnectorBase& __evt;
+	bool suspend;
 
     public:
-	inline EvtConnSuspendExcept(const EventConnectorBase& _e):
-	    __evt(_e) {}
+	inline EvtConnSetSuspendExcept(const EventConnectorBase& _e,
+				    bool _s): __evt(_e),
+					      suspend(_s){}
 	inline void operator()(EventConnectorBase* eb) {
 	    assert ( eb != NULL );
 	    if (eb->type() == __evt.type() &&
-		! (__evt == *eb) )
-		eb->suspend();
-	}
-};
-
-class EvtConnUnsuspendAllEq {
-    private:
-	EVENT_TYPE __evt;
-
-    public:
-	inline EvtConnUnsuspendAllEq(EVENT_TYPE _e): __evt(_e) {}
-	inline void operator()(EventConnectorBase* eb) {
-	    assert ( eb != NULL );
-	    if (eb->type() == __evt)
-		eb->unsuspend();
-	}
-};
-
-class EvtConnUnsuspendExcept {
-    private:
-	const EventConnectorBase& __evt;
-
-    public:
-	inline EvtConnUnsuspendExcept(const EventConnectorBase& _e):
-	    __evt(_e) {}
-	inline void operator()(EventConnectorBase* eb) {
-	    assert ( eb != NULL );
-	    if (eb->type() == __evt.type() &&
-		! (__evt == *eb) )
-		eb->unsuspend();
+		! (__evt == *eb) ) {
+		if (suspend)
+		    eb->suspend();
+		else
+		    eb->unsuspend();
+	    }
 	}
 };
 
@@ -429,31 +413,55 @@ EventQueue::disconnectEvent(const EventConnectorBase& ec) {
 }
 
 void
+EventQueue::suspend(const EventConnectorBase& ec) {
+    std::list<EventConnectorBase*>::iterator it =
+	std::find_if(evtconn_list.begin(),
+		     evtconn_list.end(),
+		     EventConnectorEqual(ec));
+
+    if ( it == evtconn_list.end() ) return;
+
+    (*it)->suspend();
+}
+
+void
 EventQueue::suspendAll(EVENT_TYPE _t) {
     std::for_each(evtconn_list.begin(),
 		  evtconn_list.end(),
-		  EvtConnSuspendAllEq(_t));
+		  EvtConnSetSuspendAll(_t, true));
 }
 
 void
 EventQueue::suspendExcept(const EventConnectorBase& ec) {
     std::for_each(evtconn_list.begin(),
 		  evtconn_list.end(),
-		  EvtConnSuspendExcept(ec));
+		  EvtConnSetSuspendExcept(ec, true));
+}
+
+void
+EventQueue::unsuspend(const EventConnectorBase& ec) {
+    std::list<EventConnectorBase*>::iterator it =
+	std::find_if(evtconn_list.begin(),
+		     evtconn_list.end(),
+		     EventConnectorEqual(ec));
+
+    if ( it == evtconn_list.end() ) return;
+
+    (*it)->unsuspend();
 }
 
 void
 EventQueue::unsuspendAll(EVENT_TYPE _t) {
     std::for_each(evtconn_list.begin(),
 		  evtconn_list.end(),
-		  EvtConnUnsuspendAllEq(_t));
+		  EvtConnSetSuspendAll(_t, false));
 }
 
 void
 EventQueue::unsuspendExcept(const EventConnectorBase& ec) {
     std::for_each(evtconn_list.begin(),
 		  evtconn_list.end(),
-		  EvtConnUnsuspendExcept(ec));
+		  EvtConnSetSuspendExcept(ec, false));
 }
 
 void

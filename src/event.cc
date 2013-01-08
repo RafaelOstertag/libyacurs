@@ -68,7 +68,7 @@ EventWinCh::clone() const {
 
 ///////
 
-EventKey::EventKey(const int& _r): Event<int>(EVT_WINCH, _r) {}
+EventKey::EventKey(const int& _r): Event<int>(EVT_KEY, _r) {}
 
 EventKey::EventKey(const EventKey& _e): Event<int>(_e) {}
 

@@ -208,7 +208,7 @@ Curses::inquiryScreenSize() {
     __scrdim.setX(0);
     __scrdim.setY(0);
 
-    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) != -1) {
+    if (ioctl(STDIN_FILENO, TIOCGWINSZ, &ws) != -1) {
 	if (ws.ws_row > 0 && ws.ws_col > 0) {
 	    __scrdim.setLines(ws.ws_row);
 	    __scrdim.setCols(ws.ws_col);

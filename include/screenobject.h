@@ -11,11 +11,14 @@
 
 #include "mycurses.h"
 #include "realizeable.h"
+#include "margin.h"
+#include "event.h"
 
 class ScreenObject : public Realizeable {
     private:
 	Rectangle<> rect;
-	/// Keeps track of how many instances objects have been created sharing
+	Margin<> margin;
+	/// Keeps track of how many instance objects have been created sharing
 	/// the same WINDOW structure
 	unsigned int* instances;
 	/// Pointer to a pointer so that we can replace the window for all
@@ -29,7 +32,7 @@ class ScreenObject : public Realizeable {
 	unsigned int getInstanceCount() const;
 
     public:
-	ScreenObject();
+	ScreenObject(const Margin<> _m = Margin<>());
 	ScreenObject(const ScreenObject& so);
 	virtual ~ScreenObject();
 	ScreenObject& operator=(const ScreenObject& so);

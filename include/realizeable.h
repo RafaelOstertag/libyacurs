@@ -16,22 +16,19 @@ class Realizeable {
 	bool realized;
 
     protected:
-	inline virtual void setRealized(bool _r) { realized = _r; }
+	virtual void setRealized(bool _r);
 
     public:
-	inline Realizeable() : realized(false) {}
-	inline Realizeable(const Realizeable& r) { realized = r.realized; }
-	inline virtual ~Realizeable() {}
+	Realizeable();
+	Realizeable(const Realizeable& r);
+	virtual ~Realizeable();
 
-	inline Realizeable& operator=(const Realizeable& r) {
-	    realized = r.realized;
-	    return *this;
-	}
+	Realizeable& operator=(const Realizeable& r);
 	    
 	virtual void refresh() = 0;
-	virtual void resize(const Rectangle<>& r) = 0;
-	virtual void realize(const Rectangle<>& r) = 0;
-	inline virtual bool isRealized() const { return realized; }
+	virtual void resize(const Rectangle<>&) = 0;
+	virtual void realize(const Rectangle<>&) = 0;
+	bool isRealized() const;
 };
 
 #endif // REALIZEABLE_H

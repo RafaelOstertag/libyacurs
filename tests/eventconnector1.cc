@@ -65,13 +65,19 @@ class AlrmHandler2: public AlrmHandler {
 	}
 };
 
-int fcthandler1(EventBase&) {
-    return 0;
-}
+class Static1 {
+    public:
+	static int fcthandler1(EventBase&) {
+	    return 0;
+	}
+};
 
-int fcthandler2(EventBase&) {
-    return 0;
-}
+class Static2 {
+    public:
+	static int fcthandler1(EventBase&) {
+	    return 0;
+	}
+};
 
 int main() {
 
@@ -125,9 +131,9 @@ int main() {
     if ( *ptr1 != *ptr2 )
 	return 1;
 
-    EventConnectorFunction1 efh1(EVT_USR1, fcthandler1);
-    EventConnectorFunction1 efh1_1(EVT_USR1, fcthandler1);
-    EventConnectorFunction1 efh2(EVT_USR1, fcthandler2);
+    EventConnectorFunction1 efh1(EVT_USR1, &Static1::fcthandler1);
+    EventConnectorFunction1 efh1_1(EVT_USR1, &Static1::fcthandler1);
+    EventConnectorFunction1 efh2(EVT_USR1, &Static2::fcthandler1);
 
     if (efh1 != efh1)
 	return 1;

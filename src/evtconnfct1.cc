@@ -22,6 +22,11 @@ EventConnectorFunction1::compare(const EventConnectorBase& eb) const {
     return false;
 }
 
+const void*
+EventConnectorFunction1::handler_ptr() const {
+    return NULL;
+}
+
 //
 // Public
 //

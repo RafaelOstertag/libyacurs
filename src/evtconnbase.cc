@@ -34,7 +34,7 @@ EventConnectorBase::operator=(const EventConnectorBase& _ec) {
 
 bool
 EventConnectorBase::operator==(const EventConnectorBase& _ec) const {
-    return evt == _ec.evt && this->compare(_ec);
+    return evt == _ec.evt && compare(_ec);
 }
 
 bool

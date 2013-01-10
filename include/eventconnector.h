@@ -27,6 +27,20 @@
 
 #include "event.h"
 
+/**
+ * An Event Connector connects an event (@c EVENT_TYPE) to an handler
+ * (function, or member function).
+ *
+ * When connecting an event to a member function, it is expected that
+ * exactly one member function for a particular event per object is
+ * called. Connecting a particular event to several member functions
+ * of the same object result in only the last connection made taking
+ * effect (i.e. the current connection replaces any previous
+ * connections).
+ *
+ * This uniqueness is not enforced by the event connector itself, but
+ * an event connector has to provide
+ */
 class EventConnectorBase {
     private:
 	EVENT_TYPE evt;
@@ -37,6 +51,8 @@ class EventConnectorBase {
 	void setSuspended(bool _s);
 
     public:
+	virtual const void* handler_ptr() const = 0;
+
 	EventConnectorBase(EVENT_TYPE _e, bool _s = false);
 	EventConnectorBase(const EventConnectorBase& _ec);
 	virtual ~EventConnectorBase() {}
@@ -52,6 +68,12 @@ class EventConnectorBase {
 	void suspend();
 	void unsuspend();
 
+	/** Call the handler
+	 *
+	 * @param the event.
+	 *
+	 * @return the value returned by the handler.
+	 */
 	virtual int call(EventBase&) const = 0;
 	virtual EventConnectorBase* clone() const = 0;
 };
@@ -69,22 +91,12 @@ class EventConnectorMethod1: public EventConnectorBase {
 	bool compare(const EventConnectorBase& eb) const {
 	    assert( __func != NULL );
 	    assert( __obj_ptr != NULL );
-	    if (typeid(eb) == typeid(EventConnectorMethod1<T>)) {
-		const EventConnectorMethod1<T>& tmp =
-		    dynamic_cast<const EventConnectorMethod1<T>& >(eb);
-		assert(tmp.__func != NULL);
-		assert(tmp.__obj_ptr != NULL);
-		// Please remember, the event type will be checked by the base
-		// class. This method is called from the base class'
-		// operator==().
-		//
-		// Because comparing the method pointer does not always work
-		// (i.e. SunCC, some clang++ versions), we only compare the obj
-		// ptr. It should be enough having one method pointer per
-		// object per event.
-		return tmp.__obj_ptr == __obj_ptr;
-	    }
-	    return false;
+
+	    return eb.handler_ptr() == this->handler_ptr();
+	}
+
+	const void* handler_ptr() const {
+	    return static_cast<const void*>(__obj_ptr);
 	}
 
     public:
@@ -110,12 +122,18 @@ class EventConnectorMethod1: public EventConnectorBase {
 	    assert(__obj_ptr != NULL);
 	    return *this;
 	}
+
+	/**
+	 * @return the value returned by the member function called,
+	 * or -1 if the connector is suspended
+	 */
 	int call(EventBase& _a) const {
 	    assert(__obj_ptr != NULL);
 	    assert(__func != NULL);
 	    if (isSuspended()) return -1;
 	    return (__obj_ptr->*__func)(_a);
 	}
+
 	EventConnectorBase* clone() const {
 	    return new EventConnectorMethod1<T>(*this);
 	}
@@ -129,6 +147,8 @@ class EventConnectorFunction1: public EventConnectorBase {
 
     protected:
 	bool compare(const EventConnectorBase& eb) const;
+	// Not used
+	const void* handler_ptr() const;
 
     public:
 	EventConnectorFunction1(EVENT_TYPE _e, fptr_t _func);

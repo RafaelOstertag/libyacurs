@@ -20,9 +20,8 @@ EventConnectorBase::setSuspended(bool _s) {
 EventConnectorBase::EventConnectorBase(EVENT_TYPE _e, bool _s):
     evt(_e), suspended(_s) {}
 
-EventConnectorBase::EventConnectorBase(const EventConnectorBase& _ec) {
-    evt = _ec.evt;
-    suspended = _ec.suspended;
+EventConnectorBase::EventConnectorBase(const EventConnectorBase& _ec) :
+    evt(_ec.evt), suspended(_ec.suspended) {
 }
 
 EventConnectorBase&
@@ -34,7 +33,8 @@ EventConnectorBase::operator=(const EventConnectorBase& _ec) {
 
 bool
 EventConnectorBase::operator==(const EventConnectorBase& _ec) const {
-    return evt == _ec.evt && compare(_ec);
+    return (evt == _ec.evt) && 
+	(id() == _ec.id());
 }
 
 bool

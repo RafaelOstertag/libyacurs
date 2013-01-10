@@ -9,9 +9,17 @@
 #include "config.h"
 #endif
 
+#ifdef HAVE_STDINT_H
+#include <stdint.h>
+#endif // HAVE_STDINT_H
+
 #ifdef HAVE_CSTDLIB
 #include <cstdlib>
 #endif // HAVE_CSTDLIB
+
+#ifdef HAVE_STRING
+#include <string>
+#endif // HAVE_STRING
 
 #ifdef HAVE_CASSERT
 #include <cassert>
@@ -47,12 +55,10 @@ class EventConnectorBase {
 	bool suspended;
 
     protected:
-	virtual bool compare(const EventConnectorBase& ) const = 0;
+	virtual uintptr_t id() const = 0;
 	void setSuspended(bool _s);
 
     public:
-	virtual const void* handler_ptr() const = 0;
-
 	EventConnectorBase(EVENT_TYPE _e, bool _s = false);
 	EventConnectorBase(const EventConnectorBase& _ec);
 	virtual ~EventConnectorBase() {}
@@ -88,16 +94,7 @@ class EventConnectorMethod1: public EventConnectorBase {
 	_obj_ptr_t __obj_ptr;
 
     protected:
-	bool compare(const EventConnectorBase& eb) const {
-	    assert( __func != NULL );
-	    assert( __obj_ptr != NULL );
-
-	    return eb.handler_ptr() == this->handler_ptr();
-	}
-
-	const void* handler_ptr() const {
-	    return static_cast<const void*>(__obj_ptr);
-	}
+	uintptr_t id() const { return (uintptr_t)__obj_ptr; }
 
     public:
 	EventConnectorMethod1(EVENT_TYPE _e,
@@ -114,12 +111,15 @@ class EventConnectorMethod1: public EventConnectorBase {
 	    assert(__func != NULL);
 	    assert(__obj_ptr != NULL);
 	}
+
 	EventConnectorMethod1<T>& operator=(const EventConnectorMethod1<T>& _ec) {
 	    EventConnectorBase::operator=(_ec);
+	    assert(_ec.__func != NULL);
 	    __func = _ec.__func;
-	    assert(__func != NULL);
+
+	    assert(_ec.__obj_ptr != NULL);
 	    __obj_ptr = _ec.__obj_ptr;
-	    assert(__obj_ptr != NULL);
+
 	    return *this;
 	}
 
@@ -144,11 +144,10 @@ class EventConnectorFunction1: public EventConnectorBase {
 	typedef int (*fptr_t)(EventBase&);
     private:
 	fptr_t __func;
+	std::string __id;
 
     protected:
-	bool compare(const EventConnectorBase& eb) const;
-	// Not used
-	const void* handler_ptr() const;
+	uintptr_t id() const;
 
     public:
 	EventConnectorFunction1(EVENT_TYPE _e, fptr_t _func);

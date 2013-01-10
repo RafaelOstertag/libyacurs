@@ -65,6 +65,14 @@ class AlrmHandler2: public AlrmHandler {
 	}
 };
 
+int fcthandler1(EventBase&) {
+    return 0;
+}
+
+int fcthandler2(EventBase&) {
+    return 0;
+}
+
 int main() {
 
     WinChHandler winch1;
@@ -83,7 +91,7 @@ int main() {
     EventConnectorMethod1<AlrmHandler2> aconnector2_1(EVT_ALARM, &ahandler2_1, &AlrmHandler2::handler);
     EventConnectorMethod1<AlrmHandler2> aconnector2_2(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler);
     EventConnectorMethod1<AlrmHandler2> aconnector2_2_(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler);
-
+    EventConnectorMethod1<Handler> ehandler(EVT_ALARM, &ahandler2_2, &Handler::handler);
 
     if (wconnector1 == wconnector2)
 	return 1;
@@ -100,6 +108,9 @@ int main() {
     if (aconnector2_2 != aconnector2_2_)
 	return 1;
 
+    if (aconnector2_2 != ehandler)
+	return 1;
+
     EventConnectorBase *ptr1, *ptr2;
 
     ptr1 = &wconnector1;
@@ -113,5 +124,19 @@ int main() {
 
     if ( *ptr1 != *ptr2 )
 	return 1;
+
+    EventConnectorFunction1 efh1(EVT_USR1, fcthandler1);
+    EventConnectorFunction1 efh1_1(EVT_USR1, fcthandler1);
+    EventConnectorFunction1 efh2(EVT_USR1, fcthandler2);
+
+    if (efh1 != efh1)
+	return 1;
+
+    if (efh1 != efh1_1)
+	return 1;
+
+    if (efh1 == efh2)
+	return 1;
+
     return 0;
 }

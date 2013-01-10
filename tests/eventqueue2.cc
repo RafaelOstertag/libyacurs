@@ -40,25 +40,55 @@ class Handler {
 class AlrmHandler: public Handler {
     public:
 	inline AlrmHandler(): Handler(EVT_ALARM) {}
-	inline int handler(EventBase& e) { 
+	inline int handler(EventBase& e) {
 	    EventQueue::inject(EventBase(EVT_QUIT));
-	    return Handler::handler(e); 
+	    return Handler::handler(e);
 	}
 };
 
+class SelfRegister : public Handler {
+    public:
+	inline SelfRegister(): Handler(EVT_ALARM) {
+	    EventQueue::connectEvent(EventConnectorMethod1<SelfRegister>(EVT_ALARM, this ,&SelfRegister::handler) );
+	}
+	inline int handler(EventBase& e) {
+	    return Handler::handler(e);
+	}
+};
+
+class SelfRegister2 : public SelfRegister {
+    public:
+	inline SelfRegister2(): SelfRegister() {
+	    EventQueue::connectEvent(EventConnectorMethod1<SelfRegister2>(EVT_ALARM, this ,&SelfRegister2::handler) );
+	}
+	inline int handler(EventBase& e) {
+	    EventQueue::inject(EventBase(EVT_QUIT));
+	    return SelfRegister::handler(e);
+	}
+};
+
+
 int main() {
-    
+
     try {
 	AlrmHandler ahandler;
 
 	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
 
 	Curses::init();
-	alarm(4);
+	alarm(2);
 	EventQueue::run();
 
 	if (ahandler.getCalls() != 1)
 	    goto _ERR;
+
+	SelfRegister2 sr2;
+	alarm(2);
+	EventQueue::run();
+
+	if (sr2.getCalls() != 1)
+	    goto _ERR;
+
 	Curses::end();
     } catch (std::exception& e) {
 	std::cerr << e.what() << std::endl;

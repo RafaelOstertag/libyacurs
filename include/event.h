@@ -11,6 +11,13 @@
 
 #include "rectangle.h"
 
+/**
+ * Event Types. One event handler can be connected to each event type per object using an Event Connector.
+ *
+ * @see EventConnectorBase
+ * @see EventQueue
+ * @group Event
+ */
 enum EVENT_TYPE {
     /// Terminates the EventQueue main loop
     EVT_QUIT,

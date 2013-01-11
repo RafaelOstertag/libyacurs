@@ -42,23 +42,27 @@ class WinChHandler: public Handler {
 	inline int handler(EventBase& e) {
 	    Handler::handler(e);
 	    Rectangle<> tmp(dynamic_cast<EventWinCh&>(e).data());
+	    std::cout << "WinChHandler\r" << std::endl;
 	    return 0;
 	}
 };
 
-class WinAlrmHandler: public Handler {
+class AlrmHandler: public Handler {
     public:
-	inline WinAlrmHandler(): Handler(EVT_ALARM) {}
-	inline int handler(EventBase& e) { return Handler::handler(e); }
+	inline AlrmHandler(): Handler(EVT_ALARM) {}
+	inline int handler(EventBase& e) { 
+	    std::cout << "WinChHandler\r" << std::endl;
+	    return Handler::handler(e); 
+	}
 };
 
 int main() {
     try {
 	WinChHandler whandler;
-	WinAlrmHandler ahandler;
+	AlrmHandler ahandler;
 
 	EventQueue::connectEvent(EventConnectorMethod1<WinChHandler>(EVT_WINCH, &whandler,&WinChHandler::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<WinAlrmHandler>(EVT_ALARM, &ahandler,&WinAlrmHandler::handler) );
+	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
 
 	EventQueue::inject(EventWinCh(Rectangle<> ()));
 	EventQueue::inject(EventBase(EVT_ALARM));

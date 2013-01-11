@@ -24,6 +24,8 @@ EventConnectorBase::EventConnectorBase(const EventConnectorBase& _ec) :
     evt(_ec.evt), suspended(_ec.suspended) {
 }
 
+EventConnectorBase::~EventConnectorBase() {}
+
 EventConnectorBase&
 EventConnectorBase::operator=(const EventConnectorBase& _ec) {
     evt = _ec.evt;
@@ -50,6 +52,16 @@ EventConnectorBase::operator==(const EventBase& _eb) const {
 bool
 EventConnectorBase::operator!=(const EventBase& _eb) const {
     return !operator==(_eb);
+}
+
+bool
+EventConnectorBase::operator==(EVENT_TYPE _et) const {
+    return _et == evt;
+}
+
+bool
+EventConnectorBase::operator!=(EVENT_TYPE _et) const {
+    return !operator==(_et);
 }
 
 EVENT_TYPE

@@ -69,7 +69,7 @@ class EvtConnSetSuspendAll {
 	    __evt(_e), suspend(_s) {}
 	inline void operator()(EventConnectorBase* eb) {
 	    assert ( eb != NULL );
-	    if ( eb->type() == __evt) {
+	    if ( *eb == __evt) {
 		if (suspend)
 		    eb->suspend();
 		else
@@ -89,7 +89,7 @@ class EvtConnSetSuspendExcept {
 					      suspend(_s){}
 	inline void operator()(EventConnectorBase* eb) {
 	    assert ( eb != NULL );
-	    if (eb->type() == __evt.type() &&
+	    if (*eb == __evt.type() &&
 		! (__evt == *eb) ) {
 		if (suspend)
 		    eb->suspend();

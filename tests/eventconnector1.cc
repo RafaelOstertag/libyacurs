@@ -99,6 +99,7 @@ int main() {
     EventConnectorMethod1<AlrmHandler2> aconnector2_2_(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler);
     EventConnectorMethod1<Handler> ehandler(EVT_ALARM, &ahandler2_2, &Handler::handler);
 
+    
     if (wconnector1 == wconnector2)
 	return 1;
 
@@ -116,6 +117,19 @@ int main() {
 
     if (aconnector2_2 != ehandler)
 	return 1;
+
+    Handler* hptr=&ahandler2_1;
+    AlrmHandler* aptr=&ahandler2_1;
+    AlrmHandler2* a2ptr=&ahandler2_1;
+
+    EventConnectorMethod1<AlrmHandler2> _a1(EVT_ALARM, a2ptr, &AlrmHandler2::handler);
+    EventConnectorMethod1<AlrmHandler> _a2(EVT_ALARM, aptr, &AlrmHandler::handler);
+  EventConnectorMethod1<Handler> _a3(EVT_ALARM, hptr, &Handler::handler);
+
+  if (!(_a1 == _a2))
+      return 1;
+  if (!(_a2 == _a3))
+      return 1;
 
     EventConnectorBase *ptr1, *ptr2;
 

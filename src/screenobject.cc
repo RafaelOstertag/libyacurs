@@ -12,6 +12,7 @@
 #include <cassert>
 #endif // HAVE_CASSERT
 
+#include "curs.h"
 #include "cursex.h"
 #include "screenobject.h"
 #include "eventqueue.h"
@@ -23,42 +24,65 @@
 //
 // Protected
 //
-WINDOW* 
+WINDOW*
 ScreenObject::getWindow() const {
     return *w;
  }
 
-unsigned int 
+unsigned int
 ScreenObject::getInstanceCount() const {
     return *instances;
 }
+
+void
+ScreenObject::setMargin(const Margin<>& _m) {
+    //    assert(!isRealized());
+    margin = _m;
+}
+
+const Margin<>&
+ScreenObject::getMargin() const {
+    return margin;
+}
+
+void
+ScreenObject::unrealize() {
+    if (not isRealized()) throw NotRealized();
+
+    setRealized(false);
+
+    assert(w!=NULL);
+    assert(*w!=NULL);
+
+    if (delwin(*w) == ERR)
+	throw DelWindowFailed();
+
+    *w = NULL;
+}
+
 
 //
 // Public
 //
 
-ScreenObject::ScreenObject(const Margin<> _m): Realizeable(),
-					       rect(),
-					       margin(_m),
-					       instances(NULL),
-					       w(NULL) {
+ScreenObject::ScreenObject(const Rectangle<>& _r,
+			   const Margin<>& _m):
+    Realizeable(), rect(_r), margin(_m),
+    instances(NULL), w(NULL) {
+
+    if ( _r == Rectangle<>() )
+	rect = Curses::inquiryScreenSize();
+
     w = new WINDOW*;
-    *w = NULL; // resize has to take care of allocating the window
+    *w = NULL;
 
     instances = new unsigned int;
     *instances = 1;
 }
 
-ScreenObject::ScreenObject(const ScreenObject& so) : Realizeable(so) {
-    instances = so.instances;
+ScreenObject::ScreenObject(const ScreenObject& so):
+    Realizeable(so), rect(so.rect), margin(so.margin), instances(so.instances) {
     (*instances)++;
-
-    w = so.w;
-
-    rect = so.rect;
-
-    margin = so.margin;
-
 }
 
 ScreenObject::~ScreenObject() {
@@ -90,7 +114,7 @@ ScreenObject::operator=(const ScreenObject& so) {
     Realizeable::operator=(so);
 
     instances = so.instances;
-    assert(instances!=0);
+    assert(instances!=NULL);
     (*instances)++;
 
     w = so.w;
@@ -103,48 +127,65 @@ ScreenObject::operator=(const ScreenObject& so) {
 }
 
 void
-ScreenObject::refresh() {
+ScreenObject::refresh(bool immediate) {
     if (!isRealized()) return;
 
     assert(w!=NULL);
     assert(*w!=NULL);
 
-    int retval = wnoutrefresh(*w);
+    int retval;
+    if (immediate)
+	retval = wrefresh(*w);
+    else
+	retval = wnoutrefresh(*w);
+
     if (retval == ERR)
 	throw RefreshFailed();
 
-    return;
 }
 
 void
 ScreenObject::resize(const Rectangle<>& r) {
+    //
+    // Keep in mind: a resize does not refresh!
+    //
     if (!isRealized()) throw NotRealized();
 
-    setRealized(false);
+    assert(r.x()>=0);
+    assert(r.y()>=0);
+    assert(r.rows()>0);
+    assert(r.cols()>0);
+
+    unrealize();
 
     rect = r;
 
-    int retval = delwin(*w);
-    if (retval == ERR) {
-	throw DelWindowFailed();
-    }
-
-    realize(r);
-
-    refresh();
+    realize();
 }
 
 void
-ScreenObject::realize(const Rectangle<>& r) {
-    if (isRealized()) return;
+ScreenObject::realize() {
+    if (isRealized()) throw AlreadyRealized();
 
-    rect = r;
+    assert(rect.x()>=0);
+    assert(rect.y()>=0);
+    assert(rect.rows()>0);
+    assert(rect.cols()>0);
+
     Rectangle<> _tmp = rect - margin;
 
-    *w = newwin(_tmp.getLines(),
-		_tmp.getCols(),
-		_tmp.getY(),
-		_tmp.getX());
+    assert(_tmp.x()>=0);
+    assert(_tmp.y()>=0);
+    assert(_tmp.rows()>0);
+    assert(_tmp.cols()>0);
+
+
+    assert(w!=NULL);
+    assert(*w==NULL);
+    *w = newwin(_tmp.rows(),
+		_tmp.cols(),
+		_tmp.y(),
+		_tmp.x());
     if (*w == NULL) {
 	throw NewWindowFailed();
     }

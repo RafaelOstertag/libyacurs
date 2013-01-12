@@ -80,3 +80,12 @@ WinSizeInvalid::WinSizeInvalid():
 
 UnableToGetWinSize::UnableToGetWinSize():
     BaseCurEx("Unable to get window size") {}
+
+DelCurTermFailed::DelCurTermFailed():
+    BaseCurEx("Error in call to del_curterm()") {}
+
+SetupTermFailed::SetupTermFailed():
+    BaseCurEx("Error in call to setupterm()") {}
+
+TouchFailed::TouchFailed():
+    BaseCurEx("Error in call to setupterm()") {}

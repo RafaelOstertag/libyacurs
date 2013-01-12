@@ -127,4 +127,19 @@ class UnableToGetWinSize: public BaseCurEx {
 	UnableToGetWinSize();
 };
 
+class DelCurTermFailed: public BaseCurEx {
+    public:
+	DelCurTermFailed();
+};
+
+class SetupTermFailed: public BaseCurEx {
+    public:
+	SetupTermFailed();
+};
+
+class TouchFailed: public BaseCurEx {
+    public:
+	TouchFailed();
+};
+
 #endif // CUREX_H

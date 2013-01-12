@@ -12,49 +12,49 @@
 template<class T=int>
 class Coordinates {
     private:
-	T x, y;
+	T __x, __y;
 
     public:
-	Coordinates() : x(0), y(0) {}
-	Coordinates(T _x, T _y) : x(_x), y(_y) {}
+	Coordinates() : __x(0), __y(0) {}
+	Coordinates(T _x, T _y) : __x(_x), __y(_y) {}
 	Coordinates(const Coordinates<T>& _c) {
-	    x = _c.x;
-	    y = _c.y;
+	    __x = _c.__x;
+	    __y = _c.__y;
 	}
 	virtual ~Coordinates() {}
 	
-	T getX() const { return x; }
-	T getY() const { return y; }
-	void setX(T _x) { x = _x; }
-	void setY(T _y) { y = _y; }
+	T x() const { return __x; }
+	T y() const { return __y; }
+	void x(T _x) { __x = _x; }
+	void y(T _y) { __y = _y; }
 	
 	Coordinates<T>& operator=(const Coordinates<T>& rhs) {
-	    x = rhs.x;
-	    y = rhs.y;
+	    __x = rhs.__x;
+	    __y = rhs.__y;
 	    return *this;
 	}
 	
 	Coordinates<T>& operator+=(const Coordinates<T>& rhs) {
-	    x += rhs.x;
-	    y += rhs.y;
+	    __x += rhs.__x;
+	    __y += rhs.__y;
 	    return *this;
 	}
 
 	Coordinates<T>& operator+=(const T& rhs) {
-	    x += rhs;
-	    y += rhs;
+	    __x += rhs;
+	    __y += rhs;
 	    return *this;
 	}
 	
 	Coordinates<T>& operator-=(const Coordinates<T>& rhs) {
-	    x -= rhs.x;
-	    y -= rhs.y;
+	    __x -= rhs.__x;
+	    __y -= rhs.__y;
 	    return *this;
 	}
 
 	Coordinates<T>& operator-=(const T& rhs) {
-	    x -= rhs;
-	    y -= rhs;
+	    __x -= rhs;
+	    __y -= rhs;
 	    return *this;
 	}
 	
@@ -79,7 +79,7 @@ class Coordinates {
 	}
 	
 	bool operator==(const Coordinates<T>& rhs) const {
-	    return x == rhs.x && y == rhs.y;
+	    return __x == rhs.__x && __y == rhs.__y;
 	}
 
 	bool operator!=(const Coordinates<T>& rhs) const {

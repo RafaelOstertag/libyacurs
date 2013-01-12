@@ -17,18 +17,18 @@ int main() {
 
     Margin<> r = m1 + m2;
 
-    if ( r.getTop() != 11 ||
-	 r.getLeft() != 13 ||
-	 r.getBottom() != 17 ||
-	 r.getRight() != 19 )
+    if ( r.top() != 11 ||
+	 r.left() != 13 ||
+	 r.bottom() != 17 ||
+	 r.right() != 19 )
 	return 1;
 
     r = m1 - m2;
 
-    if ( r.getTop() != 2 ||
-	 r.getLeft() != 3 ||
-	 r.getBottom() != 5 ||
-	 r.getRight() != 7 )
+    if ( r.top() != 2 ||
+	 r.left() != 3 ||
+	 r.bottom() != 5 ||
+	 r.right() != 7 )
 	return 1;
 
     if ( r != m1 - m2)

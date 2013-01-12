@@ -10,18 +10,18 @@ int main() {
 
     Rectangle<> r = o-m;
 
-    if (r.getLines() != 21 ||
-	r.getCols() != 73 ||
-	r.getY() != 1 ||
-	r.getX() != 2 )
+    if (r.rows() != 21 ||
+	r.cols() != 73 ||
+	r.y() != 1 ||
+	r.x() != 2 )
 	return 1;
 
     o = Rectangle<>(2,2,5,5);
     m = Margin<>(1,1,0,0);
     r = o-m;
 
-    if (r.getLines() != 4 &&
-	r.getCols() != 4)
+    if (r.rows() != 4 &&
+	r.cols() != 4)
 	return 1;
 
     Rectangle<> o1(1,2,3,5);
@@ -44,28 +44,28 @@ int main() {
     if (!(o1 == o2))
 	return 1;
 
-    if (o1.getLines() != 13 ||
-	o1.getCols() != 17)
+    if (o1.rows() != 13 ||
+	o1.cols() != 17)
 	return 1;
 
-    o1.setLines(25);
-    if (o1.getLines() != 25 ||
-	o1.getCols() != 17 )
+    o1.rows(25);
+    if (o1.rows() != 25 ||
+	o1.cols() != 17 )
 	return 1;
 
-    o1.setCols(80);
-    if (o1.getLines() != 25 ||
-	o1.getCols() != 80)
+    o1.cols(80);
+    if (o1.rows() != 25 ||
+	o1.cols() != 80)
 	return 1;
 
-    o1.setCols(80);
-    if (o1.getLines() != 25 ||
-	o1.getCols() != 80)
+    o1.cols(80);
+    if (o1.rows() != 25 ||
+	o1.cols() != 80)
 	return 1;
 
-    o1.setLines(25);
-    if (o1.getLines() != 25 ||
-	o1.getCols() != 80 )
+    o1.rows(25);
+    if (o1.rows() != 25 ||
+	o1.cols() != 80 )
 	return 1;
 
 

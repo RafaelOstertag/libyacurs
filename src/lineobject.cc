@@ -4,12 +4,48 @@
 #include "config.h"
 #endif
 
+#include "curs.h"
+#include "eventqueue.h"
 #include "cursex.h"
 #include "lineobject.h"
 
 //
 // Private
 //
+
+void
+LineObject::computeMargin(const Rectangle<>& _s) {
+    Rectangle<> _tmp_r;
+
+    if (_s == Rectangle<>() )
+	_tmp_r = Curses::inquiryScreenSize();
+    else
+	_tmp_r= _s;
+
+#ifndef NDEBUG
+    Margin<> __m_debug;
+#endif // NDEBUG
+    switch (position) {
+    case POS_TOP:
+#ifdef NDEBUG
+	setMargin(Margin<>(0, 0, _tmp_r.rows()-1,0));
+#else // NDEBUG
+	__m_debug = Margin<>(0, 0, _tmp_r.rows()-1,0);
+	assert(__m_debug.bottom()>=0);
+	setMargin(__m_debug);
+#endif //NDEBUG
+	break;
+    case POS_BOTTOM:
+#ifdef NDEBUG
+	setMargin(Margin<>(_tmp_r.rows()-1, 0, 0, 0));
+#else // NDEBUG
+	__m_debug = Margin<>(_tmp_r.rows()-1, 0, 0, 0);
+	assert(__m_debug.top()>=0);
+	setMargin(__m_debug);
+#endif
+	break;
+    }
+}
 
 //
 // Protected
@@ -25,76 +61,78 @@ LineObject::putLine() {
 
     retval = mymvwaddstr(getWindow(),
 			 0,0,
-			 line.c_str());
+			 linetext.c_str());
     if (retval == ERR)
 	throw AddStrFailed();
+
+    refresh(true);
+}
+
+int
+LineObject::refresh_handler(EventBase& _e) {
+    assert(_e.type() == EVT_REFRESH);
+    refresh(false);
+    return 0;
+}
+
+int
+LineObject::resize_handler(EventBase& _e) {
+    assert(_e.type() == EVT_WINCH);
+    
+    EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
+
+    // set the margin in order to achieve the position
+    computeMargin(winch.data()); 
+
+    // resize() of ScreenObject
+    resize(winch.data()); 
+    
+    return 0;
 }
 
 //
 // Public
 //
-
-LineObject::LineObject(POSITION _pos, const Coordinates<>* _coords):
-    ScreenObject(), line(), pos(_pos), coords(NULL) {
-    if (_coords)
-	coords = new Coordinates<>(*_coords);
-}
-
-LineObject::LineObject(POSITION _pos, const Coordinates<>* _coords, const std::string& _str):
-    ScreenObject(), line(_str), pos(_pos), coords(NULL) {
-    if (_coords)
-	coords = new Coordinates<>(*_coords);
-}
-
-LineObject::LineObject(POSITION _pos, const Coordinates<>* _coords, const char* _str):
-    ScreenObject(), line(_str), pos(_pos), coords(NULL) {
-    if (_coords)
-	coords = new Coordinates<>(*_coords);
+LineObject::LineObject(POSITION _pos, const std::string& _t):
+    ScreenObject(), linetext(_t), position(_pos) {
+    EventQueue::connectEvent(EventConnectorMethod1<LineObject>(EVT_REFRESH,this, &LineObject::refresh_handler));
+    EventQueue::connectEvent(EventConnectorMethod1<LineObject>(EVT_WINCH,this, &LineObject::resize_handler));
 }
 
 LineObject::~LineObject() {
-    if (coords)
-	delete coords;
+    EventQueue::disconnectEvent(EventConnectorMethod1<LineObject>(EVT_REFRESH,this, &LineObject::refresh_handler));
+    EventQueue::disconnectEvent(EventConnectorMethod1<LineObject>(EVT_WINCH,this, &LineObject::resize_handler));
 }
 
-LineObject::LineObject(const LineObject& lo) : ScreenObject(lo) {
-    line = lo.line;
-    pos = lo.pos;
-    if (lo.coords)
-	coords = new Coordinates<>(*lo.coords);
-    else
-	coords=NULL;
+LineObject::LineObject(const LineObject& lo):
+    ScreenObject(lo), linetext(lo.linetext), position(lo.position) {
+
+    EventQueue::connectEvent(EventConnectorMethod1<LineObject>(EVT_REFRESH,this, &LineObject::refresh_handler));
+    EventQueue::connectEvent(EventConnectorMethod1<LineObject>(EVT_WINCH,this, &LineObject::resize_handler));
 }
 
 LineObject&
 LineObject::operator=(const LineObject& lo) {
-    if (this == &lo) return *this;
+    ScreenObject::operator=(lo);
 
-    line = lo.line;
-    pos = lo.pos;
-
-    if (coords)
-	delete coords;
-
-    if (lo.coords)
-	coords = new Coordinates<>(*lo.coords);
-    else
-	coords=NULL;
+    linetext = lo.linetext;
+    position = lo.position;
 
     return *this;
 }
 
 void
-LineObject::realize(const Rectangle<>& r) {
-    ScreenObject::realize(r);
+LineObject::realize() {
+    computeMargin();
+    ScreenObject::realize();
     putLine();
 }
 
 void
 LineObject::setLine(const std::string& _str) {
-    line = _str;
+    linetext = _str;
     putLine();
 }
 
-std::string 
-LineObject::getLine() const { return line; }
+std::string
+LineObject::getLine() const { return linetext; }

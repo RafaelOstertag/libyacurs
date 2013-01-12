@@ -23,28 +23,35 @@ class LineObject: public ScreenObject {
     public:
 	enum POSITION {
 	    POS_TOP,
-	    POS_BOTTOM,
-	    POS_ABSOLUTE
+	    POS_BOTTOM
 	};
 
     private:
-	std::string line;
-	POSITION pos;
-	/// Only used when in absolut positioning mode
-	Coordinates<>* coords;
+	std::string linetext;
+	POSITION position;
+
+	/**
+	 * Compute and sets the margin of ScreenObject to achieve the position
+	 * of the line object according to \c pos.
+	 *
+	 * @param _s the screen size. If this parameter is equal to
+	 * Rectangle<>(), computeMargin calls Curses::inquiryScreenSize() in
+	 * order to determine the screen size.
+	 */
+	void computeMargin(const Rectangle<>& _s=Rectangle<>());
 
     protected:
 	void putLine();
+	virtual int refresh_handler(EventBase& _e);
+	virtual int resize_handler(EventBase& _e);
 
     public:
-	LineObject(POSITION _pos, const Coordinates<>* _coords);
-	LineObject(POSITION _pos, const Coordinates<>* _coords, const std::string& _str);
-	LineObject(POSITION _pos, const Coordinates<>* _coords, const char* _str);
+	LineObject(POSITION _pos, const std::string& _t = std::string());
 	~LineObject();
 	LineObject(const LineObject& lo);
 	LineObject& operator=(const LineObject& lo);
 
-	void realize(const Rectangle<>& r);
+	void realize();
 
 	void setLine(const std::string& _str);
 	std::string getLine() const;

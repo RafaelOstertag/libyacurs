@@ -17,9 +17,7 @@
 #include <cstdlib>
 #endif // HAVE_CSTDLIB
 
-#include "curs.h"
-#include "eventconnector.h"
-#include "eventqueue.h"
+#include "yacurs.h"
 
 class Handler {
     private:
@@ -47,6 +45,13 @@ class AlrmHandler: public Handler {
 	inline AlrmHandler(): Handler(EVT_ALARM) {}
 	inline int handler(EventBase& e) {
 	    Handler::handler(e);
+	    std::cout << "AlrmHandler2::handler()\r" << std::endl;
+	    // During processing of the queue, USR1 is blocked, so we cheat and unblock it
+	    sigset_t _sset;
+	    sigemptyset(&_sset);
+	    sigaddset(&_sset,SIGUSR1);
+	    if (sigprocmask(SIG_UNBLOCK, &_sset, NULL))
+		abort();
 	    raise(SIGUSR1);
 	    return 0;
 	}
@@ -59,10 +64,19 @@ class Usr1Handler: public Handler {
 	inline Usr1Handler(bool q=false): Handler(EVT_USR1), quit(q) {}
 	inline int handler(EventBase& e) {
 	    Handler::handler(e);
+	    std::cout << "Usr1Handler::handler()\r" << std::endl;
 	    if (quit)
 		EventQueue::inject(EventBase(EVT_QUIT));
-	    else
+	    else {
+		// During processing of the queue, USR2 is blocked, so we cheat
+		// and unblock it
+		sigset_t _sset;
+		sigemptyset(&_sset);
+		sigaddset(&_sset,SIGUSR2);
+		if (sigprocmask(SIG_UNBLOCK, &_sset, NULL))
+		    abort();
 		raise(SIGUSR2);
+	    }
 	    return 0;
 	}
 	inline void setQuit(bool q) { quit=q; }
@@ -73,6 +87,7 @@ class Usr2Handler: public Handler {
 	inline Usr2Handler(): Handler(EVT_USR2) {}
 	inline int handler(EventBase& e) {
 	    Handler::handler(e);
+	    std::cout << "Usr2Handler::handler()\r" << std::endl;
 	    EventQueue::inject(EventBase(EVT_QUIT));
 	    return 0;
 	}
@@ -274,12 +289,12 @@ int main() {
 
 	Curses::end();
     } catch (std::exception& e) {
+	Curses::end();
 	std::cerr << e.what() << std::endl;
-	goto _ERR;
+	return 1;
     }
 
     return 0;
-
  _ERR:
     Curses::end();
     return 1;

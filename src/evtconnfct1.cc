@@ -44,7 +44,7 @@ EventConnectorFunction1::call(EventBase& _e) const {
 
     if (isSuspended()) return -1;
 
-    return __func(_a);
+    return __func(_e);
 }
 
 EventConnectorBase*

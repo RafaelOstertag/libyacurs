@@ -14,6 +14,7 @@
 
 #ifdef HAVE_NCURSES_H
 #include <ncurses.h>
+#include <term.h>
 #elif HAVE_CURSES_H
 #include <curses.h>
 #else

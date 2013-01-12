@@ -9,42 +9,49 @@
 #include <unistd.h>
 #endif // HAVE_UNISTD_H
 
+#ifdef HAVE_CASSERT
+#include <cassert>
+#endif // HAVE_CASSERT
+
 #ifdef HAVE_IOSTREAM
 #include <iostream>
 #endif // HAVE_IOSTREAM
 
-#include "curs.h"
-#include "lineobject.h"
-#include "window.h"
+#include "yacurs.h"
+
+int alrm(EventBase& _e) {
+    assert(_e == EVT_ALARM);
+    EventQueue::inject(EventBase(EVT_QUIT));
+    return 0;
+}
 
 int main() {
     try {
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   NULL, "Basic 1");
+					   "Basic 1");
 	Curses::setTitle(title);
 
-	Window* w1 = new Window;
+	Window* w1 = new Window(Margin<>(1,0,0,0));
 	w1->setFrame(true);
 
 	Curses::setWindow(w1);
 
-	Curses::show();
+	EventQueue::connectEvent(EventConnectorFunction1(EVT_ALARM,&alrm));
 
-	sleep(2);
+	alarm(2);
+	Curses::run();
 
 	delete title;
 	delete w1;
+
 	Curses::end();
     } catch (std::exception& e) {
+	Curses::end();
 	std::cerr << e.what() << std::endl;
-	sleep(2);
-	goto _ERR;
+	return 1;
     }
 
     return 0;
- _ERR:
-    Curses::end();
-    return 1;
 }

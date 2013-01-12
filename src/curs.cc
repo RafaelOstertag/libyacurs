@@ -49,7 +49,30 @@ Rectangle<> Curses::scrdim;
 //
 // Protected
 //
+int
+Curses::doupdate_handler(EventBase& e) {
+    if (doupdate() == ERR)
+	throw DoupdateFailed();
 
+    return 0;
+}
+
+int 
+Curses::termresetup_handler(EventBase& e) {
+    if (del_curterm(cur_term)==ERR)
+	throw DelCurTermFailed();
+
+    if (setupterm(NULL, fileno(stdout), NULL) == ERR)
+	throw SetupTermFailed();
+
+    if (werase(stdscr) == ERR)
+	throw EraseFailed();
+
+    if (wrefresh(stdscr) == ERR)
+	throw RefreshFailed();
+
+    return 0;
+}
 
 //
 // Public
@@ -65,17 +88,15 @@ Curses::init() {
 
     scrdim = inquiryScreenSize();
 
-    EventQueue::connectEvent(EventConnectorFunction1(EVT_WINCH, resize));
+    EventQueue::connectEvent(EventConnectorFunction1(EVT_DOUPDATE, Curses::doupdate_handler));
+    EventQueue::connectEvent(EventConnectorFunction1(EVT_TERMRESETUP, Curses::termresetup_handler));
 
-    int retval;
 #if !(defined(_XOPEN_CURSES) || defined(NCURSES_VERSION))
-    retval = wrefresh(stdscr);
-    if (retval == ERR)
+    if (wrefresh(stdscr) == ERR)
 	throw RefreshFailed();
 #endif // !(defined(_XOPEN_CURSES) || defined(NCURSES_VERSION))
 
-    retval = nonl();
-    if (retval == ERR)
+    if (nonl() == ERR)
 	throw NoNLFailed();
 
     initialized = true;
@@ -94,65 +115,28 @@ Curses::end() {
 }
 
 void
-Curses::show() {
+Curses::run() {
     if (!initialized) throw NotInitialized();
 
-    Rectangle<> rmain(scrdim);
-
-
     if (title) {
-	title->realize(Rectangle<>(0, 0, 1, scrdim.getCols()));
-
-	rmain-=Margin<>(1,0,0,0);
-
-	title->refresh();
+	title->realize();
+	title->refresh(false);
     }
 
     if (statusline) {
-	statusline->realize(Rectangle<>(scrdim.getLines()-1,0,1,
-					scrdim.getCols()));
-	rmain-=Margin<>(0,0,1,0);
-
-	statusline->refresh();
+	statusline->realize();
+	statusline->refresh(false);
     }
 
     if (mainwindow) {
-	mainwindow->realize(rmain);
-
-	mainwindow->refresh();
+	mainwindow->realize();
+	mainwindow->refresh(false);
     }
 
-    int retval = doupdate();
-    if (retval == ERR)
-	throw DoupdateFailed();
-}
-
-int
-Curses::resize(EventBase& e) {
-    if (!initialized) throw NotInitialized();
-
-    Rectangle<> rmain(dynamic_cast<EventWinCh&>(e).data());
-
-    if (title) {
-	title->resize(Rectangle<>(0, 0, 1, scrdim.getCols()));
-
-	rmain-=Margin<>(1,0,0,0);
-    }
-
-    if (statusline) {
-	statusline->resize(Rectangle<>(scrdim.getLines()-1,0,1,
-					scrdim.getCols()));
-	rmain-=Margin<>(0,0,1,0);
-    }
-
-    if (mainwindow)
-	mainwindow->resize(rmain);
-
-    int retval = doupdate();
-    if (retval == ERR)
+    if (doupdate() == ERR)
 	throw DoupdateFailed();
 
-    return 0;
+    EventQueue::run();
 }
 
 void
@@ -205,27 +189,27 @@ Curses::inquiryScreenSize() {
     winsize ws;
     Rectangle<> __scrdim;
 
-    __scrdim.setX(0);
-    __scrdim.setY(0);
+    __scrdim.x(0);
+    __scrdim.y(0);
 
     if (ioctl(STDIN_FILENO, TIOCGWINSZ, &ws) != -1) {
 	if (ws.ws_row > 0 && ws.ws_col > 0) {
-	    __scrdim.setLines(ws.ws_row);
-	    __scrdim.setCols(ws.ws_col);
+	    __scrdim.rows(ws.ws_row);
+	    __scrdim.cols(ws.ws_col);
 	} else {
 	    throw WinSizeInvalid();
 	}
     } else {
-	char* clines = std::getenv("LINES");
+	char* crows = std::getenv("LINES");
 	char* ccols = std::getenv("COLUMNS");
 
-	if ( clines != NULL && ccols != NULL ) {
-	    int _lines = std::atoi(clines);
+	if ( crows != NULL && ccols != NULL ) {
+	    int _rows = std::atoi(crows);
 	    int _cols = std::atoi(ccols);
 
-	    if ( _lines > 0 && _cols > 0 ) {
-		__scrdim.setLines(_lines);
-		__scrdim.setCols(_cols);
+	    if ( _rows > 0 && _cols > 0 ) {
+		__scrdim.rows(_rows);
+		__scrdim.cols(_cols);
 	    } else {
 		throw UnableToGetWinSize();
 	    }
@@ -236,13 +220,13 @@ Curses::inquiryScreenSize() {
     return __scrdim;
 
 #if 0
-    int x, y, nlines, ncols;
+    int x, y, nrows, ncols;
     getbegyx(w, y, x);
-    getmaxyx(w, nlines, ncols);
+    getmaxyx(w, nrows, ncols);
 
-    scrdim.setX(x);
-    scrdim.setY(y);
-    scrdim.setLines(nlines);
-    scrdim.setCols(ncols);
+    scrdim.x(x);
+    scrdim.y(y);
+    scrdim.rows(nrows);
+    scrdim.cols(ncols);
 #endif
 }

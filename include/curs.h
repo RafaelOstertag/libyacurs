@@ -28,12 +28,15 @@ class Curses {
 	static bool initialized;
 	static Rectangle<> scrdim;
 
+    protected:
+	static int doupdate_handler(EventBase& e);
+	static int termresetup_handler(EventBase& e);
+
     public:
 	static void init();
 	static void end();
 
-	static void show();
-	static int resize(EventBase& e);
+	static void run();
 
 	static void setTitle(LineObject* _title);
 	static LineObject* getTitle();

@@ -3,11 +3,9 @@
 check_PROGRAMS = cursinit coordinates margin rectangle		  \
   eventconnector1 eventqueue1 eventqueue2 eventqueue3 eventqueue4 \
   eventqueue5 eventqueue6 eventqueue7 eventqueue8 eventqueue9	  \
-  windowrefs basic1 basic2 resize1
-TESTS = cursinit coordinates margin rectangle eventconnector1	\
-   eventqueue1 eventqueue2 eventqueue3 eventqueue4 eventqueue5	\
-   eventqueue6 eventqueue7 eventqueue8 windowrefs basic1 basic2	\
-   resize1
+  windowrefs basic1 basic2 resize1 resize2 resize3
+# eventqueue9 and resize3 are interactive tests. They must not be listed here
+TESTS = $(filter-out eventqueue9 resize3, $(check_PROGRAMS))
 AM_DEFAULT_SOURCE_EXT = .cc
 
 AM_CPPFLAGS = -I$(top_srcdir)/include

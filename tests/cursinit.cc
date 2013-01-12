@@ -13,12 +13,11 @@
 #include <iostream>
 #endif // HAVE_IOSTREAM
 
-#include "curs.h"
+#include "yacurs.h"
 
 int main() {
     try {
 	Curses::init();
-	sleep(1);
 	Curses::end();
     } catch (std::exception &e) {
 	std::cerr << e.what() << std::endl;

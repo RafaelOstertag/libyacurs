@@ -17,9 +17,7 @@
 #include <cstdlib>
 #endif // HAVE_CSTDLIB
 
-#include "curs.h"
-#include "eventconnector.h"
-#include "eventqueue.h"
+#include "yacurs.h"
 
 class Handler {
     private:
@@ -46,8 +44,8 @@ class AlrmHandler: public Handler {
 	inline AlrmHandler(): Handler(EVT_ALARM) {}
 	inline int handler(EventBase& e) {
 	    Handler::handler(e);
+	    std::cout << "AlrmHandler::handler()\r" << std::endl;
 	    if (getCalls() < 4) {
-		std::cout << "alarm(1)" << std::endl;
 		alarm(1);
 		return 0;
 	    }
@@ -62,6 +60,7 @@ class AlrmHandler2: public AlrmHandler {
 	inline AlrmHandler2(): AlrmHandler() {}
 	inline int handler(EventBase& e) {
 	    EventQueue::disconnectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, this, &AlrmHandler2::handler));
+	    std::cout << "AlrmHandler2::handler()\r" << std::endl;
 	    return Handler::handler(e);
 	}
 };
@@ -95,8 +94,9 @@ int main() {
 	    goto _ERR;
 	Curses::end();
     } catch (std::exception& e) {
+	Curses::end();
 	std::cerr << e.what() << std::endl;
-	goto _ERR;
+	return 1;
     }
 
     return 0;

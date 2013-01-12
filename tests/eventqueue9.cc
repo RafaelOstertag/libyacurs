@@ -17,9 +17,7 @@
 #include <cstdlib>
 #endif // HAVE_CSTDLIB
 
-#include "curs.h"
-#include "eventconnector.h"
-#include "eventqueue.h"
+#include "yacurs.h"
 
 class Handler {
     private:
@@ -76,13 +74,10 @@ int main() {
 
 	Curses::end();
     } catch (std::exception& e) {
+	Curses::end();
 	std::cerr << e.what() << std::endl;
-	goto _ERR;
+	return 1;
     }
 
     return 0;
-
- _ERR:
-    Curses::end();
-    return 1;
 }

@@ -17,9 +17,7 @@
 #include <cstdlib>
 #endif // HAVE_CSTDLIB
 
-#include "curs.h"
-#include "eventconnector.h"
-#include "eventqueue.h"
+#include "yacurs.h"
 
 class Handler {
     private:
@@ -45,6 +43,7 @@ class AlrmHandler: public Handler {
     public:
 	inline AlrmHandler(): Handler(EVT_ALARM) {}
 	inline int handler(EventBase& e) {
+	    std::cout << "AlrmHandler::handler()\r" << std::endl;
 	    EventQueue::inject(EventBase(EVT_QUIT));
 	    return Handler::handler(e);
 	}
@@ -57,12 +56,15 @@ class AlrmHandler2: public AlrmHandler {
     public:
 	inline AlrmHandler2(): AlrmHandler(), calls_handler2(0), calls_handler3(0) {}
 	inline int handler(EventBase& e) {
+	    std::cout << "AlrmHandler2::handler()\r" << std::endl;
 	    return Handler::handler(e);
 	}
 	inline int handler2(EventBase& e) {
+	    std::cout << "AlrmHandler2::handler2()\r" << std::endl;
 	    return ++calls_handler2;
 	}
 	inline int handler3(EventBase& e) {
+	    std::cout << "AlrmHandler2::handler3()\r" << std::endl;
 	    return ++calls_handler3;
 	}
 	inline int getCalls2() const {return calls_handler2;}
@@ -99,12 +101,12 @@ int main() {
 	    goto _ERR;
 	Curses::end();
     } catch (std::exception& e) {
+	Curses::end();
 	std::cerr << e.what() << std::endl;
-	goto _ERR;
+	return 1;
     }
 
     return 0;
-
  _ERR:
     Curses::end();
     return 1;

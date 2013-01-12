@@ -17,10 +17,7 @@
 #include <cstdlib>
 #endif // HAVE_CSTDLIB
 
-#include "curs.h"
-#include "eventconnector.h"
-#include "eventqueue.h"
-
+#include "yacurs.h"
 
 class Handler {
     private:
@@ -41,6 +38,7 @@ class AlrmHandler: public Handler {
     public:
 	inline AlrmHandler(): Handler(EVT_ALARM) {}
 	inline int handler(EventBase& e) {
+	    std::cout << "AlrmHandler::handler()\r" << std::endl;
 	    EventQueue::inject(EventBase(EVT_QUIT));
 	    return Handler::handler(e);
 	}
@@ -52,6 +50,7 @@ class SelfRegister : public Handler {
 	    EventQueue::connectEvent(EventConnectorMethod1<SelfRegister>(EVT_ALARM, this ,&SelfRegister::handler) );
 	}
 	inline int handler(EventBase& e) {
+	    std::cout << "SelfRegister::handler()\r" << std::endl;
 	    return Handler::handler(e);
 	}
 };
@@ -63,6 +62,7 @@ class SelfRegister2 : public SelfRegister {
 	}
 	inline int handler(EventBase& e) {
 	    EventQueue::inject(EventBase(EVT_QUIT));
+	    std::cout << "SelfRegister2::handler()\r" << std::endl;
 	    return SelfRegister::handler(e);
 	}
 };
@@ -91,8 +91,9 @@ int main() {
 
 	Curses::end();
     } catch (std::exception& e) {
+	Curses::end();
 	std::cerr << e.what() << std::endl;
-	goto _ERR;
+	return 1;
     }
 
     return 0;

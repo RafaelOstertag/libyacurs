@@ -6,8 +6,7 @@
 #include <iostream>
 #include <exception>
 
-#include "curs.h"
-#include "window.h"
+#include "yacurs.h"
 
 
 class TWindow: public Window {

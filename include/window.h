@@ -18,21 +18,24 @@
 
 class Window: public ScreenObject {
     private:
-	Margin<> margin;
 	bool hasframe;
 
-	void __init();
+    protected:
+	virtual int refresh_handler(EventBase& _e);
+	virtual int resize_handler(EventBase& _e);
+	virtual int key_handler(EventBase& _e);
 
     public:
 	Window();
 	Window(const Margin<>& m);
 	Window(const Window& W);
+	~Window();
 	Window& operator=(const Window& W);
-	bool operator==(const Window& W) const;
+
 	bool getFrame() const;
 	void setFrame(bool b);
 
-	void realize(const Rectangle<>& r);
+	void realize();
 };
 
 #endif // WINDOWS_H

@@ -15,7 +15,10 @@
 
 void
 StatusLine::putTopMsg() {
-    setLine(messages.top());
+    if (messages.empty())
+	setLine(std::string());
+    else
+	setLine(messages.top());
 }
 
 
@@ -28,7 +31,7 @@ StatusLine::putTopMsg() {
 //
 
 StatusLine::StatusLine():
-    LineObject(POS_BOTTOM, NULL) {}
+    LineObject(POS_BOTTOM) {}
 
 StatusLine::StatusLine(const StatusLine& sl):
     LineObject(sl) {}
@@ -43,6 +46,5 @@ void
 StatusLine::popMsg() {
     if (messages.empty()) return;
     messages.pop();
-    if (messages.empty()) return;
     putTopMsg();
 }

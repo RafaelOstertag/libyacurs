@@ -28,8 +28,6 @@
 #include "eventqueue.h"
 #include "curs.h"
 
-#if defined(SIGWINCH) || defined(SIGALRM) || \
-    defined(SIGUSR1) || defined(SIGUSR2)
 sigset_t EventQueue::block_sigmask;
 sigset_t EventQueue::tmp_old_sigmask;
 sigset_t EventQueue::old_sigmask;
@@ -37,7 +35,6 @@ struct sigaction EventQueue::old_winch_act;
 struct sigaction EventQueue::old_alrm_act;
 struct sigaction EventQueue::old_usr1_act;
 struct sigaction EventQueue::old_usr2_act;		
-#endif // defined(SIGWINCH) || defined(SIGALRM)
 bool EventQueue::signal_blocked = false;
 
 std::queue<EventBase*> EventQueue::evt_queue;
@@ -136,9 +133,7 @@ EventQueue::setupSignal() {
     //
     // Window Size Change handler
     //
-#ifdef SIGWINCH
     struct sigaction winchact;
-
     winchact.sa_sigaction = signal_handler;
 #ifdef SA_SIGINFO
     winchact.sa_flags = SA_SIGINFO;
@@ -147,18 +142,18 @@ EventQueue::setupSignal() {
 #endif // SA_SIGINFO
 
     sigemptyset(&winchact.sa_mask);
+    sigaddset(&winchact.sa_mask, SIGALRM);
+    sigaddset(&winchact.sa_mask, SIGUSR1);
+    sigaddset(&winchact.sa_mask, SIGUSR2);
 
     err = sigaction(SIGWINCH, &winchact, &old_winch_act);
     if (err)
 	throw SystemError(errno);
-#endif // SIGWINCH
 
     //
     // Alarm handler
     //
-#ifdef SIGALRM
     struct sigaction alrmact;
-
     alrmact.sa_sigaction = signal_handler;
 #ifdef SA_SIGINFO
     alrmact.sa_flags = SA_SIGINFO;
@@ -167,18 +162,18 @@ EventQueue::setupSignal() {
 #endif // SA_SIGINFO
 
     sigemptyset(&alrmact.sa_mask);
+    sigaddset(&alrmact.sa_mask, SIGWINCH);
+    sigaddset(&alrmact.sa_mask, SIGUSR1);
+    sigaddset(&alrmact.sa_mask, SIGUSR2);
 
     err = sigaction(SIGALRM, &alrmact, &old_alrm_act);
     if (err)
 	throw SystemError(errno);
-#endif // SIGALRM
 
     //
-    // Alarm handler
+    // Usr1 handler
     //
-#ifdef SIGUSR1
     struct sigaction usr1act;
-
     usr1act.sa_sigaction = signal_handler;
 #ifdef SA_SIGINFO
     usr1act.sa_flags = SA_SIGINFO;
@@ -187,15 +182,16 @@ EventQueue::setupSignal() {
 #endif // SA_SIGINFO
 
     sigemptyset(&usr1act.sa_mask);
+    sigaddset(&usr1act.sa_mask, SIGWINCH);
+    sigaddset(&usr1act.sa_mask, SIGALRM);
+    sigaddset(&usr1act.sa_mask, SIGUSR2);
 
     err = sigaction(SIGUSR1, &usr1act, &old_usr1_act);
     if (err)
 	throw SystemError(errno);
-#endif // SIGUSR1
 
-#ifdef SIGUSR2
+
     struct sigaction usr2act;
-
     usr2act.sa_sigaction = signal_handler;
 #ifdef SA_SIGINFO
     usr2act.sa_flags = SA_SIGINFO;
@@ -204,69 +200,47 @@ EventQueue::setupSignal() {
 #endif // SA_SIGINFO
 
     sigemptyset(&usr2act.sa_mask);
+    sigaddset(&usr2act.sa_mask, SIGWINCH);
+    sigaddset(&usr2act.sa_mask, SIGALRM);
+    sigaddset(&usr2act.sa_mask, SIGUSR1);
 
     err = sigaction(SIGUSR2, &usr2act, &old_usr2_act);
     if (err)
 	throw SystemError(errno);
-#endif // SIGUSR2
 
     sigset_t nset;
     sigemptyset(&nset);
 
-#ifdef SIGWINCH
     sigaddset(&nset, SIGWINCH);
-#endif // SIGWINCH
-#ifdef SIGALRM
     sigaddset(&nset, SIGALRM);
-#endif // SIGALRM
-#ifdef SIGUSR1
     sigaddset(&nset, SIGUSR1);
-#endif // SIGUSR1
-#ifdef SIGUSR2
     sigaddset(&nset, SIGUSR2);
-#endif // SIGUSR1
 
-
-#if defined(SIGWINCH) || defined(SIGALRM) ||\
-    defined(SIGUSR1) || defined(SIGUSR2)
     err = sigprocmask(SIG_UNBLOCK, &nset, &old_sigmask);
     if (err)
 	throw SystemError(errno);
-#endif // defined(SIGWINCH) || defined(SIGALRM)
-
 }
 
 void
 EventQueue::restoreSignal() {
     int err;
 
-#ifdef SIGWINCH
     err = sigaction(SIGWINCH, &old_winch_act, NULL);
     if (err)
 	throw SystemError(errno);
-#endif // SIGWINCH
-#ifdef SIGALRM
     err = sigaction(SIGWINCH, &old_alrm_act, NULL);
     if (err)
 	throw SystemError(errno);
-#endif // SIGALRM
-#ifdef SIGUSR1
     err = sigaction(SIGUSR1, &old_usr1_act, NULL);
     if (err)
 	throw SystemError(errno);
-#endif // SIGUSR1
-#ifdef SIGUSR2
     err = sigaction(SIGUSR2, &old_usr2_act, NULL);
     if (err)
 	throw SystemError(errno);
-#endif // SIGUSR2
 
-#if defined(SIGWINCH) || defined(SIGALRM) ||\
-    defined(SIGUSR1) || defined(SIGUSR2)
     err = sigprocmask(SIG_SETMASK, &old_sigmask, NULL);
     if (err)
 	throw SystemError(errno);
-#endif // defined(SIGWINCH) || defined(SIGALRM)
 }
 
 void
@@ -279,7 +253,6 @@ EventQueue::signal_handler(int signo)
     int olderrno = errno;
 
     switch (signo) {
-#ifdef SIGALRM
     case SIGALRM:
 	try {
 	    evt_queue.push(new EventBase(EVT_ALARM));
@@ -291,11 +264,12 @@ EventQueue::signal_handler(int signo)
 #endif
 	}
 	break;
-#endif // SIGALRM
-#ifdef SIGWINCH
     case SIGWINCH:
 	try {
+	    evt_queue.push(new EventBase(EVT_TERMRESETUP));
 	    evt_queue.push(new EventWinCh(Curses::inquiryScreenSize()));
+	    evt_queue.push(new EventBase(EVT_REFRESH));
+	    evt_queue.push(new EventBase(EVT_DOUPDATE));
 	} catch(std::exception& e) {
 	    // Intentionally empty
 #ifndef NDEBUG
@@ -304,8 +278,6 @@ EventQueue::signal_handler(int signo)
 #endif
 	}
 	break;
-#endif // SIGWINCH
-#ifdef SIGUSR1
     case SIGUSR1:
 	try {
 	    evt_queue.push(new EventBase(EVT_USR1));
@@ -317,8 +289,6 @@ EventQueue::signal_handler(int signo)
 #endif
 	}
 	break;
-#endif // SIGUSR1
-#ifdef SIGUSR2
     case SIGUSR2:
 	try {
 	    evt_queue.push(new EventBase(EVT_USR2));
@@ -330,7 +300,6 @@ EventQueue::signal_handler(int signo)
 #endif
 	}
 	break;
-#endif // SIGUSR2
     }
 
     errno = olderrno;
@@ -338,28 +307,22 @@ EventQueue::signal_handler(int signo)
 
 void
 EventQueue::blocksignal() {
-#if defined(SIGWINCH) || defined(SIGALRM) ||\
-    defined(SIGUSR1) || defined(SIGUSR2)
     if (signal_blocked) return;
 
-    int err = sigprocmask(SIG_BLOCK, &block_sigmask, &tmp_old_sigmask);
-    if (err)
+    if (sigprocmask(SIG_BLOCK, &block_sigmask, &tmp_old_sigmask))
 	throw SystemError(errno);
+
     signal_blocked = true;
-#endif // defined(SIGWINCH) || defined(SIGALRM)
 }
 
 void
 EventQueue::unblocksignal() {
-#if defined(SIGWINCH) || defined(SIGALRM) ||\
-    defined(SIGUSR1) || defined(SIGUSR2)
     if (!signal_blocked) return;
+
     signal_blocked = false;
 
-    int err = sigprocmask(SIG_SETMASK, &tmp_old_sigmask, NULL);
-    if (err)
+    if (sigprocmask(SIG_SETMASK, &tmp_old_sigmask, NULL))
 	throw SystemError(errno);
-#endif // defined(SIGWINCH) || defined(SIGALRM)
 }
 
 /////////////////
@@ -482,12 +445,10 @@ EventQueue::inject(const EventBase& ev) {
 void
 EventQueue::run() {
     sigemptyset(&block_sigmask);
-#ifdef SIGWINCH
     sigaddset(&block_sigmask, SIGWINCH);
-#endif // SIGWINCH
-#ifdef SIGALRM
     sigaddset(&block_sigmask, SIGALRM);
-#endif // SIGALRM
+    sigaddset(&block_sigmask, SIGUSR1);
+    sigaddset(&block_sigmask, SIGUSR2);
 
     setupSignal();
 

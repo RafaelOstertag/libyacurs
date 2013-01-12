@@ -27,8 +27,6 @@
 
 class EventQueue {
     private:
-#if defined(SIGWINCH) || defined(SIGALRM) || \
-    defined(SIGUSR1) || defined(SIGUSR2)
 	/// Used by blocksignal()/unblocksignal()
 	static sigset_t block_sigmask;
 	/// Used by blocksignal()/unblocksignal()
@@ -40,7 +38,7 @@ class EventQueue {
 	static struct sigaction old_alrm_act;
 	static struct sigaction old_usr1_act;
 	static struct sigaction old_usr2_act;
-#endif // defined(SIGWINCH) || defined(SIGALRM)
+
 	static bool signal_blocked;
 	static std::queue<EventBase*> evt_queue;
 	/**

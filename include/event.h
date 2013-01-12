@@ -27,8 +27,12 @@ enum EVENT_TYPE {
     EVT_ALARM,
     /// Key pressed
     EVT_KEY,
-    /// Refresh request
+    /// A refresh is usually issued after an resize
     EVT_REFRESH,
+    /// A doupdate is usually issued after a refresh
+    EVT_DOUPDATE,
+    /// Re-setup terminal. Mainly used when resizing screen
+    EVT_TERMRESETUP,
     EVT_USR1,
     EVT_USR2
 };
@@ -43,6 +47,7 @@ class EventBase {
 	EventBase& operator=(const EventBase& _e);
 	virtual ~EventBase();
 	virtual bool operator==(const EventBase& _e) const;
+	bool operator==(EVENT_TYPE _et) const;
 	EVENT_TYPE type() const;
 	virtual EventBase* clone() const;
 };

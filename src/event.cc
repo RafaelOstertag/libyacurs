@@ -36,6 +36,11 @@ EventBase::operator==(const EventBase& _e) const {
     return event_type == _e.event_type;
 }
 
+bool
+EventBase::operator==(EVENT_TYPE _et) const {
+    return event_type == _et;
+}
+
 EVENT_TYPE
 EventBase::type() const {
     return event_type;

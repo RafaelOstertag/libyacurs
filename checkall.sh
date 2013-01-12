@@ -247,7 +247,9 @@ host_freebsd32() {
 
 host_fish() {
     gmake distclean
-    ./configure
+    ./configure \
+	CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
+	CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
     had_error $? "Error in $arch"
 
     gmake clean
@@ -260,7 +262,9 @@ host_fish() {
 
 host_openbsd32() {
     gmake distclean
-    ./configure
+    ./configure \
+	CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
+	CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
     had_error $? "Error in $arch"
 
     gmake clean

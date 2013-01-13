@@ -57,20 +57,30 @@ Curses::doupdate_handler(EventBase& e) {
     return 0;
 }
 
-int 
+int
 Curses::termresetup_handler(EventBase& e) {
+#ifdef HAVE_RESIZE_TERM
+    // I simply assume that having resize_term() is resize_term() of
+    // ncurses.
+
+    Rectangle<> __tmp(Curses::inquiryScreenSize());
+
+    resize_term(__tmp.rows(), __tmp.cols());
+
+#else
     if (del_curterm(cur_term)==ERR)
 	throw DelCurTermFailed();
 
     if (setupterm(NULL, fileno(stdout), NULL) == ERR)
 	throw SetupTermFailed();
-
-    if (werase(stdscr) == ERR)
+#endif
+    
+    if (wclear(stdscr) == ERR)
 	throw EraseFailed();
 
     if (wrefresh(stdscr) == ERR)
 	throw RefreshFailed();
-
+    
     return 0;
 }
 
@@ -91,13 +101,20 @@ Curses::init() {
     EventQueue::connectEvent(EventConnectorFunction1(EVT_DOUPDATE, Curses::doupdate_handler));
     EventQueue::connectEvent(EventConnectorFunction1(EVT_TERMRESETUP, Curses::termresetup_handler));
 
-#if !(defined(_XOPEN_CURSES) || defined(NCURSES_VERSION))
-    if (wrefresh(stdscr) == ERR)
-	throw RefreshFailed();
-#endif // !(defined(_XOPEN_CURSES) || defined(NCURSES_VERSION))
-
     if (nonl() == ERR)
 	throw NoNLFailed();
+
+    if (cbreak() == ERR)
+	throw CbreakFailed();
+
+    if (noecho() == ERR)
+	throw NoEchoFailed();
+    
+    // NCurses clears stdscr upon first call to getch, which may
+    // produce undesired results, i.e. already created Curses Windows
+    // wmay be overwritten. Therefore we refresh stdscr preventive.
+    if (wrefresh(stdscr) == ERR)
+	throw RefreshFailed();
 
     initialized = true;
 }

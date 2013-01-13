@@ -13,10 +13,10 @@
 
 class Realizeable {
     private:
-	bool realized;
+	bool __realized;
 
     protected:
-	virtual void setRealized(bool _r);
+	virtual void realized(bool _r);
 
     public:
 	Realizeable();
@@ -31,7 +31,7 @@ class Realizeable {
 	 */
 	virtual void resize(const Rectangle<>&) = 0;
 	virtual void realize() = 0;
-	bool isRealized() const;
+	bool realized() const;
 };
 
 #endif // REALIZEABLE_H

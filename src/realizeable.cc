@@ -7,28 +7,28 @@
 //
 
 void 
-Realizeable::setRealized(bool _r) {
-    realized = _r;
+Realizeable::realized(bool _r) {
+    __realized = _r;
 }
 
 //
 // Public
 //
-Realizeable::Realizeable() : realized(false) {}
+Realizeable::Realizeable() : __realized(false) {}
 
 Realizeable::Realizeable(const Realizeable& r) {
-    realized = r.realized;
+    __realized = r.__realized;
 }
 
 Realizeable::~Realizeable() {}
 
 Realizeable&
 Realizeable::operator=(const Realizeable& r) {
-    realized = r.realized;
+    __realized = r.__realized;
     return *this;
 }
 
 bool
-Realizeable::isRealized() const {
-    return realized;
+Realizeable::realized() const {
+    return __realized;
 }

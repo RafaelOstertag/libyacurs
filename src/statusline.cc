@@ -16,9 +16,9 @@
 void
 StatusLine::putTopMsg() {
     if (messages.empty())
-	setLine(std::string());
+	line(std::string());
     else
-	setLine(messages.top());
+	line(messages.top());
 }
 
 

@@ -47,9 +47,9 @@ ScreenObject::getMargin() const {
 
 void
 ScreenObject::unrealize() {
-    if (not isRealized()) throw NotRealized();
+    if (not realized()) throw NotRealized();
 
-    setRealized(false);
+    realized(false);
 
     assert(w!=NULL);
     assert(*w!=NULL);
@@ -128,7 +128,7 @@ ScreenObject::operator=(const ScreenObject& so) {
 
 void
 ScreenObject::refresh(bool immediate) {
-    if (!isRealized()) return;
+    if (!realized()) return;
 
     assert(w!=NULL);
     assert(*w!=NULL);
@@ -149,7 +149,7 @@ ScreenObject::resize(const Rectangle<>& r) {
     //
     // Keep in mind: a resize does not refresh!
     //
-    if (!isRealized()) throw NotRealized();
+    if (!realized()) throw NotRealized();
 
     assert(r.x()>=0);
     assert(r.y()>=0);
@@ -165,7 +165,7 @@ ScreenObject::resize(const Rectangle<>& r) {
 
 void
 ScreenObject::realize() {
-    if (isRealized()) throw AlreadyRealized();
+    if (realized()) throw AlreadyRealized();
 
     assert(rect.x()>=0);
     assert(rect.y()>=0);
@@ -190,5 +190,5 @@ ScreenObject::realize() {
 	throw NewWindowFailed();
     }
 
-    setRealized(true);
+    realized(true);
 }

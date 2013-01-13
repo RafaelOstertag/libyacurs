@@ -26,6 +26,10 @@ int alrm(EventBase& _e) {
 }
 
 int main() {
+#if 0
+    std::cout << getpid() << std::endl;
+    sleep(15);
+#endif
     try {
 	Curses::init();
 
@@ -34,13 +38,13 @@ int main() {
 	Curses::setTitle(title);
 
 	Window* w1 = new Window(Margin<>(1,0,0,0));
-	w1->setFrame(true);
+	w1->frame(true);
 
 	Curses::setWindow(w1);
 
 	EventQueue::connectEvent(EventConnectorFunction1(EVT_ALARM,&alrm));
 
-	alarm(2);
+	alarm(1);
 	Curses::run();
 
 	delete title;

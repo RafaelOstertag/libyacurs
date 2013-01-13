@@ -77,7 +77,7 @@ int main() {
 	Curses::setTitle(title);
 
 	MyWindow* w1 = new MyWindow(Margin<>(1,0,1,0));
-	w1->setFrame(true);
+	w1->frame(true);
 
 	Curses::setWindow(w1);
 

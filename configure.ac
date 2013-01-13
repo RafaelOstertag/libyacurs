@@ -45,8 +45,9 @@ AS_IF([test "x$have_ncurses_h" = xyes],
 		[AC_MSG_ERROR([curses library required])]
 	    )],
       [AC_MSG_ERROR([neither ncurses nor curses library available])])
-
 LT_INIT([disable-static])
+
+AC_CHECK_FUNCS([resize_term])
 
 # Some custom tests
 AC_MSG_CHECKING([whether waddstr() use const char*])

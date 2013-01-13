@@ -27,7 +27,7 @@
 int 
 Window::refresh_handler(EventBase& _e) {
     assert(_e == EVT_REFRESH);
-    assert(isRealized());
+    assert(realized());
     refresh(false);
     return 0;
 }
@@ -35,7 +35,7 @@ Window::refresh_handler(EventBase& _e) {
 int 
 Window::resize_handler(EventBase& _e) {
     assert(_e == EVT_WINCH);
-    assert(isRealized());
+    assert(realized());
     
     EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
     resize(winch.data());
@@ -46,7 +46,7 @@ Window::resize_handler(EventBase& _e) {
 int 
 Window::key_handler(EventBase& _e) {
     assert(_e == EVT_KEY);
-    assert(isRealized());
+    assert(realized());
 
     return -1;
 }
@@ -102,11 +102,11 @@ Window::realize() {
 }
 
 bool
-Window::getFrame() const {
+Window::frame() const {
     return hasframe;
 }
 
 void
-Window::setFrame(bool b) {
+Window::frame(bool b) {
     hasframe = b;
 }

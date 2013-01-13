@@ -32,8 +32,8 @@ class Window: public ScreenObject {
 	~Window();
 	Window& operator=(const Window& W);
 
-	bool getFrame() const;
-	void setFrame(bool b);
+	bool frame() const;
+	void frame(bool b);
 
 	void realize();
 };

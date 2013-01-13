@@ -53,8 +53,8 @@ class LineObject: public ScreenObject {
 
 	void realize();
 
-	void setLine(const std::string& _str);
-	std::string getLine() const;
+	void line(const std::string& _str);
+	std::string line() const;
 };
 
 #endif // LINEOBJECT_H

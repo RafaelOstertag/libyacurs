@@ -53,7 +53,7 @@ LineObject::computeMargin(const Rectangle<>& _s) {
 
 void
 LineObject::putLine() {
-    if (!isRealized()) return;
+    if (!realized()) return;
 
     int retval = werase(getWindow());
     if (retval == ERR)
@@ -71,6 +71,7 @@ LineObject::putLine() {
 int
 LineObject::refresh_handler(EventBase& _e) {
     assert(_e.type() == EVT_REFRESH);
+    putLine();
     refresh(false);
     return 0;
 }
@@ -129,10 +130,10 @@ LineObject::realize() {
 }
 
 void
-LineObject::setLine(const std::string& _str) {
+LineObject::line(const std::string& _str) {
     linetext = _str;
     putLine();
 }
 
 std::string
-LineObject::getLine() const { return linetext; }
+LineObject::line() const { return linetext; }

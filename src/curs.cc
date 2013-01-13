@@ -110,9 +110,9 @@ Curses::init() {
     if (noecho() == ERR)
 	throw NoEchoFailed();
     
-    // NCurses clears stdscr upon first call to getch, which may
+    // Curses clears stdscr upon first call to getch, which may
     // produce undesired results, i.e. already created Curses Windows
-    // wmay be overwritten. Therefore we refresh stdscr preventive.
+    // may be overwritten. Therefore we refresh stdscr preventive.
     if (wrefresh(stdscr) == ERR)
 	throw RefreshFailed();
 

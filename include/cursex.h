@@ -142,4 +142,14 @@ class TouchFailed: public BaseCurEx {
 	TouchFailed();
 };
 
+class CbreakFailed: public BaseCurEx {
+    public:
+	CbreakFailed();
+};
+
+class NoEchoFailed: public BaseCurEx {
+    public:
+	NoEchoFailed();
+};
+
 #endif // CUREX_H

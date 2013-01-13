@@ -89,3 +89,9 @@ SetupTermFailed::SetupTermFailed():
 
 TouchFailed::TouchFailed():
     BaseCurEx("Error in call to setupterm()") {}
+
+CbreakFailed::CbreakFailed():
+    BaseCurEx("Error in call to setupterm()") {}
+
+NoEchoFailed::NoEchoFailed():
+    BaseCurEx("Error in call to setupterm()") {}

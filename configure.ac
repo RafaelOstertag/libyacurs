@@ -106,5 +106,5 @@ AC_COMPILE_IFELSE(
 	[AC_MSG_RESULT([no])])
 
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile include/Makefile])
 AC_OUTPUT

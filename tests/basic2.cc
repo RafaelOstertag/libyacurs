@@ -19,7 +19,7 @@
 
 #include "yacurs.h"
 
-int alrm(EventBase& _e) {
+int alrm(Event& _e) {
     static int calls = 0;
     assert(_e == EVT_ALARM);
 
@@ -39,7 +39,7 @@ int alrm(EventBase& _e) {
     }
 
     if (calls++ > 3)
-	EventQueue::inject(EventBase(EVT_QUIT));
+	EventQueue::submit(Event(EVT_QUIT));
     else
 	alarm(1);
 

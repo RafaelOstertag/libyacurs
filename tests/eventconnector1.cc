@@ -31,7 +31,7 @@ class Handler {
 	    calls = _h.calls;
 	}
 	inline virtual ~Handler() {}
-	inline virtual int handler(EventBase& e) {
+	inline virtual int handler(Event& e) {
 	    if (e.type() != expected_evt) std::abort();
 	    calls++;
 	    return 0;
@@ -42,7 +42,7 @@ class Handler {
 class WinChHandler: public Handler {
     public:
 	inline WinChHandler(): Handler(EVT_WINCH) {}
-	inline int handler(EventBase& e) {
+	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    return 0;
 	}
@@ -51,7 +51,7 @@ class WinChHandler: public Handler {
 class AlrmHandler: public Handler {
     public:
 	inline AlrmHandler(): Handler(EVT_ALARM) {}
-	inline int handler(EventBase& e) {
+	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    return 0;
 	}
@@ -60,21 +60,21 @@ class AlrmHandler: public Handler {
 class AlrmHandler2: public AlrmHandler {
     public:
 	inline AlrmHandler2(): AlrmHandler() {}
-	inline int handler(EventBase& e) {
+	inline int handler(Event& e) {
 	    return Handler::handler(e);
 	}
 };
 
 class Static1 {
     public:
-	static int fcthandler1(EventBase&) {
+	static int fcthandler1(Event&) {
 	    return 0;
 	}
 };
 
 class Static2 {
     public:
-	static int fcthandler1(EventBase&) {
+	static int fcthandler1(Event&) {
 	    return 0;
 	}
 };

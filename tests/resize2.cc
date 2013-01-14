@@ -31,27 +31,29 @@
 
 #include "yacurs.h"
 
-int alrm(EventBase& _e) {
+int alrm(Event& _e) {
     static int calls = 0;
     assert(_e == EVT_ALARM);
+
+    std::string status_msg("Size: rows=");
+    
+    Rectangle<> _scrdim(Curses::inquiryScreenSize());
+
+    char buff[32];
+    snprintf(buff,32,"%d",_scrdim.rows());
+    status_msg+=buff;
+
+    status_msg+=" cols=";
+
+    snprintf(buff,32,"%d",_scrdim.cols());
+    status_msg+=buff;
+
+    Curses::getStatusLine()->pushMsg(status_msg);
 
     winsize ws;
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1) {
 	return -1;
     }
-
-    std::string status_msg("Size: rows=");
-
-    char buff[32];
-    snprintf(buff,32,"%d",ws.ws_row);
-    status_msg+=buff;
-
-    status_msg+=" cols=";
-
-    snprintf(buff,32,"%d",ws.ws_col);
-    status_msg+=buff;
-
-    Curses::getStatusLine()->pushMsg(status_msg);
 
     ws.ws_row--;
     ws.ws_col--;
@@ -61,7 +63,7 @@ int alrm(EventBase& _e) {
     }
 
     if (calls++ > 3)
-	EventQueue::inject(EventBase(EVT_QUIT));
+	EventQueue::submit(Event(EVT_QUIT));
     else
 	alarm(1);
 

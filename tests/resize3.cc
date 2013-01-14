@@ -33,7 +33,7 @@
 
 class MyWindow: public Window {
     protected:
-	int resize_handler(EventBase& _e) {
+	int resize_handler(Event& _e) {
 	    Window::resize_handler(_e);
 
 	    EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
@@ -61,9 +61,9 @@ class MyWindow: public Window {
 
 };
 
-int alrm(EventBase& _e) {
+int alrm(Event& _e) {
     assert(_e == EVT_ALARM);
-    EventQueue::inject(EventBase(EVT_QUIT));
+    EventQueue::submit(Event(EVT_QUIT));
     return 0;
 }
 

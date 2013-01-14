@@ -31,7 +31,7 @@ class Handler {
 	    calls = _h.calls;
 	}
 	inline virtual ~Handler() {}
-	inline virtual int handler(EventBase& e) {
+	inline virtual int handler(Event& e) {
 	    if (e.type() != expected_evt) std::abort();
 	    calls++;
 	    return 0;
@@ -42,9 +42,9 @@ class Handler {
 class AlrmHandler: public Handler {
     public:
 	inline AlrmHandler(): Handler(EVT_ALARM) {}
-	inline int handler(EventBase& e) {
+	inline int handler(Event& e) {
 	    std::cout << "AlrmHandler::handler()\r" << std::endl;
-	    EventQueue::inject(EventBase(EVT_QUIT));
+	    EventQueue::submit(Event(EVT_QUIT));
 	    return Handler::handler(e);
 	}
 };
@@ -55,15 +55,15 @@ class AlrmHandler2: public AlrmHandler {
 	int calls_handler3;
     public:
 	inline AlrmHandler2(): AlrmHandler(), calls_handler2(0), calls_handler3(0) {}
-	inline int handler(EventBase& e) {
+	inline int handler(Event& e) {
 	    std::cout << "AlrmHandler2::handler()\r" << std::endl;
 	    return Handler::handler(e);
 	}
-	inline int handler2(EventBase& e) {
+	inline int handler2(Event& e) {
 	    std::cout << "AlrmHandler2::handler2()\r" << std::endl;
 	    return ++calls_handler2;
 	}
-	inline int handler3(EventBase& e) {
+	inline int handler3(Event& e) {
 	    std::cout << "AlrmHandler2::handler3()\r" << std::endl;
 	    return ++calls_handler3;
 	}
@@ -87,7 +87,7 @@ int main() {
 	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_WINCH, &ahandler2, &AlrmHandler2::handler3) );
 	
 	Curses::init();
-	EventQueue::inject(EventWinCh(Rectangle<>() ));
+	EventQueue::submit(EventWinCh(Rectangle<>() ));
 	alarm(4);
 	EventQueue::run();
 

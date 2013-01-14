@@ -31,7 +31,7 @@ class Handler {
 	    calls = _h.calls;
 	}
 	inline virtual ~Handler() {}
-	inline virtual int handler(EventBase& e) {
+	inline virtual int handler(Event& e) {
 	    if (e.type() != expected_evt) std::abort();
 	    calls++;
 	    return 0;
@@ -42,7 +42,7 @@ class Handler {
 class AlrmHandler: public Handler {
     public:
 	inline AlrmHandler(): Handler(EVT_ALARM) {}
-	inline int handler(EventBase& e) {
+	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "AlrmHandler::handler()\r" << std::endl;
 	    // During processing of the queue, USR1 is blocked, so we cheat and unblock it
@@ -59,7 +59,7 @@ class AlrmHandler: public Handler {
 class Usr1Handler: public Handler {
     public:
 	inline Usr1Handler(): Handler(EVT_USR1) {}
-	inline int handler(EventBase& e) {
+	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "Usr1Handler::handler()\r" << std::endl;
 	    // During processing of the queue, USR2 is blocked, so we cheat and unblock it
@@ -76,10 +76,10 @@ class Usr1Handler: public Handler {
 class Usr2Handler: public Handler {
     public:
 	inline Usr2Handler(): Handler(EVT_USR2) {}
-	inline int handler(EventBase& e) {
+	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "Usr2Handler::handler()\r" << std::endl;
-	    EventQueue::inject(EventBase(EVT_QUIT));
+	    EventQueue::submit(Event(EVT_QUIT));
 	    return 0;
 	}
 };	

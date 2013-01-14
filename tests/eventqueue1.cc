@@ -1,6 +1,6 @@
 // $Id$
 //
-// Test basic functionality of EventQueue by injecting events using EventQueue::inject()
+// Test basic functionality of EventQueue by injecting events using EventQueue::submit()
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -26,7 +26,7 @@ class Handler {
     public:
 	inline Handler(EVENT_TYPE expected):
 	    expected_evt(expected), calls(0) {}
-	inline virtual int handler(EventBase& e) {
+	inline virtual int handler(Event& e) {
 	    if (e.type() != expected_evt) std::abort();
 	    calls++;
 	    return 0;
@@ -37,7 +37,7 @@ class Handler {
 class WinChHandler: public Handler {
     public:
 	inline WinChHandler(): Handler(EVT_WINCH) {}
-	inline int handler(EventBase& e) {
+	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    Rectangle<> tmp(dynamic_cast<EventWinCh&>(e).data());
 	    std::cout << "WinChHandler\r" << std::endl;
@@ -48,7 +48,7 @@ class WinChHandler: public Handler {
 class AlrmHandler: public Handler {
     public:
 	inline AlrmHandler(): Handler(EVT_ALARM) {}
-	inline int handler(EventBase& e) { 
+	inline int handler(Event& e) { 
 	    std::cout << "WinChHandler\r" << std::endl;
 	    return Handler::handler(e); 
 	}
@@ -62,9 +62,9 @@ int main() {
 	EventQueue::connectEvent(EventConnectorMethod1<WinChHandler>(EVT_WINCH, &whandler,&WinChHandler::handler) );
 	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
 
-	EventQueue::inject(EventWinCh(Rectangle<> ()));
-	EventQueue::inject(EventBase(EVT_ALARM));
-	EventQueue::inject(EventBase(EVT_QUIT));
+	EventQueue::submit(EventWinCh(Rectangle<> ()));
+	EventQueue::submit(Event(EVT_ALARM));
+	EventQueue::submit(Event(EVT_QUIT));
 
 	Curses::init();
 	// EventQueue:run() blocks in getch().

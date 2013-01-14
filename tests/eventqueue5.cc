@@ -31,7 +31,7 @@ class Handler {
 	    calls = _h.calls;
 	}
 	inline virtual ~Handler() {}
-	inline virtual int handler(EventBase& e) {
+	inline virtual int handler(Event& e) {
 	    if (e.type() != expected_evt) std::abort();
 	    calls++;
 	    return 0;
@@ -42,7 +42,7 @@ class Handler {
 class AlrmHandler: public Handler {
     public:
 	inline AlrmHandler(): Handler(EVT_ALARM) {}
-	inline int handler(EventBase& e) {
+	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "AlrmHandler::handler()\r" << std::endl;
 	    if (getCalls() < 4) {
@@ -50,7 +50,7 @@ class AlrmHandler: public Handler {
 		return 0;
 	    }
 	    std::cout << "QUIT" << std::endl;
-	    EventQueue::inject(EventBase(EVT_QUIT));
+	    EventQueue::submit(Event(EVT_QUIT));
 	    return 0;
 	}
 };
@@ -58,7 +58,7 @@ class AlrmHandler: public Handler {
 class AlrmHandler2: public AlrmHandler {
     public:
 	inline AlrmHandler2(): AlrmHandler() {}
-	inline int handler(EventBase& e) {
+	inline int handler(Event& e) {
 	    EventQueue::disconnectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, this, &AlrmHandler2::handler));
 	    std::cout << "AlrmHandler2::handler()\r" << std::endl;
 	    return Handler::handler(e);

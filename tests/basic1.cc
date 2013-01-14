@@ -19,9 +19,9 @@
 
 #include "yacurs.h"
 
-int alrm(EventBase& _e) {
+int alrm(Event& _e) {
     assert(_e == EVT_ALARM);
-    EventQueue::inject(EventBase(EVT_QUIT));
+    EventQueue::submit(Event(EVT_QUIT));
     return 0;
 }
 

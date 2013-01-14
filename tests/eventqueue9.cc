@@ -31,7 +31,7 @@ class Handler {
 	    calls = _h.calls;
 	}
 	inline virtual ~Handler() {}
-	inline virtual int handler(EventBase& e) {
+	inline virtual int handler(Event& e) {
 	    if (e.type() != expected_evt) {
 		std::cerr << "Unexpected event type" << std::endl;
 		std::abort();
@@ -49,7 +49,7 @@ class MyHandler: public Handler {
 
     public:
 	inline MyHandler(): Handler(EVT_KEY), _str() {}
-	inline int handler(EventBase& e) {
+	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    if (typeid(e) != typeid(EventKey)) std::abort();
 
@@ -58,7 +58,7 @@ class MyHandler: public Handler {
 	    _str.push_back(c);
 
 	    if (_str == "Hello, World!")
-	    	EventQueue::inject(EventBase(EVT_QUIT));
+	    	EventQueue::submit(Event(EVT_QUIT));
 	    return 0;
 	}
 };

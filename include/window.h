@@ -21,9 +21,9 @@ class Window: public ScreenObject {
 	bool hasframe;
 
     protected:
-	virtual int refresh_handler(EventBase& _e);
-	virtual int resize_handler(EventBase& _e);
-	virtual int key_handler(EventBase& _e);
+	virtual int refresh_handler(Event& _e);
+	virtual int resize_handler(Event& _e);
+	virtual int key_handler(Event& _e);
 
     public:
 	Window();

@@ -69,7 +69,7 @@ LineObject::putLine() {
 }
 
 int
-LineObject::refresh_handler(EventBase& _e) {
+LineObject::refresh_handler(Event& _e) {
     assert(_e.type() == EVT_REFRESH);
     putLine();
     refresh(false);
@@ -77,7 +77,7 @@ LineObject::refresh_handler(EventBase& _e) {
 }
 
 int
-LineObject::resize_handler(EventBase& _e) {
+LineObject::resize_handler(Event& _e) {
     assert(_e.type() == EVT_WINCH);
     
     EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);

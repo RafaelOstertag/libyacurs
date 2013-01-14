@@ -29,8 +29,8 @@ class Curses {
 	static Rectangle<> scrdim;
 
     protected:
-	static int doupdate_handler(EventBase& e);
-	static int termresetup_handler(EventBase& e);
+	static int doupdate_handler(Event& e);
+	static int termresetup_handler(Event& e);
 
     public:
 	static void init();

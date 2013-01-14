@@ -42,8 +42,8 @@ class LineObject: public ScreenObject {
 
     protected:
 	void putLine();
-	virtual int refresh_handler(EventBase& _e);
-	virtual int resize_handler(EventBase& _e);
+	virtual int refresh_handler(Event& _e);
+	virtual int resize_handler(Event& _e);
 
     public:
 	LineObject(POSITION _pos, const std::string& _t = std::string());

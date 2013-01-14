@@ -25,7 +25,7 @@
 // Protected
 //
 int 
-Window::refresh_handler(EventBase& _e) {
+Window::refresh_handler(Event& _e) {
     assert(_e == EVT_REFRESH);
     assert(realized());
     refresh(false);
@@ -33,7 +33,7 @@ Window::refresh_handler(EventBase& _e) {
 }
 
 int 
-Window::resize_handler(EventBase& _e) {
+Window::resize_handler(Event& _e) {
     assert(_e == EVT_WINCH);
     assert(realized());
     
@@ -44,7 +44,7 @@ Window::resize_handler(EventBase& _e) {
 }
 
 int 
-Window::key_handler(EventBase& _e) {
+Window::key_handler(Event& _e) {
     assert(_e == EVT_KEY);
     assert(realized());
 

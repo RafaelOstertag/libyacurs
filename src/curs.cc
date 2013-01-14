@@ -50,7 +50,7 @@ Rectangle<> Curses::scrdim;
 // Protected
 //
 int
-Curses::doupdate_handler(EventBase& e) {
+Curses::doupdate_handler(Event& e) {
     if (doupdate() == ERR)
 	throw DoupdateFailed();
 
@@ -58,28 +58,21 @@ Curses::doupdate_handler(EventBase& e) {
 }
 
 int
-Curses::termresetup_handler(EventBase& e) {
+Curses::termresetup_handler(Event& e) {
 #ifdef HAVE_RESIZE_TERM
-    // I simply assume that having resize_term() is resize_term() of
-    // ncurses.
+    // We only support resizing for Curses implementation having
+    // resize_term.
 
     Rectangle<> __tmp(Curses::inquiryScreenSize());
 
     resize_term(__tmp.rows(), __tmp.cols());
 
-#else
-    if (del_curterm(cur_term)==ERR)
-	throw DelCurTermFailed();
-
-    if (setupterm(NULL, fileno(stdout), NULL) == ERR)
-	throw SetupTermFailed();
-#endif
-    
     if (wclear(stdscr) == ERR)
 	throw EraseFailed();
 
     if (wrefresh(stdscr) == ERR)
 	throw RefreshFailed();
+#endif // HAVE_RESIZE_TERM
     
     return 0;
 }
@@ -203,8 +196,17 @@ Curses::unsetWindow() {
 
 Rectangle<>
 Curses::inquiryScreenSize() {
-    winsize ws;
+    // If we have resize term, we need to get the actual terminal
+    // size, because we have the ability to easily resize, and thus
+    // support it.
+    //
+    // Without resize_term(), we return the size of stdscr, since
+    // resizing is not support then
+
     Rectangle<> __scrdim;
+#ifdef HAVE_RESIZE_TERM
+    winsize ws;
+
 
     __scrdim.x(0);
     __scrdim.y(0);
@@ -234,16 +236,15 @@ Curses::inquiryScreenSize() {
 	    throw UnableToGetWinSize();
 	}
     }
-    return __scrdim;
-
-#if 0
-    int x, y, nrows, ncols;
-    getbegyx(w, y, x);
+#else // HAVE_RESIZE_TERM
+    int nrows, ncols;
     getmaxyx(w, nrows, ncols);
 
-    scrdim.x(x);
-    scrdim.y(y);
-    scrdim.rows(nrows);
-    scrdim.cols(ncols);
-#endif
+    __scrdim.x(0);
+    __scrdim.y(0);
+    __scrdim.rows(nrows);
+    __scrdim.cols(ncols);
+#endif // HAVE_RESIZE_TERM
+
+    return __scrdim;
 }

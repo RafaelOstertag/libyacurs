@@ -45,12 +45,12 @@ EventConnectorBase::operator!=(const EventConnectorBase& _ec) const {
 }
 
 bool
-EventConnectorBase::operator==(const EventBase& _eb) const {
+EventConnectorBase::operator==(const Event& _eb) const {
     return _eb.type() == evt;
 }
 
 bool
-EventConnectorBase::operator!=(const EventBase& _eb) const {
+EventConnectorBase::operator!=(const Event& _eb) const {
     return !operator==(_eb);
 }
 

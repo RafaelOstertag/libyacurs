@@ -39,7 +39,7 @@ EventConnectorFunction1::operator=(const EventConnectorFunction1& _ec) {
 }
 
 int
-EventConnectorFunction1::call(EventBase& _e) const {
+EventConnectorFunction1::call(Event& _e) const {
     assert(__func != NULL);
 
     if (isSuspended()) return -1;

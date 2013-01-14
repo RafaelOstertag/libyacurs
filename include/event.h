@@ -12,7 +12,10 @@
 #include "rectangle.h"
 
 /**
- * Event Types. One event handler can be connected to each event type per object using an Event Connector.
+ * Event Types that can be connected to.
+ *
+ * One event handler can be connected to each event type
+ * per object using an Event Connector.
  *
  * @see EventConnectorBase
  * @see EventQueue
@@ -33,49 +36,112 @@ enum EVENT_TYPE {
     EVT_DOUPDATE,
     /// Re-setup terminal. Mainly used when resizing screen
     EVT_TERMRESETUP,
+    /// SIGUSR1
     EVT_USR1,
+    /// SIGUSR2
     EVT_USR2
 };
 
-class EventBase {
+/**
+ * An Event is generated (key stroke, signal) and submitted into the
+ * EventQueue. The event queue passes the Event to EventConnectors
+ * (i.e. calls the function or method connected to the event).
+ */
+class Event {
     private:
+	/// The type of the Event
 	EVENT_TYPE event_type;
-    
+
     public:
-	EventBase(EVENT_TYPE _et);
-	EventBase(const EventBase& _e);
-	EventBase& operator=(const EventBase& _e);
-	virtual ~EventBase();
-	virtual bool operator==(const EventBase& _e) const;
+	/**
+	 * @param _et the event type
+	 */
+	Event(EVENT_TYPE _et);
+	Event(const Event& _e);
+	/**
+	 * Assigns one event to anothoer
+	 *
+	 * @param _e reference to to rhs
+	 *
+	 * @return reference to *this.
+	 */
+	Event& operator=(const Event& _e);
+	virtual ~Event();
+	/**
+	 * Tests Event objects for equality.
+	 *
+	 * @param _e reference to rhs
+	 *
+	 * @return \c true if the event type of the events are
+	 * equal. \c false otherwise.
+	 */
+	virtual bool operator==(const Event& _e) const;
+	/**
+	 * Tests whether the given event type is equal to type of this
+	 * object.
+	 *
+	 * @param _et rhs EVENT_TYPE
+	 *
+	 * @return \c true if the event types are equal, \c false
+	 * otherwise.
+	 */
 	bool operator==(EVENT_TYPE _et) const;
+	/**
+	 * Get the event type of the object.
+	 *
+	 * @return event type of the object.
+	 */
 	EVENT_TYPE type() const;
-	virtual EventBase* clone() const;
+	/**
+	 * Create a copy of the object. The caller is responsible for
+	 * freeing the memory of the object returned.
+	 *
+	 * @return pointer to copy of this object. The memory has to
+	 * be freed by the caller.
+	 */
+	virtual Event* clone() const;
 };
 
+/**
+ * Extends Event and adds a payload to the event in order to pass
+ * information to the EventConnectors.
+ *
+ * The data may be modified by EventConnectors.
+ */
 template<class T>
-class Event: public EventBase {
+class EventEx: public Event {
     private:
+	/// The data transported
 	T payload;
 
     public:
-	Event(EVENT_TYPE _et, const T& _v): EventBase(_et) {
+	/**
+	 * @param _et the event type
+	 *
+	 * @param _v reference to the data. The data will be copied to
+	 * an internal variable.
+	 */
+	EventEx(EVENT_TYPE _et, const T& _v): Event(_et) {
 	    payload = _v;
 	}
-	Event(const Event<T>& _e): EventBase(_e) {
+	EventEx(const EventEx<T>& _e): Event(_e) {
 	    payload = _e.payload;
 	}
-	Event<T>& operator=(const Event<T>& _e) {
-	    EventBase::operator=(_e);
+	EventEx<T>& operator=(const EventEx<T>& _e) {
+	    Event::operator=(_e);
 	    payload = _e.payload;
 	    return *this;
 	}
-	Event<T>* clone() const {
-	    return new Event<T>(*this);
+	EventEx<T>* clone() const {
+	    return new EventEx<T>(*this);
 	}
+	/**
+	 * @return a reference to the data of the event.
+	 */
 	virtual T& data() { return payload; }
 };
 
-class EventWinCh: public Event<Rectangle<> > {
+class EventWinCh: public EventEx<Rectangle<> > {
     public:
 	EventWinCh(const Rectangle<>& _r);
 	EventWinCh(const EventWinCh& _e);
@@ -83,7 +149,7 @@ class EventWinCh: public Event<Rectangle<> > {
 	EventWinCh* clone() const;
 };
 
-class EventKey: public Event<int> {
+class EventKey: public EventEx<int> {
     public:
 	EventKey(const int& _r);
 	EventKey(const EventKey& _e);

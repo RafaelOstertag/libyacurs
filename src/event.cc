@@ -17,52 +17,52 @@
 //
 // Public
 //
-EventBase::EventBase(EVENT_TYPE _et): event_type(_et) {}
+Event::Event(EVENT_TYPE _et): event_type(_et) {}
 
-EventBase::EventBase(const EventBase& _e) {
+Event::Event(const Event& _e) {
     event_type = _e.event_type;
 }
 
-EventBase&
-EventBase::operator=(const EventBase& _e) {
+Event&
+Event::operator=(const Event& _e) {
     event_type = _e.event_type;
     return *this;
 }
 
-EventBase::~EventBase() {}
+Event::~Event() {}
 
 bool
-EventBase::operator==(const EventBase& _e) const {
+Event::operator==(const Event& _e) const {
     return event_type == _e.event_type;
 }
 
 bool
-EventBase::operator==(EVENT_TYPE _et) const {
+Event::operator==(EVENT_TYPE _et) const {
     return event_type == _et;
 }
 
 EVENT_TYPE
-EventBase::type() const {
+Event::type() const {
     return event_type;
 }
 
-EventBase*
-EventBase::clone() const {
-    return new EventBase(*this);
+Event*
+Event::clone() const {
+    return new Event(*this);
 }
 
 ///////
 
 EventWinCh::EventWinCh(const Rectangle<>& _r):
-    Event<Rectangle<> >(EVT_WINCH, _r) {}
+    EventEx<Rectangle<> >(EVT_WINCH, _r) {}
 
 EventWinCh::EventWinCh(const EventWinCh& _e):
-    Event<Rectangle<> >(_e) {}
+    EventEx<Rectangle<> >(_e) {}
 
 
 EventWinCh&
 EventWinCh::operator=(const EventWinCh& _e) {
-    Event<Rectangle<> >::operator=(_e);
+    EventEx<Rectangle<> >::operator=(_e);
     return *this;
 }
 
@@ -73,13 +73,13 @@ EventWinCh::clone() const {
 
 ///////
 
-EventKey::EventKey(const int& _r): Event<int>(EVT_KEY, _r) {}
+EventKey::EventKey(const int& _r): EventEx<int>(EVT_KEY, _r) {}
 
-EventKey::EventKey(const EventKey& _e): Event<int>(_e) {}
+EventKey::EventKey(const EventKey& _e): EventEx<int>(_e) {}
 
 EventKey&
 EventKey::operator=(const EventKey& _e) {
-    Event<int>::operator=(_e);
+    EventEx<int>::operator=(_e);
     return *this;
 }
 

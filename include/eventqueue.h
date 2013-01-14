@@ -40,7 +40,7 @@ class EventQueue {
 	static struct sigaction old_usr2_act;
 
 	static bool signal_blocked;
-	static std::queue<EventBase*> evt_queue;
+	static std::queue<Event*> evt_queue;
 	/**
 	 * EventConnectors are not removed immediately, instead remove
 	 * requests are queue up for processing later.
@@ -80,7 +80,7 @@ class EventQueue {
 	static void unsuspendExcept(const EventConnectorBase& ec);
 
 	/// Add an event to the qeue
-	static void inject(const EventBase& ev);
+	static void submit(const Event& ev);
 	static void run();
 };
 

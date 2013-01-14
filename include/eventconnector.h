@@ -52,7 +52,7 @@
  *
  * See operator==() for more information about equality.
  *
- * @see EventBase
+ * @see Event
  * @see EventQueue
  * @group Event
  */
@@ -106,11 +106,11 @@ class EventConnectorBase {
 	 * <pre>
 	 *  class base {
 	 *   public:
-	 *   virtual int handler(EventBase&);
+	 *   virtual int handler(Event&);
 	 *  };
 	 *  class derived : public base {
 	 *   public:
-	 *   int handler(EventBase&);
+	 *   int handler(Event&);
 	 *  };
 	 *
 	 *  derived d();
@@ -127,15 +127,15 @@ class EventConnectorBase {
 	/**
 	 * Compare the event type.
 	 *
-	 * Compares only the event type of the given EventBase.
+	 * Compares only the event type of the given Event.
 	 *
-	 * @param _eb reference to an EventBase object.
+	 * @param _eb reference to an Event object.
 	 *
 	 * @return \c true if the value of evt and _eb.type() are
 	 * equal, \c false otherwise.
 	 */
-	bool operator==(const EventBase& _eb) const;
-	bool operator!=(const EventBase& _eb) const;
+	bool operator==(const Event& _eb) const;
+	bool operator!=(const Event& _eb) const;
 	/**
 	 * Compare the event type.
 	 *
@@ -176,7 +176,7 @@ class EventConnectorBase {
 	 *
 	 * @return the value returned by the handler.
 	 */
-	virtual int call(EventBase& _e) const = 0;
+	virtual int call(Event& _e) const = 0;
 	/**
 	 * The EventQueue requires a local copy of the
 	 * EventConnector. This method has to return a copy of the
@@ -193,14 +193,14 @@ class EventConnectorBase {
  *
  * The signature of the handler has to be
  *
- *  <code>Class::handler(EventBase&)</code>
+ *  <code>Class::handler(Event&)</code>
  *
  * @group Event
  */
 template<class T /* Type of object called */>
 class EventConnectorMethod1: public EventConnectorBase {
     public:
-	typedef int (T::*__mem_fun_t)(EventBase&);
+	typedef int (T::*__mem_fun_t)(Event&);
 	typedef T* _obj_ptr_t;
     private:
 	/// Holds the pointer to the member function of a class of
@@ -225,7 +225,7 @@ class EventConnectorMethod1: public EventConnectorBase {
 	 * connected to a particular event has to have the following
 	 * signature:
 	 *
-	 * <code>Class::handler(EventBase&)</code>
+	 * <code>Class::handler(Event&)</code>
 	 *
 	 * @param _e the event type to connect
 	 *
@@ -240,7 +240,7 @@ class EventConnectorMethod1: public EventConnectorBase {
 	 * <pre>
 	 *  class A {
 	 *   public:
-	 *    int event_handler(EventBase& _e);
+	 *    int event_handler(Event& _e);
 	 *  };
 	 *
 	 *  A a;
@@ -282,7 +282,7 @@ class EventConnectorMethod1: public EventConnectorBase {
 	 * @return the value returned by the member function called,
 	 * or -1 if the connector is suspended
 	 */
-	int call(EventBase& _e) const {
+	int call(Event& _e) const {
 	    assert(__obj_ptr != NULL);
 	    assert(__func != NULL);
 
@@ -306,17 +306,17 @@ class EventConnectorMethod1: public EventConnectorBase {
  *
  * The signature of the function connected has to be
  *
- *  <code>int fct(EventBase&)</code>
+ *  <code>int fct(Event&)</code>
  *
  * or
  *
- *  <code>static int Class::handler(EventBase&)</code>
+ *  <code>static int Class::handler(Event&)</code>
  */
 class EventConnectorFunction1: public EventConnectorBase {
     public:
 	/// Type of the function pointer that will be called upon an
 	/// event.
-	typedef int (*fptr_t)(EventBase&);
+	typedef int (*fptr_t)(Event&);
     private:
 	/// Holds the pointer to the function to be called.
 	fptr_t __func;
@@ -351,7 +351,7 @@ class EventConnectorFunction1: public EventConnectorBase {
 	 * @return the value returned by the function called,
 	 * or -1 if the connector is suspended
 	 */
-	int call(EventBase& _e) const;
+	int call(Event& _e) const;
 	/**
 	 * Creates a copy of this object. The caller is responsible
 	 * for freeing the memory.

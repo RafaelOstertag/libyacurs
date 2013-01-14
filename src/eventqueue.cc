@@ -37,7 +37,7 @@ struct sigaction EventQueue::old_usr1_act;
 struct sigaction EventQueue::old_usr2_act;		
 bool EventQueue::signal_blocked = false;
 
-std::queue<EventBase*> EventQueue::evt_queue;
+std::queue<Event*> EventQueue::evt_queue;
 std::queue<EventConnectorBase*> EventQueue::evtconn_rem_request;
 std::list<EventConnectorBase*> EventQueue::evtconn_list;
 
@@ -106,10 +106,10 @@ class DestroyEventConnector {
 
 class CallEventConnector {
     private:
-	EventBase& __eb;
+	Event& __eb;
 
     public:
-	inline CallEventConnector(EventBase& _eb): __eb(_eb) {}
+	inline CallEventConnector(Event& _eb): __eb(_eb) {}
 	inline void operator()(EventConnectorBase* _ec) {
 	    assert(_ec != NULL);
 	    if (_ec->type() == __eb.type()) {
@@ -133,6 +133,9 @@ EventQueue::setupSignal() {
     //
     // Window Size Change handler
     //
+    // This handler is always installed, whether or not resize_term()
+    // is available. However, depending on availability of
+    // resize_term(), the application will be actually resized.
     struct sigaction winchact;
     winchact.sa_sigaction = signal_handler;
 #ifdef SA_SIGINFO
@@ -255,7 +258,7 @@ EventQueue::signal_handler(int signo)
     switch (signo) {
     case SIGALRM:
 	try {
-	    evt_queue.push(new EventBase(EVT_ALARM));
+	    evt_queue.push(new Event(EVT_ALARM));
 	} catch(std::exception& e) {
 	    // Intentionally empty
 #ifndef NDEBUG
@@ -266,10 +269,10 @@ EventQueue::signal_handler(int signo)
 	break;
     case SIGWINCH:
 	try {
-	    evt_queue.push(new EventBase(EVT_TERMRESETUP));
+	    evt_queue.push(new Event(EVT_TERMRESETUP));
 	    evt_queue.push(new EventWinCh(Curses::inquiryScreenSize()));
-	    evt_queue.push(new EventBase(EVT_REFRESH));
-	    evt_queue.push(new EventBase(EVT_DOUPDATE));
+	    evt_queue.push(new Event(EVT_REFRESH));
+	    evt_queue.push(new Event(EVT_DOUPDATE));
 	} catch(std::exception& e) {
 	    // Intentionally empty
 #ifndef NDEBUG
@@ -280,7 +283,7 @@ EventQueue::signal_handler(int signo)
 	break;
     case SIGUSR1:
 	try {
-	    evt_queue.push(new EventBase(EVT_USR1));
+	    evt_queue.push(new Event(EVT_USR1));
 	} catch(std::exception& e) {
 	    // Intentionally empty
 #ifndef NDEBUG
@@ -291,7 +294,7 @@ EventQueue::signal_handler(int signo)
 	break;
     case SIGUSR2:
 	try {
-	    evt_queue.push(new EventBase(EVT_USR2));
+	    evt_queue.push(new Event(EVT_USR2));
 	} catch(std::exception& e) {
 	    // Intentionally empty
 #ifndef NDEBUG
@@ -428,7 +431,7 @@ EventQueue::unsuspendExcept(const EventConnectorBase& ec) {
 }
 
 void
-EventQueue::inject(const EventBase& ev) {
+EventQueue::submit(const Event& ev) {
     blocksignal();
     try {
 	evt_queue.push(ev.clone());
@@ -455,7 +458,7 @@ EventQueue::run() {
     while(true) {
 	int c=getch();
 	if (c != ERR)
-	    inject(EventKey(c));
+	    submit(EventKey(c));
 
 	blocksignal();
 
@@ -464,7 +467,7 @@ EventQueue::run() {
 
 	while(!evt_queue.empty()) {
 
-	    EventBase* evt = evt_queue.front();
+	    Event* evt = evt_queue.front();
 	    assert(evt != NULL);
 
 	    if (evt->type() == EVT_QUIT) {

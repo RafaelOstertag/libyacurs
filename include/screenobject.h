@@ -17,9 +17,9 @@
 class ScreenObject : public Realizeable {
     private:
 	/// The dimension of screen object
-	Rectangle<> rect;
+	Rectangle rect;
 	/// margin of the screen object
-	Margin<> margin;
+	Margin margin;
 	/// Keeps track of how many instance objects have been created sharing
 	/// the same WINDOW structure
 	unsigned int* instances;
@@ -33,25 +33,25 @@ class ScreenObject : public Realizeable {
 	/// Keep this. Used by tests/windowrefs.cc.
 	unsigned int getInstanceCount() const;
 
-	void setMargin(const Margin<>& _m);
-	const Margin<>& getMargin() const;
+	void setMargin(const Margin& _m);
+	const Margin& getMargin() const;
 
 	void unrealize();
 
     public:
 	/**
-	 * @param _r the size of the window. If it is equal to Rectangle<>(),
+	 * @param _r the size of the window. If it is equal to Rectangle(),
 	 * ScreenObject will retrieve the screen size by calling
 	 * Curses::inquiryScreenSize().
 	 */
-	ScreenObject(const Rectangle<>& _r = Rectangle<>(),
-		     const Margin<>& _m = Margin<>());
+	ScreenObject(const Rectangle& _r = Rectangle(),
+		     const Margin& _m = Margin());
 	ScreenObject(const ScreenObject& so);
 	virtual ~ScreenObject();
 	ScreenObject& operator=(const ScreenObject& so);
 
 	void refresh(bool immediate);
-	void resize(const Rectangle<>& _r);
+	void resize(const Rectangle& _r);
 	void realize();
 
 };

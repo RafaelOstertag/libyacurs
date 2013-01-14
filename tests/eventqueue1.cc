@@ -39,7 +39,7 @@ class WinChHandler: public Handler {
 	inline WinChHandler(): Handler(EVT_WINCH) {}
 	inline int handler(Event& e) {
 	    Handler::handler(e);
-	    Rectangle<> tmp(dynamic_cast<EventWinCh&>(e).data());
+	    Rectangle tmp(dynamic_cast<EventWinCh&>(e).data());
 	    std::cout << "WinChHandler\r" << std::endl;
 	    return 0;
 	}
@@ -62,7 +62,7 @@ int main() {
 	EventQueue::connectEvent(EventConnectorMethod1<WinChHandler>(EVT_WINCH, &whandler,&WinChHandler::handler) );
 	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
 
-	EventQueue::submit(EventWinCh(Rectangle<> ()));
+	EventQueue::submit(EventWinCh(Rectangle ()));
 	EventQueue::submit(Event(EVT_ALARM));
 	EventQueue::submit(Event(EVT_QUIT));
 

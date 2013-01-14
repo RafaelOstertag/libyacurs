@@ -37,7 +37,7 @@ int alrm(Event& _e) {
 
     std::string status_msg("Size: rows=");
     
-    Rectangle<> _scrdim(Curses::inquiryScreenSize());
+    Rectangle _scrdim(Curses::inquiryScreenSize());
 
     char buff[32];
     snprintf(buff,32,"%d",_scrdim.rows());
@@ -83,7 +83,7 @@ int main() {
 					   "Resize 1");
 	Curses::setTitle(title);
 
-	Window* w1 = new Window(Margin<>(1,0,1,0));
+	Window* w1 = new Window(Margin(1,0,1,0));
 	w1->frame(true);
 
 	Curses::setWindow(w1);

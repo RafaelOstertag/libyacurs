@@ -35,7 +35,7 @@ int main() {
     try {
 	Curses::init();
 
-	Window* w1 = new Window(Margin<>(1,0,1,0));
+	Window* w1 = new Window(Margin(1,0,1,0));
 	w1->frame(true);
 
 	w1->realize();
@@ -43,14 +43,14 @@ int main() {
 
 	sleep(1);
 
-	Rectangle<> scrsz(Curses::inquiryScreenSize());
-	Rectangle<> newsz(0,0,scrsz.rows()-1, scrsz.cols()-1);
+	Rectangle scrsz(Curses::inquiryScreenSize());
+	Rectangle newsz(0,0,scrsz.rows()-1, scrsz.cols()-1);
 	w1->resize(newsz);
 	w1->refresh(true);
 
 	sleep(1);
 
-	newsz=Rectangle<>(0,0,scrsz.rows()-2, scrsz.cols()-2);
+	newsz=Rectangle(0,0,scrsz.rows()-2, scrsz.cols()-2);
 	w1->resize(newsz);
 	w1->refresh(true);
 

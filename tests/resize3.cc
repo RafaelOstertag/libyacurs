@@ -56,7 +56,7 @@ class MyWindow: public Window {
 	MyWindow() : Window() {
 	    EventQueue::connectEvent(EventConnectorMethod1<MyWindow>(EVT_WINCH,this, &MyWindow::resize_handler));
 	}
-	MyWindow(const Margin<>& _m) : Window(_m) {}
+	MyWindow(const Margin& _m) : Window(_m) {}
 	MyWindow(const MyWindow& _o) : Window(_o) {}
 
 };
@@ -76,7 +76,7 @@ int main() {
 					   "Resize 1");
 	Curses::setTitle(title);
 
-	MyWindow* w1 = new MyWindow(Margin<>(1,0,1,0));
+	MyWindow* w1 = new MyWindow(Margin(1,0,1,0));
 	w1->frame(true);
 
 	Curses::setWindow(w1);

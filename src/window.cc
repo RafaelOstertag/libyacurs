@@ -55,7 +55,7 @@ Window::key_handler(Event& _e) {
 // Public
 //
 
-Window::Window(const Margin<>& m):
+Window::Window(const Margin& m):
     ScreenObject(Curses::inquiryScreenSize(), m),
     hasframe(false) {
 

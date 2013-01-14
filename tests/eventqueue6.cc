@@ -87,7 +87,7 @@ int main() {
 	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_WINCH, &ahandler2, &AlrmHandler2::handler3) );
 	
 	Curses::init();
-	EventQueue::submit(EventWinCh(Rectangle<>() ));
+	EventQueue::submit(EventWinCh(Rectangle() ));
 	alarm(4);
 	EventQueue::run();
 

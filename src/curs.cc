@@ -40,7 +40,7 @@ StatusLine* Curses::statusline = NULL;
 LineObject* Curses::title = NULL;
 Window* Curses::mainwindow = NULL;
 bool Curses::initialized = false;
-Rectangle<> Curses::scrdim;
+Rectangle Curses::scrdim;
 
 //
 // Private
@@ -63,7 +63,7 @@ Curses::termresetup_handler(Event& e) {
     // We only support resizing for Curses implementation having
     // resize_term.
 
-    Rectangle<> __tmp(Curses::inquiryScreenSize());
+    Rectangle __tmp(Curses::inquiryScreenSize());
 
     resize_term(__tmp.rows(), __tmp.cols());
 
@@ -194,7 +194,7 @@ Curses::unsetWindow() {
     mainwindow = NULL;
 }
 
-Rectangle<>
+Rectangle
 Curses::inquiryScreenSize() {
     // If we have resize term, we need to get the actual terminal
     // size, because we have the ability to easily resize, and thus
@@ -203,7 +203,7 @@ Curses::inquiryScreenSize() {
     // Without resize_term(), we return the size of stdscr, since
     // resizing is not support then
 
-    Rectangle<> __scrdim;
+    Rectangle __scrdim;
 #ifdef HAVE_RESIZE_TERM
     winsize ws;
 

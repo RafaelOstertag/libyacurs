@@ -37,7 +37,7 @@ int main() {
 					   "Basic 1");
 	Curses::setTitle(title);
 
-	Window* w1 = new Window(Margin<>(1,0,0,0));
+	Window* w1 = new Window(Margin(1,0,0,0));
 	w1->frame(true);
 
 	Curses::setWindow(w1);

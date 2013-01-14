@@ -29,7 +29,7 @@ class Realizeable {
 	/**
 	 * Resizes the object. A resize must not refresh.
 	 */
-	virtual void resize(const Rectangle<>&) = 0;
+	virtual void resize(const Rectangle&) = 0;
 	virtual void realize() = 0;
 	bool realized() const;
 };

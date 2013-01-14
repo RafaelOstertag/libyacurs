@@ -5,25 +5,14 @@
 #include "rectangle.h"
 
 int main() {
-    Coordinates<> o1(1,2);
-    Coordinates<> o2(3,5);
+    Coordinates o1(1,2);
+    Coordinates o2(3,5);
 
-    Coordinates<> r = o1-o2;
+    Coordinates r = o1-o2;
 
     if ( r.x() != -2 ||
 	 r.y() != -3)
 	return 1;
-
-    r+=1;
-
-    if ( r.x() != -1 ||
-	 r.y() != -2 )
-	return 1;
-
-    if ( o1 == o2 )
-	return 1;
-
-    r-=1;
 
     if ( r != o1-o2 )
 	return 1;
@@ -74,7 +63,7 @@ int main() {
 	 o2.y() != 5 )
 	 return 1;
 
-    o1 = o2 - Coordinates<>(2,3);
+    o1 = o2 - Coordinates(2,3);
 
     if ( o1.x() != 5 ||
 	 o1.y() != 2 )

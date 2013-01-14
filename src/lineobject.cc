@@ -14,32 +14,32 @@
 //
 
 void
-LineObject::computeMargin(const Rectangle<>& _s) {
-    Rectangle<> _tmp_r;
+LineObject::computeMargin(const Rectangle& _s) {
+    Rectangle _tmp_r;
 
-    if (_s == Rectangle<>() )
+    if (_s == Rectangle() )
 	_tmp_r = Curses::inquiryScreenSize();
     else
 	_tmp_r= _s;
 
 #ifndef NDEBUG
-    Margin<> __m_debug;
+    Margin __m_debug;
 #endif // NDEBUG
     switch (position) {
     case POS_TOP:
 #ifdef NDEBUG
-	setMargin(Margin<>(0, 0, _tmp_r.rows()-1,0));
+	setMargin(Margin(0, 0, _tmp_r.rows()-1,0));
 #else // NDEBUG
-	__m_debug = Margin<>(0, 0, _tmp_r.rows()-1,0);
+	__m_debug = Margin(0, 0, _tmp_r.rows()-1,0);
 	assert(__m_debug.bottom()>=0);
 	setMargin(__m_debug);
 #endif //NDEBUG
 	break;
     case POS_BOTTOM:
 #ifdef NDEBUG
-	setMargin(Margin<>(_tmp_r.rows()-1, 0, 0, 0));
+	setMargin(Margin(_tmp_r.rows()-1, 0, 0, 0));
 #else // NDEBUG
-	__m_debug = Margin<>(_tmp_r.rows()-1, 0, 0, 0);
+	__m_debug = Margin(_tmp_r.rows()-1, 0, 0, 0);
 	assert(__m_debug.top()>=0);
 	setMargin(__m_debug);
 #endif

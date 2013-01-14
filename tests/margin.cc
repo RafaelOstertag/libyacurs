@@ -12,10 +12,10 @@
 #include "margin.h"
 
 int main() {
-    Margin<> m1(2,3,5,7);
-    Margin<> m2(11,13,17,19);
+    Margin m1(2,3,5,7);
+    Margin m2(11,13,17,19);
 
-    Margin<> r = m1 + m2;
+    Margin r = m1 + m2;
 
     if ( r.top() != 11 ||
 	 r.left() != 13 ||

@@ -27,7 +27,7 @@ class Window: public ScreenObject {
 
     public:
 	Window();
-	Window(const Margin<>& m);
+	Window(const Margin& m);
 	Window(const Window& W);
 	~Window();
 	Window& operator=(const Window& W);

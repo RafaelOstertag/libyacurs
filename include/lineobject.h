@@ -35,10 +35,10 @@ class LineObject: public ScreenObject {
 	 * of the line object according to \c pos.
 	 *
 	 * @param _s the screen size. If this parameter is equal to
-	 * Rectangle<>(), computeMargin calls Curses::inquiryScreenSize() in
+	 * Rectangle(), computeMargin calls Curses::inquiryScreenSize() in
 	 * order to determine the screen size.
 	 */
-	void computeMargin(const Rectangle<>& _s=Rectangle<>());
+	void computeMargin(const Rectangle& _s=Rectangle());
 
     protected:
 	void putLine();

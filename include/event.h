@@ -141,9 +141,9 @@ class EventEx: public Event {
 	virtual T& data() { return payload; }
 };
 
-class EventWinCh: public EventEx<Rectangle<> > {
+class EventWinCh: public EventEx<Rectangle > {
     public:
-	EventWinCh(const Rectangle<>& _r);
+	EventWinCh(const Rectangle& _r);
 	EventWinCh(const EventWinCh& _e);
 	EventWinCh& operator=(const EventWinCh& _e);
 	EventWinCh* clone() const;

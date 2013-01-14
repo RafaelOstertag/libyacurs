@@ -18,6 +18,8 @@
 #include "lineobject.h"
 #include "statusline.h"
 #include "window.h"
+#include "widget.h"
+#include "pack.h"
 
 #endif // YACURS_H
 

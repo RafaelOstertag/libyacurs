@@ -178,9 +178,9 @@ class EventConnectorBase {
 	 */
 	virtual int call(Event& _e) const = 0;
 	/**
-	 * The EventQueue requires a local copy of the
-	 * EventConnector. This method has to return a copy of the
-	 * object. The caller is responsible for freeing the memory.
+	 * The EventQueue creates a local copy of the EventConnector
+	 * object. This method has to return a copy of the object. The
+	 * caller is responsible for freeing the memory.
 	 *
 	 * @return pointer to a derived EventConnectorBase object. The
 	 * caller is responsible for freeing the memory.

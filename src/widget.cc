@@ -4,6 +4,8 @@
 #include "config.h"
 #endif
 
+#include <cstdlib>
+
 #include "widget.h"
 
 //
@@ -18,14 +20,23 @@
 // Private
 //
 
-Widget::Widget(): __parent(NULL), __area() {
+Widget::Widget(): Realizeable(), __parent(NULL), __area() {
 }
 
 Widget::~Widget() {
 }
 
 Widget::Widget(const Widget& _w):
-    __parent(_w.parent), __area(_w.__area) {
+    Realizeable(_w),  __parent(_w.__parent), __area(_w.__area) {
+}
+
+const Widget&
+Widget::operator=(const Widget& _w) {
+    Realizeable::operator=(_w);
+    __parent = _w.__parent;
+    __area = _w.__area;
+
+    return *this;
 }
 
 void
@@ -36,4 +47,14 @@ Widget::area(const Rectangle& _a) {
 const Rectangle&
 Widget::area() const {
     return __area;
+}
+
+void
+Widget::parent(Widget* _p) {
+    __parent = _p;
+}
+
+Widget*
+Widget::parent() const {
+    return __parent;
 }

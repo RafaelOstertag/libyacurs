@@ -9,8 +9,18 @@
 #include "config.h"
 #endif
 
-class VPack: public Pack {
+#include "pack.h"
 
+class VPack: public Pack {
+    protected:
+	void add_size(const Widget* _w);
+	void recalc_size();
+
+    public:
+	VPack();
+	VPack(const VPack& _vp);
+	~VPack();
+	const VPack& operator=(const VPack& _vp);
 };
 
 #endif // VPACK_H

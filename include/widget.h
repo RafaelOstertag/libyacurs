@@ -26,6 +26,7 @@ class Widget: public Realizeable {
 	Widget();
 	~Widget();
 	Widget(const Widget& _w);
+	const Widget& operator=(const Widget& w);
 	
 	/**
 	 * Set the screen area, the widget has to its disposition.
@@ -41,6 +42,22 @@ class Widget: public Realizeable {
 	 * disposition. Absolute with regards to stdscr.
 	 */
 	const Rectangle& area() const;
+	/**
+	 * Set parent of widget.
+	 *
+	 * @param _p the parent. The pointer has to be valid during the
+	 * lifetime of the widget.
+	 */
+	void parent(Widget* _p);
+	/**
+	 * Get the address parent of the widget.
+	 *
+	 * If the widget has no parent, NULL is returned.
+	 *
+	 * @return the address of the parent widget or NULL if the is no
+	 * parent.
+	 */
+	Widget* parent() const;
 	/**
 	 * Return the size the widget uses effectively.
 	 *

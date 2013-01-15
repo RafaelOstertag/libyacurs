@@ -4,26 +4,11 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_CASSERT
-#include <cassert>
-#endif // HAVE_CASSERT
 
-#ifdef HAVE_CSTDLIB
+#include <cassert>
 #include <cstdlib>
-#endif // HAVE_CSTDLIB
 
 #include "pack.h"
-
-// Functors
-class CalcSize {
-    private:
-	Rectangle __size;
-
-    public:
-	CalcSize(): __size() {}
-	CalcSize(const CalcSize& _cs): __size(cs.__size) {}
-	const Rectangle& size() const { return __size; }
-};
 
 //
 // Private
@@ -36,44 +21,52 @@ class CalcSize {
 //
 // Public
 //
-Pack::Pack(): widget_list(), __size(), __area() {}
+Pack::Pack(): Widget(), widget_list(), __size() {
+}
 
-Pack::~Pack() {}
+Pack::~Pack() {
+}
 
 Pack::Pack(const Pack& _p):
-    widget_list(_p.widget_list), __size(_p.__size), __area(_p.__area) {}
+    Widget(_p), widget_list(_p.widget_list), __size(_p.__size) {
+}
+
+const Pack&
+Pack::operator=(const Pack& _p) {
+    Widget::operator=(_p);
+    widget_list = _p.widget_list;
+    __size = _p.__size;
+
+    return *this;
+}
 
 void
 Pack::add_front(Widget* _w) {
     assert(_w != NULL);
     widget_list.push_front(_w);
-    update_size()
+    add_size(_w);
 }
 
 void
 Pack::add_back(Widget* _w) {
     assert(_w != NULL);
+
     widget_list.push_back(_w);
-    update_size();
+    add_size(_w);
 }
 
 void
 Pack::remove(Widget* _w) {
-    assert(_w != NULL)
-    widget_list.remove(_w);
-}
-    
-const Rectangle&
-Pack::size() {
-    return __size;
-}
+    assert(_w != NULL);
 
-void
-Pack::area(const Rectangle& _a) {
-    __area=_a;
+    widget_list.remove(_w);
+
+    // I see now way of maintaining the proper size when removing widgets than
+    // to recalc the size from scratch.
+    recalc_size();
 }
     
 const Rectangle&
-Pack::area() const {
-    return __area;
+Pack::size() const {
+    return __size;
 }

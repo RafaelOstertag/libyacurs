@@ -1,5 +1,6 @@
 # $Id$
 
-noinst_HEADERS = coordinates.h eventconnector.h mycurses.h statusline.h	\
-curs.h eventqueue.h realizeable.h widget.h cursex.h lineobject.h rectangle.h	\
-window.h event.h margin.h screenobject.h yacurs.h
+noinst_HEADERS = coordinates.h cursex.h curs.h eventconnector.h	\
+event.h eventqueue.h lineobject.h margin.h mycurses.h pack.h	\
+realizeable.h rectangle.h screenobject.h statusline.h vpack.h	\
+widget.h window.h yacurs.h hpack.h label.h

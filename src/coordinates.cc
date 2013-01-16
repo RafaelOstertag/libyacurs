@@ -14,9 +14,9 @@
 // Public
 //
 
-Coordinates::Coordinates() : __x(0), __y(0) {}
+Coordinates::Coordinates() : __y(0), __x(0) {}
 
-Coordinates::Coordinates(int _x, int _y) : __x(_x), __y(_y) {}
+Coordinates::Coordinates(int _x, int _y) : __y(_y), __x(_x) {}
 
 Coordinates::Coordinates(const Coordinates& _c) {
     __x = _c.__x;

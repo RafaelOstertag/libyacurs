@@ -19,6 +19,16 @@
 #include <string>
 #endif // HAVE_STRING
 
+/**
+ * @defgroup exceptions Exceptions.
+ *
+ * @{
+ */
+
+/**
+ * Base class used for all exception in yacurs.
+ *
+ */
 class BaseCurEx: public std::exception {
     private:
 	std::string msg;
@@ -29,6 +39,11 @@ class BaseCurEx: public std::exception {
 	BaseCurEx& operator=(const BaseCurEx &c);
 	virtual ~BaseCurEx() throw();
 
+	/**
+	 * Show the error message.
+	 *
+	 * @return error message.
+	 */
 	virtual const char* what() const throw();
 };
 
@@ -151,5 +166,9 @@ class NoEchoFailed: public BaseCurEx {
     public:
 	NoEchoFailed();
 };
+
+/**
+ * @}
+ */
 
 #endif // CUREX_H

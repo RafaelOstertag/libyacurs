@@ -12,6 +12,12 @@
 #include "rectangle.h"
 
 /**
+ * @defgroup Event Event related code
+ */
+
+/**
+ * @ingroup Event
+ *
  * Event Types that can be connected to.
  *
  * One event handler can be connected to each event type
@@ -19,7 +25,6 @@
  *
  * @see EventConnectorBase
  * @see EventQueue
- * @group Event
  */
 enum EVENT_TYPE {
     /// Terminates the EventQueue main loop
@@ -43,6 +48,8 @@ enum EVENT_TYPE {
 };
 
 /**
+ * @ingroup Event
+ *
  * An Event is generated (key stroke, signal) and submitted into the
  * EventQueue. The event queue passes the Event to EventConnectors
  * (i.e. calls the function or method connected to the event).
@@ -103,6 +110,8 @@ class Event {
 };
 
 /**
+ * @ingroup Event
+ *
  * Extends Event and adds a payload to the event in order to pass
  * information to the EventConnectors.
  *
@@ -141,6 +150,9 @@ class EventEx: public Event {
 	virtual T& data() { return payload; }
 };
 
+/**
+ * @ingroup Event
+ */
 class EventWinCh: public EventEx<Rectangle > {
     public:
 	EventWinCh(const Rectangle& _r);
@@ -149,6 +161,9 @@ class EventWinCh: public EventEx<Rectangle > {
 	EventWinCh* clone() const;
 };
 
+/**
+ * @ingroup Event
+ */
 class EventKey: public EventEx<int> {
     public:
 	EventKey(const int& _r);

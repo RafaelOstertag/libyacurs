@@ -25,6 +25,9 @@
 #include "eventconnector.h"
 #include "rectangle.h"
 
+/**
+ * @ingroup Event
+ */
 class EventQueue {
     private:
 	/// Used by blocksignal()/unblocksignal()

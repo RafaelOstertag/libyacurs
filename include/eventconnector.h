@@ -36,6 +36,8 @@
 #include "event.h"
 
 /**
+ * @ingroup Event
+ *
  * An Event Connector connects an event (@c EVENT_TYPE) to an handler
  * (function, or member function).
  *
@@ -54,7 +56,6 @@
  *
  * @see Event
  * @see EventQueue
- * @group Event
  */
 class EventConnectorBase {
     private:
@@ -189,13 +190,14 @@ class EventConnectorBase {
 };
 
 /**
- * This template connects a member function to an event.
+ * @ingroup Event
+ *
+ * Connect a member function to an event.
  *
  * The signature of the handler has to be
  *
  *  <code>Class::handler(Event&)</code>
  *
- * @group Event
  */
 template<class T /* Type of object called */>
 class EventConnectorMethod1: public EventConnectorBase {
@@ -302,6 +304,8 @@ class EventConnectorMethod1: public EventConnectorBase {
 };
 
 /**
+ * @ingroup Event
+ *
  * Connect a function to an event.
  *
  * The signature of the function connected has to be

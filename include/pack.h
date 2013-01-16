@@ -17,21 +17,15 @@
 #include "widget.h"
 
 /**
- * A pack is a list of widgets, that are either horizontally, or vertically
- * stacked and displayed.
+ * A pack is a list of widgets, that are either horizontally, or
+ * vertically stacked and displayed.
  *
  * The pack will calculate the size needed for displaying the widgets
  * horizontally, vertically.
  */
 class Pack: public Widget {
-    private:
-	std::list<Widget*> widget_list;
-
     protected:
-	/**
-	 * The size requirements of all the widgets in the pack.
-	 */
-	Rectangle __size;
+	std::list<Widget*> widget_list;
 
 	/**
 	 * Add the size of the given widget to the __size.
@@ -45,15 +39,18 @@ class Pack: public Widget {
 	virtual void add_size(const Widget* _w) = 0;
 
 	/**
-	 * Recalculates the size requirements of all widgets in the pack.
+	 * Recalculates the size requirements of all widgets in the
+	 * pack.
 	 *
-	 * Needed to recalculate the size when removing widgets from the pack.
+	 * Needed to recalculate the size when removing widgets from
+	 * the pack.
 	 *
-	 * @internal Simply subtracting the size of the widget to be removed
-	 * from __size, might not always do the trick, e.g. removing a widget
-	 * with size requirement of 4x4 from a pack consisting of only of 2x2
-	 * will leave 2 rows/cols (depending on vertical or horizontal packing)
-	 * too many in __size. So we have to take all remaining widgets into
+	 * @internal Simply subtracting the size of the widget to be
+	 * removed from __size, might not always do the trick,
+	 * e.g. removing a widget with size requirement of 4x4 from a
+	 * pack consisting of only of 2x2 will leave 2 rows/cols
+	 * (depending on vertical or horizontal packing) too many in
+	 * __size. So we have to take all remaining widgets into
 	 * account as well.
 	 */
 	virtual void recalc_size() = 0;

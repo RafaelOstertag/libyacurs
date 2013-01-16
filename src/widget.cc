@@ -20,14 +20,15 @@
 // Private
 //
 
-Widget::Widget(): Realizeable(), __parent(NULL), __area() {
+Widget::Widget(): Realizeable(), __parent(NULL), __area(), __size() {
 }
 
 Widget::~Widget() {
 }
 
 Widget::Widget(const Widget& _w):
-    Realizeable(_w),  __parent(_w.__parent), __area(_w.__area) {
+    Realizeable(_w),  __parent(_w.__parent),
+    __area(_w.__area), __size(_w.__size) {
 }
 
 const Widget&
@@ -35,6 +36,7 @@ Widget::operator=(const Widget& _w) {
     Realizeable::operator=(_w);
     __parent = _w.__parent;
     __area = _w.__area;
+    __size = _w.__size;
 
     return *this;
 }
@@ -57,4 +59,9 @@ Widget::parent(Widget* _p) {
 Widget*
 Widget::parent() const {
     return __parent;
+}
+
+const Rectangle&
+Widget::size() const {
+    return __size;
 }

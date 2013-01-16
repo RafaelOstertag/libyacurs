@@ -12,7 +12,7 @@
 #include "realizeable.h"
 #include "rectangle.h"
 
-class Widget: public Realizeable {
+class Widget: virtual public Realizeable {
     private:
 	/**
 	 * The parent of the widget. If the widget has no parent, it
@@ -21,6 +21,14 @@ class Widget: public Realizeable {
 	Widget* __parent;
 	Rectangle __area;
 
+    protected:
+	/**
+	 * Holds the size in columns and rows (w/ x=y=0) that the
+	 * widget requires.
+	 *
+	 * Derrived widgets have to maintain this attribute.
+	 */
+	Rectangle __size;
 
     public:
 	Widget();
@@ -45,8 +53,8 @@ class Widget: public Realizeable {
 	/**
 	 * Set parent of widget.
 	 *
-	 * @param _p the parent. The pointer has to be valid during the
-	 * lifetime of the widget.
+	 * @param _p the parent. The pointer has to be valid during
+	 * the lifetime of the widget.
 	 */
 	void parent(Widget* _p);
 	/**
@@ -54,8 +62,8 @@ class Widget: public Realizeable {
 	 *
 	 * If the widget has no parent, NULL is returned.
 	 *
-	 * @return the address of the parent widget or NULL if the is no
-	 * parent.
+	 * @return the address of the parent widget or NULL if the is
+	 * no parent.
 	 */
 	Widget* parent() const;
 	/**
@@ -63,7 +71,7 @@ class Widget: public Realizeable {
 	 *
 	 * @return the size the widget uses effectively.
 	 */
-	virtual const Rectangle& size() const = 0;
+	virtual const Rectangle& size() const;
 	virtual Widget* clone() const = 0;
 
 };

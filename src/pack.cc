@@ -21,14 +21,14 @@
 //
 // Public
 //
-Pack::Pack(): Widget(), widget_list(), __size() {
+Pack::Pack(): Widget(), widget_list() {
 }
 
 Pack::~Pack() {
 }
 
 Pack::Pack(const Pack& _p):
-    Widget(_p), widget_list(_p.widget_list), __size(_p.__size) {
+    Widget(_p), widget_list(_p.widget_list) {
 }
 
 const Pack&
@@ -61,12 +61,7 @@ Pack::remove(Widget* _w) {
 
     widget_list.remove(_w);
 
-    // I see now way of maintaining the proper size when removing widgets than
-    // to recalc the size from scratch.
+    // I see now way of maintaining the proper size when removing
+    // widgets than to recalc the size from scratch.
     recalc_size();
-}
-    
-const Rectangle&
-Pack::size() const {
-    return __size;
 }

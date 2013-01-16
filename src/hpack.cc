@@ -1,4 +1,4 @@
-// $Id$
+// $Id: vpack.cc 4684 2013-01-15 20:47:55Z rafisol $
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <algorithm>
 
-#include "vpack.h"
+#include "hpack.h"
 
 // Functors
 class CalcSize {
@@ -18,10 +18,10 @@ class CalcSize {
 	CalcSize(Rectangle _s = Rectangle()): __size(_s) {}
 	CalcSize(const CalcSize& _rs): __size(_rs.__size) {}
 	void operator()(const Widget* _w) {
-	    __size.rows(__size.rows() +
-			_w->size().rows());
-	    __size.cols(__size.cols() < _w->size().cols() ?
-			_w->size().cols() : __size.cols());
+	    __size.rows(__size.rows() < _w->size().rows() ?
+			_w->size().rows() : __size.rows());
+
+	    __size.cols(__size.cols()+_w->size().cols());
 	}
 	const Rectangle& size() const { return __size; }
 };
@@ -34,16 +34,19 @@ class CalcSize {
 // Protected
 //
 void 
-VPack::add_size(const Widget* _w) {
+HPack::add_size(const Widget* _w) {
     assert(_w != NULL);
+
     CalcSize newsize(__size);
     newsize(_w);
+
     __size=newsize.size();
 }
 
 void
-VPack::recalc_size() {
+HPack::recalc_size() {
     CalcSize newsize;
+
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  newsize);
@@ -54,19 +57,19 @@ VPack::recalc_size() {
 //
 // Public
 //
-VPack::VPack(): Pack() {}
+HPack::HPack(): Pack() {}
 
-VPack::VPack(const VPack& _vp): Pack(_vp) {}
+HPack::HPack(const HPack& _hp): Pack(_hp) {}
 
-VPack::~VPack() {}
+HPack::~HPack() {}
 
-const VPack&
-VPack::operator=(const VPack& _vp) {
-    Pack::operator=(_vp);
+const HPack&
+HPack::operator=(const HPack& _hp) {
+    Pack::operator=(_hp);
     return *this;
 }
 
 Widget*
-VPack::clone() const {
-    return new VPack(*this);
+HPack::clone() const {
+    return new HPack(*this);
 }

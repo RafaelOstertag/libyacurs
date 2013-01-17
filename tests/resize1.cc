@@ -43,14 +43,14 @@ int main() {
 
 	sleep(1);
 
-	Rectangle scrsz(Curses::inquiryScreenSize());
-	Rectangle newsz(0,0,scrsz.rows()-1, scrsz.cols()-1);
+	Area scrsz(Curses::inquiryScreenSize());
+	Area newsz(0,0,scrsz.rows()-1, scrsz.cols()-1);
 	w1->resize(newsz);
 	w1->refresh(true);
 
 	sleep(1);
 
-	newsz=Rectangle(0,0,scrsz.rows()-2, scrsz.cols()-2);
+	newsz=Area(0,0,scrsz.rows()-2, scrsz.cols()-2);
 	w1->resize(newsz);
 	w1->refresh(true);
 

@@ -9,7 +9,7 @@
 #include "config.h"
 #endif
 
-#include "rectangle.h"
+#include "area.h"
 
 /**
  * @defgroup Event Event related code
@@ -153,9 +153,9 @@ class EventEx: public Event {
 /**
  * @ingroup Event
  */
-class EventWinCh: public EventEx<Rectangle > {
+class EventWinCh: public EventEx<Area > {
     public:
-	EventWinCh(const Rectangle& _r);
+	EventWinCh(const Area& _r);
 	EventWinCh(const EventWinCh& _e);
 	EventWinCh& operator=(const EventWinCh& _e);
 	EventWinCh* clone() const;

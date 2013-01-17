@@ -12,7 +12,7 @@
 #endif // HAVE_STRING
 
 #include "mycurses.h"
-#include "rectangle.h"
+#include "area.h"
 #include "lineobject.h"
 #include "statusline.h"
 #include "window.h"
@@ -26,7 +26,7 @@ class Curses {
 	static LineObject* title;
 	static Window* mainwindow;
 	static bool initialized;
-	static Rectangle scrdim;
+	static Area scrdim;
 
     protected:
 	static int doupdate_handler(Event& e);
@@ -50,7 +50,7 @@ class Curses {
 	static Window* getWindow();
 	static void unsetWindow();
 
-	static Rectangle inquiryScreenSize();
+	static Area inquiryScreenSize();
 };
 
 #endif

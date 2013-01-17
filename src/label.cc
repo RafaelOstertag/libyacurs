@@ -15,7 +15,7 @@
 //
 Label::Label(const std::string& _l):
     Widget(), ScreenObject(), __label(_l) {
-    __size = Rectangle(0, 0, 1, __label.length());
+    __size = Area(0, 0, 1, __label.length());
 }
 
 Label::Label(const Label& _l):
@@ -43,7 +43,7 @@ Label::clone() const {
 void
 Label::label(const std::string& _l) {
     __label = _l;
-    __size = Rectangle(0, 0, 1, __label.length());
+    __size = Area(0, 0, 1, __label.length());
 }
 
 const std::string&

@@ -14,10 +14,10 @@
 //
 
 void
-LineObject::computeMargin(const Rectangle& _s) {
-    Rectangle _tmp_r;
+LineObject::computeMargin(const Area& _s) {
+    Area _tmp_r;
 
-    if (_s == Rectangle() )
+    if (_s == Area() )
 	_tmp_r = Curses::inquiryScreenSize();
     else
 	_tmp_r= _s;

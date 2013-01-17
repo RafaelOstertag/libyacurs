@@ -2,7 +2,7 @@
 //
 // Test Dimension class
 
-#include "rectangle.h"
+#include "area.h"
 
 int main() {
     Coordinates o1(1,2);

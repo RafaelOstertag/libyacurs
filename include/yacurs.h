@@ -8,7 +8,7 @@
 #include "realizeable.h"
 #include "coordinates.h"
 #include "margin.h"
-#include "rectangle.h"
+#include "area.h"
 #include "cursex.h"
 #include "event.h"
 #include "eventconnector.h"

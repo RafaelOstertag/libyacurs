@@ -5,10 +5,10 @@
 #include "rectangle.h"
 
 int main() {
-    Rectangle o(0,0,25,80);
+    Area o(0,0,25,80);
     Margin m(1,2,3,5);
 
-    Rectangle r = o-m;
+    Area r = o-m;
 
     if (r.rows() != 21 ||
 	r.cols() != 73 ||
@@ -16,7 +16,7 @@ int main() {
 	r.x() != 2 )
 	return 1;
 
-    o = Rectangle(2,2,5,5);
+    o = Area(2,2,5,5);
     m = Margin(1,1,0,0);
     r = o-m;
 
@@ -24,8 +24,8 @@ int main() {
 	r.cols() != 4)
 	return 1;
 
-    Rectangle o1(1,2,3,5);
-    Rectangle o2(7,11,13,17);
+    Area o1(1,2,3,5);
+    Area o2(7,11,13,17);
 
     if (o1 == o2)
 	return 1;

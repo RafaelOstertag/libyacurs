@@ -65,12 +65,12 @@ ScreenObject::unrealize() {
 // Public
 //
 
-ScreenObject::ScreenObject(const Rectangle& _r,
+ScreenObject::ScreenObject(const Area& _r,
 			   const Margin& _m):
     Realizeable(), rect(_r), margin(_m),
     instances(NULL), w(NULL) {
 
-    if ( _r == Rectangle() )
+    if ( _r == Area() )
 	rect = Curses::inquiryScreenSize();
 
     w = new WINDOW*;
@@ -145,7 +145,7 @@ ScreenObject::refresh(bool immediate) {
 }
 
 void
-ScreenObject::resize(const Rectangle& r) {
+ScreenObject::resize(const Area& r) {
     //
     // Keep in mind: a resize does not refresh!
     //
@@ -172,7 +172,7 @@ ScreenObject::realize() {
     assert(rect.rows()>0);
     assert(rect.cols()>0);
 
-    Rectangle _tmp = rect - margin;
+    Area _tmp = rect - margin;
 
     assert(_tmp.x()>=0);
     assert(_tmp.y()>=0);

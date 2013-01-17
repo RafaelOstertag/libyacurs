@@ -23,7 +23,7 @@
 
 #include "event.h"
 #include "eventconnector.h"
-#include "rectangle.h"
+#include "area.h"
 
 /**
  * @ingroup Event

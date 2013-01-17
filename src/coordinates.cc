@@ -14,16 +14,10 @@
 // Public
 //
 
-Coordinates::Coordinates() : __y(0), __x(0) {}
-
-Coordinates::Coordinates(int _x, int _y) : __y(_y), __x(_x) {}
-
 Coordinates::Coordinates(const Coordinates& _c) {
     __x = _c.__x;
     __y = _c.__y;
 }
-
-Coordinates::~Coordinates() {}
 
 int
 Coordinates::x() const {
@@ -45,21 +39,21 @@ Coordinates::y(int _y) {
     __y = _y;
 }
 
-Coordinates&
+const Coordinates&
 Coordinates::operator=(const Coordinates& rhs) {
     __x = rhs.__x;
     __y = rhs.__y;
     return *this;
 }
 
-Coordinates&
+const Coordinates&
 Coordinates::operator+=(const Coordinates& rhs) {
     __x += rhs.__x;
     __y += rhs.__y;
     return *this;
 }
 
-Coordinates&
+const Coordinates&
 Coordinates::operator-=(const Coordinates& rhs) {
     __x -= rhs.__x;
     __y -= rhs.__y;

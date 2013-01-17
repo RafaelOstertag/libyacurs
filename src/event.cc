@@ -53,16 +53,16 @@ Event::clone() const {
 
 ///////
 
-EventWinCh::EventWinCh(const Rectangle& _r):
-    EventEx<Rectangle >(EVT_WINCH, _r) {}
+EventWinCh::EventWinCh(const Area& _r):
+    EventEx<Area >(EVT_WINCH, _r) {}
 
 EventWinCh::EventWinCh(const EventWinCh& _e):
-    EventEx<Rectangle >(_e) {}
+    EventEx<Area >(_e) {}
 
 
 EventWinCh&
 EventWinCh::operator=(const EventWinCh& _e) {
-    EventEx<Rectangle >::operator=(_e);
+    EventEx<Area >::operator=(_e);
     return *this;
 }
 

@@ -13,9 +13,9 @@
 // Functors
 class CalcSize {
     private:
-	Rectangle __size;
+	Area __size;
     public:
-	CalcSize(Rectangle _s = Rectangle()): __size(_s) {}
+	CalcSize(Area _s = Area()): __size(_s) {}
 	CalcSize(const CalcSize& _rs): __size(_rs.__size) {}
 	void operator()(const Widget* _w) {
 	    __size.rows(__size.rows() < _w->size().rows() ?
@@ -23,7 +23,7 @@ class CalcSize {
 
 	    __size.cols(__size.cols()+_w->size().cols());
 	}
-	const Rectangle& size() const { return __size; }
+	const Area& size() const { return __size; }
 };
 
 //

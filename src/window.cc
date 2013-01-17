@@ -14,7 +14,7 @@
 
 #include "curs.h"
 #include "window.h"
-#include "rectangle.h"
+#include "area.h"
 #include "eventqueue.h"
 
 //

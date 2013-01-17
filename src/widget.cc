@@ -42,11 +42,11 @@ Widget::operator=(const Widget& _w) {
 }
 
 void
-Widget::area(const Rectangle& _a) {
+Widget::area(const Area& _a) {
     __area = _a;
 }
 
-const Rectangle&
+const Area&
 Widget::area() const {
     return __area;
 }
@@ -61,7 +61,7 @@ Widget::parent() const {
     return __parent;
 }
 
-const Rectangle&
+const Area&
 Widget::size() const {
     return __size;
 }

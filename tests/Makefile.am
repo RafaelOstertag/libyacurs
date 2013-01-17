@@ -1,6 +1,6 @@
 # $Id$
 
-check_PROGRAMS = cursinit coordinates margin rectangle		  \
+check_PROGRAMS = cursinit coordinates margin area		  \
   eventconnector1 eventqueue1 eventqueue2 eventqueue3 eventqueue4 \
   eventqueue5 eventqueue6 eventqueue7 eventqueue8 eventqueue9	  \
   windowrefs basic1 basic2 resize1 resize2 resize3

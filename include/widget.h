@@ -10,7 +10,7 @@
 #endif
 
 #include "realizeable.h"
-#include "rectangle.h"
+#include "area.h"
 
 class Widget: virtual public Realizeable {
     private:
@@ -19,7 +19,7 @@ class Widget: virtual public Realizeable {
 	 * has to be set to NULL.
 	 */
 	Widget* __parent;
-	Rectangle __area;
+	Area __area;
 
     protected:
 	/**
@@ -28,7 +28,7 @@ class Widget: virtual public Realizeable {
 	 *
 	 * Derrived widgets have to maintain this attribute.
 	 */
-	Rectangle __size;
+	Area __size;
 
     public:
 	Widget();
@@ -42,14 +42,14 @@ class Widget: virtual public Realizeable {
 	 * @param _a area the widget has to its disposition. Its
 	 * absolute with regards to stdscr.
 	 */
-	void area(const Rectangle& _a);
+	void area(const Area& _a);
 	/**
 	 * Get the screen area, the widget has to its disposition.
 	 *
 	 * @return area the widget claims it has to its
 	 * disposition. Absolute with regards to stdscr.
 	 */
-	const Rectangle& area() const;
+	const Area& area() const;
 	/**
 	 * Set parent of widget.
 	 *
@@ -71,7 +71,7 @@ class Widget: virtual public Realizeable {
 	 *
 	 * @return the size the widget uses effectively.
 	 */
-	virtual const Rectangle& size() const;
+	virtual const Area& size() const;
 	virtual Widget* clone() const = 0;
 
 };

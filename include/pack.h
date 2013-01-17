@@ -13,7 +13,7 @@
 #include <list>
 #endif // HAVE_LIST
 
-#include "rectangle.h"
+#include "area.h"
 #include "widget.h"
 
 /**
@@ -90,7 +90,7 @@ class Pack: public Widget {
 	 * @return the space required for displaying the pack and
 	 * associated widget.
 	 */
-	const Rectangle& size() const;
+	const Area& size() const;
 };
 
 #endif // PACK_H

@@ -17,7 +17,7 @@
 class ScreenObject : public Realizeable {
     private:
 	/// The dimension of screen object
-	Rectangle rect;
+	Area rect;
 	/// margin of the screen object
 	Margin margin;
 	/// Keeps track of how many instance objects have been created sharing
@@ -40,18 +40,18 @@ class ScreenObject : public Realizeable {
 
     public:
 	/**
-	 * @param _r the size of the window. If it is equal to Rectangle(),
+	 * @param _r the size of the window. If it is equal to Area(),
 	 * ScreenObject will retrieve the screen size by calling
 	 * Curses::inquiryScreenSize().
 	 */
-	ScreenObject(const Rectangle& _r = Rectangle(),
+	ScreenObject(const Area& _r = Area(),
 		     const Margin& _m = Margin());
 	ScreenObject(const ScreenObject& so);
 	virtual ~ScreenObject();
 	ScreenObject& operator=(const ScreenObject& so);
 
 	void refresh(bool immediate);
-	void resize(const Rectangle& _r);
+	void resize(const Area& _r);
 	void realize();
 
 };

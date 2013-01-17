@@ -30,25 +30,34 @@ Area::Area(const Coordinates& _c, const Size& _s):
     Coordinates(_c), Size(_s) {
 }
 
-Area::~Area() {}
-
-bool
-Area::operator==(const Area& d) const {
-    return Coordinates::operator==(*this) && 
-	Size::operator==(*this);
-}
-
-bool
-Area::operator!=(const Area& d) const {
-    return !operator==(d);
+Area::Area(const Area& _a): Coordinates(_a), Size(_a) {
 }
 
 Area&
+Area::operator=(const Area& _a) {
+    Coordinates::operator=(_a);
+    Size::operator=(_a);
+    return *this;
+}
+
+bool
+Area::operator==(const Area& _a) const {
+    return Coordinates::operator==(_a) && 
+	Size::operator==(_a);
+}
+
+bool
+Area::operator!=(const Area& _a) const {
+    return !operator==(_a);
+}
+
+const Area&
 Area::operator-=(const Margin& rhs) {
-    rows(rows() - rhs.bottom());
-    cols(cols() - rhs.right());
     y(y() + rhs.top());
     x(x() + rhs.left());
+    rows(rows() - rhs.bottom() - rhs.top());
+    cols(cols() - rhs.right() - rhs.left());
+
     return *this;
 }
 

@@ -61,7 +61,12 @@ Pack::remove(Widget* _w) {
 
     widget_list.remove(_w);
 
-    // I see now way of maintaining the proper size when removing
+    // I see no way of maintaining the proper size when removing
     // widgets than to recalc the size from scratch.
     recalc_size();
+}
+
+const Area&
+Pack::size() const {
+    return __size;
 }

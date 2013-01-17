@@ -12,6 +12,11 @@
 #include "pack.h"
 
 class HPack: public Pack {
+    private:
+#warning "NEEDS TO BE IMPLEMENTED"
+	void refresh(bool) { abort(); }
+	void resize(const Area&) { abort(); }
+	void realize() { abort(); }
     protected:
 	void add_size(const Widget* _w);
 	void recalc_size();

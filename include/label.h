@@ -15,7 +15,12 @@
 #include "screenobject.h"
 
 
-class Label: public Widget {
+class Label: public Widget, public ScreenObject {
+    private:
+#warning "NEEDS TO BE IMPLEMENTED"
+	void refresh(bool) { abort(); }
+	void resize(const Area&) { abort(); }
+	void realize() { abort(); }
     private:
 	std::string __label;
 

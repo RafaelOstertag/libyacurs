@@ -36,11 +36,17 @@ class Size {
 	/**
 	 * Set the number of columns.
 	 *
+	 * If number of columns is tried to set to a negative value, an
+	 * out_of_range exception is thrown.
+	 *
 	 * @param _cols number of columns
 	 */
 	void cols(int _cols);
 	/**
 	 * Set the number of rows.
+	 *
+	 * If number of rows is tried to set to a negative value, an
+	 * out_of_range exception is thrown.
 	 *
 	 * @param _rows number of rows
 	 */

@@ -17,7 +17,6 @@
 
 class Label: public WidgetBase, public ScreenObject {
     private:
-#warning "NEEDS TO BE IMPLEMENTED"
 	void refresh(bool) { abort(); }
 	void resize(const Area&) { abort(); }
 	void realize() { abort(); }

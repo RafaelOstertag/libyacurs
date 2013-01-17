@@ -33,6 +33,10 @@ class Window: public ScreenObject {
 	Window& operator=(const Window& W);
 
 	bool frame() const;
+	/**
+	 * @todo make setting/removing frame take effect immediately, if window
+	 * is realized.
+	 */
 	void frame(bool b);
 
 	void realize();

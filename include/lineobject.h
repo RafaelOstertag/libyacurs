@@ -18,6 +18,9 @@
 
 /**
  * A line object occupies one entire line of the screen.
+ *
+ * @todo provide options for centering and right aligning so that title can be
+ * centered if it is used as title for the application.
  */
 class LineObject: public ScreenObject {
     public:
@@ -32,7 +35,7 @@ class LineObject: public ScreenObject {
 
 	/**
 	 * Compute and sets the margin of ScreenObject to achieve the position
-	 * of the line object according to \c pos.
+	 * of the line object according to @c pos.
 	 *
 	 * @param _s the screen size. If this parameter is equal to
 	 * Area(), computeMargin calls Curses::inquiryScreenSize() in

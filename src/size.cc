@@ -20,9 +20,9 @@
 
 Size::Size(int _rows, int _cols) : __rows(_rows), __cols(_cols) {
     if (__rows < 0)
-	throw out_of_range("Rows cannot be <0");
+	throw std::out_of_range("Rows cannot be <0");
     if (__cols < 0)
-	throw out_of_range("Columns cannot be <0");
+	throw std::out_of_range("Columns cannot be <0");
 }
 
 Size::Size(const Size& _s) {
@@ -45,14 +45,14 @@ Size::rows() const {
 void
 Size::cols(int _cols) {
     if (_cols < 0)
-	throw out_of_range("Columns cannot be <0");
+	throw std::out_of_range("Columns cannot be <0");
      __cols = _cols;
 }
 
 void
 Size::rows(int _rows) {
     if (_rows < 0)
-	throw out_of_range("Rows cannot be <0");
+	throw std::out_of_range("Rows cannot be <0");
     __rows = _rows;
 }
 

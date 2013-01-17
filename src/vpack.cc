@@ -17,7 +17,7 @@ class CalcSize {
     public:
 	CalcSize(Area _s = Area()): __size(_s) {}
 	CalcSize(const CalcSize& _rs): __size(_rs.__size) {}
-	void operator()(const Widget* _w) {
+	void operator()(const WidgetBase* _w) {
 	    __size.rows(__size.rows() +
 			_w->size().rows());
 	    __size.cols(__size.cols() < _w->size().cols() ?
@@ -34,7 +34,7 @@ class CalcSize {
 // Protected
 //
 void 
-VPack::add_size(const Widget* _w) {
+VPack::add_size(const WidgetBase* _w) {
     assert(_w != NULL);
     CalcSize newsize(__size);
     newsize(_w);
@@ -66,7 +66,7 @@ VPack::operator=(const VPack& _vp) {
     return *this;
 }
 
-Widget*
+WidgetBase*
 VPack::clone() const {
     return new VPack(*this);
 }

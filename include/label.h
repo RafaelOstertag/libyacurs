@@ -11,11 +11,11 @@
 
 #include <string>
 
-#include "widget.h"
+#include "widgetbase.h"
 #include "screenobject.h"
 
 
-class Label: public Widget, public ScreenObject {
+class Label: public WidgetBase, public ScreenObject {
     private:
 #warning "NEEDS TO BE IMPLEMENTED"
 	void refresh(bool) { abort(); }
@@ -30,7 +30,7 @@ class Label: public Widget, public ScreenObject {
 	~Label();
 	const Label& operator=(const Label& _l);
 
-	Widget* clone() const;
+	WidgetBase* clone() const;
 
 	void label(const std::string& _l);
 	const std::string& label() const;

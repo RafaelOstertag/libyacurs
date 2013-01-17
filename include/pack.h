@@ -14,7 +14,7 @@
 #endif // HAVE_LIST
 
 #include "area.h"
-#include "widget.h"
+#include "widgetbase.h"
 
 /**
  * A pack is a list of widgets, that are either horizontally, or
@@ -23,9 +23,9 @@
  * The pack will calculate the size needed for displaying the widgets
  * horizontally, vertically.
  */
-class Pack: public Widget {
+class Pack: public WidgetBase {
     protected:
-	std::list<Widget*> widget_list;
+	std::list<WidgetBase*> widget_list;
 
 	/**
 	 * Add the size of the given widget to the __size.
@@ -36,7 +36,7 @@ class Pack: public Widget {
 	 *
 	 * @param _w the widget the size has to taken into account.
 	 */
-	virtual void add_size(const Widget* _w) = 0;
+	virtual void add_size(const WidgetBase* _w) = 0;
 
 	/**
 	 * Recalculates the size requirements of all widgets in the
@@ -69,7 +69,7 @@ class Pack: public Widget {
 	 * copy, so the pointer has to remain valid for the lifetime
 	 * of the pack.
 	 */
-	void add_front(Widget* _w);
+	void add_front(WidgetBase* _w);
 	/**
 	 * Add a widget to the Pack. The widget will be added after
 	 * all other widget.
@@ -78,14 +78,14 @@ class Pack: public Widget {
 	 * copy, so the pointer has to remain valid for the lifetime
 	 * of the pack.
 	 */
-	void add_back(Widget* _w);
+	void add_back(WidgetBase* _w);
 	/**
 	 * Remove a previously added widget.
 	 *
 	 * @param _w widget to be removed. Pack compares the address
 	 * of the widget.
 	 */
-	void remove(Widget* _w);
+	void remove(WidgetBase* _w);
 	/**
 	 * @return the space required for displaying the pack and
 	 * associated widget.

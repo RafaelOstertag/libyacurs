@@ -14,12 +14,12 @@
 // Public
 //
 Label::Label(const std::string& _l):
-    Widget(), ScreenObject(), __label(_l) {
+    WidgetBase(), ScreenObject(), __label(_l) {
     __size = Area(0, 0, 1, __label.length());
 }
 
 Label::Label(const Label& _l):
-    Widget(_l), ScreenObject(_l), __label(_l.__label) {
+    WidgetBase(_l), ScreenObject(_l), __label(_l.__label) {
 }
 
 Label::~Label() {
@@ -27,7 +27,7 @@ Label::~Label() {
 
 const Label&
 Label::operator=(const Label& _l) {
-    Widget::operator=(_l);
+    WidgetBase::operator=(_l);
     ScreenObject::operator=(_l);
 
     __label = _l.__label;
@@ -35,7 +35,7 @@ Label::operator=(const Label& _l) {
     return *this;
 }
 
-Widget*
+WidgetBase*
 Label::clone() const {
     return new Label(*this);
 }

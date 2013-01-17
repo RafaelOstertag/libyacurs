@@ -6,7 +6,7 @@
 
 #include <cstdlib>
 
-#include "widget.h"
+#include "widgetbase.h"
 
 //
 // Private
@@ -20,19 +20,19 @@
 // Private
 //
 
-Widget::Widget(): Realizeable(), __parent(NULL), __area(), __size() {
+WidgetBase::WidgetBase(): Realizeable(), __parent(NULL), __area(), __size() {
 }
 
-Widget::~Widget() {
+WidgetBase::~WidgetBase() {
 }
 
-Widget::Widget(const Widget& _w):
+WidgetBase::WidgetBase(const WidgetBase& _w):
     Realizeable(_w),  __parent(_w.__parent),
     __area(_w.__area), __size(_w.__size) {
 }
 
-const Widget&
-Widget::operator=(const Widget& _w) {
+const WidgetBase&
+WidgetBase::operator=(const WidgetBase& _w) {
     Realizeable::operator=(_w);
     __parent = _w.__parent;
     __area = _w.__area;
@@ -42,26 +42,26 @@ Widget::operator=(const Widget& _w) {
 }
 
 void
-Widget::area(const Area& _a) {
+WidgetBase::area(const Area& _a) {
     __area = _a;
 }
 
 const Area&
-Widget::area() const {
+WidgetBase::area() const {
     return __area;
 }
 
 void
-Widget::parent(Widget* _p) {
+WidgetBase::parent(WidgetBase* _p) {
     __parent = _p;
 }
 
-Widget*
-Widget::parent() const {
+WidgetBase*
+WidgetBase::parent() const {
     return __parent;
 }
 
 const Area&
-Widget::size() const {
+WidgetBase::size() const {
     return __size;
 }

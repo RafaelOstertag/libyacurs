@@ -18,7 +18,7 @@ class VPack: public Pack {
 	void resize(const Area&) { abort(); }
 	void realize() { abort(); }
     protected:
-	void add_size(const Widget* _w);
+	void add_size(const WidgetBase* _w);
 	void recalc_size();
 
     public:
@@ -27,7 +27,7 @@ class VPack: public Pack {
 	~VPack();
 	const VPack& operator=(const VPack& _vp);
 
-	Widget* clone() const;
+	WidgetBase* clone() const;
 };
 
 #endif // VPACK_H

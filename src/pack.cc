@@ -21,19 +21,19 @@
 //
 // Public
 //
-Pack::Pack(): Widget(), widget_list() {
+Pack::Pack(): WidgetBase(), widget_list() {
 }
 
 Pack::~Pack() {
 }
 
 Pack::Pack(const Pack& _p):
-    Widget(_p), widget_list(_p.widget_list) {
+    WidgetBase(_p), widget_list(_p.widget_list) {
 }
 
 const Pack&
 Pack::operator=(const Pack& _p) {
-    Widget::operator=(_p);
+    WidgetBase::operator=(_p);
     widget_list = _p.widget_list;
     __size = _p.__size;
 
@@ -41,14 +41,14 @@ Pack::operator=(const Pack& _p) {
 }
 
 void
-Pack::add_front(Widget* _w) {
+Pack::add_front(WidgetBase* _w) {
     assert(_w != NULL);
     widget_list.push_front(_w);
     add_size(_w);
 }
 
 void
-Pack::add_back(Widget* _w) {
+Pack::add_back(WidgetBase* _w) {
     assert(_w != NULL);
 
     widget_list.push_back(_w);
@@ -56,7 +56,7 @@ Pack::add_back(Widget* _w) {
 }
 
 void
-Pack::remove(Widget* _w) {
+Pack::remove(WidgetBase* _w) {
     assert(_w != NULL);
 
     widget_list.remove(_w);

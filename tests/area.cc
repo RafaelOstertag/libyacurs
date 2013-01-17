@@ -2,7 +2,7 @@
 //
 // Test Dimension class
 
-#include "rectangle.h"
+#include "area.h"
 
 int main() {
     Area o(0,0,25,80);
@@ -16,11 +16,21 @@ int main() {
 	r.x() != 2 )
 	return 1;
 
-    o = Area(2,2,5,5);
+    o = Area(2,2,6,6);
     m = Margin(1,1,0,0);
     r = o-m;
 
-    if (r.rows() != 4 &&
+    if (r.rows() != 5 &&
+	r.cols() != 5 &&
+	r.x() != 3 &&
+	r.y() != 3)
+	return 1;
+
+    r -= Margin(0,0,1,1);
+
+    if (r.x() != 3 &&
+	r.y() != 3 &&
+	r.rows() != 4 &&
 	r.cols() != 4)
 	return 1;
 

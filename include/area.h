@@ -4,6 +4,7 @@
 #define AREA_H
 
 #include "coordinates.h"
+#include "size.h"
 #include "margin.h"
 
 /**
@@ -18,10 +19,10 @@ class Area: public Coordinates, public Size {
 	Area(const Coordinates& _c, const Size& _s);
 	Area(const Area& d);
 
-	Area& operator=(const Area &d);
+	Area& operator=(const Area &_a);
 
-	bool operator==(const Area& d) const;
-	bool operator!=(const Area& d) const;
+	bool operator==(const Area& _a) const;
+	bool operator!=(const Area& _a) const;
 	const Area& operator-=(const Margin& rhs);
 	Area operator-(const Margin& rhs) const;
 };

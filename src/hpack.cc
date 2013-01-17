@@ -17,7 +17,7 @@ class CalcSize {
     public:
 	CalcSize(Area _s = Area()): __size(_s) {}
 	CalcSize(const CalcSize& _rs): __size(_rs.__size) {}
-	void operator()(const Widget* _w) {
+	void operator()(const WidgetBase* _w) {
 	    __size.rows(__size.rows() < _w->size().rows() ?
 			_w->size().rows() : __size.rows());
 
@@ -34,7 +34,7 @@ class CalcSize {
 // Protected
 //
 void 
-HPack::add_size(const Widget* _w) {
+HPack::add_size(const WidgetBase* _w) {
     assert(_w != NULL);
 
     CalcSize newsize(__size);
@@ -69,7 +69,7 @@ HPack::operator=(const HPack& _hp) {
     return *this;
 }
 
-Widget*
+WidgetBase*
 HPack::clone() const {
     return new HPack(*this);
 }

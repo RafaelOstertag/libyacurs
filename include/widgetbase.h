@@ -2,8 +2,8 @@
 //
 // $Id$
 
-#ifndef WIDGET_H
-#define WIDGET_H
+#ifndef WIDGETBASE_H
+#define WIDGETBASE_H
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,29 +12,29 @@
 #include "realizeable.h"
 #include "area.h"
 
-class Widget: virtual public Realizeable {
+class WidgetBase: public Realizeable {
     private:
 	/**
-	 * The parent of the widget. If the widget has no parent, it
-	 * has to be set to NULL.
+	 * The parent of the widget. If the widget has no parent, it has to be
+	 * set to NULL.
 	 */
-	Widget* __parent;
+	WidgetBase* __parent;
 	Area __area;
 
     protected:
 	/**
 	 * Holds the size in columns and rows (w/ x=y=0) that the
-	 * widget requires.
+	 * widgetbase requires.
 	 *
 	 * Derrived widgets have to maintain this attribute.
 	 */
 	Area __size;
 
     public:
-	Widget();
-	~Widget();
-	Widget(const Widget& _w);
-	const Widget& operator=(const Widget& w);
+	WidgetBase();
+	~WidgetBase();
+	WidgetBase(const WidgetBase& _w);
+	const WidgetBase& operator=(const WidgetBase& w);
 	
 	/**
 	 * Set the screen area, the widget has to its disposition.
@@ -56,7 +56,7 @@ class Widget: virtual public Realizeable {
 	 * @param _p the parent. The pointer has to be valid during
 	 * the lifetime of the widget.
 	 */
-	void parent(Widget* _p);
+	void parent(WidgetBase* _p);
 	/**
 	 * Get the address parent of the widget.
 	 *
@@ -65,15 +65,15 @@ class Widget: virtual public Realizeable {
 	 * @return the address of the parent widget or NULL if the is
 	 * no parent.
 	 */
-	Widget* parent() const;
+	WidgetBase* parent() const;
 	/**
 	 * Return the size the widget uses effectively.
 	 *
 	 * @return the size the widget uses effectively.
 	 */
 	virtual const Area& size() const;
-	virtual Widget* clone() const = 0;
+	virtual WidgetBase* clone() const = 0;
 
 };
 
-#endif // WIDGET_H
+#endif // WIDGETBASE_H

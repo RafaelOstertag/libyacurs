@@ -13,6 +13,9 @@
 //
 // Public
 //
+Coordinates::Coordinates(int _x, int _y): __y(_y), __x(_x){
+}
+
 
 Coordinates::Coordinates(const Coordinates& _c) {
     __x = _c.__x;

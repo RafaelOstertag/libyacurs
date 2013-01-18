@@ -21,8 +21,9 @@
 #error "Neither ncurses.h nor curses.h available"
 #endif
 
+
+
 #ifdef tab
-#define __tab tab
 #undef tab
 #endif
 
@@ -66,12 +67,13 @@ inline int refresh() {
 #endif // HAVE_CURSES_H
 
 #ifdef WADDSTR_USE_CHAR
-#ifdef HAVE_CSTDLIB
+#ifdef __SunOS_5_10
+# include <stdlib.h>
+# include <string.h>
+#else // __SunOS_5_10
 # include <cstdlib>
-#endif
-#ifdef HAVE_CSTRING
 # include <cstring>
-#endif
+#endif // __SunOS_5_10
 
 inline int waddstr_c (WINDOW* win, const char* str) {
     char* tmp_ptr = strdup(str);
@@ -86,12 +88,13 @@ inline int waddstr_c (WINDOW* win, const char* str) {
 #endif // WADDSTR_USE_CHAR
 
 #ifdef MVWADDSTR_USE_CHAR
-#ifdef HAVE_CSTDLIB
+#ifdef __SunOS_5_10
+# include <stdlib.h>
+# include <string.h>
+#else // __SunOS_5_10
 # include <cstdlib>
-#endif
-#ifdef HAVE_CSTRING
 # include <cstring>
-#endif
+#endif // __SunOS_5_10
 
 inline int mvwaddstr_c (WINDOW* win, int y, int x, const char* str) {
     char* tmp_ptr = strdup(str);
@@ -106,12 +109,13 @@ inline int mvwaddstr_c (WINDOW* win, int y, int x, const char* str) {
 #endif // MVWADDSTR_USE_CHAR
 
 #ifdef MVWADDNSTR_USE_CHAR
-#ifdef HAVE_CSTDLIB
+#ifdef __SunOS_5_10
+# include <stdlib.h>
+# include <string.h>
+#else // __SunOS_5_10
 # include <cstdlib>
-#endif
-#ifdef HAVE_CSTRING
 # include <cstring>
-#endif
+#endif // __SunOS_5_10
 
 inline int mvwaddnstr_c (WINDOW* win, int y, int x, const char* str, int n) {
     char* tmp_ptr = strdup(str);

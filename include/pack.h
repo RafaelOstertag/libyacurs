@@ -17,11 +17,20 @@
 #include "widgetbase.h"
 
 /**
- * A pack is a list of widgets, that are either horizontally, or
- * vertically stacked and displayed.
+ * A container widget for stacking widgets horizontally or vertically.
+ *
+ * A pack is a list of widgets, that are either horizontally, or vertically
+ * stacked and displayed.
  *
  * The pack will calculate the size needed for displaying the widgets
  * horizontally, vertically.
+ *
+ * @warning If a Pack is destroyed before its associated Widgets, the Widgets will have
+ * a __parent pointer that is invalid.
+ *
+ *
+ * @see VPack
+ * @see HPack
  */
 class Pack: public WidgetBase {
     private:
@@ -37,6 +46,8 @@ class Pack: public WidgetBase {
 	 * size is different. Thus it will be implemented in derrived
 	 * classes.
 	 *
+	 * @internal Pack::add_*() use this function.
+	 *
 	 * @param _w the widget the size has to taken into account.
 	 */
 	virtual void add_size(const WidgetBase* _w) = 0;
@@ -48,15 +59,19 @@ class Pack: public WidgetBase {
 	 * Needed to recalculate the size when removing widgets from
 	 * the pack.
 	 *
-	 * @internal Simply subtracting the size of the widget to be
-	 * removed from __size, might not always do the trick,
-	 * e.g. removing a widget with size requirement of 4x4 from a
-	 * pack consisting of only of 2x2 will leave 2 rows/cols
-	 * (depending on vertical or horizontal packing) too many in
-	 * __size. So we have to take all remaining widgets into
+	 * @internal Simply subtracting the size of the widget to be removed
+	 * from __size, might not always do the trick, e.g. removing a widget
+	 * with size requirement of 4x4 from a pack consisting of only of 2x2
+	 * will leave 2 rows/cols (depending on vertical or horizontal packing)
+	 * too many in __size. So we have to take all remaining widgets into
 	 * account as well.
+	 *
+	 * @internal Pack::remove() uses this function.
 	 */
 	virtual void recalc_size() = 0;
+
+
+	void unrealize();
 
     public:
 	Pack();
@@ -101,9 +116,17 @@ class Pack: public WidgetBase {
 	void curseswindow(WINDOW* _p);
 
 	void refresh(bool immediate);
-	void realize();
-	void unrealize();
-	
+	/**
+	 * Resize the pack.
+	 *
+	 * This function relies on the implementation of realize() of derived
+	 * classes.
+	 *
+	 * @param _s the new size available to the pack.
+	 */
+	void resize(const Area& _a);
+	// Has to be implemented in derrived classes
+	//void realize();
 };
 
 #endif // PACK_H

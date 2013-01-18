@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <functional>
 
+#include "cursex.h"
 #include "pack.h"
 
 //
@@ -25,6 +26,15 @@ Pack::set_all_curseswindow() {
 //
 // Protected
 //
+void
+Pack::unrealize() {
+    if (!realized()) throw NotRealized();
+    std::for_each(widget_list.begin(),
+		  widget_list.end(),
+		  std::mem_fun(&WidgetBase::unrealize));
+
+    realized(false);
+}
 
 //
 // Public
@@ -43,19 +53,21 @@ const Pack&
 Pack::operator=(const Pack& _p) {
     WidgetBase::operator=(_p);
     widget_list = _p.widget_list;
-    __size = _p.__size;
-
+ 
     return *this;
 }
 
 void
 Pack::add_front(WidgetBase* _w) {
     assert(_w != NULL);
+    assert(!_w->realized());
     widget_list.push_front(_w);
 
     _w->parent(this);
 
     _w->curseswindow(WidgetBase::curseswindow());
+
+    _w->window(window());
 
     add_size(_w);
 }
@@ -63,12 +75,15 @@ Pack::add_front(WidgetBase* _w) {
 void
 Pack::add_back(WidgetBase* _w) {
     assert(_w != NULL);
+    assert(!_w->realized());
 
     widget_list.push_back(_w);
 
     _w->parent(this);
 
     _w->curseswindow(WidgetBase::curseswindow());
+
+    _w->window(window());
 
     add_size(_w);
 }
@@ -78,6 +93,7 @@ Pack::remove(WidgetBase* _w) {
     assert(_w != NULL);
 
     widget_list.remove(_w);
+    _w->window(NULL);
 
     // I see no way of maintaining the proper size when removing
     // widgets than to recalc the size from scratch.
@@ -95,21 +111,20 @@ Pack::curseswindow(WINDOW* _p) {
 
 void
 Pack::refresh(bool immediate) {
+    if (!realized()) throw NotRealized();
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  std::bind2nd(std::mem_fun(&WidgetBase::refresh),immediate));
 }
 
 void
-Pack::realize() {
-    std::for_each(widget_list.begin(),
-		  widget_list.end(),
-		  std::mem_fun(&WidgetBase::realize));
+Pack::resize(const Area& _a) {
+    if (!realized()) throw NotRealized();
+
+    position(_a);
+    size_available(_a);
+
+    unrealize();
+    realize();
 }
 
-void
-Pack::unrealize() {
-    std::for_each(widget_list.begin(),
-		  widget_list.end(),
-		  std::mem_fun(&WidgetBase::unrealize));
-}

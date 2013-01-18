@@ -12,6 +12,10 @@
 #include "mycurses.h"
 #include "realizeable.h"
 #include "area.h"
+#include "window.h"
+
+// Forward declaration because window.h already included widgetbase.h
+class Window;
 
 /**
  * A widget is an object with or without interaction on the screen.
@@ -24,6 +28,9 @@
  *  - query the size the widget requires
  *  - setting/unsetting focus
  *  - setting a parent widget
+ *
+ * If widgets use curses windows, it is expected that they create the window
+ * using derwin() to create them.
  *
  */
 class WidgetBase: public Realizeable {
@@ -39,21 +46,36 @@ class WidgetBase: public Realizeable {
 	/**
 	 * The parent of the widget. If the widget has no parent, it has to be
 	 * set to NULL.
+	 *
+	 * Basically, only container widgets such as Packs can be parents.
 	 */
 	WidgetBase* __parent;
 	/**
-	 * Holds the position, where the widget will be displayed.
+	 * The parent Window of the widget.
+	 *
+	 * This is used for container widgets, so that they are able to query
+	 * the area they have to their disposition.
+	 */
+	Window* __window;
+
+	/**
+	 * Holds the position, where the widget will display.
+	 *
+	 * Depending on the implemntation, those coordinates are relative to
+	 * __curseswindow, since it is expected that widgets use derwin() if
+	 * they display. Container widgets may use absolute coordinates.
 	 */
 	Coordinates __position;
 
-    protected:
 	/**
-	 * Holds  the size  in columns  and rows  that the  widgetbase
-	 * requires.
+	 * Holds the Size available to the widget.
 	 *
-	 * Derrived widgets have to maintain this attribute.
+	 * Holds the Size available to the widget starting from __position.
+	 *
+	 * This is mostly used for container widgets such as Pack or widgets
+	 * dynamically adjust their size.
 	 */
-	Size __size;
+	Size __size_available;
 
     public:
 	WidgetBase();
@@ -62,19 +84,45 @@ class WidgetBase: public Realizeable {
 	WidgetBase& operator=(const WidgetBase& w);
 
 	/**
-	 * Set the screen position, where the widget will be displayed.
+	 * Set the position, where the widget will be displayed.
 	 *
-	 * @param _c position where the widget will be displayed
+	 * @param _c position where the widget will be displayed. The position
+	 * is relative to __curseswindow, since it is expected that widgets use
+	 * derwin().
 	 */
 	void position(const Coordinates& _c);
+
 	/**
-	 * Get the the position of the widget on the screen
+	 * Get the the position of the widget.
 	 *
-	 * @return the position of the widget on the screen.
+	 * @return the position of the widget. The position is relative to the
+	 * position of __curseswindow.
 	 */
 	const Coordinates& position() const;
+
+	/**
+	 * Set the screen Area available to the widget.
+	 *
+	 * This is used by container widgets.
+	 *
+	 * @param _a Area available to the widget
+	 *
+	 */
+	void size_available(const Size& _s);
+
+	/**
+	 * Get the size available to the widget.
+	 *
+	 * Used by container widgets
+	 *
+	 * @return size available to the widget.
+	 */
+	const Size& size_available() const;
+
 	/**
 	 * Set parent of widget.
+	 *
+	 * A parent is usually a container widget such as Packs.
 	 *
 	 * This is usually not called by the user.
 	 *
@@ -82,6 +130,7 @@ class WidgetBase: public Realizeable {
 	 * the lifetime of the widget.
 	 */
 	void parent(WidgetBase* _p);
+
 	/**
 	 * Get pointer to the parent of the widget.
 	 *
@@ -91,6 +140,22 @@ class WidgetBase: public Realizeable {
 	 * no parent.
 	 */
 	WidgetBase* parent() const;
+
+	/**
+	 * Set the Window the widget belongs to
+	 *
+	 * @param _w pointer to the Window the widget belongs to. The
+	 * pointer has to be valid for the lifetime of the object.
+	 */
+	void window(Window* _w);
+
+	/**
+	 * Get the Window the widget belongs to
+	 *
+	 * @return pointer to the Window the widget belongs to
+	 */
+	Window* window() const;
+
 	/**
 	 * Set the curses window of the widget.
 	 *
@@ -110,10 +175,25 @@ class WidgetBase: public Realizeable {
 	 */
 	WINDOW* curseswindow() const;
 
-	virtual const Size& size() const;
+	/**
+	 * Notification of size change of a child.
+	 *
+	 * This is called on a parent widget when the child detects a size
+	 * change.
+	 *
+	 * If the called class is not a container
+	 *
+	 * @return the parent returns @c true if the size change can be
+	 * fullfilled, else @false.
+	 */
+	virtual bool sizechange() = 0;
 
-	virtual WidgetBase* clone() const = 0;
-
+	/**
+	 * The size the widget effectively occupies.
+	 *
+	 * @return size the widget effectively occupies.
+	 */
+	virtual const Size& size() const = 0;
 };
 
 #endif // WIDGETBASE_H

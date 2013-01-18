@@ -153,7 +153,8 @@ class EventEx: public Event {
 /**
  * Event generated upon SIGWINCH.
  *
- * This event will be generated
+ * This event will be generated upon SIGWINCH. As payload, it holds the new
+ * size of the screen.
  *
  * @ingroup Event
  */

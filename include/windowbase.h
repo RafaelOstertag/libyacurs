@@ -86,13 +86,18 @@ class WindowBase : public Realizeable {
 	WindowBase& operator=(const WindowBase& so);
 
 	/**
+	 * Get the position from where other objects may be displayed.
+	 *
+	 * @return position from where other objects may be displayed.
+	 */
+	virtual Coordinates position_available() const;
+
+	/**
 	 * Get the size available for displaying other objects.
 	 *
 	 * @return size available for displaying other object.
 	 */
-	virtual Size size() const;
-	/**
-	 * 
+	virtual Size size_available() const;
 
 	/**
 	 * @todo when setting margin and window is realized, resize
@@ -110,7 +115,7 @@ class WindowBase : public Realizeable {
 
 	// Those are from Realizable
 	void refresh(bool immediate);
-	void resize(const Size& _s);
+	void resize(const Area& _a);
 	void realize();
 
 };

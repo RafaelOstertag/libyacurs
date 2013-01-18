@@ -167,6 +167,11 @@ class NoEchoFailed: public BaseCurEx {
 	NoEchoFailed();
 };
 
+class DerWinFailed: public BaseCurEx {
+    public:
+	DerWinFailed();
+};
+
 /**
  * @}
  */

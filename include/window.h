@@ -2,18 +2,20 @@
 //
 // $Id$
 
-#ifndef WINDOWS_H
-#define WINDOWS_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+
+#include "mycurses.h"
 #include "windowbase.h"
 #include "widgetbase.h"
 
-#include "mycurses.h"
-
+// Forward declaration because widgetbase.h already included window.h
+class WidgetBase;
 
 /**
  * Window for displaying a widget.
@@ -38,8 +40,8 @@ class Window: public WindowBase {
 
 	// Those are from Realizable
 	void refresh(bool immediate);
-	void resize(const Size& _s);
+	void resize(const Area& _a);
 	void realize();
 };
 
-#endif // WINDOWS_H
+#endif // WINDOW_H

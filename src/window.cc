@@ -72,6 +72,11 @@ Window::widget(WidgetBase* _w) {
 
     // This widget cannot have another widget as parent.
     _w->parent(NULL);
+
+    _w->window(this);
+
+    _w->position(area());
+    _w->size_available(area());
 }
 
 WidgetBase*
@@ -86,9 +91,11 @@ Window::refresh(bool immediate) {
 }
 
 void
-Window::resize(const Size& _s) {
-    WindowBase::resize(_s);
-    if (__widget) __widget->resize(_s);
+Window::resize(const Area& _a) {
+    WindowBase::resize(_a);
+    if (__widget) {
+	__widget->resize(area());
+    }
 }
 
 void

@@ -7,7 +7,9 @@
 #include <cassert>
 #include <cstdlib>
 #include <algorithm>
+#include <functional>
 
+#include "cursex.h"
 #include "vpack.h"
 
 // Functors
@@ -54,19 +56,34 @@ VPack::recalc_size() {
 //
 // Public
 //
-VPack::VPack(): Pack() {}
+VPack::VPack(): Pack(), __size() {}
 
-VPack::VPack(const VPack& _vp): Pack(_vp) {}
+VPack::VPack(const VPack& _vp): Pack(_vp),
+				__size(_vp.__size) {}
 
 VPack::~VPack() {}
 
 const VPack&
 VPack::operator=(const VPack& _vp) {
     Pack::operator=(_vp);
+    __size = _vp.__size;
+
     return *this;
 }
 
-WidgetBase*
-VPack::clone() const {
-    return new VPack(*this);
+const Size&
+VPack::size() const {
+    return __size;
+}
+
+void
+VPack::realize() {
+    if (realized()) throw AlreadyRealized();
+    
+    
+    std::for_each(widget_list.begin(),
+		  widget_list.end(),
+		  std::mem_fun(&WidgetBase::realize));
+
+    realized(true);
 }

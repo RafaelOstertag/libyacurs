@@ -95,3 +95,6 @@ CbreakFailed::CbreakFailed():
 
 NoEchoFailed::NoEchoFailed():
     BaseCurEx("error in call to setupterm()") {}
+
+DerWinFailed::DerWinFailed():
+    BaseCurEx("derwin() failed") {}

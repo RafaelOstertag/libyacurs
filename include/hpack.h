@@ -13,7 +13,8 @@
 
 class HPack: public Pack {
     private:
-	void resize(const Size&) { abort(); }
+	Size __size;
+
     protected:
 	void add_size(const WidgetBase* _w);
 	void recalc_size();
@@ -23,8 +24,9 @@ class HPack: public Pack {
 	HPack(const HPack& _hp);
 	~HPack();
 	const HPack& operator=(const HPack& _hp);
-
-	WidgetBase* clone() const;
+	const Size& size() const;
+	
+	void realize();
 };
 
 #endif // HPACK_H

@@ -9,18 +9,22 @@
 #include "config.h"
 #endif
 
+#include <cstdlib>
+
 #include <string>
 
-#include "widgetbase.h"
-#include "windowbase.h"
+#include "widget.h"
 
-
-class Label: public WidgetBase, public WindowBase {
+class Label: public Widget {
     private:
+	Size __size;
+
 	void refresh(bool) { abort(); }
-	void resize(const Size&) { abort(); }
+	void resize(const Area&) { abort(); }
 	void realize() { abort(); }
 	void unrealize() { abort(); };
+
+	
     private:
 	std::string __label;
 
@@ -29,8 +33,6 @@ class Label: public WidgetBase, public WindowBase {
 	Label(const Label& _l);
 	~Label();
 	const Label& operator=(const Label& _l);
-
-	WidgetBase* clone() const;
 
 	void label(const std::string& _l);
 	const std::string& label() const;

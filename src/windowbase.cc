@@ -49,7 +49,7 @@ WindowBase::unrealize() {
     *w = NULL;
 }
 
-int 
+int
 WindowBase::refresh_handler(Event& _e) {
     assert(_e == EVT_REFRESH);
     assert(realized());
@@ -57,14 +57,14 @@ WindowBase::refresh_handler(Event& _e) {
     return 0;
 }
 
-int 
+int
 WindowBase::resize_handler(Event& _e) {
     assert(_e == EVT_WINCH);
     assert(realized());
-    
+
     EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
-    resize(winch.data());
-    
+    resize(Area(Coordinates(0,0),winch.data()));
+
     return 0;
 }
 
@@ -88,7 +88,7 @@ WindowBase::WindowBase(const Margin& _m):
 
 WindowBase::WindowBase(const WindowBase& so):
     Realizeable(so), __area(so.__area), __margin(so.__margin),
-    instances(so.instances), __frame(so.__frame) {
+    instances(so.instances), w(so.w), __frame(so.__frame) {
     (*instances)++;
 
     EventQueue::connectEvent(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
@@ -96,22 +96,20 @@ WindowBase::WindowBase(const WindowBase& so):
 }
 
 WindowBase::~WindowBase() {
+    assert(instances!=NULL);
+
     if (*instances > 1) {
 	(*instances)--;
 	return;
     }
 
-    assert(instances!=NULL);
-
     delete instances;
 
     assert(w!=NULL);
 
-    if (*w != NULL) {
-	int retval = delwin(*w);
-	if (retval == ERR)
+    if (*w != NULL)
+	if (delwin(*w) == ERR)
 	    throw DelWindowFailed();
-    }
 
     delete w;
 
@@ -139,8 +137,16 @@ WindowBase::operator=(const WindowBase& so) {
     return *this;
 }
 
+Coordinates
+WindowBase::position_available() const {
+    if (__frame)
+	return (__area-__margin)-Margin(1,1,1,1);
+    else
+	return (__area-__margin);
+}
+
 Size
-WindowBase::size() const {
+WindowBase::size_available() const {
     if (__frame)
 	return (__area-__margin)-Margin(1,1,1,1);
     else
@@ -187,19 +193,20 @@ WindowBase::refresh(bool immediate) {
 }
 
 void
-WindowBase::resize(const Size& _s) {
+WindowBase::resize(const Area& _a) {
     //
     // Keep in mind: a resize does not refresh!
     //
     if (!realized()) throw NotRealized();
 
-    assert(_s.rows()>0);
-    assert(_s.cols()>0);
+    assert(_a.x()>-1);
+    assert(_a.y()>-1);
+    assert(_a.rows()>0);
+    assert(_a.cols()>0);
 
     unrealize();
 
-    __area = Coordinates(); // initialize x/y to (0/0)
-    __area = _s;
+    __area = _a;
 
     realize();
 }

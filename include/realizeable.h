@@ -9,7 +9,7 @@
 #include "config.h"
 #endif
 
-#include "size.h"
+#include "area.h"
 
 /**
  * Realizeable defines a basic interfaces for displaying and resizing
@@ -53,26 +53,31 @@ class Realizeable {
 	 * @c false indicating non-immediate refresh.
 	 */
 	virtual void refresh(bool immediate) = 0;
+
 	/**
 	 * Resizes the object.
 	 *
-	 * How the new size is interpreted depends on the
+	 * How the new Area is interpreted depends on the
 	 * implementation.
 	 *
-	 * A resize must not refresh.
+	 * @internal A resize must not refresh. It is usually a sequence of
+	 * unrealize(), realize().
 	 *
-	 * @param _r the new size available to the object.
+	 * @param _a the new Area available to the object.
 	 */
-	virtual void resize(const Size& _s) = 0;
+	virtual void resize(const Area& _a) = 0;
+
 	/**
 	 * Realize the object by calling Curses functions and prepare
 	 * the object for a refresh.
 	 */
 	virtual void realize() = 0;
+
 	/**
 	 * Unrealize the object again.
 	 */
 	virtual void unrealize() = 0;
+
 	/**
 	 * Get the realized state of the object.
 	 *

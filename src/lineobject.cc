@@ -69,17 +69,6 @@ LineObject::refresh_handler(Event& _e) {
     return 0;
 }
 
-int
-LineObject::resize_handler(Event& _e) {
-    assert(_e.type() == EVT_WINCH);
-
-    EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
-
-    // resize() of WindowBase
-    resize(winch.data());
-
-    return 0;
-}
 
 //
 // Public

@@ -4,6 +4,7 @@
 #include "config.h"
 #endif
 
+#include <cassert>
 #include <cstdlib>
 
 #include "widgetbase.h"
@@ -20,18 +21,18 @@
 // Private
 //
 
-WidgetBase::WidgetBase(): Realizeable(), __parent(NULL),
-			  __position(), __size(),
-			  __curseswindow(NULL) {
+WidgetBase::WidgetBase(): Realizeable(), __curseswindow(NULL),
+			  __parent(NULL), __window(NULL), __position(),
+			  __size_available() {
 }
 
 WidgetBase::~WidgetBase() {
 }
 
 WidgetBase::WidgetBase(const WidgetBase& _w):
-    Realizeable(_w),  __parent(_w.__parent),
-    __position(_w.__position), __size(_w.__size),
-    __curseswindow(NULL) {
+    Realizeable(_w), __curseswindow(NULL), __parent(_w.__parent),
+    __window(_w.__window), __position(_w.__position),
+    __size_available(_w.__size_available) {
 }
 
 WidgetBase&
@@ -39,14 +40,17 @@ WidgetBase::operator=(const WidgetBase& _w) {
     Realizeable::operator=(_w);
     __parent = _w.__parent;
     __position = _w.__position;
-    __size = _w.__size;
     __curseswindow = _w.__curseswindow;
+    __window = _w.__window;
+    __size_available = _w.__size_available;
 
     return *this;
 }
 
 void
 WidgetBase::position(const Coordinates& _c) {
+    assert(_c.x()>-1);
+    assert(_c.y()>-1);
     __position = _c;
 }
 
@@ -54,6 +58,19 @@ const Coordinates&
 WidgetBase::position() const {
     return __position;
 }
+
+void
+WidgetBase::size_available(const Size& _s) {
+    assert(_s.rows()>1);
+    assert(_s.cols()>1);
+    __size_available = _s;
+}
+
+const Size&
+WidgetBase::size_available() const {
+    return __size_available;
+}
+
 
 void
 WidgetBase::parent(WidgetBase* _p) {
@@ -65,12 +82,17 @@ WidgetBase::parent() const {
     return __parent;
 }
 
-const Size&
-WidgetBase::size() const {
-    return __size;
+void
+WidgetBase::window(Window* _w) {
+    __window = _w;
 }
 
-void 
+Window*
+WidgetBase::window() const {
+    return __window;
+}
+
+void
 WidgetBase::curseswindow(WINDOW* _p) {
     __curseswindow=_p;
 }

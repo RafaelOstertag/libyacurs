@@ -18,8 +18,9 @@
 class Label: public WidgetBase, public WindowBase {
     private:
 	void refresh(bool) { abort(); }
-	void resize(const Area&) { abort(); }
+	void resize(const Size&) { abort(); }
 	void realize() { abort(); }
+	void unrealize() { abort(); };
     private:
 	std::string __label;
 

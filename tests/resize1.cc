@@ -43,8 +43,8 @@ int main() {
 
 	sleep(1);
 
-	Area scrsz(Curses::inquiryScreenSize());
-	Area newsz(0,0,scrsz.rows()-1, scrsz.cols()-1);
+	Size scrsz(Curses::inquiryScreenSize());
+	Size newsz(scrsz.rows()-1, scrsz.cols()-1);
 	w1->resize(newsz);
 	w1->refresh(true);
 

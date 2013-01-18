@@ -26,7 +26,6 @@ class Curses {
 	static LineObject* title;
 	static Window* mainwindow;
 	static bool initialized;
-	static Area scrdim;
 
     protected:
 	static int doupdate_handler(Event& e);
@@ -50,7 +49,7 @@ class Curses {
 	static Window* getWindow();
 	static void unsetWindow();
 
-	static Area inquiryScreenSize();
+	static Size inquiryScreenSize();
 };
 
 #endif

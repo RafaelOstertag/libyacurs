@@ -21,12 +21,12 @@
 #error "Neither ncurses.h nor curses.h available"
 #endif
 
-#ifdef HAVE_CURSES_H
-
-#if defined(tab) && defined(_XOPEN_CURSES)
+#ifdef tab
 #define __tab tab
 #undef tab
 #endif
+
+#ifdef HAVE_CURSES_H
 
 #ifdef box
 #undef box

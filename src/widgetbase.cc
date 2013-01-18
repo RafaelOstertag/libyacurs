@@ -20,7 +20,9 @@
 // Private
 //
 
-WidgetBase::WidgetBase(): Realizeable(), __parent(NULL), __position(), __size() {
+WidgetBase::WidgetBase(): Realizeable(), __parent(NULL),
+			  __position(), __size(),
+			  __curseswindow(NULL) {
 }
 
 WidgetBase::~WidgetBase() {
@@ -28,7 +30,8 @@ WidgetBase::~WidgetBase() {
 
 WidgetBase::WidgetBase(const WidgetBase& _w):
     Realizeable(_w),  __parent(_w.__parent),
-    __position(_w.__position), __size(_w.__size) {
+    __position(_w.__position), __size(_w.__size),
+    __curseswindow(NULL) {
 }
 
 const WidgetBase&
@@ -37,18 +40,19 @@ WidgetBase::operator=(const WidgetBase& _w) {
     __parent = _w.__parent;
     __position = _w.__position;
     __size = _w.__size;
+    __curseswindow = _w.__curseswindow;
 
     return *this;
 }
 
 void
-WidgetBase::area(const Area& _a) {
-    __area = _a;
+WidgetBase::position(const Coordinates& _c) {
+    __position = _c;
 }
 
-const Area&
-WidgetBase::area() const {
-    return __area;
+const Coordinates&
+WidgetBase::position() const {
+    return __position;
 }
 
 void
@@ -61,7 +65,17 @@ WidgetBase::parent() const {
     return __parent;
 }
 
-const Area&
+const Size&
 WidgetBase::size() const {
     return __size;
+}
+
+void 
+WidgetBase::curseswindow(WINDOW* _p) {
+    __curseswindow=_p;
+}
+
+WINDOW*
+WidgetBase::curseswindow() const {
+    return __curseswindow;
 }

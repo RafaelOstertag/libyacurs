@@ -24,23 +24,10 @@
 //
 // Protected
 //
-int 
-Window::refresh_handler(Event& _e) {
-    assert(_e == EVT_REFRESH);
-    assert(realized());
-    refresh(false);
-    return 0;
-}
-
-int 
-Window::resize_handler(Event& _e) {
-    assert(_e == EVT_WINCH);
-    assert(realized());
-    
-    EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
-    resize(winch.data());
-    
-    return 0;
+void
+Window::unrealize() {
+    if (__widget) __widget->unrealize();
+    WindowBase::unrealize();
 }
 
 int 
@@ -55,58 +42,62 @@ Window::key_handler(Event& _e) {
 // Public
 //
 
-Window::Window(const Margin& m):
-    WindowBase(Curses::inquiryScreenSize(), m),
-    hasframe(false) {
-
-    EventQueue::connectEvent(EventConnectorMethod1<Window>(EVT_REFRESH,this, &Window::refresh_handler));
-    EventQueue::connectEvent(EventConnectorMethod1<Window>(EVT_WINCH,this, &Window::resize_handler));
+Window::Window(const Margin& m): WindowBase(m), __widget(NULL) {
     EventQueue::connectEvent(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
 }
 
-Window::Window():
-    WindowBase(Curses::inquiryScreenSize()),
-    hasframe(false) {
-}
-
-Window::Window(const Window& W):
-    WindowBase(W), hasframe(W.hasframe) {
-    EventQueue::connectEvent(EventConnectorMethod1<Window>(EVT_REFRESH,this, &Window::refresh_handler));
-    EventQueue::connectEvent(EventConnectorMethod1<Window>(EVT_WINCH,this, &Window::resize_handler));
+Window::Window(const Window& W): WindowBase(W),
+				 __widget(W.__widget) {
     EventQueue::connectEvent(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
 }
 
 Window::~Window() {
-    EventQueue::disconnectEvent(EventConnectorMethod1<Window>(EVT_REFRESH,this, &Window::refresh_handler));
-    EventQueue::disconnectEvent(EventConnectorMethod1<Window>(EVT_WINCH,this, &Window::resize_handler));
     EventQueue::disconnectEvent(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
 }
 
 Window&
 Window::operator=(const Window& W) {
     WindowBase::operator=(W);
-
-    hasframe = W.hasframe;
+    
+    __widget = W.__widget;
 
     return *this;
 }
 
 void
-Window::realize() {
-    WindowBase::realize();
+Window::widget(WidgetBase* _w) {
+    __widget = _w;
 
-    if (hasframe) {
-	if (box(getWindow(), 0, 0) == ERR)
-	    throw BoxFailed();
-    }
+    _w->curseswindow(getWindow());
+
+    // This widget cannot have another widget as parent.
+    _w->parent(NULL);
 }
 
-bool
-Window::frame() const {
-    return hasframe;
+WidgetBase*
+Window::widget() const {
+    return __widget;
 }
 
 void
-Window::frame(bool b) {
-    hasframe = b;
+Window::refresh(bool immediate) {
+    WindowBase::refresh(immediate);
+    if (__widget) __widget->refresh(immediate);
+}
+
+void
+Window::resize(const Size& _s) {
+    WindowBase::resize(_s);
+    if (__widget) __widget->resize(_s);
+}
+
+void
+Window::realize() {
+    WindowBase::realize();
+    if (__widget) {
+	// This is imperative, so that the widget also is aware of the new
+	// curses window.
+	__widget->curseswindow(getWindow());
+	__widget->realize();
+    }
 }

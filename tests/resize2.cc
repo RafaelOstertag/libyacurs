@@ -37,7 +37,7 @@ int alrm(Event& _e) {
 
     std::string status_msg("Size: rows=");
     
-    Area _scrdim(Curses::inquiryScreenSize());
+    Size _scrdim(Curses::inquiryScreenSize());
 
     char buff[32];
     snprintf(buff,32,"%d",_scrdim.rows());

@@ -70,6 +70,10 @@ class Realizeable {
 	 */
 	virtual void realize() = 0;
 	/**
+	 * Unrealize the object again.
+	 */
+	virtual void unrealize() = 0;
+	/**
 	 * Get the realized state of the object.
 	 *
 	 * @return @c true if the object is realized, @c false

@@ -29,15 +29,9 @@ WindowBase::getInstanceCount() const {
     return *instances;
 }
 
-void
-WindowBase::setMargin(const Margin& _m) {
-    //    assert(!isRealized());
-    margin = _m;
-}
-
-const Margin&
-WindowBase::getMargin() const {
-    return margin;
+const Area&
+WindowBase::area() const {
+    return __area;
 }
 
 void
@@ -55,29 +49,50 @@ WindowBase::unrealize() {
     *w = NULL;
 }
 
+int 
+WindowBase::refresh_handler(Event& _e) {
+    assert(_e == EVT_REFRESH);
+    assert(realized());
+    refresh(false);
+    return 0;
+}
+
+int 
+WindowBase::resize_handler(Event& _e) {
+    assert(_e == EVT_WINCH);
+    assert(realized());
+    
+    EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
+    resize(winch.data());
+    
+    return 0;
+}
 
 //
 // Public
 //
 
-WindowBase::WindowBase(const Area& _r,
-			   const Margin& _m):
-    Realizeable(), rect(_r), margin(_m),
-    instances(NULL), w(NULL) {
-
-    if ( _r == Area() )
-	rect = Curses::inquiryScreenSize();
+WindowBase::WindowBase(const Margin& _m):
+    Realizeable(), __area(Coordinates(),Curses::inquiryScreenSize()),
+    __margin(_m), instances(NULL), w(NULL), __frame(false) {
 
     w = new WINDOW*;
     *w = NULL;
 
     instances = new unsigned int;
     *instances = 1;
+
+    EventQueue::connectEvent(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
+    EventQueue::connectEvent(EventConnectorMethod1<WindowBase>(EVT_WINCH,this, &WindowBase::resize_handler));
 }
 
 WindowBase::WindowBase(const WindowBase& so):
-    Realizeable(so), rect(so.rect), margin(so.margin), instances(so.instances) {
+    Realizeable(so), __area(so.__area), __margin(so.__margin),
+    instances(so.instances), __frame(so.__frame) {
     (*instances)++;
+
+    EventQueue::connectEvent(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
+    EventQueue::connectEvent(EventConnectorMethod1<WindowBase>(EVT_WINCH,this, &WindowBase::resize_handler));
 }
 
 WindowBase::~WindowBase() {
@@ -99,6 +114,9 @@ WindowBase::~WindowBase() {
     }
 
     delete w;
+
+    EventQueue::disconnectEvent(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
+    EventQueue::disconnectEvent(EventConnectorMethod1<WindowBase>(EVT_WINCH,this, &WindowBase::resize_handler));
 }
 
 WindowBase&
@@ -114,16 +132,45 @@ WindowBase::operator=(const WindowBase& so) {
 
     w = so.w;
 
-    rect = so.rect;
+    __area = so.__area;
 
-    margin = so.margin;
+    __margin = so.__margin;
 
     return *this;
 }
 
+Size
+WindowBase::size() const {
+    if (__frame)
+	return (__area-__margin)-Margin(1,1,1,1);
+    else
+	return (__area-__margin);
+}
+
+void
+WindowBase::margin(const Margin& _m) {
+    //    assert(!isRealized());
+    __margin = _m;
+}
+
+const Margin&
+WindowBase::margin() const {
+    return __margin;
+}
+
+bool
+WindowBase::frame() const {
+    return __frame;
+}
+
+void
+WindowBase::frame(bool b) {
+    __frame = b;
+}
+
 void
 WindowBase::refresh(bool immediate) {
-    if (!realized()) return;
+    if (!realized()) throw NotRealized();
 
     assert(w!=NULL);
     assert(*w!=NULL);
@@ -140,20 +187,19 @@ WindowBase::refresh(bool immediate) {
 }
 
 void
-WindowBase::resize(const Area& r) {
+WindowBase::resize(const Size& _s) {
     //
     // Keep in mind: a resize does not refresh!
     //
     if (!realized()) throw NotRealized();
 
-    assert(r.x()>=0);
-    assert(r.y()>=0);
-    assert(r.rows()>0);
-    assert(r.cols()>0);
+    assert(_s.rows()>0);
+    assert(_s.cols()>0);
 
     unrealize();
 
-    rect = r;
+    __area = Coordinates(); // initialize x/y to (0/0)
+    __area = _s;
 
     realize();
 }
@@ -162,12 +208,12 @@ void
 WindowBase::realize() {
     if (realized()) throw AlreadyRealized();
 
-    assert(rect.x()>=0);
-    assert(rect.y()>=0);
-    assert(rect.rows()>0);
-    assert(rect.cols()>0);
+    assert(__area.x()>=0);
+    assert(__area.y()>=0);
+    assert(__area.rows()>0);
+    assert(__area.cols()>0);
 
-    Area _tmp = rect - margin;
+    Area _tmp = __area - __margin;
 
     assert(_tmp.x()>=0);
     assert(_tmp.y()>=0);
@@ -183,6 +229,11 @@ WindowBase::realize() {
 		_tmp.x());
     if (*w == NULL) {
 	throw NewWindowFailed();
+    }
+
+    if (__frame) {
+	if (box(getWindow(), 0, 0) == ERR)
+	    throw BoxFailed();
     }
 
     realized(true);

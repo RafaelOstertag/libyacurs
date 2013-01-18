@@ -10,35 +10,35 @@
 #endif
 
 #include "windowbase.h"
-#include "margin.h"
-#include "cursex.h"
+#include "widgetbase.h"
 
 #include "mycurses.h"
 
 
+/**
+ * Window for displaying a widget.
+ */
 class Window: public WindowBase {
     private:
-	bool hasframe;
+	WidgetBase* __widget;
 
     protected:
-	virtual int refresh_handler(Event& _e);
-	virtual int resize_handler(Event& _e);
+	void unrealize();
+
 	virtual int key_handler(Event& _e);
 
     public:
-	Window();
-	Window(const Margin& m);
+	Window(const Margin& m=Margin());
 	Window(const Window& W);
 	~Window();
 	Window& operator=(const Window& W);
+	
+	void widget(WidgetBase* _w);
+	WidgetBase* widget() const;
 
-	bool frame() const;
-	/**
-	 * @todo make setting/removing frame take effect immediately, if window
-	 * is realized.
-	 */
-	void frame(bool b);
-
+	// Those are from Realizable
+	void refresh(bool immediate);
+	void resize(const Size& _s);
 	void realize();
 };
 

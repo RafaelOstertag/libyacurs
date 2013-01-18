@@ -39,7 +39,7 @@ class WinChHandler: public Handler {
 	inline WinChHandler(): Handler(EVT_WINCH) {}
 	inline int handler(Event& e) {
 	    Handler::handler(e);
-	    Area tmp(dynamic_cast<EventWinCh&>(e).data());
+	    Size tmp(dynamic_cast<EventWinCh&>(e).data());
 	    std::cout << "WinChHandler\r" << std::endl;
 	    return 0;
 	}

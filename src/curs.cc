@@ -34,13 +34,13 @@
 
 #include "curs.h"
 #include "eventqueue.h"
+#include "cursex.h"
 
 WINDOW* Curses::w = NULL;
 StatusLine* Curses::statusline = NULL;
 LineObject* Curses::title = NULL;
 Window* Curses::mainwindow = NULL;
 bool Curses::initialized = false;
-Area Curses::scrdim;
 
 //
 // Private
@@ -63,7 +63,7 @@ Curses::termresetup_handler(Event& e) {
     // We only support resizing for Curses implementation having
     // resize_term.
 
-    Area __tmp(Curses::inquiryScreenSize());
+    Size __tmp(Curses::inquiryScreenSize());
 
     resize_term(__tmp.rows(), __tmp.cols());
 
@@ -88,8 +88,6 @@ Curses::init() {
     w = initscr();
     if (w == NULL)
 	throw UnableToInitialize();
-
-    scrdim = inquiryScreenSize();
 
     EventQueue::connectEvent(EventConnectorFunction1(EVT_DOUPDATE, Curses::doupdate_handler));
     EventQueue::connectEvent(EventConnectorFunction1(EVT_TERMRESETUP, Curses::termresetup_handler));
@@ -194,7 +192,7 @@ Curses::unsetWindow() {
     mainwindow = NULL;
 }
 
-Area
+Size
 Curses::inquiryScreenSize() {
     // If we have resize term, we need to get the actual terminal
     // size, because we have the ability to easily resize, and thus
@@ -203,13 +201,10 @@ Curses::inquiryScreenSize() {
     // Without resize_term(), we return the size of stdscr, since
     // resizing is not support then
 
-    Area __scrdim;
+    Size __scrdim;
 #ifdef HAVE_RESIZE_TERM
     winsize ws;
 
-
-    __scrdim.x(0);
-    __scrdim.y(0);
 
     if (ioctl(STDIN_FILENO, TIOCGWINSZ, &ws) != -1) {
 	if (ws.ws_row > 0 && ws.ws_col > 0) {
@@ -240,8 +235,6 @@ Curses::inquiryScreenSize() {
     int nrows, ncols;
     getmaxyx(w, nrows, ncols);
 
-    __scrdim.x(0);
-    __scrdim.y(0);
     __scrdim.rows(nrows);
     __scrdim.cols(ncols);
 #endif // HAVE_RESIZE_TERM

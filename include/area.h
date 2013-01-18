@@ -20,6 +20,8 @@ class Area: public Coordinates, public Size {
 	Area(const Area& d);
 
 	Area& operator=(const Area &_a);
+	Area& operator=(const Size &_s);
+	Area& operator=(const Coordinates &_c);
 
 	bool operator==(const Area& _a) const;
 	bool operator!=(const Area& _a) const;

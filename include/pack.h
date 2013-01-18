@@ -24,6 +24,9 @@
  * horizontally, vertically.
  */
 class Pack: public WidgetBase {
+    private:
+	void set_all_curseswindow();
+
     protected:
 	std::list<WidgetBase*> widget_list;
 
@@ -86,11 +89,21 @@ class Pack: public WidgetBase {
 	 * of the widget.
 	 */
 	void remove(WidgetBase* _w);
+
 	/**
-	 * @return the space required for displaying the pack and
-	 * associated widget.
+	 * Set the curses window of the pack and all associated widgets.
+	 *
+	 * Pack has to maintain its curses window pointer as well as the
+	 * pointer of the associated widgets.
+	 *
+	 * @param _p pointer to curses window
 	 */
-	const Area& size() const;
+	void curseswindow(WINDOW* _p);
+
+	void refresh(bool immediate);
+	void realize();
+	void unrealize();
+	
 };
 
 #endif // PACK_H

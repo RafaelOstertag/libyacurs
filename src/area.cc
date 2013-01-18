@@ -40,6 +40,18 @@ Area::operator=(const Area& _a) {
     return *this;
 }
 
+Area&
+Area::operator=(const Size& _s) {
+    Size::operator=(_s);
+    return *this;
+}
+
+Area&
+Area::operator=(const Coordinates& _c) {
+    Coordinates::operator=(_c);
+    return *this;
+}
+
 bool
 Area::operator==(const Area& _a) const {
     return Coordinates::operator==(_a) && 

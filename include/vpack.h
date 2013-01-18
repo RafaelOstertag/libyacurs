@@ -13,9 +13,8 @@
 
 class VPack: public Pack {
     private:
-	void refresh(bool) { abort(); }
-	void resize(const Area&) { abort(); }
-	void realize() { abort(); }
+	void resize(const Size&) { abort(); }
+
     protected:
 	void add_size(const WidgetBase* _w);
 	void recalc_size();

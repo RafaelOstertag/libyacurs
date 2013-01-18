@@ -5,6 +5,38 @@
 #include "area.h"
 
 int main() {
+    Size s1(7,11);
+    if (s1.rows() != 7 ||
+	s1.cols() != 11)
+	return 1;
+
+    Coordinates c1(13,17);
+    if (c1.x()!=13 ||
+	c1.y()!=17)
+	return 1;
+
+    Area o3(1,2,3,5);
+    if (o3.x()!=2 ||
+	o3.y()!=1 ||
+	o3.rows()!=3 ||
+	o3.cols()!=5)
+	return 1;
+
+    o3 = s1;
+    if (o3.x()!=2 ||
+	o3.y()!=1 ||
+	o3.rows()!=7 ||
+	o3.cols()!=11)
+	return 1;
+
+    o3 = c1;
+    if (o3.x()!=13 ||
+	o3.y()!=17 ||
+	o3.rows()!=7 ||
+	o3.cols()!=11)
+	return 1;
+
+
     Area o(0,0,25,80);
     Margin m(1,2,3,5);
 
@@ -77,8 +109,6 @@ int main() {
     if (o1.rows() != 25 ||
 	o1.cols() != 80 )
 	return 1;
-
-
 
     return 0;
 }

@@ -9,6 +9,7 @@
 #include "config.h"
 #endif
 
+#include "mycurses.h"
 #include "realizeable.h"
 #include "area.h"
 
@@ -27,6 +28,14 @@
  */
 class WidgetBase: public Realizeable {
     private:
+	/**
+	 * Curses window used to display the widget. Widgets like Pack may not
+	 * directly use this, but pass the pointer on to assigned widgets.  The
+	 * widget does not maintain the window, i.e. it does not free the
+	 * memory occupied. However, the pointer has to be valid for the entire
+	 * lifetime of the object.
+	 */
+	WINDOW* __curseswindow;
 	/**
 	 * The parent of the widget. If the widget has no parent, it has to be
 	 * set to NULL.
@@ -51,7 +60,7 @@ class WidgetBase: public Realizeable {
 	~WidgetBase();
 	WidgetBase(const WidgetBase& _w);
 	const WidgetBase& operator=(const WidgetBase& w);
-	
+
 	/**
 	 * Set the screen position, where the widget will be displayed.
 	 *
@@ -63,9 +72,11 @@ class WidgetBase: public Realizeable {
 	 *
 	 * @return the position of the widget on the screen.
 	 */
-	const Size& position() const;
+	const Coordinates& position() const;
 	/**
 	 * Set parent of widget.
+	 *
+	 * This is usually not called by the user.
 	 *
 	 * @param _p the parent. The pointer has to be valid during
 	 * the lifetime of the widget.
@@ -80,6 +91,27 @@ class WidgetBase: public Realizeable {
 	 * no parent.
 	 */
 	WidgetBase* parent() const;
+	/**
+	 * Set the curses window of the widget.
+	 *
+	 * The curses window is used for displaying the widget.
+	 *
+	 * This is usually not called by the user.
+	 *
+	 * @param _p pointer to curses window. The pointer has to be valid for
+	 * the entire lifetime of the widget.
+	 */
+	virtual void curseswindow(WINDOW* _p);
+
+	/**
+	 * Get the curses window.
+	 *
+	 * @return pointer to the curses window.
+	 */
+	WINDOW* curseswindow() const;
+
+	virtual const Size& size() const;
+
 	virtual WidgetBase* clone() const = 0;
 
 };

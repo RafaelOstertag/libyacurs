@@ -19,7 +19,13 @@
  *
  * WindowBase has the following properties:
  *
+ * - curses window uses entire screen, unless a margin is given
+ *
  * - positioning is achieved by using margins
+ *
+ * - can have a visible frame
+ *
+ * - connect to EVT_REFRESH and EVT_RESIZE
  *
  * - allocates only one instance of curses Windows across
  *   assignments.
@@ -27,15 +33,20 @@
  * - tracks the number of WindowBase instances created by copying and
  *   assigning and frees curses window only upon destruction of
  *   last instance.
+ *
+ *  - connect to the refresh (EVT_REFRESH) and resize (EVT_RESIZE) event.
  */
 class WindowBase : public Realizeable {
     private:
-	/// The dimension of screen object
-	Area rect;
+	/**
+	 * The dimension of the window. Used as cache to avoid calls to
+	 * Curses::inquiryScreenSize().
+	 */
+	Area __area;
 	/**
 	 * margin of the screen object.
 	 */
-	Margin margin;
+	Margin __margin;
 	/**
 	 * Keeps track of how many instance objects have been created
 	 * sharing the same WINDOW structure
@@ -47,33 +58,57 @@ class WindowBase : public Realizeable {
 	 */
 	WINDOW** w;
 
+	/**
+	 * Whether or not the window has a border
+	 */
+	bool __frame;
+
     protected:
 	WINDOW* getWindow() const;
 
 	/// Keep this. Used by tests/windowrefs.cc.
 	unsigned int getInstanceCount() const;
 
-	/**
-	 * @todo when setting margin and window is realized, resize
-	 * it.
-	 */
-	void setMargin(const Margin& _m);
-	const Margin& getMargin() const;
+	const Area& area() const;
 
 	void unrealize();
 
+	virtual int refresh_handler(Event& _e);
+	virtual int resize_handler(Event& _e);
+
     public:
 	/**
-	 * @param _a size and position of the window. If it is equal
-	 * to Area(), WindowBase will retrieve the screen size by
-	 * calling Curses::inquiryScreenSize().
+	 * @param _m margin to be used.
 	 */
-	WindowBase(const Area& _a = Area(),
-		     const Margin& _m = Margin());
+	WindowBase(const Margin& _m = Margin());
 	WindowBase(const WindowBase& so);
 	virtual ~WindowBase();
 	WindowBase& operator=(const WindowBase& so);
 
+	/**
+	 * Get the size available for displaying other objects.
+	 *
+	 * @return size available for displaying other object.
+	 */
+	virtual Size size() const;
+	/**
+	 * 
+
+	/**
+	 * @todo when setting margin and window is realized, resize
+	 * it.
+	 */
+	void margin(const Margin& _m);
+	const Margin& margin() const;
+
+	bool frame() const;
+	/**
+	 * @todo make setting/removing frame take effect immediately, if window
+	 * is realized.
+	 */
+	void frame(bool b);
+
+	// Those are from Realizable
 	void refresh(bool immediate);
 	void resize(const Size& _s);
 	void realize();

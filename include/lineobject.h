@@ -36,17 +36,15 @@ class LineObject: public WindowBase {
 	/**
 	 * Compute and sets the margin of WindowBase to achieve the position
 	 * of the line object according to @c pos.
-	 *
-	 * @param _s the screen size. If this parameter is equal to
-	 * Area(), computeMargin calls Curses::inquiryScreenSize() in
-	 * order to determine the screen size.
 	 */
-	void computeMargin(const Area& _s=Area());
+	void computeMargin();
 
     protected:
 	void putLine();
-	virtual int refresh_handler(Event& _e);
-	virtual int resize_handler(Event& _e);
+
+	
+	int refresh_handler(Event& _e);
+	int resize_handler(Event& _e);
 
     public:
 	LineObject(POSITION _pos, const std::string& _t = std::string());

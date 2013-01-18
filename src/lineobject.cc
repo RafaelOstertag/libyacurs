@@ -14,34 +14,27 @@
 //
 
 void
-LineObject::computeMargin(const Area& _s) {
-    Area _tmp_r;
-
-    if (_s == Area() )
-	_tmp_r = Curses::inquiryScreenSize();
-    else
-	_tmp_r= _s;
-
+LineObject::computeMargin() {
 #ifndef NDEBUG
     Margin __m_debug;
 #endif // NDEBUG
     switch (position) {
     case POS_TOP:
 #ifdef NDEBUG
-	setMargin(Margin(0, 0, _tmp_r.rows()-1,0));
+	margin(Margin(0, 0, area().rows()-1,0));
 #else // NDEBUG
-	__m_debug = Margin(0, 0, _tmp_r.rows()-1,0);
+	__m_debug = Margin(0, 0, area().rows()-1,0);
 	assert(__m_debug.bottom()>=0);
-	setMargin(__m_debug);
+	margin(__m_debug);
 #endif //NDEBUG
 	break;
     case POS_BOTTOM:
 #ifdef NDEBUG
-	setMargin(Margin(_tmp_r.rows()-1, 0, 0, 0));
+	margin(Margin(area().rows()-1, 0, 0, 0));
 #else // NDEBUG
-	__m_debug = Margin(_tmp_r.rows()-1, 0, 0, 0);
+	__m_debug = Margin(area().rows()-1, 0, 0, 0);
 	assert(__m_debug.top()>=0);
-	setMargin(__m_debug);
+	margin(__m_debug);
 #endif
 	break;
     }
@@ -79,15 +72,12 @@ LineObject::refresh_handler(Event& _e) {
 int
 LineObject::resize_handler(Event& _e) {
     assert(_e.type() == EVT_WINCH);
-    
+
     EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
 
-    // set the margin in order to achieve the position
-    computeMargin(winch.data()); 
-
     // resize() of WindowBase
-    resize(winch.data()); 
-    
+    resize(winch.data());
+
     return 0;
 }
 
@@ -96,20 +86,17 @@ LineObject::resize_handler(Event& _e) {
 //
 LineObject::LineObject(POSITION _pos, const std::string& _t):
     WindowBase(), linetext(_t), position(_pos) {
-    EventQueue::connectEvent(EventConnectorMethod1<LineObject>(EVT_REFRESH,this, &LineObject::refresh_handler));
-    EventQueue::connectEvent(EventConnectorMethod1<LineObject>(EVT_WINCH,this, &LineObject::resize_handler));
+    // We don't have to connect to EVT_REFRESH and EVT_RESIZE, since that has
+    // already been done by BaseWindow. We simply have to override the handler
+    // functions.
 }
 
 LineObject::~LineObject() {
-    EventQueue::disconnectEvent(EventConnectorMethod1<LineObject>(EVT_REFRESH,this, &LineObject::refresh_handler));
-    EventQueue::disconnectEvent(EventConnectorMethod1<LineObject>(EVT_WINCH,this, &LineObject::resize_handler));
 }
 
 LineObject::LineObject(const LineObject& lo):
     WindowBase(lo), linetext(lo.linetext), position(lo.position) {
 
-    EventQueue::connectEvent(EventConnectorMethod1<LineObject>(EVT_REFRESH,this, &LineObject::refresh_handler));
-    EventQueue::connectEvent(EventConnectorMethod1<LineObject>(EVT_WINCH,this, &LineObject::resize_handler));
 }
 
 LineObject&
@@ -136,4 +123,6 @@ LineObject::line(const std::string& _str) {
 }
 
 std::string
-LineObject::line() const { return linetext; }
+LineObject::line() const {
+    return linetext;
+}

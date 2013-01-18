@@ -151,11 +151,15 @@ class EventEx: public Event {
 };
 
 /**
+ * Event generated upon SIGWINCH.
+ *
+ * This event will be generated
+ *
  * @ingroup Event
  */
-class EventWinCh: public EventEx<Area > {
+class EventWinCh: public EventEx<Size> {
     public:
-	EventWinCh(const Area& _r);
+	EventWinCh(const Size& _s);
 	EventWinCh(const EventWinCh& _e);
 	EventWinCh& operator=(const EventWinCh& _e);
 	EventWinCh* clone() const;

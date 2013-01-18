@@ -59,7 +59,7 @@ class WidgetBase: public Realizeable {
 	WidgetBase();
 	~WidgetBase();
 	WidgetBase(const WidgetBase& _w);
-	const WidgetBase& operator=(const WidgetBase& w);
+	WidgetBase& operator=(const WidgetBase& w);
 
 	/**
 	 * Set the screen position, where the widget will be displayed.

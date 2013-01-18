@@ -34,7 +34,7 @@ WidgetBase::WidgetBase(const WidgetBase& _w):
     __curseswindow(NULL) {
 }
 
-const WidgetBase&
+WidgetBase&
 WidgetBase::operator=(const WidgetBase& _w) {
     Realizeable::operator=(_w);
     __parent = _w.__parent;

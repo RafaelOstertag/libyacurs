@@ -25,37 +25,37 @@ const char*
 BaseCurEx::what() const throw() { return msg.c_str(); }
 
 UnableToInitialize::UnableToInitialize() :
-    BaseCurEx("Unable to initialize curses") {}
+    BaseCurEx("unable to initialize curses") {}
 
 NotInitialized::NotInitialized() :
-    BaseCurEx("Curses not initialized") {}
+    BaseCurEx("curses not initialized") {}
 
 EndWinError::EndWinError() :
     BaseCurEx("Endwin() had an error") {}
 
 AlreadyInitialized::AlreadyInitialized() :
-    BaseCurEx("Curses has already been initialized") {}
+    BaseCurEx("curses has already been initialized") {}
 
 RefreshFailed::RefreshFailed() :
-    BaseCurEx("Refresh failed") {}
+    BaseCurEx("refresh failed") {}
 
 NewWindowFailed::NewWindowFailed() :
-    BaseCurEx("Creating new window failed") {}
+    BaseCurEx("creating new window failed") {}
 
 DelWindowFailed::DelWindowFailed() :
-    BaseCurEx("Deleting window failed") {}
+    BaseCurEx("deleting window failed") {}
 
 BoxFailed::BoxFailed() :
-    BaseCurEx("Creating box (border) on window failed") {}
+    BaseCurEx("creating box (border) on window failed") {}
 
 DoupdateFailed::DoupdateFailed() :
     BaseCurEx("doupdate() failed") {}
 
 AddStrFailed::AddStrFailed() :
-    BaseCurEx("Adding string to window failed") {}
+    BaseCurEx("adding string to window failed") {}
 
 EraseFailed::EraseFailed() :
-    BaseCurEx("Erase of window failed") {}
+    BaseCurEx("erase of window failed") {}
 
 ScrollOKFailed::ScrollOKFailed() :
     BaseCurEx("call to scrollok() failed") {}
@@ -67,10 +67,10 @@ NoNLFailed::NoNLFailed() :
     BaseCurEx("call to nonl() failed") {}
 
 AlreadyRealized::AlreadyRealized():
-    BaseCurEx("ScreenObject already realized") {}
+    BaseCurEx("object already realized") {}
 
 NotRealized::NotRealized():
-    BaseCurEx("ScreenObject is not realized") {}
+    BaseCurEx("object not realized") {}
 
 SystemError::SystemError(int _errno):
     BaseCurEx(strerror(_errno)) {}
@@ -79,19 +79,19 @@ WinSizeInvalid::WinSizeInvalid():
     BaseCurEx("TIOCGWINSZ info invalid") {}
 
 UnableToGetWinSize::UnableToGetWinSize():
-    BaseCurEx("Unable to get window size") {}
+    BaseCurEx("unable to get window size") {}
 
 DelCurTermFailed::DelCurTermFailed():
-    BaseCurEx("Error in call to del_curterm()") {}
+    BaseCurEx("error in call to del_curterm()") {}
 
 SetupTermFailed::SetupTermFailed():
-    BaseCurEx("Error in call to setupterm()") {}
+    BaseCurEx("error in call to setupterm()") {}
 
 TouchFailed::TouchFailed():
-    BaseCurEx("Error in call to setupterm()") {}
+    BaseCurEx("error in call to setupterm()") {}
 
 CbreakFailed::CbreakFailed():
-    BaseCurEx("Error in call to setupterm()") {}
+    BaseCurEx("error in call to setupterm()") {}
 
 NoEchoFailed::NoEchoFailed():
-    BaseCurEx("Error in call to setupterm()") {}
+    BaseCurEx("error in call to setupterm()") {}

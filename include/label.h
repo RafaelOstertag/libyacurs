@@ -12,10 +12,10 @@
 #include <string>
 
 #include "widgetbase.h"
-#include "screenobject.h"
+#include "windowbase.h"
 
 
-class Label: public WidgetBase, public ScreenObject {
+class Label: public WidgetBase, public WindowBase {
     private:
 	void refresh(bool) { abort(); }
 	void resize(const Area&) { abort(); }

@@ -85,7 +85,7 @@ LineObject::resize_handler(Event& _e) {
     // set the margin in order to achieve the position
     computeMargin(winch.data()); 
 
-    // resize() of ScreenObject
+    // resize() of WindowBase
     resize(winch.data()); 
     
     return 0;
@@ -95,7 +95,7 @@ LineObject::resize_handler(Event& _e) {
 // Public
 //
 LineObject::LineObject(POSITION _pos, const std::string& _t):
-    ScreenObject(), linetext(_t), position(_pos) {
+    WindowBase(), linetext(_t), position(_pos) {
     EventQueue::connectEvent(EventConnectorMethod1<LineObject>(EVT_REFRESH,this, &LineObject::refresh_handler));
     EventQueue::connectEvent(EventConnectorMethod1<LineObject>(EVT_WINCH,this, &LineObject::resize_handler));
 }
@@ -106,7 +106,7 @@ LineObject::~LineObject() {
 }
 
 LineObject::LineObject(const LineObject& lo):
-    ScreenObject(lo), linetext(lo.linetext), position(lo.position) {
+    WindowBase(lo), linetext(lo.linetext), position(lo.position) {
 
     EventQueue::connectEvent(EventConnectorMethod1<LineObject>(EVT_REFRESH,this, &LineObject::refresh_handler));
     EventQueue::connectEvent(EventConnectorMethod1<LineObject>(EVT_WINCH,this, &LineObject::resize_handler));
@@ -114,7 +114,7 @@ LineObject::LineObject(const LineObject& lo):
 
 LineObject&
 LineObject::operator=(const LineObject& lo) {
-    ScreenObject::operator=(lo);
+    WindowBase::operator=(lo);
 
     linetext = lo.linetext;
     position = lo.position;
@@ -125,7 +125,7 @@ LineObject::operator=(const LineObject& lo) {
 void
 LineObject::realize() {
     computeMargin();
-    ScreenObject::realize();
+    WindowBase::realize();
     putLine();
 }
 

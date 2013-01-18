@@ -13,7 +13,7 @@
 #include <string>
 #endif // HAVE_STRING
 
-#include "screenobject.h"
+#include "windowbase.h"
 
 
 /**
@@ -22,7 +22,7 @@
  * @todo provide options for centering and right aligning so that title can be
  * centered if it is used as title for the application.
  */
-class LineObject: public ScreenObject {
+class LineObject: public WindowBase {
     public:
 	enum POSITION {
 	    POS_TOP,
@@ -34,7 +34,7 @@ class LineObject: public ScreenObject {
 	POSITION position;
 
 	/**
-	 * Compute and sets the margin of ScreenObject to achieve the position
+	 * Compute and sets the margin of WindowBase to achieve the position
 	 * of the line object according to @c pos.
 	 *
 	 * @param _s the screen size. If this parameter is equal to

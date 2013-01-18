@@ -9,11 +9,11 @@
 #include "config.h"
 #endif
 
-#include "area.h"
+#include "size.h"
 
 /**
  * Realizeable defines a basic interfaces for displaying and resizing
- * objects on the screen.
+ * Curses objects on the screen.
  *
  * Realizeable classes display objects on the screen, or provide a way
  * for other objects to be displayed (see Pack).
@@ -63,7 +63,7 @@ class Realizeable {
 	 *
 	 * @param _r the new size available to the object.
 	 */
-	virtual void resize(const Area& _r) = 0;
+	virtual void resize(const Size& _s) = 0;
 	/**
 	 * Realize the object by calling Curses functions and prepare
 	 * the object for a refresh.

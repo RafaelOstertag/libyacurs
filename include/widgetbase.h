@@ -12,6 +12,19 @@
 #include "realizeable.h"
 #include "area.h"
 
+/**
+ * A widget is an object with or without interaction on the screen.
+ *
+ * WidgetBase provides the interface common to all Widgets.
+ *
+ * The interface is comprised of the following:
+ *
+ *  - setting position where the widget will be displayed
+ *  - query the size the widget requires
+ *  - setting/unsetting focus
+ *  - setting a parent widget
+ *
+ */
 class WidgetBase: public Realizeable {
     private:
 	/**
@@ -19,16 +32,19 @@ class WidgetBase: public Realizeable {
 	 * set to NULL.
 	 */
 	WidgetBase* __parent;
-	Area __area;
+	/**
+	 * Holds the position, where the widget will be displayed.
+	 */
+	Coordinates __position;
 
     protected:
 	/**
-	 * Holds the size in columns and rows (w/ x=y=0) that the
-	 * widgetbase requires.
+	 * Holds  the size  in columns  and rows  that the  widgetbase
+	 * requires.
 	 *
 	 * Derrived widgets have to maintain this attribute.
 	 */
-	Area __size;
+	Size __size;
 
     public:
 	WidgetBase();
@@ -37,19 +53,17 @@ class WidgetBase: public Realizeable {
 	const WidgetBase& operator=(const WidgetBase& w);
 	
 	/**
-	 * Set the screen area, the widget has to its disposition.
+	 * Set the screen position, where the widget will be displayed.
 	 *
-	 * @param _a area the widget has to its disposition. Its
-	 * absolute with regards to stdscr.
+	 * @param _c position where the widget will be displayed
 	 */
-	void area(const Area& _a);
+	void position(const Coordinates& _c);
 	/**
-	 * Get the screen area, the widget has to its disposition.
+	 * Get the the position of the widget on the screen
 	 *
-	 * @return area the widget claims it has to its
-	 * disposition. Absolute with regards to stdscr.
+	 * @return the position of the widget on the screen.
 	 */
-	const Area& area() const;
+	const Size& position() const;
 	/**
 	 * Set parent of widget.
 	 *
@@ -58,7 +72,7 @@ class WidgetBase: public Realizeable {
 	 */
 	void parent(WidgetBase* _p);
 	/**
-	 * Get the address parent of the widget.
+	 * Get pointer to the parent of the widget.
 	 *
 	 * If the widget has no parent, NULL is returned.
 	 *
@@ -66,12 +80,6 @@ class WidgetBase: public Realizeable {
 	 * no parent.
 	 */
 	WidgetBase* parent() const;
-	/**
-	 * Return the size the widget uses effectively.
-	 *
-	 * @return the size the widget uses effectively.
-	 */
-	virtual const Area& size() const;
 	virtual WidgetBase* clone() const = 0;
 
 };

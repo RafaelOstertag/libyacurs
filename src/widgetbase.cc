@@ -20,7 +20,7 @@
 // Private
 //
 
-WidgetBase::WidgetBase(): Realizeable(), __parent(NULL), __area(), __size() {
+WidgetBase::WidgetBase(): Realizeable(), __parent(NULL), __position(), __size() {
 }
 
 WidgetBase::~WidgetBase() {
@@ -28,14 +28,14 @@ WidgetBase::~WidgetBase() {
 
 WidgetBase::WidgetBase(const WidgetBase& _w):
     Realizeable(_w),  __parent(_w.__parent),
-    __area(_w.__area), __size(_w.__size) {
+    __position(_w.__position), __size(_w.__size) {
 }
 
 const WidgetBase&
 WidgetBase::operator=(const WidgetBase& _w) {
     Realizeable::operator=(_w);
     __parent = _w.__parent;
-    __area = _w.__area;
+    __position = _w.__position;
     __size = _w.__size;
 
     return *this;

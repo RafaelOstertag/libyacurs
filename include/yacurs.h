@@ -14,7 +14,7 @@
 #include "eventconnector.h"
 #include "eventqueue.h"
 #include "curs.h"
-#include "screenobject.h"
+#include "windowbase.h"
 #include "lineobject.h"
 #include "statusline.h"
 #include "window.h"

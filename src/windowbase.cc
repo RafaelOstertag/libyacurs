@@ -4,17 +4,12 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_CERRNO
 #include <cerrno>
-#endif // HAVE_CERRNO
-
-#ifdef HAVE_CASSERT
 #include <cassert>
-#endif // HAVE_CASSERT
 
 #include "curs.h"
 #include "cursex.h"
-#include "screenobject.h"
+#include "windowbase.h"
 #include "eventqueue.h"
 
 //
@@ -25,28 +20,28 @@
 // Protected
 //
 WINDOW*
-ScreenObject::getWindow() const {
+WindowBase::getWindow() const {
     return *w;
  }
 
 unsigned int
-ScreenObject::getInstanceCount() const {
+WindowBase::getInstanceCount() const {
     return *instances;
 }
 
 void
-ScreenObject::setMargin(const Margin& _m) {
+WindowBase::setMargin(const Margin& _m) {
     //    assert(!isRealized());
     margin = _m;
 }
 
 const Margin&
-ScreenObject::getMargin() const {
+WindowBase::getMargin() const {
     return margin;
 }
 
 void
-ScreenObject::unrealize() {
+WindowBase::unrealize() {
     if (not realized()) throw NotRealized();
 
     realized(false);
@@ -65,7 +60,7 @@ ScreenObject::unrealize() {
 // Public
 //
 
-ScreenObject::ScreenObject(const Area& _r,
+WindowBase::WindowBase(const Area& _r,
 			   const Margin& _m):
     Realizeable(), rect(_r), margin(_m),
     instances(NULL), w(NULL) {
@@ -80,12 +75,12 @@ ScreenObject::ScreenObject(const Area& _r,
     *instances = 1;
 }
 
-ScreenObject::ScreenObject(const ScreenObject& so):
+WindowBase::WindowBase(const WindowBase& so):
     Realizeable(so), rect(so.rect), margin(so.margin), instances(so.instances) {
     (*instances)++;
 }
 
-ScreenObject::~ScreenObject() {
+WindowBase::~WindowBase() {
     if (*instances > 1) {
 	(*instances)--;
 	return;
@@ -106,8 +101,8 @@ ScreenObject::~ScreenObject() {
     delete w;
 }
 
-ScreenObject&
-ScreenObject::operator=(const ScreenObject& so) {
+WindowBase&
+WindowBase::operator=(const WindowBase& so) {
     if ( this == &so)
 	return *this;
 
@@ -127,7 +122,7 @@ ScreenObject::operator=(const ScreenObject& so) {
 }
 
 void
-ScreenObject::refresh(bool immediate) {
+WindowBase::refresh(bool immediate) {
     if (!realized()) return;
 
     assert(w!=NULL);
@@ -145,7 +140,7 @@ ScreenObject::refresh(bool immediate) {
 }
 
 void
-ScreenObject::resize(const Area& r) {
+WindowBase::resize(const Area& r) {
     //
     // Keep in mind: a resize does not refresh!
     //
@@ -164,7 +159,7 @@ ScreenObject::resize(const Area& r) {
 }
 
 void
-ScreenObject::realize() {
+WindowBase::realize() {
     if (realized()) throw AlreadyRealized();
 
     assert(rect.x()>=0);

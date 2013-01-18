@@ -56,7 +56,7 @@ Window::key_handler(Event& _e) {
 //
 
 Window::Window(const Margin& m):
-    ScreenObject(Curses::inquiryScreenSize(), m),
+    WindowBase(Curses::inquiryScreenSize(), m),
     hasframe(false) {
 
     EventQueue::connectEvent(EventConnectorMethod1<Window>(EVT_REFRESH,this, &Window::refresh_handler));
@@ -65,12 +65,12 @@ Window::Window(const Margin& m):
 }
 
 Window::Window():
-    ScreenObject(Curses::inquiryScreenSize()),
+    WindowBase(Curses::inquiryScreenSize()),
     hasframe(false) {
 }
 
 Window::Window(const Window& W):
-    ScreenObject(W), hasframe(W.hasframe) {
+    WindowBase(W), hasframe(W.hasframe) {
     EventQueue::connectEvent(EventConnectorMethod1<Window>(EVT_REFRESH,this, &Window::refresh_handler));
     EventQueue::connectEvent(EventConnectorMethod1<Window>(EVT_WINCH,this, &Window::resize_handler));
     EventQueue::connectEvent(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
@@ -84,7 +84,7 @@ Window::~Window() {
 
 Window&
 Window::operator=(const Window& W) {
-    ScreenObject::operator=(W);
+    WindowBase::operator=(W);
 
     hasframe = W.hasframe;
 
@@ -93,7 +93,7 @@ Window::operator=(const Window& W) {
 
 void
 Window::realize() {
-    ScreenObject::realize();
+    WindowBase::realize();
 
     if (hasframe) {
 	if (box(getWindow(), 0, 0) == ERR)

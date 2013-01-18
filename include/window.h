@@ -9,14 +9,14 @@
 #include "config.h"
 #endif
 
-#include "screenobject.h"
+#include "windowbase.h"
 #include "margin.h"
 #include "cursex.h"
 
 #include "mycurses.h"
 
 
-class Window: public ScreenObject {
+class Window: public WindowBase {
     private:
 	bool hasframe;
 

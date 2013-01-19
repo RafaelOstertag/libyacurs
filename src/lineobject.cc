@@ -58,17 +58,7 @@ LineObject::putLine() {
     if (retval == ERR)
 	throw AddStrFailed();
 
-    refresh(true);
 }
-
-int
-LineObject::refresh_handler(Event& _e) {
-    assert(_e.type() == EVT_REFRESH);
-    putLine();
-    refresh(false);
-    return 0;
-}
-
 
 //
 // Public
@@ -102,13 +92,19 @@ void
 LineObject::realize() {
     computeMargin();
     WindowBase::realize();
+}
+
+void
+LineObject::refresh(bool immediate) {
     putLine();
+    WindowBase::refresh(immediate);
 }
 
 void
 LineObject::line(const std::string& _str) {
     linetext = _str;
     putLine();
+    refresh(true);
 }
 
 std::string

@@ -375,6 +375,8 @@ EventQueue::connectEvent(const EventConnectorBase& ec) {
 
 void
 EventQueue::disconnectEvent(const EventConnectorBase& ec) {
+    // does not delete the connector, but adds it to a queue for later
+    // removal
     evtconn_rem_request.push(ec.clone());
 }
 
@@ -496,8 +498,14 @@ QUIT:
 	evt_queue.pop();
     }
     unblocksignal();
+
     restoreSignal();
 
+    // Remove any pending removal request, so that the memory will be
+    // freed properly
+    proc_rem_request();
+
+    // Free the memory occupied by remaining connectors
     std::list<EventConnectorBase*>::iterator it=evtconn_list.begin();
     while(it != evtconn_list.end()) {
 	assert(*it != NULL);

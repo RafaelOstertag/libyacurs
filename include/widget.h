@@ -7,6 +7,8 @@
 #include "config.h"
 #endif
 
+#include <cstdlib>
+
 #include "mycurses.h"
 #include "widgetbase.h"
 
@@ -31,6 +33,8 @@ class Widget: public WidgetBase {
     protected:
 	void unrealize();
 
+	WINDOW* subwin() const;
+
     public:
 	Widget();
 	Widget(const Widget& _w);
@@ -42,6 +46,7 @@ class Widget: public WidgetBase {
 	void resize(const Area& _a);
 	void realize();
 
+	bool sizechange() { abort(); return false;}
 };
 
 

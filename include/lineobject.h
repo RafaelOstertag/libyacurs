@@ -42,9 +42,6 @@ class LineObject: public WindowBase {
     protected:
 	void putLine();
 
-	
-	int refresh_handler(Event& _e);
-
     public:
 	LineObject(POSITION _pos, const std::string& _t = std::string());
 	~LineObject();
@@ -52,6 +49,7 @@ class LineObject: public WindowBase {
 	LineObject& operator=(const LineObject& lo);
 
 	void realize();
+	void refresh(bool immediate);
 
 	void line(const std::string& _str);
 	std::string line() const;

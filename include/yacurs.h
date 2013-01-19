@@ -20,6 +20,10 @@
 #include "window.h"
 #include "widgetbase.h"
 #include "pack.h"
+#include "vpack.h"
+#include "hpack.h"
+#include "widget.h"
+#include "label.h"
 
 #endif // YACURS_H
 

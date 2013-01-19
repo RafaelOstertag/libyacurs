@@ -59,11 +59,7 @@ class WidgetBase: public Realizeable {
 	Window* __window;
 
 	/**
-	 * Holds the position, where the widget will display.
-	 *
-	 * Depending on the implemntation, those coordinates are relative to
-	 * __curseswindow, since it is expected that widgets use derwin() if
-	 * they display. Container widgets may use absolute coordinates.
+	 * Holds the position on the screen, where the widget will display.
 	 */
 	Coordinates __position;
 

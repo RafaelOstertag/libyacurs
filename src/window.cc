@@ -70,7 +70,7 @@ Window::widget(WidgetBase* _w) {
 
     _w->curseswindow(getWindow());
 
-    // This widget cannot have another widget as parent.
+    // This widget does not have another widget as parent.
     _w->parent(NULL);
 
     _w->window(this);
@@ -93,9 +93,7 @@ Window::refresh(bool immediate) {
 void
 Window::resize(const Area& _a) {
     WindowBase::resize(_a);
-    if (__widget) {
-	__widget->resize(area());
-    }
+    if (__widget) __widget->resize(area());
 }
 
 void
@@ -103,7 +101,7 @@ Window::realize() {
     WindowBase::realize();
     if (__widget) {
 	// This is imperative, so that the widget also is aware of the new
-	// curses window.
+	// curses window in case we're calles in the course of a resize.
 	__widget->curseswindow(getWindow());
 	__widget->realize();
     }

@@ -17,16 +17,8 @@
 
 class Label: public Widget {
     private:
-	Size __size;
-
-	void refresh(bool) { abort(); }
-	void resize(const Area&) { abort(); }
-	void realize() { abort(); }
-	void unrealize() { abort(); };
-
-	
-    private:
 	std::string __label;
+	Size __size;
 
     public:
 	Label(const std::string& _l=std::string());
@@ -36,6 +28,10 @@ class Label: public Widget {
 
 	void label(const std::string& _l);
 	const std::string& label() const;
+
+	const Size& size() const;
+
+	void refresh(bool immediate);
 };
 
 #endif // LABEL_H

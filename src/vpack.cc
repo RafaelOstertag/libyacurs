@@ -28,6 +28,21 @@ class CalcSize {
 	const Size& size() const { return __size; }
 };
 
+class SetPosAssoc {
+    private:
+	Coordinates __pos;
+    public:
+	SetPosAssoc(const Coordinates& __start): __pos(__start){}
+	SetPosAssoc(const SetPosAssoc& _o): __pos(_o.__pos){}
+	void operator()(WidgetBase* _w) {
+	    _w->position(__pos);
+	    // Set the size available
+	    _w->size_available(_w->size());
+
+	    __pos.y(__pos.y() + _w->size().rows());
+	}
+};
+
 //
 // Private
 //
@@ -79,8 +94,12 @@ VPack::size() const {
 void
 VPack::realize() {
     if (realized()) throw AlreadyRealized();
-    
-    
+
+    // Set position for each associated widget
+    std::for_each(widget_list.begin(),
+		  widget_list.end(),
+		  SetPosAssoc(position()));
+
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  std::mem_fun(&WidgetBase::realize));

@@ -49,6 +49,10 @@ class Realizeable {
 	 * - non-immediate refresh has to prepare for a Curses
          *   doupdate()
 	 *
+	 * A refresh is supposed make changes to the screen. Adding
+	 * text to a curses window, for instance, would be implemented
+	 * in a refresh.
+	 *
 	 * @param immediate @c true indicating an immediate refresh,
 	 * @c false indicating non-immediate refresh.
 	 */
@@ -70,6 +74,11 @@ class Realizeable {
 	/**
 	 * Realize the object by calling Curses functions and prepare
 	 * the object for a refresh.
+	 *
+	 * Realize is supposed to create curses window and associcated
+	 * attributes, such as borders only. It should not be used for
+	 * adding text for instance. Adding text and related
+	 * operations would be implemented in refresh().
 	 */
 	virtual void realize() = 0;
 

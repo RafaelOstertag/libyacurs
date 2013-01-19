@@ -27,6 +27,11 @@ Widget::unrealize() {
     *__subwin = NULL;
 }
 
+WINDOW*
+Widget::subwin() const {
+    return *__subwin;
+}
+
 //
 // Public
 //
@@ -79,7 +84,6 @@ Widget::operator=(const Widget& _w) {
 
     return *this;
 }
-
     
 void
 Widget::refresh(bool immediate) {
@@ -127,9 +131,16 @@ Widget::realize() {
     const Coordinates& pos = position();
     const Size& _size = size();
 
+    // We cannot assert on parent() since it might be legally NULL
+    // assert(parent()!=NULL
+
+    assert(size()!=Size());
+    assert(size_available()!=Size());
+
     assert(curseswindow()!=NULL);
     assert(__subwin!=NULL);
     assert(*__subwin==NULL);
+
     *__subwin = derwin(curseswindow(),
 		       _size.rows(),
 		       _size.cols(),

@@ -155,24 +155,34 @@ AURORA_CC_clang=clang
 AURORA_CXX_clang=clang++
 AURORA_LDFLAGS_clang="-L/usr/lib"
 
+AURORA_CURSES_CPPFLAGS_system=
+AURORA_CURSES_LDFLAGS_system=
+
+AURORA_CURSES_CPPFLAGS_ncurses='-I/usr/local/include'
+AURORA_CURSES_LDFLAGS_ncurses='-L/usr/local/lib'
+
 host_aurora() {
     for c in default clang 34 42 44 46 47 48
     do
-	gmake distclean
-	./configure CXX="`eval echo \\$AURORA_CXX_$c`" \
-	    CC="`eval echo \\$AURORA_CC_$c`" \
-	    CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" \
-	    CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" \
-	    LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c`"
+	for curs in system ncurses
+	do
+	    gmake distclean
+	    ./configure CXX="`eval echo \\$AURORA_CXX_$c`" \
+		CC="`eval echo \\$AURORA_CC_$c`" \
+		CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" \
+		CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" \
+		CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" \
+		LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`"
 
-	had_error $? "Error in CXX=`eval echo \\$AURORA_CXX_$c` CC=`eval echo \\$AURORA_CC_$c` CFLAGS=`eval echo \\$AURORA_CFLAGS_$c` CXXFLAGS=`eval echo \\$AURORA_CXXFLAGS_$c` LDFLAGS=`eval echo \\$AURORA_LDFLAGS_$c`"
+	    had_error $? "Error in CXX="`eval echo \\$AURORA_CXX_$c`" CC="`eval echo \\$AURORA_CC_$c`" CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`""
 
-	gmake clean
-	gmake -j
-	had_error $? "Error in CXX=`eval echo \\$AURORA_CXX_$c` CC=`eval echo \\$AURORA_CC_$c` CFLAGS=`eval echo \\$AURORA_CFLAGS_$c` CXXFLAGS=`eval echo \\$AURORA_CXXFLAGS_$c` LDFLAGS=`eval echo \\$AURORA_LDFLAGS_$c`"
-
-	gmake check
-	had_error $? "Error in CXX=`eval echo \\$AURORA_CXX_$c` CC=`eval echo \\$AURORA_CC_$c` CFLAGS=`eval echo \\$AURORA_CFLAGS_$c` CXXFLAGS=`eval echo \\$AURORA_CXXFLAGS_$c` LDFLAGS=`eval echo \\$AURORA_LDFLAGS_$c`"
+	    gmake clean
+	    gmake -j
+	    had_error $? "Error in CXX="`eval echo \\$AURORA_CXX_$c`" CC="`eval echo \\$AURORA_CC_$c`" CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`""
+	    
+	    gmake check
+	    had_error $? "Error in CXX="`eval echo \\$AURORA_CXX_$c`" CC="`eval echo \\$AURORA_CC_$c`" CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`""
+	done
     done
 }
 
@@ -216,32 +226,42 @@ FREEBSD32_CXXFLAGS_default="$FREEBSD32_CXXFLAGS_42"
 FREEBSD32_CFLAGS_default="$FREEBSD32_CXXFLAGS_42"
 FREEBSD32_CC_default=gcc
 FREEBSD32_CXX_default=g++
-FREEBSD32_LDFLAGS_default="-L/usr/lib"
+FREEBSD32_LDFLAGS_default=""
 
 FREEBSD32_CXXFLAGS_clang="$FREEBSD32_CXXFLAGS_42"
 FREEBSD32_CFLAGS_clang="$FREEBSD32_CXXFLAGS_42"
 FREEBSD32_CC_clang=clang
 FREEBSD32_CXX_clang=clang++
-FREEBSD32_LDFLAGS_clang="-L/usr/lib"
+FREEBSD32_LDFLAGS_clang=""
+
+FREEBSD32_CURSES_CPPFLAGS_system=
+FREEBSD32_CURSES_LDFLAGS_system=
+
+FREEBSD32_CURSES_CPPFLAGS_ncurses='-I/usr/local/include'
+FREEBSD32_CURSES_LDFLAGS_ncurses='-L/usr/local/lib'
 
 host_freebsd32() {
     for c in default clang 34 42 44 46 47 48
     do
-	gmake distclean
-	./configure CXX="`eval echo \\$FREEBSD32_CXX_$c`" \
-	    CC="`eval echo \\$FREEBSD32_CC_$c`" \
-	    CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" \
-	    CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" \
-	    LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c`"
+	for curs in system ncurses
+	do
+	    gmake distclean
+	    ./configure CXX="`eval echo \\$FREEBSD32_CXX_$c`" \
+		CC="`eval echo \\$FREEBSD32_CC_$c`" \
+		CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" \
+		CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" \
+		CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" \
+		LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`"
 
-	had_error $? "Error in CXX=`eval echo \\$FREEBSD32_CXX_$c` CC=`eval echo \\$FREEBSD32_CC_$c` CFLAGS=`eval echo \\$FREEBSD32_CFLAGS_$c` CXXFLAGS=`eval echo \\$FREEBSD32_CXXFLAGS_$c` LDFLAGS=`eval echo \\$FREEBSD32_LDFLAGS_$c`"
+	    had_error $? "Error in CXX="`eval echo \\$FREEBSD32_CXX_$c`" CC="`eval echo \\$FREEBSD32_CC_$c`" CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`""
 
-	gmake clean
-	gmake -j
-	had_error $? "Error in CXX=`eval echo \\$FREEBSD32_CXX_$c` CC=`eval echo \\$FREEBSD32_CC_$c` CFLAGS=`eval echo \\$FREEBSD32_CFLAGS_$c` CXXFLAGS=`eval echo \\$FREEBSD32_CXXFLAGS_$c` LDFLAGS=`eval echo \\$FREEBSD32_LDFLAGS_$c`"
-
-	gmake check
-	had_error $? "Error in CXX=`eval echo \\$FREEBSD32_CXX_$c` CC=`eval echo \\$FREEBSD32_CC_$c` CFLAGS=`eval echo \\$FREEBSD32_CFLAGS_$c` CXXFLAGS=`eval echo \\$FREEBSD32_CXXFLAGS_$c` LDFLAGS=`eval echo \\$FREEBSD32_LDFLAGS_$c`"
+	    gmake clean
+	    gmake -j
+	    had_error $? "Error in CXX="`eval echo \\$FREEBSD32_CXX_$c`" CC="`eval echo \\$FREEBSD32_CC_$c`" CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`""
+	    
+	    gmake check
+	    had_error $? "Error in CXX="`eval echo \\$FREEBSD32_CXX_$c`" CC="`eval echo \\$FREEBSD32_CC_$c`" CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`""
+	done
     done
 }
 

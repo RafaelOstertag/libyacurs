@@ -48,7 +48,7 @@ class MyWindow: public Window {
 	    snprintf(buff,32,"%d",winch.data().cols());
 	    status_msg+=buff;
 	    
-	    Curses::getStatusLine()->pushMsg(status_msg);
+	    Curses::statusline()->pushMsg(status_msg);
 	    return 0;
 	};
 
@@ -74,15 +74,15 @@ int main() {
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
 					   "Resize 1");
-	Curses::setTitle(title);
+	Curses::title(title);
 
 	MyWindow* w1 = new MyWindow(Margin(1,0,1,0));
 	w1->frame(true);
 
-	Curses::setWindow(w1);
+	Curses::mainwindow(w1);
 
 	StatusLine* sl = new StatusLine();
-	Curses::setStatusLine(sl);
+	Curses::statusline(sl);
 
 	EventQueue::connectEvent(EventConnectorFunction1(EVT_ALARM,&alrm));
 

@@ -4,13 +4,8 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif // HAVE_UNISTD_H
-
-#ifdef HAVE_SIGNAL_H
 #include <signal.h>
-#endif // HAVE_SIGNAL_H
 
 #ifdef HAVE_STROPTS_H
 #include <stropts.h>
@@ -20,13 +15,13 @@
 #include <sys/ioctl.h>
 #endif // HAVE_SYS_IOCTL_H
 
-#ifdef HAVE_SYS_TERMIOS_H
-#include <sys/termios.h>
-#else
 #ifdef HAVE_TERMIOS_H
 #include <termios.h>
-#endif // HAVE_TERMIOS_H
+#else // HAVE_TERMIOS_H
+#ifdef HAVE_SYS_TERMIOS_H
+#include <sys/termios.h>
 #endif // HAVE_SYS_TERMIOS_H
+#endif // HAVE_TERMIOS_H
 
 #ifdef HAVE_CSTDLIB
 #include <cstdlib>
@@ -36,10 +31,9 @@
 #include "eventqueue.h"
 #include "cursex.h"
 
-WINDOW* Curses::w = NULL;
-StatusLine* Curses::statusline = NULL;
-LineObject* Curses::title = NULL;
-Window* Curses::mainwindow = NULL;
+StatusLine* Curses::__statusline = NULL;
+LineObject* Curses::__title = NULL;
+Window* Curses::__mainwindow = NULL;
 bool Curses::initialized = false;
 
 //
@@ -73,7 +67,7 @@ Curses::termresetup_handler(Event& e) {
     if (wrefresh(stdscr) == ERR)
 	throw RefreshFailed();
 #endif // HAVE_RESIZE_TERM
-    
+
     return 0;
 }
 
@@ -85,8 +79,7 @@ Curses::init() {
     if (Curses::initialized)
 	throw AlreadyInitialized();
 
-    w = initscr();
-    if (w == NULL)
+    if (initscr() == NULL)
 	throw UnableToInitialize();
 
     EventQueue::connectEvent(EventConnectorFunction1(EVT_DOUPDATE, Curses::doupdate_handler));
@@ -100,7 +93,7 @@ Curses::init() {
 
     if (noecho() == ERR)
 	throw NoEchoFailed();
-    
+
     // Curses clears stdscr upon first call to getch, which may
     // produce undesired results, i.e. already created Curses Windows
     // may be overwritten. Therefore we refresh stdscr preventive.
@@ -114,31 +107,37 @@ void
 Curses::end() {
     if (!initialized) throw NotInitialized();
 
-    int retval = endwin();
-    if (retval == ERR)
+    // On FreeBSD, for instance, endwin() does not clear screen, so we
+    // unconditionally issue calls to do so
+    if (wclear(stdscr) == ERR)
+	throw ClearFailed();
+    if (wrefresh(stdscr) == ERR)
+	throw RefreshFailed();
+
+
+    if (endwin() == ERR)
 	throw EndWinError();
 
     initialized = false;
-    w = NULL;
 }
 
 void
 Curses::run() {
     if (!initialized) throw NotInitialized();
 
-    if (title) {
-	title->realize();
-	title->refresh(false);
+    if (__title) {
+	__title->realize();
+	__title->refresh(false);
     }
 
-    if (statusline) {
-	statusline->realize();
-	statusline->refresh(false);
+    if (__statusline) {
+	__statusline->realize();
+	__statusline->refresh(false);
     }
 
-    if (mainwindow) {
-	mainwindow->realize();
-	mainwindow->refresh(false);
+    if (__mainwindow) {
+	__mainwindow->realize();
+	__mainwindow->refresh(false);
     }
 
     if (doupdate() == ERR)
@@ -148,48 +147,33 @@ Curses::run() {
 }
 
 void
-Curses::setTitle(LineObject* _title) {
-    title = _title;
+Curses::title(LineObject* _title) {
+    __title = _title;
 }
 
 LineObject*
-Curses::getTitle() {
-    return title;
+Curses::title() {
+    return __title;
 }
 
 void
-Curses::unsetTitle() {
-    title = NULL;
-}
-
-void
-Curses::setStatusLine(StatusLine* _sl) {
-    statusline = _sl;
+Curses::statusline(StatusLine* _sl) {
+    __statusline = _sl;
 }
 
 StatusLine*
-Curses::getStatusLine() {
-    return statusline;
+Curses::statusline() {
+    return __statusline;
 }
 
 void
-Curses::unsetStatusLine() {
-    statusline = NULL;
-}
-
-void
-Curses::setWindow(Window* _w) {
-    mainwindow = _w;
+Curses::mainwindow(Window* _w) {
+    __mainwindow = _w;
 }
 
 Window*
-Curses::getWindow() {
-    return mainwindow;
-}
-
-void
-Curses::unsetWindow() {
-    mainwindow = NULL;
+Curses::mainwindow() {
+    return __mainwindow;
 }
 
 Size

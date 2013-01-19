@@ -25,16 +25,16 @@ int alrm(Event& _e) {
 
     switch (calls) {
     case 0:
-	Curses::getStatusLine()->pushMsg("Status 1");
+	Curses::statusline()->pushMsg("Status 1");
 	break;
     case 1:
-	Curses::getStatusLine()->pushMsg("Status 2");
+	Curses::statusline()->pushMsg("Status 2");
 	break;
     case 2:
-	Curses::getStatusLine()->popMsg();
+	Curses::statusline()->popMsg();
 	break;
     case 3:
-	Curses::getStatusLine()->popMsg();
+	Curses::statusline()->popMsg();
 	break;
     }
 
@@ -52,15 +52,15 @@ int main() {
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
 					   "Basic 2");
-	Curses::setTitle(title);
+	Curses::title(title);
 
 	Window* w1 = new Window(Margin(1,0,1,0));
 	w1->frame(true);
 
-	Curses::setWindow(w1);
+	Curses::mainwindow(w1);
 
 	StatusLine* sl = new StatusLine();
-	Curses::setStatusLine(sl);
+	Curses::statusline(sl);
 
 	EventQueue::connectEvent(EventConnectorFunction1(EVT_ALARM,&alrm));
 

@@ -21,10 +21,9 @@
 
 class Curses {
     private:
-	static WINDOW* w;
-	static StatusLine* statusline;
-	static LineObject* title;
-	static Window* mainwindow;
+	static StatusLine* __statusline;
+	static LineObject* __title;
+	static Window* __mainwindow;
 	static bool initialized;
 
     protected:
@@ -37,17 +36,14 @@ class Curses {
 
 	static void run();
 
-	static void setTitle(LineObject* _title);
-	static LineObject* getTitle();
-	static void unsetTitle();
+	static void title(LineObject* _title);
+	static LineObject* title();
 
-	static void setStatusLine(StatusLine* _sl);
-	static StatusLine* getStatusLine();
-	static void unsetStatusLine();
+	static void statusline(StatusLine* _sl);
+	static StatusLine* statusline();
 
-	static void setWindow(Window* _w);
-	static Window* getWindow();
-	static void unsetWindow();
+	static void mainwindow(Window* _w);
+	static Window* mainwindow();
 
 	static Size inquiryScreenSize();
 };

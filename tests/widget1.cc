@@ -27,7 +27,7 @@ int main() {
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
 					   "Basic 1");
-	Curses::setTitle(title);
+	Curses::title(title);
 
 	Window* w1 = new Window(Margin(1,0,0,0));
 	w1->frame(true);
@@ -35,7 +35,7 @@ int main() {
 	Label* label1 = new Label("Test label");
 	w1->widget(label1);
 
-	Curses::setWindow(w1);
+	Curses::mainwindow(w1);
 
 	EventQueue::connectEvent(EventConnectorFunction1(EVT_ALARM,&alrm));
 

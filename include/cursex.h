@@ -172,6 +172,11 @@ class DerWinFailed: public BaseCurEx {
 	DerWinFailed();
 };
 
+class ClearFailed: public BaseCurEx {
+    public:
+	ClearFailed();
+};
+
 /**
  * @}
  */

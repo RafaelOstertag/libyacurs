@@ -98,3 +98,6 @@ NoEchoFailed::NoEchoFailed():
 
 DerWinFailed::DerWinFailed():
     BaseCurEx("derwin() failed") {}
+
+ClearFailed::ClearFailed():
+    BaseCurEx("*clear() failed") {}

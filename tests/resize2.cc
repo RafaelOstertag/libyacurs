@@ -48,7 +48,7 @@ int alrm(Event& _e) {
     snprintf(buff,32,"%d",_scrdim.cols());
     status_msg+=buff;
 
-    Curses::getStatusLine()->pushMsg(status_msg);
+    Curses::statusline()->pushMsg(status_msg);
 
     winsize ws;
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1) {
@@ -81,15 +81,15 @@ int main() {
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
 					   "Resize 1");
-	Curses::setTitle(title);
+	Curses::title(title);
 
 	Window* w1 = new Window(Margin(1,0,1,0));
 	w1->frame(true);
 
-	Curses::setWindow(w1);
+	Curses::mainwindow(w1);
 
 	StatusLine* sl = new StatusLine();
-	Curses::setStatusLine(sl);
+	Curses::statusline(sl);
 
 	EventQueue::connectEvent(EventConnectorFunction1(EVT_ALARM,&alrm));
 

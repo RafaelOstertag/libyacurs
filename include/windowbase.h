@@ -70,6 +70,12 @@ class WindowBase : public Realizeable {
 	unsigned int getInstanceCount() const;
 
 	const Area& area() const;
+	/**
+	 * Gets the area that can be used by widgets
+	 *
+	 * @return the area in with absolute coordinates that can be used by widgets.
+	 */
+	Area widget_area() const;
 
 	void unrealize();
 
@@ -84,20 +90,6 @@ class WindowBase : public Realizeable {
 	WindowBase(const WindowBase& so);
 	virtual ~WindowBase();
 	WindowBase& operator=(const WindowBase& so);
-
-	/**
-	 * Get the position from where other objects may be displayed.
-	 *
-	 * @return position from where other objects may be displayed.
-	 */
-	virtual Coordinates position_available() const;
-
-	/**
-	 * Get the size available for displaying other objects.
-	 *
-	 * @return size available for displaying other object.
-	 */
-	virtual Size size_available() const;
 
 	/**
 	 * @todo when setting margin and window is realized, resize

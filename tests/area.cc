@@ -110,5 +110,24 @@ int main() {
 	o1.cols() != 80 )
 	return 1;
 
+    Area a1, a2(0,0,24,79);
+
+    Margin m1(2,2,2,2);
+    Margin m2(1,1,1,1);
+
+    a1 = a2-m1;
+    if (a1.x() != 2 ||
+	a1.y() != 2 ||
+	a1.rows() != 20 ||
+	a1.cols() != 75)
+	return 1;
+
+    a1 = (a2-m1)-m2;
+    if (a1.x() != 3 ||
+	a1.y() != 3 ||
+	a1.rows() != 18 ||
+	a1.cols() != 73)
+	return 1;
+
     return 0;
 }

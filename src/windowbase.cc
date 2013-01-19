@@ -28,10 +28,24 @@ unsigned int
 WindowBase::getInstanceCount() const {
     return *instances;
 }
-
 const Area&
 WindowBase::area() const {
     return __area;
+}
+
+Area
+WindowBase::widget_area() const {
+    Area widget_area;
+
+    if (__frame) {
+	// we have to take the frame into account, thus
+	// minus Margin(1,1,1,1)
+	widget_area = (__area-__margin)-Margin(1,1,1,1);
+    } else {
+	widget_area = __area-__margin;
+    }
+
+    return widget_area;
 }
 
 void
@@ -137,22 +151,6 @@ WindowBase::operator=(const WindowBase& so) {
     return *this;
 }
 
-Coordinates
-WindowBase::position_available() const {
-    if (__frame)
-	return (__area-__margin)-Margin(1,1,1,1);
-    else
-	return (__area-__margin);
-}
-
-Size
-WindowBase::size_available() const {
-    if (__frame)
-	return (__area-__margin)-Margin(1,1,1,1);
-    else
-	return (__area-__margin);
-}
-
 void
 WindowBase::margin(const Margin& _m) {
     //    assert(!isRealized());
@@ -239,7 +237,7 @@ WindowBase::realize() {
     }
 
     if (__frame) {
-	if (box(getWindow(), 0, 0) == ERR)
+	if (box(*w, 0, 0) == ERR)
 	    throw BoxFailed();
     }
 

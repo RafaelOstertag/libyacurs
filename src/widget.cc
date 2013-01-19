@@ -141,7 +141,7 @@ Widget::realize() {
     assert(__subwin!=NULL);
     assert(*__subwin==NULL);
 
-    *__subwin = derwin(curseswindow(),
+    *__subwin = ::subwin(curseswindow(),
 		       _size.rows(),
 		       _size.cols(),
 		       pos.y(),

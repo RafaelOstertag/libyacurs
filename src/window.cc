@@ -75,8 +75,8 @@ Window::widget(WidgetBase* _w) {
 
     _w->window(this);
 
-    _w->position(area());
-    _w->size_available(area());
+    _w->position(widget_area());
+    _w->size_available(widget_area());
 }
 
 WidgetBase*
@@ -93,7 +93,7 @@ Window::refresh(bool immediate) {
 void
 Window::resize(const Area& _a) {
     WindowBase::resize(_a);
-    if (__widget) __widget->resize(area());
+    if (__widget) __widget->resize(widget_area());
 }
 
 void

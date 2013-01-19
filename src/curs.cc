@@ -217,7 +217,7 @@ Curses::inquiryScreenSize() {
     }
 #else // HAVE_RESIZE_TERM
     int nrows, ncols;
-    getmaxyx(w, nrows, ncols);
+    getmaxyx(stdscr, nrows, ncols);
 
     __scrdim.rows(nrows);
     __scrdim.cols(ncols);

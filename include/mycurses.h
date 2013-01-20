@@ -22,7 +22,6 @@
 #endif
 
 
-
 #ifdef tab
 #undef tab
 #endif
@@ -67,13 +66,13 @@ inline int refresh() {
 #endif // HAVE_CURSES_H
 
 #ifdef WADDSTR_USE_CHAR
-#ifdef __SunOS_5_10
+#ifdef __SVR4
 # include <stdlib.h>
 # include <string.h>
-#else // __SunOS_5_10
+#else // __SVR4
 # include <cstdlib>
 # include <cstring>
-#endif // __SunOS_5_10
+#endif // __SVR4
 
 inline int waddstr_c (WINDOW* win, const char* str) {
     char* tmp_ptr = strdup(str);
@@ -88,13 +87,13 @@ inline int waddstr_c (WINDOW* win, const char* str) {
 #endif // WADDSTR_USE_CHAR
 
 #ifdef MVWADDSTR_USE_CHAR
-#ifdef __SunOS_5_10
+#ifdef __SVR4
 # include <stdlib.h>
 # include <string.h>
-#else // __SunOS_5_10
+#else // __SVR4
 # include <cstdlib>
 # include <cstring>
-#endif // __SunOS_5_10
+#endif // __SVR4
 
 inline int mvwaddstr_c (WINDOW* win, int y, int x, const char* str) {
     char* tmp_ptr = strdup(str);
@@ -109,13 +108,13 @@ inline int mvwaddstr_c (WINDOW* win, int y, int x, const char* str) {
 #endif // MVWADDSTR_USE_CHAR
 
 #ifdef MVWADDNSTR_USE_CHAR
-#ifdef __SunOS_5_10
+#ifdef __SVR4
 # include <stdlib.h>
 # include <string.h>
-#else // __SunOS_5_10
+#else // __SVR4
 # include <cstdlib>
 # include <cstring>
-#endif // __SunOS_5_10
+#endif // __SVR4
 
 inline int mvwaddnstr_c (WINDOW* win, int y, int x, const char* str, int n) {
     char* tmp_ptr = strdup(str);

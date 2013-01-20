@@ -32,8 +32,15 @@ int main() {
 	Window* w1 = new Window(Margin(1,0,0,0));
 	w1->frame(true);
 
+
+	VPack* vpack = new VPack;
+	w1->widget(vpack);
+
 	Label* label1 = new Label("Test label");
-	w1->widget(label1);
+	vpack->add_front(label1);
+
+	Label* label2 = new Label("Test label2");
+	vpack->add_back(label2);
 
 	Curses::mainwindow(w1);
 
@@ -44,6 +51,8 @@ int main() {
 
 	delete title;
 	delete label1;
+	delete label2;
+	delete vpack;
 	delete w1;
 
 	Curses::end();

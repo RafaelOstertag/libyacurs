@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// $Id: pack.h 4680 2013-01-14 21:36:10Z rafisol $
+// $Id$
 
 #ifndef HPACK_H
 #define HPACK_H
@@ -11,12 +11,15 @@
 
 #include "pack.h"
 
+/**
+ * Packs Widgets horizontally.
+ *
+ * The main purpose of this class is the implement the size calculation of and
+ * for the associated Widgets and to implement realize().
+ */
 class HPack: public Pack {
-    private:
-	Size __size;
-
     protected:
-	void add_size(const WidgetBase* _w);
+	// Remember, this will be called from Pack::add_*()
 	void recalc_size();
 
     public:
@@ -24,7 +27,6 @@ class HPack: public Pack {
 	HPack(const HPack& _hp);
 	~HPack();
 	const HPack& operator=(const HPack& _hp);
-	const Size& size() const;
 	
 	void realize();
 };

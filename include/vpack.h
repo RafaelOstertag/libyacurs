@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// $Id: pack.h 4680 2013-01-14 21:36:10Z rafisol $
+// $Id$
 
 #ifndef VPACK_H
 #define VPACK_H
@@ -11,12 +11,15 @@
 
 #include "pack.h"
 
+/**
+ * Packs Widgets vertically.
+ *
+ * The main purpose of this class is the implement the size calculation of and
+ * for the associated Widgets and to implement realize().
+ */
 class VPack: public Pack {
-    private:
-	Size __size;
-
     protected:
-	void add_size(const WidgetBase* _w);
+	// Remember, this will be called from Pack::add_*()
 	void recalc_size();
 
     public:
@@ -24,7 +27,6 @@ class VPack: public Pack {
 	VPack(const VPack& _vp);
 	~VPack();
 	const VPack& operator=(const VPack& _vp);
-	const Size& size() const;
 
 	void realize();
 };

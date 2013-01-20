@@ -61,8 +61,8 @@ WidgetBase::position() const {
 
 void
 WidgetBase::size_available(const Size& _s) {
-    assert(_s.rows()>1);
-    assert(_s.cols()>1);
+    assert(_s.rows()>0);
+    assert(_s.cols()>0);
     __size_available = _s;
 }
 

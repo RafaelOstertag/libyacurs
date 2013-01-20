@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// $Id: coordinates.h 4677 2013-01-14 20:05:04Z rafisol $
+// $Id$
 
 #ifndef SIZE_H
 #define SIZE_H
@@ -15,6 +15,10 @@
  */
 class Size {
     private:
+	/**
+	 * Object representing zero.
+	 */
+	static Size __zero;
 	int __rows, __cols;
 
     public:
@@ -102,6 +106,12 @@ class Size {
 	bool operator==(const Size& rhs) const;
 	bool operator!=(const Size& rhs) const;
 
+	/**
+	 * Return the object representing zero.
+	 *
+	 * @return Size object representing zero.
+	 */
+	static const Size& zero();
 };
 
 #endif // SIZE_H

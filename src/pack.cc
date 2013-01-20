@@ -14,6 +14,26 @@
 #include "pack.h"
 
 //
+// Functors
+//
+
+/**
+ * Functor for setting size on associated widgets.
+ *
+ * This class simply sets the size_available() to the size() reported by the
+ * widget. At a later stage, this class may become obsolete due to the
+ * requirement of having dynamically sized widgets, that really rely upon the
+ * size_available() provided by the parent Widget.
+ */
+class SetSimpleSize {
+    public:
+	void operator()(WidgetBase* _w) {
+	    _w->size_available(_w->size());
+	}
+};
+
+
+//
 // Private
 //
 void
@@ -53,7 +73,7 @@ const Pack&
 Pack::operator=(const Pack& _p) {
     WidgetBase::operator=(_p);
     widget_list = _p.widget_list;
- 
+
     return *this;
 }
 
@@ -69,7 +89,8 @@ Pack::add_front(WidgetBase* _w) {
 
     _w->window(window());
 
-    add_size(_w);
+    // We have to recalc the size because of dynamically sized widgets
+    recalc_size();
 }
 
 void
@@ -85,8 +106,10 @@ Pack::add_back(WidgetBase* _w) {
 
     _w->window(window());
 
-    add_size(_w);
+    // We have to recalc the size because of dynamically sized widgets
+    recalc_size();
 }
+
 
 void
 Pack::remove(WidgetBase* _w) {
@@ -95,8 +118,6 @@ Pack::remove(WidgetBase* _w) {
     widget_list.remove(_w);
     _w->window(NULL);
 
-    // I see no way of maintaining the proper size when removing
-    // widgets than to recalc the size from scratch.
     recalc_size();
 }
 
@@ -107,6 +128,32 @@ Pack::curseswindow(WINDOW* _p) {
     // We have to make sure that the associated widgets have the same curses
     // window as we do.
     set_all_curseswindow();
+}
+
+void
+Pack::size_available(const Size& _s) {
+    WidgetBase::size_available(_s);
+    __size = _s;
+
+    // Recalc size. recalc_size() called in add_*() might not took effect,
+    // since add_*() can be called without any size_available() set.
+    recalc_size();
+}
+
+const Size&
+Pack::size() const {
+    return __size;
+}
+
+void
+Pack::resetsize() {
+    __size=Size(0,0);
+}
+
+bool
+Pack::sizechange() {
+    abort();
+    return false;
 }
 
 void
@@ -127,4 +174,3 @@ Pack::resize(const Area& _a) {
     unrealize();
     realize();
 }
-

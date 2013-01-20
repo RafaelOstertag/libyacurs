@@ -101,7 +101,7 @@ Window::realize() {
     WindowBase::realize();
     if (__widget) {
 	// This is imperative, so that the widget also is aware of the new
-	// curses window in case we're calles in the course of a resize.
+	// curses window in case we're called in the course of a resize.
 	__widget->curseswindow(getWindow());
 	__widget->realize();
     }

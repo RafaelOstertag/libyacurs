@@ -30,8 +30,14 @@ class Window;
  *  - setting a parent widget
  *
  * If widgets use curses windows, it is expected that they create the window
- * using derwin() to create them.
+ * using subwin() to create them.
  *
+ * Information on how much space the widget has to its disposition, has to be
+ * provided by the Window the widget is associated or by the parent Widget.
+ *
+ * Dynamically sized Widgets return Size(0,0) upon a call to size(). For those
+ * widgets. An implementation detail of those Widget is, that they should reset
+ * their size() to Size(0,0) upon unrealize().
  */
 class WidgetBase: public Realizeable {
     private:
@@ -41,6 +47,9 @@ class WidgetBase: public Realizeable {
 	 * widget does not maintain the window, i.e. it does not free the
 	 * memory occupied. However, the pointer has to be valid for the entire
 	 * lifetime of the object.
+	 *
+	 * Further, this pointer is used for subwin() in order to create
+	 * subwindows.
 	 */
 	WINDOW* __curseswindow;
 	/**
@@ -50,7 +59,10 @@ class WidgetBase: public Realizeable {
 	 * Basically, only container widgets such as Packs can be parents.
 	 */
 	WidgetBase* __parent;
+
 	/**
+	 * @deprecated parent or window will set size. No querying.
+	 *
 	 * The parent Window of the widget.
 	 *
 	 * This is used for container widgets, so that they are able to query
@@ -97,14 +109,15 @@ class WidgetBase: public Realizeable {
 	const Coordinates& position() const;
 
 	/**
-	 * Set the screen Area available to the widget.
+	 * Set the size available to the widget.
 	 *
-	 * This is used by container widgets.
+	 * This is used by container widgets and has to be set by the paren
+	 * widget, or the Window if the widget has no parent Widget.
 	 *
-	 * @param _a Area available to the widget
+	 * @param _s size available to the widget
 	 *
 	 */
-	void size_available(const Size& _s);
+	virtual void size_available(const Size& _s);
 
 	/**
 	 * Get the size available to the widget.
@@ -138,6 +151,8 @@ class WidgetBase: public Realizeable {
 	WidgetBase* parent() const;
 
 	/**
+	 * @deprecated parent or window will set size. No querying.
+	 *
 	 * Set the Window the widget belongs to
 	 *
 	 * @param _w pointer to the Window the widget belongs to. The
@@ -146,6 +161,8 @@ class WidgetBase: public Realizeable {
 	void window(Window* _w);
 
 	/**
+	 * @deprecated parent or window will set size. No querying.
+	 *
 	 * Get the Window the widget belongs to
 	 *
 	 * @return pointer to the Window the widget belongs to
@@ -187,9 +204,25 @@ class WidgetBase: public Realizeable {
 	/**
 	 * The size the widget effectively occupies.
 	 *
-	 * @return size the widget effectively occupies.
+	 * If the Widget returns a size of Size(0,0) it indicates that it
+	 * dynamically adjusts to the size_available(). It is then means, that
+	 * the parent Widget has to provide a sensible value for
+	 * size_available().
+	 *
+	 * @return size the widget effectively occupies, or Size(0,0) if it
+	 * dynamically adjusts to the size_available().
 	 */
 	virtual const Size& size() const = 0;
+
+	/**
+	 * Reset the size of the widget.
+	 *
+	 * This is used mainly for dynamically sized Widgets, so that will
+	 * return Size(0,0) upon next call to size().
+	 *
+	 * Non-dynamically sized Widget are supposed to ignore this.
+	 */
+	virtual void resetsize() = 0;
 };
 
 #endif // WIDGETBASE_H

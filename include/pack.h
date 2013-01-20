@@ -23,7 +23,8 @@
  * stacked and displayed.
  *
  * The pack will calculate the size needed for displaying the widgets
- * horizontally, vertically.
+ * horizontally, vertically. This should happen on realize() which is required
+ * to be implemented in derived classes.
  *
  * @warning If a Pack is destroyed before its associated Widgets, the Widgets will have
  * a __parent pointer that is invalid.
@@ -34,23 +35,23 @@
  */
 class Pack: public WidgetBase {
     private:
+	/**
+	 * The Size of the Pack.
+	 *
+	 * This will be set by calling size_available().
+	 */
+	Size __size;
+
+	/**
+	 * Call curseswindow() on all associated Widgets.
+	 */
 	void set_all_curseswindow();
 
     protected:
-	std::list<WidgetBase*> widget_list;
-
 	/**
-	 * Add the size of the given widget to the __size.
-	 *
-	 * Depending on the alignment (horizontally, vertically), the
-	 * size is different. Thus it will be implemented in derrived
-	 * classes.
-	 *
-	 * @internal Pack::add_*() use this function.
-	 *
-	 * @param _w the widget the size has to taken into account.
+	 * List of all Widgets associated with the Pack.
 	 */
-	virtual void add_size(const WidgetBase* _w) = 0;
+	std::list<WidgetBase*> widget_list;
 
 	/**
 	 * Recalculates the size requirements of all widgets in the
@@ -115,6 +116,27 @@ class Pack: public WidgetBase {
 	 */
 	void curseswindow(WINDOW* _p);
 
+	/**
+	 * Set the available size.
+	 *
+	 * Since Pack is dynamically sizeable, we have to react on
+	 * size_available(), unlike statically sized Widgets.
+	 *
+	 * @param _s the size available to the Pack.
+	 */
+	void size_available(const Size& _s);
+
+	const Size& size() const;
+
+	void resetsize();
+
+	bool sizechange();
+
+	/**
+	 * Refresh all Widgets in the Pack.
+	 *
+	 * @param immediate @see Realizeable
+	 */
 	void refresh(bool immediate);
 	/**
 	 * Resize the pack.
@@ -125,6 +147,8 @@ class Pack: public WidgetBase {
 	 * @param _s the new size available to the pack.
 	 */
 	void resize(const Area& _a);
+
+	//
 	// Has to be implemented in derrived classes
 	//void realize();
 };

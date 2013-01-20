@@ -1,9 +1,14 @@
-// $Id: size.cc 4686 2013-01-16 21:53:11Z rafisol $
+// $Id$
 
 #include <cassert>
 #include <stdexcept>
 
 #include "size.h"
+
+//
+// Static
+//
+Size Size::__zero=Size(0,0);
 
 
 //
@@ -104,4 +109,9 @@ Size::operator==(const Size& rhs) const {
 bool
 Size::operator!=(const Size& rhs) const {
     return !operator==(rhs);
+}
+
+const Size&
+Size::zero() {
+    return __zero;
 }

@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// $Id: widget.h 4684 2013-01-15 20:47:55Z rafisol $
+// $Id$
 
 #ifndef LABEL_H
 #define LABEL_H
@@ -30,6 +30,13 @@ class Label: public Widget {
 	const std::string& label() const;
 
 	const Size& size() const;
+	/**
+	 * Does nothing.
+	 *
+	 * Does nothing on a Label, but we have to override.
+	 */
+	void resetsize();
+
 
 	void refresh(bool immediate);
 };

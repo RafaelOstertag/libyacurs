@@ -41,10 +41,13 @@ Label::operator=(const Label& _l) {
 void
 Label::label(const std::string& _l) {
     __label = _l;
+
+    Size oldsize = __size;
+
     __size = Size(1, __label.length()+1);
 
-    if (parent()!=NULL)
-	parent()->sizechange();
+    if (parent()!=NULL && oldsize != __size)
+	parent()->sizechange(); // notify parent of size change
 }
 
 const std::string&
@@ -55,6 +58,12 @@ Label::label() const {
 const Size&
 Label::size() const {
     return __size;
+}
+
+void
+Label::resetsize() {
+    // Intentionally empty, since resetsize() is intended for dynamically sized
+    // Widgets.
 }
 
 void

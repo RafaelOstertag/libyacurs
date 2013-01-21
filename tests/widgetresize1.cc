@@ -123,6 +123,13 @@ int main() {
 	Curses::run();
 
 	delete title;
+	delete label1;
+	delete label2;
+	delete label3;
+	delete label4;
+	delete vpack1;
+	delete vpack2;
+	delete hpack;
 	delete w1;
 	delete sl;
 	Curses::end();

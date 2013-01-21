@@ -41,12 +41,14 @@ class Widget: public WidgetBase {
 	~Widget();
 	Widget& operator=(const Widget& _w);
 
+	// Must be overriden in derived classes
+	//bool sizechange();
+
 	// Inherited from Realizeable
 	void refresh(bool immediate);
 	void resize(const Area& _a);
 	void realize();
 
-	bool sizechange() { abort(); return false;}
 };
 
 

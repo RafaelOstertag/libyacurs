@@ -15,9 +15,21 @@
 
 #include "widget.h"
 
+/**
+ * Display text on the screen.
+ *
+ * Simple widget for displaying text on the screen.
+ */
 class Label: public Widget {
     private:
+	/**
+	 * The text to be displayed.
+	 */
 	std::string __label;
+	/**
+	 * The size the Label requires. Rows are always 1. Cols are
+	 * __label.length()+1
+	 */
 	Size __size;
 
     public:
@@ -29,7 +41,28 @@ class Label: public Widget {
 	void label(const std::string& _l);
 	const std::string& label() const;
 
+	// From WidgetBase
+
+	/**
+	 * Size the Label requires.
+	 *
+	 * @return Size::rows() always 1. Size::cols() equal the
+	 * length of the string to be displayed.
+	 */
 	const Size& size() const;
+
+	Size size_hint() const;
+
+	/**
+	 * Dummy. Does nothing.
+	 *
+	 * Label is not a container Widget, hence it may not notified
+	 * of size changes().
+	 *
+	 * @return always @false
+	 */
+	bool sizechange();
+
 	/**
 	 * Does nothing.
 	 *
@@ -37,7 +70,16 @@ class Label: public Widget {
 	 */
 	void resetsize();
 
+	// From Realizeable
 
+	/**
+	 * Refresh the label.
+	 *
+	 * Adds the Label text to the subwin.
+	 *
+	 * @param immediate not directly used by Label::refresh() but
+	 * passed to Widget::refresh().
+	 */
 	void refresh(bool immediate);
 };
 

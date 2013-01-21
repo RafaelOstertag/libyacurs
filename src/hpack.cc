@@ -16,6 +16,33 @@
 // Functors
 //
 
+/**
+ * Calculate the size hint.
+ *
+ * Calculate the size hint by finding the max rows.
+ */
+class HCalcSizeHint {
+    private:
+	Size __size_hint;
+
+    public:
+	HCalcSizeHint(): __size_hint(Size::zero()) {}
+	HCalcSizeHint(const HCalcSizeHint& _v): __size_hint(_v.__size_hint) {}
+	HCalcSizeHint& operator=(const HCalcSizeHint& _v) {
+	    __size_hint=_v.__size_hint;
+	    return *this;
+	}
+
+	void operator()(const WidgetBase* w) {
+	    assert(w!=NULL);
+	    __size_hint.rowss( w->size_hint().rowss() > __size_hint.rows() ? w->size_hint().rows() : __size_hint.rows() );
+	}
+
+	const Size& hint() const {
+	    return __size_hint;
+	}
+};
+
 class HSetSizeAvail {
     private:
 	const Size& __avail;
@@ -185,6 +212,16 @@ const HPack&
 HPack::operator=(const HPack& _hp) {
     Pack::operator=(_hp);
     return *this;
+}
+
+Size
+HPack::size_hint() const {
+    HCalcSizeHint _size_hint;
+    _size_hint = std::for_each(widget_list.begin(),
+			       widget_list.end(),
+			       _size_hint);
+    assert(_size_hint.hint().cols()==0);
+    return _size_hint.hint();
 }
 
 void

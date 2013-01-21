@@ -16,6 +16,33 @@
 // Functors
 //
 
+/**
+ * Calculate the size hint.
+ *
+ * Calculate the size hint by finding the max cols.
+ */
+class VCalcSizeHint {
+    private:
+	Size __size_hint;
+
+    public:
+	VCalcSizeHint(): __size_hint(Size::zero()) {}
+	VCalcSizeHint(const VCalcSizeHint& _v): __size_hint(_v.__size_hint) {}
+	VCalcSizeHint& operator=(const VCalcSizeHint& _v) {
+	    __size_hint=_v.__size_hint;
+	    return *this;
+	}
+
+	void operator()(const WidgetBase* w) {
+	    assert(w!=NULL);
+	    __size_hint.cols( w->size_hint().cols() > __size_hint.cols() ? w->size_hint().cols() : __size_hint.cols() );
+	}
+
+	const Size& hint() const {
+	    return __size_hint;
+	}
+};
+
 class VSetSizeAvail {
     private:
 	const Size& __avail;
@@ -62,7 +89,7 @@ class VCalcNSetSize {
 
 	void operator()(WidgetBase* _w) {
 	    assert(_w != NULL);
-	    
+
 	    // First, reset the size, so that we can identify dynamically sized Widgets
 	    _w->resetsize();
 
@@ -82,7 +109,7 @@ class VCalcNSetSize {
 	    _w->size_available(_w->size());
 	}
 
-	void finish() { 
+	void finish() {
 	    if (__dyn_widgets.empty() ) {
 		// There are no dynamically sized widgets, there is nothing
 		// left to do
@@ -160,7 +187,7 @@ VPack::recalc_size() {
     VCalcNSetSize calc = std::for_each(widget_list.begin(),
 				       widget_list.end(),
 				       VCalcNSetSize(WidgetBase::size_available()));
-    
+
     // This is imperative, in order to set the size_available on any
     // dynamically sized Widgets.
     calc.finish();
@@ -171,7 +198,7 @@ VPack::recalc_size() {
 //
 VPack::VPack(): Pack() {
 }
-	      
+
 
 VPack::VPack(const VPack& _vp): Pack(_vp) {
 }
@@ -182,6 +209,17 @@ const VPack&
 VPack::operator=(const VPack& _vp) {
     Pack::operator=(_vp);
     return *this;
+}
+
+
+Size
+VPack::size_hint() const {
+    VCalcSizeHint _size_hint;
+    _size_hint = std::for_each(widget_list.begin(),
+			       widget_list.end(),
+			       _size_hint);
+    assert(_size_hint.hint().rows()==0);
+    return _size_hint.hint();
 }
 
 void

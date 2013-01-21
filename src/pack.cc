@@ -52,6 +52,9 @@ Pack::unrealize() {
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  std::mem_fun(&WidgetBase::unrealize));
+    
+    // Required since pack is a dynamically sized Widget.
+    resetsize();
 
     realized(false);
 }
@@ -81,13 +84,12 @@ void
 Pack::add_front(WidgetBase* _w) {
     assert(_w != NULL);
     assert(!_w->realized());
+
     widget_list.push_front(_w);
 
     _w->parent(this);
 
     _w->curseswindow(WidgetBase::curseswindow());
-
-    _w->window(window());
 
     // We have to recalc the size because of dynamically sized widgets
     recalc_size();
@@ -104,8 +106,6 @@ Pack::add_back(WidgetBase* _w) {
 
     _w->curseswindow(WidgetBase::curseswindow());
 
-    _w->window(window());
-
     // We have to recalc the size because of dynamically sized widgets
     recalc_size();
 }
@@ -116,7 +116,6 @@ Pack::remove(WidgetBase* _w) {
     assert(_w != NULL);
 
     widget_list.remove(_w);
-    _w->window(NULL);
 
     recalc_size();
 }
@@ -125,8 +124,8 @@ void
 Pack::curseswindow(WINDOW* _p) {
     WidgetBase::curseswindow(_p);
 
-    // We have to make sure that the associated widgets have the same curses
-    // window as we do.
+    // We have to make sure that the associated widgets have the same
+    // curses window as we do.
     set_all_curseswindow();
 }
 
@@ -135,8 +134,9 @@ Pack::size_available(const Size& _s) {
     WidgetBase::size_available(_s);
     __size = _s;
 
-    // Recalc size. recalc_size() called in add_*() might not took effect,
-    // since add_*() can be called without any size_available() set.
+    // Recalc size. recalc_size() called in add_*() might not have
+    // took effect, since add_*() can be called without any
+    // size_available() set.
     recalc_size();
 }
 
@@ -147,13 +147,24 @@ Pack::size() const {
 
 void
 Pack::resetsize() {
-    __size=Size(0,0);
+    __size=Size::zero();
 }
 
 bool
 Pack::sizechange() {
-    abort();
-    return false;
+    if (parent()!=NULL)
+	return parent()->sizechange();
+
+    if (!realized()) return true;
+
+    // We're realized
+    resize(Area(position(),
+		WidgetBase::size_available()) );
+
+    // Immediate refresh.
+    refresh(true);
+
+    return true;
 }
 
 void
@@ -172,5 +183,8 @@ Pack::resize(const Area& _a) {
     size_available(_a);
 
     unrealize();
+
+    recalc_size();
+
     realize();
 }

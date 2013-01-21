@@ -3,6 +3,11 @@
 #include "coordinates.h"
 
 //
+// Static
+//
+Coordinates Coordinates::__zero=Coordinates(0,0);
+
+//
 // Private
 //
 
@@ -42,21 +47,21 @@ Coordinates::y(int _y) {
     __y = _y;
 }
 
-const Coordinates&
+Coordinates&
 Coordinates::operator=(const Coordinates& rhs) {
     __x = rhs.__x;
     __y = rhs.__y;
     return *this;
 }
 
-const Coordinates&
+Coordinates&
 Coordinates::operator+=(const Coordinates& rhs) {
     __x += rhs.__x;
     __y += rhs.__y;
     return *this;
 }
 
-const Coordinates&
+Coordinates&
 Coordinates::operator-=(const Coordinates& rhs) {
     __x -= rhs.__x;
     __y -= rhs.__y;
@@ -83,4 +88,9 @@ Coordinates::operator==(const Coordinates& rhs) const {
 bool
 Coordinates::operator!=(const Coordinates& rhs) const {
     return !operator==(rhs);
+}
+
+const Coordinates&
+Coordinates::zero() {
+    return __zero;
 }

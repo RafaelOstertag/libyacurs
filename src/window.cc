@@ -73,9 +73,8 @@ Window::widget(WidgetBase* _w) {
     // This widget does not have another widget as parent.
     _w->parent(NULL);
 
-    _w->window(this);
-
     _w->position(widget_area());
+
     _w->size_available(widget_area());
 }
 

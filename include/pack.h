@@ -19,15 +19,15 @@
 /**
  * A container widget for stacking widgets horizontally or vertically.
  *
- * A pack is a list of widgets, that are either horizontally, or vertically
- * stacked and displayed.
+ * A pack is a list of widgets, that are either horizontally, or
+ * vertically stacked and displayed.
  *
  * The pack will calculate the size needed for displaying the widgets
- * horizontally, vertically. This should happen on realize() which is required
- * to be implemented in derived classes.
+ * horizontally, vertically. This should happen on realize() which is
+ * required to be implemented in derived classes.
  *
- * @warning If a Pack is destroyed before its associated Widgets, the Widgets will have
- * a __parent pointer that is invalid.
+ * @warning If a Pack is destroyed before its associated Widgets, the
+ * Widgets will have a __parent pointer that is invalid.
  *
  *
  * @see VPack
@@ -130,6 +130,16 @@ class Pack: public WidgetBase {
 
 	void resetsize();
 
+	/**
+	 * Handle a size change in an associated Widget.
+	 *
+	 * If the pack has a parent, the notification is passed
+	 * further up. Else it will handle the notification by calling
+	 * Pack::resize().
+	 *
+	 * @return @c true if the notification can be handled, @c
+	 * false otherwise.
+	 */
 	bool sizechange();
 
 	/**

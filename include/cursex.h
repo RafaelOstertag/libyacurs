@@ -20,17 +20,13 @@
 #endif // HAVE_STRING
 
 /**
- * @defgroup exceptions Exceptions.
- *
- * @{
- */
-
-/**
- * Base class used for all exception in yacurs.
- *
+ * Base class from which all libyacurs exceptions are derived.
  */
 class BaseCurEx: public std::exception {
     private:
+	/**
+	 * The message of the exception.
+	 */
 	std::string msg;
 
     public:
@@ -176,9 +172,5 @@ class ClearFailed: public BaseCurEx {
     public:
 	ClearFailed();
 };
-
-/**
- * @}
- */
 
 #endif // CUREX_H

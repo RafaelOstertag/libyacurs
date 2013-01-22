@@ -121,6 +121,8 @@ class Pack: public WidgetBase {
 
 	const Size& size() const;
 
+	Size size_hint() const;
+
 	void resetsize();
 
 	/**

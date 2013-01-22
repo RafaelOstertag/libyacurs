@@ -28,8 +28,6 @@ class HPack: public Pack {
 	~HPack();
 	const HPack& operator=(const HPack& _hp);
 
-	Size size_hint() const;
-
 	void realize();
 };
 

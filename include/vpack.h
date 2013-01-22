@@ -28,8 +28,6 @@ class VPack: public Pack {
 	~VPack();
 	const VPack& operator=(const VPack& _vp);
 
-	Size size_hint() const;
-
 	void realize();
 };
 

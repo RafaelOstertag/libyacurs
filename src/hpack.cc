@@ -307,18 +307,6 @@ HPack::operator=(const HPack& _hp) {
     return *this;
 }
 
-Size
-HPack::size_hint() const {
-    // remember that Packs may return either component >0 when
-    // hinting, see also comment on HGetMaxSizeHint
-    HGetMaxSizeHint hhint;
-
-    hhint = std::for_each(widget_list.begin(),
-			  widget_list.end(),
-			  hhint);
-    return hhint.hint();
-}
-
 void
 HPack::realize() {
     if (realized()) throw AlreadyRealized();

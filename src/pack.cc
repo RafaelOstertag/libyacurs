@@ -16,6 +16,39 @@
 //
 // Functors
 //
+/**
+ * Calculate the size hint.
+ *
+ * Functor for calculating the size hint by finding the max columns
+ * and rows size.
+ *
+ * Packs may return rows()>0 or cols()>0 as hint, as opposed to other
+ * widget that only return one of the components >0.
+ */
+class GetMaxSizeHint {
+    private:
+	Size __size_max;
+
+    public:
+	GetMaxSizeHint(): __size_max(Size::zero()) {}
+	GetMaxSizeHint(const GetMaxSizeHint& _v):
+	    __size_max(_v.__size_max) {}
+	GetMaxSizeHint& operator=(const GetMaxSizeHint& _v) {
+	    __size_max=_v.__size_max;
+	    return *this;
+	}
+
+	void operator()(const WidgetBase* w) {
+	    assert(w!=NULL);
+	    __size_max.cols(std::max(w->size_hint().cols(),
+				      __size_max.cols()));
+	    __size_max.rows(w->size_hint().rows()+__size_max.rows());
+	}
+
+	const Size& hint() const {
+	    return __size_max;
+	}
+};
 
 //
 // Private
@@ -128,6 +161,18 @@ Pack::size_available(const Size& _s) {
 const Size&
 Pack::size() const {
     return __size;
+}
+
+Size
+Pack::size_hint() const {
+    // remember that Packs may return either component >0 when
+    // hinting, see also comment on VGetMaxSizeHint
+    GetMaxSizeHint shint;
+
+    shint = std::for_each(widget_list.begin(),
+			 widget_list.end(),
+			 shint); 
+    return shint.hint();
 }
 
 void

@@ -19,27 +19,34 @@
 /**
  * Calculate the size hint.
  *
- * Functor for calculating the size hint by finding the max rows.
+ * Functor for calculating the size hint by finding the max columns
+ * and row size.
+ *
+ * Packs may return rows()>0 or cols()>0 as hint, as opposed to other
+ * widget that only return one of the components >0.
  */
-class HCalcSizeHint {
+class HGetMaxSizeHint {
     private:
-	Size __size_hint;
+	Size __size_max;
 
     public:
-	HCalcSizeHint(): __size_hint(Size::zero()) {}
-	HCalcSizeHint(const HCalcSizeHint& _v): __size_hint(_v.__size_hint) {}
-	HCalcSizeHint& operator=(const HCalcSizeHint& _v) {
-	    __size_hint=_v.__size_hint;
+	HGetMaxSizeHint(): __size_max(Size::zero()) {}
+	HGetMaxSizeHint(const HGetMaxSizeHint& _v):
+	    __size_max(_v.__size_max) {}
+	HGetMaxSizeHint& operator=(const HGetMaxSizeHint& _v) {
+	    __size_max=_v.__size_max;
 	    return *this;
 	}
 
 	void operator()(const WidgetBase* w) {
 	    assert(w!=NULL);
-	    __size_hint.rows( w->size_hint().cols() > __size_hint.cols() ? w->size_hint().cols() : __size_hint.cols() );
+	    __size_max.cols(w->size_hint().cols()+__size_max.cols());
+	    __size_max.rows(std::max(w->size_hint().rows(),
+				     __size_max.rows()));
 	}
 
 	const Size& hint() const {
-	    return __size_hint;
+	    return __size_max;
 	}
 };
 
@@ -57,6 +64,8 @@ class HSetSizeAvail {
 	HSetSizeAvail(const HSetSizeAvail& _s): __avail(_s.__avail) {}
 	void operator()(WidgetBase* w) {
 	    assert(w!=NULL);
+	    assert(__avail.rows()>0);
+	    assert(__avail.cols()>0);
 	    w->size_available(__avail);
 	}
 };
@@ -74,8 +83,10 @@ class HSetSizeHinted {
     public:
 	HSetSizeHinted(const Size& _cr): __const_rows(_cr),
 					 __size_used() {}
-	HSetSizeHinted(const HSetSizeHinted& _h): __const_rows(_h.__const_rows),
-						  __size_used(_h.__size_used) {}
+
+	HSetSizeHinted(const HSetSizeHinted& _h):
+	    __const_rows(_h.__const_rows),
+	    __size_used(_h.__size_used) {}
 	HSetSizeHinted& operator=(const HSetSizeHinted& _h) {
 	    __const_rows=_h.__const_rows;
 	    __size_used=_h.__size_used;
@@ -85,6 +96,7 @@ class HSetSizeHinted {
 	void operator()(WidgetBase* _w) {
 	    assert(_w!=NULL);
 	    assert(_w->size_hint().cols()>0);
+	    assert(__const_rows.rows()>0);
 
 	    // _sa is supposed to hold the constant row value and the
 	    // hinted cols value as retrieved from calling size_hint()
@@ -106,13 +118,11 @@ class HSetSizeHinted {
 };
 
 /**
- * Calculates the size required by associated Widgets.
+ * Calculates and sets the size required by associated Widgets.
  *
- * It also sets the size_available() of the Widgets and handles dynamically
- * sized Widgets.
- *
- * This class is passed in a std::for_each(). Once for_each() is done, finish()
- * must be called, since that will set size on all dynamically sized Widgets.
+ * This class is passed in a std::for_each(). Once for_each() is done,
+ * finish() must be called, since that will set size on all
+ * dynamically sized Widgets.
  */
 class HCalcNSetSize {
     private:
@@ -127,10 +137,11 @@ class HCalcNSetSize {
 					__dyn_widgets(),
 					__hinted_widgets() {}
 
-	HCalcNSetSize(const HCalcNSetSize& _c): __size(_c.__size),
-						__size_available(_c.__size_available),
-						__dyn_widgets(_c.__dyn_widgets),
-						__hinted_widgets() {}
+	HCalcNSetSize(const HCalcNSetSize& _c): 
+	    __size(_c.__size),
+	    __size_available(_c.__size_available),
+	    __dyn_widgets(_c.__dyn_widgets),
+	    __hinted_widgets(_c.__hinted_widgets) {}
 
 	HCalcNSetSize& operator=(const HCalcNSetSize& _c) {
 	    __size = _c.__size;
@@ -140,16 +151,16 @@ class HCalcNSetSize {
 	    return *this;
 	}
 
-
 	void operator()(WidgetBase* _w) {
 	    assert(_w != NULL);
 
-	    // First, reset the size, so that we can identify dynamically sized Widgets
+	    // First, reset the size, so that we can identify
+	    // dynamically sized Widgets
 	    _w->resetsize();
 
 	    if ( _w->size() == Size::zero() ) {
-		// That's a dynamically sized widget, thus add it to the list
-		// for later processing
+		// That's a dynamically sized widget, thus add it to
+		// the list for later processing
 
 		// if it is capable of giving a hint, add it to the
 		// __hinted_widgets list which is treated separately
@@ -163,46 +174,54 @@ class HCalcNSetSize {
 	    }
 
 
-	    __size.rows(__size.rows() < _w->size().rows() ?
-			_w->size().rows() : __size.rows());
+	    __size.rows(std::max(__size.rows(),_w->size().rows()) );
 	    __size.cols(__size.cols()+_w->size().cols());
 
-	    // Also set the size availabe for the widget. Dynamically sized
-	    // widgets are handled when CalcNSetSize::finish() is called.
+	    // Also set the size availabe for the widget. Dynamically
+	    // sized widgets are handled when CalcNSetSize::finish()
+	    // is called.
 	    _w->size_available(_w->size());
 	}
 
 	void finish() { 
 	    if (__dyn_widgets.empty() && __hinted_widgets.empty() ) {
-		// There are no dynamically sized widgets, there is nothing
-		// left to do
+		// There are no dynamically sized widgets, there is
+		// nothing left to do
 		return;
 	    }
 
-	    // In order to process hinted widgets, get the rows. We only consider Widgets hinting on cols
-	    Size rows_unhinted(__size.rows()>0 ? __size.rows() : __size_available.rows());
-	    assert(rows_unhinted.cols()>0);
-
-	    // There are dynamically sized widgets. So let's find out the how
-	    // much space is available for them
-	    Size remaining_size(__size_available-__size);
+	    // In order to process hinted widgets, get the rows. We
+	    // only consider Widgets hinting on cols
+	    Size rows_unhinted(__size.rows()>0 ?
+			       __size.rows() :
+			       __size_available.rows(),0);
+	    assert(rows_unhinted.rows()>0);
 
 	    HSetSizeHinted hinted_size(std::for_each(__hinted_widgets.begin(),
 						     __hinted_widgets.end(),
 						     HSetSizeHinted(rows_unhinted)) );
 
-	    remaining_size.cols(remaining_size.cols()-hinted_size.size_used().cols());
+	    // Bail out if there are no unhinted dynamic widgets
+	    if (__dyn_widgets.empty()) return;
+
+	    // There are dynamically sized widgets. So let's find out
+	    // the how much space is available for them
+	    Size remaining_size(__size_available-__size);
+
+	    remaining_size-=hinted_size.size_used();
 	    
 
-	    // We ignore remaining_size.rows() because we horizontally stack
-	    // widgets and the dynamically sized widgets get the amount of
-	    // __size.rows()
+	    // We ignore remaining_size.rows() because we horizontally
+	    // stack widgets and the dynamically sized widgets get the
+	    // amount of __size.rows()
 	    assert(remaining_size.cols()>0);
 
-	    // This gives the size for each dynamically sized Widget. The
-	    // remaining size will be divided equally among all dynamically
-	    // sized widgets.
-	    Size per_dyn_widget(__size.rows()>0 ? __size.rows() : __size_available.rows(),
+	    // This gives the size for each dynamically sized
+	    // Widget. The remaining size will be divided equally
+	    // among all dynamically sized widgets.
+	    Size per_dyn_widget(__size.rows()>0 ?
+				__size.rows() :
+				__size_available.rows(),
 				remaining_size.cols()/__dyn_widgets.size());
 				
 
@@ -225,7 +244,7 @@ class HSetPosWidget {
 	    // Set the size available
 	    _w->size_available(_w->size());
 
-	    __pos.x(__pos.x() + _w->size().cols() + 1);
+	    __pos.x(__pos.x() + _w->size().cols());
 	}
 };
 
@@ -240,8 +259,8 @@ class HSetPosWidget {
 void
 HPack::recalc_size() {
     // It is perfectly legal to have a size_available() of zero when
-    // recalc_size() is called. For instance, it happens in such a calling
-    // sequence
+    // recalc_size() is called. For instance, it happens in such a
+    // calling sequence
     //
     //  [...]
     //
@@ -260,9 +279,11 @@ HPack::recalc_size() {
     //
     if (WidgetBase::size_available() == Size::zero()) return;
 
-    HCalcNSetSize calc = std::for_each(widget_list.begin(),
-				       widget_list.end(),
-				       HCalcNSetSize(WidgetBase::size_available()));
+    
+    HCalcNSetSize calc(WidgetBase::size_available());
+    calc = std::for_each(widget_list.begin(),
+			 widget_list.end(),
+			 calc);
     
     // This is imperative, in order to set the size_available on any
     // dynamically sized Widgets.
@@ -288,21 +309,25 @@ HPack::operator=(const HPack& _hp) {
 
 Size
 HPack::size_hint() const {
-    HCalcSizeHint _size_hint(std::for_each(widget_list.begin(),
-					   widget_list.end(),
-					   HCalcSizeHint()) );
-    assert(_size_hint.hint().cols()==0);
-    return _size_hint.hint();
+    // remember that Packs may return either component >0 when
+    // hinting, see also comment on HGetMaxSizeHint
+    HGetMaxSizeHint hhint;
+
+    hhint = std::for_each(widget_list.begin(),
+			  widget_list.end(),
+			  hhint);
+    return hhint.hint();
 }
 
 void
 HPack::realize() {
     if (realized()) throw AlreadyRealized();
 
-    assert(WidgetBase::size_available()!=Size::zero());
+    assert(WidgetBase::size_available().rows()>0);
+    assert(WidgetBase::size_available().cols()>0);
 
-    // Set position for each associated widget. That's the only reason we
-    // implement realize() in a derived class.
+    // Set position for each associated widget. That's the only reason
+    // we implement realize() in a derived class.
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  HSetPosWidget(position()));

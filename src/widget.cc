@@ -21,10 +21,23 @@ Widget::unrealize() {
     assert(__subwin!=NULL);
     assert(*__subwin!=NULL);
 
+    // We have to clear the window since the new size might be
+    // smaller, and thus leaving artifacts on the screen if we omit to
+    // clear the entire subwin()
+    if (wclear(*__subwin) == ERR)
+	throw ClearFailed();
+
     if (delwin(*__subwin) == ERR)
 	throw DelWindowFailed();
-
     *__subwin = NULL;
+
+    // This is also needed to remove artifacts on the screen
+    if (touchwin(curseswindow()) == ERR)
+	throw TouchFailed();
+    if (wrefresh(curseswindow()) == ERR)
+	throw RefreshFailed();
+
+
 }
 
 WINDOW*

@@ -3,13 +3,12 @@
 #ifndef MARGIN_H
 #define MARGIN_H
 
+/**
+ * Margin class
+ */
 class Margin {
     private:
 	int __top, __bottom, __left, __right;
-
-    protected:
-	int max(int a, int b) const;
-	int min(int a, int b) const;
 
     public:
 	Margin(int _top, int _left, int _bottom, int _right);

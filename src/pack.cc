@@ -17,22 +17,6 @@
 // Functors
 //
 
-/**
- * Functor for setting size on associated widgets.
- *
- * This class simply sets the size_available() to the size() reported by the
- * widget. At a later stage, this class may become obsolete due to the
- * requirement of having dynamically sized widgets, that really rely upon the
- * size_available() provided by the parent Widget.
- */
-class SetSimpleSize {
-    public:
-	void operator()(WidgetBase* _w) {
-	    _w->size_available(_w->size());
-	}
-};
-
-
 //
 // Private
 //
@@ -132,7 +116,8 @@ Pack::curseswindow(WINDOW* _p) {
 void
 Pack::size_available(const Size& _s) {
     WidgetBase::size_available(_s);
-    __size = _s;
+
+    __size=_s;
 
     // Recalc size. recalc_size() called in add_*() might not have
     // took effect, since add_*() can be called without any

@@ -1,5 +1,7 @@
 // $Id$
 
+#include "algorithm"
+
 #include "margin.h"
 
 //
@@ -9,15 +11,6 @@
 //
 // Protected
 //
-int
-Margin::max(int a, int b) const {
-    return a>b ? a : b;
-}
-
-int
-Margin::min(int a, int b) const {
-    return a<b ? a : b;
-}
 
 //
 // Public
@@ -93,10 +86,10 @@ Margin
 Margin::operator+(const Margin& m) const {
     Margin tmp = *this;
 
-    tmp.__top = max(__top, m.__top);
-    tmp.__bottom = max(__bottom, m.__bottom);
-    tmp.__left = max(__left, m.__left);
-    tmp.__right = max(__right, m.__right);
+    tmp.__top = std::max(__top, m.__top);
+    tmp.__bottom = std::max(__bottom, m.__bottom);
+    tmp.__left = std::max(__left, m.__left);
+    tmp.__right = std::max(__right, m.__right);
 
     return tmp;
 }
@@ -105,10 +98,10 @@ Margin
 Margin::operator-(const Margin& m) const {
     Margin tmp = *this;
 
-    tmp.__top = min(__top, m.__top);
-    tmp.__bottom = min(__bottom, m.__bottom);
-    tmp.__left = min(__left, m.__left);
-    tmp.__right = min(__right, m.__right);
+    tmp.__top = std::min(__top, m.__top);
+    tmp.__bottom = std::min(__bottom, m.__bottom);
+    tmp.__left = std::min(__left, m.__left);
+    tmp.__right = std::min(__right, m.__right);
 
     return tmp;
 }

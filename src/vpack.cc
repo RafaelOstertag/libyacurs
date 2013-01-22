@@ -19,27 +19,34 @@
 /**
  * Calculate the size hint.
  *
- * Functor for calculating the size hint by finding the max cols.
+ * Functor for calculating the size hint by finding the max columns
+ * and rows size.
+ *
+ * Packs may return rows()>0 or cols()>0 as hint, as opposed to other
+ * widget that only return one of the components >0.
  */
-class VCalcSizeHint {
+class VGetMaxSizeHint {
     private:
-	Size __size_hint;
+	Size __size_max;
 
     public:
-	VCalcSizeHint(): __size_hint(Size::zero()) {}
-	VCalcSizeHint(const VCalcSizeHint& _v): __size_hint(_v.__size_hint) {}
-	VCalcSizeHint& operator=(const VCalcSizeHint& _v) {
-	    __size_hint=_v.__size_hint;
+	VGetMaxSizeHint(): __size_max(Size::zero()) {}
+	VGetMaxSizeHint(const VGetMaxSizeHint& _v):
+	    __size_max(_v.__size_max) {}
+	VGetMaxSizeHint& operator=(const VGetMaxSizeHint& _v) {
+	    __size_max=_v.__size_max;
 	    return *this;
 	}
 
 	void operator()(const WidgetBase* w) {
 	    assert(w!=NULL);
-	    __size_hint.cols( w->size_hint().rows() > __size_hint.rows() ? w->size_hint().rows() : __size_hint.rows() );
+	    __size_max.cols(std::max(w->size_hint().cols(),
+				      __size_max.cols()));
+	    __size_max.rows(w->size_hint().rows()+__size_max.rows());
 	}
 
 	const Size& hint() const {
-	    return __size_hint;
+	    return __size_max;
 	}
 };
 
@@ -57,6 +64,8 @@ class VSetSizeAvail {
 	VSetSizeAvail(const VSetSizeAvail& _s): __avail(_s.__avail) {}
 	void operator()(WidgetBase* w) {
 	    assert(w!=NULL);
+	    assert(__avail.rows()>0);
+	    assert(__avail.cols()>0);
 	    w->size_available(__avail);
 	}
 };
@@ -74,8 +83,9 @@ class VSetSizeHinted {
     public:
 	VSetSizeHinted(const Size& _cc): __const_cols(_cc),
 					 __size_used() {}
-	VSetSizeHinted(const VSetSizeHinted& _h): __const_cols(_h.__const_cols),
-						  __size_used(_h.__size_used) {}
+	VSetSizeHinted(const VSetSizeHinted& _h):
+	    __const_cols(_h.__const_cols),
+	    __size_used(_h.__size_used) {}
 	VSetSizeHinted& operator=(const VSetSizeHinted& _h) {
 	    __const_cols=_h.__const_cols;
 	    __size_used=_h.__size_used;
@@ -85,6 +95,7 @@ class VSetSizeHinted {
 	void operator()(WidgetBase* _w) {
 	    assert(_w!=NULL);
 	    assert(_w->size_hint().rows()>0);
+	    assert(__const_cols.cols()>0);
 
 	    // _sa is supposed to hold the constant row value and the
 	    // hinted cols value as retrieved from calling size_hint()
@@ -106,13 +117,11 @@ class VSetSizeHinted {
 };
 
 /**
- * Calculates the size required by associated Widgets.
+ * Calculates and sets the available size for associated widgets.
  *
- * It also sets the size_available() of the Widgets and handles dynamically
- * sized Widgets.
- *
- * This class is passed in a std::for_each(). Once for_each() is done, finish()
- * must be called, since that will set size on all dynamically sized Widgets.
+ * This class is passed in a std::for_each(). Once for_each() is done,
+ * finish() must be called, since that will set size on all
+ * dynamically sized Widgets.
  */
 class VCalcNSetSize {
     private:
@@ -127,10 +136,11 @@ class VCalcNSetSize {
 					__dyn_widgets(),
 					__hinted_widgets() {}
 
-	VCalcNSetSize(const VCalcNSetSize& _c): __size(_c.__size),
-						__size_available(_c.__size_available),
-						__dyn_widgets(_c.__dyn_widgets),
-						__hinted_widgets(_c.__hinted_widgets) {}
+	VCalcNSetSize(const VCalcNSetSize& _c):
+	    __size(_c.__size),
+	    __size_available(_c.__size_available),
+	    __dyn_widgets(_c.__dyn_widgets),
+	    __hinted_widgets(_c.__hinted_widgets) {}
 
 	VCalcNSetSize& operator=(const VCalcNSetSize& _c) {
 	    __size = _c.__size;
@@ -143,12 +153,13 @@ class VCalcNSetSize {
 	void operator()(WidgetBase* _w) {
 	    assert(_w != NULL);
 
-	    // First, reset the size, so that we can identify dynamically sized Widgets
+	    // First, reset the size, so that we can identify
+	    // dynamically sized Widgets
 	    _w->resetsize();
 
 	    if ( _w->size() == Size::zero() ) {
-		// That's a dynamically sized widget, thus add it to the list
-		// for later processing
+		// That's a dynamically sized widget, thus add it to
+		// the list for later processing
 
 		// if it is capable of giving a hint, add it to the
 		// __hinted_widgets list which is treated separately
@@ -162,46 +173,54 @@ class VCalcNSetSize {
 	    }
 
 	    __size.rows(__size.rows()+_w->size().rows());
-	    __size.cols(__size.cols() < _w->size().cols() ?
-			_w->size().cols() : __size.cols());
+	    __size.cols(std::max(__size.cols(),_w->size().cols()) );
 
-	    // Also set the size availabe for the widget. Dynamically sized
-	    // widgets are handled when CalcNSetSize::finish() is called.
+	    // Also set the size availabe for the widget. Dynamically
+	    // sized widgets are handled when CalcNSetSize::finish()
+	    // is called.
 	    _w->size_available(_w->size());
 	}
 
 	void finish() {
 	    if (__dyn_widgets.empty() && __hinted_widgets.empty() ) {
-		// There are no dynamically sized widgets, there is nothing
-		// left to do
+		// There are no dynamically sized widgets, there is
+		// nothing left to do
 		return;
 	    }
 
 
-	    // In order to process hinte widgets, get the cols. We only consider Widgets hinting on rows
-	    Size cols_unhinted(__size.cols()>0 ? __size.cols() : __size_available.cols());
+	    // In order to process hinted widgets, get the cols. We
+	    // only consider Widgets hinting on rows
+	    Size cols_unhinted(0, __size.cols()>0 ?
+			       __size.cols() :
+			       __size_available.cols());
 	    assert(cols_unhinted.cols()>0);
-
-	    // There are dynamically sized widgets. So let's find out the how
-	    // much space is available for them
-	    Size remaining_size(__size_available-__size);
 
 	    VSetSizeHinted hinted_size(std::for_each(__hinted_widgets.begin(),
 						     __hinted_widgets.end(),
 						     VSetSizeHinted(cols_unhinted)) );
 
-	    remaining_size.rows(remaining_size.rows()-hinted_size.size_used().rows());
+	    // Bail out if there are no unhinted dynamic widgets
+	    if (__dyn_widgets.empty()) return;
 
-	    // We ignore remaining_size.cols() because we vertically stack
-	    // widgets and the dynamically sized widgets get the amount of
-	    // __size.cols()
+	    // There are dynamically sized widgets. So let's find out
+	    // the how much space is available for them
+	    Size remaining_size(__size_available-__size);
+
+	    remaining_size-=hinted_size.size_used();
+
+	    // We ignore remaining_size.cols() because we vertically
+	    // stack widgets and the dynamically sized widgets get the
+	    // amount of __size.cols()
 	    assert(remaining_size.rows()>0);
 
-	    // This gives the size for each dynamically sized Widget. The
-	    // remaining size will be divided equally among all dynamically
-	    // sized widgets.
+	    // This gives the size for each dynamically sized
+	    // Widget. The remaining size will be divided equally
+	    // among all dynamically sized widgets.
 	    Size per_dyn_widget(remaining_size.rows()/__dyn_widgets.size(),
-				__size.cols()>0 ? __size.cols() : __size_available.cols());
+				__size.cols()>0 ?
+				__size.cols() :
+				__size_available.cols());
 
 	    // Set the size for each widget.
 	    std::for_each(__dyn_widgets.begin(),
@@ -236,8 +255,8 @@ class VSetPosWidget {
 void
 VPack::recalc_size() {
     // It is perfectly legal to have a size_available() of zero when
-    // recalc_size() is called. For instance, it happens in such a calling
-    // sequence
+    // recalc_size() is called. For instance, it happens in such a
+    // calling sequence
     //
     //  [...]
     //
@@ -256,9 +275,10 @@ VPack::recalc_size() {
     //
     if (WidgetBase::size_available() == Size::zero()) return;
 
-    VCalcNSetSize calc = std::for_each(widget_list.begin(),
-				       widget_list.end(),
-				       VCalcNSetSize(WidgetBase::size_available()));
+    VCalcNSetSize calc(WidgetBase::size_available());
+    calc = std::for_each(widget_list.begin(),
+			 widget_list.end(),
+			 calc);
 
     // This is imperative, in order to set the size_available on any
     // dynamically sized Widgets.
@@ -286,21 +306,25 @@ VPack::operator=(const VPack& _vp) {
 
 Size
 VPack::size_hint() const {
-    VCalcSizeHint _size_hint(std::for_each(widget_list.begin(),
-					   widget_list.end(),
-					   VCalcSizeHint()) );
-    assert(_size_hint.hint().rows()==0);
-    return _size_hint.hint();
+    // remember that Packs may return either component >0 when
+    // hinting, see also comment on VGetMaxSizeHint
+    VGetMaxSizeHint vhint;
+
+    vhint = std::for_each(widget_list.begin(),
+			 widget_list.end(),
+			 vhint); 
+    return vhint.hint();
 }
 
 void
 VPack::realize() {
     if (realized()) throw AlreadyRealized();
 
-    assert(WidgetBase::size_available()!=Size::zero());
+    assert(WidgetBase::size_available().rows()>0);
+    assert(WidgetBase::size_available().cols()>0);
 
-    // Set position for each associated widget. That's the only reason we
-    // implement realize() in a derived class.
+    // Set position for each associated widget. That's the only reason
+    // we implement realize() in a derived class.
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  VSetPosWidget(position()));

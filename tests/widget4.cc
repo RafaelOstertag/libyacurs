@@ -31,6 +31,11 @@ int alrm(Event& _e) {
 	break;
 
     case 2:
+	label1->label("This should resize");
+	alarm(1);
+	break;
+
+    case 3:
 	label3->label("Huge Big Label 3");
 	alarm(1);
 	break;

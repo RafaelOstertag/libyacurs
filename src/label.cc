@@ -12,13 +12,13 @@
 //
 // Protected
 //
-
+    
 //
 // Public
 //
 Label::Label(const std::string& _l):
     Widget(), __label(_l),
-    __size(Size(1, __label.length()+1)) {
+    __size(Size(1, _l.length()+1)) {
 }
 
 Label::Label(const Label& _l):
@@ -55,21 +55,8 @@ Label::label(const std::string& _l) {
 	if (realized()) refresh(true);
 	return;
     }
-
-    //
-    // The size has changed
-
-    if (realized()) {
-	// We have to clear the window since the new size might be
-	// smaller, and thus leaving artifacts on the screen if we
-	// omit to clear the entire subwin()
-	if (wclear(subwin()) == ERR)
-	    throw ClearFailed();
-	if (wrefresh(subwin()) == ERR)
-	    throw RefreshFailed();
-    }
-
-    // notify parent of size change
+    
+    // The size has changed notify parent of size change
     parent()->sizechange(); 
 }
 
@@ -97,8 +84,8 @@ Label::sizechange() {
 
 void
 Label::resetsize() {
-    // Intentionally empty, since resetsize() is intended for dynamically sized
-    // Widgets.
+    // Intentionally empty, since resetsize() is intended for
+    // dynamically sized Widgets.
 }
 
 void

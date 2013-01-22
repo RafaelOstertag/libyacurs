@@ -57,17 +57,8 @@ class Pack: public WidgetBase {
 	 * Recalculates the size requirements of all widgets in the
 	 * pack.
 	 *
-	 * Needed to recalculate the size when removing widgets from
-	 * the pack.
-	 *
-	 * @internal Simply subtracting the size of the widget to be removed
-	 * from __size, might not always do the trick, e.g. removing a widget
-	 * with size requirement of 4x4 from a pack consisting of only of 2x2
-	 * will leave 2 rows/cols (depending on vertical or horizontal packing)
-	 * too many in __size. So we have to take all remaining widgets into
-	 * account as well.
-	 *
-	 * @internal Pack::remove() uses this function.
+	 * Needed to recalculate the size when adding or removing
+	 * widgets from the pack.
 	 */
 	virtual void recalc_size() = 0;
 
@@ -89,6 +80,7 @@ class Pack: public WidgetBase {
 	 * of the pack.
 	 */
 	void add_front(WidgetBase* _w);
+
 	/**
 	 * Add a widget to the Pack. The widget will be added after
 	 * all other widget.
@@ -98,6 +90,7 @@ class Pack: public WidgetBase {
 	 * of the pack.
 	 */
 	void add_back(WidgetBase* _w);
+
 	/**
 	 * Remove a previously added widget.
 	 *
@@ -148,6 +141,7 @@ class Pack: public WidgetBase {
 	 * @param immediate @see Realizeable
 	 */
 	void refresh(bool immediate);
+
 	/**
 	 * Resize the pack.
 	 *

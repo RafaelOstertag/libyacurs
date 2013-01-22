@@ -69,10 +69,15 @@ class WidgetBase: public Realizeable {
 	/**
 	 * Holds the Size available to the widget.
 	 *
-	 * Holds the Size available to the widget starting from __position.
+	 * Holds the Size available to the widget starting from
+	 * __position.
 	 *
-	 * This is mostly used for container widgets such as Pack or widgets
-	 * dynamically adjust their size.
+	 * This is mostly used for container widgets such as Pack or
+	 * Widgets dynamically adjust their size.
+	 *
+	 * This Size is also imperative for the Widget. If the size()
+	 * of a Widget is component wise greater than
+	 * __size_available, the behavior is undefined.
 	 */
 	Size __size_available;
 

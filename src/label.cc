@@ -61,7 +61,8 @@ Label::label(const std::string& _l) {
 
     if (realized()) {
 	// We have to clear the window since the new size might be
-	// smaller, and thus leaving artifacts on the screen.
+	// smaller, and thus leaving artifacts on the screen if we
+	// omit to clear the entire subwin()
 	if (wclear(subwin()) == ERR)
 	    throw ClearFailed();
 	if (wrefresh(subwin()) == ERR)

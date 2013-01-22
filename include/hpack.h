@@ -14,8 +14,9 @@
 /**
  * Packs Widgets horizontally.
  *
- * The main purpose of this class is the implement the size calculation of and
- * for the associated Widgets and to implement realize().
+ * The main purpose of this class is the implement the size
+ * calculation of and for the associated Widgets and to implement
+ * realize().
  */
 class HPack: public Pack {
     protected:

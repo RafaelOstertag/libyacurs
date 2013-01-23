@@ -21,14 +21,21 @@
 // Private
 //
 
-WidgetBase::WidgetBase(): Realizeable(), __curseswindow(NULL),
-			  __parent(NULL), __position(), __size_available() {
+WidgetBase::WidgetBase(): Realizeable(),
+			  __curseswindow(NULL),
+			  __parent(NULL),
+			  __position(),
+			  __size_available() {
 }
 
 WidgetBase::~WidgetBase() {
 }
 
-WidgetBase::WidgetBase(const WidgetBase& _w): Realizeable(_w), __curseswindow(NULL), __parent(_w.__parent), __position(_w.__position), __size_available(_w.__size_available) {
+WidgetBase::WidgetBase(const WidgetBase& _w): Realizeable(_w),
+					      __curseswindow(NULL),
+					      __parent(_w.__parent),
+					      __position(_w.__position),
+					      __size_available(_w.__size_available) {
 }
 
 WidgetBase&

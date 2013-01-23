@@ -56,7 +56,7 @@ int main() {
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   "Basic 1");
+					   "Widget 4");
 	Curses::title(title);
 
 	Window* w1 = new Window(Margin(1,0,0,0));

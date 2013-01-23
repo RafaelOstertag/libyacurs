@@ -1,4 +1,4 @@
-// $Id: widget3.cc 4710 2013-01-20 18:27:44Z rafisol $
+// $Id$
 //
 // Test Label size change while displaying.
 #ifdef HAVE_CONFIG_H

@@ -21,9 +21,13 @@
 #include <stropts.h>
 #endif // HAVE_STROPTS_H
 
-#ifdef HAVE_SYS_TERMIOS_H
-#include <sys/termios.h>
-#endif // HAVE_SYS_TERMIOS_H
+#ifdef HAVE_TERMIOS_H
+# include <termios.h>
+#else // HAVE_TERMIOS_H
+# ifdef HAVE_SYS_TERMIOS_H
+#  include <sys/termios.h>
+# endif // HAVE_SYS_TERMIOS_H
+#endif // HAVE_TERMIOS_H
 
 #ifdef HAVE_IOSTREAM
 #include <iostream>

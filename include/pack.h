@@ -40,10 +40,11 @@ class Pack: public WidgetBase {
 	 *
 	 * This will be set by calling size_available().
 	 *
-	 * @internal the only reason for maintaining that field, is so
-	 * that we can reset the size when resetsize() is
-	 * called. Pack::size() may even choose to use a different
-	 * size.
+	 * @internal the only reason for maintaining that field is, so
+	 * that we can reset the size when resetsize() is called and
+	 * return Size::zero() on subsequent calls to
+	 * Pack::size(). Pack::size() may even choose to use a
+	 * different size (@sa Pack::size()).
 	 */
 	Size __size;
 

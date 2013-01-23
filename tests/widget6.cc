@@ -56,7 +56,7 @@ int main() {
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   "Widget 5");
+					   "Widget 6: Always dynamic, no hinting");
 	Curses::title(title);
 
 	Window* w1 = new Window(Margin(1,0,0,0));
@@ -94,30 +94,44 @@ int main() {
 	vpack->add_front(hpack1);
 	vpack->add_back(hpack2);
 
+	hpack->always_dynamic(true);
+	hpack->hinting(false);
 	hpack->add_back(vpack1);
 	hpack->add_back(vpack2);
 
+	hpack1->always_dynamic(true);
+	hpack1->hinting(false);
 	hpack1->add_back(vpack2_1);
 	hpack1->add_back(vpack2_2);
 
+	vpack1->always_dynamic(true);
+	vpack1->hinting(false);
 	vpack1->add_back(label1);
 	vpack1->add_back(label2);
 	vpack1->add_front(label3);
 
+	vpack2->always_dynamic(true);
+	vpack2->hinting(false);
 	vpack2->add_back(label4);
 	vpack2->add_back(label5);
 	vpack2->add_back(label6);
 
+	vpack2_1->always_dynamic(true);
+	vpack2_1->hinting(false);
 	vpack2_1->add_front(label7);
 	vpack2_1->add_front(label8);
 	vpack2_1->add_front(label9);
 
+	vpack2_2->always_dynamic(true);
+	vpack2_2->hinting(false);
 	vpack2_2->add_back(label10);
 	vpack2_2->add_back(label11);
 	vpack2_2->add_back(label12);
 	vpack2_2->add_back(label13);
 	vpack2_2->add_back(label14);
 
+	hpack2->always_dynamic(true);
+	hpack2->hinting(false);
 	hpack2->add_back(label15);
 	hpack2->add_back(label16);
 
@@ -125,8 +139,6 @@ int main() {
 	label2->label("New Test Label2");
 	label3->label("New Test Label3");
 	label4->label("New Test Label4");
-
-	
 
 
 	w1->widget(vpack);

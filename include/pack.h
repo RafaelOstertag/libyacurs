@@ -50,10 +50,21 @@ class Pack: public WidgetBase {
 
 	/**
 	 * When hinting is enabled (@c true) Pack::size_hint() queries
-	 * associated Widgets for hints. When disabled (@c false)
-	 * Pack::size_hint() always returns Size::zero().
+	 * associated Widgets for hints and returns a hint based on
+	 * the result. When disabled (@c false) Pack::size_hint()
+	 * always returns Size::zero().
 	 */
 	bool __hinting;
+
+	/**
+	 * Indicates whether or not the Pack should behave as dynamically sized Widget.
+	 *
+	 * If @c true, a call to Pack::size() does NOT invoke call calc_size(), which in turn returns Size != Size::zero() if all associated Widgets are non-dynamic.
+	 *
+	 * If @c false Pack::size() calls calc_size() and may return
+	 * that result.
+	 */
+	bool __always_dynamic;
 
 	/**
 	 * Call curseswindow() on all associated Widgets.
@@ -162,6 +173,16 @@ class Pack: public WidgetBase {
 	 * @sa hinting()
 	 */
 	bool hinting() const;
+
+	/**
+	 * tbd
+	 */
+	void always_dynamic(bool _d);
+
+	/**
+	 * tbd
+	 */
+	bool always_dynamic() const;
 
 	void resetsize();
 

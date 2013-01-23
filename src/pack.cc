@@ -150,12 +150,20 @@ Pack::size_available(const Size& _s) {
 
 Size
 Pack::size() const {
+    // If we are always dynamic, simply return the current value of
+    // __size, which may be Size::zero() if a call was made to
+    // resetsize().
+    if (__always_dynamic) return __size;
+
+    // Since we are not always dynamic, see if we can figure out the
+    // size. This only succeeds if there are no dynamically sized
+    // widgets.
     Size non_dynamic=calc_size();
     if (non_dynamic!=Size::zero())
 	return non_dynamic;
 
-    // __size might have been set by a former call to
-    // size_available().
+    // __size might have been set by a former call to size_available()
+    // so return that.
     return __size;
 }
 
@@ -181,6 +189,16 @@ Pack::hinting(bool _h) {
 bool
 Pack::hinting() const {
     return __hinting;
+}
+
+void
+Pack::always_dynamic(bool _d) {
+    __always_dynamic = _d;
+}
+
+bool
+Pack::always_dynamic() const {
+    return __always_dynamic;
 }
 
 void

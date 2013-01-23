@@ -43,6 +43,13 @@ class Pack: public WidgetBase {
 	Size __size;
 
 	/**
+	 * When hinting is enabled (@c true) Pack::size_hint() queries
+	 * associated Widgets for hints. When disabled (@c false)
+	 * Pack::size_hint() always returns Size::zero().
+	 */
+	bool __hinting;
+
+	/**
 	 * Call curseswindow() on all associated Widgets.
 	 */
 	void set_all_curseswindow();
@@ -52,16 +59,6 @@ class Pack: public WidgetBase {
 	 * List of all Widgets associated with the Pack.
 	 */
 	std::list<WidgetBase*> widget_list;
-
-	/**
-	 * Recalculates the size requirements of all widgets in the
-	 * pack.
-	 *
-	 * Needed to recalculate the size when adding or removing
-	 * widgets from the pack.
-	 */
-	virtual void recalc_size() = 0;
-
 
 	void unrealize();
 
@@ -122,6 +119,27 @@ class Pack: public WidgetBase {
 	const Size& size() const;
 
 	Size size_hint() const;
+
+	/**
+	 * Enable/disable hinting mode.
+	 *
+	 * When hinting is disabled, size_hint() will always return
+	 * Size::zero(), else it uses size_hint() of associated
+	 * Widgets.
+	 *
+	 * @param _h @c true enables hinting, @c false disables
+	 * hinting.
+	 */
+	void hinting(bool _h);
+
+	/**
+	 * Query hinting mode.
+	 *
+	 * @return @c true if hinting is enabled, @c false otherwise.
+	 *
+	 * @sa hinting()
+	 */
+	bool hinting() const;
 
 	void resetsize();
 

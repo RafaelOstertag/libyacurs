@@ -79,19 +79,26 @@ Pack::unrealize() {
 //
 // Public
 //
-Pack::Pack(): WidgetBase(), widget_list() {
+Pack::Pack(): WidgetBase(), 
+	      __size(), 
+	      __hinting(true),
+	      widget_list() {
 }
 
 Pack::~Pack() {
 }
 
-Pack::Pack(const Pack& _p):
-    WidgetBase(_p), widget_list(_p.widget_list) {
+Pack::Pack(const Pack& _p): WidgetBase(_p),
+			    __size(_p.__size),
+			    __hinting(_p.__hinting),
+			    widget_list(_p.widget_list) {
 }
 
 const Pack&
 Pack::operator=(const Pack& _p) {
     WidgetBase::operator=(_p);
+    __size = _p.__size;
+    __hinting = _p.__hinting;
     widget_list = _p.widget_list;
 
     return *this;
@@ -105,11 +112,7 @@ Pack::add_front(WidgetBase* _w) {
     widget_list.push_front(_w);
 
     _w->parent(this);
-
     _w->curseswindow(WidgetBase::curseswindow());
-
-    // We have to recalc the size because of dynamically sized widgets
-    recalc_size();
 }
 
 void
@@ -120,11 +123,7 @@ Pack::add_back(WidgetBase* _w) {
     widget_list.push_back(_w);
 
     _w->parent(this);
-
     _w->curseswindow(WidgetBase::curseswindow());
-
-    // We have to recalc the size because of dynamically sized widgets
-    recalc_size();
 }
 
 
@@ -133,8 +132,6 @@ Pack::remove(WidgetBase* _w) {
     assert(_w != NULL);
 
     widget_list.remove(_w);
-
-    recalc_size();
 }
 
 void
@@ -148,14 +145,7 @@ Pack::curseswindow(WINDOW* _p) {
 
 void
 Pack::size_available(const Size& _s) {
-    WidgetBase::size_available(_s);
-
-    __size=_s;
-
-    // Recalc size. recalc_size() called in add_*() might not have
-    // took effect, since add_*() can be called without any
-    // size_available() set.
-    recalc_size();
+    WidgetBase::size_available(__size=_s);
 }
 
 const Size&
@@ -165,6 +155,8 @@ Pack::size() const {
 
 Size
 Pack::size_hint() const {
+    if (!__hinting) return Size::zero();
+
     // remember that Packs may return either component >0 when
     // hinting, see also comment on VGetMaxSizeHint
     GetMaxSizeHint shint;
@@ -173,6 +165,16 @@ Pack::size_hint() const {
 			 widget_list.end(),
 			 shint); 
     return shint.hint();
+}
+
+void
+Pack::hinting(bool _h) {
+    __hinting=_h;
+}
+
+bool
+Pack::hinting() const {
+    return __hinting;
 }
 
 void
@@ -200,6 +202,7 @@ Pack::sizechange() {
 void
 Pack::refresh(bool immediate) {
     if (!realized()) throw NotRealized();
+
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  std::bind2nd(std::mem_fun(&WidgetBase::refresh),immediate));
@@ -209,12 +212,11 @@ void
 Pack::resize(const Area& _a) {
     if (!realized()) throw NotRealized();
 
-    position(_a);
-    size_available(_a);
-
     unrealize();
 
-    recalc_size();
+    position(_a);
+
+    size_available(_a);
 
     realize();
 }

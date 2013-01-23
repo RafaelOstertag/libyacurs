@@ -276,6 +276,8 @@ VPack::realize() {
     assert(WidgetBase::size_available().rows()>0);
     assert(WidgetBase::size_available().cols()>0);
 
+    recalc_size();
+
     // Set position for each associated widget. That's the only reason
     // we implement realize() in a derived class.
     std::for_each(widget_list.begin(),

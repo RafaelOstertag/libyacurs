@@ -148,8 +148,14 @@ Pack::size_available(const Size& _s) {
     WidgetBase::size_available(__size=_s);
 }
 
-const Size&
+Size
 Pack::size() const {
+    Size non_dynamic=calc_size();
+    if (non_dynamic!=Size::zero())
+	return non_dynamic;
+
+    // __size might have been set by a former call to
+    // size_available().
     return __size;
 }
 

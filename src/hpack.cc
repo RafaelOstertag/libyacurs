@@ -233,6 +233,44 @@ class HCalcNSetSize {
 	}
 };
 
+/**
+ * Functor calculating the size only if no dynamically sized Widgets
+ * are associated. Else it will return Size::zero().
+ */
+class HCalcSize {
+    private:
+	Size __size;
+	bool __had_dynamic;
+    public:
+	HCalcSize(): __size(), __had_dynamic(false) {}
+	HCalcSize(const HCalcSize& _r): __size(_r.__size),
+					__had_dynamic(_r.__had_dynamic){}
+	HCalcSize& operator=(const HCalcSize& _r) {
+	    __size = _r.__size;
+	    __had_dynamic = _r.__had_dynamic;
+	    return *this;
+	}
+	void operator()(const WidgetBase* _w) {
+	    assert(_w!=NULL);
+
+	    // Do nothing if we already found a dynamic widget
+	    if (__had_dynamic) return;
+
+	    if (_w->size() == Size::zero() ) {
+		// found a dynamic widget. Reset size and mark
+		__had_dynamic = true;
+		__size = Size::zero();
+		return;
+	    }
+
+	    __size.rows(std::max(__size.rows(),_w->size().rows()));
+	    __size.cols(__size.cols()+_w->size().cols());
+	}
+	const Size& size() const {
+	    return __size;
+	}
+};
+
 class HSetPosWidget {
     private:
 	Coordinates __pos;
@@ -288,6 +326,15 @@ HPack::recalc_size() {
     // This is imperative, in order to set the size_available on any
     // dynamically sized Widgets.
     calc.finish();
+}
+
+Size
+HPack::calc_size() const {
+    HCalcSize _s;
+    _s=std::for_each(widget_list.begin(),
+		     widget_list.end(),
+		     _s);
+    return _s.size();
 }
 
 //

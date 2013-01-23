@@ -20,8 +20,8 @@
  */
 class VPack: public Pack {
     protected:
-	// Remember, this will be called from Pack::add_*()
 	void recalc_size();
+	Size calc_size() const;
 
     public:
 	VPack();

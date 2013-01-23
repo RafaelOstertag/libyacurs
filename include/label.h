@@ -49,7 +49,7 @@ class Label: public Widget {
 	 * @return Size::rows() always 1. Size::cols() equal the
 	 * length of the string to be displayed.
 	 */
-	const Size& size() const;
+	Size size() const;
 
 	Size size_hint() const;
 

@@ -195,6 +195,44 @@ class VCalcNSetSize {
 	}
 };
 
+/**
+ * Functor calculating the size only if no dynamically sized Widgets
+ * are associated. Else it will return Size::zero().
+ */
+class VCalcSize {
+    private:
+	Size __size;
+	bool __had_dynamic;
+    public:
+	VCalcSize(): __size(), __had_dynamic(false) {}
+	VCalcSize(const VCalcSize& _r): __size(_r.__size),
+					__had_dynamic(_r.__had_dynamic){}
+	VCalcSize& operator=(const VCalcSize& _r) {
+	    __size = _r.__size;
+	    __had_dynamic = _r.__had_dynamic;
+	    return *this;
+	}
+	void operator()(const WidgetBase* _w) {
+	    assert(_w!=NULL);
+
+	    // Do nothing if we already found a dynamic widget
+	    if (__had_dynamic) return;
+
+	    if (_w->size() == Size::zero() ) {
+		// found a dynamic widget. Reset size and mark
+		__had_dynamic = true;
+		__size = Size::zero();
+		return;
+	    }
+
+	    __size.rows(__size.rows()+_w->size().rows());
+	    __size.cols(std::max(__size.cols(),_w->size().cols()));
+	}
+	const Size& size() const {
+	    return __size;
+	}
+};
+
 class VSetPosWidget {
     private:
 	Coordinates __pos;
@@ -249,6 +287,15 @@ VPack::recalc_size() {
     // This is imperative, in order to set the size_available on any
     // dynamically sized Widgets.
     calc.finish();
+}
+
+Size
+VPack::calc_size() const {
+    VCalcSize _s;
+    _s=std::for_each(widget_list.begin(),
+		     widget_list.end(),
+		     _s);
+    return _s.size();
 }
 
 //

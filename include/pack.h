@@ -54,6 +54,22 @@ class Pack: public WidgetBase {
 	 */
 	void set_all_curseswindow();
 
+	/**
+	 * Calculate size required.
+	 *
+	 * Calculate the size required. Returns a Size not equal to
+	 * Size::zero() only if there are no dynamically sized Widgets
+	 * associated.
+	 *
+	 * @internal the idea is to use this function in size(), so it
+	 * should return a Size != Size::zero() only if we can
+	 * determine the size of all Widgets definitely, without
+	 * calculating the size for dynamically sized Widgets. In
+	 * other words, the Pack appears non-dynamically only if there
+	 * are no dynamically sized Widgets associated.
+	 */
+	virtual Size calc_size() const = 0;
+
     protected:
 	/**
 	 * List of all Widgets associated with the Pack.
@@ -116,7 +132,7 @@ class Pack: public WidgetBase {
 	 */
 	void size_available(const Size& _s);
 
-	const Size& size() const;
+	Size size() const;
 
 	Size size_hint() const;
 

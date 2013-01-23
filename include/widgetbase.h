@@ -186,10 +186,12 @@ class WidgetBase: public Realizeable {
 	 * means, that the parent Widget has to provide a sensible
 	 * value for size_available().
 	 *
+	 * size_hint() may provide a hint for the size occupied.
+	 *
 	 * @return size the widget effectively occupies, or Size(0,0)
 	 * if it dynamically adjusts to the size_available().
 	 */
-	virtual const Size& size() const = 0;
+	virtual Size size() const = 0;
 
 	/**
 	 * Provide a size hint.

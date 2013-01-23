@@ -65,7 +65,7 @@ Label::label() const {
     return __label;
 }
 
-const Size&
+Size
 Label::size() const {
     return __size;
 }

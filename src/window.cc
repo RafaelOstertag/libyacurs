@@ -67,15 +67,6 @@ Window::operator=(const Window& W) {
 void
 Window::widget(WidgetBase* _w) {
     __widget = _w;
-
-    _w->curseswindow(getWindow());
-
-    // This widget does not have another widget as parent.
-    _w->parent(NULL);
-
-    _w->position(widget_area());
-
-    _w->size_available(widget_area());
 }
 
 WidgetBase*
@@ -92,7 +83,12 @@ Window::refresh(bool immediate) {
 void
 Window::resize(const Area& _a) {
     WindowBase::resize(_a);
-    if (__widget) __widget->resize(widget_area());
+    // We do not call resize, because the WidgetBase::resize() would
+    // happen after the widget has been unrealized and realized again
+    // by Window::resize().
+    //
+    // Window::realize takes care of setting up things
+    //if (__widget) __widget->resize(widget_area());
 }
 
 void
@@ -102,6 +98,14 @@ Window::realize() {
 	// This is imperative, so that the widget also is aware of the new
 	// curses window in case we're called in the course of a resize.
 	__widget->curseswindow(getWindow());
+	
+	// This widget does not have another widget as parent.
+	__widget->parent(NULL);
+	
+	__widget->position(widget_area());
+	
+	__widget->size_available(widget_area());
+
 	__widget->realize();
     }
 }

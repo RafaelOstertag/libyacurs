@@ -171,7 +171,8 @@ class WidgetBase: public Realizeable {
 	 * This is called on a parent widget when the child detects a size
 	 * change.
 	 *
-	 * If the called class is not a container
+	 * If the called class is not a container, it should ignore a
+	 * call.
 	 *
 	 * @return the parent returns @c true if the size change can be
 	 * fullfilled, else @false.

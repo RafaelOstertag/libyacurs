@@ -72,6 +72,13 @@ class Pack: public WidgetBase {
 	void set_all_curseswindow();
 
 	/**
+	 * Refresh all associated Widgets.
+	 *
+	 * @param i immediate flag. @sa Realizeable::refresh().
+	 */
+	void refresh_all_widgets(bool i);
+
+	/**
 	 * Calculate size required.
 	 *
 	 * Calculate the size required. Returns a Size not equal to
@@ -150,8 +157,6 @@ class Pack: public WidgetBase {
 	void size_available(const Size& _s);
 
 	Size size() const;
-
-	Size size_hint() const;
 
 	/**
 	 * Enable/disable hinting mode.

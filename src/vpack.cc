@@ -15,6 +15,39 @@
 //
 // Functors
 //
+/**
+ * Calculate the size hint.
+ *
+ * Functor for calculating the size hint by finding the max columns
+ * size and summing up row size.
+ *
+ * Packs may return rows()>0 or cols()>0 as hint, as opposed to other
+ * widget that only return one of the components >0.
+ */
+class VGetMaxSizeHint {
+    private:
+	Size __size_max;
+
+    public:
+	VGetMaxSizeHint(): __size_max(Size::zero()) {}
+	VGetMaxSizeHint(const VGetMaxSizeHint& _v):
+	    __size_max(_v.__size_max) {}
+	VGetMaxSizeHint& operator=(const VGetMaxSizeHint& _v) {
+	    __size_max=_v.__size_max;
+	    return *this;
+	}
+
+	void operator()(const WidgetBase* w) {
+	    assert(w!=NULL);
+	    __size_max.cols(std::max(w->size_hint().cols(),
+				     __size_max.cols()));
+	    __size_max.rows(w->size_hint().rows()+__size_max.rows());
+	}
+
+	const Size& hint() const {
+	    return __size_max;
+	}
+};
 
 /**
  * Set size_available() on widgets.
@@ -198,6 +231,8 @@ class VCalcNSetSize {
 /**
  * Functor calculating the size only if no dynamically sized Widgets
  * are associated. Else it will return Size::zero().
+ *
+ * Used in calc_size().
  */
 class VCalcSize {
     private:
@@ -314,6 +349,20 @@ const VPack&
 VPack::operator=(const VPack& _vp) {
     Pack::operator=(_vp);
     return *this;
+}
+
+Size
+VPack::size_hint() const {
+    if (!hinting()) return Size::zero();
+
+    // remember that Packs may return either component >0 when
+    // hinting, see also comment on VGetMaxSizeHint
+    VGetMaxSizeHint shint;
+
+    shint = std::for_each(widget_list.begin(),
+			  widget_list.end(),
+			  shint); 
+    return shint.hint();
 }
 
 void

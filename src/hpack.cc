@@ -15,12 +15,11 @@
 //
 // Functors
 //
-
 /**
  * Calculate the size hint.
  *
- * Functor for calculating the size hint by finding the max columns
- * and row size.
+ * Functor for calculating the size hint by finding the max row size
+ * and summing up column size.
  *
  * Packs may return rows()>0 or cols()>0 as hint, as opposed to other
  * widget that only return one of the components >0.
@@ -236,6 +235,8 @@ class HCalcNSetSize {
 /**
  * Functor calculating the size only if no dynamically sized Widgets
  * are associated. Else it will return Size::zero().
+ *
+ * Used in calc_size().
  */
 class HCalcSize {
     private:
@@ -352,6 +353,20 @@ const HPack&
 HPack::operator=(const HPack& _hp) {
     Pack::operator=(_hp);
     return *this;
+}
+
+Size
+HPack::size_hint() const {
+    if (!hinting()) return Size::zero();
+
+    // remember that Packs may return either component >0 when
+    // hinting, see also comment on VGetMaxSizeHint
+    HGetMaxSizeHint shint;
+
+    shint = std::for_each(widget_list.begin(),
+			  widget_list.end(),
+			  shint); 
+    return shint.hint();
 }
 
 void

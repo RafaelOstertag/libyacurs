@@ -14,11 +14,11 @@
 //
 
 void
-LineObject::computeMargin() {
+LineObject::compute_margin() {
 #ifndef NDEBUG
     Margin __m_debug;
 #endif // NDEBUG
-    switch (position) {
+    switch (__position) {
     case POS_TOP:
 #ifdef NDEBUG
 	margin(Margin(0, 0, area().rows()-1,0));
@@ -45,16 +45,16 @@ LineObject::computeMargin() {
 //
 
 void
-LineObject::putLine() {
+LineObject::put_line() {
     if (!realized()) return;
 
-    int retval = werase(getWindow());
+    int retval = werase(curses_window());
     if (retval == ERR)
 	throw EraseFailed();
 
-    retval = mymvwaddstr(getWindow(),
+    retval = mymvwaddstr(curses_window(),
 			 0,0,
-			 linetext.c_str());
+			 __linetext.c_str());
     if (retval == ERR)
 	throw AddStrFailed();
 
@@ -64,7 +64,7 @@ LineObject::putLine() {
 // Public
 //
 LineObject::LineObject(POSITION _pos, const std::string& _t):
-    WindowBase(), linetext(_t), position(_pos) {
+    WindowBase(), __linetext(_t), __position(_pos) {
     // We don't have to connect to EVT_REFRESH and EVT_RESIZE, since that has
     // already been done by BaseWindow. We simply have to override the handler
     // functions.
@@ -74,7 +74,7 @@ LineObject::~LineObject() {
 }
 
 LineObject::LineObject(const LineObject& lo):
-    WindowBase(lo), linetext(lo.linetext), position(lo.position) {
+    WindowBase(lo), __linetext(lo.__linetext), __position(lo.__position) {
 
 }
 
@@ -82,32 +82,32 @@ LineObject&
 LineObject::operator=(const LineObject& lo) {
     WindowBase::operator=(lo);
 
-    linetext = lo.linetext;
-    position = lo.position;
+    __linetext = lo.__linetext;
+    __position = lo.__position;
 
     return *this;
 }
 
 void
 LineObject::realize() {
-    computeMargin();
+    compute_margin();
     WindowBase::realize();
 }
 
 void
 LineObject::refresh(bool immediate) {
-    putLine();
+    put_line();
     WindowBase::refresh(immediate);
 }
 
 void
 LineObject::line(const std::string& _str) {
-    linetext = _str;
-    putLine();
+    __linetext = _str;
+    put_line();
     refresh(true);
 }
 
 std::string
 LineObject::line() const {
-    return linetext;
+    return __linetext;
 }

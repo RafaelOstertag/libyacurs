@@ -59,8 +59,8 @@ int main() {
 	WinChHandler whandler;
 	AlrmHandler ahandler;
 
-	EventQueue::connectEvent(EventConnectorMethod1<WinChHandler>(EVT_WINCH, &whandler,&WinChHandler::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<WinChHandler>(EVT_WINCH, &whandler,&WinChHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
 
 	EventQueue::submit(EventWinCh(Area ()));
 	EventQueue::submit(Event(EVT_ALARM));

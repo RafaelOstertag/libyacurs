@@ -47,7 +47,7 @@ class AlrmHandler: public Handler {
 class SelfRegister : public Handler {
     public:
 	inline SelfRegister(): Handler(EVT_ALARM) {
-	    EventQueue::connectEvent(EventConnectorMethod1<SelfRegister>(EVT_ALARM, this ,&SelfRegister::handler) );
+	    EventQueue::connect_event(EventConnectorMethod1<SelfRegister>(EVT_ALARM, this ,&SelfRegister::handler) );
 	}
 	inline int handler(Event& e) {
 	    std::cout << "SelfRegister::handler()\r" << std::endl;
@@ -58,7 +58,7 @@ class SelfRegister : public Handler {
 class SelfRegister2 : public SelfRegister {
     public:
 	inline SelfRegister2(): SelfRegister() {
-	    EventQueue::connectEvent(EventConnectorMethod1<SelfRegister2>(EVT_ALARM, this ,&SelfRegister2::handler) );
+	    EventQueue::connect_event(EventConnectorMethod1<SelfRegister2>(EVT_ALARM, this ,&SelfRegister2::handler) );
 	}
 	inline int handler(Event& e) {
 	    EventQueue::submit(Event(EVT_QUIT));
@@ -73,7 +73,7 @@ int main() {
     try {
 	AlrmHandler ahandler;
 
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
 
 	Curses::init();
 	alarm(2);

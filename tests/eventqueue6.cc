@@ -77,14 +77,14 @@ int main() {
 	AlrmHandler ahandler;
 	AlrmHandler2 ahandler2;
 
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
 	// Should be overriden by next call
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2, &AlrmHandler2::handler2) );
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2, &AlrmHandler2::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2, &AlrmHandler2::handler2) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2, &AlrmHandler2::handler) );
 	// AlrmHandler2::handler should not be called now
-	EventQueue::disconnectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2, &AlrmHandler2::handler) );
+	EventQueue::disconnect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2, &AlrmHandler2::handler) );
 
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_WINCH, &ahandler2, &AlrmHandler2::handler3) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_WINCH, &ahandler2, &AlrmHandler2::handler3) );
 	
 	Curses::init();
 	EventQueue::submit(EventWinCh(Area() ));

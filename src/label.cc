@@ -57,7 +57,7 @@ Label::label(const std::string& _l) {
     }
     
     // The size has changed notify parent of size change
-    parent()->sizechange(); 
+    parent()->size_change(); 
 }
 
 const std::string&
@@ -76,15 +76,15 @@ Label::size_hint() const {
 }
 
 bool
-Label::sizechange() {
+Label::size_change() {
     // We don't handle size changes since we're not a container
     // Widget.
     return false;
 }
 
 void
-Label::resetsize() {
-    // Intentionally empty, since resetsize() is intended for
+Label::reset_size() {
+    // Intentionally empty, since reset_size() is intended for
     // dynamically sized Widgets.
 }
 

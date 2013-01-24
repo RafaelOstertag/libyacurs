@@ -51,7 +51,7 @@ class WidgetBase: public Realizeable {
 	 * Further, this pointer is used for subwin() in order to create
 	 * subwindows.
 	 */
-	WINDOW* __curseswindow;
+	WINDOW* __curses_window;
 
 	/**
 	 * The parent of the widget. If the widget has no parent, it has to be
@@ -91,7 +91,7 @@ class WidgetBase: public Realizeable {
 	 * Set the position, where the widget will be displayed.
 	 *
 	 * @param _c position where the widget will be displayed. The position
-	 * is relative to __curseswindow, since it is expected that widgets use
+	 * is relative to __curses_window, since it is expected that widgets use
 	 * derwin().
 	 */
 	void position(const Coordinates& _c);
@@ -100,7 +100,7 @@ class WidgetBase: public Realizeable {
 	 * Get the the position of the widget.
 	 *
 	 * @return the position of the widget. The position is relative to the
-	 * position of __curseswindow.
+	 * position of __curses_window.
 	 */
 	const Coordinates& position() const;
 
@@ -156,14 +156,14 @@ class WidgetBase: public Realizeable {
 	 * @param _p pointer to curses window. The pointer has to be valid for
 	 * the entire lifetime of the widget.
 	 */
-	virtual void curseswindow(WINDOW* _p);
+	virtual void curses_window(WINDOW* _p);
 
 	/**
 	 * Get the curses window.
 	 *
 	 * @return pointer to the curses window.
 	 */
-	WINDOW* curseswindow() const;
+	WINDOW* curses_window() const;
 
 	/**
 	 * Notification of size change of a child.
@@ -177,7 +177,7 @@ class WidgetBase: public Realizeable {
 	 * @return the parent returns @c true if the size change can be
 	 * fullfilled, else @false.
 	 */
-	virtual bool sizechange() = 0;
+	virtual bool size_change() = 0;
 
 	/**
 	 * The size the widget effectively occupies.
@@ -214,7 +214,7 @@ class WidgetBase: public Realizeable {
 	 *
 	 * Non-dynamically sized Widget are supposed to ignore this.
 	 */
-	virtual void resetsize() = 0;
+	virtual void reset_size() = 0;
 };
 
 #endif // WIDGETBASE_H

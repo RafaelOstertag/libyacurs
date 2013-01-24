@@ -20,13 +20,13 @@
 // Protected
 //
 WINDOW*
-WindowBase::getWindow() const {
-    return *w;
+WindowBase::curses_window() const {
+    return *__curses_window;
  }
 
 unsigned int
-WindowBase::getInstanceCount() const {
-    return *instances;
+WindowBase::instance_count() const {
+    return *__instance_count;
 }
 const Area&
 WindowBase::area() const {
@@ -54,13 +54,13 @@ WindowBase::unrealize() {
 
     realized(false);
 
-    assert(w!=NULL);
-    assert(*w!=NULL);
+    assert(__curses_window!=NULL);
+    assert(*__curses_window!=NULL);
 
-    if (delwin(*w) == ERR)
+    if (delwin(*__curses_window) == ERR)
 	throw DelWindowFailed();
 
-    *w = NULL;
+    *__curses_window = NULL;
 }
 
 int
@@ -87,48 +87,57 @@ WindowBase::resize_handler(Event& _e) {
 //
 
 WindowBase::WindowBase(const Margin& _m):
-    Realizeable(), __area(Coordinates(),Curses::inquiryScreenSize()),
-    __margin(_m), instances(NULL), w(NULL), __frame(false) {
+    Realizeable(),
+    __area(Coordinates(),Curses::inquiry_screensize()),
+    __margin(_m),
+    __instance_count(NULL),
+    __curses_window(NULL),
+    __frame(false) {
 
-    w = new WINDOW*;
-    *w = NULL;
+    __curses_window = new WINDOW*;
+    *__curses_window = NULL;
 
-    instances = new unsigned int;
-    *instances = 1;
+    __instance_count = new unsigned int;
+    *__instance_count = 1;
 
-    EventQueue::connectEvent(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
-    EventQueue::connectEvent(EventConnectorMethod1<WindowBase>(EVT_WINCH,this, &WindowBase::resize_handler));
+    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
+    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_WINCH,this, &WindowBase::resize_handler));
 }
 
 WindowBase::WindowBase(const WindowBase& so):
-    Realizeable(so), __area(so.__area), __margin(so.__margin),
-    instances(so.instances), w(so.w), __frame(so.__frame) {
-    (*instances)++;
+    Realizeable(so),
+    __area(so.__area),
+    __margin(so.__margin),
+    __instance_count(so.__instance_count),
+    __curses_window(so.__curses_window),
+    __frame(so.__frame)
+{
+    (*__instance_count)++;
 
-    EventQueue::connectEvent(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
-    EventQueue::connectEvent(EventConnectorMethod1<WindowBase>(EVT_WINCH,this, &WindowBase::resize_handler));
+    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
+    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_WINCH,this, &WindowBase::resize_handler));
 }
 
 WindowBase::~WindowBase() {
-    assert(instances!=NULL);
+    assert(__instance_count!=NULL);
 
-    if (*instances > 1) {
-	(*instances)--;
+    if (*__instance_count > 1) {
+	(*__instance_count)--;
 	return;
     }
 
-    delete instances;
+    delete __instance_count;
 
-    assert(w!=NULL);
+    assert(__curses_window!=NULL);
 
-    if (*w != NULL)
-	if (delwin(*w) == ERR)
+    if (*__curses_window != NULL)
+	if (delwin(*__curses_window) == ERR)
 	    throw DelWindowFailed();
 
-    delete w;
+    delete __curses_window;
 
-    EventQueue::disconnectEvent(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
-    EventQueue::disconnectEvent(EventConnectorMethod1<WindowBase>(EVT_WINCH,this, &WindowBase::resize_handler));
+    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
+    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_WINCH,this, &WindowBase::resize_handler));
 }
 
 WindowBase&
@@ -138,11 +147,11 @@ WindowBase::operator=(const WindowBase& so) {
 
     Realizeable::operator=(so);
 
-    instances = so.instances;
-    assert(instances!=NULL);
-    (*instances)++;
+    __instance_count = so.__instance_count;
+    assert(__instance_count!=NULL);
+    (*__instance_count)++;
 
-    w = so.w;
+    __curses_window = so.__curses_window;
 
     __area = so.__area;
 
@@ -176,14 +185,14 @@ void
 WindowBase::refresh(bool immediate) {
     if (!realized()) throw NotRealized();
 
-    assert(w!=NULL);
-    assert(*w!=NULL);
+    assert(__curses_window!=NULL);
+    assert(*__curses_window!=NULL);
 
     int retval;
     if (immediate)
-	retval = wrefresh(*w);
+	retval = wrefresh(*__curses_window);
     else
-	retval = wnoutrefresh(*w);
+	retval = wnoutrefresh(*__curses_window);
 
     if (retval == ERR)
 	throw RefreshFailed();
@@ -226,18 +235,18 @@ WindowBase::realize() {
     assert(_tmp.cols()>0);
 
 
-    assert(w!=NULL);
-    assert(*w==NULL);
-    *w = newwin(_tmp.rows(),
-		_tmp.cols(),
-		_tmp.y(),
-		_tmp.x());
-    if (*w == NULL) {
+    assert(__curses_window!=NULL);
+    assert(*__curses_window==NULL);
+    *__curses_window = newwin(_tmp.rows(),
+				  _tmp.cols(),
+				  _tmp.y(),
+				  _tmp.x());
+    if (*__curses_window == NULL) {
 	throw NewWindowFailed();
     }
 
     if (__frame) {
-	if (box(*w, 0, 0) == ERR)
+	if (box(*__curses_window, 0, 0) == ERR)
 	    throw BoxFailed();
     }
 

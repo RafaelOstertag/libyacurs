@@ -41,7 +41,7 @@ class Pack: public WidgetBase {
 	 * This will be set by calling size_available().
 	 *
 	 * @internal the only reason for maintaining that field is, so
-	 * that we can reset the size when resetsize() is called and
+	 * that we can reset the size when reset_size() is called and
 	 * return Size::zero() on subsequent calls to
 	 * Pack::size(). Pack::size() may even choose to use a
 	 * different size (@sa Pack::size()).
@@ -67,9 +67,9 @@ class Pack: public WidgetBase {
 	bool __always_dynamic;
 
 	/**
-	 * Call curseswindow() on all associated Widgets.
+	 * Call curses_window() on all associated Widgets.
 	 */
-	void set_all_curseswindow();
+	void set_all_curses_window();
 
 	/**
 	 * Refresh all associated Widgets.
@@ -144,7 +144,7 @@ class Pack: public WidgetBase {
 	 *
 	 * @param _p pointer to curses window
 	 */
-	void curseswindow(WINDOW* _p);
+	void curses_window(WINDOW* _p);
 
 	/**
 	 * Set the available size.
@@ -189,7 +189,7 @@ class Pack: public WidgetBase {
 	 */
 	bool always_dynamic() const;
 
-	void resetsize();
+	void reset_size();
 
 	/**
 	 * Handle a size change in an associated Widget.
@@ -201,7 +201,7 @@ class Pack: public WidgetBase {
 	 * @return @c true if the notification can be handled, @c
 	 * false otherwise.
 	 */
-	bool sizechange();
+	bool size_change();
 
 	/**
 	 * Refresh all Widgets in the Pack.

@@ -145,7 +145,7 @@ int main() {
 
 	Curses::mainwindow(w1);
 
-	EventQueue::connectEvent(EventConnectorFunction1(EVT_ALARM,&alrm));
+	EventQueue::connect_event(EventConnectorFunction1(EVT_ALARM,&alrm));
 
 	alarm(5);
 	Curses::run();

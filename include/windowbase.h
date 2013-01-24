@@ -40,7 +40,7 @@ class WindowBase : public Realizeable {
     private:
 	/**
 	 * The dimension of the window. Used as cache to avoid calls to
-	 * Curses::inquiryScreenSize().
+	 * Curses::inquiry_screensize().
 	 */
 	Area __area;
 	/**
@@ -51,12 +51,12 @@ class WindowBase : public Realizeable {
 	 * Keeps track of how many instance objects have been created
 	 * sharing the same WINDOW structure
 	 */
-	unsigned int* instances;
+	unsigned int* __instance_count;
 	/**
 	 * Pointer to a pointer so that we can replace the window for
 	 * all instances simultaneously.
 	 */
-	WINDOW** w;
+	WINDOW** __curses_window;
 
 	/**
 	 * Whether or not the window has a border
@@ -64,10 +64,10 @@ class WindowBase : public Realizeable {
 	bool __frame;
 
     protected:
-	WINDOW* getWindow() const;
+	WINDOW* curses_window() const;
 
 	/// Keep this. Used by tests/windowrefs.cc.
-	unsigned int getInstanceCount() const;
+	unsigned int instance_count() const;
 
 	const Area& area() const;
 	/**

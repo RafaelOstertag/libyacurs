@@ -17,15 +17,15 @@
 
 class StatusLine: public LineObject {
     private:
-	std::stack<std::string> messages;
+	std::stack<std::string> __messages;
 	
-	void putTopMsg();
+	void put_top_msg();
 
     public:
 	StatusLine();
 	StatusLine(const StatusLine& sl);
-	void pushMsg(const std::string& m);
-	void popMsg();
+	void push_msg(const std::string& m);
+	void pop_msg();
 };
 
 #endif

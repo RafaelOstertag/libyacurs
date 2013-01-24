@@ -127,7 +127,7 @@ class CallEventConnector {
 /////////////
 
 void
-EventQueue::setupSignal() {
+EventQueue::setup_signal() {
     int err;
 
     //
@@ -225,7 +225,7 @@ EventQueue::setupSignal() {
 }
 
 void
-EventQueue::restoreSignal() {
+EventQueue::restore_signal() {
     int err;
 
     err = sigaction(SIGWINCH, &old_winch_act, NULL);
@@ -270,7 +270,7 @@ EventQueue::signal_handler(int signo)
     case SIGWINCH:
 	try {
 	    evt_queue.push(new Event(EVT_TERMRESETUP));
-	    evt_queue.push(new EventWinCh(Curses::inquiryScreenSize()));
+	    evt_queue.push(new EventWinCh(Curses::inquiry_screensize()));
 	    evt_queue.push(new Event(EVT_REFRESH));
 	    evt_queue.push(new Event(EVT_DOUPDATE));
 	} catch(std::exception& e) {
@@ -357,7 +357,7 @@ EventQueue::proc_rem_request() {
 // Public
 //
 void
-EventQueue::connectEvent(const EventConnectorBase& ec) {
+EventQueue::connect_event(const EventConnectorBase& ec) {
     // Only one event handler per event per object can be connectd
     std::list<EventConnectorBase*>::iterator it =
 	std::find_if(evtconn_list.begin(),
@@ -374,7 +374,7 @@ EventQueue::connectEvent(const EventConnectorBase& ec) {
 }
 
 void
-EventQueue::disconnectEvent(const EventConnectorBase& ec) {
+EventQueue::disconnect_event(const EventConnectorBase& ec) {
     // does not delete the connector, but adds it to a queue for later
     // removal
     evtconn_rem_request.push(ec.clone());
@@ -393,14 +393,14 @@ EventQueue::suspend(const EventConnectorBase& ec) {
 }
 
 void
-EventQueue::suspendAll(EVENT_TYPE _t) {
+EventQueue::suspend_all(EVENT_TYPE _t) {
     std::for_each(evtconn_list.begin(),
 		  evtconn_list.end(),
 		  EvtConnSetSuspendAll(_t, true));
 }
 
 void
-EventQueue::suspendExcept(const EventConnectorBase& ec) {
+EventQueue::suspend_except(const EventConnectorBase& ec) {
     std::for_each(evtconn_list.begin(),
 		  evtconn_list.end(),
 		  EvtConnSetSuspendExcept(ec, true));
@@ -419,14 +419,14 @@ EventQueue::unsuspend(const EventConnectorBase& ec) {
 }
 
 void
-EventQueue::unsuspendAll(EVENT_TYPE _t) {
+EventQueue::unsuspend_all(EVENT_TYPE _t) {
     std::for_each(evtconn_list.begin(),
 		  evtconn_list.end(),
 		  EvtConnSetSuspendAll(_t, false));
 }
 
 void
-EventQueue::unsuspendExcept(const EventConnectorBase& ec) {
+EventQueue::unsuspend_except(const EventConnectorBase& ec) {
     std::for_each(evtconn_list.begin(),
 		  evtconn_list.end(),
 		  EvtConnSetSuspendExcept(ec, false));
@@ -455,7 +455,7 @@ EventQueue::run() {
     sigaddset(&block_sigmask, SIGUSR1);
     sigaddset(&block_sigmask, SIGUSR2);
 
-    setupSignal();
+    setup_signal();
 
     while(true) {
 	int c=getch();
@@ -499,7 +499,7 @@ QUIT:
     }
     unblocksignal();
 
-    restoreSignal();
+    restore_signal();
 
     // Remove any pending removal request, so that the memory will be
     // freed properly

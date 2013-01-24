@@ -23,7 +23,7 @@ class Widget: public WidgetBase {
 	 * Keeps track of how many instance objects have been created
 	 * sharing the same WINDOW structure
 	 */
-	unsigned int* instances;
+	unsigned int* __instance_count;
 	/**
 	 * Pointer to a pointer so that we can replace the window for
 	 * all instances simultaneously.
@@ -42,7 +42,7 @@ class Widget: public WidgetBase {
 	Widget& operator=(const Widget& _w);
 
 	// Must be overriden in derived classes
-	//bool sizechange();
+	//bool size_change();
 
 	// Inherited from Realizeable
 	void refresh(bool immediate);

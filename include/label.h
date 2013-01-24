@@ -61,14 +61,14 @@ class Label: public Widget {
 	 *
 	 * @return always @false
 	 */
-	bool sizechange();
+	bool size_change();
 
 	/**
 	 * Does nothing.
 	 *
 	 * Does nothing on a Label, but we have to override.
 	 */
-	void resetsize();
+	void reset_size();
 
 	// From Realizeable
 

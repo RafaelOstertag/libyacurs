@@ -30,17 +30,17 @@ class LineObject: public WindowBase {
 	};
 
     private:
-	std::string linetext;
-	POSITION position;
+	std::string __linetext;
+	POSITION __position;
 
 	/**
 	 * Compute and sets the margin of WindowBase to achieve the position
 	 * of the line object according to @c pos.
 	 */
-	void computeMargin();
+	void compute_margin();
 
     protected:
-	void putLine();
+	void put_line();
 
     public:
 	LineObject(POSITION _pos, const std::string& _t = std::string());

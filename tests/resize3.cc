@@ -52,13 +52,13 @@ class MyWindow: public Window {
 	    snprintf(buff,32,"%d",winch.data().cols());
 	    status_msg+=buff;
 	    
-	    Curses::statusline()->pushMsg(status_msg);
+	    Curses::statusline()->push_msg(status_msg);
 	    return 0;
 	};
 
     public:
 	MyWindow() : Window() {
-	    EventQueue::connectEvent(EventConnectorMethod1<MyWindow>(EVT_WINCH,this, &MyWindow::resize_handler));
+	    EventQueue::connect_event(EventConnectorMethod1<MyWindow>(EVT_WINCH,this, &MyWindow::resize_handler));
 	}
 	MyWindow(const Margin& _m) : Window(_m) {}
 	MyWindow(const MyWindow& _o) : Window(_o) {}
@@ -88,7 +88,7 @@ int main() {
 	StatusLine* sl = new StatusLine();
 	Curses::statusline(sl);
 
-	EventQueue::connectEvent(EventConnectorFunction1(EVT_ALARM,&alrm));
+	EventQueue::connect_event(EventConnectorFunction1(EVT_ALARM,&alrm));
 
 	Curses::run();
 

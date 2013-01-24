@@ -59,7 +59,7 @@ class AlrmHandler2: public AlrmHandler {
     public:
 	inline AlrmHandler2(): AlrmHandler() {}
 	inline int handler(Event& e) {
-	    EventQueue::disconnectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, this, &AlrmHandler2::handler));
+	    EventQueue::disconnect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, this, &AlrmHandler2::handler));
 	    std::cout << "AlrmHandler2::handler()\r" << std::endl;
 	    return Handler::handler(e);
 	}
@@ -73,12 +73,12 @@ int main() {
 	AlrmHandler2 ahandler2_2;
 	AlrmHandler2 ahandler2_3;
 
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_1, &AlrmHandler2::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_3, &AlrmHandler2::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_1, &AlrmHandler2::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_3, &AlrmHandler2::handler) );
 
-	EventQueue::disconnectEvent(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler) );
+	EventQueue::disconnect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler) );
 
 	Curses::init();
 	alarm(4);

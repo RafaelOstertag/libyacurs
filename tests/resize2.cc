@@ -41,7 +41,7 @@ int alrm(Event& _e) {
 
     std::string status_msg("Size: rows=");
     
-    Size _scrdim(Curses::inquiryScreenSize());
+    Size _scrdim(Curses::inquiry_screensize());
 
     char buff[32];
     snprintf(buff,32,"%d",_scrdim.rows());
@@ -52,7 +52,7 @@ int alrm(Event& _e) {
     snprintf(buff,32,"%d",_scrdim.cols());
     status_msg+=buff;
 
-    Curses::statusline()->pushMsg(status_msg);
+    Curses::statusline()->push_msg(status_msg);
 
     winsize ws;
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1) {
@@ -95,7 +95,7 @@ int main() {
 	StatusLine* sl = new StatusLine();
 	Curses::statusline(sl);
 
-	EventQueue::connectEvent(EventConnectorFunction1(EVT_ALARM,&alrm));
+	EventQueue::connect_event(EventConnectorFunction1(EVT_ALARM,&alrm));
 
 	alarm(1);
 	Curses::run();

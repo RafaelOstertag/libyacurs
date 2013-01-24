@@ -45,7 +45,7 @@ class Curses {
 	static void mainwindow(Window* _w);
 	static Window* mainwindow();
 
-	static Size inquiryScreenSize();
+	static Size inquiry_screensize();
 };
 
 #endif

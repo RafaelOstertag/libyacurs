@@ -154,7 +154,7 @@ class VCalcNSetSize {
 
 	    // First, reset the size, so that we can identify
 	    // dynamically sized Widgets
-	    _w->resetsize();
+	    _w->reset_size();
 
 	    if ( _w->size() == Size::zero() ) {
 		// That's a dynamically sized widget, thus add it to

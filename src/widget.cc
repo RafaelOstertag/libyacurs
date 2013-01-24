@@ -32,9 +32,9 @@ Widget::unrealize() {
     *__subwin = NULL;
 
     // This is also needed to remove artifacts on the screen
-    if (touchwin(curseswindow()) == ERR)
+    if (touchwin(curses_window()) == ERR)
 	throw TouchFailed();
-    if (wrefresh(curseswindow()) == ERR)
+    if (wrefresh(curses_window()) == ERR)
 	throw RefreshFailed();
 
 
@@ -50,28 +50,28 @@ Widget::subwin() const {
 //
 
 Widget::Widget():
-    WidgetBase(), instances(NULL), __subwin(NULL) {
+    WidgetBase(), __instance_count(NULL), __subwin(NULL) {
     __subwin = new WINDOW*;
     *__subwin = NULL;
 
-    instances = new unsigned int;
-    *instances = 1;
+    __instance_count = new unsigned int;
+    *__instance_count = 1;
 }
 
 Widget::Widget(const Widget& _w):
-    WidgetBase(_w), instances(_w.instances),
+    WidgetBase(_w), __instance_count(_w.__instance_count),
     __subwin(_w.__subwin) {
-    (*instances)++;
+    (*__instance_count)++;
 }
 
 Widget::~Widget() {
-    assert(instances!=NULL);
-    if (*instances > 1) {
-	(*instances)--;
+    assert(__instance_count!=NULL);
+    if (*__instance_count > 1) {
+	(*__instance_count)--;
 	return;
     }
 
-    delete instances;
+    delete __instance_count;
 
     assert(__subwin!=NULL);
 
@@ -89,9 +89,9 @@ Widget::operator=(const Widget& _w) {
 
     WidgetBase::operator=(_w);
 
-    instances = _w.instances;
-    assert(instances!=NULL);
-    (*instances)++;
+    __instance_count = _w.__instance_count;
+    assert(__instance_count!=NULL);
+    (*__instance_count)++;
 
     __subwin = _w.__subwin;
 
@@ -150,11 +150,11 @@ Widget::realize() {
     assert(size()!=Size());
     assert(size_available()!=Size());
 
-    assert(curseswindow()!=NULL);
+    assert(curses_window()!=NULL);
     assert(__subwin!=NULL);
     assert(*__subwin==NULL);
 
-    *__subwin = ::subwin(curseswindow(),
+    *__subwin = ::subwin(curses_window(),
 		       _size.rows(),
 		       _size.cols(),
 		       pos.y(),

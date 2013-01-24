@@ -22,10 +22,10 @@
 // Private
 //
 void
-Pack::set_all_curseswindow() {
+Pack::set_all_curses_window() {
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
-		  std::bind2nd(std::mem_fun<void,WidgetBase,WINDOW*>(&WidgetBase::curseswindow),WidgetBase::curseswindow()));
+		  std::bind2nd(std::mem_fun<void,WidgetBase,WINDOW*>(&WidgetBase::curses_window),WidgetBase::curses_window()));
 }
 
 void
@@ -46,7 +46,7 @@ Pack::unrealize() {
 		  std::mem_fun(&WidgetBase::unrealize));
     
     // Required since pack is a dynamically sized Widget.
-    resetsize();
+    reset_size();
 
     realized(false);
 }
@@ -87,7 +87,7 @@ Pack::add_front(WidgetBase* _w) {
     widget_list.push_front(_w);
 
     _w->parent(this);
-    _w->curseswindow(WidgetBase::curseswindow());
+    _w->curses_window(WidgetBase::curses_window());
 }
 
 void
@@ -98,7 +98,7 @@ Pack::add_back(WidgetBase* _w) {
     widget_list.push_back(_w);
 
     _w->parent(this);
-    _w->curseswindow(WidgetBase::curseswindow());
+    _w->curses_window(WidgetBase::curses_window());
 }
 
 
@@ -110,12 +110,12 @@ Pack::remove(WidgetBase* _w) {
 }
 
 void
-Pack::curseswindow(WINDOW* _p) {
-    WidgetBase::curseswindow(_p);
+Pack::curses_window(WINDOW* _p) {
+    WidgetBase::curses_window(_p);
 
     // We have to make sure that the associated widgets have the same
     // curses window as we do.
-    set_all_curseswindow();
+    set_all_curses_window();
 }
 
 void
@@ -127,7 +127,7 @@ Size
 Pack::size() const {
     // If we are always dynamic, simply return the current value of
     // __size, which may be Size::zero() if a call was made to
-    // resetsize().
+    // reset_size().
     if (__always_dynamic) return __size;
 
     // Since we are not always dynamic, see if we can figure out the
@@ -145,7 +145,7 @@ Pack::size() const {
 void
 Pack::hinting(bool _h) {
     __hinting=_h;
-    sizechange();
+    size_change();
 }
 
 bool
@@ -156,7 +156,7 @@ Pack::hinting() const {
 void
 Pack::always_dynamic(bool _d) {
     __always_dynamic = _d;
-    sizechange();
+    size_change();
 }
 
 bool
@@ -165,14 +165,14 @@ Pack::always_dynamic() const {
 }
 
 void
-Pack::resetsize() {
+Pack::reset_size() {
     __size=Size::zero();
 }
 
 bool
-Pack::sizechange() {
+Pack::size_change() {
     if (parent()!=NULL)
-	return parent()->sizechange();
+	return parent()->size_change();
 
     if (!realized()) return true;
 

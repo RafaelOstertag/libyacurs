@@ -14,11 +14,11 @@
 //
 
 void
-StatusLine::putTopMsg() {
-    if (messages.empty())
+StatusLine::put_top_msg() {
+    if (__messages.empty())
 	line(std::string());
     else
-	line(messages.top());
+	line(__messages.top());
 }
 
 
@@ -37,14 +37,14 @@ StatusLine::StatusLine(const StatusLine& sl):
     LineObject(sl) {}
 
 void
-StatusLine::pushMsg(const std::string& m) {
-    messages.push(m);
-    putTopMsg();
+StatusLine::push_msg(const std::string& m) {
+    __messages.push(m);
+    put_top_msg();
 }
 
 void
-StatusLine::popMsg() {
-    if (messages.empty()) return;
-    messages.pop();
-    putTopMsg();
+StatusLine::pop_msg() {
+    if (__messages.empty()) return;
+    __messages.pop();
+    put_top_msg();
 }

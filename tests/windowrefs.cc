@@ -12,7 +12,7 @@
 class TWindow: public Window {
     public:
 	inline unsigned int _test() const {
-	    return getInstanceCount();
+	    return instance_count();
 	}
 };
 

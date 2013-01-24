@@ -25,16 +25,16 @@ int alrm(Event& _e) {
 
     switch (calls) {
     case 0:
-	Curses::statusline()->pushMsg("Status 1");
+	Curses::statusline()->push_msg("Status 1");
 	break;
     case 1:
-	Curses::statusline()->pushMsg("Status 2");
+	Curses::statusline()->push_msg("Status 2");
 	break;
     case 2:
-	Curses::statusline()->popMsg();
+	Curses::statusline()->pop_msg();
 	break;
     case 3:
-	Curses::statusline()->popMsg();
+	Curses::statusline()->pop_msg();
 	break;
     }
 
@@ -62,7 +62,7 @@ int main() {
 	StatusLine* sl = new StatusLine();
 	Curses::statusline(sl);
 
-	EventQueue::connectEvent(EventConnectorFunction1(EVT_ALARM,&alrm));
+	EventQueue::connect_event(EventConnectorFunction1(EVT_ALARM,&alrm));
 
 	alarm(1);
 	Curses::run();

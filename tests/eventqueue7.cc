@@ -91,13 +91,13 @@ int main() {
 	Usr1Handler u1handler;
 	Usr2Handler u2handler;
 
-	EventQueue::connectEvent(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
 	// This event connector should be replaced by the next call,
 	// hence the handler must only be called once
-	EventQueue::connectEvent(EventConnectorMethod1<Handler>(EVT_USR1, &u1handler, &Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Handler>(EVT_USR1, &u1handler, &Handler::handler) );
 	// overrides the previous statement
-	EventQueue::connectEvent(EventConnectorMethod1<Usr1Handler>(EVT_USR1, &u1handler, &Usr1Handler::handler) );
-	EventQueue::connectEvent(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_USR1, &u1handler, &Usr1Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler, &Usr2Handler::handler) );
 
 	Curses::init();
 	alarm(4);

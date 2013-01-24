@@ -57,7 +57,7 @@ Curses::termresetup_handler(Event& e) {
     // We only support resizing for Curses implementation having
     // resize_term.
 
-    Size __tmp(Curses::inquiryScreenSize());
+    Size __tmp(Curses::inquiry_screensize());
 
     resize_term(__tmp.rows(), __tmp.cols());
 
@@ -82,8 +82,8 @@ Curses::init() {
     if (initscr() == NULL)
 	throw UnableToInitialize();
 
-    EventQueue::connectEvent(EventConnectorFunction1(EVT_DOUPDATE, Curses::doupdate_handler));
-    EventQueue::connectEvent(EventConnectorFunction1(EVT_TERMRESETUP, Curses::termresetup_handler));
+    EventQueue::connect_event(EventConnectorFunction1(EVT_DOUPDATE, Curses::doupdate_handler));
+    EventQueue::connect_event(EventConnectorFunction1(EVT_TERMRESETUP, Curses::termresetup_handler));
 
     if (nonl() == ERR)
 	throw NoNLFailed();
@@ -177,7 +177,7 @@ Curses::mainwindow() {
 }
 
 Size
-Curses::inquiryScreenSize() {
+Curses::inquiry_screensize() {
     // If we have resize term, we need to get the actual terminal
     // size, because we have the ability to easily resize, and thus
     // support it.

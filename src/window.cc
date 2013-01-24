@@ -43,16 +43,16 @@ Window::key_handler(Event& _e) {
 //
 
 Window::Window(const Margin& m): WindowBase(m), __widget(NULL) {
-    EventQueue::connectEvent(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
+    EventQueue::connect_event(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
 }
 
 Window::Window(const Window& W): WindowBase(W),
 				 __widget(W.__widget) {
-    EventQueue::connectEvent(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
+    EventQueue::connect_event(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
 }
 
 Window::~Window() {
-    EventQueue::disconnectEvent(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
+    EventQueue::disconnect_event(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
 }
 
 Window&
@@ -97,7 +97,7 @@ Window::realize() {
     if (__widget) {
 	// This is imperative, so that the widget also is aware of the new
 	// curses window in case we're called in the course of a resize.
-	__widget->curseswindow(getWindow());
+	__widget->curses_window(curses_window());
 	
 	// This widget does not have another widget as parent.
 	__widget->parent(NULL);

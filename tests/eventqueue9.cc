@@ -66,7 +66,7 @@ class MyHandler: public Handler {
 int main() {
     try {
 	MyHandler h;
-	EventQueue::connectEvent(EventConnectorMethod1<MyHandler>(EVT_KEY, &h, &MyHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<MyHandler>(EVT_KEY, &h, &MyHandler::handler) );
 
 	Curses::init();
 

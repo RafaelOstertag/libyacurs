@@ -3,8 +3,7 @@
 check_PROGRAMS = cursinit coordinates margin area eventconnector1   \
   eventqueue1 eventqueue2 eventqueue3 eventqueue4 eventqueue5	    \
   eventqueue6 eventqueue7 eventqueue8 eventqueue9 windowrefs basic1 \
-  basic2 resize1 resize2 resize3 widget1 widget2 widget3 widget4    \
-  widget5 widget6 widget7 widget8 widget9 widgetresize1
+  basic2 resize1 resize2 resize3 widget1 pack1 pack2 pack3 pack4 pack5 pack6 pack7 pack8 pack9 packresize1
 # eventqueue9 and resize3 are interactive tests. They must not be listed here
 TESTS = $(filter-out eventqueue9 resize3, $(check_PROGRAMS))
 AM_DEFAULT_SOURCE_EXT = .cc

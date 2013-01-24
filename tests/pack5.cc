@@ -1,6 +1,6 @@
-// $Id: widget7.cc 4732 2013-01-23 21:21:35Z rafisol $
+// $Id$
 //
-// Test Label size change while displaying.
+// Test pack
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -56,7 +56,7 @@ int main() {
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   "Widget 7: Always dynamic, only vertical hinting");
+					   "Pack 5: Always dynamic, no hinting");
 	Curses::title(title);
 
 	Window* w1 = new Window(Margin(1,0,0,0));
@@ -105,25 +105,25 @@ int main() {
 	hpack1->add_back(vpack2_2);
 
 	vpack1->always_dynamic(true);
-	vpack1->hinting(true);
+	vpack1->hinting(false);
 	vpack1->add_back(label1);
 	vpack1->add_back(label2);
 	vpack1->add_front(label3);
 
 	vpack2->always_dynamic(true);
-	vpack2->hinting(true);
+	vpack2->hinting(false);
 	vpack2->add_back(label4);
 	vpack2->add_back(label5);
 	vpack2->add_back(label6);
 
 	vpack2_1->always_dynamic(true);
-	vpack2_1->hinting(true);
+	vpack2_1->hinting(false);
 	vpack2_1->add_front(label7);
 	vpack2_1->add_front(label8);
 	vpack2_1->add_front(label9);
 
 	vpack2_2->always_dynamic(true);
-	vpack2_2->hinting(true);
+	vpack2_2->hinting(false);
 	vpack2_2->add_back(label10);
 	vpack2_2->add_back(label11);
 	vpack2_2->add_back(label12);

@@ -1,6 +1,6 @@
 // $Id$
 //
-// Test widget
+// Test Pack
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -26,7 +26,7 @@ int main() {
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   "Widget 2");
+					   "Pack 1");
 	Curses::title(title);
 
 	Window* w1 = new Window(Margin(1,0,0,0));

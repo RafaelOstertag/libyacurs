@@ -1,6 +1,6 @@
 // $Id: widget7.cc 4732 2013-01-23 21:21:35Z rafisol $
 //
-// Test Label size change while displaying.
+// Test Pack
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -12,8 +12,32 @@
 #include "yacurs.h"
 
 // The alarm handler needs access to those
+VPack* vpack;
+HPack* hpack;
+HPack* hpack1;
+HPack* hpack2;
+VPack* vpack1;
+VPack* vpack2;
+VPack* vpack2_1;
+VPack* vpack2_2;
+
+
 Label* label1;
+Label* label2;
 Label* label3;
+Label* label4;
+Label* label5;
+Label* label6;
+Label* label7;
+Label* label8;
+Label* label9;
+Label* label10;
+Label* label11;
+Label* label12;
+Label* label13;
+Label* label14;
+Label* label15;
+Label* label16;
 
 int alrm(Event& _e) {
     static int i=0;
@@ -21,25 +45,77 @@ int alrm(Event& _e) {
     assert(_e == EVT_ALARM);
     switch (i++) {
     case 0:
-	label1->label("Big New Label1");
+	hpack->always_dynamic(false);
+	hpack->hinting(false);
+	hpack1->always_dynamic(false);
+	hpack1->hinting(false);
+	hpack2->always_dynamic(false);
+	hpack2->hinting(false);
+	vpack1->always_dynamic(false);
+	vpack1->hinting(false);
+	vpack2->always_dynamic(false);
+	vpack2->hinting(false);
+	vpack2_1->always_dynamic(false);
+	vpack2_1->hinting(false);
+	vpack2_2->always_dynamic(false);
+	vpack2_2->hinting(false);
 	alarm(1);
 	break;
-	
+
     case 1:
-	label1->label("Small label1");
+	hpack->always_dynamic(true);
+	hpack->hinting(false);
+	hpack1->always_dynamic(true);
+	hpack1->hinting(false);
+	hpack2->always_dynamic(true);
+	hpack2->hinting(false);
+	vpack1->always_dynamic(true);
+	vpack1->hinting(false);
+	vpack2->always_dynamic(true);
+	vpack2->hinting(false);
+	vpack2_1->always_dynamic(true);
+	vpack2_1->hinting(false);
+	vpack2_2->always_dynamic(true);
+	vpack2_2->hinting(false);
 	alarm(1);
 	break;
 
     case 2:
-	label1->label("This should resize");
+	hpack->always_dynamic(false);
+	hpack->hinting(true);
+	hpack1->always_dynamic(false);
+	hpack1->hinting(true);
+	hpack2->always_dynamic(false);
+	hpack2->hinting(true);
+	vpack1->always_dynamic(false);
+	vpack1->hinting(true);
+	vpack2->always_dynamic(false);
+	vpack2->hinting(true);
+	vpack2_1->always_dynamic(false);
+	vpack2_1->hinting(true);
+	vpack2_2->always_dynamic(false);
+	vpack2_2->hinting(true);
 	alarm(1);
 	break;
 
     case 3:
-	label3->label("Huge Big Label 3");
+	hpack->always_dynamic(true);
+	hpack->hinting(true);
+	hpack1->always_dynamic(true);
+	hpack1->hinting(true);
+	hpack2->always_dynamic(true);
+	hpack2->hinting(true);
+	vpack1->always_dynamic(true);
+	vpack1->hinting(true);
+	vpack2->always_dynamic(true);
+	vpack2->hinting(true);
+	vpack2_1->always_dynamic(true);
+	vpack2_1->hinting(true);
+	vpack2_2->always_dynamic(true);
+	vpack2_2->hinting(true);
 	alarm(1);
 	break;
-	
+
     default:
 	EventQueue::submit(Event(EVT_QUIT));
 	break;
@@ -56,39 +132,39 @@ int main() {
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   "Widget 7: Always dynamic, only horizontal hinting");
+					   "Pack 8: Always dynamic, only horizontal hinting");
 	Curses::title(title);
 
 	Window* w1 = new Window(Margin(1,0,0,0));
 	w1->frame(true);
 
 
-	VPack* vpack = new VPack;
-	HPack* hpack = new HPack;
-	HPack* hpack1 = new HPack();
-	HPack* hpack2 = new HPack();
-	VPack* vpack1 = new VPack;
-	VPack* vpack2 = new VPack;
-	VPack* vpack2_1 = new VPack();
-	VPack* vpack2_2 = new VPack();
+	vpack = new VPack;
+	hpack = new HPack;
+	hpack1 = new HPack();
+	hpack2 = new HPack();
+	vpack1 = new VPack;
+	vpack2 = new VPack;
+	vpack2_1 = new VPack();
+	vpack2_2 = new VPack();
 
 
 	label1 = new Label("Test label");
-	Label* label2 = new Label("Test label2");
+	label2 = new Label("Test label2");
 	label3 = new Label("Test label3");
-	Label* label4 = new Label("Test label4");
-	Label* label5=new Label("Label 5");
-	Label* label6=new Label("Label 6");
-	Label* label7=new Label("Label 7");
-	Label* label8=new Label("Label 8");
-	Label* label9=new Label("Label 9");
-	Label* label10=new Label("Label 10");
-	Label* label11=new Label("Label 11");
-	Label* label12=new Label("Label 12");
-	Label* label13=new Label("Label 13");
-	Label* label14=new Label("Label 14");
-	Label* label15=new Label("Label 15");
-	Label* label16=new Label("Label 16");
+	label4 = new Label("Test label4");
+	label5 = new Label("Label 5");
+	label6 = new Label("Label 6");
+	label7 = new Label("Label 7");
+	label8 = new Label("Label 8");
+	label9 = new Label("Label 9");
+	label10 = new Label("Label 10");
+	label11 = new Label("Label 11");
+	label12 = new Label("Label 12");
+	label13 = new Label("Label 13");
+	label14 = new Label("Label 14");
+	label15 = new Label("Label 15");
+	label16 = new Label("Label 16");
 
 	vpack->add_front(hpack);
 	vpack->add_front(hpack1);

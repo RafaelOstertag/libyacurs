@@ -29,11 +29,12 @@ class Window;
  *  - setting/unsetting focus
  *  - setting a parent widget
  *
- * If widgets use curses windows, it is expected that they create the window
- * using subwin() to create them.
+ * If widgets use curses windows, it is expected that they create the
+ * window using subwin() to create them.
  *
- * Information on how much space the widget has to its disposition, has to be
- * provided by the Window the widget is associated or by the parent Widget.
+ * Information on how much space the widget has to its disposition,
+ * has to be provided by the Window the widget is associated or by the
+ * parent Widget.
  *
  * Dynamically sized Widgets return Size::zero() upon a call to
  * size(). An implementation detail of those Widget is, that they
@@ -42,27 +43,30 @@ class Window;
 class WidgetBase: public Realizeable {
     private:
 	/**
-	 * Curses window used to display the widget. Widgets like Pack may not
-	 * directly use this, but pass the pointer on to assigned widgets.  The
-	 * widget does not maintain the window, i.e. it does not free the
-	 * memory occupied. However, the pointer has to be valid for the entire
-	 * lifetime of the object.
+	 * Curses window used to display the widget. Widgets like Pack
+	 * may not directly use this, but pass the pointer on to
+	 * assigned widgets.  The widget does not maintain the window,
+	 * i.e. it does not free the memory occupied. However, the
+	 * pointer has to be valid for the entire lifetime of the
+	 * object.
 	 *
-	 * Further, this pointer is used for subwin() in order to create
-	 * subwindows.
+	 * Further, this pointer is used for subwin() in order to
+	 * create subwindows.
 	 */
 	WINDOW* __curses_window;
 
 	/**
-	 * The parent of the widget. If the widget has no parent, it has to be
-	 * set to NULL.
+	 * The parent of the widget. If the widget has no parent, it
+	 * has to be set to NULL.
 	 *
-	 * Basically, only container widgets such as Packs can be parents.
+	 * Basically, only container widgets such as Packs can be
+	 * parents.
 	 */
 	WidgetBase* __parent;
 
 	/**
-	 * Holds the position on the screen, where the widget will display.
+	 * Holds the position on the screen, where the widget will
+	 * display.
 	 */
 	Coordinates __position;
 
@@ -86,43 +90,6 @@ class WidgetBase: public Realizeable {
 	~WidgetBase();
 	WidgetBase(const WidgetBase& _w);
 	WidgetBase& operator=(const WidgetBase& w);
-
-	/**
-	 * Set the position, where the widget will be displayed.
-	 *
-	 * @param _c position where the widget will be displayed. The position
-	 * is relative to __curses_window, since it is expected that widgets use
-	 * derwin().
-	 */
-	void position(const Coordinates& _c);
-
-	/**
-	 * Get the the position of the widget.
-	 *
-	 * @return the position of the widget. The position is relative to the
-	 * position of __curses_window.
-	 */
-	const Coordinates& position() const;
-
-	/**
-	 * Set the size available to the widget.
-	 *
-	 * This is used by container widgets and has to be set by the paren
-	 * widget, or the Window if the widget has no parent Widget.
-	 *
-	 * @param _s size available to the widget
-	 *
-	 */
-	virtual void size_available(const Size& _s);
-
-	/**
-	 * Get the size available to the widget.
-	 *
-	 * Used by container widgets
-	 *
-	 * @return size available to the widget.
-	 */
-	const Size& size_available() const;
 
 	/**
 	 * Set parent of widget.
@@ -153,8 +120,8 @@ class WidgetBase: public Realizeable {
 	 *
 	 * This is usually not called by the user.
 	 *
-	 * @param _p pointer to curses window. The pointer has to be valid for
-	 * the entire lifetime of the widget.
+	 * @param _p pointer to curses window. The pointer has to be
+	 * valid for the entire lifetime of the widget.
 	 */
 	virtual void curses_window(WINDOW* _p);
 
@@ -165,17 +132,57 @@ class WidgetBase: public Realizeable {
 	 */
 	WINDOW* curses_window() const;
 
+
+	/**
+	 * Set the position, where the widget will be displayed.
+	 *
+	 * @param _c position where the widget will be displayed. The
+	 * position is relative to __curses_window, since it is
+	 * expected that widgets use derwin().
+	 */
+	void position(const Coordinates& _c);
+
+	/**
+	 * Get the the position of the widget.
+	 *
+	 * @return the position of the widget. The position is
+	 * relative to the position of __curses_window.
+	 */
+	const Coordinates& position() const;
+
+	/**
+	 * Set the size available to the widget.
+	 *
+	 * This is used by container widgets and has to be set by the
+	 * paren widget, or the Window if the widget has no parent
+	 * Widget.
+	 *
+	 * @param _s size available to the widget
+	 *
+	 */
+	virtual void size_available(const Size& _s);
+
+	/**
+	 * Get the size available to the widget.
+	 *
+	 * Used by container widgets
+	 *
+	 * @return size available to the widget.
+	 */
+	const Size& size_available() const;
+
+
 	/**
 	 * Notification of size change of a child.
 	 *
-	 * This is called on a parent widget when the child detects a size
-	 * change.
+	 * This is called on a parent widget when the child detects a
+	 * size change.
 	 *
 	 * If the called class is not a container, it should ignore a
 	 * call.
 	 *
-	 * @return the parent returns @c true if the size change can be
-	 * fullfilled, else @false.
+	 * @return the parent returns @c true if the size change can
+	 * be fullfilled, else @c false.
 	 */
 	virtual bool size_change() = 0;
 
@@ -197,7 +204,8 @@ class WidgetBase: public Realizeable {
 	/**
 	 * Provide a size hint.
 	 *
-	 * Dynamically size Widgets can provide size hints if possible.
+	 * Dynamically size Widgets can provide size hints if
+	 * possible.
 	 *
 	 * @return Size::zero() if no hint can be provided. Either
 	 * Size::rows()>0 or Size::cols()>0 which is taken as
@@ -209,12 +217,39 @@ class WidgetBase: public Realizeable {
 	/**
 	 * Reset the size of the widget.
 	 *
-	 * This is used mainly for dynamically sized Widgets, so that will
-	 * return Size(0,0) upon next call to size().
+	 * This is used mainly for dynamically sized Widgets, so that
+	 * will return Size(0,0) upon next call to size().
 	 *
 	 * Non-dynamically sized Widget are supposed to ignore this.
 	 */
 	virtual void reset_size() = 0;
+
+	/**
+	 * Indicates whether or not the Widget is capable of focusing.
+	 *
+	 * @return Widgets not capable of focusing return @c false,
+	 * otherwise @c true.
+	 */
+        virtual bool can_focus() const = 0;
+
+	/**
+	 * Set the focus to the Widget.
+	 *
+	 * If a Widget is not capable of focusing, it must throw an
+	 * CannotFocus exception.o
+	 */
+	virtual void focus() = 0;
+
+	/**
+	 * Get the focus status.
+	 *
+	 * Widgets that cannot have focus, must always return @c
+	 * false.
+	 *
+	 * @return @c true if the widget has focus, @c false
+	 * otherwise.
+	 */
+	virtual bool has_focus() const = 0;
 };
 
 #endif // WIDGETBASE_H

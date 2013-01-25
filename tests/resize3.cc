@@ -58,7 +58,7 @@ class MyWindow: public Window {
 
     public:
 	MyWindow() : Window() {
-	    EventQueue::connect_event(EventConnectorMethod1<MyWindow>(EVT_WINCH,this, &MyWindow::resize_handler));
+	    EventQueue::connect_event(EventConnectorMethod1<MyWindow>(EVT_SIGWINCH,this, &MyWindow::resize_handler));
 	}
 	MyWindow(const Margin& _m) : Window(_m) {}
 	MyWindow(const MyWindow& _o) : Window(_o) {}
@@ -66,7 +66,7 @@ class MyWindow: public Window {
 };
 
 int alrm(Event& _e) {
-    assert(_e == EVT_ALARM);
+    assert(_e == EVT_SIGALRM);
     EventQueue::submit(Event(EVT_QUIT));
     return 0;
 }
@@ -88,7 +88,7 @@ int main() {
 	StatusLine* sl = new StatusLine();
 	Curses::statusline(sl);
 
-	EventQueue::connect_event(EventConnectorFunction1(EVT_ALARM,&alrm));
+	EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
 
 	Curses::run();
 

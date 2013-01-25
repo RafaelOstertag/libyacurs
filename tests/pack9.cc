@@ -42,9 +42,10 @@ Label* label16;
 int alrm(Event& _e) {
     static int i=0;
 
-    assert(_e == EVT_ALARM);
+    assert(_e == EVT_SIGALRM);
     switch (i++) {
     case 0:
+	Curses::title()->line("Pack 9: always_dynamic=false, hinting=false");
 	hpack->always_dynamic(false);
 	hpack->hinting(false);
 	hpack1->always_dynamic(false);
@@ -63,6 +64,7 @@ int alrm(Event& _e) {
 	break;
 
     case 1:
+	Curses::title()->line("Pack 9: always_dynamic=true, hinting=false");
 	hpack->always_dynamic(true);
 	hpack->hinting(false);
 	hpack1->always_dynamic(true);
@@ -81,6 +83,7 @@ int alrm(Event& _e) {
 	break;
 
     case 2:
+	Curses::title()->line("Pack 9: always_dynamic=false, hinting=true");
 	hpack->always_dynamic(false);
 	hpack->hinting(true);
 	hpack1->always_dynamic(false);
@@ -99,6 +102,7 @@ int alrm(Event& _e) {
 	break;
 
     case 3:
+	Curses::title()->line("Pack 9: always_dynamic=true, hinting=true");
 	hpack->always_dynamic(true);
 	hpack->hinting(true);
 	hpack1->always_dynamic(true);
@@ -132,7 +136,7 @@ int main() {
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   "Pack 8: Always dynamic, only horizontal hinting");
+					   "Pack 9:");
 	Curses::title(title);
 
 	Window* w1 = new Window(Margin(1,0,0,0));
@@ -221,7 +225,7 @@ int main() {
 
 	Curses::mainwindow(w1);
 
-	EventQueue::connect_event(EventConnectorFunction1(EVT_ALARM,&alrm));
+	EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
 
 	alarm(5);
 	Curses::run();

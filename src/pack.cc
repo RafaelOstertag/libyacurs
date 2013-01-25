@@ -188,6 +188,33 @@ Pack::size_change() {
     return true;
 }
 
+bool
+Pack::can_focus() const {
+    //
+    // TO BE IMPLEMENTED
+    //
+    abort();
+    return false;
+}
+
+void
+Pack::focus() {
+    //
+    // TO BE IMPLEMENTED
+    //
+    abort();
+}
+
+bool
+Pack::has_focus() const {
+    //
+    // TO BE IMPLEMENTED
+    //
+    abort();
+    return false;
+}
+
+
 void
 Pack::refresh(bool immediate) {
     if (!realized()) throw NotRealized();

@@ -101,3 +101,6 @@ DerWinFailed::DerWinFailed():
 
 ClearFailed::ClearFailed():
     BaseCurEx("*clear() failed") {}
+
+CannotFocus::CannotFocus():
+    BaseCurEx("Cannot focus") {}

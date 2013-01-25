@@ -73,7 +73,7 @@ WindowBase::refresh_handler(Event& _e) {
 
 int
 WindowBase::resize_handler(Event& _e) {
-    assert(_e == EVT_WINCH);
+    assert(_e == EVT_SIGWINCH);
     assert(realized());
 
     EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
@@ -101,7 +101,7 @@ WindowBase::WindowBase(const Margin& _m):
     *__instance_count = 1;
 
     EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
-    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_WINCH,this, &WindowBase::resize_handler));
+    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
 }
 
 WindowBase::WindowBase(const WindowBase& so):
@@ -115,7 +115,7 @@ WindowBase::WindowBase(const WindowBase& so):
     (*__instance_count)++;
 
     EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
-    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_WINCH,this, &WindowBase::resize_handler));
+    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
 }
 
 WindowBase::~WindowBase() {
@@ -137,7 +137,7 @@ WindowBase::~WindowBase() {
     delete __curses_window;
 
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
-    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_WINCH,this, &WindowBase::resize_handler));
+    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
 }
 
 WindowBase&

@@ -41,7 +41,7 @@ class Handler {
 
 class AlrmHandler: public Handler {
     public:
-	inline AlrmHandler(): Handler(EVT_ALARM) {}
+	inline AlrmHandler(): Handler(EVT_SIGALRM) {}
 	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "AlrmHandler::handler()\r" << std::endl;
@@ -73,11 +73,11 @@ int main() {
 	AlrmHandler2 ahandler2_3;
 	AlrmHandler2 ahandler2_4;
 
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_1,&AlrmHandler2::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_2,&AlrmHandler2::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_3,&AlrmHandler2::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2_4,&AlrmHandler2::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler,&AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGALRM, &ahandler2_1,&AlrmHandler2::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGALRM, &ahandler2_2,&AlrmHandler2::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGALRM, &ahandler2_3,&AlrmHandler2::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGALRM, &ahandler2_4,&AlrmHandler2::handler) );
 
 	Curses::init();
 	alarm(4);

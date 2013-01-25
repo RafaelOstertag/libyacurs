@@ -30,9 +30,9 @@ enum EVENT_TYPE {
     /// Terminates the EventQueue main loop
     EVT_QUIT,
     /// Notification of window size change
-    EVT_WINCH,
+    EVT_SIGWINCH,
     /// Notification of alarm signal
-    EVT_ALARM,
+    EVT_SIGALRM,
     /// Key pressed
     EVT_KEY,
     /// A refresh is usually issued after an resize
@@ -42,9 +42,10 @@ enum EVENT_TYPE {
     /// Re-setup terminal. Mainly used when resizing screen
     EVT_TERMRESETUP,
     /// SIGUSR1
-    EVT_USR1,
+    EVT_SIGUSR1,
     /// SIGUSR2
-    EVT_USR2
+    EVT_SIGUSR2,
+    EVT_SIGINT
 };
 
 /**
@@ -120,60 +121,92 @@ class Event {
 template<class T>
 class EventEx: public Event {
     private:
-	/// The data transported
-	T payload;
+	/// The data transported by the event.
+	T __payload;
 
     public:
 	/**
 	 * @param _et the event type
 	 *
-	 * @param _v reference to the data. The data will be copied to
+	 * @param _payload reference to the data. The data will be copied to
 	 * an internal variable.
 	 */
-	EventEx(EVENT_TYPE _et, const T& _v): Event(_et) {
-	    payload = _v;
+	EventEx(EVENT_TYPE _et, const T& _payload): Event(_et) {
+	    __payload = _payload;
 	}
-	EventEx(const EventEx<T>& _e): Event(_e) {
-	    payload = _e.payload;
+
+	EventEx(const EventEx<T>& _e): Event(_e),
+				       __payload(_e.__payload) {
 	}
+
 	EventEx<T>& operator=(const EventEx<T>& _e) {
 	    Event::operator=(_e);
-	    payload = _e.payload;
+	    __payload = _e.__payload;
 	    return *this;
 	}
+
+	/**
+	 * Create an exact copy of this object.
+	 *
+	 * Create an exact copy of this object. The memory occupied
+	 * has to be freed by the caller.
+	 */
 	EventEx<T>* clone() const {
 	    return new EventEx<T>(*this);
 	}
+
 	/**
 	 * @return a reference to the data of the event.
 	 */
-	virtual T& data() { return payload; }
+	virtual T& data() { return __payload; }
 };
 
 /**
  * Event generated upon SIGWINCH.
  *
- * This event will be generated upon SIGWINCH. As payload, it holds the new
- * size of the screen.
+ * This event will be generated upon SIGWINCH. As payload, it holds
+ * the new size of the screen.
  *
  * @ingroup Event
  */
 class EventWinCh: public EventEx<Size> {
     public:
+	/**
+	 * @param _s the new size of the screen.
+	 */
 	EventWinCh(const Size& _s);
 	EventWinCh(const EventWinCh& _e);
 	EventWinCh& operator=(const EventWinCh& _e);
+
+	/**
+	 * Create an exact copy of this object.
+	 *
+	 * Create an exact copy of this object. The memory occupied
+	 * has to be freed by the caller.
+	 */
 	EventWinCh* clone() const;
 };
 
 /**
+ * This Event will be submitted upon key press.
+ *
  * @ingroup Event
  */
 class EventKey: public EventEx<int> {
     public:
+	/**
+	 * @param _r the value of the key pressed.
+	 */
 	EventKey(const int& _r);
 	EventKey(const EventKey& _e);
 	EventKey& operator=(const EventKey& _e);
+
+	/**
+	 * Create an exact copy of this object.
+	 *
+	 * Create an exact copy of this object. The memory occupied
+	 * has to be freed by the caller.
+	 */
 	EventKey* clone() const;
 };
 

@@ -41,7 +41,7 @@ class Handler {
 
 class AlrmHandler: public Handler {
     public:
-	inline AlrmHandler(): Handler(EVT_ALARM) {}
+	inline AlrmHandler(): Handler(EVT_SIGALRM) {}
 	inline int handler(Event& e) {
 	    std::cout << "AlrmHandler::handler()\r" << std::endl;
 	    EventQueue::submit(Event(EVT_QUIT));
@@ -77,14 +77,14 @@ int main() {
 	AlrmHandler ahandler;
 	AlrmHandler2 ahandler2;
 
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
 	// Should be overriden by next call
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2, &AlrmHandler2::handler2) );
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2, &AlrmHandler2::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGALRM, &ahandler2, &AlrmHandler2::handler2) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGALRM, &ahandler2, &AlrmHandler2::handler) );
 	// AlrmHandler2::handler should not be called now
-	EventQueue::disconnect_event(EventConnectorMethod1<AlrmHandler2>(EVT_ALARM, &ahandler2, &AlrmHandler2::handler) );
+	EventQueue::disconnect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGALRM, &ahandler2, &AlrmHandler2::handler) );
 
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_WINCH, &ahandler2, &AlrmHandler2::handler3) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGWINCH, &ahandler2, &AlrmHandler2::handler3) );
 	
 	Curses::init();
 	EventQueue::submit(EventWinCh(Area() ));

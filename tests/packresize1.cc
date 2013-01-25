@@ -37,7 +37,7 @@
 
 int alrm(Event& _e) {
     static int calls = 0;
-    assert(_e == EVT_ALARM);
+    assert(_e == EVT_SIGALRM);
 
     std::string status_msg("Size: rows=");
     
@@ -176,7 +176,7 @@ int main() {
 
 	Curses::mainwindow(w1);
 
-	EventQueue::connect_event(EventConnectorFunction1(EVT_ALARM,&alrm));
+	EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
 
 	alarm(1);
 	Curses::run();

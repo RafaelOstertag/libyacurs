@@ -173,4 +173,9 @@ class ClearFailed: public BaseCurEx {
 	ClearFailed();
 };
 
+class CannotFocus: public BaseCurEx {
+    public:
+	CannotFocus();
+};
+
 #endif // CUREX_H

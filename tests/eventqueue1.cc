@@ -36,7 +36,7 @@ class Handler {
 
 class WinChHandler: public Handler {
     public:
-	inline WinChHandler(): Handler(EVT_WINCH) {}
+	inline WinChHandler(): Handler(EVT_SIGWINCH) {}
 	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    Size tmp(dynamic_cast<EventWinCh&>(e).data());
@@ -47,7 +47,7 @@ class WinChHandler: public Handler {
 
 class AlrmHandler: public Handler {
     public:
-	inline AlrmHandler(): Handler(EVT_ALARM) {}
+	inline AlrmHandler(): Handler(EVT_SIGALRM) {}
 	inline int handler(Event& e) { 
 	    std::cout << "WinChHandler\r" << std::endl;
 	    return Handler::handler(e); 
@@ -59,11 +59,11 @@ int main() {
 	WinChHandler whandler;
 	AlrmHandler ahandler;
 
-	EventQueue::connect_event(EventConnectorMethod1<WinChHandler>(EVT_WINCH, &whandler,&WinChHandler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler,&AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<WinChHandler>(EVT_SIGWINCH, &whandler,&WinChHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler,&AlrmHandler::handler) );
 
 	EventQueue::submit(EventWinCh(Area ()));
-	EventQueue::submit(Event(EVT_ALARM));
+	EventQueue::submit(Event(EVT_SIGALRM));
 	EventQueue::submit(Event(EVT_QUIT));
 
 	Curses::init();

@@ -280,9 +280,6 @@ class HSetPosWidget {
 	HSetPosWidget(const HSetPosWidget& _o): __pos(_o.__pos){}
 	void operator()(WidgetBase* _w) {
 	    _w->position(__pos);
-	    // Set the size available
-	    _w->size_available(_w->size());
-
 	    __pos.x(__pos.x() + _w->size().cols());
 	}
 };

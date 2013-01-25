@@ -9,17 +9,9 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_SIGNAL_H
 #include <signal.h>
-#endif // HAVE_SIGNAL_H
-
-#ifdef HAVE_LIST
 #include <list>
-#endif // HAVE_LIST
-
-#ifdef HAVE_QUEUE
 #include <queue>
-#endif // HAVE_QUEUE
 
 #include "event.h"
 #include "eventconnector.h"
@@ -41,6 +33,7 @@ class EventQueue {
 	static struct sigaction old_alrm_act;
 	static struct sigaction old_usr1_act;
 	static struct sigaction old_usr2_act;
+	static struct sigaction old_int_act;
 
 	static bool signal_blocked;
 	static std::queue<Event*> evt_queue;

@@ -33,7 +33,6 @@ Window::unrealize() {
 int 
 Window::key_handler(Event& _e) {
     assert(_e == EVT_KEY);
-    assert(realized());
 
     return -1;
 }
@@ -42,7 +41,8 @@ Window::key_handler(Event& _e) {
 // Public
 //
 
-Window::Window(const Margin& m): WindowBase(m), __widget(NULL) {
+Window::Window(const Margin& m): WindowBase(m), 
+				 __widget(NULL) {
     EventQueue::connect_event(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
 }
 
@@ -60,7 +60,7 @@ Window::operator=(const Window& W) {
     WindowBase::operator=(W);
     
     __widget = W.__widget;
-
+    
     return *this;
 }
 

@@ -12,7 +12,7 @@
 #include "yacurs.h"
 
 int alrm(Event& _e) {
-    assert(_e == EVT_ALARM);
+    assert(_e == EVT_SIGALRM);
     EventQueue::submit(Event(EVT_QUIT));
     return 0;
 }
@@ -44,7 +44,7 @@ int main() {
 
 	Curses::mainwindow(w1);
 
-	EventQueue::connect_event(EventConnectorFunction1(EVT_ALARM,&alrm));
+	EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
 
 	alarm(1);
 	Curses::run();

@@ -41,7 +41,7 @@ class Handler {
 
 class WinChHandler: public Handler {
     public:
-	inline WinChHandler(): Handler(EVT_WINCH) {}
+	inline WinChHandler(): Handler(EVT_SIGWINCH) {}
 	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    return 0;
@@ -50,7 +50,7 @@ class WinChHandler: public Handler {
 
 class AlrmHandler: public Handler {
     public:
-	inline AlrmHandler(): Handler(EVT_ALARM) {}
+	inline AlrmHandler(): Handler(EVT_SIGALRM) {}
 	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    return 0;
@@ -88,16 +88,16 @@ int main() {
     AlrmHandler2 ahandler2_1;
     AlrmHandler2 ahandler2_2;
 
-    EventConnectorMethod1<WinChHandler> wconnector1(EVT_WINCH, &winch1, &WinChHandler::handler);
-    EventConnectorMethod1<WinChHandler> wconnector2(EVT_WINCH, &winch2, &WinChHandler::handler);
+    EventConnectorMethod1<WinChHandler> wconnector1(EVT_SIGWINCH, &winch1, &WinChHandler::handler);
+    EventConnectorMethod1<WinChHandler> wconnector2(EVT_SIGWINCH, &winch2, &WinChHandler::handler);
 
-    EventConnectorMethod1<AlrmHandler> aconnector1(EVT_ALARM, &ahandler1, &AlrmHandler::handler);
-    EventConnectorMethod1<AlrmHandler> aconnector2(EVT_ALARM, &ahandler2, &AlrmHandler::handler);
+    EventConnectorMethod1<AlrmHandler> aconnector1(EVT_SIGALRM, &ahandler1, &AlrmHandler::handler);
+    EventConnectorMethod1<AlrmHandler> aconnector2(EVT_SIGALRM, &ahandler2, &AlrmHandler::handler);
 
-    EventConnectorMethod1<AlrmHandler2> aconnector2_1(EVT_ALARM, &ahandler2_1, &AlrmHandler2::handler);
-    EventConnectorMethod1<AlrmHandler2> aconnector2_2(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler);
-    EventConnectorMethod1<AlrmHandler2> aconnector2_2_(EVT_ALARM, &ahandler2_2, &AlrmHandler2::handler);
-    EventConnectorMethod1<Handler> ehandler(EVT_ALARM, &ahandler2_2, &Handler::handler);
+    EventConnectorMethod1<AlrmHandler2> aconnector2_1(EVT_SIGALRM, &ahandler2_1, &AlrmHandler2::handler);
+    EventConnectorMethod1<AlrmHandler2> aconnector2_2(EVT_SIGALRM, &ahandler2_2, &AlrmHandler2::handler);
+    EventConnectorMethod1<AlrmHandler2> aconnector2_2_(EVT_SIGALRM, &ahandler2_2, &AlrmHandler2::handler);
+    EventConnectorMethod1<Handler> ehandler(EVT_SIGALRM, &ahandler2_2, &Handler::handler);
 
     
     if (wconnector1 == wconnector2)
@@ -122,9 +122,9 @@ int main() {
     AlrmHandler* aptr=&ahandler2_1;
     AlrmHandler2* a2ptr=&ahandler2_1;
 
-    EventConnectorMethod1<AlrmHandler2> _a1(EVT_ALARM, a2ptr, &AlrmHandler2::handler);
-    EventConnectorMethod1<AlrmHandler> _a2(EVT_ALARM, aptr, &AlrmHandler::handler);
-  EventConnectorMethod1<Handler> _a3(EVT_ALARM, hptr, &Handler::handler);
+    EventConnectorMethod1<AlrmHandler2> _a1(EVT_SIGALRM, a2ptr, &AlrmHandler2::handler);
+    EventConnectorMethod1<AlrmHandler> _a2(EVT_SIGALRM, aptr, &AlrmHandler::handler);
+  EventConnectorMethod1<Handler> _a3(EVT_SIGALRM, hptr, &Handler::handler);
 
   if (!(_a1 == _a2))
       return 1;
@@ -145,9 +145,9 @@ int main() {
     if ( *ptr1 != *ptr2 )
 	return 1;
 
-    EventConnectorFunction1 efh1(EVT_USR1, &Static1::fcthandler1);
-    EventConnectorFunction1 efh1_1(EVT_USR1, &Static1::fcthandler1);
-    EventConnectorFunction1 efh2(EVT_USR1, &Static2::fcthandler1);
+    EventConnectorFunction1 efh1(EVT_SIGUSR1, &Static1::fcthandler1);
+    EventConnectorFunction1 efh1_1(EVT_SIGUSR1, &Static1::fcthandler1);
+    EventConnectorFunction1 efh2(EVT_SIGUSR1, &Static2::fcthandler1);
 
     if (efh1 != efh1)
 	return 1;

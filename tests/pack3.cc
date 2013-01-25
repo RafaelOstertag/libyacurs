@@ -18,7 +18,7 @@ Label* label3;
 int alrm(Event& _e) {
     static int i=0;
 
-    assert(_e == EVT_ALARM);
+    assert(_e == EVT_SIGALRM);
     switch (i++) {
     case 0:
 	label1->label("Big New Label1");
@@ -56,7 +56,7 @@ int main() {
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   "Pack 3");
+					   "Pack 3: Widget resizes");
 	Curses::title(title);
 
 	Window* w1 = new Window(Margin(1,0,0,0));
@@ -91,7 +91,7 @@ int main() {
 
 	Curses::mainwindow(w1);
 
-	EventQueue::connect_event(EventConnectorFunction1(EVT_ALARM,&alrm));
+	EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
 
 	alarm(1);
 	Curses::run();

@@ -203,6 +203,12 @@ class Pack: public WidgetBase {
 	 */
 	bool size_change();
 
+	bool can_focus() const;
+
+	void focus();
+
+	bool has_focus() const;
+
 	/**
 	 * Refresh all Widgets in the Pack.
 	 *
@@ -216,7 +222,7 @@ class Pack: public WidgetBase {
 	 * This function relies on the implementation of realize() of derived
 	 * classes.
 	 *
-	 * @param _s the new size available to the pack.
+	 * @param _a the new size available to the pack.
 	 */
 	void resize(const Area& _a);
 

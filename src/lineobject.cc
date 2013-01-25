@@ -65,17 +65,19 @@ LineObject::put_line() {
 //
 LineObject::LineObject(POSITION _pos, const std::string& _t):
     WindowBase(), __linetext(_t), __position(_pos) {
-    // We don't have to connect to EVT_REFRESH and EVT_RESIZE, since that has
-    // already been done by BaseWindow. We simply have to override the handler
-    // functions.
+    // We don't have to connect to EVT_REFRESH and EVT_RESIZE, since
+    // that has already been done by BaseWindow. We simply have to
+    // override the handler functions.
 }
 
 LineObject::~LineObject() {
 }
 
-LineObject::LineObject(const LineObject& lo):
-    WindowBase(lo), __linetext(lo.__linetext), __position(lo.__position) {
-
+LineObject::LineObject(const LineObject& lo): 
+    WindowBase(lo),
+    __linetext(lo.__linetext),
+    __position(lo.__position) 
+{
 }
 
 LineObject&

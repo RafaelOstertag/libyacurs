@@ -88,6 +88,21 @@ Label::reset_size() {
     // dynamically sized Widgets.
 }
 
+bool
+Label::can_focus() const {
+    return false;
+}
+
+void
+Label::focus() {
+    throw CannotFocus();
+}
+
+bool
+Label::has_focus() const {
+    return false;
+}
+
 void
 Label::refresh(bool immediate) {
     if (!realized()) throw NotRealized();

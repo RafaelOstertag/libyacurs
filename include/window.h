@@ -19,6 +19,8 @@ class WidgetBase;
 
 /**
  * Window for displaying a widget.
+ *
+ * Several Widgets can be displayed by the use of Packs.
  */
 class Window: public WindowBase {
     private:

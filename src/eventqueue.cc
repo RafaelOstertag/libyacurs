@@ -34,7 +34,8 @@ sigset_t EventQueue::old_sigmask;
 struct sigaction EventQueue::old_winch_act;
 struct sigaction EventQueue::old_alrm_act;
 struct sigaction EventQueue::old_usr1_act;
-struct sigaction EventQueue::old_usr2_act;		
+struct sigaction EventQueue::old_usr2_act;
+struct sigaction EventQueue::old_int_act;
 bool EventQueue::signal_blocked = false;
 
 std::queue<Event*> EventQueue::evt_queue;
@@ -59,15 +60,15 @@ class EventConnectorEqual {
 class EvtConnSetSuspendAll {
     private:
 	EVENT_TYPE __evt;
-	bool suspend;
+	bool __suspend;
 
     public:
 	inline EvtConnSetSuspendAll(EVENT_TYPE _e, bool _s):
-	    __evt(_e), suspend(_s) {}
+	    __evt(_e), __suspend(_s) {}
 	inline void operator()(EventConnectorBase* eb) {
 	    assert ( eb != NULL );
 	    if ( *eb == __evt) {
-		if (suspend)
+		if (__suspend)
 		    eb->suspend();
 		else
 		    eb->unsuspend();
@@ -78,17 +79,17 @@ class EvtConnSetSuspendAll {
 class EvtConnSetSuspendExcept {
     private:
 	const EventConnectorBase& __evt;
-	bool suspend;
+	bool __suspend;
 
     public:
 	inline EvtConnSetSuspendExcept(const EventConnectorBase& _e,
 				    bool _s): __evt(_e),
-					      suspend(_s){}
+					      __suspend(_s){}
 	inline void operator()(EventConnectorBase* eb) {
 	    assert ( eb != NULL );
 	    if (*eb == __evt.type() &&
 		! (__evt == *eb) ) {
-		if (suspend)
+		if (__suspend)
 		    eb->suspend();
 		else
 		    eb->unsuspend();
@@ -96,20 +97,51 @@ class EvtConnSetSuspendExcept {
 	}
 };
 
+/**
+ * Deletes a given EventConnector.
+ *
+ * Functor for freeing memory used by an EventConnector.
+ */
 class DestroyEventConnector {
     public:
+	/**
+	 * Frees the memory of the given EventConnector.
+	 *
+	 * @param eb pointer to EventConnectorBase to be freed.
+	 */
 	inline void operator()(EventConnectorBase* eb) {
 	    assert( eb != NULL );
 	    delete eb;
 	}
 };
 
+/**
+ * Functor for calling EventConnectors for a specific event.
+ */
 class CallEventConnector {
     private:
+	/**
+	 * Event which is used to determine the EventConnectors to be
+	 * called, and passed to them if called.
+	 */
 	Event& __eb;
 
     public:
+	/**
+	 * @param _eb Event for which EventConnectors are called.
+	 */
 	inline CallEventConnector(Event& _eb): __eb(_eb) {}
+
+	/**
+	 * Calls the given EventConnector conditionally.
+	 *
+	 * Calls the given Eventconnector only if it connects to the
+	 * same EventType as __eb. __eb will be passed as argument to
+	 * the EventConnector call.
+	 *
+	 * @param _ec EventConnector which will be called
+	 * conditionally if it connects to the same EventType as __eb is.
+	 */
 	inline void operator()(EventConnectorBase* _ec) {
 	    assert(_ec != NULL);
 	    if (_ec->type() == __eb.type()) {
@@ -130,87 +162,86 @@ void
 EventQueue::setup_signal() {
     int err;
 
+    struct sigaction sigact;
+    sigact.sa_sigaction = signal_handler;
+#ifdef SA_SIGINFO
+    sigact.sa_flags = SA_SIGINFO;
+#else // SA_SIGINFO
+    sigact.sa_flags = 0;
+#endif // SA_SIGINFO
+
     //
-    // Window Size Change handler
+    // SIGWINCH
     //
+
     // This handler is always installed, whether or not resize_term()
     // is available. However, depending on availability of
     // resize_term(), the application will be actually resized.
-    struct sigaction winchact;
-    winchact.sa_sigaction = signal_handler;
-#ifdef SA_SIGINFO
-    winchact.sa_flags = SA_SIGINFO;
-#else // SA_SIGINFO
-    winchact.sa_flags = 0;
-#endif // SA_SIGINFO
+    sigemptyset(&sigact.sa_mask);
+    sigaddset(&sigact.sa_mask, SIGALRM);
+    sigaddset(&sigact.sa_mask, SIGUSR1);
+    sigaddset(&sigact.sa_mask, SIGUSR2);
+    sigaddset(&sigact.sa_mask, SIGINT);
 
-    sigemptyset(&winchact.sa_mask);
-    sigaddset(&winchact.sa_mask, SIGALRM);
-    sigaddset(&winchact.sa_mask, SIGUSR1);
-    sigaddset(&winchact.sa_mask, SIGUSR2);
-
-    err = sigaction(SIGWINCH, &winchact, &old_winch_act);
+    err = sigaction(SIGWINCH, &sigact, &old_winch_act);
     if (err)
 	throw SystemError(errno);
 
     //
-    // Alarm handler
+    // SIGALRM
     //
-    struct sigaction alrmact;
-    alrmact.sa_sigaction = signal_handler;
-#ifdef SA_SIGINFO
-    alrmact.sa_flags = SA_SIGINFO;
-#else // SA_SIGINFO
-    alrmact.sa_flags = 0;
-#endif // SA_SIGINFO
+    sigemptyset(&sigact.sa_mask);
+    sigaddset(&sigact.sa_mask, SIGWINCH);
+    sigaddset(&sigact.sa_mask, SIGUSR1);
+    sigaddset(&sigact.sa_mask, SIGUSR2);
+    sigaddset(&sigact.sa_mask, SIGINT);
 
-    sigemptyset(&alrmact.sa_mask);
-    sigaddset(&alrmact.sa_mask, SIGWINCH);
-    sigaddset(&alrmact.sa_mask, SIGUSR1);
-    sigaddset(&alrmact.sa_mask, SIGUSR2);
-
-    err = sigaction(SIGALRM, &alrmact, &old_alrm_act);
+    err = sigaction(SIGALRM, &sigact, &old_alrm_act);
     if (err)
 	throw SystemError(errno);
 
     //
-    // Usr1 handler
+    // SIGUSR1
     //
-    struct sigaction usr1act;
-    usr1act.sa_sigaction = signal_handler;
-#ifdef SA_SIGINFO
-    usr1act.sa_flags = SA_SIGINFO;
-#else // SA_SIGINFO
-    usr1act.sa_flags = 0;
-#endif // SA_SIGINFO
+    sigemptyset(&sigact.sa_mask);
+    sigaddset(&sigact.sa_mask, SIGWINCH);
+    sigaddset(&sigact.sa_mask, SIGALRM);
+    sigaddset(&sigact.sa_mask, SIGUSR2);
+    sigaddset(&sigact.sa_mask, SIGINT);
 
-    sigemptyset(&usr1act.sa_mask);
-    sigaddset(&usr1act.sa_mask, SIGWINCH);
-    sigaddset(&usr1act.sa_mask, SIGALRM);
-    sigaddset(&usr1act.sa_mask, SIGUSR2);
-
-    err = sigaction(SIGUSR1, &usr1act, &old_usr1_act);
+    err = sigaction(SIGUSR1, &sigact, &old_usr1_act);
     if (err)
 	throw SystemError(errno);
 
+    //
+    // SIGUSR2
+    //
+    sigemptyset(&sigact.sa_mask);
+    sigaddset(&sigact.sa_mask, SIGWINCH);
+    sigaddset(&sigact.sa_mask, SIGALRM);
+    sigaddset(&sigact.sa_mask, SIGUSR1);
+    sigaddset(&sigact.sa_mask, SIGINT);
 
-    struct sigaction usr2act;
-    usr2act.sa_sigaction = signal_handler;
-#ifdef SA_SIGINFO
-    usr2act.sa_flags = SA_SIGINFO;
-#else // SA_SIGINFO
-    usr2act.sa_flags = 0;
-#endif // SA_SIGINFO
-
-    sigemptyset(&usr2act.sa_mask);
-    sigaddset(&usr2act.sa_mask, SIGWINCH);
-    sigaddset(&usr2act.sa_mask, SIGALRM);
-    sigaddset(&usr2act.sa_mask, SIGUSR1);
-
-    err = sigaction(SIGUSR2, &usr2act, &old_usr2_act);
+    err = sigaction(SIGUSR2, &sigact, &old_usr2_act);
     if (err)
 	throw SystemError(errno);
 
+    //
+    // SIGINT
+    //
+    sigemptyset(&sigact.sa_mask);
+    sigaddset(&sigact.sa_mask, SIGWINCH);
+    sigaddset(&sigact.sa_mask, SIGALRM);
+    sigaddset(&sigact.sa_mask, SIGUSR1);
+    sigaddset(&sigact.sa_mask, SIGUSR2);
+
+    err = sigaction(SIGINT, &sigact, &old_int_act);
+    if (err)
+	throw SystemError(errno);
+
+    //
+    // Connect to signals
+    //
     sigset_t nset;
     sigemptyset(&nset);
 
@@ -218,6 +249,7 @@ EventQueue::setup_signal() {
     sigaddset(&nset, SIGALRM);
     sigaddset(&nset, SIGUSR1);
     sigaddset(&nset, SIGUSR2);
+    sigaddset(&nset, SIGINT);
 
     err = sigprocmask(SIG_UNBLOCK, &nset, &old_sigmask);
     if (err)
@@ -240,6 +272,9 @@ EventQueue::restore_signal() {
     err = sigaction(SIGUSR2, &old_usr2_act, NULL);
     if (err)
 	throw SystemError(errno);
+    err = sigaction(SIGINT, &old_int_act, NULL);
+    if (err)
+	throw SystemError(errno);
 
     err = sigprocmask(SIG_SETMASK, &old_sigmask, NULL);
     if (err)
@@ -258,7 +293,7 @@ EventQueue::signal_handler(int signo)
     switch (signo) {
     case SIGALRM:
 	try {
-	    evt_queue.push(new Event(EVT_ALARM));
+	    evt_queue.push(new Event(EVT_SIGALRM));
 	} catch(std::exception& e) {
 	    // Intentionally empty
 #ifndef NDEBUG
@@ -283,7 +318,7 @@ EventQueue::signal_handler(int signo)
 	break;
     case SIGUSR1:
 	try {
-	    evt_queue.push(new Event(EVT_USR1));
+	    evt_queue.push(new Event(EVT_SIGUSR1));
 	} catch(std::exception& e) {
 	    // Intentionally empty
 #ifndef NDEBUG
@@ -294,7 +329,18 @@ EventQueue::signal_handler(int signo)
 	break;
     case SIGUSR2:
 	try {
-	    evt_queue.push(new Event(EVT_USR2));
+	    evt_queue.push(new Event(EVT_SIGUSR2));
+	} catch(std::exception& e) {
+	    // Intentionally empty
+#ifndef NDEBUG
+	    std::cerr << e.what() << std::endl;
+	    std::abort();
+#endif
+	}
+	break;
+    case SIGINT:
+	try {
+	    evt_queue.push(new Event(EVT_SIGINT));
 	} catch(std::exception& e) {
 	    // Intentionally empty
 #ifndef NDEBUG
@@ -454,6 +500,7 @@ EventQueue::run() {
     sigaddset(&block_sigmask, SIGALRM);
     sigaddset(&block_sigmask, SIGUSR1);
     sigaddset(&block_sigmask, SIGUSR2);
+    sigaddset(&block_sigmask, SIGINT);
 
     setup_signal();
 

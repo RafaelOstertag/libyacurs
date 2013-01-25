@@ -54,7 +54,7 @@ Event::clone() const {
 ///////
 
 EventWinCh::EventWinCh(const Size& _s):
-    EventEx<Size>(EVT_WINCH, _s) {}
+    EventEx<Size>(EVT_SIGWINCH, _s) {}
 
 EventWinCh::EventWinCh(const EventWinCh& _e):
     EventEx<Size>(_e) {}

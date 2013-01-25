@@ -42,7 +42,7 @@ class Handler {
 
 class AlrmHandler: public Handler {
     public:
-	inline AlrmHandler(): Handler(EVT_ALARM) {}
+	inline AlrmHandler(): Handler(EVT_SIGALRM) {}
 	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "AlrmHandler2::handler()\r" << std::endl;
@@ -61,7 +61,7 @@ class Usr1Handler: public Handler {
     private:
 	bool quit;
     public:
-	inline Usr1Handler(bool q=false): Handler(EVT_USR1), quit(q) {}
+	inline Usr1Handler(bool q=false): Handler(EVT_SIGUSR1), quit(q) {}
 	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "Usr1Handler::handler()\r" << std::endl;
@@ -84,7 +84,7 @@ class Usr1Handler: public Handler {
 
 class Usr2Handler: public Handler {
     public:
-	inline Usr2Handler(): Handler(EVT_USR2) {}
+	inline Usr2Handler(): Handler(EVT_SIGUSR2) {}
 	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "Usr2Handler::handler()\r" << std::endl;
@@ -100,11 +100,11 @@ int main() {
 	Usr1Handler u1handler;
 	Usr2Handler u2handler, u2handler2, u2handler3;
 
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_USR1, &u1handler, &Usr1Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler, &Usr2Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler3, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
 
 	Curses::init();
 	alarm(4);
@@ -127,15 +127,15 @@ int main() {
 	u2handler2.reset();
 	u2handler3.reset();
 
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_USR1, &u1handler, &Usr1Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler, &Usr2Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler3, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
 	//
 	// u2handler* may not have any calls
 	//
-	EventQueue::suspend_all(EVT_USR2);
+	EventQueue::suspend_all(EVT_SIGUSR2);
 
 	// u1handler must terminate queue loop
 	u1handler.setQuit(true);
@@ -160,15 +160,15 @@ int main() {
 	u2handler2.reset();
 	u2handler3.reset();
 
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_USR1, &u1handler, &Usr1Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler, &Usr2Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler3, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
 	//
 	// u2handler* must have calls
 	//
-	EventQueue::unsuspend_all(EVT_USR2);
+	EventQueue::unsuspend_all(EVT_SIGUSR2);
 
 	u1handler.setQuit(false);
 
@@ -192,15 +192,15 @@ int main() {
 	u2handler2.reset();
 	u2handler3.reset();
 
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_USR1, &u1handler, &Usr1Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler, &Usr2Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler3, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
 	//
 	// only u2handler2 must have calls
 	//
-	EventQueue::suspend_except(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler));
+	EventQueue::suspend_except(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler));
 
 	u1handler.setQuit(false);
 
@@ -224,17 +224,17 @@ int main() {
 	u2handler2.reset();
 	u2handler3.reset();
 
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_USR1, &u1handler, &Usr1Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler, &Usr2Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler3, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
 	//
 	// only u2handler2 must have no calls
 	//
 
-	EventQueue::suspend_all(EVT_USR2);
-	EventQueue::unsuspend_except(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler));
+	EventQueue::suspend_all(EVT_SIGUSR2);
+	EventQueue::unsuspend_except(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler));
 
 	alarm(4);
 	EventQueue::run();
@@ -256,16 +256,16 @@ int main() {
 	u2handler2.reset();
 	u2handler3.reset();
 
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_USR1, &u1handler, &Usr1Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler, &Usr2Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler3, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
 	//
 	// only u2handler2 must have no calls
 	//
 
-	EventQueue::suspend(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler2, &Usr2Handler::handler));
+	EventQueue::suspend(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler));
 
 	alarm(4);
 	EventQueue::run();

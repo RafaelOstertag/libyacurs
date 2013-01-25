@@ -268,17 +268,39 @@ class VCalcSize {
 	}
 };
 
+/**
+ * Sets the position of a given Widget.
+ *
+ * Sets the position of a given Widget and updates an internal
+ * Coordinate object in manner, that subsequent positions will not
+ * overwrite previous Widgets on the screen.
+ *
+ * The position will be advanced from top to bottom (vertically).
+ */
 class VSetPosWidget {
     private:
+	/**
+	 * Position of wich is used in the call to
+	 * WidgetBase::position().
+	 */
 	Coordinates __pos;
+
     public:
+	/**
+	 * @param __start the first call of the object will put the
+	 * Widget at this position.
+	 */
 	VSetPosWidget(const Coordinates& __start): __pos(__start){}
+
 	VSetPosWidget(const VSetPosWidget& _o): __pos(_o.__pos){}
+
+	/**
+	 * Call WidgetBase::postion().
+	 *
+	 * @param _w pointer to Widget.
+	 */
 	void operator()(WidgetBase* _w) {
 	    _w->position(__pos);
-	    // Set the size available
-	    _w->size_available(_w->size());
-
 	    __pos.y(__pos.y() + _w->size().rows());
 	}
 };

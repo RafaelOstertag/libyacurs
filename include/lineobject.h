@@ -19,8 +19,8 @@
 /**
  * A line object occupies one entire line of the screen.
  *
- * @todo provide options for centering and right aligning so that title can be
- * centered if it is used as title for the application.
+ * @todo provide options for centering and right aligning so that
+ * title can be centered if it is used as title for the application.
  */
 class LineObject: public WindowBase {
     public:
@@ -34,8 +34,8 @@ class LineObject: public WindowBase {
 	POSITION __position;
 
 	/**
-	 * Compute and sets the margin of WindowBase to achieve the position
-	 * of the line object according to @c pos.
+	 * Compute and sets the margin of WindowBase to achieve the
+	 * position of the line object according to @c pos.
 	 */
 	void compute_margin();
 

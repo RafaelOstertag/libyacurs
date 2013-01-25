@@ -50,6 +50,27 @@ WidgetBase::operator=(const WidgetBase& _w) {
 }
 
 void
+WidgetBase::parent(WidgetBase* _p) {
+    __parent = _p;
+}
+
+WidgetBase*
+WidgetBase::parent() const {
+    return __parent;
+}
+
+void
+WidgetBase::curses_window(WINDOW* _p) {
+    __curses_window=_p;
+}
+
+WINDOW*
+WidgetBase::curses_window() const {
+    return __curses_window;
+}
+
+
+void
 WidgetBase::position(const Coordinates& _c) {
     assert(_c.x()>-1);
     assert(_c.y()>-1);
@@ -71,25 +92,4 @@ WidgetBase::size_available(const Size& _s) {
 const Size&
 WidgetBase::size_available() const {
     return __size_available;
-}
-
-
-void
-WidgetBase::parent(WidgetBase* _p) {
-    __parent = _p;
-}
-
-WidgetBase*
-WidgetBase::parent() const {
-    return __parent;
-}
-
-void
-WidgetBase::curses_window(WINDOW* _p) {
-    __curses_window=_p;
-}
-
-WINDOW*
-WidgetBase::curses_window() const {
-    return __curses_window;
 }

@@ -41,7 +41,7 @@ class Handler {
 
 class AlrmHandler: public Handler {
     public:
-	inline AlrmHandler(): Handler(EVT_ALARM) {}
+	inline AlrmHandler(): Handler(EVT_SIGALRM) {}
 	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "AlrmHandler::handler()\r" << std::endl;
@@ -58,7 +58,7 @@ class AlrmHandler: public Handler {
 
 class Usr1Handler: public Handler {
     public:
-	inline Usr1Handler(): Handler(EVT_USR1) {}
+	inline Usr1Handler(): Handler(EVT_SIGUSR1) {}
 	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "Usr1Handler::handler()\r" << std::endl;
@@ -75,7 +75,7 @@ class Usr1Handler: public Handler {
 
 class Usr2Handler: public Handler {
     public:
-	inline Usr2Handler(): Handler(EVT_USR2) {}
+	inline Usr2Handler(): Handler(EVT_SIGUSR2) {}
 	inline int handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "Usr2Handler::handler()\r" << std::endl;
@@ -91,13 +91,13 @@ int main() {
 	Usr1Handler u1handler;
 	Usr2Handler u2handler;
 
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_ALARM, &ahandler, &AlrmHandler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
 	// This event connector should be replaced by the next call,
 	// hence the handler must only be called once
-	EventQueue::connect_event(EventConnectorMethod1<Handler>(EVT_USR1, &u1handler, &Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Handler>(EVT_SIGUSR1, &u1handler, &Handler::handler) );
 	// overrides the previous statement
-	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_USR1, &u1handler, &Usr1Handler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_USR2, &u2handler, &Usr2Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
+	EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
 
 	Curses::init();
 	alarm(4);

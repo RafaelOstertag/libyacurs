@@ -12,6 +12,7 @@
 
 #include "cursex.h"
 #include "pack.h"
+#include "eventqueue.h"
 
 //
 // Functors
@@ -44,7 +45,7 @@ Pack::unrealize() {
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  std::mem_fun(&WidgetBase::unrealize));
-    
+
     // Required since pack is a dynamically sized Widget.
     reset_size();
 
@@ -54,8 +55,8 @@ Pack::unrealize() {
 //
 // Public
 //
-Pack::Pack(): WidgetBase(), 
-	      __size(), 
+Pack::Pack(): WidgetBase(),
+	      __size(),
 	      __hinting(true),
 	      widget_list() {
 }
@@ -180,40 +181,32 @@ Pack::size_change() {
     resize(Area(position(),
 		WidgetBase::size_available()) );
 
-    // Immediate refresh.
-    refresh(true);
+    // There may be many widgets involved in the resize, thus we emit
+    // the same event sequence as by a screen resize. A call
+    // refresh(true) produced to much flicker.
+    //
+    // BAD: refresh(true)
 
-    
+    EventQueue::submit(EVT_REFRESH);
+    EventQueue::submit(EVT_DOUPDATE);
 
     return true;
 }
 
 bool
 Pack::can_focus() const {
-    //
-    // TO BE IMPLEMENTED
-    //
-    abort();
     return false;
 }
 
 void
-Pack::focus() {
-    //
-    // TO BE IMPLEMENTED
-    //
-    abort();
+Pack::focus(bool) {
+    throw CannotFocus();
 }
 
 bool
-Pack::has_focus() const {
-    //
-    // TO BE IMPLEMENTED
-    //
-    abort();
+Pack::focus() const {
     return false;
 }
-
 
 void
 Pack::refresh(bool immediate) {

@@ -39,6 +39,15 @@ class Window;
  * Dynamically sized Widgets return Size::zero() upon a call to
  * size(). An implementation detail of those Widget is, that they
  * should reset their size() to Size::zero() upon unrealize().
+ *
+ * If a Widget can have a focus, it can_focus() must return @c true
+ * and it should provide a event handler for EVT_FOCUS_CHANGE.
+ *
+ * For details on Focus Management, see FocusGroup and FocusManager.
+ *
+ * Widgets that want handle keyboard input, should be focusable and
+ * connect to the EVT_KEY event. However, they must only react to
+ * EVT_KEY if they have focus.
  */
 class WidgetBase: public Realizeable {
     private:
@@ -86,6 +95,17 @@ class WidgetBase: public Realizeable {
 	Size __size_available;
 
     public:
+	/**
+	 * Constructor.
+	 *
+	 * Upon construction, Widgets have no
+	 *
+	 * - focus
+	 * - curses window
+	 * - parent
+	 * - position (i.e. Coordinates::zero())
+	 * - size available (i.e. Size::zero())
+	 */
 	WidgetBase();
 	~WidgetBase();
 	WidgetBase(const WidgetBase& _w);
@@ -227,18 +247,21 @@ class WidgetBase: public Realizeable {
 	/**
 	 * Indicates whether or not the Widget is capable of focusing.
 	 *
+	 * Derived classes have to
+	 * implement is whether or not a widget can be focused.
+	 *
 	 * @return Widgets not capable of focusing return @c false,
 	 * otherwise @c true.
 	 */
         virtual bool can_focus() const = 0;
 
 	/**
-	 * Set the focus to the Widget.
+	 * Set or unset the focus to the Widget.
 	 *
 	 * If a Widget is not capable of focusing, it must throw an
-	 * CannotFocus exception.o
+	 * CannotFocus exception when trying to set the focus.
 	 */
-	virtual void focus() = 0;
+	virtual void focus(bool _f) = 0;
 
 	/**
 	 * Get the focus status.
@@ -249,7 +272,7 @@ class WidgetBase: public Realizeable {
 	 * @return @c true if the widget has focus, @c false
 	 * otherwise.
 	 */
-	virtual bool has_focus() const = 0;
+	virtual bool focus() const = 0;
 };
 
 #endif // WIDGETBASE_H

@@ -3,12 +3,31 @@
 #include <cassert>
 
 #include "focusmanager.h"
+#include "cursex.h"
+#include "eventqueue.h"
 
 std::stack<FocusGroup*> FocusManager::__focus_groups;
 
 //
 // Private
 //
+int
+FocusManager::focus_change_handler(Event& _e) {
+    if (__focus_groups.empty()) return 0;
+
+    switch (_e.type()) {
+    case EVT_FOCUS_NEXT:
+	__focus_groups.top()->focus_next();
+	break;
+    case EVT_FOCUS_PREVIOUS:
+	__focus_groups.top()->focus_previous();
+	break;
+    default:
+	throw UnexpectedEvent();
+    };
+
+    return 0;
+}
 
 //
 // Protected
@@ -17,6 +36,21 @@ std::stack<FocusGroup*> FocusManager::__focus_groups;
 //
 // Public
 //
+
+void
+FocusManager::init() {
+    EventQueue::connect_event(EventConnectorFunction1(EVT_FOCUS_NEXT,FocusManager::focus_change_handler));
+    EventQueue::connect_event(EventConnectorFunction1(EVT_FOCUS_PREVIOUS,FocusManager::focus_change_handler));
+}
+
+void
+FocusManager::uninit() {
+    EventQueue::disconnect_event(EventConnectorFunction1(EVT_FOCUS_NEXT,FocusManager::focus_change_handler));
+    EventQueue::disconnect_event(EventConnectorFunction1(EVT_FOCUS_PREVIOUS,FocusManager::focus_change_handler));
+
+    while(!__focus_groups.empty())
+	destroy_focus_group();
+}
 
 void
 FocusManager::new_focus_group() {
@@ -56,18 +90,4 @@ FocusManager::current_focus_group_remove(WidgetBase* _w) {
     assert(!__focus_groups.empty());
 
     __focus_groups.top()->remove(_w);
-}
-
-void
-FocusManager::focus_next() {
-    if (__focus_groups.empty()) return;
-
-    __focus_groups.top()->focus_next();
-}
-
-void
-FocusManager::focus_previous() {
-    if (__focus_groups.empty()) return;
-
-    __focus_groups.top()->focus_previous();
 }

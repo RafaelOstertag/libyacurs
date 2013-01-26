@@ -8,6 +8,7 @@
 #include <cstdlib>
 
 #include "widgetbase.h"
+#include "cursex.h"
 
 //
 // Private
@@ -32,7 +33,7 @@ WidgetBase::~WidgetBase() {
 }
 
 WidgetBase::WidgetBase(const WidgetBase& _w): Realizeable(_w),
-					      __curses_window(NULL),
+					      __curses_window(_w.__curses_window),
 					      __parent(_w.__parent),
 					      __position(_w.__position),
 					      __size_available(_w.__size_available) {
@@ -41,9 +42,9 @@ WidgetBase::WidgetBase(const WidgetBase& _w): Realizeable(_w),
 WidgetBase&
 WidgetBase::operator=(const WidgetBase& _w) {
     Realizeable::operator=(_w);
+    __curses_window = _w.__curses_window;
     __parent = _w.__parent;
     __position = _w.__position;
-    __curses_window = _w.__curses_window;
     __size_available = _w.__size_available;
 
     return *this;

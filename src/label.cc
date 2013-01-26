@@ -28,7 +28,7 @@ Label::Label(const Label& _l):
 Label::~Label() {
 }
 
-const Label&
+Label&
 Label::operator=(const Label& _l) {
     Widget::operator=(_l);
 
@@ -94,12 +94,12 @@ Label::can_focus() const {
 }
 
 void
-Label::focus() {
+Label::focus(bool) {
     throw CannotFocus();
 }
 
-bool
-Label::has_focus() const {
+bool 
+Label::focus() const {
     return false;
 }
 

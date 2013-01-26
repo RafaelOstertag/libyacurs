@@ -9,8 +9,6 @@
 #include "config.h"
 #endif
 
-#include <cstdlib>
-
 #include <string>
 
 #include "widget.h"
@@ -36,7 +34,7 @@ class Label: public Widget {
 	Label(const std::string& _l=std::string());
 	Label(const Label& _l);
 	~Label();
-	const Label& operator=(const Label& _l);
+	Label& operator=(const Label& _l);
 
 	void label(const std::string& _l);
 	const std::string& label() const;
@@ -71,10 +69,8 @@ class Label: public Widget {
 	void reset_size();
 
 	bool can_focus() const;
-
-	void focus();
-
-	bool has_focus() const;
+	void focus(bool);
+	bool focus() const;
 
 	// From Realizeable
 	/**

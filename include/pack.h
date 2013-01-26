@@ -204,10 +204,8 @@ class Pack: public WidgetBase {
 	bool size_change();
 
 	bool can_focus() const;
-
-	void focus();
-
-	bool has_focus() const;
+	void focus(bool);
+	bool focus() const;
 
 	/**
 	 * Refresh all Widgets in the Pack.

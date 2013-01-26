@@ -23,13 +23,12 @@
 #endif // HAVE_SYS_TERMIOS_H
 #endif // HAVE_TERMIOS_H
 
-#ifdef HAVE_CSTDLIB
 #include <cstdlib>
-#endif // HAVE_CSTDLIB
 
 #include "curs.h"
 #include "eventqueue.h"
 #include "cursex.h"
+#include "focusmanager.h"
 
 StatusLine* Curses::__statusline = NULL;
 LineObject* Curses::__title = NULL;
@@ -94,6 +93,9 @@ Curses::init() {
     if (noecho() == ERR)
 	throw NoEchoFailed();
 
+    if (keypad(stdscr, TRUE) == ERR)
+	throw KeyPadFailed();
+
     // Curses clears stdscr upon first call to getch, which may
     // produce undesired results, i.e. already created Curses Windows
     // may be overwritten. Therefore we refresh stdscr preventive.
@@ -117,6 +119,8 @@ Curses::end() {
 
     if (endwin() == ERR)
 	throw EndWinError();
+
+    EventQueue::cleanup();
 
     initialized = false;
 }
@@ -143,7 +147,11 @@ Curses::run() {
     if (doupdate() == ERR)
 	throw DoupdateFailed();
 
+    FocusManager::init();
+
     EventQueue::run();
+
+    FocusManager::uninit();
 }
 
 void

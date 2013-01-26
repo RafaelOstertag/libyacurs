@@ -35,7 +35,22 @@ class FocusManager {
 	 */
 	static std::stack<FocusGroup*> __focus_groups;
 
+	/**
+	 * Handles EVT_FOCUS_NEXT and EVT_FOCUS_PREVIOUS.
+	 */
+	static int focus_change_handler(Event& _e);
+
     public:
+	/**
+	 * initializes the Focus Manager.
+	 */
+	static void init();
+
+	/**
+	 * uninitializes the Focus Manager.
+	 */
+	static void uninit();
+
 	/**
 	 * Create a new Focus Group.
 	 *
@@ -68,16 +83,6 @@ class FocusManager {
 	 * @param _w pointer to the Widget.
 	 */
 	static void current_focus_group_remove(WidgetBase* _w);
-
-	/**
-	 * Focus next Widget in Current Focus Group.
-	 */
-	static void focus_next();
-
-	/**
-	 * Focus previous Widget in Current Focus Group.
-	 */
-	static void focus_previous();
 };
 
 #endif // FOCUSMANAGER_H

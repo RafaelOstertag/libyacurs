@@ -505,7 +505,7 @@ EventQueue::run() {
     setup_signal();
 
     while(true) {
-	int c=getch();
+	int c=wgetch(stdscr);
 	if (c != ERR)
 	    submit(EventKey(c));
 
@@ -538,15 +538,18 @@ EventQueue::run() {
 
     }
 QUIT:
-    blocksignal();
-    /* Cleanup event queue */
+    restore_signal();
+
+    cleanup();
+}
+
+void
+EventQueue::cleanup() {
+   /* Cleanup event queue */
     while(!evt_queue.empty()) {
 	delete evt_queue.front();
 	evt_queue.pop();
     }
-    unblocksignal();
-
-    restore_signal();
 
     // Remove any pending removal request, so that the memory will be
     // freed properly

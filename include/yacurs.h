@@ -13,6 +13,8 @@
 #include "event.h"
 #include "eventconnector.h"
 #include "eventqueue.h"
+#include "focusgroup.h"
+#include "focusmanager.h"
 #include "curs.h"
 #include "windowbase.h"
 #include "lineobject.h"
@@ -24,6 +26,7 @@
 #include "hpack.h"
 #include "widget.h"
 #include "label.h"
+#include "button.h"
 
 #endif // YACURS_H
 

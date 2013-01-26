@@ -78,6 +78,7 @@ class EventQueue {
 	/// Add an event to the qeue
 	static void submit(const Event& ev);
 	static void run();
+	static void cleanup();
 };
 
 #endif // EVENTQUEUE_H

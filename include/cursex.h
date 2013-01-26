@@ -178,4 +178,14 @@ class CannotFocus: public BaseCurEx {
 	CannotFocus();
 };
 
+class KeyPadFailed: public BaseCurEx {
+    public:
+	KeyPadFailed();
+};
+
+class UnexpectedEvent: public BaseCurEx {
+    public:
+	UnexpectedEvent();
+};
+
 #endif // CUREX_H

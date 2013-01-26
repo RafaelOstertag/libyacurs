@@ -4,18 +4,15 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_STDEXCEPT
 #include <stdexcept>
-#endif // HAVE_STDEXCEPT
-
-#ifdef HAVE_CASSERT
 #include <cassert>
-#endif // HAVE_CASSERT
+
 
 #include "curs.h"
 #include "window.h"
 #include "area.h"
 #include "eventqueue.h"
+#include "focusmanager.h"
 
 //
 // Private
@@ -27,40 +24,30 @@
 void
 Window::unrealize() {
     if (__widget) __widget->unrealize();
+
+    FocusManager::destroy_focus_group();
     WindowBase::unrealize();
-}
-
-int 
-Window::key_handler(Event& _e) {
-    assert(_e == EVT_KEY);
-
-    return -1;
 }
 
 //
 // Public
 //
 
-Window::Window(const Margin& m): WindowBase(m), 
-				 __widget(NULL) {
-    EventQueue::connect_event(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
-}
+Window::Window(const Margin& m): WindowBase(m),
+				 __widget(NULL) {}
 
 Window::Window(const Window& W): WindowBase(W),
-				 __widget(W.__widget) {
-    EventQueue::connect_event(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
-}
+				 __widget(W.__widget) {}
 
-Window::~Window() {
-    EventQueue::disconnect_event(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_handler));
-}
+
+Window::~Window() {}
 
 Window&
 Window::operator=(const Window& W) {
     WindowBase::operator=(W);
-    
+
     __widget = W.__widget;
-    
+
     return *this;
 }
 
@@ -94,16 +81,21 @@ Window::resize(const Area& _a) {
 void
 Window::realize() {
     WindowBase::realize();
+
+    // It is imperative that a new Focus Group is created before the
+    // Widget is realized()!
+    FocusManager::new_focus_group();
+
     if (__widget) {
 	// This is imperative, so that the widget also is aware of the new
 	// curses window in case we're called in the course of a resize.
 	__widget->curses_window(curses_window());
-	
+
 	// This widget does not have another widget as parent.
 	__widget->parent(NULL);
-	
+
 	__widget->position(widget_area());
-	
+
 	__widget->size_available(widget_area());
 
 	__widget->realize();

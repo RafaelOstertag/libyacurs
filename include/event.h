@@ -45,7 +45,17 @@ enum EVENT_TYPE {
     EVT_SIGUSR1,
     /// SIGUSR2
     EVT_SIGUSR2,
-    EVT_SIGINT
+    EVT_SIGINT,
+    /**
+     * Advises Focus Manager to give focus to the next Widget in the
+     * Current Focus Group.
+     */
+    EVT_FOCUS_NEXT,
+    /**
+     * Advises Focus Manager to give focus to the next Widget in the
+     * Current Focus Group.
+     */
+    EVT_FOCUS_PREVIOUS
 };
 
 /**

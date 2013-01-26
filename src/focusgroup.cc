@@ -39,7 +39,7 @@ FocusGroup::FocusGroup(): __active(false), __widgets(), __focus() {}
 
 FocusGroup::FocusGroup(const FocusGroup& _f): __active(_f.__active),
 					      __widgets(_f.__widgets),
-					      _focus(_f.__focus) {}
+					      __focus(_f.__focus) {}
 
 FocusGroup::~FocusGroup() {
     if (__widgets.empty()) return;
@@ -66,7 +66,7 @@ FocusGroup::activate() {
     if (__widgets.empty()) return;
 
     // If we are called the first time, make the first Widget getting
-    // the focus. Else do not change __focus, allowing the resume the
+    // the focus. Else do not change __focus, allowing to resume the
     // last state of the focus in the group.
     if (__focus == __widgets.end())
 	__focus = __widgets.begin();

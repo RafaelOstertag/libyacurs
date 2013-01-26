@@ -104,3 +104,9 @@ ClearFailed::ClearFailed():
 
 CannotFocus::CannotFocus():
     BaseCurEx("Cannot focus") {}
+
+KeyPadFailed::KeyPadFailed():
+    BaseCurEx("keypad() failed") {}
+
+UnexpectedEvent::UnexpectedEvent():
+    BaseCurEx("Unexpected event received") {}

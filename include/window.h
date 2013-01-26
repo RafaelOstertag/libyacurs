@@ -21,6 +21,11 @@ class WidgetBase;
  * Window for displaying a widget.
  *
  * Several Widgets can be displayed by the use of Packs.
+ *
+ * Upon realization, it will create a new Focus Group. When
+ * unrealized, it will destroy the Focus Group. This ensures that
+ * Widgets will register to the proper Focus Group upon their
+ * realization.
  */
 class Window: public WindowBase {
     private:
@@ -28,8 +33,6 @@ class Window: public WindowBase {
 
     protected:
 	void unrealize();
-
-	virtual int key_handler(Event& _e);
 
     public:
 	Window(const Margin& m=Margin());

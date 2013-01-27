@@ -4,6 +4,7 @@
 
 #include "cursex.h"
 #include "widget.h"
+#include "eventqueue.h"
 
 //
 // Private
@@ -12,6 +13,19 @@
 //
 // Protected
 //
+int
+Widget::force_refresh_handler(Event& _e) {
+    assert(_e == EVT_FORCEREFRESH);
+    assert(realized());
+    assert(__widget_subwin!=NULL);
+    assert(*__widget_subwin!=NULL);
+
+    if (clearok(*__widget_subwin, TRUE)==ERR)
+	throw ClearOKFailed();
+
+    return 0;
+}
+
 void
 Widget::unrealize() {
     if (not realized()) throw NotRealized();
@@ -56,12 +70,15 @@ Widget::Widget():
 
     __instance_count = new unsigned int;
     *__instance_count = 1;
+
+    EventQueue::connect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
 }
 
 Widget::Widget(const Widget& _w):
     WidgetBase(_w), __instance_count(_w.__instance_count),
     __widget_subwin(_w.__widget_subwin) {
     (*__instance_count)++;
+    EventQueue::connect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
 }
 
 Widget::~Widget() {
@@ -80,6 +97,8 @@ Widget::~Widget() {
 	    throw DelWindowFailed();
 
     delete __widget_subwin;
+
+    EventQueue::disconnect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
 }
 
 Widget&

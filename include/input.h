@@ -26,6 +26,17 @@ class Input: public Widget {
 	bool __focus;
 
 	/**
+	 * Offset into the buffer. Used when not the entire buffer can
+	 * be displayed in the Input Widget, i.e. scrolling.
+	 */
+	std::string::size_type __offset;
+
+	/**
+	 * Cursor position relative to offset, absolute to Widget.
+	 */
+	std::string::size_type __current_curs_pos;
+
+	/**
 	 * Maximum size of input.
 	 *
 	 * If it is 0, there is no limit.

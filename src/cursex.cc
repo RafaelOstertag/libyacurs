@@ -63,6 +63,9 @@ ScrollOKFailed::ScrollOKFailed() :
 LeaveOKFailed::LeaveOKFailed() :
     BaseCurEx("call to leaveok() failed") {}
 
+ClearOKFailed::ClearOKFailed() :
+    BaseCurEx("call to clearok() failed") {}
+
 NoNLFailed::NoNLFailed() :
     BaseCurEx("call to nonl() failed") {}
 
@@ -116,3 +119,6 @@ UnableToStartColor::UnableToStartColor():
 
 ColorsNotInitialized::ColorsNotInitialized():
     BaseCurEx("Colors not initialized") {}
+
+WMoveFailed::WMoveFailed():
+    BaseCurEx("wmove() failed") {}

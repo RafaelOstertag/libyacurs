@@ -510,8 +510,10 @@ EventQueue::run() {
 	    switch (c) {
 	    case KEY_REFRESH:
 	    case 12:
+		submit(Event(EVT_FORCEREFRESH));
 		submit(Event(EVT_REFRESH));
 		submit(Event(EVT_DOUPDATE));
+		break;
 	    default:
 		submit(EventKey(c));
 	    }

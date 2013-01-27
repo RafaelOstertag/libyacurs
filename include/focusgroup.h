@@ -22,6 +22,8 @@
  *
  * Everytime a focus change happens, an EVT_FOCUS_CHANGE will be
  * emitted in order to make Widgets aware of focus changes.
+ *
+ * @sa FocusManager
  */
 class FocusGroup {
     private:

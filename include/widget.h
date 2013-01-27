@@ -31,6 +31,8 @@ class Widget: public WidgetBase {
 	WINDOW** __widget_subwin;
 
     protected:
+	int force_refresh_handler(Event& _e);
+
 	void unrealize();
 
 	WINDOW* widget_subwin() const;

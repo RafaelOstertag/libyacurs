@@ -139,7 +139,8 @@ class WidgetBase: public Realizeable {
 	 *
 	 * The curses window is used for displaying the widget.
 	 *
-	 * This is usually not called by the user.
+	 * This is usually not called by the user and is used for
+	 * creating subwin().
 	 *
 	 * @param _p pointer to curses window. The pointer has to be
 	 * valid for the entire lifetime of the widget.
@@ -148,6 +149,9 @@ class WidgetBase: public Realizeable {
 
 	/**
 	 * Get the curses window of the Widget.
+	 *
+	 * This is the pointer to the curses window, where the
+	 * subwin() will be created.
 	 *
 	 * @return pointer to the curses window.
 	 */
@@ -254,7 +258,7 @@ class WidgetBase: public Realizeable {
 	 * @return Widgets not capable of focusing return @c false,
 	 * otherwise @c true.
 	 */
-        virtual bool can_focus() const = 0;
+	virtual bool can_focus() const = 0;
 
 	/**
 	 * Set or unset the focus to the Widget.

@@ -25,7 +25,31 @@
  * suddenly display a main window before an recently opened dialog,
  * for instance.
  *
- * EventQueue will also emit events for global conditions, such as screen refresh request by pressing Ctrl-L
+ * EventQueue will also emit events for global conditions, such as
+ * screen refresh request by pressing Ctrl-L
+ *
+ *
+ * Terminal Resize
+ * ---------------
+ *
+ * If supported by the curses implementation, it consists of following
+ * event sequence:
+ *
+ * - EVT_TERMRESETUP (handled in Curses)
+ * - EVT_SIGWINCH (only classes derived from WindowBase should connect.)
+ * - EVT_REFRESH
+ * - EVT_DOUPDATE
+ *
+ *
+ * Complete Refresh
+ * ----------------
+ *
+ * A complete refresh is initiated by Ctrl-L or KEY_REFRESH. It
+ * consists of following event sequence:
+ *
+ * - EVT_FORCEREFRESH
+ * - EVT_REFRESH
+ * - EVT_DOUPDATE
  *
  * @ingroup Event
  */

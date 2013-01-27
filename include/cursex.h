@@ -108,6 +108,11 @@ class LeaveOKFailed: public BaseCurEx {
 	LeaveOKFailed();
 };
 
+class ClearOKFailed: public BaseCurEx {
+    public:
+	ClearOKFailed();
+};
+
 class NoNLFailed: public BaseCurEx {
     public:
 	NoNLFailed();
@@ -196,6 +201,11 @@ class UnableToStartColor: public BaseCurEx {
 class ColorsNotInitialized: public BaseCurEx {
     public:
 	ColorsNotInitialized();
+};
+
+class WMoveFailed: public BaseCurEx {
+    public:
+	WMoveFailed();
 };
 
 #endif // CUREX_H

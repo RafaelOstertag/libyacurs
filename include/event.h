@@ -35,13 +35,19 @@ enum EVENT_TYPE {
     EVT_SIGALRM,
     /// Key pressed
     EVT_KEY,
-    /// A refresh is usually issued after an resize
+    /// A refresh is usually issued after an resize. The refresh must
+    /// not be immediate, i.e. no wrefresh(), but wnoutrefresh().
     EVT_REFRESH,
-    /// Force curses window to refresh
+    /// Force curses window to refresh. This is used to completely
+    /// redraw the screen upon Ctrl-L. The handler can be implemented
+    /// as simple call to clearok().
     EVT_FORCEREFRESH,
-    /// A doupdate is usually issued after a refresh
+    /// A doupdate is usually issued after a refresh. Only one
+    /// EVT_DOUPDATE handler should exist, since curses takes care of
+    /// refreshing all windows.
     EVT_DOUPDATE,
-    /// Re-setup terminal. Mainly used when resizing screen
+    /// Re-setup terminal. Mainly used when resizing screen or
+    /// complete screen refresh. @sa EventQueue
     EVT_TERMRESETUP,
     /// SIGUSR1
     EVT_SIGUSR1,

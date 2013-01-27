@@ -79,6 +79,7 @@ class WindowBase : public Realizeable {
 
 	void unrealize();
 
+	virtual int force_refresh_handler(Event& _e);
 	virtual int refresh_handler(Event& _e);
 	virtual int resize_handler(Event& _e);
 

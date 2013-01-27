@@ -26,6 +26,8 @@
  * becomes the current focus group. Since a Window is always realized
  * before Widgets, Widgets register themselves automatically with the
  * proper focus group.
+ *
+ * @sa FocusGroup
  */
 class FocusManager {
     private:

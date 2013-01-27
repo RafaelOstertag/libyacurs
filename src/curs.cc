@@ -97,9 +97,8 @@ Curses::init() {
     if (keypad(stdscr, TRUE) == ERR)
 	throw KeyPadFailed();
 
-    // if (has_color) {
-    // 	if (start_color() == ERR)
-    // 	    throw UnableToStartColor();
+    if (leaveok(stdscr, TRUE) == ERR)
+	throw LeaveOKFailed();
 
     YAPET::UI::Colors::init_colors();
 

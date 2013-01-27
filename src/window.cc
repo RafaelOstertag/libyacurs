@@ -9,10 +9,12 @@
 
 
 #include "curs.h"
+#include "cursex.h"
 #include "window.h"
 #include "area.h"
 #include "eventqueue.h"
 #include "focusmanager.h"
+#include "colors.h"
 
 //
 // Private
@@ -63,6 +65,9 @@ Window::widget() const {
 
 void
 Window::refresh(bool immediate) {
+    if (!realized()) throw NotRealized();
+
+    YAPET::UI::Colors::set_color(curses_window(), YAPET::UI::DEFAULT);
     WindowBase::refresh(immediate);
     if (__widget) __widget->refresh(immediate);
 }
@@ -72,9 +77,9 @@ Window::resize(const Area& _a) {
     WindowBase::resize(_a);
     // We do not call resize, because the WidgetBase::resize() would
     // happen after the widget has been unrealized and realized again
-    // by Window::resize().
+    // by Window::resize(). Therefore, Window::realize takes care of
+    // setting up things
     //
-    // Window::realize takes care of setting up things
     //if (__widget) __widget->resize(widget_area());
 }
 

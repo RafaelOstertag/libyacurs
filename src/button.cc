@@ -3,17 +3,26 @@
 #include <cassert>
 #include <cstdlib>
 
-#include <button.h>
-#include <eventqueue.h>
-#include <focusmanager.h>
+#include "button.h"
+#include "eventqueue.h"
+#include "focusmanager.h"
+#include "colors.h"
+#include "cursex.h"
 
 //
 // Private
 //
 void
 Button::visibly_change_focus() {
-#warning "Not implemented"
+    if (__focus)
+	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_FOCUS);
+    else
+	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_NOFOCUS);
+
+    // we have to immediately refresh to let the colors take effect.
+    refresh(true);
 }
+
 //
 // Protected
 //
@@ -64,8 +73,12 @@ Button::unrealize() {
 // Public
 //
 
-Button::Button(const std::string& _b): Label(_b),
+Button::Button(const std::string& _b): Label(),
 				       __focus(false) {
+
+    // We want our label() to be called, so we don't use the Label()
+    // constructor to set the label
+    label(_b);
     EventQueue::connect_event(EventConnectorMethod1<Button>(EVT_KEY,this, &Button::key_handler));
 }
 
@@ -83,6 +96,19 @@ Button::operator=(const Button& _b) {
 
     __focus=_b.__focus;
     return *this;
+}
+
+void
+Button::label(const std::string& _l) {
+    Label::label("[ " + _l + " ]");
+}
+
+std::string
+Button::label() const {
+    std::string tmp(Label::label());
+
+    // get rid of the square brackets
+    return tmp.substr(2, tmp.length()-4);
 }
 		 
 
@@ -102,4 +128,13 @@ Button::focus(bool _f) {
 bool
 Button::focus() const {
     return __focus;
+}
+
+void
+Button::refresh(bool immediate) {
+    if (!realized()) throw NotRealized();
+
+    assert(widget_subwin()!=NULL);
+    
+    Label::refresh(immediate);
 }

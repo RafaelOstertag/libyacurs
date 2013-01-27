@@ -188,4 +188,14 @@ class UnexpectedEvent: public BaseCurEx {
 	UnexpectedEvent();
 };
 
+class UnableToStartColor: public BaseCurEx {
+    public:
+	UnableToStartColor();
+};
+
+class ColorsNotInitialized: public BaseCurEx {
+    public:
+	ColorsNotInitialized();
+};
+
 #endif // CUREX_H

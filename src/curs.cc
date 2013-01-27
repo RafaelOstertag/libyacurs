@@ -29,6 +29,7 @@
 #include "eventqueue.h"
 #include "cursex.h"
 #include "focusmanager.h"
+#include "colors.h"
 
 StatusLine* Curses::__statusline = NULL;
 LineObject* Curses::__title = NULL;
@@ -56,9 +57,9 @@ Curses::termresetup_handler(Event& e) {
     // We only support resizing for Curses implementation having
     // resize_term.
 
-    Size __tmp(Curses::inquiry_screensize());
+    Size _tmp(Curses::inquiry_screensize());
 
-    resize_term(__tmp.rows(), __tmp.cols());
+    resize_term(_tmp.rows(), _tmp.cols());
 
     if (wclear(stdscr) == ERR)
 	throw EraseFailed();
@@ -96,6 +97,12 @@ Curses::init() {
     if (keypad(stdscr, TRUE) == ERR)
 	throw KeyPadFailed();
 
+    // if (has_color) {
+    // 	if (start_color() == ERR)
+    // 	    throw UnableToStartColor();
+
+    YAPET::UI::Colors::init_colors();
+
     // Curses clears stdscr upon first call to getch, which may
     // produce undesired results, i.e. already created Curses Windows
     // may be overwritten. Therefore we refresh stdscr preventive.
@@ -120,6 +127,11 @@ Curses::end() {
     if (endwin() == ERR)
 	throw EndWinError();
 
+    // Widgets and Windows delete after the EventQueue loop has
+    // terminated will have put Event Connector Removal requests into
+    // the EventQueue, which are not processed (of course, the
+    // EventQueue terminated). Calling EventQueue::cleanup() will
+    // remove the requests and free the associated memory
     EventQueue::cleanup();
 
     initialized = false;

@@ -8,6 +8,7 @@
 #include "eventqueue.h"
 #include "cursex.h"
 #include "lineobject.h"
+#include "colors.h"
 
 //
 // Private
@@ -92,21 +93,28 @@ LineObject::operator=(const LineObject& lo) {
 
 void
 LineObject::realize() {
+    if (realized()) throw AlreadyRealized();
+
     compute_margin();
     WindowBase::realize();
 }
 
 void
 LineObject::refresh(bool immediate) {
+    if (!realized()) throw NotRealized();
+
     put_line();
+
+    YAPET::UI::Colors::set_color(curses_window(), YAPET::UI::DEFAULT);
+
     WindowBase::refresh(immediate);
 }
 
 void
 LineObject::line(const std::string& _str) {
     __linetext = _str;
-    put_line();
-    refresh(true);
+    if (realized())
+	refresh(true);
 }
 
 std::string

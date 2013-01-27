@@ -18,7 +18,7 @@
 //
 Label::Label(const std::string& _l):
     Widget(), __label(_l),
-    __size(Size(1, _l.length()+1)) {
+    __size(Size(1, _l.length())) {
 }
 
 Label::Label(const Label& _l):
@@ -44,7 +44,7 @@ Label::label(const std::string& _l) {
 
     Size oldsize = __size;
 
-    __size = Size(1, __label.length()+1);
+    __size = Size(1, __label.length());
 
     // If parent is NULL, we have nobody to inform about a possible
     // size change. If old size is the same as the new size, we simply
@@ -60,7 +60,7 @@ Label::label(const std::string& _l) {
     parent()->size_change(); 
 }
 
-const std::string&
+std::string
 Label::label() const {
     return __label;
 }
@@ -107,11 +107,16 @@ void
 Label::refresh(bool immediate) {
     if (!realized()) throw NotRealized();
 
-    assert(subwin()!=NULL);
+    assert(widget_subwin()!=NULL);
 
-    if (mymvwaddstr(subwin(), 0, 0,
-		    __label.c_str()) == ERR)
-	throw AddStrFailed();
+    // if (mymvwaddstr(widget_subwin(), 0, 0,
+    // 		    __label.c_str()) == ERR)
+    // 	throw AddStrFailed();
+    //
+    // We ignore the error returned, since the cursor cannot be
+    // advanced past the end, and thus the string is
+    // truncated. However, the truncation has no effect on label.
+    mymvwaddstr(widget_subwin(), 0, 0,  __label.c_str());
 
     Widget::refresh(immediate);
 }

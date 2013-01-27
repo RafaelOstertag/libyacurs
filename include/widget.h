@@ -28,12 +28,12 @@ class Widget: public WidgetBase {
 	 * Pointer to a pointer so that we can replace the window for
 	 * all instances simultaneously.
 	 */
-	WINDOW** __subwin;
+	WINDOW** __widget_subwin;
 
     protected:
 	void unrealize();
 
-	WINDOW* subwin() const;
+	WINDOW* widget_subwin() const;
 
     public:
 	Widget();

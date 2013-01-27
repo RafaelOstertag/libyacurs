@@ -37,6 +37,8 @@ enum EVENT_TYPE {
     EVT_KEY,
     /// A refresh is usually issued after an resize
     EVT_REFRESH,
+    /// Force curses window to refresh
+    EVT_FORCEREFRESH,
     /// A doupdate is usually issued after a refresh
     EVT_DOUPDATE,
     /// Re-setup terminal. Mainly used when resizing screen

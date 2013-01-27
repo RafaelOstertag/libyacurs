@@ -26,7 +26,7 @@ class Label: public Widget {
 	std::string __label;
 	/**
 	 * The size the Label requires. Rows are always 1. Cols are
-	 * __label.length()+1
+	 * __label.length()
 	 */
 	Size __size;
 
@@ -36,8 +36,8 @@ class Label: public Widget {
 	~Label();
 	Label& operator=(const Label& _l);
 
-	void label(const std::string& _l);
-	const std::string& label() const;
+	virtual void label(const std::string& _l);
+	virtual std::string label() const;
 
 	// From WidgetBase
 

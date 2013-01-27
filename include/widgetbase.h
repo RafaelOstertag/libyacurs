@@ -52,6 +52,9 @@ class Window;
 class WidgetBase: public Realizeable {
     private:
 	/**
+	 * Pointerused for subwin() in order to
+	 * create subwindows.
+	 *
 	 * Curses window used to display the widget. Widgets like Pack
 	 * may not directly use this, but pass the pointer on to
 	 * assigned widgets.  The widget does not maintain the window,
@@ -59,8 +62,6 @@ class WidgetBase: public Realizeable {
 	 * pointer has to be valid for the entire lifetime of the
 	 * object.
 	 *
-	 * Further, this pointer is used for subwin() in order to
-	 * create subwindows.
 	 */
 	WINDOW* __curses_window;
 
@@ -146,7 +147,7 @@ class WidgetBase: public Realizeable {
 	virtual void curses_window(WINDOW* _p);
 
 	/**
-	 * Get the curses window.
+	 * Get the curses window of the Widget.
 	 *
 	 * @return pointer to the curses window.
 	 */

@@ -110,3 +110,9 @@ KeyPadFailed::KeyPadFailed():
 
 UnexpectedEvent::UnexpectedEvent():
     BaseCurEx("Unexpected event received") {}
+
+UnableToStartColor::UnableToStartColor():
+    BaseCurEx("Unable to start color") {}
+
+ColorsNotInitialized::ColorsNotInitialized():
+    BaseCurEx("Colors not initialized") {}

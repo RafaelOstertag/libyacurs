@@ -245,6 +245,12 @@ WindowBase::realize() {
 	throw NewWindowFailed();
     }
 
+    if (scrollok(*__curses_window, FALSE)==ERR)
+	throw ScrollOKFailed();
+
+    if (leaveok(*__curses_window, TRUE)==ERR)
+	throw LeaveOKFailed();
+
     if (__frame) {
 	if (box(*__curses_window, 0, 0) == ERR)
 	    throw BoxFailed();

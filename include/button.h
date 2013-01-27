@@ -23,8 +23,6 @@ class Button: public Label {
 
 	/**
 	 * Visibly change focus.
-	 *
-	 * It visibly change the focus.
 	 */
 	void visibly_change_focus();
 
@@ -38,6 +36,7 @@ class Button: public Label {
 
 	virtual int key_handler(Event& _e);
 
+	// From Realizeable
 	virtual void realize();
 	virtual void unrealize();
 
@@ -48,9 +47,16 @@ class Button: public Label {
 	~Button();
 	Button& operator=(const Button& _b);
 
+	void label(const std::string& _l);
+	std::string label() const;
+
+	// From WidgetBase
 	bool can_focus() const;
 	void focus(bool _f);
 	bool focus() const;
+
+	// From Realizeable
+	void refresh(bool immediate);
 };
 
 #endif // BUTTON_H

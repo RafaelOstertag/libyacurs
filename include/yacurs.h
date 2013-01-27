@@ -16,6 +16,7 @@
 #include "focusgroup.h"
 #include "focusmanager.h"
 #include "curs.h"
+#include "colors.h"
 #include "windowbase.h"
 #include "lineobject.h"
 #include "statusline.h"
@@ -27,6 +28,7 @@
 #include "widget.h"
 #include "label.h"
 #include "button.h"
+#include "input.h"
 
 #endif // YACURS_H
 

@@ -507,7 +507,14 @@ EventQueue::run() {
     while(true) {
 	int c=wgetch(stdscr);
 	if (c != ERR)
-	    submit(EventKey(c));
+	    switch (c) {
+	    case KEY_REFRESH:
+	    case 12:
+		submit(Event(EVT_REFRESH));
+		submit(Event(EVT_DOUPDATE));
+	    default:
+		submit(EventKey(c));
+	    }
 
 	blocksignal();
 

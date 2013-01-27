@@ -15,7 +15,7 @@ class Button1: public Button {
     protected:
 	void focus(bool _f) {
 	    Button::focus(_f);
-	    if (_f) 
+	    if (_f)
 		Curses::statusline()->push_msg("Button 1 focused");
 	    else
 		Curses::statusline()->push_msg("Button 1 unfocused");
@@ -24,14 +24,14 @@ class Button1: public Button {
 	    Curses::statusline()->push_msg("Button 1 pressed");
 	}
     public:
-	Button1(): Button("[ Button1 ]") {}
+	Button1(): Button("Button1") {}
 };
 
 class Button2: public Button {
     protected:
 	void focus(bool _f) {
 	    Button::focus(_f);
-	    if (_f) 
+	    if (_f)
 		Curses::statusline()->push_msg("Button 2 focused");
 	    else
 		Curses::statusline()->push_msg("Button 2 unfocused");
@@ -40,14 +40,14 @@ class Button2: public Button {
 	    Curses::statusline()->push_msg("Button 2 pressed");
 	}
     public:
-	Button2(): Button("[ Button2 ]") {}
+	Button2(): Button("Button2") {}
 };
 
 class Button3: public Button {
     protected:
 	void focus(bool _f) {
 	    Button::focus(_f);
-	    if (_f) 
+	    if (_f)
 		Curses::statusline()->push_msg("Button 3 focused");
 	    else
 		Curses::statusline()->push_msg("Button 3 unfocused");
@@ -56,18 +56,18 @@ class Button3: public Button {
 	    EventQueue::submit(EVT_QUIT);
 	}
     public:
-	Button3(): Button("[ Button3 ]") {}
+	Button3(): Button("Button3") {}
 };
 
 int main() {
-#if 1
+#if 0
     std::cout << getpid() << std::endl;
     sleep(15);
 #endif
     try {
 	Curses::init();
 
-	
+
 	Curses::title(new LineObject(LineObject::POS_TOP,
 				     "Pack 9:"));
 	Curses::statusline(new StatusLine);
@@ -76,16 +76,28 @@ int main() {
 	Curses::mainwindow(new Window(Margin(1,0,1,0)));
 	Curses::mainwindow()->frame(true);
 
+	VPack* vpack=new VPack;
 	HPack* hpack=new HPack;
 	Button1* b1=new Button1;
 	Button2* b2=new Button2;
 	Button3* b3=new Button3;
+	Input* ifixed=new Input(10);
+	Input* idyn=new Input;
+	
+	vpack->add_back(ifixed);
+	vpack->add_back(idyn);
 
 	hpack->add_back(b1);
 	hpack->add_back(b2);
 	hpack->add_back(b3);
 
-	Curses::mainwindow()->widget(hpack);
+	vpack->add_back(hpack);
+
+	assert(b1->label()=="Button1");
+	assert(b2->label()=="Button2");
+	assert(b3->label()=="Button3");
+
+	Curses::mainwindow()->widget(vpack);
 
 	Curses::run();
 
@@ -93,6 +105,7 @@ int main() {
 	delete b2;
 	delete b3;
 	delete hpack;
+	delete vpack;
 	delete Curses::mainwindow();
 	delete Curses::title();
 	delete Curses::statusline();

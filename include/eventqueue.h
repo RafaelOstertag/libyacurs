@@ -18,6 +18,15 @@
 #include "area.h"
 
 /**
+ *
+ * Libyacurs counts on order events are connected, so that the
+ * EVT_REFRESH/EVT_DOUPDATE event sequence will call the last
+ * connected event handler last, thus ensuring the update will not
+ * suddenly display a main window before an recently opened dialog,
+ * for instance.
+ *
+ * EventQueue will also emit events for global conditions, such as screen refresh request by pressing Ctrl-L
+ *
  * @ingroup Event
  */
 class EventQueue {

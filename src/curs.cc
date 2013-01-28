@@ -238,6 +238,13 @@ Curses::inquiry_screensize() {
 	    throw UnableToGetWinSize();
 	}
     }
+    
+    // Make sure we don't underrun the minimum size. The SIGWINCH
+    // handler does also check and not initiate a resize term.
+    if (__scrdim.rows()<MIN_ROWS)
+	__scrdim.rows(MIN_ROWS);
+    if (__scrdim.cols()<MIN_COLS)
+	__scrdim.cols(MIN_COLS);
 #else // HAVE_RESIZE_TERM
     int nrows, ncols;
     getmaxyx(stdscr, nrows, ncols);

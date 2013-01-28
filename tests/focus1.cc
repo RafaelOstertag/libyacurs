@@ -94,8 +94,10 @@ int main() {
 	hpack->add_back(b1);
 	hpack->add_back(b2);
 	hpack->add_back(b3);
+	hpack->hinting(false);
 
 	vpack->add_back(hpack);
+	vpack->hinting(false);
 
 	assert(b1->label()=="Button1");
 	assert(b2->label()=="Button2");
@@ -108,6 +110,8 @@ int main() {
 	delete b1;
 	delete b2;
 	delete b3;
+	delete idyn;
+	delete ifixed;
 	delete hpack;
 	delete vpack;
 	delete Curses::mainwindow();

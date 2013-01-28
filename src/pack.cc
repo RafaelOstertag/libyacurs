@@ -58,6 +58,7 @@ Pack::unrealize() {
 Pack::Pack(): WidgetBase(),
 	      __size(),
 	      __hinting(true),
+	      __always_dynamic(false),
 	      widget_list() {
 }
 
@@ -67,6 +68,7 @@ Pack::~Pack() {
 Pack::Pack(const Pack& _p): WidgetBase(_p),
 			    __size(_p.__size),
 			    __hinting(_p.__hinting),
+			    __always_dynamic(_p.__always_dynamic),
 			    widget_list(_p.widget_list) {
 }
 
@@ -75,6 +77,7 @@ Pack::operator=(const Pack& _p) {
     WidgetBase::operator=(_p);
     __size = _p.__size;
     __hinting = _p.__hinting;
+    __always_dynamic = _p.__always_dynamic;
     widget_list = _p.widget_list;
 
     return *this;

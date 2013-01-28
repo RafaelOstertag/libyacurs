@@ -52,6 +52,8 @@ class Pack: public WidgetBase {
 	 * associated Widgets for hints and returns a hint based on
 	 * the result. When disabled (@c false) Pack::size_hint()
 	 * always returns Size::zero().
+	 *
+	 * Default @c true.
 	 */
 	bool __hinting;
 
@@ -65,6 +67,8 @@ class Pack: public WidgetBase {
 	 *
 	 * If @c false Pack::size() calls calc_size_non_dynamic() and
 	 * may return that result.
+	 *
+	 * Default @c false.
 	 */
 	bool __always_dynamic;
 
@@ -180,7 +184,7 @@ class Pack: public WidgetBase {
 	 *
 	 * When hinting is disabled, size_hint() will always return
 	 * Size::zero(), else it uses size_hint() of associated
-	 * Widgets.
+	 * Widgets. Default @c true.
 	 *
 	 * @param _h @c true enables hinting, @c false disables
 	 * hinting.

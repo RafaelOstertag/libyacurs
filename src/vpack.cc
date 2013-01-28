@@ -47,6 +47,28 @@ class VGetMaxSizeHint {
 };
 
 /**
+ * Set size_available() on widgets.
+ *
+ * Functor for setting available size on Widgets.
+ *
+ * @internal mainly used when compiling with Solaris Studio.
+ */
+class VSetSizeAvail {
+    private:
+	const Size& __avail;
+
+    public:
+	VSetSizeAvail(const Size& _avail): __avail(_avail) {}
+	VSetSizeAvail(const VSetSizeAvail& _s): __avail(_s.__avail) {}
+	void operator()(WidgetBase* w) {
+	    assert(w!=NULL);
+	    assert(__avail.rows()>0);
+	    assert(__avail.cols()>0);
+	    w->size_available(__avail);
+	}
+};
+
+/**
  * Set size_available on hinted Widgets.
  *
  * Functor for setting size_available on hinted Widgets.
@@ -201,9 +223,16 @@ class VCalcNSetSize {
 				__size_available.cols());
 
 	    // Set the size for each widget.
+	    //
+	    // The following doesn't work when compiling with Solaris
+	    // Studio on Solaris, so we use a Function Object:
+	    //
+	    // std::for_each(__dyn_widgets.begin(),
+	    // 		  __dyn_widgets.end(),
+	    // 		  std::bind2nd(std::mem_fun<void,WidgetBase,const Size&>(&WidgetBase::size_available),per_dyn_widget));
 	    std::for_each(__dyn_widgets.begin(),
 			  __dyn_widgets.end(),
-			  std::bind2nd(std::mem_fun<void,WidgetBase,const Size&>(&WidgetBase::size_available),per_dyn_widget));
+			  VSetSizeAvail(per_dyn_widget));
 	}
 };
 

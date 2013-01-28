@@ -60,7 +60,7 @@ int alrm(Event& _e) {
 	vpack2_1->hinting(false);
 	vpack2_2->always_dynamic(false);
 	vpack2_2->hinting(false);
-	alarm(1);
+	alarm(2);
 	break;
 
     case 1:
@@ -79,7 +79,7 @@ int alrm(Event& _e) {
 	vpack2_1->hinting(false);
 	vpack2_2->always_dynamic(true);
 	vpack2_2->hinting(false);
-	alarm(1);
+	alarm(2);
 	break;
 
     case 2:
@@ -98,7 +98,7 @@ int alrm(Event& _e) {
 	vpack2_1->hinting(true);
 	vpack2_2->always_dynamic(false);
 	vpack2_2->hinting(true);
-	alarm(1);
+	alarm(2);
 	break;
 
     case 3:
@@ -117,7 +117,7 @@ int alrm(Event& _e) {
 	vpack2_1->hinting(true);
 	vpack2_2->always_dynamic(true);
 	vpack2_2->hinting(true);
-	alarm(1);
+	alarm(2);
 	break;
 
     default:

@@ -49,15 +49,26 @@ void
 LineObject::put_line() {
     if (!realized()) return;
 
-    int retval = werase(curses_window());
-    if (retval == ERR)
+    if (werase(curses_window())==ERR)
 	throw EraseFailed();
 
-    retval = mymvwaddstr(curses_window(),
+    if (__linetext.length()<1) return;
+
+    assert(area().cols()>=MIN_COLS);
+    if (area().cols()<__linetext.length()+1) {
+	if (mymvwaddnstr(curses_window(),
 			 0,0,
-			 __linetext.c_str());
-    if (retval == ERR)
-	throw AddStrFailed();
+			 __linetext.c_str(),
+			 area().cols()-1)==ERR)
+	    throw AddStrFailed();
+	if (winsch(curses_window(),'>')==ERR)
+	    throw AddStrFailed();
+    } else {
+	if (mymvwaddstr(curses_window(),
+			0,0,
+			__linetext.c_str())==ERR)
+	    throw AddStrFailed();
+    }
 
 }
 

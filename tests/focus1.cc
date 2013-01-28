@@ -90,6 +90,7 @@ int main() {
 	
 	vpack->add_back(ifixed);
 	vpack->add_back(idyn);
+	vpack->hinting(false);
 
 	hpack->add_back(b1);
 	hpack->add_back(b2);
@@ -97,7 +98,6 @@ int main() {
 	hpack->hinting(false);
 
 	vpack->add_back(hpack);
-	vpack->hinting(false);
 
 	assert(b1->label()=="Button1");
 	assert(b2->label()=="Button2");

@@ -51,7 +51,7 @@ Label::label(const std::string& _l) {
     // have to refresh immediately.
     //
     // In any case, we can leave the function.
-    if (parent()==NULL || oldsize == __size) {
+    if (parent()==NULL || oldsize.cols() >= __size.cols()) {
 	if (realized()) refresh(true);
 	return;
     }
@@ -108,6 +108,12 @@ Label::refresh(bool immediate) {
     if (!realized()) throw NotRealized();
 
     assert(widget_subwin()!=NULL);
+
+    // We don't resize if a new string is set that was smaller than
+    // the previous one. This leads to artifacts, so do a werase()
+    // first.
+    if (werase(widget_subwin())==ERR)
+	throw EraseFailed();
 
     // if (mymvwaddstr(widget_subwin(), 0, 0,
     // 		    __label.c_str()) == ERR)

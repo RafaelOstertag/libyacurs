@@ -18,6 +18,17 @@
 #include "window.h"
 #include "event.h"
 
+/**
+ * Resizing stops when any of those are underrun.
+ */
+enum {
+    /// Minimum columns. When actual screen size underruns MIN_COLS,
+    /// no resize is performed.
+    MIN_COLS=15,
+    /// Minimum rows. When actual screen size underruns MIN_ROWS,
+    /// no resize is performed.
+    MIN_ROWS=15
+};
 
 class Curses {
     private:

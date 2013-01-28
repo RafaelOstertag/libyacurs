@@ -59,6 +59,10 @@ Curses::termresetup_handler(Event& e) {
 
     Size _tmp(Curses::inquiry_screensize());
 
+    // If minimum size is underrun, resizing stops.
+    if (_tmp.rows()<MIN_ROWS || _tmp.cols()<MIN_COLS) 
+	return -1;
+
     resize_term(_tmp.rows(), _tmp.cols());
 
     if (wclear(stdscr) == ERR)

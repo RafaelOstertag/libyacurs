@@ -20,9 +20,6 @@
  *
  * Functor for calculating the size hint by finding the max columns
  * size and summing up row size.
- *
- * Packs may return rows()>0 or cols()>0 as hint, as opposed to other
- * widget that only return one of the components >0.
  */
 class VGetMaxSizeHint {
     private:
@@ -50,26 +47,6 @@ class VGetMaxSizeHint {
 };
 
 /**
- * Set size_available() on widgets.
- *
- * Functor for setting available size on Widgets.
- */
-class VSetSizeAvail {
-    private:
-	const Size& __avail;
-
-    public:
-	VSetSizeAvail(const Size& _avail): __avail(_avail) {}
-	VSetSizeAvail(const VSetSizeAvail& _s): __avail(_s.__avail) {}
-	void operator()(WidgetBase* w) {
-	    assert(w!=NULL);
-	    assert(__avail.rows()>0);
-	    assert(__avail.cols()>0);
-	    w->size_available(__avail);
-	}
-};
-
-/**
  * Set size_available on hinted Widgets.
  *
  * Functor for setting size_available on hinted Widgets.
@@ -81,10 +58,14 @@ class VSetSizeHinted {
 
     public:
 	VSetSizeHinted(const Size& _cc): __const_cols(_cc),
-					 __size_used() {}
+					 __size_used() {
+	    assert(__const_cols.cols()>0);
+	}
+
 	VSetSizeHinted(const VSetSizeHinted& _h):
 	    __const_cols(_h.__const_cols),
 	    __size_used(_h.__size_used) {}
+
 	VSetSizeHinted& operator=(const VSetSizeHinted& _h) {
 	    __const_cols=_h.__const_cols;
 	    __size_used=_h.__size_used;
@@ -94,7 +75,7 @@ class VSetSizeHinted {
 	void operator()(WidgetBase* _w) {
 	    assert(_w!=NULL);
 	    assert(_w->size_hint().rows()>0);
-	    assert(__const_cols.cols()>0);
+	    assert(_w->size_hint().cols()<=__const_cols.cols());
 
 	    // _sa is supposed to hold the constant row value and the
 	    // hinted cols value as retrieved from calling size_hint()
@@ -133,7 +114,10 @@ class VCalcNSetSize {
 	VCalcNSetSize(const Size& _av): __size(),
 					__size_available(_av),
 					__dyn_widgets(),
-					__hinted_widgets() {}
+					__hinted_widgets() {
+	    assert(__size_available.rows()>0);
+	    assert(__size_available.cols()>0);
+	}
 
 	VCalcNSetSize(const VCalcNSetSize& _c):
 	    __size(_c.__size),
@@ -158,8 +142,8 @@ class VCalcNSetSize {
 
 	    if ( _w->size() == Size::zero() ) {
 		// That's a dynamically sized widget, thus add it to
-		// the list for later processing
-
+		// one of the lists for later processing.
+		//
 		// if it is capable of giving a hint, add it to the
 		// __hinted_widgets list which is treated separately
 		// from __dyn_widgets.
@@ -190,10 +174,7 @@ class VCalcNSetSize {
 
 	    // In order to process hinted widgets, get the cols. We
 	    // only consider Widgets hinting on rows
-	    Size cols_unhinted(0, __size.cols()>0 ?
-			       __size.cols() :
-			       __size_available.cols());
-	    assert(cols_unhinted.cols()>0);
+	    Size cols_unhinted(0, __size_available.cols());
 
 	    VSetSizeHinted hinted_size(std::for_each(__hinted_widgets.begin(),
 						     __hinted_widgets.end(),
@@ -217,14 +198,12 @@ class VCalcNSetSize {
 	    // Widget. The remaining size will be divided equally
 	    // among all dynamically sized widgets.
 	    Size per_dyn_widget(remaining_size.rows()/__dyn_widgets.size(),
-				__size.cols()>0 ?
-				__size.cols() :
 				__size_available.cols());
 
 	    // Set the size for each widget.
 	    std::for_each(__dyn_widgets.begin(),
 			  __dyn_widgets.end(),
-			  VSetSizeAvail(per_dyn_widget));
+			  std::bind2nd(std::mem_fun<void,WidgetBase,const Size&>(&WidgetBase::size_available),per_dyn_widget));
 	}
 };
 
@@ -232,17 +211,18 @@ class VCalcNSetSize {
  * Functor calculating the size only if no dynamically sized Widgets
  * are associated. Else it will return Size::zero().
  *
- * Used in calc_size().
+ * Used in calc_size_non_dynamic().
  */
-class VCalcSize {
+class VCalcSizeNonDynamic {
     private:
 	Size __size;
 	bool __had_dynamic;
     public:
-	VCalcSize(): __size(), __had_dynamic(false) {}
-	VCalcSize(const VCalcSize& _r): __size(_r.__size),
-					__had_dynamic(_r.__had_dynamic){}
-	VCalcSize& operator=(const VCalcSize& _r) {
+	VCalcSizeNonDynamic(): __size(), __had_dynamic(false) {}
+	VCalcSizeNonDynamic(const VCalcSizeNonDynamic& _r):
+	    __size(_r.__size),
+	    __had_dynamic(_r.__had_dynamic){}
+	VCalcSizeNonDynamic& operator=(const VCalcSizeNonDynamic& _r) {
 	    __size = _r.__size;
 	    __had_dynamic = _r.__had_dynamic;
 	    return *this;
@@ -275,7 +255,7 @@ class VCalcSize {
  * Coordinate object in manner, that subsequent positions will not
  * overwrite previous Widgets on the screen.
  *
- * The position will be advanced from top to bottom (vertically).
+ * The position will be advanced from top to bottom (i.e. vertically).
  */
 class VSetPosWidget {
     private:
@@ -297,6 +277,8 @@ class VSetPosWidget {
 	/**
 	 * Call WidgetBase::postion().
 	 *
+	 * Call WidgetBase::position() and update __pos;
+	 *
 	 * @param _w pointer to Widget.
 	 */
 	void operator()(WidgetBase* _w) {
@@ -315,26 +297,7 @@ class VSetPosWidget {
 
 void
 VPack::recalc_size() {
-    // It is perfectly legal to have a size_available() of zero when
-    // recalc_size() is called. For instance, it happens in such a
-    // calling sequence
-    //
-    //  [...]
-    //
-    //  Window* window=new Window;
-    //
-    //  Label* l1=new Label("Label1");
-    //  Label* l2=new Label("Label2");
-    //
-    //  VPack* vp1=new VPack();
-    //  vp1->add_back(l1); // The pack has not received any size information
-    //  vp1->add_back(l2); // ditto
-    //
-    //  window->widget(vp1); // Now, the Pack receives size_available().
-    //
-    //  [...]
-    //
-    if (WidgetBase::size_available() == Size::zero()) return;
+    assert(WidgetBase::size_available() != Size::zero());
 
     VCalcNSetSize calc(WidgetBase::size_available());
     calc = std::for_each(widget_list.begin(),
@@ -347,8 +310,8 @@ VPack::recalc_size() {
 }
 
 Size
-VPack::calc_size() const {
-    VCalcSize _s;
+VPack::calc_size_non_dynamic() const {
+    VCalcSizeNonDynamic _s;
     _s=std::for_each(widget_list.begin(),
 		     widget_list.end(),
 		     _s);

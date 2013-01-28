@@ -29,7 +29,6 @@
  * @warning If a Pack is destroyed before its associated Widgets, the
  * Widgets will have a __parent pointer that is invalid.
  *
- *
  * @see VPack
  * @see HPack
  */
@@ -57,12 +56,15 @@ class Pack: public WidgetBase {
 	bool __hinting;
 
 	/**
-	 * Indicates whether or not the Pack should behave as dynamically sized Widget.
+	 * Indicates whether or not the Pack should behave as
+	 * dynamically sized Widget.
 	 *
-	 * If @c true, a call to Pack::size() does NOT invoke call calc_size(), which in turn returns Size != Size::zero() if all associated Widgets are non-dynamic.
+	 * If @c true, a call to Pack::size() does NOT invoke call
+	 * calc_size_non_dynamic(), which in turn returns Size !=
+	 * Size::zero() if all associated Widgets are non-dynamic.
 	 *
-	 * If @c false Pack::size() calls calc_size() and may return
-	 * that result.
+	 * If @c false Pack::size() calls calc_size_non_dynamic() and
+	 * may return that result.
 	 */
 	bool __always_dynamic;
 
@@ -92,7 +94,7 @@ class Pack: public WidgetBase {
 	 * other words, the Pack appears non-dynamically only if there
 	 * are no dynamically sized Widgets associated.
 	 */
-	virtual Size calc_size() const = 0;
+	virtual Size calc_size_non_dynamic() const = 0;
 
     protected:
 	/**
@@ -112,6 +114,11 @@ class Pack: public WidgetBase {
 	 * Add a widget to the Pack. The widget will be added in front
 	 * of any other widget.
 	 *
+	 * @important Widgets can only be added before the Pack is
+	 * realized. It is not possible to add a Widget after the pack
+	 * has been realized. Attempt to do so will raise
+	 * AlreadyRealized exception
+	 *
 	 * @param _w the widget to add. The pack does not create a
 	 * copy, so the pointer has to remain valid for the lifetime
 	 * of the pack.
@@ -122,6 +129,11 @@ class Pack: public WidgetBase {
 	 * Add a widget to the Pack. The widget will be added after
 	 * all other widget.
 	 *
+	 * @important Widgets can only be added before the Pack is
+	 * realized. It is not possible to add a Widget after the pack
+	 * has been realized. Attempt to do so will raise
+	 * AlreadyRealized exception
+	 *
 	 * @param _w the widget to add. The pack does not create a
 	 * copy, so the pointer has to remain valid for the lifetime
 	 * of the pack.
@@ -130,6 +142,11 @@ class Pack: public WidgetBase {
 
 	/**
 	 * Remove a previously added widget.
+	 *
+	 * @important Widgets can only be added before the Pack is
+	 * realized. It is not possible to add a Widget after the pack
+	 * has been realized. Attempt to do so will raise
+	 * AlreadyRealized exception
 	 *
 	 * @param _w widget to be removed. Pack compares the address
 	 * of the widget.
@@ -180,12 +197,12 @@ class Pack: public WidgetBase {
 	bool hinting() const;
 
 	/**
-	 * tbd
+	 * 
 	 */
 	void always_dynamic(bool _d);
 
 	/**
-	 * tbd
+	 * 
 	 */
 	bool always_dynamic() const;
 
@@ -217,8 +234,8 @@ class Pack: public WidgetBase {
 	/**
 	 * Resize the pack.
 	 *
-	 * This function relies on the implementation of realize() of derived
-	 * classes.
+	 * This function relies on the implementation of realize() of
+	 * derived classes.
 	 *
 	 * @param _a the new size available to the pack.
 	 */

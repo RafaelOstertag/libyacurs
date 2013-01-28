@@ -21,7 +21,7 @@
 class HPack: public Pack {
     protected:
 	void recalc_size();
-	Size calc_size() const;
+	Size calc_size_non_dynamic() const;
 
     public:
 	HPack();

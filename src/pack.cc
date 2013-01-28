@@ -85,6 +85,9 @@ Pack::add_front(WidgetBase* _w) {
     assert(_w != NULL);
     assert(!_w->realized());
 
+    if (realized()) throw AlreadyRealized();
+
+
     widget_list.push_front(_w);
 
     _w->parent(this);
@@ -96,6 +99,8 @@ Pack::add_back(WidgetBase* _w) {
     assert(_w != NULL);
     assert(!_w->realized());
 
+    if (realized()) throw AlreadyRealized();
+
     widget_list.push_back(_w);
 
     _w->parent(this);
@@ -106,6 +111,8 @@ Pack::add_back(WidgetBase* _w) {
 void
 Pack::remove(WidgetBase* _w) {
     assert(_w != NULL);
+
+    if (realized()) throw AlreadyRealized();
 
     widget_list.remove(_w);
 }
@@ -134,7 +141,7 @@ Pack::size() const {
     // Since we are not always dynamic, see if we can figure out the
     // size. This only succeeds if there are no dynamically sized
     // widgets.
-    Size non_dynamic=calc_size();
+    Size non_dynamic=calc_size_non_dynamic();
     if (non_dynamic!=Size::zero())
 	return non_dynamic;
 
@@ -177,13 +184,16 @@ Pack::size_change() {
 
     if (!realized()) return true;
 
+    //
     // We're realized
+    //
+
     resize(Area(position(),
 		WidgetBase::size_available()) );
 
     // There may be many widgets involved in the resize, thus we emit
     // the same event sequence as by a screen resize. A call
-    // refresh(true) produced to much flicker.
+    // refresh(true) produces to much flicker.
     //
     // BAD: refresh(true)
 

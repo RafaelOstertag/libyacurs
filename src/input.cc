@@ -37,14 +37,6 @@ Input::key_handler(Event& _e) {
 
     if (!__focus) return 0;
 
-    // Ignore wmove() errors for now
-    //
-    // if (wmove(widget_subwin(), 0, __current_curs_pos)==ERR)
-    //	throw WMoveFailed();
-    wmove(widget_subwin(), 0, __current_curs_pos);
-
-    wcursyncup(widget_subwin());
-
     EventKey& ekey=dynamic_cast<EventKey&>(_e);
 
     switch (ekey.data()) {
@@ -58,84 +50,104 @@ Input::key_handler(Event& _e) {
     case KEY_BTAB:
 	EventQueue::submit(EVT_FOCUS_PREVIOUS);
 	break;
+    case 21: // Ctrl-U
+	__buffer.clear();
+	__curs_pos=0;
+	__offset=0;
+	break;
+    case 11: // Ctrl-K
+	#warning "to be done"
+	break;
+    case KEY_LEFT:
+	if (__curs_pos>1) {
+	    __curs_pos--;
+	} else {
+	    if (__offset>0) {
+		__offset--;
+	    } else {
+		if (__curs_pos>0)
+		    __curs_pos--;
+	    }
+	}
+	break;
+    case KEY_RIGHT:
+	if (__curs_pos+__offset>=__buffer.length()) break;
+
+	if (__curs_pos+1==__size.cols()) {
+	    __offset++;
+	} else {
+	    // we're somewhere in the widget, but not the end, advance
+	    // the cursor position
+	    __curs_pos++;
+	}
+	break;
     case KEY_BACKSPACE:
-	if (__current_curs_pos>1) {
-	    __current_curs_pos--;
+	// Check if the cursor is at the very beginning, of so, bail
+	// out.
+	if (__curs_pos==0 &&
+	    __offset==0) break;
+
+	if (__curs_pos>1) {
+	    __curs_pos--;
 	} else {
 	    // we start `paging' horizontally, so that most of the
 	    // __buffer is visible
 	    if (__offset>0) {
 		if (__offset>=__size.cols()) {
 		    __offset-=__size.cols()-1;
-		    __current_curs_pos=__size.cols()-1;
+		    __curs_pos=__size.cols()-1;
 		} else {
-#warning "somewhere around here is a bug, i.e. backspace does not take effect"
-		    __current_curs_pos+=__offset;
+		    __curs_pos+=__offset-1;
 		    __offset=0;
 		}
 	    } else {
-		if (__current_curs_pos>0)
-		    __current_curs_pos--;
+		if (__curs_pos>0)
+		    __curs_pos--;
 	    }
 	}
 	if (!__buffer.empty())
-	    __buffer=__buffer.erase(__offset+__current_curs_pos,1);
-
-	// Ignore wmove() errors for now
-	//
-	// if (wmove(widget_subwin(), 0, __current_curs_pos)==ERR)
-	//    throw WMoveFailed();
-	wmove(widget_subwin(), 0, __current_curs_pos);
-	
-	wcursyncup(widget_subwin());
-
-	refresh(true);
+	    __buffer=__buffer.erase(__offset+__curs_pos,1);
 	break;
-    default:
+	
+    default: // regular key presses
 	// do not overrun the max size
 	if (__buffer.length()>=__max_size) break;
 
 	// Add the char to the curses window
-	mvwaddch(widget_subwin(), 0, __current_curs_pos, ekey.data());
+	mvwaddch(widget_subwin(), 0, __curs_pos, ekey.data());
 
 	// Add (insert) the char to the buffer. No cursor motion, this
 	// is done in the next block.
-	if (__offset+__current_curs_pos>__buffer.length()) {
+	if (__offset+__curs_pos>__buffer.length()) {
 	    // we would exceed the buffer, so we push it back at the end
-	    assert(__offset+__current_curs_pos==__buffer.length()+1);
+	    assert(__offset+__curs_pos==__buffer.length()+1);
 	    __buffer.push_back(ekey.data());
 	} else {
 	    // we're somewhere in the middle of the buffer, insert the
 	    // char there.
-	    __buffer.insert(__offset+__current_curs_pos, 1, ekey.data());
+	    __buffer.insert(__offset+__curs_pos, 1, ekey.data());
 	}
 
-	// Make sure the __current_curs_pos does not overshoot the
+	// Make sure the __curs_pos does not overshoot the
 	// border of the window
-	assert(__current_curs_pos<__size.cols());
+	assert(__curs_pos<__size.cols());
 
-	// Advance the cursor position. If __current_curs_pos+1 hits
+	// Advance the cursor position. If __curs_pos+1 hits
 	// the border, advance the offset. This way we always have a
 	// space at the end of the string (on the screen only, not in
 	// the __buffer of course).
-	if (__current_curs_pos+1==__size.cols()) {
+	if (__curs_pos+1==__size.cols()) {
 	    __offset++;
 	} else {
 	    // we're somewhere in the widget, but not the end, advance
 	    // the cursor position
-	    __current_curs_pos++;
+	    __curs_pos++;
 	}
-
-	// Ignore wmove() errors for now
-	//
-	// if (wmove(widget_subwin(), 0, __current_curs_pos)==ERR)
-	//    throw WMoveFailed();
-	wmove(widget_subwin(), 0, __current_curs_pos);
-
-	wcursyncup(widget_subwin());
-
-	refresh(true);
+	break;
     }
+
+    refresh(true);
+
     return 0;
 }
 
@@ -161,7 +173,7 @@ Input::Input(int _length, std::string::size_type _max_size, const std::string& _
     Widget(),
     __focus(false),
     __offset(0),
-    __current_curs_pos(0),
+    __curs_pos(0),
     __max_size(_max_size),
     __length(_length),
     __buffer(_t.length()>__max_size?_t.substr(0,__max_size):_t),
@@ -175,7 +187,7 @@ Input::Input(int _length, std::string::size_type _max_size, const std::string& _
 Input::Input(const Input& _i): Widget(_i),
 			       __focus(_i.__focus),
 			       __offset(_i.__offset),
-			       __current_curs_pos(_i.__current_curs_pos),
+			       __curs_pos(_i.__curs_pos),
 			       __max_size(_i.__max_size),
 			       __length(_i.__length),
 			       __buffer(_i.__buffer),
@@ -191,7 +203,7 @@ Input::operator=(const Input& _i) {
     Widget::operator=(_i);
     __focus=_i.__focus;
     __offset=_i.__offset;
-    __current_curs_pos=_i.__current_curs_pos;
+    __curs_pos=_i.__curs_pos;
     __max_size=_i.__max_size;
     __length=_i.__length;
     __buffer=_i.__buffer;
@@ -208,7 +220,7 @@ Input::input(const std::string& i) {
 
     // Reset cursor position
     __offset=0;
-    __current_curs_pos=0;
+    __curs_pos=0;
 
     if (realized())
 	refresh(true);
@@ -310,6 +322,14 @@ Input::refresh(bool immediate) {
 				    std::min(__buffer.length(),
 					     static_cast<std::string::size_type>(__size.cols()-1)) ).c_str());
     }
+
+    // Ignore wmove() errors for now
+    //
+    if (wmove(widget_subwin(), 0, __curs_pos)==ERR)
+	 throw WMoveFailed();
+    //wmove(widget_subwin(), 0, __curs_pos);
+
+    wcursyncup(widget_subwin());
 
     Widget::refresh(immediate);
 }

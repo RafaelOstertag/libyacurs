@@ -34,7 +34,7 @@ class Input: public Widget {
 	/**
 	 * Cursor position relative to offset, absolute to Widget.
 	 */
-	std::string::size_type __current_curs_pos;
+	std::string::size_type __curs_pos;
 
 	/**
 	 * Maximum size of input.

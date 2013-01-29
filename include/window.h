@@ -9,6 +9,7 @@
 #include "config.h"
 #endif
 
+#include <string>
 
 #include "mycurses.h"
 #include "windowbase.h"
@@ -45,8 +46,11 @@ class Window: public WindowBase {
 
 	// Those are from Realizable
 	void refresh(bool immediate);
-	void resize(const Area& _a);
+	// Does nothing, everything handled in parent.
+	//void resize(const Area& _a);
 	void realize();
+
+	operator std::string() const;
 };
 
 #endif // WINDOW_H

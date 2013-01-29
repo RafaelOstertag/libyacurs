@@ -30,6 +30,7 @@
 #include <iostream>
 
 #include "yacurs.h"
+#include "debug.h"
 
 int alrm(Event& _e) {
     static int calls = 0;
@@ -81,6 +82,7 @@ int main() {
     }
 
     try {
+	DEBUG::start();
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
@@ -119,8 +121,10 @@ int main() {
 	delete w1;
 	delete sl;
 	Curses::end();
+	DEBUG::end();
     } catch (std::exception& e) {
 	Curses::end();
+	DEBUG::end();
 	if (ioctl(STDIN_FILENO, TIOCSWINSZ, &wsave) == -1) {
 	    return 1;
 	}

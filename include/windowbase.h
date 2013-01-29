@@ -115,9 +115,7 @@ class WindowBase : public Realizeable {
 	void resize(const Area& _a);
 	void realize();
 
-#ifndef NDEBUG
-	virtual operator std::string() const;
-#endif
+	operator std::string() const;
 };
 
 #endif // WINDOWBASE_H

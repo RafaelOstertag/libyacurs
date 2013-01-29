@@ -79,11 +79,9 @@ Area::operator-(const Margin& rhs) const {
     return tmp-=rhs;
 }
 
-#ifndef NDEBUG
 Area::operator std::string() const {
     const Size& _size=*this;
     const Coordinates& _coords=*this;
     return "size:" + static_cast<std::string>(_size) + 
-	",area:" + static_cast<std::string>(_coords);
+	",coords:" + static_cast<std::string>(_coords);
 }
-#endif

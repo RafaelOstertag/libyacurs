@@ -8,6 +8,7 @@
 #endif
 
 #include <cstdlib>
+#include <string>
 
 #include "mycurses.h"
 #include "widgetbase.h"
@@ -51,6 +52,7 @@ class Widget: public WidgetBase {
 	void resize(const Area& _a);
 	void realize();
 
+	operator std::string() const;
 };
 
 

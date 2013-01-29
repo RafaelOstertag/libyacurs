@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <cassert>
 
+#include "debug.h"
 
 #include "curs.h"
 #include "cursex.h"
@@ -26,11 +27,16 @@
 void
 Window::unrealize() {
     if (!realized()) return;
+    DEBUGOUT("-- IN: Window::unrealize()");
+    DEBUGOUT(*this);
 
     if (__widget) __widget->unrealize();
 
     FocusManager::destroy_focus_group();
     WindowBase::unrealize();
+
+    DEBUGOUT(*this);
+    DEBUGOUT("-- OUT: Window::unrealize()");
 }
 
 //
@@ -68,15 +74,22 @@ Window::widget() const {
 void
 Window::refresh(bool immediate) {
     if (!realized()) return;
+    DEBUGOUT("-- IN: Window::refresh()");
+    DEBUGOUT(*this);
 
     YAPET::UI::Colors::set_color(curses_window(), YAPET::UI::DEFAULT);
     WindowBase::refresh(immediate);
     if (__widget) __widget->refresh(immediate);
+    DEBUGOUT("-- OUT: Window::refresh()");
+    DEBUGOUT(*this);
 }
 
+#if 0
+// This ain't needed since it does nothing...
 void
 Window::resize(const Area& _a) {
     WindowBase::resize(_a);
+
     // We do not call resize, because the WidgetBase::resize() would
     // happen after the widget has been unrealized and realized again
     // by Window::resize(). Therefore, Window::realize takes care of
@@ -84,9 +97,15 @@ Window::resize(const Area& _a) {
     //
     //if (__widget) __widget->resize(widget_area());
 }
+#endif
 
 void
 Window::realize() {
+    if (realized()) return;
+
+    DEBUGOUT("-- IN: Window::realize()");
+    DEBUGOUT(*this);
+
     WindowBase::realize();
 
     // It is imperative that a new Focus Group is created before the
@@ -110,4 +129,12 @@ Window::realize() {
 
 	__widget->realize();
     }
+
+    DEBUGOUT(*this);
+    DEBUGOUT("-- OUT: Window::realize()");
+}
+
+Window::operator std::string() const {
+    return "Window{\n\t(__widget_area:" + 
+	static_cast<std::string>(widget_area()) + ")\n}";
 }

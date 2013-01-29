@@ -7,6 +7,8 @@
 #include <cerrno>
 #include <cassert>
 
+#include "debug.h"
+
 #include "curs.h"
 #include "cursex.h"
 #include "windowbase.h"
@@ -51,6 +53,8 @@ WindowBase::widget_area() const {
 void
 WindowBase::unrealize() {
     if (not realized()) return;
+    DEBUGOUT("-- IN: WindowBase::unrealize()");
+    DEBUGOUT(*this);
 
     realized(false);
 
@@ -61,6 +65,9 @@ WindowBase::unrealize() {
 	throw DelWindowFailed();
 
     *__curses_window = NULL;
+    
+    DEBUGOUT(*this);
+    DEBUGOUT("-- OUT: WindowBase::unrealize()");
 }
 
 int
@@ -203,6 +210,9 @@ void
 WindowBase::refresh(bool immediate) {
     if (!realized()) return;
 
+    DEBUGOUT("-- IN: WindowBase::refresh()");
+    DEBUGOUT(*this);
+
     assert(__curses_window!=NULL);
     assert(*__curses_window!=NULL);
 
@@ -215,6 +225,8 @@ WindowBase::refresh(bool immediate) {
     if (retval == ERR)
 	throw RefreshFailed();
 
+    DEBUGOUT(*this);
+    DEBUGOUT("-- OUT: WindowBase::refresh()");
 }
 
 void
@@ -223,6 +235,8 @@ WindowBase::resize(const Area& _a) {
     // Keep in mind: a resize does not refresh!
     //
     if (!realized()) return;
+    DEBUGOUT("-- IN: WindowBase::resize(): _a=" + static_cast<std::string>(_a));
+    DEBUGOUT(*this);
 
     assert(_a.x()>-1);
     assert(_a.y()>-1);
@@ -234,11 +248,15 @@ WindowBase::resize(const Area& _a) {
     __area = _a;
 
     realize();
+    DEBUGOUT(*this);
+    DEBUGOUT("-- OUT: WindowBase::resize()");
 }
 
 void
 WindowBase::realize() {
     if (realized()) return;
+    DEBUGOUT("-- IN: WindowBase::realize()");
+    DEBUGOUT(*this);
 
     assert(__area.x()>=0);
     assert(__area.y()>=0);
@@ -275,13 +293,13 @@ WindowBase::realize() {
 	    throw BoxFailed();
     }
 
+    DEBUGOUT(*this);
+    DEBUGOUT("-- OUT: WindowBase::realize()");
     realized(true);
 }
 
-#ifndef NDEBUG
 WindowBase::operator std::string() const {
     return "WindowBase{\n\t(Area:" + 
 	static_cast<std::string>(__area) + ")\n\t(" +
-	static_cast<std::string>(__margin) + ")}";
+	static_cast<std::string>(__margin) + ")\n}";
 }
-#endif

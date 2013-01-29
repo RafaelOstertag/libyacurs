@@ -5,9 +5,7 @@
 #ifndef COORDINATES_H
 #define COORDINATES_H
 
-#ifndef NDEBUG
 #include <string>
-#endif
 
 /**
  * Coordinates as used throughout Curses.
@@ -139,9 +137,7 @@ class Coordinates {
 	 */
 	static const Coordinates& zero();
 
-#ifndef NDEBUG
 	operator std::string() const;
-#endif
 };
 
 #endif // COORDINATES_H

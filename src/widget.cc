@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include "debug.h"
+
 #include "cursex.h"
 #include "widget.h"
 #include "eventqueue.h"
@@ -30,7 +32,9 @@ Widget::force_refresh_handler(Event& _e) {
 void
 Widget::unrealize() {
     if (not realized()) return;
-
+    DEBUGOUT("-- IN: Widget::unrealize()");
+    DEBUGOUT(*this);
+    
     realized(false);
 
     assert(__widget_subwin!=NULL);
@@ -52,7 +56,8 @@ Widget::unrealize() {
     if (wrefresh(curses_window()) == ERR)
 	throw RefreshFailed();
 
-
+    DEBUGOUT(*this);
+    DEBUGOUT("-- OUT: Widget::unrealize()");
 }
 
 WINDOW*
@@ -121,6 +126,8 @@ Widget::operator=(const Widget& _w) {
 void
 Widget::refresh(bool immediate) {
     if (!realized()) return;
+    DEBUGOUT("-- IN: Widget::refresh()");
+    DEBUGOUT(*this);
 
     assert(__widget_subwin!=NULL);
     assert(*__widget_subwin!=NULL);
@@ -133,6 +140,9 @@ Widget::refresh(bool immediate) {
 
     if (retval == ERR)
 	throw RefreshFailed();
+
+    DEBUGOUT(*this);
+    DEBUGOUT("-- OUT: Widget::refresh()");
 }
 	
 void
@@ -143,6 +153,8 @@ Widget::resize(const Area& _a) {
     // 2. The actual resize has to be done in a derived class
     //
     if (!realized()) return;
+    DEBUGOUT("-- IN: Widget::resize()");
+    DEBUGOUT(*this);
 
     unrealize();
 
@@ -150,11 +162,16 @@ Widget::resize(const Area& _a) {
     size_available(_a);
 
     realize();
+    
+    DEBUGOUT(*this);
+    DEBUGOUT("-- OUT: Widget::resize()");
 }
 
 void
 Widget::realize() {
     if (realized()) return;
+    DEBUGOUT("-- IN: Widget::realize()");
+    DEBUGOUT(*this);
 
     const Coordinates& pos = position();
     const Size& _size = size();
@@ -191,4 +208,15 @@ Widget::realize() {
 	throw LeaveOKFailed();
 
     realized(true);
+
+    DEBUGOUT(*this);
+    DEBUGOUT("-- OUT: Widget::realize()");
+}
+
+Widget::operator std::string() const {
+    return "Widget{\n\t(pos:" + 
+	static_cast<std::string>(position()) + ")\n\t(" +
+	"szav:" + static_cast<std::string>(size_available()) + ")\n\t(" +
+	"sz:" + static_cast<std::string>(size()) + ")\n\t(" +
+	"hint:" + static_cast<std::string>(size_hint()) + ")\n}";
 }

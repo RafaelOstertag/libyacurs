@@ -14,6 +14,11 @@
 #include "margin.h"
 #include "event.h"
 
+enum {
+    MIN_WINDOW_ROWS=1,
+    MIN_WINDOW_COLS=4
+};
+
 /**
  * Base class for Windows.
  *
@@ -25,7 +30,7 @@
  *
  * - can have a visible frame
  *
- * - connect to EVT_REFRESH and EVT_RESIZE
+ * - connect to EVT_REFRESH, EVT_FORCEREFRESH and EVT_RESIZE
  *
  * - allocates only one instance of curses Windows across
  *   assignments.
@@ -33,8 +38,6 @@
  * - tracks the number of WindowBase instances created by copying and
  *   assigning and frees curses window only upon destruction of
  *   last instance.
- *
- *  - connect to the refresh (EVT_REFRESH) and resize (EVT_RESIZE) event.
  */
 class WindowBase : public Realizeable {
     private:
@@ -73,7 +76,8 @@ class WindowBase : public Realizeable {
 	/**
 	 * Gets the area that can be used by widgets
 	 *
-	 * @return the area in with absolute coordinates that can be used by widgets.
+	 * @return the area in with absolute coordinates that can be
+	 * used by widgets.
 	 */
 	Area widget_area() const;
 
@@ -111,6 +115,9 @@ class WindowBase : public Realizeable {
 	void resize(const Area& _a);
 	void realize();
 
+#ifndef NDEBUG
+	virtual operator std::string() const;
+#endif
 };
 
 #endif // WINDOWBASE_H

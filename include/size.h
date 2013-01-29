@@ -5,6 +5,10 @@
 #ifndef SIZE_H
 #define SIZE_H
 
+#ifndef NDEBUG
+#include <string>
+#endif
+
 /**
  * Describes size in terms of lines and columns.
  *
@@ -112,6 +116,10 @@ class Size {
 	 * @return Size object representing zero.
 	 */
 	static const Size& zero();
+
+#ifndef NDEBUG
+	operator std::string() const;
+#endif
 };
 
 #endif // SIZE_H

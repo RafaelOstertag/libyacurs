@@ -3,6 +3,10 @@
 #include <cassert>
 #include <stdexcept>
 
+#ifndef NDEBUG
+#include <sstream>
+#endif
+
 #include "size.h"
 
 //
@@ -115,3 +119,12 @@ const Size&
 Size::zero() {
     return __zero;
 }
+
+#ifndef NDEBUG
+Size::operator std::string() const {
+    std::ostringstream _rows, _cols;
+    _rows << __rows;
+    _cols << __cols;
+    return "rows=" + _rows.str() + ",cols=" + _cols.str();
+}
+#endif

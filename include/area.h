@@ -3,6 +3,10 @@
 #ifndef AREA_H
 #define AREA_H
 
+#ifndef NDEBUG
+#include <string>
+#endif
+
 #include "coordinates.h"
 #include "size.h"
 #include "margin.h"
@@ -84,6 +88,10 @@ class Area: public Coordinates, public Size {
 	bool operator!=(const Area& _a) const;
 	const Area& operator-=(const Margin& rhs);
 	Area operator-(const Margin& rhs) const;
+
+#ifndef NDEBUG
+	operator std::string() const;
+#endif
 };
 
 #endif

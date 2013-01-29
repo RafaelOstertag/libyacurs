@@ -25,6 +25,8 @@
 //
 void
 Window::unrealize() {
+    if (!realized()) return;
+
     if (__widget) __widget->unrealize();
 
     FocusManager::destroy_focus_group();
@@ -65,7 +67,7 @@ Window::widget() const {
 
 void
 Window::refresh(bool immediate) {
-    if (!realized()) throw NotRealized();
+    if (!realized()) return;
 
     YAPET::UI::Colors::set_color(curses_window(), YAPET::UI::DEFAULT);
     WindowBase::refresh(immediate);
@@ -92,8 +94,11 @@ Window::realize() {
     FocusManager::new_focus_group();
 
     if (__widget) {
-	// This is imperative, so that the widget also is aware of the new
-	// curses window in case we're called in the course of a resize.
+	assert(!__widget->realized());
+
+	// This is imperative, so that the widget also is aware of the
+	// new curses window in case we're called in the course of a
+	// resize.
 	__widget->curses_window(curses_window());
 
 	// This widget does not have another widget as parent.

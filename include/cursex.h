@@ -168,9 +168,9 @@ class NoEchoFailed: public BaseCurEx {
 	NoEchoFailed();
 };
 
-class DerWinFailed: public BaseCurEx {
+class SubwinFailed: public BaseCurEx {
     public:
-	DerWinFailed();
+	SubwinFailed();
 };
 
 class ClearFailed: public BaseCurEx {

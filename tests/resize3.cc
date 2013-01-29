@@ -77,7 +77,7 @@ int main() {
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   "Resize 1");
+					   "Resize 3");
 	Curses::title(title);
 
 	MyWindow* w1 = new MyWindow(Margin(1,0,1,0));

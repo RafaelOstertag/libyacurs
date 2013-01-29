@@ -15,8 +15,9 @@
 //
 int
 Widget::force_refresh_handler(Event& _e) {
+    if (!realized()) return 0;
+
     assert(_e == EVT_FORCEREFRESH);
-    assert(realized());
     assert(__widget_subwin!=NULL);
     assert(*__widget_subwin!=NULL);
 
@@ -28,7 +29,7 @@ Widget::force_refresh_handler(Event& _e) {
 
 void
 Widget::unrealize() {
-    if (not realized()) throw NotRealized();
+    if (not realized()) return;
 
     realized(false);
 
@@ -119,7 +120,7 @@ Widget::operator=(const Widget& _w) {
     
 void
 Widget::refresh(bool immediate) {
-    if (!realized()) throw NotRealized();
+    if (!realized()) return;
 
     assert(__widget_subwin!=NULL);
     assert(*__widget_subwin!=NULL);
@@ -141,12 +142,7 @@ Widget::resize(const Area& _a) {
     //
     // 2. The actual resize has to be done in a derived class
     //
-    if (!realized()) throw NotRealized();
-
-    assert(_a.x()>-1);
-    assert(_a.y()>-1);
-    assert(_a.rows()>0);
-    assert(_a.cols()>0);
+    if (!realized()) return;
 
     unrealize();
 
@@ -158,16 +154,22 @@ Widget::resize(const Area& _a) {
 
 void
 Widget::realize() {
-    if (realized()) throw AlreadyRealized();
+    if (realized()) return;
 
     const Coordinates& pos = position();
     const Size& _size = size();
+    const Size& size_a = size_available();
 
     // We cannot assert on parent() since it might be legally NULL
     // assert(parent()!=NULL
 
-    assert(size()!=Size());
-    assert(size_available()!=Size());
+    assert(_size!=Size::zero());
+    assert(size_a!=Size::zero());
+
+    if (size_a.rows()<1 ||
+	_size.rows()>size_a.rows()||
+	_size.cols()>size_a.cols() )
+	return;
 
     assert(curses_window()!=NULL);
     assert(__widget_subwin!=NULL);
@@ -179,7 +181,7 @@ Widget::realize() {
 		       pos.y(),
 		       pos.x());
     if (*__widget_subwin == NULL) {
-	throw DerWinFailed();
+	throw SubwinFailed();
     }
 
     if (scrollok(*__widget_subwin, FALSE)==ERR)

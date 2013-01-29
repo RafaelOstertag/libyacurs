@@ -3,6 +3,10 @@
 #ifndef MARGIN_H
 #define MARGIN_H
 
+#ifndef NDEBUG
+#include <string>
+#endif
+
 /**
  * Margin class
  */
@@ -31,6 +35,10 @@ class Margin {
 	Margin operator-(const Margin& m) const;
 	bool operator==(const Margin& m) const;
 	bool operator!=(const Margin& m) const;
+
+#ifndef NDEBUG
+	virtual operator std::string() const;
+#endif
 };
 
 #endif

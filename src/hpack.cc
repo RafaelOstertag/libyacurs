@@ -381,7 +381,7 @@ HPack::size_hint() const {
 
 void
 HPack::realize() {
-    if (realized()) throw AlreadyRealized();
+    if (realized()) return;
 
     assert(WidgetBase::size_available().rows()>0);
     assert(WidgetBase::size_available().cols()>0);

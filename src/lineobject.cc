@@ -104,7 +104,7 @@ LineObject::operator=(const LineObject& lo) {
 
 void
 LineObject::realize() {
-    if (realized()) throw AlreadyRealized();
+    if (realized()) return;
 
     compute_margin();
     WindowBase::realize();
@@ -112,7 +112,7 @@ LineObject::realize() {
 
 void
 LineObject::refresh(bool immediate) {
-    if (!realized()) throw NotRealized();
+    if (!realized()) return;
 
     put_line();
 

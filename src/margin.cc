@@ -2,6 +2,10 @@
 
 #include "algorithm"
 
+#ifndef NDEBUG
+#include <sstream>
+#endif
+
 #include "margin.h"
 
 //
@@ -120,3 +124,15 @@ bool
 Margin::operator!=(const Margin& m) const {
     return ! operator==(m);
 }
+
+#ifndef NDEBUG
+Margin::operator std::string() const {
+    std::ostringstream _top, _left, _bottom, _right;
+    _top << __top;
+    _left << __left;
+    _bottom << __bottom;
+    _right << __right;
+    return "t=" + _top.str() + ",l=" + _left.str() +
+	",b=" + _bottom.str() + ",r=" + _right.str();
+}
+#endif

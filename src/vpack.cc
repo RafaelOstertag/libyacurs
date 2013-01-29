@@ -381,7 +381,7 @@ VPack::size_hint() const {
 
 void
 VPack::realize() {
-    if (realized()) throw AlreadyRealized();
+    if (realized()) return;
 
     assert(WidgetBase::size_available().rows()>0);
     assert(WidgetBase::size_available().cols()>0);

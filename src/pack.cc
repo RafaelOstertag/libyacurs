@@ -41,7 +41,7 @@ Pack::refresh_all_widgets(bool i) {
 //
 void
 Pack::unrealize() {
-    if (!realized()) throw NotRealized();
+    if (!realized()) return;
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  std::mem_fun(&WidgetBase::unrealize));
@@ -223,14 +223,14 @@ Pack::focus() const {
 
 void
 Pack::refresh(bool immediate) {
-    if (!realized()) throw NotRealized();
+    if (!realized()) return;
 
     refresh_all_widgets(immediate);
 }
 
 void
 Pack::resize(const Area& _a) {
-    if (!realized()) throw NotRealized();
+    if (!realized()) return;
 
     unrealize();
 

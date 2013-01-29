@@ -1,13 +1,11 @@
-// $Id$
+// $Id: resize2.cc 4738 2013-01-25 16:55:19Z rafisol $
 //
 // Test basic functionality of Curses class
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif // HAVE_UNISTD_H
 
 #ifdef HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>
@@ -29,9 +27,7 @@
 # endif // HAVE_SYS_TERMIOS_H
 #endif // HAVE_TERMIOS_H
 
-#ifdef HAVE_IOSTREAM
 #include <iostream>
-#endif // HAVE_IOSTREAM
 
 #include "yacurs.h"
 
@@ -75,6 +71,10 @@ int alrm(Event& _e) {
 }
 
 int main() {
+#if 0
+    std::cout << getpid() << std::endl;
+    sleep(15);
+#endif
     winsize wsave;
     if (ioctl(STDIN_FILENO, TIOCGWINSZ, &wsave) == -1) {
 	return 1;
@@ -84,11 +84,22 @@ int main() {
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   "Resize 2");
+					   "Resize 4");
 	Curses::title(title);
 
 	Window* w1 = new Window(Margin(1,0,1,0));
 	w1->frame(true);
+
+	HPack* hpack = new HPack;
+	Label* l1 = new Label("abcdefghijklmnopqrstuvwxyz");
+	Label* l2 = new Label("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+	Label* l3 = new Label("0123456789");
+
+	hpack->add_front(l1);
+	hpack->add_front(l2);
+	hpack->add_back(l3);
+
+	w1->widget(hpack);
 
 	Curses::mainwindow(w1);
 
@@ -97,10 +108,14 @@ int main() {
 
 	EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
 
-	alarm(1);
+	alarm(2);
 	Curses::run();
 
 	delete title;
+	delete l1;
+	delete l2;
+	delete l3;
+	delete hpack;
 	delete w1;
 	delete sl;
 	Curses::end();

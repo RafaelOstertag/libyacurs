@@ -50,7 +50,7 @@ WindowBase::widget_area() const {
 
 void
 WindowBase::unrealize() {
-    if (not realized()) throw NotRealized();
+    if (not realized()) return;
 
     realized(false);
 
@@ -65,8 +65,9 @@ WindowBase::unrealize() {
 
 int
 WindowBase::force_refresh_handler(Event& _e) {
+    if (!realized()) return 0;
+
     assert(_e == EVT_FORCEREFRESH);
-    assert(realized());
     assert(__curses_window!=NULL);
     assert(*__curses_window!=NULL);
 
@@ -77,16 +78,18 @@ WindowBase::force_refresh_handler(Event& _e) {
 
 int
 WindowBase::refresh_handler(Event& _e) {
+    if (!realized()) return 0;
+
     assert(_e == EVT_REFRESH);
-    assert(realized());
     refresh(false);
     return 0;
 }
 
 int
 WindowBase::resize_handler(Event& _e) {
+    if (!realized()) return 0;
+
     assert(_e == EVT_SIGWINCH);
-    assert(realized());
 
     EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
     resize(Area(Coordinates(0,0),winch.data()));
@@ -177,7 +180,7 @@ WindowBase::operator=(const WindowBase& so) {
 
 void
 WindowBase::margin(const Margin& _m) {
-    //    assert(!isRealized());
+    if (realized()) throw AlreadyRealized();
     __margin = _m;
 }
 
@@ -198,7 +201,7 @@ WindowBase::frame(bool b) {
 
 void
 WindowBase::refresh(bool immediate) {
-    if (!realized()) throw NotRealized();
+    if (!realized()) return;
 
     assert(__curses_window!=NULL);
     assert(*__curses_window!=NULL);
@@ -219,7 +222,7 @@ WindowBase::resize(const Area& _a) {
     //
     // Keep in mind: a resize does not refresh!
     //
-    if (!realized()) throw NotRealized();
+    if (!realized()) return;
 
     assert(_a.x()>-1);
     assert(_a.y()>-1);
@@ -235,7 +238,7 @@ WindowBase::resize(const Area& _a) {
 
 void
 WindowBase::realize() {
-    if (realized()) throw AlreadyRealized();
+    if (realized()) return;
 
     assert(__area.x()>=0);
     assert(__area.y()>=0);
@@ -244,11 +247,12 @@ WindowBase::realize() {
 
     Area _tmp = __area - __margin;
 
-    assert(_tmp.x()>=0);
-    assert(_tmp.y()>=0);
-    assert(_tmp.rows()>0);
-    assert(_tmp.cols()>0);
 
+    if (_tmp.x()<0 ||
+	_tmp.y()<0 ||
+	_tmp.rows()<MIN_WINDOW_ROWS ||
+	_tmp.cols()<MIN_WINDOW_COLS)
+	return;
 
     assert(__curses_window!=NULL);
     assert(*__curses_window==NULL);
@@ -273,3 +277,11 @@ WindowBase::realize() {
 
     realized(true);
 }
+
+#ifndef NDEBUG
+WindowBase::operator std::string() const {
+    return "WindowBase{\n\t(Area:" + 
+	static_cast<std::string>(__area) + ")\n\t(" +
+	static_cast<std::string>(__margin) + ")}";
+}
+#endif

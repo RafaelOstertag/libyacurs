@@ -1,5 +1,9 @@
 // $Id$
 
+#ifndef NDEBUG
+#include <sstream>
+#endif
+
 #include "coordinates.h"
 
 //
@@ -94,3 +98,12 @@ const Coordinates&
 Coordinates::zero() {
     return __zero;
 }
+
+#ifndef NDEBUG
+Coordinates::operator std::string() const {
+    std::ostringstream _x, _y;
+    _x << __x;
+    _y << __y;
+    return "x=" + _x.str() + ",y=" + _y.str();
+}
+#endif

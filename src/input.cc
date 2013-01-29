@@ -114,7 +114,9 @@ Input::key_handler(Event& _e) {
 	if (__buffer.length()>=__max_size) break;
 
 	// Add the char to the curses window
-	mvwaddch(widget_subwin(), 0, __curs_pos, ekey.data());
+	//
+	// (void) used to silence clang w/ -Wall -pedantic
+	(void)mvwaddch(widget_subwin(), 0, __curs_pos, ekey.data());
 
 	// Add (insert) the char to the buffer. No cursor motion, this
 	// is done in the next block.

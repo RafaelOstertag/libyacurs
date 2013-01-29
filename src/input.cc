@@ -73,7 +73,7 @@ Input::key_handler(Event& _e) {
     case KEY_RIGHT:
 	if (__curs_pos+__offset>=__buffer.length()) break;
 
-	if (__curs_pos+1==__size.cols()) {
+	if (__curs_pos+1==static_cast<std::string::size_type>(__size.cols())) {
 	    __offset++;
 	} else {
 	    // we're somewhere in the widget, but not the end, advance
@@ -93,11 +93,11 @@ Input::key_handler(Event& _e) {
 	    // we start `paging' horizontally, so that most of the
 	    // __buffer is visible
 	    if (__offset>0) {
-		if (__offset>=__size.cols()) {
+		if (__offset>=static_cast<std::string::size_type>(__size.cols())) {
 		    __offset-=__size.cols()-1;
 		    __curs_pos=__size.cols()-1;
 		} else {
-		    __curs_pos+=__offset-1;
+		    __curs_pos+=__offset;
 		    __offset=0;
 		}
 	    } else {
@@ -130,13 +130,13 @@ Input::key_handler(Event& _e) {
 
 	// Make sure the __curs_pos does not overshoot the
 	// border of the window
-	assert(__curs_pos<__size.cols());
+	assert(__curs_pos<static_cast<std::string::size_type>(__size.cols()));
 
 	// Advance the cursor position. If __curs_pos+1 hits
 	// the border, advance the offset. This way we always have a
 	// space at the end of the string (on the screen only, not in
 	// the __buffer of course).
-	if (__curs_pos+1==__size.cols()) {
+	if (__curs_pos+1==static_cast<std::string::size_type>(__size.cols())) {
 	    __offset++;
 	} else {
 	    // we're somewhere in the widget, but not the end, advance

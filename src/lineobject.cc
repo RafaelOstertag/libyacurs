@@ -55,7 +55,7 @@ LineObject::put_line() {
     if (__linetext.length()<1) return;
 
     assert(area().cols()>=MIN_COLS);
-    if (area().cols()<__linetext.length()+1) {
+    if (static_cast<std::string::size_type>(area().cols())<__linetext.length()+1) {
 	if (mymvwaddnstr(curses_window(),
 			 0,0,
 			 __linetext.c_str(),

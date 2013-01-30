@@ -65,12 +65,21 @@ class MyWindow: public Window {
 
 };
 
-int alrm(Event& _e) {
-    assert(_e == EVT_SIGALRM);
-    EventQueue::submit(Event(EVT_QUIT));
+int key_handler(Event& _e) {
+    assert(_e == EVT_KEY);
+ 
+    EventKey& _ek = dynamic_cast<EventKey&>(_e);
+
+    switch (_ek.data()) {
+    case 'q':
+    case 'Q':
+	EventQueue::submit(Event(EVT_QUIT));
+	break;
+    default:
+	break;
+    }
     return 0;
 }
-
 
 int main() {
     try {
@@ -87,8 +96,9 @@ int main() {
 
 	StatusLine* sl = new StatusLine();
 	Curses::statusline(sl);
+	sl->push_msg("Press Q to quit");
 
-	EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
+	EventQueue::connect_event(EventConnectorFunction1(EVT_KEY,&key_handler));
 
 	Curses::run();
 

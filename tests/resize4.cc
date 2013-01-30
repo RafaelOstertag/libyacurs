@@ -28,46 +28,53 @@
 #endif // HAVE_TERMIOS_H
 
 #include <iostream>
+#include <sstream>
 
 #include "yacurs.h"
 #include "debug.h"
 
-int alrm(Event& _e) {
-    static int calls = 0;
-    assert(_e == EVT_SIGALRM);
+class MyWindow: public Window {
+    protected:
+	int resize_handler(Event& _e) {
+	    Window::resize_handler(_e);
 
-    std::string status_msg("Size: rows=");
-    
-    Size _scrdim(Curses::inquiry_screensize());
+	    EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
+	    std::string status_msg("Size: rows=");
+	    
+	    char buff[32];
+	    snprintf(buff,32,"%d",winch.data().rows());
+	    status_msg+=buff;
+	    
+	    status_msg+=" cols=";
+	    
+	    snprintf(buff,32,"%d",winch.data().cols());
+	    status_msg+=buff;
+	    
+	    Curses::statusline()->push_msg(status_msg);
+	    return 0;
+	};
 
-    char buff[32];
-    snprintf(buff,32,"%d",_scrdim.rows());
-    status_msg+=buff;
+    public:
+	MyWindow(const Margin& m) : Window(m) {
+	    EventQueue::connect_event(EventConnectorMethod1<MyWindow>(EVT_SIGWINCH,this, &MyWindow::resize_handler));
+	}
+	MyWindow(const MyWindow& _o) : Window(_o) {}
 
-    status_msg+=" cols=";
+};
 
-    snprintf(buff,32,"%d",_scrdim.cols());
-    status_msg+=buff;
+int key_handler(Event& _e) {
+    assert(_e == EVT_KEY);
+ 
+    EventKey& _ek = dynamic_cast<EventKey&>(_e);
 
-    Curses::statusline()->push_msg(status_msg);
-
-    winsize ws;
-    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1) {
-	return -1;
-    }
-
-    ws.ws_row--;
-    ws.ws_col--;
-
-    if (ioctl(STDIN_FILENO, TIOCSWINSZ, &ws) == -1) {
-	return -1;
-    }
-
-    if (calls++ > 3)
+    switch (_ek.data()) {
+    case 'q':
+    case 'Q':
 	EventQueue::submit(Event(EVT_QUIT));
-    else
-	alarm(1);
-
+	break;
+    default:
+	break;
+    }
     return 0;
 }
 
@@ -89,34 +96,50 @@ int main() {
 					   "Resize 4");
 	Curses::title(title);
 
-	Window* w1 = new Window(Margin(1,0,1,0));
+	StatusLine* sl = new StatusLine();
+	sl->push_msg("Press Q to quit");
+	Curses::statusline(sl);
+
+	MyWindow* w1 = new MyWindow(Margin(1,0,1,0));
 	w1->frame(true);
 
 	HPack* hpack = new HPack;
-	Label* l1 = new Label("abcdefghijklmnopqrstuvwxyz");
-	Label* l2 = new Label("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-	Label* l3 = new Label("0123456789");
+	Label* hl1 = new Label("abcdefghijklmnopqrstuvwxyz");
+	Label* hl2 = new Label("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+	Label* hl3 = new Label("0123456789");
 
-	hpack->add_front(l1);
-	hpack->add_front(l2);
-	hpack->add_back(l3);
+    
+	hpack->add_front(hl1);
+	hpack->add_front(hl2);
+	hpack->add_back(hl3);
+
+	VPack* vpack = new VPack;
+	Label* vls[20];
+	for(int i=0; i<20; i++) {
+	    std::ostringstream _i;
+	    _i<<i;
+	    vls[i]=new Label("VLabel " + _i.str());
+	    vpack->add_back(vls[i]);
+	}
+	
+	hpack->add_front(vpack);
 
 	w1->widget(hpack);
 
 	Curses::mainwindow(w1);
 
-	StatusLine* sl = new StatusLine();
-	Curses::statusline(sl);
+	EventQueue::connect_event(EventConnectorFunction1(EVT_KEY,&key_handler));
 
-	EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
-
-	alarm(2);
 	Curses::run();
 
+	delete vpack;
+	for(int i=0; i<20; i++) {
+	    delete vls[i];
+	}
 	delete title;
-	delete l1;
-	delete l2;
-	delete l3;
+	delete hl1;
+	delete hl2;
+	delete hl3;
 	delete hpack;
 	delete w1;
 	delete sl;

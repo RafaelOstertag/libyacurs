@@ -42,8 +42,8 @@ enum {
 class WindowBase : public Realizeable {
     private:
 	/**
-	 * The dimension of the window. Used as cache to avoid calls to
-	 * Curses::inquiry_screensize().
+	 * The dimension of the screen. Used as cache to avoid calls
+	 * to Curses::inquiry_screensize().
 	 */
 	Area __area;
 	/**

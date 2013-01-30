@@ -122,3 +122,6 @@ ColorsNotInitialized::ColorsNotInitialized():
 
 WMoveFailed::WMoveFailed():
     BaseCurEx("wmove() failed") {}
+
+AreaExceeded::AreaExceeded():
+    BaseCurEx("An object exceeded space constraints.") {}

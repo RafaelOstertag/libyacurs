@@ -264,6 +264,7 @@ WindowBase::realize() {
     assert(__area.cols()>0);
 
     Area _tmp = __area - __margin;
+    DEBUGOUT("window Area:" + static_cast<std::string>(_tmp));
 
 
     if (_tmp.x()<0 ||
@@ -299,7 +300,7 @@ WindowBase::realize() {
 }
 
 WindowBase::operator std::string() const {
-    return "WindowBase{\n\t(Area:" + 
-	static_cast<std::string>(__area) + ")\n\t(" +
+    return "WindowBase{\n\t(Screen Area:" + 
+	static_cast<std::string>(__area) + ")\n\t(Margin:" +
 	static_cast<std::string>(__margin) + ")\n}";
 }

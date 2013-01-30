@@ -208,4 +208,9 @@ class WMoveFailed: public BaseCurEx {
 	WMoveFailed();
 };
 
+class AreaExceeded: public BaseCurEx {
+    public:
+	AreaExceeded();
+};
+
 #endif // CUREX_H

@@ -50,6 +50,13 @@ class Widget: public WidgetBase {
 	// Inherited from Realizeable
 	void refresh(bool immediate);
 	void resize(const Area& _a);
+
+	/**
+	 * Realize the widget.
+	 *
+	 * realizes the widget by setting up a curses subwindow, which
+	 * can be used by derived classes.
+	 */
 	void realize();
 
 	operator std::string() const;

@@ -9,12 +9,37 @@
 #include <algorithm>
 #include <functional>
 
+#include "debug.h"
+
 #include "cursex.h"
 #include "hpack.h"
 
 //
 // Functors
 //
+
+/**
+ * Realizes widgets.
+ *
+ * It checks for exceptions when realizing.
+ */
+class HRealizeWidgets {
+    public:
+	void operator()(WidgetBase* _w) {
+	    assert(_w!=NULL);
+	    // It is possible, that upon a resize the widget became to
+	    // big for the screen, or overshoots it due to its
+	    // position and size. Packs do not check whether or not
+	    // statically sized become too big when stacked.
+	    try {
+		_w->realize();
+	    } catch (BaseCurEx& e) {
+		std::string str("!! HRealizeWidgets Exception: ");
+		DEBUGOUT(str + e.what());
+	    } 
+	}
+};
+
 /**
  * Calculate the size hint.
  *
@@ -179,6 +204,10 @@ class HCalcNSetSize {
 
 	    __size.rows(std::max(__size.rows(),_w->size().rows()) );
 	    __size.cols(__size.cols()+_w->size().cols());
+
+	    if (__size.rows()>__size_available.rows() ||
+		__size.cols()>__size_available.cols())
+		throw AreaExceeded();
 
 	    // Also set the size availabe for the widget. Dynamically
 	    // sized widgets are handled when CalcNSetSize::finish()
@@ -386,17 +415,29 @@ HPack::realize() {
     assert(WidgetBase::size_available().rows()>0);
     assert(WidgetBase::size_available().cols()>0);
 
-    recalc_size();
+    try {
+	recalc_size();
+    } catch (AreaExceeded& ae) {
+	std::string str("!! HPack::recalc_size() Exception: ");
+	DEBUGOUT(str + ae.what());
+	return;
+    }
+
 
     // Set position for each associated widget. That's the only reason
-    // we implement realize() in a derived class.
+    // we implement realize() in a derived class, i.e. here
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  HSetPosWidget(position()));
 
+    // We have to catch exceptions, but continue. The 
+    //
+    //    std::for_each(widget_list.begin(),
+    //		  widget_list.end(),
+    //		  std::mem_fun(&WidgetBase::realize));
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
-		  std::mem_fun(&WidgetBase::realize));
+		  HRealizeWidgets());
 
     realized(true);
 }

@@ -39,6 +39,8 @@ Input::key_handler(Event& _e) {
 
     EventKey& ekey=dynamic_cast<EventKey&>(_e);
 
+    assert(__offset+__curs_pos<=__buffer.length());
+
     switch (ekey.data()) {
     case KEY_DOWN:
     case KEY_ENTER:
@@ -56,10 +58,11 @@ Input::key_handler(Event& _e) {
 	__offset=0;
 	break;
     case 11: // Ctrl-K
-	#warning "to be done"
+	__buffer=__buffer.erase(__offset+__curs_pos,
+				__buffer.length()-(__offset+__curs_pos));
 	break;
     case KEY_LEFT:
-	if (__curs_pos>1) {
+	if (__curs_pos>0) {
 	    __curs_pos--;
 	} else {
 	    if (__offset>0) {
@@ -82,28 +85,13 @@ Input::key_handler(Event& _e) {
 	}
 	break;
     case KEY_BACKSPACE:
-	// Check if the cursor is at the very beginning, of so, bail
-	// out.
-	if (__curs_pos==0 &&
-	    __offset==0) break;
+	if (__offset==0 && __curs_pos==0) break;
 
-	if (__curs_pos>1) {
-	    __curs_pos--;
+	if (__offset>0) {
+	    __offset--;
 	} else {
-	    // we start `paging' horizontally, so that most of the
-	    // __buffer is visible
-	    if (__offset>0) {
-		if (__offset>=static_cast<std::string::size_type>(__size.cols())) {
-		    __offset-=__size.cols()-1;
-		    __curs_pos=__size.cols()-1;
-		} else {
-		    __curs_pos+=__offset;
-		    __offset=0;
-		}
-	    } else {
-		if (__curs_pos>0)
-		    __curs_pos--;
-	    }
+	    if (__curs_pos>0)
+		__curs_pos--;
 	}
 	if (!__buffer.empty())
 	    __buffer=__buffer.erase(__offset+__curs_pos,1);
@@ -320,16 +308,15 @@ Input::refresh(bool immediate) {
     if (__buffer.length()>0) {
 	mymvwaddstr(widget_subwin(),
 		    0, 0,
-		    __buffer.substr(__offset,
-				    std::min(__buffer.length(),
-					     static_cast<std::string::size_type>(__size.cols()-1)) ).c_str());
+		    __buffer.substr(__offset, __size.cols()-1).c_str());
     }
 
-    // Ignore wmove() errors for now
-    //
+    // Sanitize the cursor position if necessary, for example due to a
+    // shrink of the screen, the cursor position might overshoot.
+    if (__curs_pos>static_cast<std::string::size_type>(__size.cols()) ) __curs_pos=__size.cols();
+
     if (wmove(widget_subwin(), 0, __curs_pos)==ERR)
 	 throw WMoveFailed();
-    //wmove(widget_subwin(), 0, __curs_pos);
 
     wcursyncup(widget_subwin());
 

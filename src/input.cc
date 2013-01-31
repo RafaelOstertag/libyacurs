@@ -1,7 +1,9 @@
 // $Id$
 
 #include <cassert>
+#include <sstream>
 
+#include "debug.h"
 #include "input.h"
 #include "eventqueue.h"
 #include "focusmanager.h"
@@ -144,16 +146,24 @@ Input::key_handler(Event& _e) {
 
 void
 Input::realize() {
+    DEBUGOUT("-- IN: Input::realize()");
+    DEBUGOUT(*this);
     Widget::realize();
 
     FocusManager::current_focus_group_add(this);
+    DEBUGOUT(*this);
+    DEBUGOUT("-- OUT: Input::realize()");
 }
 
 void
 Input::unrealize() {
+    DEBUGOUT("-- IN: Input::unrealize()");
+    DEBUGOUT(*this);
     FocusManager::current_focus_group_remove(this);
 
     Widget::unrealize();
+    DEBUGOUT(*this);
+    DEBUGOUT("-- OUT: Input::unrealize()");
 }
 //
 // Public
@@ -284,7 +294,10 @@ Input::focus() const {
 
 void
 Input::refresh(bool immediate) {
-    if (!realized()) throw NotRealized();
+    if (!realized()) return;
+    DEBUGOUT("-- IN: Input::refresh()");
+    DEBUGOUT(*this);
+
 
     assert(widget_subwin()!=NULL);
 
@@ -312,8 +325,9 @@ Input::refresh(bool immediate) {
     }
 
     // Sanitize the cursor position if necessary, for example due to a
-    // shrink of the screen, the cursor position might overshoot.
-    if (__curs_pos>static_cast<std::string::size_type>(__size.cols()) ) __curs_pos=__size.cols();
+    // shrink of the screen, the cursor position might overshoot the
+    // available subwin size.
+    if (__curs_pos>static_cast<std::string::size_type>(__size.cols()) ) __curs_pos=__size.cols()-1;
 
     if (wmove(widget_subwin(), 0, __curs_pos)==ERR)
 	 throw WMoveFailed();
@@ -321,4 +335,22 @@ Input::refresh(bool immediate) {
     wcursyncup(widget_subwin());
 
     Widget::refresh(immediate);
+    DEBUGOUT(*this);
+    DEBUGOUT("-- OUT: Input::refresh()");
+}
+
+Input::operator std::string() const {
+    std::ostringstream _f, _o, _p, _msz, _len;
+    _f << __focus;
+    _o << __offset;
+    _p << __curs_pos;
+    _msz << __max_size;
+    _len << __length;
+    return "Input{\n\t(focus:" + 
+	_f.str() + ")\n\t(" +
+	"offset:" + _o.str() + ")\n\t(" +
+	"curspos:" + _p.str()  + ")\n\t(" +
+	"maxsize:" + _msz.str() + ")\n\t(" +
+	"length:" + _len.str() + ")\n\t(" +
+	"size:" + static_cast<std::string>(__size) + ")\n}";
 }

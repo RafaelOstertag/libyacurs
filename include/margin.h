@@ -34,7 +34,7 @@ class Margin {
 	bool operator==(const Margin& m) const;
 	bool operator!=(const Margin& m) const;
 
-	virtual operator std::string() const;
+	operator std::string() const;
 };
 
 #endif

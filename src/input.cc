@@ -327,10 +327,7 @@ Input::refresh(bool immediate) {
     // Sanitize the cursor position if necessary, for example due to a
     // shrink of the screen, the cursor position might overshoot the
     // available subwin size.
-    //
-    // remember, that setting __cur_pos=__size.cols() will result in
-    // exception thrown, because wmove() would be off by one.
-    if (__curs_pos>=static_cast<std::string::size_type>(__size.cols()) ) __curs_pos=__size.cols()-1;
+    if (__curs_pos>=static_cast<std::string::size_type>(__size.cols()) ) __curs_pos=__size.cols();
 
     if (wmove(widget_subwin(), 0, __curs_pos)==ERR)
 	 throw WMoveFailed();

@@ -249,5 +249,7 @@ FocusGroup::focus_previous() {
 
 void
 FocusGroup::refocus() const {
+    if (__widgets.empty()) return;
+
     (*__focus)->focus(true);
 }

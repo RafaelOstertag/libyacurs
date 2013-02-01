@@ -5,6 +5,7 @@
 #include "config.h"
 #endif
 
+#include <debug.h>
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -69,6 +70,7 @@ int main() {
     sleep(15);
 #endif
     try {
+	DEBUG::start();
 	Curses::init();
 
 

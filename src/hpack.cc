@@ -410,7 +410,7 @@ HPack::size_hint() const {
 
 void
 HPack::realize() {
-    if (realized()) return;
+    REALIZE_ENTER;
 
     assert(WidgetBase::size_available().rows()>0);
     assert(WidgetBase::size_available().cols()>0);
@@ -420,6 +420,12 @@ HPack::realize() {
     } catch (AreaExceeded& ae) {
 	std::string str("!! HPack::recalc_size() Exception: ");
 	DEBUGOUT(str + ae.what());
+
+	// Back off
+	std::for_each(widget_list.begin(),
+		  widget_list.end(),
+		  std::mem_fun(&WidgetBase::unrealize));
+	realization(UNREALIZED);
 	return;
     }
 
@@ -439,5 +445,5 @@ HPack::realize() {
 		  widget_list.end(),
 		  HRealizeWidgets());
 
-    realized(true);
+    REALIZE_LEAVE;
 }

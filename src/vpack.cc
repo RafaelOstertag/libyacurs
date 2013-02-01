@@ -409,7 +409,7 @@ VPack::size_hint() const {
 
 void
 VPack::realize() {
-    if (realized()) return;
+    REALIZE_ENTER;
 
     assert(WidgetBase::size_available().rows()>0);
     assert(WidgetBase::size_available().cols()>0);
@@ -419,6 +419,13 @@ VPack::realize() {
     } catch (AreaExceeded& ae) {
 	std::string str("!! VPack::recalc_size() Exception: ");
 	DEBUGOUT(str + ae.what());
+
+	// Back off
+	std::for_each(widget_list.begin(),
+		      widget_list.end(),
+		      std::mem_fun(&WidgetBase::unrealize));
+
+	realization(UNREALIZED);
 	return;
     }
 
@@ -437,5 +444,5 @@ VPack::realize() {
 		  widget_list.end(),
 		  VRealizeWidgets());
 
-    realized(true);
+    REALIZE_LEAVE;
 }

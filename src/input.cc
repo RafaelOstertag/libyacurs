@@ -146,6 +146,8 @@ Input::key_handler(Event& _e) {
 
 void
 Input::realize() {
+    REALIZE_ENTER;
+	
     DEBUGOUT("-- IN: Input::realize()");
     DEBUGOUT(*this);
     Widget::realize();
@@ -153,10 +155,14 @@ Input::realize() {
     FocusManager::current_focus_group_add(this);
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Input::realize()");
+
+    REALIZE_LEAVE;
 }
 
 void
 Input::unrealize() {
+    UNREALIZE_ENTER;
+
     DEBUGOUT("-- IN: Input::unrealize()");
     DEBUGOUT(*this);
     FocusManager::current_focus_group_remove(this);
@@ -164,6 +170,8 @@ Input::unrealize() {
     Widget::unrealize();
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Input::unrealize()");
+
+    UNREALIZE_LEAVE;
 }
 //
 // Public
@@ -222,7 +230,7 @@ Input::input(const std::string& i) {
     __offset=0;
     __curs_pos=0;
 
-    if (realized())
+    if (realization()==REALIZED)
 	refresh(true);
 }
 
@@ -283,7 +291,8 @@ void
 Input::focus(bool _f) {
     __focus = _f;
 
-    if (realized())
+    if (realization()==REALIZED ||
+	realization()==REALIZING)
 	visibly_change_focus();
 }
 
@@ -294,7 +303,7 @@ Input::focus() const {
 
 void
 Input::refresh(bool immediate) {
-    if (!realized()) return;
+    if (realization()!=REALIZED) return;
     DEBUGOUT("-- IN: Input::refresh()");
     DEBUGOUT(*this);
 

@@ -52,7 +52,8 @@ WindowBase::widget_area() const {
 
 void
 WindowBase::unrealize() {
-    if (not realized()) return;
+    UNREALIZE_ENTER;
+
     DEBUGOUT("-- IN: WindowBase::unrealize()");
     DEBUGOUT(*this);
 
@@ -61,18 +62,22 @@ WindowBase::unrealize() {
     assert(__curses_window!=NULL);
     assert(*__curses_window!=NULL);
 
-    if (delwin(*__curses_window) == ERR)
+    if (delwin(*__curses_window) == ERR) {
+	realization(UNREALIZED);
 	throw DelWindowFailed();
+    }
 
     *__curses_window = NULL;
     
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: WindowBase::unrealize()");
+    
+    UNREALIZE_LEAVE;
 }
 
 int
 WindowBase::force_refresh_handler(Event& _e) {
-    if (!realized()) return 0;
+    if (realization()!=REALIZED) return 0;
 
     assert(_e == EVT_FORCEREFRESH);
     assert(__curses_window!=NULL);
@@ -85,7 +90,7 @@ WindowBase::force_refresh_handler(Event& _e) {
 
 int
 WindowBase::refresh_handler(Event& _e) {
-    if (!realized()) return 0;
+    if (realization()!=REALIZED) return 0;
 
     assert(_e == EVT_REFRESH);
     refresh(false);
@@ -94,7 +99,7 @@ WindowBase::refresh_handler(Event& _e) {
 
 int
 WindowBase::resize_handler(Event& _e) {
-    if (!realized()) return 0;
+    if (realization()!=REALIZED) return 0;
 
     assert(_e == EVT_SIGWINCH);
 
@@ -187,7 +192,7 @@ WindowBase::operator=(const WindowBase& so) {
 
 void
 WindowBase::margin(const Margin& _m) {
-    if (realized()) throw AlreadyRealized();
+    if (realization()==REALIZED) throw AlreadyRealized();
     __margin = _m;
 }
 
@@ -208,7 +213,7 @@ WindowBase::frame(bool b) {
 
 void
 WindowBase::refresh(bool immediate) {
-    if (!realized()) return;
+    if (realization()!=REALIZED && realization()!=REALIZING) return;
 
     DEBUGOUT("-- IN: WindowBase::refresh()");
     DEBUGOUT(*this);
@@ -234,7 +239,7 @@ WindowBase::resize(const Area& _a) {
     //
     // Keep in mind: a resize does not refresh!
     //
-    if (!realized()) return;
+    if (realization()!=REALIZED) return;
     DEBUGOUT("-- IN: WindowBase::resize(): _a=" + static_cast<std::string>(_a));
     DEBUGOUT(*this);
 
@@ -254,7 +259,8 @@ WindowBase::resize(const Area& _a) {
 
 void
 WindowBase::realize() {
-    if (realized()) return;
+    REALIZE_ENTER
+
     DEBUGOUT("-- IN: WindowBase::realize()");
     DEBUGOUT(*this);
 
@@ -270,8 +276,10 @@ WindowBase::realize() {
     if (_tmp.x()<0 ||
 	_tmp.y()<0 ||
 	_tmp.rows()<MIN_WINDOW_ROWS ||
-	_tmp.cols()<MIN_WINDOW_COLS)
+	_tmp.cols()<MIN_WINDOW_COLS) {
+	realization(UNREALIZED);
 	return;
+    }
 
     assert(__curses_window!=NULL);
     assert(*__curses_window==NULL);
@@ -280,23 +288,31 @@ WindowBase::realize() {
 				  _tmp.y(),
 				  _tmp.x());
     if (*__curses_window == NULL) {
+	realization(UNREALIZED);
 	throw NewWindowFailed();
     }
 
-    if (scrollok(*__curses_window, FALSE)==ERR)
+    if (scrollok(*__curses_window, FALSE)==ERR) {
+	realization(UNREALIZED);
 	throw ScrollOKFailed();
+    }
 
-    if (leaveok(*__curses_window, TRUE)==ERR)
+    if (leaveok(*__curses_window, TRUE)==ERR) {
+	realization(UNREALIZED);
 	throw LeaveOKFailed();
+    }
 
     if (__frame) {
-	if (box(*__curses_window, 0, 0) == ERR)
+	if (box(*__curses_window, 0, 0) == ERR) {
+	    realization(UNREALIZED);
 	    throw BoxFailed();
+	}
     }
 
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: WindowBase::realize()");
-    realized(true);
+
+    REALIZE_LEAVE;
 }
 
 WindowBase::operator std::string() const {

@@ -52,7 +52,7 @@ Label::label(const std::string& _l) {
     //
     // In any case, we can leave the function.
     if (parent()==NULL || oldsize.cols() >= __size.cols()) {
-	if (realized()) refresh(true);
+	if (realization()==REALIZED) refresh(true);
 	return;
     }
     
@@ -105,7 +105,7 @@ Label::focus() const {
 
 void
 Label::refresh(bool immediate) {
-    if (!realized()) return;
+    if (realization()!=REALIZED && realization!=REALIZING) return;
 
     assert(widget_subwin()!=NULL);
 

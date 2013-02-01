@@ -47,6 +47,8 @@ LineObject::compute_margin() {
 
 void
 LineObject::put_line() {
+    if (!(realization()==REALIZED ||
+	  realization()==REALIZING)) return;
     if (!realized()) return;
 
     if (werase(curses_window())==ERR)
@@ -104,15 +106,17 @@ LineObject::operator=(const LineObject& lo) {
 
 void
 LineObject::realize() {
-    if (realized()) return;
+    REALIZE_ENTER;
 
     compute_margin();
     WindowBase::realize();
+    
+    REALIZE_LEAVE;
 }
 
 void
 LineObject::refresh(bool immediate) {
-    if (!realized()) return;
+    if (realization()!=REALIZED) return;
 
     put_line();
 
@@ -124,7 +128,7 @@ LineObject::refresh(bool immediate) {
 void
 LineObject::line(const std::string& _str) {
     __linetext = _str;
-    if (realized())
+    if (realization()!=REALIZED && realization()!=REALIZING)
 	refresh(true);
 }
 

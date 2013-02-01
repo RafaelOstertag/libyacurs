@@ -40,7 +40,7 @@ Pack::refresh_all_widgets(bool i) {
 //
 void
 Pack::unrealize() {
-    if (!realized()) return;
+    UNREALIZE_ENTER;
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  std::mem_fun(&WidgetBase::unrealize));
@@ -48,7 +48,7 @@ Pack::unrealize() {
     // Required since pack is a dynamically sized Widget.
     reset_size();
 
-    realized(false);
+    UNREALIZE_LEAVE;
 }
 
 //
@@ -85,9 +85,8 @@ Pack::operator=(const Pack& _p) {
 void
 Pack::add_front(WidgetBase* _w) {
     assert(_w != NULL);
-    assert(!_w->realized());
 
-    if (realized()) throw AlreadyRealized();
+    if (realization()!=UNREALIZED) throw AlreadyRealized();
 
 
     widget_list.push_front(_w);
@@ -99,9 +98,8 @@ Pack::add_front(WidgetBase* _w) {
 void
 Pack::add_back(WidgetBase* _w) {
     assert(_w != NULL);
-    assert(!_w->realized());
 
-    if (realized()) throw AlreadyRealized();
+    if (realization()!=UNREALIZED) throw AlreadyRealized();
 
     widget_list.push_back(_w);
 
@@ -114,7 +112,7 @@ void
 Pack::remove(WidgetBase* _w) {
     assert(_w != NULL);
 
-    if (realized()) throw AlreadyRealized();
+    if (realization()!=UNREALIZED) throw AlreadyRealized();
 
     widget_list.remove(_w);
 }
@@ -184,7 +182,7 @@ Pack::size_change() {
     if (parent()!=NULL)
 	return parent()->size_change();
 
-    if (!realized()) return true;
+    if (realization()!=REALIZED) return true;
 
     //
     // We're realized
@@ -222,14 +220,14 @@ Pack::focus() const {
 
 void
 Pack::refresh(bool immediate) {
-    if (!realized()) return;
+    if (realization()!=REALIZED) return;
 
     refresh_all_widgets(immediate);
 }
 
 void
 Pack::resize(const Area& _a) {
-    if (!realized()) return;
+    if (realization()!=REALIZED) return;
 
     unrealize();
 

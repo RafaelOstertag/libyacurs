@@ -26,7 +26,8 @@
 //
 void
 Window::unrealize() {
-    if (!realized()) return;
+    UNREALIZE_ENTER;
+
     DEBUGOUT("-- IN: Window::unrealize()");
     DEBUGOUT(*this);
 
@@ -37,6 +38,8 @@ Window::unrealize() {
 
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Window::unrealize()");
+
+    UNREALIZE_LEAVE;
 }
 
 //
@@ -73,13 +76,16 @@ Window::widget() const {
 
 void
 Window::refresh(bool immediate) {
-    if (!realized()) return;
+    if (realization()!=REALIZED) return;
     DEBUGOUT("-- IN: Window::refresh()");
     DEBUGOUT(*this);
 
     YAPET::UI::Colors::set_color(curses_window(), YAPET::UI::DEFAULT);
+
     WindowBase::refresh(immediate);
+
     if (__widget) __widget->refresh(immediate);
+
     DEBUGOUT("-- OUT: Window::refresh()");
     DEBUGOUT(*this);
 }
@@ -101,7 +107,7 @@ Window::resize(const Area& _a) {
 
 void
 Window::realize() {
-    if (realized()) return;
+    REALIZE_ENTER;
 
     DEBUGOUT("-- IN: Window::realize()");
     DEBUGOUT(*this);
@@ -132,6 +138,8 @@ Window::realize() {
 
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Window::realize()");
+
+    REALIZE_LEAVE;
 }
 
 Window::operator std::string() const {

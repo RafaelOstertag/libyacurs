@@ -1,5 +1,7 @@
 // $Id$
 
+#include <cassert>
+
 #include "realizeable.h"
 
 //
@@ -7,28 +9,28 @@
 //
 
 void 
-Realizeable::realized(bool _r) {
-    __realized = _r;
+Realizeable::realization(REALIZATION_STATE _r) {
+    __realization_state = _r;
 }
 
 //
 // Public
 //
-Realizeable::Realizeable() : __realized(false) {}
+Realizeable::Realizeable() : __realization_state(UNREALIZED) {}
 
 Realizeable::Realizeable(const Realizeable& r) {
-    __realized = r.__realized;
+    __realization_state = r.__realization_state;
 }
 
 Realizeable::~Realizeable() {}
 
 Realizeable&
 Realizeable::operator=(const Realizeable& r) {
-    __realized = r.__realized;
+    __realization_state = r.__realization_state;
     return *this;
 }
 
-bool
-Realizeable::realized() const {
-    return __realized;
+REALIZATION_STATE
+Realizeable::realization() const {
+    return __realization_state;
 }

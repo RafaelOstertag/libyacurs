@@ -17,7 +17,7 @@
 //
 int
 Widget::force_refresh_handler(Event& _e) {
-    if (!realized()) return 0;
+    if (realization()!=REALIZED) return 0;
 
     assert(_e == EVT_FORCEREFRESH);
     assert(__widget_subwin!=NULL);
@@ -31,7 +31,8 @@ Widget::force_refresh_handler(Event& _e) {
 
 void
 Widget::unrealize() {
-    if (not realized()) return;
+    UNREALIZE_ENTER;
+
     DEBUGOUT("-- IN: Widget::unrealize()");
     DEBUGOUT(*this);
     
@@ -43,7 +44,8 @@ Widget::unrealize() {
     // We have to clear the window since the new size might be
     // smaller, and thus leaving artifacts on the screen if we omit to
     // clear the entire subwin()
-    if (wclear(*__widget_subwin) == ERR)
+    if (wclear(*__widget_subwin) == ERR) {
+	realization(UNREALIZED);
 	throw ClearFailed();
 
     if (delwin(*__widget_subwin) == ERR)

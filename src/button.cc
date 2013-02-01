@@ -121,7 +121,7 @@ void
 Button::focus(bool _f) {
     __focus = _f;
 
-    if (realized())
+    if (realization()==REALIZED)
 	visibly_change_focus();
 }
 
@@ -132,7 +132,7 @@ Button::focus() const {
 
 void
 Button::refresh(bool immediate) {
-    if (!realized()) throw NotRealized();
+    if (realization()!=REALIZED) return;
 
     assert(widget_subwin()!=NULL);
     

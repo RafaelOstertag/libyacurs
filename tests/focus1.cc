@@ -75,7 +75,7 @@ int main() {
 
 
 	Curses::title(new LineObject(LineObject::POS_TOP,
-				     "Pack 9:"));
+				     "Focus 1"));
 	Curses::statusline(new StatusLine);
 
 

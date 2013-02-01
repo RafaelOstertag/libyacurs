@@ -63,6 +63,31 @@ Input::key_handler(Event& _e) {
 	__buffer=__buffer.erase(__offset+__curs_pos,
 				__buffer.length()-(__offset+__curs_pos));
 	break;
+    case KEY_BACKSPACE:
+	if (__offset==0 && __curs_pos==0) break;
+
+	if (__offset>0) {
+	    __offset--;
+	} else {
+	    if (__curs_pos>0)
+		__curs_pos--;
+	}
+	if (!__buffer.empty())
+	    __buffer=__buffer.erase(__offset+__curs_pos,1);
+	break;
+    case 1: // Ctrl-A
+	__curs_pos=0;
+	__offset=0;
+	break;
+    case 5: // Ctrl-E
+	if (__buffer.length()>static_cast<std::string::size_type>(__size.cols())) {
+	    __offset=__buffer.length()-__size.cols();
+	    __curs_pos=__size.cols();
+	} else {
+	    __offset=0;
+	    __curs_pos=__buffer.length();
+	}
+	break;
     case KEY_LEFT:
 	if (__curs_pos>0) {
 	    __curs_pos--;
@@ -86,19 +111,6 @@ Input::key_handler(Event& _e) {
 	    __curs_pos++;
 	}
 	break;
-    case KEY_BACKSPACE:
-	if (__offset==0 && __curs_pos==0) break;
-
-	if (__offset>0) {
-	    __offset--;
-	} else {
-	    if (__curs_pos>0)
-		__curs_pos--;
-	}
-	if (!__buffer.empty())
-	    __buffer=__buffer.erase(__offset+__curs_pos,1);
-	break;
-	
     default: // regular key presses
 	// do not overrun the max size
 	if (__buffer.length()>=__max_size) break;

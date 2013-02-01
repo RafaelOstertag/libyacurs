@@ -184,7 +184,9 @@ class Pack: public WidgetBase {
 	 *
 	 * When hinting is disabled, size_hint() will always return
 	 * Size::zero(), else it uses size_hint() of associated
-	 * Widgets. Default @c true.
+	 * Widgets.
+	 *
+	 * By default, hinting is enabled.
 	 *
 	 * @param _h @c true enables hinting, @c false disables
 	 * hinting.
@@ -201,12 +203,28 @@ class Pack: public WidgetBase {
 	bool hinting() const;
 
 	/**
-	 * 
+	 * Enable/disable always dynamic mode.
+	 *
+	 * If always dynamic is disabled, the pack will behave like a
+	 * non-dynamic Widget, if, and only if, it does not contain
+	 * any dynamicially sized Widgets. Else it behaves like a
+	 * dynamic Widget.
+	 *
+	 * If always dynmic is enabled, it behaves always like a
+	 * dynamic widget.
+	 *
+	 * By default, always dynamic is disabled.
+	 *
+	 * @param _d @c true to enable always dynamic mode, @c false
+	 * to disable it.
 	 */
 	void always_dynamic(bool _d);
 
 	/**
-	 * 
+	 * Query always dynamic mode.
+	 *
+	 * @return @c true if always dynamic mode is enabled, @c false
+	 * otherwise.
 	 */
 	bool always_dynamic() const;
 

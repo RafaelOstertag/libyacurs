@@ -78,7 +78,7 @@ Input::key_handler(Event& _e) {
 	    __buffer=__buffer.erase(__offset+__curs_pos,1);
 	break;
     case KEY_DC:
-	if (__offset+__curs_pos>=__buffer.length()||
+	if (__offset+__curs_pos>=__buffer.length() ||
 	    __buffer.empty()) break;
 	__buffer=__buffer.erase(__offset+__curs_pos,1);
 	break;
@@ -251,8 +251,7 @@ Input::input(const std::string& i) {
     __offset=0;
     __curs_pos=0;
 
-    if (realization()==REALIZED)
-	refresh(true);
+    refresh(true);
 }
 
 std::string

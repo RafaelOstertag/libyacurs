@@ -16,16 +16,37 @@
 #include "widgetbase.h"
 
 /**
+ * @defgroup Focus Focus Management
+ *
+ * Focus Groups and Focus Manager.
+ *
+ * Focus Management is comprised of Focus Groups and the Focus
+ * Manager. Focus Groups are organized in a stack, where the top most
+ * Focus Group is the Current Focus Group.
+ *
+ * The Focus Manager maintains the stack of Focus Groups and is the
+ * only interface to Focus Groups.
+ */
+
+/**
+ * @ingroup Focus
+ *
  * Focus Manager for Widgets.
  *
  * In Libyacurs, only widgets can be focused. Widgets register
- * themselves upon realization with the current focus group, which is
+ * themselves upon realization with the current Focus Group, which is
  * maintained by the FocusManager.
  *
- * A Window does create a focus group upon realization, which then
- * becomes the current focus group. Since a Window is always realized
+ * A Window does create a Focus Group upon realization, which then
+ * becomes the Current Focus Group. Since a Window is always realized
  * before Widgets, Widgets register themselves automatically with the
- * proper focus group.
+ * proper Focus Group.
+ *
+ * Focus Groups are organized in a stack. Windows basically push and
+ * pop on realization and unrealization Focus Groups of that stack.
+ *
+ * The FocusManager is intended to be the only interface to
+ * FocusGroups for other objects.
  *
  * @sa FocusGroup
  */

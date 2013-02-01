@@ -28,6 +28,20 @@ enum REALIZATION_STATE {
  * Realizeable classes display objects on the screen, or provide a way
  * for other objects to be displayed (see Pack).
  *
+ * The functions
+ *
+ * - refresh()
+ * - realize()
+ * - unrealize()
+ * - resize()
+ *
+ * must not rely on being only called when the object is in the proper
+ * state. They must handle calls while being in inproper state
+ * gracefully, i.e. not throwing exceptions due to an unexpected
+ * state. For instance: refresh() must not throw an exception when
+ * called on unrealized objects. Another example would be realize()
+ * being called twice.
+ *
  * Realizing consists of two states
  *
  * - REALIZING: the object is in the course of being realized, its
@@ -43,7 +57,11 @@ enum REALIZATION_STATE {
  *
  * - UNREALIZED: the object is unrealized. Its state is stable.
  *
- * Please keep in mind, the implementation has to set the proper states.
+ * Please keep in mind, the implementation has to set the proper
+ * states. The helper macros @c REALIZE_ENTER and @c REALIZE_LEAVE can
+ * be used when entering and leaving realize() function, @c
+ * UNREALIZE_ENTER and @c UNREALIZE_LEAVE for unrealize.
+ *
  */
 class Realizeable {
     private:
@@ -102,10 +120,9 @@ class Realizeable {
 	 * Realize the object by calling Curses functions and prepare
 	 * the object for a refresh.
 	 *
-	 * Realize is supposed to create curses window and associcated
-	 * attributes, such as borders only. It should not be used for
-	 * adding text for instance. Adding text and related
-	 * operations would be implemented in refresh().
+	 * Realize is supposed to create curses window. It should not
+	 * be used for adding text for instance. Adding text and
+	 * related operations would be implemented in refresh().
 	 */
 	virtual void realize() = 0;
 
@@ -122,7 +139,11 @@ class Realizeable {
 	REALIZATION_STATE realization() const;
 };
 
-/*
+/**
+ * @fn void REALIZE_ENTER()
+ *
+ * @relates Realizeable
+ *
  * This macro should be used when implementing realize(). It has to be
  * called first. It will ensure that the REALIZATION_STATE is set
  * properly when REALIZE_LEAVE is called.
@@ -134,25 +155,26 @@ class Realizeable {
  * A::realize() or B::realize() is called, i.e. as long as the first
  * call to realize() is not finished, the state has to be REALIZING.
  *
- *
+ * <pre>
  *  void A::realize() {
- *    REALIZE_ENTER
+ *    REALIZE_ENTER();
  *
  *    // Object realization_state() == REALIZING
  *
- *    REALIZE_LEAVE
+ *    REALIZE_LEAVE();
  *  }
  *
  *  void B::realize() {
- *    REALIZE_ENTER
+ *    REALIZE_ENTER();
  *
  *    A::realize();
  *
  *    // Object realization_state() == REALIZING
  *
- *    REALIZE_LEAVE
+ *    REALIZE_LEAVE();
+ * </pre>
  */
-#define REALIZE_ENTER bool __was_realizing_on_enter__=false;		\
+#define REALIZE_ENTER(x) bool __was_realizing_on_enter__=false;		\
     switch (realization()) {						\
     case REALIZED:							\
     case UNREALIZING:							\
@@ -168,19 +190,32 @@ class Realizeable {
 	break;								\
     }
 
-/*
- * Helper function to be used in realize()
+/**
+ * @fn void REALIZE_LEAVE()
+ *
+ * @relates Realizeable
+ *
+ * Helper macro to be used in realize()
  *
  * Has to be the last call in realize(). It ensures that the
  * realization state is set properly.
+ *
+ * @warning if realize() has to be left due to error condition, do not
+ * use REALIZE_LEAVE(), instead set realization() to the proper
+ * realization state (which, in that case, is most likely @c
+ * UNREALIZED).
  */
-#define REALIZE_LEAVE if(!__was_realizing_on_enter__)	\
+#define REALIZE_LEAVE(x) if(!__was_realizing_on_enter__)	\
 	realization(REALIZED);
 
-/*
+/**
+ * @fn void UNREALIZE_ENTER()
+ *
+ * @relates Realizeable
+ *
  * The same purpose as REALIZE_ENTER.
  */
-#define UNREALIZE_ENTER bool __was_unrealizing_on_enter__=false;	\
+#define UNREALIZE_ENTER(x) bool __was_unrealizing_on_enter__=false;	\
     switch (realization()) {						\
     case REALIZED:								\
 	realization(UNREALIZING);					\
@@ -195,10 +230,15 @@ class Realizeable {
 	assert(0);							\
 	break;								\
     }
-/*
+
+/**
+ * @fn void UNREALIZE_LEAVE()
+ *
+ * @relates Realizeable
+ *
  * The same purpose as REALIZE_LEAVE.
  */
-#define UNREALIZE_LEAVE if(!__was_unrealizing_on_enter__) \
+#define UNREALIZE_LEAVE(x) if(!__was_unrealizing_on_enter__)	\
 	realization(UNREALIZED);
 
 #endif // REALIZEABLE_H

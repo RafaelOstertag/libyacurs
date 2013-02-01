@@ -14,14 +14,21 @@
 #include "widgetbase.h"
 
 /**
+ * @ingroup Focus
+ *
  * Focus Group
  *
  * A Focus Group is comprised of Widgets with one Widget having the
  * focus, if the Group is active (or the Current Focus Group with
  * regards to the Focus Manager).
  *
- * Everytime a focus change happens, an EVT_FOCUS_CHANGE will be
- * emitted in order to make Widgets aware of focus changes.
+ * Widgets should emit @c EVT_FOCUS_NEXT or @c EVT_FOCUS_PREVIOUS if
+ * the voluntarely give up focus. The focus will then go to the next
+ * (or previous) Widget in the Focus Group, by calling
+ * WidgetBase::focus().
+ *
+ * The FocusManager is intended to be the only interface to
+ * FocusGroups for other objects.
  *
  * @sa FocusManager
  */

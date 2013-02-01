@@ -18,19 +18,37 @@
 #include "area.h"
 
 /**
+ * @ingroup Event
  *
- * Libyacurs counts on order events are connected, so that the
+ * The Event Queue dispatches Events submitted to the respective
+ * connectors.
+ *
+ * It is started by calling EventQueue::run(). It will then wait for
+ * keyboard input or Unix Signals and dispatch, aka. `emit`, the Event
+ * to all Event Connectors for the given event.
+ *
+ * The Event Queue will terminate upon submission of @c EVT_QUIT.
+ *
+ * Libyacurs counts on the order events are connected, so that the
  * EVT_REFRESH/EVT_DOUPDATE event sequence will call the last
  * connected event handler last, thus ensuring the update will not
  * suddenly display a main window before an recently opened dialog,
  * for instance.
  *
  * EventQueue will also emit events for global conditions, such as
- * screen refresh request by pressing Ctrl-L
+ * screen refresh request when pressing Ctrl-L.
  *
+ * @section Unix Signals
  *
- * Terminal Resize
- * ---------------
+ * EventQueue will emit events on following Unix Signals
+ *
+ * - SIGWINCH (@c EVT_SIGWINCH)
+ * - SIGALRM (@c EVT_SIGALRM)
+ * - SIGUSR1 (@c EVT_SIGUSR1)
+ * - SIGUSR2 (@c EVT_SIGUSR2)
+ * - SIGINT (@c EVT_SIGINT)
+ *
+ * @section Terminal Resize
  *
  * If supported by the curses implementation, it consists of following
  * event sequence:
@@ -40,18 +58,15 @@
  * - EVT_REFRESH
  * - EVT_DOUPDATE
  *
+ * @section Complete Refresh
  *
- * Complete Refresh
- * ----------------
- *
- * A complete refresh is initiated by Ctrl-L or KEY_REFRESH. It
- * consists of following event sequence:
+ * A complete refresh is initiated by pressing Ctrl-L or KEY_REFRESH
+ * on the keyboard. It consists of following event sequence:
  *
  * - EVT_FORCEREFRESH
  * - EVT_REFRESH
  * - EVT_DOUPDATE
  *
- * @ingroup Event
  */
 class EventQueue {
     private:

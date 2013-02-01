@@ -13,6 +13,14 @@
 
 /**
  * @defgroup Event Event related code
+ *
+ * Events, Event Queue, and Event Connectors.
+ *
+ * Events (@c EVENT_TYPE) can be connected to by means of Event
+ * Connectors (@c EventConnectorBase). A list of Event Connectors is
+ * maintained by the Event Queue (@c EventQueue). Events can be
+ * submitted to the Event Queue, which in turn calls all Event
+ * Connectors for a given Event.
  */
 
 /**
@@ -29,7 +37,12 @@
 enum EVENT_TYPE {
     /// Terminates the EventQueue main loop
     EVT_QUIT,
-    /// Notification of window size change
+    /**
+     * Notification of window size change.
+     *
+     * Only Curses is supposed to handle this Event. Widgets and
+     * Windows should not use it in order to resize.
+     */
     EVT_SIGWINCH,
     /// Notification of alarm signal
     EVT_SIGALRM,
@@ -55,11 +68,17 @@ enum EVENT_TYPE {
     EVT_SIGUSR2,
     EVT_SIGINT,
     /**
+     * @ingroup Event
+     * @ingroup Focus
+     *
      * Advises Focus Manager to give focus to the next Widget in the
      * Current Focus Group.
      */
     EVT_FOCUS_NEXT,
     /**
+     * @ingroup Event
+     * @ingroup Focus
+     *
      * Advises Focus Manager to give focus to the next Widget in the
      * Current Focus Group.
      */

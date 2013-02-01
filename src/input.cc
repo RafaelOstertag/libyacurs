@@ -54,11 +54,13 @@ Input::key_handler(Event& _e) {
     case KEY_BTAB:
 	EventQueue::submit(EVT_FOCUS_PREVIOUS);
 	break;
+    case KEY_DL:
     case 21: // Ctrl-U
 	__buffer.clear();
 	__curs_pos=0;
 	__offset=0;
 	break;
+    case KEY_EOL:
     case 11: // Ctrl-K
 	__buffer=__buffer.erase(__offset+__curs_pos,
 				__buffer.length()-(__offset+__curs_pos));
@@ -75,6 +77,12 @@ Input::key_handler(Event& _e) {
 	if (!__buffer.empty())
 	    __buffer=__buffer.erase(__offset+__curs_pos,1);
 	break;
+    case KEY_DC:
+	if (__offset+__curs_pos>=__buffer.length()||
+	    __buffer.empty()) break;
+	__buffer=__buffer.erase(__offset+__curs_pos,1);
+	break;
+    case KEY_HOME:
     case 1: // Ctrl-A
 	__curs_pos=0;
 	__offset=0;

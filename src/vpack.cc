@@ -10,6 +10,7 @@
 #include <functional>
 
 #include "debug.h"
+
 #include "cursex.h"
 #include "vpack.h"
 
@@ -121,7 +122,6 @@ class VSetSizeHinted {
 	void operator()(WidgetBase* _w) {
 	    assert(_w!=NULL);
 	    assert(_w->size_hint().rows()>0);
-	    assert(_w->size_hint().cols()<=__const_cols.cols());
 
 	    // _sa is supposed to hold the constant row value and the
 	    // hinted cols value as retrieved from calling size_hint()
@@ -192,8 +192,10 @@ class VCalcNSetSize {
 		//
 		// if it is capable of giving a hint, add it to the
 		// __hinted_widgets list which is treated separately
-		// from __dyn_widgets.
-		if (_w->size_hint().rows()>0)
+		// from __dyn_widgets. But only if the hint does not
+		// exceed the available size.
+		if (_w->size_hint().rows()>0 &&
+		    _w->size_hint().rows()<=__size_available.rows())
 		    __hinted_widgets.push_back(_w);
 		else
 		    __dyn_widgets.push_back(_w);

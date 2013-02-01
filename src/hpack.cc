@@ -122,7 +122,6 @@ class HSetSizeHinted {
 	void operator()(WidgetBase* _w) {
 	    assert(_w!=NULL);
 	    assert(_w->size_hint().cols()>0);
-	    assert(_w->size_hint().rows()<=__const_rows.rows());
 
 	    // _sa is supposed to hold the constant row value and the
 	    // hinted cols value as retrieved from calling size_hint()
@@ -193,8 +192,10 @@ class HCalcNSetSize {
 		//
 		// if it is capable of giving a hint, add it to the
 		// __hinted_widgets list which is treated separately
-		// from __dyn_widgets.
-		if (_w->size_hint().cols()>0)
+		// from __dyn_widgets. But only if the hint does not
+		// exceed the available size.
+		if (_w->size_hint().cols()>0 &&
+		    _w->size_hint().cols()<=__size_available.cols())
 		    __hinted_widgets.push_back(_w);
 		else
 		    __dyn_widgets.push_back(_w);

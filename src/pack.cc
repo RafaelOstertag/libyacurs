@@ -62,6 +62,14 @@ Pack::Pack(): WidgetBase(),
 }
 
 Pack::~Pack() {
+    // We don't unrealize widget, since they may be already deleted by
+    // the user, so we would try to reference invalid memory.
+    //
+    // We also don't want to force users of removing widgets from
+    // packs before the packs can be deleted.
+    //
+    // May be we could implement some self removal of widgets from
+    // packs on destruction...
 }
 
 Pack::Pack(const Pack& _p): WidgetBase(_p),
@@ -220,7 +228,8 @@ Pack::focus() const {
 
 void
 Pack::refresh(bool immediate) {
-    if (realization()!=REALIZED) return;
+    if (!(realization()==REALIZED ||
+	  realization()==REALIZING) ) return;
 
     refresh_all_widgets(immediate);
 }

@@ -41,7 +41,7 @@ class Widget: public WidgetBase {
     public:
 	Widget();
 	Widget(const Widget& _w);
-	~Widget();
+	virtual ~Widget();
 	Widget& operator=(const Widget& _w);
 
 	// Must be overriden in derived classes

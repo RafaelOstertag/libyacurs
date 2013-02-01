@@ -49,7 +49,6 @@ void
 LineObject::put_line() {
     if (!(realization()==REALIZED ||
 	  realization()==REALIZING)) return;
-    if (!realized()) return;
 
     if (werase(curses_window())==ERR)
 	throw EraseFailed();
@@ -128,8 +127,10 @@ LineObject::refresh(bool immediate) {
 void
 LineObject::line(const std::string& _str) {
     __linetext = _str;
-    if (realization()!=REALIZED && realization()!=REALIZING)
-	refresh(true);
+    // Refresh is responsible for taking care of whether or not the
+    // refresh can happen, for instance, it cannot happen if the
+    // object is not realized.
+    refresh(true);
 }
 
 std::string

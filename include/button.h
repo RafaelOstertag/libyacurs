@@ -44,7 +44,7 @@ class Button: public Label {
     public:
 	Button(const std::string& _b);
 	Button(const Button& _b);
-	~Button();
+	virtual ~Button();
 	Button& operator=(const Button& _b);
 
 	void label(const std::string& _l);

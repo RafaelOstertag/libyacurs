@@ -33,7 +33,7 @@ class Label: public Widget {
     public:
 	Label(const std::string& _l=std::string());
 	Label(const Label& _l);
-	~Label();
+	virtual ~Label();
 	Label& operator=(const Label& _l);
 
 	virtual void label(const std::string& _l);

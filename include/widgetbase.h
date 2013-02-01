@@ -108,7 +108,7 @@ class WidgetBase: public Realizeable {
 	 * - size available (i.e. Size::zero())
 	 */
 	WidgetBase();
-	~WidgetBase();
+	virtual ~WidgetBase();
 	WidgetBase(const WidgetBase& _w);
 	WidgetBase& operator=(const WidgetBase& w);
 

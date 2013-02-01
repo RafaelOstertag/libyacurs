@@ -105,7 +105,7 @@ Label::focus() const {
 
 void
 Label::refresh(bool immediate) {
-    if (realization()!=REALIZED && realization!=REALIZING) return;
+    if (realization()!=REALIZED && realization()!=REALIZING) return;
 
     assert(widget_subwin()!=NULL);
 

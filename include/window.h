@@ -38,7 +38,7 @@ class Window: public WindowBase {
     public:
 	Window(const Margin& m=Margin());
 	Window(const Window& W);
-	~Window();
+	virtual ~Window();
 	Window& operator=(const Window& W);
 	
 	void widget(WidgetBase* _w);

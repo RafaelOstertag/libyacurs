@@ -85,7 +85,7 @@ class Input: public Widget {
 	 */
 	Input(int _length=0, std::string::size_type _max_size=255, const std::string& _t=std::string());
 	Input(const Input& _i);
-	~Input();
+	virtual ~Input();
 	Input& operator=(const Input& _i);
 
 	/**

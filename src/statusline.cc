@@ -36,6 +36,8 @@ StatusLine::StatusLine():
 StatusLine::StatusLine(const StatusLine& sl):
     LineObject(sl) {}
 
+StatusLine::~StatusLine() {}
+
 void
 StatusLine::push_msg(const std::string& m) {
     __messages.push(m);

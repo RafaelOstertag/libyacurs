@@ -57,8 +57,6 @@ WindowBase::unrealize() {
     DEBUGOUT("-- IN: WindowBase::unrealize()");
     DEBUGOUT(*this);
 
-    realized(false);
-
     assert(__curses_window!=NULL);
     assert(*__curses_window!=NULL);
 
@@ -90,8 +88,6 @@ WindowBase::force_refresh_handler(Event& _e) {
 
 int
 WindowBase::refresh_handler(Event& _e) {
-    if (realization()!=REALIZED) return 0;
-
     assert(_e == EVT_REFRESH);
     refresh(false);
     return 0;
@@ -99,13 +95,9 @@ WindowBase::refresh_handler(Event& _e) {
 
 int
 WindowBase::resize_handler(Event& _e) {
-    if (realization()!=REALIZED) return 0;
-
     assert(_e == EVT_SIGWINCH);
-
     EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
     resize(Area(Coordinates(0,0),winch.data()));
-
     return 0;
 }
 
@@ -159,15 +151,16 @@ WindowBase::~WindowBase() {
 
     assert(__curses_window!=NULL);
 
-    if (*__curses_window != NULL)
-	if (delwin(*__curses_window) == ERR)
-	    throw DelWindowFailed();
+    bool delwin_failed=delwin(*__curses_window)==ERR;
 
     delete __curses_window;
 
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_FORCEREFRESH,this, &WindowBase::force_refresh_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
+   
+    if (delwin_failed)
+	throw DelWindowFailed();
 }
 
 WindowBase&
@@ -294,17 +287,23 @@ WindowBase::realize() {
 
     if (scrollok(*__curses_window, FALSE)==ERR) {
 	realization(UNREALIZED);
+	delwin(*__curses_window);
+	*__curses_window=NULL;
 	throw ScrollOKFailed();
     }
 
     if (leaveok(*__curses_window, TRUE)==ERR) {
 	realization(UNREALIZED);
+	delwin(*__curses_window);
+	*__curses_window=NULL;
 	throw LeaveOKFailed();
     }
 
     if (__frame) {
 	if (box(*__curses_window, 0, 0) == ERR) {
 	    realization(UNREALIZED);
+	    delwin(*__curses_window);
+	    *__curses_window=NULL;
 	    throw BoxFailed();
 	}
     }

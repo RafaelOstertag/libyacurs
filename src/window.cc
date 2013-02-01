@@ -105,6 +105,9 @@ Window::resize(const Area& _a) {
 }
 #endif
 
+/**
+ * @todo widget does not show cursor on focus after realization.
+ */
 void
 Window::realize() {
     REALIZE_ENTER;
@@ -119,7 +122,7 @@ Window::realize() {
     FocusManager::new_focus_group();
 
     if (__widget) {
-	assert(!__widget->realized());
+	assert(__widget->realization()==UNREALIZED);
 
 	// This is imperative, so that the widget also is aware of the
 	// new curses window in case we're called in the course of a
@@ -134,6 +137,9 @@ Window::realize() {
 	__widget->size_available(widget_area());
 
 	__widget->realize();
+
+	// Make sure a widget has the focus
+	FocusManager::refocus();
     }
 
     DEBUGOUT(*this);

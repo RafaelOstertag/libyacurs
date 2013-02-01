@@ -204,7 +204,8 @@ Input::Input(const Input& _i): Widget(_i),
 }
 
 Input::~Input() {
-    EventQueue::disconnect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));}
+    EventQueue::disconnect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));
+}
 
 Input&
 Input::operator=(const Input& _i) {
@@ -291,8 +292,7 @@ void
 Input::focus(bool _f) {
     __focus = _f;
 
-    if (realization()==REALIZED ||
-	realization()==REALIZING)
+    if (realization()==REALIZED)
 	visibly_change_focus();
 }
 

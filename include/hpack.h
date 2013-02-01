@@ -26,7 +26,7 @@ class HPack: public Pack {
     public:
 	HPack();
 	HPack(const HPack& _hp);
-	~HPack();
+	virtual ~HPack();
 	const HPack& operator=(const HPack& _hp);
 
 	Size size_hint() const;

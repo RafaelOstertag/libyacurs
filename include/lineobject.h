@@ -44,7 +44,7 @@ class LineObject: public WindowBase {
 
     public:
 	LineObject(POSITION _pos, const std::string& _t = std::string());
-	~LineObject();
+	virtual ~LineObject();
 	LineObject(const LineObject& lo);
 	LineObject& operator=(const LineObject& lo);
 

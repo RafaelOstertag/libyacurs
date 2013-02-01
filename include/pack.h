@@ -110,7 +110,7 @@ class Pack: public WidgetBase {
 
     public:
 	Pack();
-	~Pack();
+	virtual ~Pack();
 	Pack(const Pack& _p);
 	const Pack& operator=(const Pack& _p);
 

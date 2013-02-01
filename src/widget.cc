@@ -36,8 +36,6 @@ Widget::unrealize() {
     DEBUGOUT("-- IN: Widget::unrealize()");
     DEBUGOUT(*this);
     
-    realized(false);
-
     assert(__widget_subwin!=NULL);
     assert(*__widget_subwin!=NULL);
 
@@ -47,19 +45,29 @@ Widget::unrealize() {
     if (wclear(*__widget_subwin) == ERR) {
 	realization(UNREALIZED);
 	throw ClearFailed();
+    }
 
-    if (delwin(*__widget_subwin) == ERR)
+    if (delwin(*__widget_subwin) == ERR) {
+	realization(UNREALIZED);
 	throw DelWindowFailed();
+    }
+
     *__widget_subwin = NULL;
 
     // This is also needed to remove artifacts on the screen
-    if (touchwin(curses_window()) == ERR)
+    if (touchwin(curses_window()) == ERR) {
+	realization(UNREALIZED);
 	throw TouchFailed();
-    if (wrefresh(curses_window()) == ERR)
+    }
+    if (wrefresh(curses_window()) == ERR) {
+	realization(UNREALIZED);
 	throw RefreshFailed();
+    }
 
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Widget::unrealize()");
+
+    UNREALIZE_LEAVE;
 }
 
 WINDOW*
@@ -99,14 +107,14 @@ Widget::~Widget() {
     delete __instance_count;
 
     assert(__widget_subwin!=NULL);
-
-    if (*__widget_subwin != NULL)
-	if (delwin(*__widget_subwin) == ERR)
-	    throw DelWindowFailed();
+    
+    bool delwin_failed=delwin(*__widget_subwin)==ERR;
 
     delete __widget_subwin;
 
     EventQueue::disconnect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
+    if (delwin_failed)
+	throw DelWindowFailed();
 }
 
 Widget&
@@ -127,7 +135,9 @@ Widget::operator=(const Widget& _w) {
     
 void
 Widget::refresh(bool immediate) {
-    if (!realized()) return;
+    if (!(realization()==REALIZED ||
+	  realization()==REALIZING) ) return;
+
     DEBUGOUT("-- IN: Widget::refresh()");
     DEBUGOUT(*this);
 
@@ -154,7 +164,7 @@ Widget::resize(const Area& _a) {
     //
     // 2. The actual resize has to be done in a derived class
     //
-    if (!realized()) return;
+    if (!realization()==REALIZED) return;
     DEBUGOUT("-- IN: Widget::resize()");
     DEBUGOUT(*this);
 
@@ -171,7 +181,8 @@ Widget::resize(const Area& _a) {
 
 void
 Widget::realize() {
-    if (realized()) return;
+    REALIZE_ENTER;
+
     DEBUGOUT("-- IN: Widget::realize()");
     DEBUGOUT(*this);
 
@@ -200,19 +211,28 @@ Widget::realize() {
 		       pos.y(),
 		       pos.x());
     if (*__widget_subwin == NULL) {
+	realization(UNREALIZED);
 	throw SubwinFailed();
     }
 
-    if (scrollok(*__widget_subwin, FALSE)==ERR)
+    if (scrollok(*__widget_subwin, FALSE)==ERR) {
+	realization(UNREALIZED);
+	delwin(*__widget_subwin);
+	*__widget_subwin=NULL;
 	throw ScrollOKFailed();
+    }
 
-    if (leaveok(*__widget_subwin, TRUE)==ERR)
+    if (leaveok(*__widget_subwin, TRUE)==ERR) {
+	realization(UNREALIZED);
+	delwin(*__widget_subwin);
+	*__widget_subwin=NULL;
 	throw LeaveOKFailed();
-
-    realized(true);
+    }
 
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Widget::realize()");
+
+    REALIZE_LEAVE;
 }
 
 Widget::operator std::string() const {

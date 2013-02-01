@@ -163,21 +163,21 @@ class Realizeable {
  *
  *    REALIZE_LEAVE
  */
-#define REALIZE_ENTER (bool __was_realizing_on_enter__=false;		\
-		       switch (realization()) {				\
-		       REALIZED:					\
-		       UNREALIZING:					\
-			   return;					\
-		       UNREALIZED:					\
-			   realizing(REALIZING);			\
-			   break;					\
-		       REALIZING:					\
-			   __was_realizing_on_enter__=true;		\
-			   break;					\
-		       default:						\
-			   assert(0);					\
-			   break;					\
-		       })
+#define REALIZE_ENTER bool __was_realizing_on_enter__=false;		\
+    switch (realization()) {						\
+    case REALIZED:							\
+    case UNREALIZING:							\
+	return;								\
+    case UNREALIZED:							\
+	realization(REALIZING);						\
+	break;								\
+    case REALIZING:							\
+	__was_realizing_on_enter__=true;				\
+	break;								\
+    default:								\
+	assert(0);							\
+	break;								\
+    }
 
 /*
  * Helper function to be used in realize()
@@ -185,31 +185,31 @@ class Realizeable {
  * Has to be the last call in realize(). It ensures that the
  * realization state is set properly.
  */
-#define REALIZE_LEAVE (if(!__was_realizing_on_enter__)	\
-			   realizing(REALIZED);)
+#define REALIZE_LEAVE if(!__was_realizing_on_enter__)	\
+	realization(REALIZED);
 
 /*
  * The same purpose as REALIZE_ENTER.
  */
-#define UNREALIZE_ENTER (bool __was_unrealizing_on_enter__=false;	\
-			 switch (realization()) {			\
-			 REALIZED:					\
-			     realizing(UNREALIZING);			\
-			     break;					\
-			 UNREALIZING:					\
-			     __was_unrealizing_on_enter=true;		\
-			     break;					\
-			 UNREALIZED:					\
-			 REALIZING:					\
-			     return;					\
-			 default:					\
-			     assert(0);					\
-			     break;					\
-			 })
+#define UNREALIZE_ENTER bool __was_unrealizing_on_enter__=false;	\
+    switch (realization()) {						\
+    case REALIZED:								\
+	realization(UNREALIZING);					\
+	break;								\
+    case UNREALIZING:							\
+	__was_unrealizing_on_enter__=true;				\
+	break;								\
+    case UNREALIZED:							\
+    case REALIZING:							\
+	return;								\
+    default:								\
+	assert(0);							\
+	break;								\
+    }
 /*
  * The same purpose as REALIZE_LEAVE.
  */
-#define UNREALIZE_LEAVE (if(!__was_unrealizing_on_enter__) \
-			     realizing(UNREALIZED);)
+#define UNREALIZE_LEAVE if(!__was_unrealizing_on_enter__) \
+	realization(UNREALIZED);
 
 #endif // REALIZEABLE_H

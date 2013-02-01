@@ -230,7 +230,8 @@ class WidgetBase: public Realizeable {
 	 * Provide a size hint.
 	 *
 	 * Dynamically size Widgets can provide size hints if
-	 * possible.
+	 * possible. However, there is no guarantee that they get size
+	 * they hinted.
 	 *
 	 * @return Size::zero() if no hint can be provided. Either
 	 * Size::rows()>0 or Size::cols()>0 which is taken as

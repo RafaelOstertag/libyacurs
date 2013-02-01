@@ -111,6 +111,11 @@ class FocusGroup {
 	 */
 	void focus_previous();
 
+	/**
+	 * Re-focus the current focussed widgets.
+	 */
+	void refocus() const;
+
 };
 
 #endif // FOCUSGROUP_H

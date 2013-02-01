@@ -79,7 +79,8 @@ FocusManager::destroy_focus_group() {
 void
 FocusManager::current_focus_group_add(WidgetBase* _w) {
     assert(_w!=NULL);
-    assert(!__focus_groups.empty());
+
+    if (__focus_groups.empty()) return;
 
     __focus_groups.top()->add(_w);
 }
@@ -87,7 +88,14 @@ FocusManager::current_focus_group_add(WidgetBase* _w) {
 void
 FocusManager::current_focus_group_remove(WidgetBase* _w) {
     assert(_w!=NULL);
-    assert(!__focus_groups.empty());
+
+    if (__focus_groups.empty()) return;
 
     __focus_groups.top()->remove(_w);
+}
+
+void
+FocusManager::refocus() {
+    if (__focus_groups.empty()) return;
+    __focus_groups.top()->refocus();
 }

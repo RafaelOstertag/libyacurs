@@ -76,6 +76,8 @@ FocusGroup::activate() {
     (*__focus)->focus(true);
 
 #ifndef NDEBUG
+    // Solaris Studio 12.3 forced me to do it that way, i.e. with
+    // functor.
     CountFocus cf=std::for_each(__widgets.begin(),
 				__widgets.end(),
 				CountFocus());
@@ -96,6 +98,8 @@ FocusGroup::deactivate() {
 
     (*__focus)->focus(false);
 #ifndef NDEBUG
+    // Solaris Studio 12.3 forced me to do it that way, i.e. with
+    // functor.
     CountFocus cf=std::for_each(__widgets.begin(),
 				__widgets.end(),
 				CountFocus());
@@ -123,6 +127,8 @@ FocusGroup::add(WidgetBase* _w) {
 	__focus=__widgets.begin();
 	(*__focus)->focus(true);
 #ifndef NDEBUG
+	// Solaris Studio 12.3 forced me to do it that way, i.e. with
+	// functor.
 	CountFocus cf=std::for_each(__widgets.begin(),
 				    __widgets.end(),
 				    CountFocus());
@@ -162,6 +168,8 @@ FocusGroup::remove(WidgetBase* _w) {
 	(*__focus)->focus(true);
 
 #ifndef NDEBUG
+    // Solaris Studio 12.3 forced me to do it that way, i.e. with
+    // functor.
     CountFocus cf=std::for_each(__widgets.begin(),
 				__widgets.end(),
 				CountFocus());
@@ -194,6 +202,8 @@ FocusGroup::focus_next() {
     (*__focus)->focus(true);
 
 #ifndef NDEBUG
+    // Solaris Studio 12.3 forced me to do it that way, i.e. with
+    // functor.
     CountFocus cf=std::for_each(__widgets.begin(),
 				__widgets.end(),
 				CountFocus());
@@ -228,9 +238,16 @@ FocusGroup::focus_previous() {
     (*__focus)->focus(true);
 
 #ifndef NDEBUG
+    // Solaris Studio 12.3 forced me to do it that way, i.e. with
+    // functor.
     CountFocus cf=std::for_each(__widgets.begin(),
 				__widgets.end(),
 				CountFocus());
     assert(cf.count()==1);
 #endif // NDEBUG
 }    
+
+void
+FocusGroup::refocus() const {
+    (*__focus)->focus(true);
+}

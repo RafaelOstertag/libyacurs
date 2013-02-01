@@ -85,6 +85,13 @@ class FocusManager {
 	 * @param _w pointer to the Widget.
 	 */
 	static void current_focus_group_remove(WidgetBase* _w);
+
+	/**
+	 * Re-focus
+	 *
+	 * Calls refocus() on Current Focus Group.
+	 */
+	static void refocus();
 };
 
 #endif // FOCUSMANAGER_H

@@ -52,7 +52,7 @@ WindowBase::widget_area() const {
 
 void
 WindowBase::unrealize() {
-    UNREALIZE_ENTER;
+    UNREALIZE_ENTER();
 
     DEBUGOUT("-- IN: WindowBase::unrealize()");
     DEBUGOUT(*this);
@@ -70,7 +70,7 @@ WindowBase::unrealize() {
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: WindowBase::unrealize()");
     
-    UNREALIZE_LEAVE;
+    UNREALIZE_LEAVE();
 }
 
 int
@@ -252,7 +252,7 @@ WindowBase::resize(const Area& _a) {
 
 void
 WindowBase::realize() {
-    REALIZE_ENTER
+    REALIZE_ENTER()
 
     DEBUGOUT("-- IN: WindowBase::realize()");
     DEBUGOUT(*this);
@@ -311,7 +311,7 @@ WindowBase::realize() {
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: WindowBase::realize()");
 
-    REALIZE_LEAVE;
+    REALIZE_LEAVE();
 }
 
 WindowBase::operator std::string() const {

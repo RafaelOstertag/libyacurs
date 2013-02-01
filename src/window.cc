@@ -26,7 +26,7 @@
 //
 void
 Window::unrealize() {
-    UNREALIZE_ENTER;
+    UNREALIZE_ENTER();
 
     DEBUGOUT("-- IN: Window::unrealize()");
     DEBUGOUT(*this);
@@ -41,7 +41,7 @@ Window::unrealize() {
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Window::unrealize()");
 
-    UNREALIZE_LEAVE;
+    UNREALIZE_LEAVE();
 }
 
 //
@@ -112,7 +112,7 @@ Window::resize(const Area& _a) {
  */
 void
 Window::realize() {
-    REALIZE_ENTER;
+    REALIZE_ENTER();
 
     DEBUGOUT("-- IN: Window::realize()");
     DEBUGOUT(*this);
@@ -147,7 +147,7 @@ Window::realize() {
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Window::realize()");
 
-    REALIZE_LEAVE;
+    REALIZE_LEAVE();
 }
 
 Window::operator std::string() const {

@@ -105,12 +105,12 @@ LineObject::operator=(const LineObject& lo) {
 
 void
 LineObject::realize() {
-    REALIZE_ENTER;
+    REALIZE_ENTER();
 
     compute_margin();
     WindowBase::realize();
     
-    REALIZE_LEAVE;
+    REALIZE_LEAVE();
 }
 
 void

@@ -307,7 +307,6 @@ Input::refresh(bool immediate) {
     DEBUGOUT("-- IN: Input::refresh()");
     DEBUGOUT(*this);
 
-
     assert(widget_subwin()!=NULL);
 
     if (__focus) {
@@ -326,18 +325,21 @@ Input::refresh(bool immediate) {
     //
     // We ignore the error returned, since the cursor cannot be
     // advanced past the end, and thus the string is
-    // truncated. However, the truncation has no effect on label.
+    // truncated. However, the truncation has no effect on the input.
     if (__buffer.length()>0) {
 	mymvwaddstr(widget_subwin(),
 		    0, 0,
 		    __buffer.substr(__offset, __size.cols()-1).c_str());
+	// Sanitize the cursor position if necessary, for example due
+	// to a shrink of the screen, the cursor position might
+	// overshoot the available subwin size.
+	if (__curs_pos>=static_cast<std::string::size_type>(__size.cols()) ) __curs_pos=__size.cols()-1;
+    } else {
+	// since the buffer is empty, make sure the cursor position is
+	// set to the biginning.
+	assert(__curs_pos==0); 
     }
-
-    // Sanitize the cursor position if necessary, for example due to a
-    // shrink of the screen, the cursor position might overshoot the
-    // available subwin size.
-    if (__curs_pos>=static_cast<std::string::size_type>(__size.cols()) ) __curs_pos=__size.cols();
-
+    
     if (wmove(widget_subwin(), 0, __curs_pos)==ERR)
 	 throw WMoveFailed();
 

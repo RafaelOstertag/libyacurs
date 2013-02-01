@@ -52,17 +52,6 @@ class Realizeable {
 	 */
 	REALIZATION_STATE __realization_state;
 
-	/**
-	 * Internal variable for realize_enter()/realize_leave()
-	 *
-	 * Variable is used to keep track of the realization state of
-	 * the object when realize_enter() was called. Depending on
-	 * the value, a call to realize_leave() will either set
-	 * __realization_state to REALIZED (if @false) or not touch
-	 * __realization_state (if @c true).
-	 */
-	bool ___on_realize_enter_was_realizing;
-
     protected:
 	/**
 	 * Set realization state.

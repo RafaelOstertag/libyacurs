@@ -53,6 +53,8 @@ class LineObject: public WindowBase {
 
 	void line(const std::string& _str);
 	std::string line() const;
+
+	operator std::string();
 };
 
 #endif // LINEOBJECT_H

@@ -178,8 +178,8 @@ class WidgetBase: public Realizeable {
 	/**
 	 * Set the size available to the widget.
 	 *
-	 * This is used by container widgets and has to be set by the
-	 * paren widget, or the Window if the widget has no parent
+	 * This is used by dynamic widgets and has to be set by the
+	 * parent widget, or the Window if the widget has no parent
 	 * Widget.
 	 *
 	 * @param _s size available to the widget

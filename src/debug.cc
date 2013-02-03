@@ -1,5 +1,7 @@
 // $Id$
 
+#include <sstream>
+
 #include "debug.h"
 
 bool DEBUG::__initialized=false;
@@ -21,9 +23,12 @@ DEBUG::end() {
 }
 
 void
-DEBUG::out(const std::string& _o) {
+DEBUG::out(const void* ptr, const std::string& _o) {
     if (!__initialized) return;
 
-    __file << _o << std::endl;
+    std::ostringstream _ptr;
+    _ptr << ptr;
+
+    __file << "[" << _ptr.str() << "] " << _o << std::endl;
     __file.flush();
 }

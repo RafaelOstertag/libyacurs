@@ -31,11 +31,11 @@ class DEBUG {
     public:
 	static void start();
 	static void end();
-	static void out(const std::string& _o);
+	static void out(const void* ptr, const std::string& _o);
 };
 
 #ifndef NDEBUG
-#define DEBUGOUT(x) (DEBUG::out(x))
+#define DEBUGOUT(x) (DEBUG::out(this,x))
 #else
 #define DEBUGOUT(x)
 #endif // NDEBUG

@@ -442,6 +442,8 @@ HPack::realize() {
     //    std::for_each(widget_list.begin(),
     //		  widget_list.end(),
     //		  std::mem_fun(&WidgetBase::realize));
+    //
+    // can't be used for that.
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  HRealizeWidgets());

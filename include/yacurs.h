@@ -27,6 +27,7 @@
 #include "hpack.h"
 #include "widget.h"
 #include "label.h"
+#include "dynlabel.h"
 #include "button.h"
 #include "input.h"
 

@@ -19,7 +19,7 @@
  * Simple widget for displaying text on the screen.
  *
  * Label is not dynamic, i.e. if the text is too long, it might happen
- * that it cannot be realized().
+ * that it cannot be realized() and throwing an exception.
  */
 class Label: public Widget {
     protected:

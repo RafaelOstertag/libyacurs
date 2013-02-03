@@ -106,7 +106,14 @@ class EventQueue {
 	static void proc_rem_request();
 
     public:
-	/// Connect a member function or function to an event
+	/**
+	 * Register an event connector.
+	 *
+	 * @note the last event connector registered will be called
+	 * first.
+	 *
+	 * @param ec event connector to register.
+	 */
 	static void connect_event(const EventConnectorBase& ec);
 	/// Disconnect from the event
 	static void disconnect_event(const EventConnectorBase& ec);

@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// $Id: label.h 4742 2013-01-27 15:33:30Z rafisol $
+// $Id$
 
 #ifndef DEBUG_H
 #define DEBUG_H

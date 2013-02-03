@@ -1,4 +1,4 @@
-// $Id: widget7.cc 4732 2013-01-23 21:21:35Z rafisol $
+// $Id$
 //
 // Test Pack
 #ifdef HAVE_CONFIG_H

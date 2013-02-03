@@ -1,4 +1,4 @@
-// $Id: label.cc 4772 2013-02-01 12:07:58Z rafisol $
+// $Id$
 
 #include <cassert>
 

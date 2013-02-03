@@ -1,4 +1,4 @@
-// $Id: packresize1.cc 4738 2013-01-25 16:55:19Z rafisol $
+// $Id$
 //
 // Test basic functionality of Curses class
 #ifdef HAVE_CONFIG_H

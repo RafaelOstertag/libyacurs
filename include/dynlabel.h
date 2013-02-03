@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// $Id: label.h 4786 2013-02-01 20:23:03Z rafisol $
+// $Id$
 
 #ifndef DYNLABEL_H
 #define DYNLABEL_H

@@ -213,4 +213,9 @@ class AreaExceeded: public BaseCurEx {
 	AreaExceeded();
 };
 
+class WInsChFailed: public BaseCurEx {
+    public:
+	WInsChFailed();
+};
+
 #endif // CUREX_H

@@ -125,3 +125,6 @@ WMoveFailed::WMoveFailed():
 
 AreaExceeded::AreaExceeded():
     BaseCurEx("An object exceeded space constraints.") {}
+
+WInsChFailed::WInsChFailed():
+    BaseCurEx("winsch() failed") {}

@@ -39,6 +39,11 @@ DynLabel::label(const std::string& _l) {
     if (realization()==REALIZED) refresh(true);
 }
 
+std::string
+DynLabel::label() const {
+    return __label;
+}
+
 void
 DynLabel::size_available(const Size& _s) {
     assert(_s.rows()>0);

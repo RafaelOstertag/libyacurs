@@ -22,14 +22,16 @@
  * that it cannot be realized().
  */
 class Label: public Widget {
-    private:
+    protected:
 	/**
 	 * The text to be displayed.
 	 */
 	std::string __label;
+
 	/**
 	 * The size the Label requires. Rows are always 1. Cols are
-	 * __label.length()
+	 * __label.length(). Derrived classes may define other
+	 * constraints.
 	 */
 	Size __size;
 

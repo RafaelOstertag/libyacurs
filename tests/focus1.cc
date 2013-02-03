@@ -18,13 +18,6 @@ Input* idyn;
 
 class Button1: public Button {
     protected:
-	void focus(bool _f) {
-	    Button::focus(_f);
-	    if (_f)
-		Curses::statusline()->push_msg("Button 1 focused");
-	    else
-		Curses::statusline()->push_msg("Button 1 unfocused");
-	}
 	void on_press() {
 	    Curses::statusline()->push_msg(ifixed->input());
 	}
@@ -34,13 +27,6 @@ class Button1: public Button {
 
 class Button2: public Button {
     protected:
-	void focus(bool _f) {
-	    Button::focus(_f);
-	    if (_f)
-		Curses::statusline()->push_msg("Button 2 focused");
-	    else
-		Curses::statusline()->push_msg("Button 2 unfocused");
-	}
 	void on_press() {
 	    Curses::statusline()->push_msg(idyn->input());
 	}
@@ -49,14 +35,7 @@ class Button2: public Button {
 };
 
 class Button3: public Button {
-    protected:
-	void focus(bool _f) {
-	    Button::focus(_f);
-	    if (_f)
-		Curses::statusline()->push_msg("Button 3 focused");
-	    else
-		Curses::statusline()->push_msg("Button 3 unfocused");
-	}
+    protected:	
 	void on_press() {
 	    EventQueue::submit(EVT_QUIT);
 	}

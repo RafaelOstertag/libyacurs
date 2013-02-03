@@ -14,10 +14,15 @@
 //
 void
 Button::visibly_change_focus() {
-    if (__focus)
+    if (__focus) {
 	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_FOCUS);
-    else
+	if (leaveok(widget_subwin(), FALSE)==ERR)
+	    throw LeaveOKFailed();
+    } else {
 	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_NOFOCUS);
+	if (leaveok(widget_subwin(), TRUE)==ERR)
+	    throw LeaveOKFailed();
+    }
 
     // we have to immediately refresh to let the colors take effect.
     refresh(true);
@@ -110,7 +115,7 @@ Button::label() const {
     // get rid of the square brackets
     return tmp.substr(2, tmp.length()-4);
 }
-		 
+
 
 bool
 Button::can_focus() const {
@@ -135,6 +140,6 @@ Button::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
 
     assert(widget_subwin()!=NULL);
-    
+
     Label::refresh(immediate);
 }

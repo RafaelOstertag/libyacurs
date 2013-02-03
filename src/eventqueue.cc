@@ -4,28 +4,15 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_CASSERT
 #include <cassert>
-#endif // HAVE_CASSERT
-
-#ifdef HAVE_CERRNO
 #include <cerrno>
-#endif // HAVE_CERRNO_H
-
-#ifdef HAVE_CSTDLIB
 #include <cstdlib>
-#endif // HAVE_CSTDLIB
-
-#ifdef HAVE_IOSTREAM
 #include <iostream>
-#endif // HAVE_IOSTREAM
-
-#ifdef HAVE_ALGORITHM
 #include <algorithm>
-#endif // HAVE_ALGORITHM
 
 #include "cursex.h"
 #include "eventqueue.h"
+#include "focusmanager.h"
 #include "curs.h"
 
 sigset_t EventQueue::block_sigmask;
@@ -505,6 +492,11 @@ EventQueue::run() {
     setup_signal();
 
     while(true) {
+	// This is to move the cursor to the focused widget. Before
+	// adding that call tests/focus1 had the cursor always left on
+	// the status line. It's sorta hack, but it works...
+	FocusManager::refocus();
+
 	int c=wgetch(stdscr);
 	if (c != ERR)
 	    switch (c) {

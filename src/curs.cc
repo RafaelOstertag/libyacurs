@@ -104,7 +104,7 @@ Curses::init() {
     if (leaveok(stdscr, TRUE) == ERR)
 	throw LeaveOKFailed();
 
-    // We don't fail if that doesn't work.
+    // We don't fail if that doesn't work, so no check on retval.
     curs_set(0);
 
     YAPET::UI::Colors::init_colors();

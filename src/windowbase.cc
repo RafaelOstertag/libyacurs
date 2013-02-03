@@ -151,7 +151,9 @@ WindowBase::~WindowBase() {
 
     assert(__curses_window!=NULL);
 
-    bool delwin_failed=delwin(*__curses_window)==ERR;
+    bool delwin_failed=false;
+    if (realization()==REALIZED)
+	delwin_failed=delwin(*__curses_window)==ERR;
 
     delete __curses_window;
 

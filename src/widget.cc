@@ -108,7 +108,9 @@ Widget::~Widget() {
 
     assert(__widget_subwin!=NULL);
     
-    bool delwin_failed=delwin(*__widget_subwin)==ERR;
+    bool delwin_failed=false;;
+    if (realization()==REALIZED)
+	delwin_failed=delwin(*__widget_subwin)==ERR;
 
     delete __widget_subwin;
 

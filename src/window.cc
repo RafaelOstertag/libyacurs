@@ -139,9 +139,6 @@ Window::realize() {
 	__widget->size_available(widget_area());
 
 	__widget->realize();
-
-	// Make sure a widget has the focus
-	FocusManager::refocus();
     }
 
     DEBUGOUT(*this);

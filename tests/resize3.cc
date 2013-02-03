@@ -34,6 +34,7 @@
 #endif // HAVE_IOSTREAM
 
 #include "yacurs.h"
+#include "debug.h"
 
 class MyWindow: public Window {
     protected:
@@ -83,20 +84,30 @@ int key_handler(Event& _e) {
 
 int main() {
     try {
+	DEBUG::start();
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
 					   "Resize 3");
 	Curses::title(title);
 
+	// NOTE:
+	// 
+	// The order the objects are created (MyWindow, StatusLine) is
+	// important here. Because MyWindow calls
+	// StatusLine::put_msg() on resize we have to make sure
+	// StatusLine is resized first. Since EventQueue calls the
+	// last EventConnector connected first, StatusLine has to be
+	// created AFTER MyWindow.
+
 	MyWindow* w1 = new MyWindow(Margin(1,0,1,0));
 	w1->frame(true);
-
-	Curses::mainwindow(w1);
 
 	StatusLine* sl = new StatusLine();
 	Curses::statusline(sl);
 	sl->push_msg("Press Q to quit");
+
+	Curses::mainwindow(w1);
 
 	EventQueue::connect_event(EventConnectorFunction1(EVT_KEY,&key_handler));
 

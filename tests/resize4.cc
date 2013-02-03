@@ -96,12 +96,21 @@ int main() {
 					   "Resize 4");
 	Curses::title(title);
 
-	StatusLine* sl = new StatusLine();
-	sl->push_msg("Press Q to quit");
-	Curses::statusline(sl);
+	// NOTE:
+	// 
+	// The order the objects are created (MyWindow, StatusLine) is
+	// important here. Because MyWindow calls
+	// StatusLine::put_msg() on resize we have to make sure
+	// StatusLine is resized first. Since EventQueue calls the
+	// last EventConnector connected first, StatusLine has to be
+	// created AFTER MyWindow.
 
 	MyWindow* w1 = new MyWindow(Margin(1,0,1,0));
 	w1->frame(true);
+
+	StatusLine* sl = new StatusLine();
+	sl->push_msg("Press Q to quit");
+	Curses::statusline(sl);
 
 	HPack* hpack = new HPack;
 	Label* hl1 = new Label("abcdefghijklmnopqrstuvwxyz");

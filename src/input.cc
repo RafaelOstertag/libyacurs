@@ -166,7 +166,7 @@ Input::key_handler(Event& _e) {
 
 void
 Input::realize() {
-    REALIZE_ENTER();
+    REALIZE_ENTER;
 	
     DEBUGOUT("-- IN: Input::realize()");
     DEBUGOUT(*this);
@@ -176,12 +176,12 @@ Input::realize() {
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Input::realize()");
 
-    REALIZE_LEAVE();
+    REALIZE_LEAVE;
 }
 
 void
 Input::unrealize() {
-    UNREALIZE_ENTER();
+    UNREALIZE_ENTER;
 
     DEBUGOUT("-- IN: Input::unrealize()");
     DEBUGOUT(*this);
@@ -191,7 +191,7 @@ Input::unrealize() {
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Input::unrealize()");
 
-    UNREALIZE_LEAVE();
+    UNREALIZE_LEAVE;
 }
 //
 // Public

@@ -15,19 +15,15 @@
 //
 // Protected
 //
-inline void
-EventConnectorBase::setSuspended(bool _s) {
-    suspended = _s;
-}
 
 //
 // Public
 //
 EventConnectorBase::EventConnectorBase(EVENT_TYPE _e, bool _s):
-    evt(_e), suspended(_s) {}
+    evt(_e), __suspended(_s) {}
 
 EventConnectorBase::EventConnectorBase(const EventConnectorBase& _ec) :
-    evt(_ec.evt), suspended(_ec.suspended) {
+    evt(_ec.evt), __suspended(_ec.__suspended) {
 }
 
 EventConnectorBase::~EventConnectorBase() {}
@@ -35,7 +31,7 @@ EventConnectorBase::~EventConnectorBase() {}
 EventConnectorBase&
 EventConnectorBase::operator=(const EventConnectorBase& _ec) {
     evt = _ec.evt;
-    suspended = _ec.suspended;
+    __suspended = _ec.__suspended;
     return *this;
 }
 
@@ -75,19 +71,14 @@ EventConnectorBase::type() const {
     return evt;
 }
 
+void
+EventConnectorBase::suspended(bool _s) {
+    __suspended = _s;
+}
+
 bool
-EventConnectorBase::isSuspended() const {
-    return suspended;
-}
-
-void
-EventConnectorBase::suspend() {
-    setSuspended(true);
-}
-
-void
-EventConnectorBase::unsuspend() {
-    setSuspended(false);
+EventConnectorBase::suspended() const {
+    return __suspended;
 }
 
 ////////////////////////////////////////////////////////
@@ -131,7 +122,7 @@ int
 EventConnectorFunction1::call(Event& _e) const {
     assert(__func != NULL);
 
-    if (isSuspended()) return -1;
+    if (suspended()) return -1;
 
     return __func(_e);
 }

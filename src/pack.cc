@@ -40,7 +40,7 @@ Pack::refresh_all_widgets(bool i) {
 //
 void
 Pack::unrealize() {
-    UNREALIZE_ENTER();
+    UNREALIZE_ENTER;
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  std::mem_fun(&WidgetBase::unrealize));
@@ -48,7 +48,7 @@ Pack::unrealize() {
     // Required since pack is a dynamically sized Widget.
     reset_size();
 
-    UNREALIZE_LEAVE();
+    UNREALIZE_LEAVE;
 }
 
 //

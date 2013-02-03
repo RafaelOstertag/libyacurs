@@ -69,9 +69,9 @@ class EvtConnSetSuspendAll {
 	    assert ( eb != NULL );
 	    if ( *eb == __evt) {
 		if (__suspend)
-		    eb->suspend();
+		    eb->suspended(true);
 		else
-		    eb->unsuspend();
+		    eb->suspended(false);
 	    }
 	}
 };
@@ -90,9 +90,9 @@ class EvtConnSetSuspendExcept {
 	    if (*eb == __evt.type() &&
 		! (__evt == *eb) ) {
 		if (__suspend)
-		    eb->suspend();
+		    eb->suspended(true);
 		else
-		    eb->unsuspend();
+		    eb->suspended(false);
 	    }
 	}
 };
@@ -435,7 +435,7 @@ EventQueue::suspend(const EventConnectorBase& ec) {
 
     if ( it == evtconn_list.end() ) return;
 
-    (*it)->suspend();
+    (*it)->suspended(true);
 }
 
 void
@@ -461,7 +461,7 @@ EventQueue::unsuspend(const EventConnectorBase& ec) {
 
     if ( it == evtconn_list.end() ) return;
 
-    (*it)->unsuspend();
+    (*it)->suspended(false);
 }
 
 void

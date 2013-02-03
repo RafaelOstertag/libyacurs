@@ -140,8 +140,6 @@ class Realizeable {
 };
 
 /**
- * @fn void REALIZE_ENTER()
- *
  * @relates Realizeable
  *
  * This macro should be used when implementing realize(). It has to be
@@ -157,24 +155,24 @@ class Realizeable {
  *
  * <pre>
  *  void A::realize() {
- *    REALIZE_ENTER();
+ *    REALIZE_ENTER;
  *
  *    // Object realization_state() == REALIZING
  *
- *    REALIZE_LEAVE();
+ *    REALIZE_LEAVE;
  *  }
  *
  *  void B::realize() {
- *    REALIZE_ENTER();
+ *    REALIZE_ENTER;
  *
  *    A::realize();
  *
  *    // Object realization_state() == REALIZING
  *
- *    REALIZE_LEAVE();
+ *    REALIZE_LEAVE;
  * </pre>
  */
-#define REALIZE_ENTER(x) bool __was_realizing_on_enter__=false;		\
+#define REALIZE_ENTER bool __was_realizing_on_enter__=false;		\
     switch (realization()) {						\
     case REALIZED:							\
     case UNREALIZING:							\
@@ -191,8 +189,6 @@ class Realizeable {
     }
 
 /**
- * @fn void REALIZE_LEAVE()
- *
  * @relates Realizeable
  *
  * Helper macro to be used in realize()
@@ -201,21 +197,19 @@ class Realizeable {
  * realization state is set properly.
  *
  * @warning if realize() has to be left due to error condition, do not
- * use REALIZE_LEAVE(), instead set realization() to the proper
+ * use REALIZE_LEAVE, instead set realization() to the proper
  * realization state (which, in that case, is most likely @c
  * UNREALIZED).
  */
-#define REALIZE_LEAVE(x) if(!__was_realizing_on_enter__)	\
+#define REALIZE_LEAVE if(!__was_realizing_on_enter__)	\
 	realization(REALIZED);
 
 /**
- * @fn void UNREALIZE_ENTER()
- *
  * @relates Realizeable
  *
  * The same purpose as REALIZE_ENTER.
  */
-#define UNREALIZE_ENTER(x) bool __was_unrealizing_on_enter__=false;	\
+#define UNREALIZE_ENTER bool __was_unrealizing_on_enter__=false;	\
     switch (realization()) {						\
     case REALIZED:								\
 	realization(UNREALIZING);					\
@@ -232,13 +226,11 @@ class Realizeable {
     }
 
 /**
- * @fn void UNREALIZE_LEAVE()
- *
  * @relates Realizeable
  *
  * The same purpose as REALIZE_LEAVE.
  */
-#define UNREALIZE_LEAVE(x) if(!__was_unrealizing_on_enter__)	\
+#define UNREALIZE_LEAVE if(!__was_unrealizing_on_enter__)	\
 	realization(UNREALIZED);
 
 #endif // REALIZEABLE_H

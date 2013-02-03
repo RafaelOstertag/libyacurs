@@ -66,7 +66,7 @@ class EventConnectorBase {
 	 * handler is suspended. Suspended event handler won't be
 	 * called.
 	 */
-	bool suspended;
+	bool __suspended;
 
     protected:
 	/**
@@ -77,14 +77,6 @@ class EventConnectorBase {
 	 * handler.
 	 */
 	virtual uintptr_t id() const = 0;
-	/**
-	 * Set the \c suspended to the given value.
-	 *
-	 * @param _s boolean value indicating whether (\c true) or not
-	 * (\c false) the event handler is called upon the occurrence
-	 * of the event.
-	 */
-	void setSuspended(bool _s);
 
     public:
 	/**
@@ -155,21 +147,23 @@ class EventConnectorBase {
 	 * @return the EVENT_TYPE
 	 */
 	EVENT_TYPE type() const;
+
+	/**
+	 * Set the suspended state to the given value.
+	 *
+	 * @param _s boolean value indicating whether (\c true) or not
+	 * (\c false) the event handler is called upon the occurrence
+	 * of the event.
+	 */
+	void suspended(bool _s);
+
 	/**
 	 * Query the suspended state.
 	 *
-	 * @return \c true if the event handler is suspended. \c false
-	 * otherwise.
+	 * @return @c true if event connector is suspended, @c false otherwise.
 	 */
-	bool isSuspended() const;
-	/**
-	 * Suspend the handler.
-	 */
-	void suspend();
-	/**
-	 * Resume a previously suspended handler.
-	 */
-	void unsuspend();
+	bool suspended() const;
+
 	/**
 	 * Call the handler and pass the event
 	 *
@@ -288,7 +282,7 @@ class EventConnectorMethod1: public EventConnectorBase {
 	    assert(__obj_ptr != NULL);
 	    assert(__func != NULL);
 
-	    if (isSuspended()) return -1;
+	    if (suspended()) return -1;
 	    return (__obj_ptr->*__func)(_e);
 	}
 

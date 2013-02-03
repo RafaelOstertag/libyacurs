@@ -411,7 +411,7 @@ VPack::size_hint() const {
 
 void
 VPack::realize() {
-    REALIZE_ENTER();
+    REALIZE_ENTER;
 
     assert(WidgetBase::size_available().rows()>0);
     assert(WidgetBase::size_available().cols()>0);
@@ -448,5 +448,5 @@ VPack::realize() {
 		  widget_list.end(),
 		  VRealizeWidgets());
 
-    REALIZE_LEAVE();
+    REALIZE_LEAVE;
 }

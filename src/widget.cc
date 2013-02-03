@@ -31,7 +31,7 @@ Widget::force_refresh_handler(Event& _e) {
 
 void
 Widget::unrealize() {
-    UNREALIZE_ENTER();
+    UNREALIZE_ENTER;
 
     DEBUGOUT("-- IN: Widget::unrealize()");
     DEBUGOUT(*this);
@@ -67,7 +67,7 @@ Widget::unrealize() {
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Widget::unrealize()");
 
-    UNREALIZE_LEAVE();
+    UNREALIZE_LEAVE;
 }
 
 WINDOW*
@@ -183,7 +183,7 @@ Widget::resize(const Area& _a) {
 
 void
 Widget::realize() {
-    REALIZE_ENTER();
+    REALIZE_ENTER;
 
     DEBUGOUT("-- IN: Widget::realize()");
     DEBUGOUT(*this);
@@ -234,7 +234,7 @@ Widget::realize() {
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Widget::realize()");
 
-    REALIZE_LEAVE();
+    REALIZE_LEAVE;
 }
 
 Widget::operator std::string() const {

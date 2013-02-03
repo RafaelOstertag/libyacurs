@@ -129,13 +129,13 @@ LineObject::operator=(const LineObject& lo) {
 void
 LineObject::realize() {
     DEBUGOUT("-- IN: LineObject::realize()");
-    REALIZE_ENTER();
+    REALIZE_ENTER;
 
     compute_margin();
     WindowBase::realize();
     
     DEBUGOUT("-- OUT: LineObject::realize()");
-    REALIZE_LEAVE();
+    REALIZE_LEAVE;
 }
 
 void

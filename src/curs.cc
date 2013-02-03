@@ -104,6 +104,9 @@ Curses::init() {
     if (leaveok(stdscr, TRUE) == ERR)
 	throw LeaveOKFailed();
 
+    // We don't fail if that doesn't work.
+    curs_set(0);
+
     YAPET::UI::Colors::init_colors();
 
     // Curses clears stdscr upon first call to getch, which may

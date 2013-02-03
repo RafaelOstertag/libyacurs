@@ -17,11 +17,12 @@ void
 Input::visibly_change_focus() {
     if (__focus) {
 	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::INPUTWIDGET_FOCUS);
-
+	curs_set(1);
 	if (leaveok(widget_subwin(), FALSE)==ERR)
 	    throw LeaveOKFailed();
     } else {
 	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::INPUTWIDGET_NOFOCUS);
+	curs_set(0);
 	if (leaveok(widget_subwin(), TRUE)==ERR)
 	    throw LeaveOKFailed();
     }
@@ -65,6 +66,7 @@ Input::key_handler(Event& _e) {
 	__buffer=__buffer.erase(__offset+__curs_pos,
 				__buffer.length()-(__offset+__curs_pos));
 	break;
+    case 127: // Backspace in Solaris' XOpen Curses
     case KEY_BACKSPACE:
 	if (__offset==0 && __curs_pos==0) break;
 

@@ -1,6 +1,8 @@
 // $Id$
 //
-// Test Pack
+// Add very long string to Input and Label stacked in VPack. Adding
+// long string to Input should work, adding text to Label clear VPack
+// due to exception thrown by Label due to space issues.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

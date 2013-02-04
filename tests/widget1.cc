@@ -1,6 +1,6 @@
 // $Id$
 //
-// Test widget
+// Add a Label to a Window, show, and quit.
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif

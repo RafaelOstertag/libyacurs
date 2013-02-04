@@ -16,7 +16,32 @@
 /**
  * Input line.
  *
- * Widget for text input.
+ * Widget providing one line for text input.
+ *
+ * If not length is specified, it behaves like a dynamic
+ * Widget. Providing a length make it behave non-dynamic.
+ *
+ * Following cursor motion keys are supported:
+ *
+ *  - Key left: move cursor to the left
+ *  - Key right: move cursor to the right
+ *  - Ctrl-A: move to the beginning of line
+ *  - Ctrl-E: move to the end of line
+ *
+ * Following editing keys are supported:
+ *
+ *  - Ctrl-U: delete all text
+ *  - Ctrl-K: delete text from current cursor position to end of text.
+ *  - Backspace: delete character left to the cursor
+ *  - Delete: delete character right to the cursor
+ *
+ * Misc keys:
+ *
+ *  - Key Down, Enter, Tab: focus next Widget.
+ *  - Key Up, Shift-Tab: focus previous Widget.
+ *
+ * When Input is put in read-only mode, all editing keys keys are
+ * disabled. Only cursor motion is available.
  */
 class Input: public Widget {
     private:
@@ -49,6 +74,11 @@ class Input: public Widget {
 	 * May be zero when dynamically sized.
 	 */
 	int __length;
+
+	/**
+	 * Mode, whether or not editing is allowed.
+	 */
+	bool __read_only;
 
 	/**
 	 * The input
@@ -101,6 +131,22 @@ class Input: public Widget {
 	 * @return the content of the input buffer.
 	 */
 	virtual std::string input() const;
+
+	/**
+	 * Set readonly mode.
+	 *
+	 * @param _s @c true, no editing allowed. @c false, editing
+	 * allowed.
+	 */
+	void readonly(bool _s);
+
+	/**
+	 * Get read-only mode
+	 *
+	 * @return @c true if Input Widget is in read-only mode, @c
+	 * false otherwise.
+	 */
+	bool readonly() const;
 
 	// From WidgetBase
 

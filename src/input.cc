@@ -57,17 +57,20 @@ Input::key_handler(Event& _e) {
 	break;
     case KEY_DL:
     case 21: // Ctrl-U
+	if (__read_only) break;
 	__buffer.clear();
 	__curs_pos=0;
 	__offset=0;
 	break;
     case KEY_EOL:
     case 11: // Ctrl-K
+	if (__read_only) break;
 	__buffer=__buffer.erase(__offset+__curs_pos,
 				__buffer.length()-(__offset+__curs_pos));
 	break;
-    case 127: // Backspace in Solaris' XOpen Curses
+    case 127: // Backspace in Solaris' Curses
     case KEY_BACKSPACE:
+	if (__read_only) break;
 	if (__offset==0 && __curs_pos==0) break;
 
 	if (__offset>0) {
@@ -79,7 +82,8 @@ Input::key_handler(Event& _e) {
 	if (!__buffer.empty())
 	    __buffer=__buffer.erase(__offset+__curs_pos,1);
 	break;
-    case KEY_DC:
+    case KEY_DC: // Delete
+	if (__read_only) break;
 	if (__offset+__curs_pos>=__buffer.length() ||
 	    __buffer.empty()) break;
 	__buffer=__buffer.erase(__offset+__curs_pos,1);
@@ -122,6 +126,8 @@ Input::key_handler(Event& _e) {
 	}
 	break;
     default: // regular key presses
+	if (__read_only) break;
+
 	// do not overrun the max size
 	if (__buffer.length()>=__max_size) break;
 
@@ -206,6 +212,7 @@ Input::Input(int _length, std::string::size_type _max_size, const std::string& _
     __curs_pos(0),
     __max_size(_max_size),
     __length(_length),
+    __read_only(false),
     __buffer(_t.length()>__max_size?_t.substr(0,__max_size):_t),
     __size() {
     if (__length>0)
@@ -220,6 +227,7 @@ Input::Input(const Input& _i): Widget(_i),
 			       __curs_pos(_i.__curs_pos),
 			       __max_size(_i.__max_size),
 			       __length(_i.__length),
+			       __read_only(_i.__read_only),
 			       __buffer(_i.__buffer),
 			       __size(_i.__size) {
     EventQueue::connect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));
@@ -237,6 +245,7 @@ Input::operator=(const Input& _i) {
     __curs_pos=_i.__curs_pos;
     __max_size=_i.__max_size;
     __length=_i.__length;
+    __read_only=_i.__read_only;
     __buffer=_i.__buffer;
     __size=_i.__size;
     return *this;
@@ -259,6 +268,16 @@ Input::input(const std::string& i) {
 std::string
 Input::input() const {
     return __buffer;
+}
+
+void
+Input::readonly(bool _s) {
+    __read_only=_s;
+}
+
+bool
+Input::readonly() const {
+    return __read_only;
 }
 
 void

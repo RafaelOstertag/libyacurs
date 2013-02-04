@@ -68,9 +68,13 @@ int main() {
 	Button3* b3=new Button3;
 	ifixed=new Input(10);
 	idyn=new Input;
+	Input* ireadonly=new Input;
+	ireadonly->input("Read only");
+	ireadonly->readonly(true);
 	
 	vpack->add_back(ifixed);
 	vpack->add_back(idyn);
+	vpack->add_back(ireadonly);
 	vpack->hinting(false);
 
 	hpack->add_back(b1);
@@ -93,6 +97,7 @@ int main() {
 	delete b3;
 	delete idyn;
 	delete ifixed;
+	delete ireadonly;
 	delete hpack;
 	delete vpack;
 	delete Curses::mainwindow();

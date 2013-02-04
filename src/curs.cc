@@ -147,23 +147,14 @@ void
 Curses::run() {
     if (!initialized) throw NotInitialized();
 
-    if (__title) {
-	__title->realize();
-	__title->refresh(false);
-    }
+    if (__title)
+	__title->show();
 
-    if (__statusline) {
-	__statusline->realize();
-	__statusline->refresh(false);
-    }
+    if (__statusline)
+	__statusline->show();
 
-    if (__mainwindow) {
-	__mainwindow->realize();
-	__mainwindow->refresh(false);
-    }
-
-    if (doupdate() == ERR)
-	throw DoupdateFailed();
+    if (__mainwindow)
+	__mainwindow->show();
 
     FocusManager::init();
 

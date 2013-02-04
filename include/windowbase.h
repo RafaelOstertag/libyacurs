@@ -46,15 +46,18 @@ class WindowBase : public Realizeable {
 	 * to Curses::inquiry_screensize().
 	 */
 	Area __area;
+
 	/**
 	 * margin of the screen object.
 	 */
 	Margin __margin;
+
 	/**
 	 * Keeps track of how many instance objects have been created
 	 * sharing the same WINDOW structure
 	 */
 	unsigned int* __instance_count;
+
 	/**
 	 * Pointer to a pointer so that we can replace the window for
 	 * all instances simultaneously.
@@ -109,6 +112,20 @@ class WindowBase : public Realizeable {
 	 * is realized.
 	 */
 	void frame(bool b);
+
+	/**
+	 * Show the window.
+	 *
+	 * This is supposed to be called by the user.
+	 */
+	virtual void show() = 0;
+
+	/**
+	 * Hide the window.
+	 *
+	 * This is supposed to be called by the user.
+	 */
+	virtual void hide() = 0;
 
 	// Those are from Realizable
 	void refresh(bool immediate);

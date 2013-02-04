@@ -77,6 +77,21 @@ Window::widget() const {
 }
 
 void
+Window::show() {
+    if (realization()!=UNREALIZED) return;
+
+    realize();
+    refresh(true);
+}
+
+void
+Window::hide() {
+    if (realization()!=REALIZED) return;
+
+    unrealize();
+}
+
+void
 Window::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
     DEBUGOUT("-- IN: Window::refresh()");

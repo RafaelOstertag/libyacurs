@@ -44,6 +44,9 @@ class Window: public WindowBase {
 	void widget(WidgetBase* _w);
 	WidgetBase* widget() const;
 
+	virtual void show();
+	virtual void hide();
+
 	// Those are from Realizable
 	void refresh(bool immediate);
 	// Does nothing, everything handled in parent.

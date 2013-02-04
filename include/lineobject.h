@@ -48,11 +48,16 @@ class LineObject: public WindowBase {
 	LineObject(const LineObject& lo);
 	LineObject& operator=(const LineObject& lo);
 
-	void realize();
-	void refresh(bool immediate);
-
 	void line(const std::string& _str);
 	std::string line() const;
+
+	// from WindowBase
+	void show();
+	void hide();
+
+	// from Realizeable
+	void realize();
+	void refresh(bool immediate);
 
 	operator std::string();
 };

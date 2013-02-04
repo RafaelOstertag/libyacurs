@@ -126,6 +126,37 @@ LineObject::operator=(const LineObject& lo) {
     return *this;
 }
 
+
+void
+LineObject::line(const std::string& _str) {
+    __linetext = _str;
+    // Refresh is responsible for taking care of whether or not the
+    // refresh can happen, for instance, it cannot happen if the
+    // object is not realized.
+    refresh(true);
+}
+
+std::string
+LineObject::line() const {
+    return __linetext;
+}
+
+void
+LineObject::show() {
+    if (realization()!=UNREALIZED) return;
+
+    realize();
+    refresh(true);
+}
+
+void
+LineObject::hide() {
+    if (realization()!=REALIZED) return;
+
+    realize();
+    refresh(true);
+}
+
 void
 LineObject::realize() {
     DEBUGOUT("-- IN: LineObject::realize()");
@@ -149,20 +180,6 @@ LineObject::refresh(bool immediate) {
 
     WindowBase::refresh(immediate);
     DEBUGOUT("-- OUT: LineObject::refresh()");
-}
-
-void
-LineObject::line(const std::string& _str) {
-    __linetext = _str;
-    // Refresh is responsible for taking care of whether or not the
-    // refresh can happen, for instance, it cannot happen if the
-    // object is not realized.
-    refresh(true);
-}
-
-std::string
-LineObject::line() const {
-    return __linetext;
 }
 
 LineObject::operator std::string() {

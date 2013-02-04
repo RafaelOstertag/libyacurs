@@ -38,6 +38,10 @@ enum {
  * - tracks the number of WindowBase instances created by copying and
  *   assigning and frees curses window only upon destruction of
  *   last instance.
+ *
+ * Users of this class are expected to call show()/close() in order to
+ * show and hide the window. Calling realize()/unrealize() is
+ * discouraged.
  */
 class WindowBase : public Realizeable {
     private:
@@ -107,9 +111,10 @@ class WindowBase : public Realizeable {
 	const Margin& margin() const;
 
 	bool frame() const;
+
 	/**
-	 * @todo make setting/removing frame take effect immediately, if window
-	 * is realized.
+	 * @todo make setting/removing frame take effect immediately,
+	 * if window is realized.
 	 */
 	void frame(bool b);
 
@@ -118,14 +123,14 @@ class WindowBase : public Realizeable {
 	 *
 	 * This is supposed to be called by the user.
 	 */
-	virtual void show() = 0;
+	virtual void show();
 
 	/**
 	 * Hide the window.
 	 *
 	 * This is supposed to be called by the user.
 	 */
-	virtual void hide() = 0;
+	virtual void close();
 
 	// Those are from Realizable
 	void refresh(bool immediate);

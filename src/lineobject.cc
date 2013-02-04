@@ -142,22 +142,6 @@ LineObject::line() const {
 }
 
 void
-LineObject::show() {
-    if (realization()!=UNREALIZED) return;
-
-    realize();
-    refresh(true);
-}
-
-void
-LineObject::hide() {
-    if (realization()!=REALIZED) return;
-
-    realize();
-    refresh(true);
-}
-
-void
 LineObject::realize() {
     DEBUGOUT("-- IN: LineObject::realize()");
     REALIZE_ENTER;

@@ -206,6 +206,25 @@ WindowBase::frame(bool b) {
     __frame = b;
 }
 
+
+void
+WindowBase::show() {
+    if (realization()!=UNREALIZED) return;
+
+    realize();
+    refresh(true);
+    EventQueue::submit(EventWindowShow(this));
+}
+
+void
+WindowBase::close() {
+    if (realization()!=REALIZED) return;
+
+    unrealize();
+    EventQueue::submit(EventWindowClose(this));
+}
+
+
 void
 WindowBase::refresh(bool immediate) {
     if (realization()!=REALIZED && realization()!=REALIZING) return;

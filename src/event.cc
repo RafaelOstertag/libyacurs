@@ -6,17 +6,12 @@
 
 #include "event.h"
 
+////////////////////////////////////////////////////////
 //
-// Private
+// class Event
 //
+////////////////////////////////////////////////////////
 
-//
-// Protected
-//
-
-//
-// Public
-//
 Event::Event(EVENT_TYPE _et): event_type(_et) {}
 
 Event::Event(const Event& _e) {
@@ -51,7 +46,11 @@ Event::clone() const {
     return new Event(*this);
 }
 
-///////
+////////////////////////////////////////////////////////
+//
+// class EventWinCh
+//
+////////////////////////////////////////////////////////
 
 EventWinCh::EventWinCh(const Size& _s):
     EventEx<Size>(EVT_SIGWINCH, _s) {}
@@ -71,7 +70,11 @@ EventWinCh::clone() const {
     return new EventWinCh(*this);
 }
 
-///////
+////////////////////////////////////////////////////////
+//
+// class EventKey
+//
+////////////////////////////////////////////////////////
 
 EventKey::EventKey(const int& _r): EventEx<int>(EVT_KEY, _r) {}
 
@@ -86,4 +89,50 @@ EventKey::operator=(const EventKey& _e) {
 EventKey*
 EventKey::clone() const {
     return new EventKey(*this);
+}
+
+////////////////////////////////////////////////////////
+//
+// class EventWindowShow
+//
+////////////////////////////////////////////////////////
+
+EventWindowShow::EventWindowShow(WindowBase* _w):
+    EventEx<WindowBase*>(EVT_WINDOW_SHOW, _w) {}
+
+EventWindowShow::EventWindowShow(const EventWindowShow& _e):
+    EventEx<WindowBase*>(_e) {}
+
+EventWindowShow&
+EventWindowShow::operator=(const EventWindowShow& _e) {
+    EventEx<WindowBase*>::operator=(_e);
+    return *this;
+}
+
+EventWindowShow*
+EventWindowShow::clone() const {
+    return new EventWindowShow(*this);
+}
+
+////////////////////////////////////////////////////////
+//
+// class EventWindowClose
+//
+////////////////////////////////////////////////////////
+
+EventWindowClose::EventWindowClose(WindowBase* _w):
+    EventEx<WindowBase*>(EVT_WINDOW_CLOSE, _w) {}
+
+EventWindowClose::EventWindowClose(const EventWindowClose& _e):
+    EventEx<WindowBase*>(_e) {}
+
+EventWindowClose&
+EventWindowClose::operator=(const EventWindowClose& _e) {
+    EventEx<WindowBase*>::operator=(_e);
+    return *this;
+}
+
+EventWindowClose*
+EventWindowClose::clone() const {
+    return new EventWindowClose(*this);
 }

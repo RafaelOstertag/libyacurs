@@ -11,6 +11,9 @@
 
 #include "area.h"
 
+// forward declaration because windowbase.h includes event.h
+class WindowBase;
+
 /**
  * @defgroup Event Event related code
  *
@@ -82,7 +85,16 @@ enum EVENT_TYPE {
      * Advises Focus Manager to give focus to the next Widget in the
      * Current Focus Group.
      */
-    EVT_FOCUS_PREVIOUS
+    EVT_FOCUS_PREVIOUS,
+    /**
+     * Windows emit events of this type when shown by calling show().
+     */
+    EVT_WINDOW_SHOW,
+    /**
+     * Windows emit events of this type when closed by calling
+     * close().
+     */
+    EVT_WINDOW_CLOSE
 };
 
 /**
@@ -102,7 +114,9 @@ class Event {
 	 * @param _et the event type
 	 */
 	Event(EVENT_TYPE _et);
+
 	Event(const Event& _e);
+
 	/**
 	 * Assigns one event to anothoer
 	 *
@@ -111,7 +125,9 @@ class Event {
 	 * @return reference to *this.
 	 */
 	Event& operator=(const Event& _e);
+
 	virtual ~Event();
+
 	/**
 	 * Tests Event objects for equality.
 	 *
@@ -121,6 +137,7 @@ class Event {
 	 * equal. \c false otherwise.
 	 */
 	virtual bool operator==(const Event& _e) const;
+
 	/**
 	 * Tests whether the given event type is equal to type of this
 	 * object.
@@ -131,12 +148,14 @@ class Event {
 	 * otherwise.
 	 */
 	bool operator==(EVENT_TYPE _et) const;
+
 	/**
 	 * Get the event type of the object.
 	 *
 	 * @return event type of the object.
 	 */
 	EVENT_TYPE type() const;
+
 	/**
 	 * Create a copy of the object. The caller is responsible for
 	 * freeing the memory of the object returned.
@@ -199,12 +218,12 @@ class EventEx: public Event {
 };
 
 /**
+ * @ingroup Event
+ *
  * Event generated upon SIGWINCH.
  *
  * This event will be generated upon SIGWINCH. As payload, it holds
  * the new size of the screen.
- *
- * @ingroup Event
  */
 class EventWinCh: public EventEx<Size> {
     public:
@@ -225,9 +244,9 @@ class EventWinCh: public EventEx<Size> {
 };
 
 /**
- * This Event will be submitted upon key press.
- *
  * @ingroup Event
+ *
+ * This Event will be submitted upon key press.
  */
 class EventKey: public EventEx<int> {
     public:
@@ -245,6 +264,58 @@ class EventKey: public EventEx<int> {
 	 * has to be freed by the caller.
 	 */
 	EventKey* clone() const;
+};
+
+/**
+ * @ingroup Event
+ *
+ * Event submitted upon Window show.
+ *
+ * This event has to be submitted on WindowBase::show(). It carries
+ * the address of the Window being shown.
+ */
+class EventWindowShow: public EventEx<WindowBase*> {
+    public:
+	/**
+	 * @param _w address of the window being closed.
+	 */
+	EventWindowShow(WindowBase* _w);
+	EventWindowShow(const EventWindowShow& _e);
+	EventWindowShow& operator=(const EventWindowShow& _e);
+
+	/**
+	 * Create an exact copy of this object.
+	 *
+	 * Create an exact copy of this object. The memory occupied
+	 * has to be freed by the caller.
+	 */
+	EventWindowShow* clone() const;
+};
+
+/**
+ * @ingroup Event
+ *
+ * Event submitted upon Window close.
+ *
+ * This event has to be submitted on WindowBase::close(). It carries
+ * the address of the Window closed.
+ */
+class EventWindowClose: public EventEx<WindowBase*> {
+    public:
+	/**
+	 * @param _w address of the window being closed.
+	 */
+	EventWindowClose(WindowBase* _w);
+	EventWindowClose(const EventWindowClose& _e);
+	EventWindowClose& operator=(const EventWindowClose& _e);
+
+	/**
+	 * Create an exact copy of this object.
+	 *
+	 * Create an exact copy of this object. The memory occupied
+	 * has to be freed by the caller.
+	 */
+	EventWindowClose* clone() const;
 };
 
 #endif // EVENT_H

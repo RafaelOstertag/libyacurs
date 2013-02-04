@@ -51,10 +51,6 @@ class LineObject: public WindowBase {
 	void line(const std::string& _str);
 	std::string line() const;
 
-	// from WindowBase
-	void show();
-	void hide();
-
 	// from Realizeable
 	void realize();
 	void refresh(bool immediate);

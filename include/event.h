@@ -94,7 +94,11 @@ enum EVENT_TYPE {
      * Windows emit events of this type when closed by calling
      * close().
      */
-    EVT_WINDOW_CLOSE
+    EVT_WINDOW_CLOSE,
+    /**
+     * Will be emmitted when Button is pressed.
+     */
+    EVT_BUTTON_PRESS
 };
 
 /**

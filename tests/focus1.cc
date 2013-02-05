@@ -12,36 +12,33 @@
 
 #include "yacurs.h"
 
-// buttons require access to them
+// Event handler requires access
 Input* ifixed;
 Input* idyn;
+Button* b1;
+Button* b2;
+Button* b3;
 
-class Button1: public Button {
-    protected:
-	void on_press() {
-	    Curses::statusline()->push_msg(ifixed->input());
-	}
-    public:
-	Button1(): Button("Button1") {}
-};
+int button_press_handler(Event& _e) {
+    assert(_e==EVT_BUTTON_PRESS);
 
-class Button2: public Button {
-    protected:
-	void on_press() {
-	    Curses::statusline()->push_msg(idyn->input());
-	}
-    public:
-	Button2(): Button("Button2") {}
-};
+    EventEx<Button*>& ev=dynamic_cast<EventEx<Button*>&>(_e);
+    if (ev.data() == b1) {
+	Curses::statusline()->push_msg(ifixed->input());
+	return 0;
+    }
 
-class Button3: public Button {
-    protected:	
-	void on_press() {
-	    EventQueue::submit(EVT_QUIT);
-	}
-    public:
-	Button3(): Button("Button3") {}
-};
+    if (ev.data() == b2) {
+	Curses::statusline()->push_msg(idyn->input());
+	return 0;
+    }
+
+    if (ev.data() == b3) {
+	EventQueue::submit(EVT_QUIT);
+	return 0;
+    }
+    return 1;
+}
 
 int main() {
 #if 0
@@ -52,20 +49,21 @@ int main() {
 	DEBUG::start();
 	Curses::init();
 
+	EventQueue::connect_event(EventConnectorFunction1(EVT_BUTTON_PRESS,button_press_handler));
+
 
 	Curses::title(new LineObject(LineObject::POS_TOP,
 				     "Focus 1"));
 	Curses::statusline(new StatusLine);
-
 
 	Curses::mainwindow(new Window(Margin(1,0,1,0)));
 	Curses::mainwindow()->frame(true);
 
 	VPack* vpack=new VPack;
 	HPack* hpack=new HPack;
-	Button1* b1=new Button1;
-	Button2* b2=new Button2;
-	Button3* b3=new Button3;
+	b1=new Button("Button1");
+	b2=new Button("Button2");
+	b3=new Button("Button3");
 	ifixed=new Input(10);
 	idyn=new Input;
 	Input* ireadonly=new Input;

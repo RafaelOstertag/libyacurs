@@ -409,8 +409,15 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 void
 EventQueue::disconnect_event(const EventConnectorBase& ec) {
     // does not delete the connector, but adds it to a queue for later
-    // removal
+    // removal. Why? What happens if an EventConnector disconnects
+    // itself? std::for_each iterating over evtconn_list in run()
+    // would freak out. So we wait until we're sure that nobody is
+    // reading the list.
     evtconn_rem_request.push(ec.clone());
+
+    // However, the event connector must not be called anymore,
+    // because the object might have been destroyed meanwhile.
+    suspend(ec);
 }
 
 void
@@ -463,6 +470,11 @@ EventQueue::unsuspend_except(const EventConnectorBase& ec) {
     std::for_each(evtconn_list.begin(),
 		  evtconn_list.end(),
 		  EvtConnSetSuspendExcept(ec, false));
+}
+
+void
+EventQueue::submit(EVENT_TYPE _et) {
+    submit(Event(_et));
 }
 
 void

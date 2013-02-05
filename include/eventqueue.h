@@ -131,7 +131,9 @@ class EventQueue {
 	static void unsuspend_except(const EventConnectorBase& ec);
 
 	/// Add an event to the qeue
+	static void submit(EVENT_TYPE _et);
 	static void submit(const Event& ev);
+
 	static void run();
 	static void cleanup();
 };

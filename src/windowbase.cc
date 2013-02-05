@@ -222,6 +222,11 @@ WindowBase::close() {
 
     unrealize();
     EventQueue::submit(EventWindowClose(this));
+
+    // We might have obstructed another window, so make sure it
+    // receives a refresh.
+    EventQueue::submit(EVT_REFRESH);
+    EventQueue::submit(EVT_DOUPDATE);
 }
 
 

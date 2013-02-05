@@ -27,13 +27,6 @@ class Button: public Label {
 	void visibly_change_focus();
 
     protected:
-	/**
-	 * Will be called upon key press.
-	 *
-	 * Derived Buttons have to implement this.
-	 */
-	virtual void on_press() = 0;
-
 	virtual int key_handler(Event& _e);
 
 	// From Realizeable

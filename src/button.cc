@@ -52,7 +52,7 @@ Button::key_handler(Event& _e) {
 	break;
     case KEY_ENTER:
     case '\r':
-	on_press();
+	EventQueue::submit(EventEx<Button*>(EVT_BUTTON_PRESS,this));
 	break;
     }
 

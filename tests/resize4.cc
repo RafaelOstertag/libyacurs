@@ -83,11 +83,6 @@ int main() {
     std::cout << getpid() << std::endl;
     sleep(15);
 #endif
-    winsize wsave;
-    if (ioctl(STDIN_FILENO, TIOCGWINSZ, &wsave) == -1) {
-	return 1;
-    }
-
     try {
 	DEBUG::start();
 	Curses::init();
@@ -157,14 +152,7 @@ int main() {
     } catch (std::exception& e) {
 	Curses::end();
 	DEBUG::end();
-	if (ioctl(STDIN_FILENO, TIOCSWINSZ, &wsave) == -1) {
-	    return 1;
-	}
 	std::cerr << e.what() << std::endl;
-	return 1;
-    }
-
-    if (ioctl(STDIN_FILENO, TIOCSWINSZ, &wsave) == -1) {
 	return 1;
     }
 

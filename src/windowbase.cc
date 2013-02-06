@@ -119,9 +119,6 @@ WindowBase::WindowBase(const Margin& _m):
     __instance_count = new unsigned int;
     *__instance_count = 1;
 
-    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_FORCEREFRESH,this, &WindowBase::force_refresh_handler));
-    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
-    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
 }
 
 WindowBase::WindowBase(const WindowBase& so):
@@ -133,10 +130,6 @@ WindowBase::WindowBase(const WindowBase& so):
     __frame(so.__frame)
 {
     (*__instance_count)++;
-
-    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_FORCEREFRESH,this, &WindowBase::force_refresh_handler));
-    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
-    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
 }
 
 WindowBase::~WindowBase() {
@@ -211,6 +204,10 @@ void
 WindowBase::show() {
     if (realization()!=UNREALIZED) return;
 
+    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_FORCEREFRESH,this, &WindowBase::force_refresh_handler));
+    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
+    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
+
     realize();
     refresh(true);
     EventQueue::submit(EventWindowShow(this));
@@ -221,6 +218,11 @@ WindowBase::close() {
     if (realization()!=REALIZED) return;
 
     unrealize();
+
+    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_FORCEREFRESH,this, &WindowBase::force_refresh_handler));
+    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
+    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
+
     EventQueue::submit(EventWindowClose(this));
 
     // We might have obstructed another window, so make sure it

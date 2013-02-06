@@ -52,8 +52,7 @@ class Window;
 class WidgetBase: public Realizeable {
     private:
 	/**
-	 * Pointerused for subwin() in order to
-	 * create subwindows.
+	 * Pointer used for subwin() in order to create subwindows.
 	 *
 	 * Curses window used to display the widget. Widgets like Pack
 	 * may not directly use this, but pass the pointer on to
@@ -95,6 +94,27 @@ class WidgetBase: public Realizeable {
 	 */
 	Size __size_available;
 
+    protected:
+	/**
+	 * Get pointer to the parent of the widget.
+	 *
+	 * If the widget has no parent, NULL is returned.
+	 *
+	 * @return the address of the parent widget or NULL if the is
+	 * no parent.
+	 */
+	WidgetBase* parent() const;
+
+	/**
+	 * Get the curses window of the Widget.
+	 *
+	 * This is the pointer to the curses window, where the
+	 * subwin() will be created.
+	 *
+	 * @return pointer to the curses window.
+	 */
+	WINDOW* curses_window() const;
+
     public:
 	/**
 	 * Constructor.
@@ -125,16 +145,6 @@ class WidgetBase: public Realizeable {
 	void parent(WidgetBase* _p);
 
 	/**
-	 * Get pointer to the parent of the widget.
-	 *
-	 * If the widget has no parent, NULL is returned.
-	 *
-	 * @return the address of the parent widget or NULL if the is
-	 * no parent.
-	 */
-	WidgetBase* parent() const;
-
-	/**
 	 * Set the curses window of the widget.
 	 *
 	 * The curses window is used for displaying the widget.
@@ -144,19 +154,11 @@ class WidgetBase: public Realizeable {
 	 *
 	 * @param _p pointer to curses window. The pointer has to be
 	 * valid for the entire lifetime of the widget.
+	 *
+	 * @internal it is virtual because pack implements its own
+	 * version
 	 */
 	virtual void curses_window(WINDOW* _p);
-
-	/**
-	 * Get the curses window of the Widget.
-	 *
-	 * This is the pointer to the curses window, where the
-	 * subwin() will be created.
-	 *
-	 * @return pointer to the curses window.
-	 */
-	WINDOW* curses_window() const;
-
 
 	/**
 	 * Set the position, where the widget will be displayed.

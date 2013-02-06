@@ -17,6 +17,15 @@
 //
 // Protected
 //
+WINDOW*
+WidgetBase::curses_window() const {
+    return __curses_window;
+}
+
+WidgetBase*
+WidgetBase::parent() const {
+    return __parent;
+}
 
 //
 // Private
@@ -55,21 +64,10 @@ WidgetBase::parent(WidgetBase* _p) {
     __parent = _p;
 }
 
-WidgetBase*
-WidgetBase::parent() const {
-    return __parent;
-}
-
 void
 WidgetBase::curses_window(WINDOW* _p) {
     __curses_window=_p;
 }
-
-WINDOW*
-WidgetBase::curses_window() const {
-    return __curses_window;
-}
-
 
 void
 WidgetBase::position(const Coordinates& _c) {

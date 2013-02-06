@@ -402,7 +402,13 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 	delete *it;
 	*it = ec.clone();
     } else {
-	evtconn_list.push_front(ec.clone());
+	// We have to push_back(). The last registered event connector
+	// has to be called last. This is required when:
+	//  - Realizing
+	//  - Refreshing
+	//
+	// It ensures proper display of overlapping windows.
+	evtconn_list.push_back(ec.clone());
     }
 }
 

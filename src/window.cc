@@ -31,12 +31,10 @@ Window::unrealize() {
     DEBUGOUT("-- IN: Window::unrealize()");
     DEBUGOUT(*this);
 
-    FocusManager::destroy_focus_group();
-
     if (__widget) __widget->unrealize();
-
-
     WindowBase::unrealize();
+
+    FocusManager::destroy_focus_group();
 
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Window::unrealize()");

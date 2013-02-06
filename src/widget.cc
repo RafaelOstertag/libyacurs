@@ -35,6 +35,8 @@ Widget::unrealize() {
 
     DEBUGOUT("-- IN: Widget::unrealize()");
     DEBUGOUT(*this);
+
+    EventQueue::disconnect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
     
     assert(__widget_subwin!=NULL);
     assert(*__widget_subwin!=NULL);
@@ -86,15 +88,12 @@ Widget::Widget():
 
     __instance_count = new unsigned int;
     *__instance_count = 1;
-
-    EventQueue::connect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
 }
 
 Widget::Widget(const Widget& _w):
     WidgetBase(_w), __instance_count(_w.__instance_count),
     __widget_subwin(_w.__widget_subwin) {
     (*__instance_count)++;
-    EventQueue::connect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
 }
 
 Widget::~Widget() {
@@ -115,6 +114,7 @@ Widget::~Widget() {
     delete __widget_subwin;
 
     EventQueue::disconnect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
+
     if (delwin_failed)
 	throw DelWindowFailed();
 }
@@ -191,6 +191,8 @@ Widget::realize() {
     const Coordinates& pos = position();
     const Size& _size = size();
     const Size& size_a = size_available();
+
+    EventQueue::connect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
 
     // We cannot assert on parent() since it might be legally NULL
     // assert(parent()!=NULL

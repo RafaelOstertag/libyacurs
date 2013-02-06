@@ -63,11 +63,15 @@ void
 Button::realize() {
     Label::realize();
 
+    EventQueue::connect_event(EventConnectorMethod1<Button>(EVT_KEY,this, &Button::key_handler));
+
     FocusManager::current_focus_group_add(this);
 }
 
 void
 Button::unrealize() {
+    EventQueue::disconnect_event(EventConnectorMethod1<Button>(EVT_KEY,this, &Button::key_handler));
+
     FocusManager::current_focus_group_remove(this);
 
     Label::unrealize();
@@ -84,11 +88,9 @@ Button::Button(const std::string& _b): Label(),
     // We want our label() to be called, so we don't use the Label()
     // constructor to set the label
     label(_b);
-    EventQueue::connect_event(EventConnectorMethod1<Button>(EVT_KEY,this, &Button::key_handler));
 }
 
 Button::Button(const Button& _b): Label(_b), __focus(_b.__focus) {
-    EventQueue::connect_event(EventConnectorMethod1<Button>(EVT_KEY,this, &Button::key_handler));
 }
 
 Button::~Button() {

@@ -178,6 +178,9 @@ Input::realize() {
 	
     DEBUGOUT("-- IN: Input::realize()");
     DEBUGOUT(*this);
+
+    EventQueue::connect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));
+
     Widget::realize();
 
     FocusManager::current_focus_group_add(this);
@@ -193,6 +196,9 @@ Input::unrealize() {
 
     DEBUGOUT("-- IN: Input::unrealize()");
     DEBUGOUT(*this);
+
+    EventQueue::disconnect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));
+
     FocusManager::current_focus_group_remove(this);
 
     Widget::unrealize();
@@ -217,8 +223,6 @@ Input::Input(int _length, std::string::size_type _max_size, const std::string& _
     __size() {
     if (__length>0)
 	__size=Size(1,__length);
-
-    EventQueue::connect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));
 }
 
 Input::Input(const Input& _i): Widget(_i),
@@ -230,7 +234,6 @@ Input::Input(const Input& _i): Widget(_i),
 			       __read_only(_i.__read_only),
 			       __buffer(_i.__buffer),
 			       __size(_i.__size) {
-    EventQueue::connect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));
 }
 
 Input::~Input() {

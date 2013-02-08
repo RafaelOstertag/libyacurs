@@ -45,6 +45,8 @@ bool Curses::initialized = false;
 //
 int
 Curses::doupdate_handler(Event& e) {
+    assert(e==EVT_DOUPDATE);
+
     if (doupdate() == ERR)
 	throw DoupdateFailed();
 
@@ -53,6 +55,7 @@ Curses::doupdate_handler(Event& e) {
 
 int
 Curses::termresetup_handler(Event& e) {
+    assert(e==EVT_TERMRESETUP);
 #ifdef HAVE_RESIZE_TERM
     // We only support resizing for Curses implementation having
     // resize_term.

@@ -10,6 +10,14 @@
 // Functors
 //
 #ifndef NDEBUG
+/**
+ * Class for debugging.
+ *
+ * Functor counting the number of widgets having focus in the Focus
+ * Group.
+ *
+ * Usually, this should either be 1 or 0.
+ */
 class CountFocus {
     private:
 	int __count;

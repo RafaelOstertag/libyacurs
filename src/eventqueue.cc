@@ -26,33 +26,57 @@ struct sigaction EventQueue::old_int_act;
 bool EventQueue::signal_blocked = false;
 
 std::queue<Event*> EventQueue::evt_queue;
-std::queue<EventConnectorBase*> EventQueue::evtconn_rem_request;
+std::list<EventConnectorBase*> EventQueue::evtconn_rem_request;
 std::list<EventConnectorBase*> EventQueue::evtconn_list;
 
 //
 // Functors
 //
 
+/**
+ * Functor for comparing EventConnectors for equality.
+ */
 class EventConnectorEqual {
     private:
 	const EventConnectorBase& __eb;
     public:
-	inline EventConnectorEqual(const EventConnectorBase& _eb) : __eb(_eb) {}
-	inline bool operator()(EventConnectorBase* eb) {
+	/**
+	 * @param _eb EventConnector which others are compared to.
+	 */
+	EventConnectorEqual(const EventConnectorBase& _eb) : __eb(_eb) {}
+	/**
+	 * @param eb pointer to EventConnector which is compared to __eb.
+	 *
+	 * @return @c true if __eb == *eb, @c false otherwise.
+	 */
+	bool operator()(EventConnectorBase* eb) {
 	    assert( eb != NULL );
 	    return *eb == __eb;
 	}
 };
 
-class EvtConnSetSuspendAll {
+/**
+ * Functor setting the suspend state.
+ *
+ * Functor for setting the suspend state on the given EventConnector
+ * if it matches the Event.
+ */
+class EvtConnSetSuspend {
     private:
 	EVENT_TYPE __evt;
 	bool __suspend;
 
     public:
-	inline EvtConnSetSuspendAll(EVENT_TYPE _e, bool _s):
+	/**
+	 * @param _e Event the EventConnector has to connect in order
+	 * to be suspended/unsuspended.
+	 *
+	 * @param _s suspend state to set: @c true to suspend the
+	 * EventConnector, @c false to unsuspend the EventConnector.
+	 */
+	EvtConnSetSuspend(EVENT_TYPE _e, bool _s):
 	    __evt(_e), __suspend(_s) {}
-	inline void operator()(EventConnectorBase* eb) {
+	void operator()(EventConnectorBase* eb) {
 	    assert ( eb != NULL );
 	    if ( *eb == __evt) {
 		if (__suspend)
@@ -63,16 +87,30 @@ class EvtConnSetSuspendAll {
 	}
 };
 
+/**
+ * Functor for setting suspend state.
+ *
+ * Set the suspend/unsuspend state on EventConnectors except for a
+ * particular EventConnector.
+ */
 class EvtConnSetSuspendExcept {
     private:
 	const EventConnectorBase& __evt;
 	bool __suspend;
 
     public:
-	inline EvtConnSetSuspendExcept(const EventConnectorBase& _e,
+	/**
+	 * @param _e all EventConnectors having the same EVENT_TYPE as
+	 * this, will have set their suspend state. _e will not be
+	 * changed, though.
+	 *
+	 * @param _s suspend state to set: @c true to suspend the
+	 * EventConnector, @c false to unsuspend the EventConnector.
+	 */
+	EvtConnSetSuspendExcept(const EventConnectorBase& _e,
 				    bool _s): __evt(_e),
 					      __suspend(_s){}
-	inline void operator()(EventConnectorBase* eb) {
+	void operator()(EventConnectorBase* eb) {
 	    assert ( eb != NULL );
 	    if (*eb == __evt.type() &&
 		! (__evt == *eb) ) {
@@ -367,9 +405,13 @@ EventQueue::unblocksignal() {
 
 void
 EventQueue::proc_rem_request() {
-    while(!evtconn_rem_request.empty()) {
+    std::list<EventConnectorBase*>::iterator it_erq = 
+	evtconn_rem_request.begin();
 
-	EventConnectorBase* ecb = evtconn_rem_request.front();
+    while(it_erq!=evtconn_rem_request.end()) {
+	assert(*it_erq!=NULL);
+
+	EventConnectorBase* ecb = *it_erq;
 
 	std::list<EventConnectorBase*>::iterator it =
 	    std::find_if(evtconn_list.begin(),
@@ -377,13 +419,17 @@ EventQueue::proc_rem_request() {
 			 EventConnectorEqual(*ecb));
 
 	delete ecb;
-	evtconn_rem_request.pop();
+	it_erq++;
 
 	if (it == evtconn_list.end()) continue;
+
+	assert(*it!=NULL);
 
 	delete *it;
 	evtconn_list.erase(it);
     }
+
+    evtconn_rem_request.clear();
 }
 
 //
@@ -397,6 +443,7 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 		     evtconn_list.end(),
 		     EventConnectorEqual(ec));
     if ( it != evtconn_list.end() ) {
+	assert(*it!=NULL);
 	// there is already a member function registered for the
 	// object on the given event. Replace that connection.
 	delete *it;
@@ -410,6 +457,27 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 	// It ensures proper display of overlapping windows.
 	evtconn_list.push_back(ec.clone());
     }
+
+    //
+    // Remove any pending Event connector removal requests.
+    //
+    // In case you wonder why we don't unsuspend, this had already
+    // happended above since we overwrite the still existing
+    // connector.
+    //
+    if (evtconn_rem_request.empty()) return;
+
+    std::list<EventConnectorBase*>::iterator it_erq =
+	std::find_if(evtconn_rem_request.begin(),
+		     evtconn_rem_request.end(),
+		     EventConnectorEqual(ec));
+
+    if (it_erq != evtconn_rem_request.end()) {
+	assert(*it_erq!=NULL);
+	delete *it_erq;
+	evtconn_rem_request.erase(it_erq);
+    }
+
 }
 
 void
@@ -419,11 +487,18 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
     // itself? std::for_each iterating over evtconn_list in run()
     // would freak out. So we wait until we're sure that nobody is
     // reading the list.
-    evtconn_rem_request.push(ec.clone());
+    evtconn_rem_request.push_back(ec.clone());
 
     // However, the event connector must not be called anymore,
     // because the object might have been destroyed meanwhile.
-    suspend(ec);
+    std::list<EventConnectorBase*>::iterator it =
+	std::find_if(evtconn_list.begin(),
+		     evtconn_list.end(),
+		     EventConnectorEqual(ec));
+    if ( it != evtconn_list.end() ) {
+	assert(*it!=NULL);
+	(*it)->suspended(true);
+    }
 }
 
 void
@@ -442,7 +517,7 @@ void
 EventQueue::suspend_all(EVENT_TYPE _t) {
     std::for_each(evtconn_list.begin(),
 		  evtconn_list.end(),
-		  EvtConnSetSuspendAll(_t, true));
+		  EvtConnSetSuspend(_t, true));
 }
 
 void
@@ -468,7 +543,7 @@ void
 EventQueue::unsuspend_all(EVENT_TYPE _t) {
     std::for_each(evtconn_list.begin(),
 		  evtconn_list.end(),
-		  EvtConnSetSuspendAll(_t, false));
+		  EvtConnSetSuspend(_t, false));
 }
 
 void
@@ -516,6 +591,9 @@ EventQueue::run() {
 	FocusManager::refocus();
 
 	int c=wgetch(stdscr);
+
+	blocksignal();
+
 	if (c != ERR)
 	    switch (c) {
 	    case KEY_REFRESH:
@@ -528,7 +606,6 @@ EventQueue::run() {
 		submit(EventKey(c));
 	    }
 
-	blocksignal();
 
 	// process any pending EventConnector removal requests
 	proc_rem_request();

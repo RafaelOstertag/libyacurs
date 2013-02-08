@@ -89,7 +89,7 @@ class EventQueue {
 	 * EventConnectors are not removed immediately, instead remove
 	 * requests are queue up for processing later.
 	 */
-	static std::queue<EventConnectorBase*> evtconn_rem_request;
+	static std::list<EventConnectorBase*> evtconn_rem_request;
 	static std::list<EventConnectorBase*> evtconn_list;
 
 	static void setup_signal();
@@ -107,16 +107,39 @@ class EventQueue {
 
     public:
 	/**
-	 * Register an event connector.
+	 * Connect an event connector.
+	 *
+	 * Connect a (member) function to an Event. Please note, that
+	 * only one function per object and Event can be connected. If
+	 * two or more member functions of the same object will be
+	 * connected to a single Event, each call to connect
+	 * overwrites previous connections.
 	 *
 	 * @note the last event connector registered will be called
 	 * first.
 	 *
+	 * @note any pending disconnect will be cancelled and the
+	 * connector unsuspended.
+	 *
 	 * @param ec event connector to register.
 	 */
 	static void connect_event(const EventConnectorBase& ec);
-	/// Disconnect from the event
+
+	/**
+	 * Disconnect an event connector.
+	 *
+	 * Disconnect the specified event connector.
+	 *
+	 * @note disconnecting does not immediately remove the
+	 * connector. Instead it will be queued up for later
+	 * removal. Until it is finally removed, it will be suspended.
+	 * @note any pending removal will be cancelled by a
+	 * (re-)connect and the connector will be unsuspended.
+	 *
+	 * @param ec event connector to disconnect.
+	 */
 	static void disconnect_event(const EventConnectorBase& ec);
+
 	/// Suspend event
 	static void suspend(const EventConnectorBase& ec);
 	/// Suspend all events equal to a given event

@@ -30,14 +30,50 @@ enum {
     MIN_ROWS=15
 };
 
+/**
+ * Static class for starting/stopping Curses.
+ *
+ * Class taking care of initializing and unitializing curses, and
+ * running the application.
+ *
+ * It can take of showing a title, status line, and/or main window.
+ */
 class Curses {
     private:
+	/**
+	 * Pointer to StatusLine.
+	 *
+	 * Curses will not free the memory associated with StatuLine.
+	 */
 	static StatusLine* __statusline;
+
+	/**
+	 * Pointer to a title LineObject.
+	 *
+	 * Curses will not free the memory associated with LineObject.
+	 */
 	static LineObject* __title;
+	
+	/**
+	 * Pointer to the main window.
+	 *
+	 * Curses will not free the memory associated with Window.
+	 */
 	static Window* __mainwindow;
+
+	/**
+	 * Flag indicating whether or not Curses has been initialized.
+	 *
+	 * It will be set by init() and removed by end().
+	 */
 	static bool initialized;
 
     protected:
+	/**
+	 * Handler for EVT_DOUPDATE event.
+	 *
+	 * @param e doupdate event.
+	 */
 	static int doupdate_handler(Event& e);
 	static int termresetup_handler(Event& e);
 

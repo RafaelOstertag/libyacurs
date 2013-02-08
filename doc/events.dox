@@ -1,0 +1,28 @@
+// -*- c++ -*-
+/**
+ * @mainpage
+ *
+ * @section Terminal Resize
+ *
+ * If supported by the underlying Curses implementation, a Terminal
+ * Resize emits following events:
+ *
+ * 1. @c EVT_TERMRESETUP
+ * 2. @c EVT_SIGWINCH
+ * 3. @c EVT_REFRESH
+ * 4. @c EVT_DOUPDATE
+ *
+ * @c EVT_TERMRESETUP is connected and handled by Curses.
+ *
+ * @c EVT_SIGWINCH should only be connected by derived classes of
+ * WindowBase. Classes derived from WidgetBase must not connect to
+ * that Event in order to resize, but rely on the parent Window
+ * calling resize().
+ *
+ * All visible objects should connect @c EVT_REFRESH. @c EVT_REFRESH
+ * advises the object to prepare for a Curses doupdate(), i.e. they
+ * should call @c this->refresh(true).
+ *
+ * A Terminal Resize will always result in objects being first
+ * unrealized() and then realized() again.
+ */

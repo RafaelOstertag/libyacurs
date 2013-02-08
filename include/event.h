@@ -71,17 +71,11 @@ enum EVENT_TYPE {
     EVT_SIGUSR2,
     EVT_SIGINT,
     /**
-     * @ingroup Event
-     * @ingroup Focus
-     *
      * Advises Focus Manager to give focus to the next Widget in the
      * Current Focus Group.
      */
     EVT_FOCUS_NEXT,
     /**
-     * @ingroup Event
-     * @ingroup Focus
-     *
      * Advises Focus Manager to give focus to the next Widget in the
      * Current Focus Group.
      */

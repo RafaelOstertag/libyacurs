@@ -31,10 +31,16 @@ Window::unrealize() {
     DEBUGOUT("-- IN: Window::unrealize()");
     DEBUGOUT(*this);
 
+    // We destroy the FocusGroup as soon as possible. This should have
+    // no impact on unrealizing widget(s) further below.
+    //
+    // This was the way since r4777 and was changed in r4821,
+    // i.e. FocusGroup destroyed after widget(s) unrealized. Later on
+    // the behavior was reverted to r4777 behavior
+    FocusManager::destroy_focus_group();
+
     if (__widget) __widget->unrealize();
     WindowBase::unrealize();
-
-    FocusManager::destroy_focus_group();
 
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Window::unrealize()");

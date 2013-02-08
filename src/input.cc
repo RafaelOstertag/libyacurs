@@ -94,8 +94,8 @@ Input::key_handler(Event& _e) {
 	__offset=0;
 	break;
     case 5: // Ctrl-E
-	if (__buffer.length()>static_cast<std::string::size_type>(__size.cols())) {
-	    __offset=__buffer.length()-__size.cols();
+	if (__buffer.length()>=static_cast<std::string::size_type>(__size.cols())) {
+	    __offset=__buffer.length()-__size.cols()+1;
 	    __curs_pos=__size.cols();
 	} else {
 	    __offset=0;
@@ -220,9 +220,7 @@ Input::Input(int _length, std::string::size_type _max_size, const std::string& _
     __length(_length),
     __read_only(false),
     __buffer(_t.length()>__max_size?_t.substr(0,__max_size):_t),
-    __size() {
-    if (__length>0)
-	__size=Size(1,__length);
+    __size(__length>0 ? Size(1, __length) : Size::zero()) {
 }
 
 Input::Input(const Input& _i): Widget(_i),

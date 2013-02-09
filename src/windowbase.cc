@@ -280,7 +280,7 @@ WindowBase::resize(const Area& _a) {
 
 void
 WindowBase::realize() {
-    REALIZE_ENTER
+    REALIZE_ENTER;
 
     DEBUGOUT("-- IN: WindowBase::realize()");
     DEBUGOUT(*this);

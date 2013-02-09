@@ -32,6 +32,14 @@ class Window: public WindowBase {
     private:
 	WidgetBase* __widget;
 
+	/**
+	 * ID of the Focus Group.
+	 *
+	 * The ID of the Focus Group belonging to this
+	 * Window. Supposed to be passed along Widget(s).
+	 */
+	fgid_t __fgid;
+
     protected:
 	void unrealize();
 

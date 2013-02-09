@@ -179,11 +179,14 @@ Input::realize() {
     DEBUGOUT("-- IN: Input::realize()");
     DEBUGOUT(*this);
 
-    EventQueue::connect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));
-
     Widget::realize();
 
-    FocusManager::current_focus_group_add(this);
+    EventQueue::connect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));
+
+    assert(focusgroup_id()!=(fgid_t)-1);
+
+    FocusManager::focus_group_add(focusgroup_id(), this);
+
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Input::realize()");
 
@@ -199,7 +202,9 @@ Input::unrealize() {
 
     EventQueue::disconnect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));
 
-    FocusManager::current_focus_group_remove(this);
+    assert(focusgroup_id()!=(fgid_t)-1);
+
+    FocusManager::focus_group_remove(focusgroup_id(), this);
 
     Widget::unrealize();
     DEBUGOUT(*this);

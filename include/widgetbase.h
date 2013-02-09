@@ -10,6 +10,7 @@
 #endif
 
 #include "mycurses.h"
+#include "yacurstypes.h"
 #include "realizeable.h"
 #include "area.h"
 #include "window.h"
@@ -65,6 +66,15 @@ class WidgetBase: public Realizeable {
 	WINDOW* __curses_window;
 
 	/**
+	 * Focus Group ID
+	 *
+	 * Focus Group where this Widget has to register.
+	 *
+	 * @note It should be set to (fgid_t)-1 when unrealize()'d.
+	 */
+	fgid_t __fgid;
+
+	/**
 	 * The parent of the widget. If the widget has no parent, it
 	 * has to be set to NULL.
 	 *
@@ -115,6 +125,13 @@ class WidgetBase: public Realizeable {
 	 */
 	WINDOW* curses_window() const;
 
+	/**
+	 * Get the Focus Group ID.
+	 *
+	 * @return Focus Group ID.
+	 */
+	fgid_t focusgroup_id() const;
+
     public:
 	/**
 	 * Constructor.
@@ -155,10 +172,19 @@ class WidgetBase: public Realizeable {
 	 * @param _p pointer to curses window. The pointer has to be
 	 * valid for the entire lifetime of the widget.
 	 *
-	 * @internal it is virtual because pack implements its own
+	 * @internal it is virtual because Pack implements its own
 	 * version
 	 */
 	virtual void curses_window(WINDOW* _p);
+
+	/**
+	 * Set Focus Group ID.
+	 *
+	 * @param _id Focus Group ID.
+	 *
+	 * @internal it is virtual because Pack implements its own version.
+	 */
+	virtual void focusgroup_id(fgid_t _id);
 
 	/**
 	 * Set the position, where the widget will be displayed.

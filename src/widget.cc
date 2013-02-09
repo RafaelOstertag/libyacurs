@@ -36,6 +36,8 @@ Widget::unrealize() {
     DEBUGOUT("-- IN: Widget::unrealize()");
     DEBUGOUT(*this);
 
+    focusgroup_id((fgid_t)-1);
+
     EventQueue::disconnect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
     
     assert(__widget_subwin!=NULL);
@@ -145,6 +147,7 @@ Widget::refresh(bool immediate) {
 
     assert(__widget_subwin!=NULL);
     assert(*__widget_subwin!=NULL);
+    assert(focusgroup_id()!=(fgid_t)-1);
 
     int retval;
     if (immediate)
@@ -191,6 +194,8 @@ Widget::realize() {
     const Coordinates& pos = position();
     const Size& _size = size();
     const Size& size_a = size_available();
+
+    assert(focusgroup_id()!=(fgid_t)-1);
 
     EventQueue::connect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
 

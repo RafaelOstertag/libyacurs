@@ -31,16 +31,14 @@ Window::unrealize() {
     DEBUGOUT("-- IN: Window::unrealize()");
     DEBUGOUT(*this);
 
-    // We destroy the FocusGroup as soon as possible. This should have
-    // no impact on unrealizing widget(s) further below.
-    //
-    // This was the way since r4777 and was changed in r4821,
-    // i.e. FocusGroup destroyed after widget(s) unrealized. Later on
-    // the behavior was reverted to r4777 behavior
-    FocusManager::destroy_focus_group();
-
     if (__widget) __widget->unrealize();
     WindowBase::unrealize();
+
+    // With the introduction of Focus Group IDs, we have to destroy
+    // the Focus Group AFTER the Widget has been removed from the
+    // Focus Group.
+    FocusManager::destroy_focus_group(__fgid);
+    __fgid = (fgid_t)-1;
 
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Window::unrealize()");
@@ -53,10 +51,12 @@ Window::unrealize() {
 //
 
 Window::Window(const Margin& m): WindowBase(m),
-				 __widget(NULL) {}
+				 __widget(NULL),
+				 __fgid((fgid_t)-1) {}
 
 Window::Window(const Window& W): WindowBase(W),
-				 __widget(W.__widget) {}
+				 __widget(W.__widget),
+				 __fgid(W.__fgid) {}
 
 
 Window::~Window() {}
@@ -66,6 +66,7 @@ Window::operator=(const Window& W) {
     WindowBase::operator=(W);
 
     __widget = W.__widget;
+    __fgid = W.__fgid;
 
     return *this;
 }
@@ -90,30 +91,14 @@ Window::refresh(bool immediate) {
 
     WindowBase::refresh(immediate);
 
+    FocusManager::focus_group_activate(__fgid);
+
     if (__widget) __widget->refresh(immediate);
 
     DEBUGOUT("-- OUT: Window::refresh()");
     DEBUGOUT(*this);
 }
 
-#if 0
-// This ain't needed since it does nothing...
-void
-Window::resize(const Area& _a) {
-    WindowBase::resize(_a);
-
-    // We do not call resize, because the WidgetBase::resize() would
-    // happen after the widget has been unrealized and realized again
-    // by Window::resize(). Therefore, Window::realize takes care of
-    // setting up things
-    //
-    //if (__widget) __widget->resize(widget_area());
-}
-#endif
-
-/**
- * @todo widget does not show cursor on focus after realization.
- */
 void
 Window::realize() {
     REALIZE_ENTER;
@@ -125,7 +110,7 @@ Window::realize() {
 
     // It is imperative that a new Focus Group is created before the
     // Widget is realized()!
-    FocusManager::new_focus_group();
+    __fgid = FocusManager::new_focus_group();
 
     if (__widget) {
 	assert(__widget->realization()==UNREALIZED);
@@ -137,6 +122,8 @@ Window::realize() {
 
 	// This widget does not have another widget as parent.
 	__widget->parent(NULL);
+
+	__widget->focusgroup_id(__fgid);
 
 	__widget->position(widget_area());
 

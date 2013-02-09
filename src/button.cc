@@ -61,20 +61,32 @@ Button::key_handler(Event& _e) {
 
 void
 Button::realize() {
+    REALIZE_ENTER;
+
     Label::realize();
 
     EventQueue::connect_event(EventConnectorMethod1<Button>(EVT_KEY,this, &Button::key_handler));
 
-    FocusManager::current_focus_group_add(this);
+    assert(focusgroup_id()!=(fgid_t)-1);
+
+    FocusManager::focus_group_add(focusgroup_id(), this);
+
+    REALIZE_LEAVE;
 }
 
 void
 Button::unrealize() {
+    UNREALIZE_ENTER;
+
     EventQueue::disconnect_event(EventConnectorMethod1<Button>(EVT_KEY,this, &Button::key_handler));
 
-    FocusManager::current_focus_group_remove(this);
+    assert(focusgroup_id()!=(fgid_t)-1);
+
+    FocusManager::focus_group_remove(focusgroup_id(), this);
 
     Label::unrealize();
+
+    UNREALIZE_LEAVE;
 }
 
 

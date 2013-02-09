@@ -29,6 +29,13 @@ Pack::set_all_curses_window() {
 }
 
 void
+Pack::set_all_focusgroup_id() {
+    std::for_each(widget_list.begin(),
+		  widget_list.end(),
+		  std::bind2nd(std::mem_fun<void,WidgetBase,fgid_t>(&WidgetBase::focusgroup_id),WidgetBase::focusgroup_id()));
+}
+
+void
 Pack::refresh_all_widgets(bool i) {
    std::for_each(widget_list.begin(),
 		 widget_list.end(),
@@ -41,9 +48,12 @@ Pack::refresh_all_widgets(bool i) {
 void
 Pack::unrealize() {
     UNREALIZE_ENTER;
+
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  std::mem_fun(&WidgetBase::unrealize));
+
+    focusgroup_id((fgid_t)-1);
 
     // Required since pack is a dynamically sized Widget.
     reset_size();
@@ -101,6 +111,7 @@ Pack::add_front(WidgetBase* _w) {
 
     _w->parent(this);
     _w->curses_window(WidgetBase::curses_window());
+    _w->focusgroup_id(WidgetBase::focusgroup_id());
 }
 
 void
@@ -113,6 +124,7 @@ Pack::add_back(WidgetBase* _w) {
 
     _w->parent(this);
     _w->curses_window(WidgetBase::curses_window());
+    _w->focusgroup_id(WidgetBase::focusgroup_id());
 }
 
 
@@ -123,6 +135,7 @@ Pack::remove(WidgetBase* _w) {
     if (realization()!=UNREALIZED) throw AlreadyRealized();
 
     widget_list.remove(_w);
+    _w->focusgroup_id((fgid_t)-1);
 }
 
 void
@@ -132,6 +145,15 @@ Pack::curses_window(WINDOW* _p) {
     // We have to make sure that the associated widgets have the same
     // curses window as we do.
     set_all_curses_window();
+}
+
+void
+Pack::focusgroup_id(fgid_t _id) {
+    WidgetBase::focusgroup_id(_id);
+
+    // We have to make sure that the associated widgets have the same
+    // Focus Group ID as we do.
+    set_all_focusgroup_id();
 }
 
 void

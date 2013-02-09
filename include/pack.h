@@ -78,6 +78,11 @@ class Pack: public WidgetBase {
 	void set_all_curses_window();
 
 	/**
+	 * Call focusgroup_id() on all associated Widgets.
+	 */
+	void set_all_focusgroup_id();
+
+	/**
 	 * Refresh all associated Widgets.
 	 *
 	 * @param i immediate flag. @sa Realizeable::refresh().
@@ -158,14 +163,23 @@ class Pack: public WidgetBase {
 	void remove(WidgetBase* _w);
 
 	/**
-	 * Set the curses window of the pack and all associated widgets.
+	 * Set the curses window of the Pack and all associated
+	 * Widgets.
 	 *
-	 * Pack has to maintain its curses window pointer as well as the
-	 * pointer of the associated widgets.
+	 * Pack has to maintain its curses window pointer as well as
+	 * the pointer of the associated widgets.
 	 *
 	 * @param _p pointer to curses window
 	 */
 	void curses_window(WINDOW* _p);
+
+	/**
+	 * Set the Focus Group ID of the Pack and all associated
+	 * Widgets.
+	 *
+	 * @param _id Focus Group ID.
+	 */
+	void focusgroup_id(fgid_t _id);
 
 	/**
 	 * Set the available size.

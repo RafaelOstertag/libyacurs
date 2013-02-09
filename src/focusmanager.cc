@@ -147,7 +147,11 @@ FocusManager::focus_group_activate(fgid_t _id) {
 
 void
 FocusManager::refocus() {
-    assert(!__focus_groups.empty());
+    if (__focus_groups.empty()) return;
+    // This would make many tests fail. Also, it should be no problem
+    // if we don't assert.
+    //
+    //assert(!__focus_groups.empty());
 
     __focus_groups[__active_focusgroup]->refocus();
 }

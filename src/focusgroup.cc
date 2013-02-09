@@ -43,7 +43,7 @@ class CountFocus {
 // Public
 //
 
-FocusGroup::FocusGroup(): __active(false), __widgets(), __focus() {}
+FocusGroup::FocusGroup(): __active(false), __widgets(), __focus(__widgets.end()) {}
 
 FocusGroup::FocusGroup(const FocusGroup& _f): __active(_f.__active),
 					      __widgets(_f.__widgets),

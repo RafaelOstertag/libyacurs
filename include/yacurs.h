@@ -5,6 +5,7 @@
 #ifndef YACURS_H
 #define YACURS_H
 
+#include "yacurstypes.h"
 #include "realizeable.h"
 #include "coordinates.h"
 #include "margin.h"

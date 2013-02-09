@@ -105,3 +105,12 @@ const Size&
 WidgetBase::size_available() const {
     return __size_available;
 }
+
+void
+WidgetBase::unrealize() {
+    UNREALIZE_ENTER;
+
+    __fgid=(fgid_t)-1;
+
+    UNREALIZE_LEAVE;
+}

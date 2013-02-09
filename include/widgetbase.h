@@ -307,6 +307,9 @@ class WidgetBase: public Realizeable {
 	 * otherwise.
 	 */
 	virtual bool focus() const = 0;
+
+	// From Realizable
+	void unrealize();
 };
 
 #endif // WIDGETBASE_H

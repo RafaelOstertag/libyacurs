@@ -35,9 +35,15 @@ int alrm(Event& _e) {
 	input2->input("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
 	break;
     case 2:
-	label1->label("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+	label1->label("abcdefghiklmnopqrstuvwxyz");
 	break;
     case 3:
+	label2->label("abcdefghiklmnopqrstuvwxyz");
+	break;
+    case 4:
+	label1->label("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+	break;
+    case 5:
 	label2->label("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
 	break;
     default:

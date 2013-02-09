@@ -218,14 +218,30 @@ Pack::size_change() {
     // We're realized
     //
 
-    resize(Area(position(),
-		WidgetBase::size_available()) );
+    // We don't use resize() because we would loose the Focus Group
+    // ID. So we implement our own resize() again here.
+    //
+    //resize(Area(position(),
+    //		WidgetBase::size_available()) );
+
+    fgid_t save_id = WidgetBase::focusgroup_id();
+    Area _save_area = Area(position(), WidgetBase::size_available());
+
+    unrealize();
+
+    focusgroup_id(save_id);
+
+    position(_save_area);
+
+    size_available(_save_area);
+
+    realize();
 
     // There may be many widgets involved in the resize, thus we emit
     // the same event sequence as by a screen resize. A call
     // refresh(true) produces to much flicker.
     //
-    // BAD: refresh(true)
+    //refresh(true)
 
     EventQueue::submit(EVT_REFRESH);
     EventQueue::submit(EVT_DOUPDATE);

@@ -32,11 +32,10 @@ Widget::force_refresh_handler(Event& _e) {
 void
 Widget::unrealize() {
     UNREALIZE_ENTER;
+    WidgetBase::unrealize();
 
     DEBUGOUT("-- IN: Widget::unrealize()");
     DEBUGOUT(*this);
-
-    focusgroup_id((fgid_t)-1);
 
     EventQueue::disconnect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
     

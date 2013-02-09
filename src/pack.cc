@@ -48,12 +48,11 @@ Pack::refresh_all_widgets(bool i) {
 void
 Pack::unrealize() {
     UNREALIZE_ENTER;
+    WidgetBase::unrealize();
 
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
 		  std::mem_fun(&WidgetBase::unrealize));
-
-    focusgroup_id((fgid_t)-1);
 
     // Required since pack is a dynamically sized Widget.
     reset_size();

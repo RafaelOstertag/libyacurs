@@ -143,8 +143,9 @@ LineObject::line() const {
 
 void
 LineObject::realize() {
-    DEBUGOUT("-- IN: LineObject::realize()");
     REALIZE_ENTER;
+
+    DEBUGOUT("-- IN: LineObject::realize()");
 
     compute_margin();
     WindowBase::realize();

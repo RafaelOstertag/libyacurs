@@ -15,8 +15,17 @@
 
 
 /**
- * Implements a widget.
+ * Implements a Widget.
  *
+ * @subsection Basics
+ *
+ * Upon realize(), only the Curses Window will be created. refresh()
+ * only calls wrefresh() or wnoutrefresh(). unrealize() will destroy
+ * the Curses Window.
+ *
+ * @subsection Content
+ *
+ * Content in Curses Window should only be drawn upon refresh().
  */
 class Widget: public WidgetBase {
     private:

@@ -23,32 +23,51 @@ class Window;
  *
  * WidgetBase provides the interface common to all Widgets.
  *
- * The interface is comprised of the following:
+ * @subsection Curses Window
  *
- *  - setting position where the widget will be displayed
- *  - query the size the widget requires
- *  - setting/unsetting focus
- *  - setting a parent widget
+ * If derived classes need Curses Windows, it is expected that they
+ * create the Curses Window using subwin() on the Curses Window
+ * returned by curses_window().
  *
- * If widgets use curses windows, it is expected that they create the
- * window using subwin() to create them.
+ * @subsection Widget Position
+ *
+ * The Window the Widget is associated, or the Parent Widget, calls
+ * position() on the Widget in order to position it.
+ *
+ * @subsection Widget Size
  *
  * Information on how much space the widget has to its disposition,
  * has to be provided by the Window the widget is associated or by the
- * parent Widget.
+ * parent Widget by calling size_available().
  *
  * Dynamically sized Widgets return Size::zero() upon a call to
  * size(). An implementation detail of those Widget is, that they
- * should reset their size() to Size::zero() upon unrealize().
+ * should reset their size() to Size::zero() upon unrealize() or when
+ * explicitely requested by reset_size().
  *
- * If a Widget can have a focus, it can_focus() must return @c true
- * and it should provide a event handler for EVT_FOCUS_CHANGE.
+ * If a Widget can provide size hints, the hints has to be provided
+ * when size_hint() is called. If no hint can be provided for a
+ * dynamic Widget, Size::zero() has to be returned.
+ *
+ * Non-dynamic Widget have to return size_hint() == size().
+ *
+ * @subsection Focus
+ *
+ * If a Widget can have focus, can_focus() must return @c true. The
+ * Widget mus add itself to the Focus Group upon realize() and remove
+ * itself from the Focus Group upon unrealize(). The Parent Widget or
+ * the Window has to provide the proper Focus Manager ID.
  *
  * For details on Focus Management, see FocusGroup and FocusManager.
  *
- * Widgets that want handle keyboard input, should be focusable and
+ * Widgets that want to handle keyboard input, should be focusable and
  * connect to the EVT_KEY event. However, they must only react to
  * EVT_KEY if they have focus.
+ *
+ * @subsection Screen Resize
+ *
+ * Widgets must not connect to @c EVT_SIGWINCH. A resize is initiated
+ * by the Window, or the Parent Widget.
  */
 class WidgetBase: public Realizeable {
     private:
@@ -57,11 +76,10 @@ class WidgetBase: public Realizeable {
 	 *
 	 * Curses window used to display the widget. Widgets like Pack
 	 * may not directly use this, but pass the pointer on to
-	 * assigned widgets.  The widget does not maintain the window,
-	 * i.e. it does not free the memory occupied. However, the
-	 * pointer has to be valid for the entire lifetime of the
+	 * associated Widgets. WidgetBase does not maintain the
+	 * window, i.e. it does not free the memory occupied. However,
+	 * the pointer has to be valid for the entire lifetime of the
 	 * object.
-	 *
 	 */
 	WINDOW* __curses_window;
 

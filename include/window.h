@@ -21,12 +21,38 @@ class WidgetBase;
 /**
  * Window for displaying a widget.
  *
+ * @subsection Widget
+ *
+ * Window is responsible for realizing/unrealizing/refresh the
+ * Widget.
+ *
+ * A screen resize will result in Window calling resize() of the Widget.
+ *
  * Several Widgets can be displayed by the use of Packs.
  *
- * Upon realization, it will create a new Focus Group. When
- * unrealized, it will destroy the Focus Group. This ensures that
- * Widgets will register to the proper Focus Group upon their
- * realization.
+ * Window will call set
+ *
+ *  - Curses Window (curses_window())
+ *  - Focus Group (focusgroup_id())
+ *  - Position (position())
+ *  - Available Size (size_available())
+ *
+ * @subsection Focus
+ *
+ * Upon realization, Window will create a new Focus Group. When
+ * unrealized, it will destroy the Focus Group.
+ *
+ * Window is responsible for passing along Focus Group ID to
+ * Widget.
+ *
+ * Window will activate its Focus Group upon refresh(). This ensures
+ * that the last Window refresh()'ed will have the focus.
+ *
+ * @subsection Events
+ *
+ * Window does not connect any Events explicitely. It implements
+ * unrealize(), refresh(), and realize(), which will be called by
+ * Event Handlers of WindowBase.
  */
 class Window: public WindowBase {
     private:

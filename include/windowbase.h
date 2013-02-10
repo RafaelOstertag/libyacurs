@@ -42,6 +42,13 @@ enum {
  * Users of this class are expected to call show()/close() in order to
  * show and hide the window. Calling realize()/unrealize() is
  * discouraged.
+ *
+ * Events will be connected upon call to show() and disconnected upon
+ * call to close().
+ *
+ * Derived classes do not need to connect to EVT_REFRESH, or
+ * EVT_RESIZE. The Event handler of WindowBase call refresh() or
+ * resize() which can be implemented by derived classes.
  */
 class WindowBase : public Realizeable {
     private:

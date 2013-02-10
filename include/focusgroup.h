@@ -23,7 +23,7 @@
  * regards to the Focus Manager).
  *
  * Widgets should emit @c EVT_FOCUS_NEXT or @c EVT_FOCUS_PREVIOUS if
- * the voluntarely give up focus. The focus will then go to the next
+ * they voluntarely give up focus. The focus will then go to the next
  * (or previous) Widget in the Focus Group, by calling
  * WidgetBase::focus().
  *

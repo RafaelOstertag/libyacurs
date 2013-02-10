@@ -47,8 +47,9 @@ Input::key_handler(Event& _e) {
     switch (ekey.data()) {
     case KEY_DOWN:
     case KEY_ENTER:
-    case '\r':
-    case '\t':
+    case KEY_RETURN:
+    case KEY_RETURN2:
+    case KEY_TAB:
 	EventQueue::submit(EVT_FOCUS_NEXT);
 	break;
     case KEY_UP:
@@ -56,19 +57,19 @@ Input::key_handler(Event& _e) {
 	EventQueue::submit(EVT_FOCUS_PREVIOUS);
 	break;
     case KEY_DL:
-    case 21: // Ctrl-U
+    case KEY_CTRL_U:
 	if (__read_only) break;
 	__buffer.clear();
 	__curs_pos=0;
 	__offset=0;
 	break;
     case KEY_EOL:
-    case 11: // Ctrl-K
+    case KEY_CTRL_K:
 	if (__read_only) break;
 	__buffer=__buffer.erase(__offset+__curs_pos,
 				__buffer.length()-(__offset+__curs_pos));
 	break;
-    case 127: // Backspace in Solaris' Curses
+    case KEY_BKSPC_SOL:
     case KEY_BACKSPACE:
 	if (__read_only) break;
 	if (__offset==0 && __curs_pos==0) break;
@@ -89,11 +90,11 @@ Input::key_handler(Event& _e) {
 	__buffer=__buffer.erase(__offset+__curs_pos,1);
 	break;
     case KEY_HOME:
-    case 1: // Ctrl-A
+    case KEY_CTRL_A:
 	__curs_pos=0;
 	__offset=0;
 	break;
-    case 5: // Ctrl-E
+    case KEY_CTRL_E:
 	if (__buffer.length()>=static_cast<std::string::size_type>(__size.cols())) {
 	    __offset=__buffer.length()-__size.cols()+1;
 	    __curs_pos=__size.cols();
@@ -103,6 +104,7 @@ Input::key_handler(Event& _e) {
 	}
 	break;
     case KEY_LEFT:
+    case KEY_CTRL_B:
 	if (__curs_pos>0) {
 	    __curs_pos--;
 	} else {
@@ -115,6 +117,7 @@ Input::key_handler(Event& _e) {
 	}
 	break;
     case KEY_RIGHT:
+    case KEY_CTRL_F:
 	if (__curs_pos+__offset>=__buffer.length()) break;
 
 	if (__curs_pos+1==static_cast<std::string::size_type>(__size.cols())) {

@@ -597,7 +597,7 @@ EventQueue::run() {
 	if (c != ERR)
 	    switch (c) {
 	    case KEY_REFRESH:
-	    case 12: // Ctrl-L
+	    case KEY_CTRL_L:
 		submit(Event(EVT_FORCEREFRESH));
 		submit(Event(EVT_REFRESH));
 		submit(Event(EVT_DOUPDATE));

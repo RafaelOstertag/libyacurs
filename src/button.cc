@@ -42,7 +42,7 @@ Button::key_handler(Event& _e) {
     switch (ekey.data()) {
     case KEY_DOWN:
     case KEY_RIGHT:
-    case '\t':
+    case KEY_TAB:
 	EventQueue::submit(EVT_FOCUS_NEXT);
 	break;
     case KEY_UP:
@@ -51,7 +51,8 @@ Button::key_handler(Event& _e) {
 	EventQueue::submit(EVT_FOCUS_PREVIOUS);
 	break;
     case KEY_ENTER:
-    case '\r':
+    case KEY_RETURN:
+    case KEY_RETURN2:
 	EventQueue::submit(EventEx<Button*>(EVT_BUTTON_PRESS,this));
 	break;
     }

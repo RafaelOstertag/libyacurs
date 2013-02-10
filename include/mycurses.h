@@ -21,6 +21,51 @@
 #error "Neither ncurses.h nor curses.h available"
 #endif
 
+// My Keys.
+
+enum {
+#ifndef KEY_CTRL_A
+    KEY_CTRL_A=1,
+#endif
+#ifndef KEY_CTRL_B
+    KEY_CTRL_B=2,
+#endif
+#ifndef KEY_CTRL_E
+    KEY_CTRL_E=5,
+#endif
+#ifndef KEY_CTRL_F
+    KEY_CTRL_F=6,
+#endif
+#ifndef KEY_TAB
+    KEY_TAB=9,
+#endif
+#ifndef KEY_RETURN
+    KEY_RETURN=10,
+#endif
+#ifndef KEY_RETURN2
+    KEY_RETURN2=13,
+#endif
+#ifndef KEY_CTRL_K
+    KEY_CTRL_K=11,
+#endif
+#ifndef KEY_CTRL_L
+    KEY_CTRL_L=12,
+#endif
+#ifndef KEY_CTRL_N
+    KEY_CTRL_N=14,
+#endif
+#ifndef KEY_CTRL_P
+    KEY_CTRL_P=16,
+#endif
+#ifndef KEY_CTRL_U
+    KEY_CTRL_U=21,
+#endif
+#ifndef KEY_BKSPC_SOL
+    // Backspace in Solaris' Curses
+    KEY_BKSPC_SOL=127,
+#endif
+    __KEY_MY_DUMMY__=0 // To make compiler stop complaining about comma
+};
 
 #ifdef tab
 #undef tab

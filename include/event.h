@@ -90,9 +90,13 @@ enum EVENT_TYPE {
      */
     EVT_WINDOW_CLOSE,
     /**
-     * Will be emmitted when Button is pressed.
+     * Will be emitted when Button is pressed.
      */
-    EVT_BUTTON_PRESS
+    EVT_BUTTON_PRESS,
+    /**
+     * Will be emitted when ENTER is pressed in ListBox.
+     */
+    EVT_LISTBOX_ENTER
 };
 
 /**

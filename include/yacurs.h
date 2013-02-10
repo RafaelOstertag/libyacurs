@@ -31,6 +31,7 @@
 #include "dynlabel.h"
 #include "button.h"
 #include "input.h"
+#include "listbox.h"
 
 #endif // YACURS_H
 

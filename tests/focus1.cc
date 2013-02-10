@@ -9,12 +9,14 @@
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
+#include <sstream>
 
 #include "yacurs.h"
 
 // Event handler requires access
 Input* ifixed;
 Input* idyn;
+ListBox* listbox;
 Button* b1;
 Button* b2;
 Button* b3;
@@ -41,6 +43,13 @@ int button_press_handler(Event& _e) {
 }
 
 int main() {
+    std::list<std::string> items;
+
+    for (int i=0; i<120; i++) {
+	std::ostringstream n;
+	n<<i;
+	items.push_back("Long Name ListBox Item Number " + n.str());
+    }
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
@@ -66,6 +75,8 @@ int main() {
 	b3=new Button("Button3");
 	ifixed=new Input(10);
 	idyn=new Input;
+	listbox=new ListBox;
+	listbox->set(items);
 	Input* ireadonly=new Input;
 	ireadonly->input("Read only");
 	ireadonly->readonly(true);
@@ -73,6 +84,7 @@ int main() {
 	vpack->add_back(ifixed);
 	vpack->add_back(idyn);
 	vpack->add_back(ireadonly);
+	vpack->add_back(listbox);
 	vpack->hinting(false);
 
 	hpack->add_back(b1);
@@ -96,6 +108,7 @@ int main() {
 	delete idyn;
 	delete ifixed;
 	delete ireadonly;
+	delete listbox;
 	delete hpack;
 	delete vpack;
 	delete Curses::mainwindow();

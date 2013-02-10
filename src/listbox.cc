@@ -291,11 +291,10 @@ ListBox::refresh(bool immediate) {
 	i<std::min<std::list<std::string>::size_type>(__size.rows()-2, __list.size());
 	it++, i++) {
 
-#warning "If kept, add error checking"
 	if (__focus && i==__curs_pos)
-	    wattrset(widget_subwin(), A_REVERSE);
+	    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX_FOCUS);
 	else
-	    wattrset(widget_subwin(), A_NORMAL);
+	    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX);
 
 	// We prepare our own line, so that we can fill up with spaces
 	std::string line(*it);
@@ -314,10 +313,9 @@ ListBox::refresh(bool immediate) {
 			 line.c_str(), __size.cols()-3);
 	    winsch(widget_subwin(), '>');
 	}
-
-#warning "If kept, add error checking"
-	wattrset(widget_subwin(), A_NORMAL);
     }
+
+    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX);
 
     //
     // Box creation and scroll marker setting was moved here, because

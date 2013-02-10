@@ -77,9 +77,13 @@ namespace YAPET {
              */
             BUTTON_FOCUS,
             /**
-             * Color of listwidgets.
+             * Color of ListBox
              */
-            LISTWIDGET,
+            LISTBOX,
+	    /**
+	     * Color of ListBox with Focus
+	     */
+	    LISTBOX_FOCUS,
             /**
              * Color of Check Box Groups
              */

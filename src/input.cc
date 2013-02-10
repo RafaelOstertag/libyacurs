@@ -392,8 +392,6 @@ Input::refresh(bool immediate) {
     if (wmove(widget_subwin(), 0, __curs_pos)==ERR)
 	 throw WMoveFailed();
 
-    wcursyncup(widget_subwin());
-
     Widget::refresh(immediate);
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: Input::refresh()");

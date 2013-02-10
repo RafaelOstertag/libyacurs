@@ -34,7 +34,7 @@ bool Colors::__initialized = false;
 #ifndef _GIRLYCOLORS
 color Colors::__colors[] = {
     // Normal
-    {1, COLOR_WHITE, COLOR_BLUE, A_NORMAL},
+    {1, COLOR_WHITE, COLOR_BLACK, A_NORMAL},
     // Message box title
     {2, COLOR_CYAN, COLOR_BLACK, A_NORMAL},
     // Message box
@@ -42,7 +42,7 @@ color Colors::__colors[] = {
     // Input widget no focus
     {4, COLOR_BLACK, COLOR_WHITE, A_REVERSE},
     // Input widget focus
-    {5, COLOR_BLACK, COLOR_YELLOW, A_REVERSE},
+    {5, COLOR_BLACK, COLOR_GREEN, A_REVERSE},
     // Input widget hidden (Only works with colors)
     {6, COLOR_YELLOW, COLOR_YELLOW, A_REVERSE},
     // Button no focus
@@ -50,11 +50,13 @@ color Colors::__colors[] = {
     // Button focus
     {8, COLOR_BLACK, COLOR_GREEN, A_REVERSE},
     // List widget
-    {9, COLOR_WHITE, COLOR_BLUE, A_NORMAL},
+    {9, COLOR_WHITE, COLOR_BLACK, A_NORMAL},
+    // List widget focus
+    {10, COLOR_BLACK, COLOR_GREEN, A_REVERSE},
     // Check Box Group
-    {10, COLOR_BLACK, COLOR_CYAN, A_NORMAL},
+    {11, COLOR_BLACK, COLOR_CYAN, A_NORMAL},
     // Check Box Group Title
-    {11, COLOR_CYAN, COLOR_BLACK, A_NORMAL},
+    {12, COLOR_CYAN, COLOR_BLACK, A_NORMAL},
     // The marker of the end
     {0, 0, 0, 0}
 };
@@ -81,10 +83,12 @@ color Colors::__colors[] = {
     {8, COLOR_CYAN, COLOR_MAGENTA, A_REVERSE},
     // List widget
     {9, COLOR_BLUE, COLOR_CYAN, A_NORMAL},
+    // List widget focus
+    {10, COLOR_CYAN, COLOR_BLUE, A_REVERSE},
     // Check Box Group
-    {10, COLOR_BLACK, COLOR_CYAN, A_NORMAL},
+    {11, COLOR_BLACK, COLOR_CYAN, A_NORMAL},
     // Check Box Group Title
-    {11, COLOR_CYAN, COLOR_BLACK, A_NORMAL},
+    {12, COLOR_CYAN, COLOR_BLACK, A_NORMAL},
     // The marker of the end
     {0, 0, 0, 0}
 };
@@ -117,11 +121,11 @@ Colors::set_color (WINDOW* w, COLORS c) {
 	throw ColorsNotInitialized();
 
     if (has_colors() == TRUE) {
-	wattron(w, COLOR_PAIR (__colors[c].no) );
-	wbkgd (w, ' ' | COLOR_PAIR (__colors[c].no) );
+	wattrset(w, COLOR_PAIR (__colors[c].no) );
+	wbkgdset(w, ' ' | COLOR_PAIR (__colors[c].no) );
     } else {
-	wattron(w, __colors[c].attr);
-	wbkgd (w, ' ' | __colors[c].attr);
+	wattrset(w, __colors[c].attr);
+	wbkgdset(w, ' ' | __colors[c].attr);
     }
 }
 

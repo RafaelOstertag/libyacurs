@@ -83,7 +83,7 @@ namespace YAPET {
 	    /**
 	     * Color of ListBox with Focus
 	     */
-	    LISTBOX_FOCUS,
+	    LISTBOX_HILITE,
             /**
              * Color of Check Box Groups
              */

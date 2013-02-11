@@ -162,6 +162,7 @@ LineObject::refresh(bool immediate) {
     put_line();
 
     YAPET::UI::Colors::set_color(curses_window(), YAPET::UI::DEFAULT);
+    YAPET::UI::Colors::set_bg(curses_window(), YAPET::UI::DEFAULT);
 
     WindowBase::refresh(immediate);
     DEBUGOUT("-- OUT: LineObject::refresh()");

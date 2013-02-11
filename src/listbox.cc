@@ -305,7 +305,7 @@ ListBox::refresh(bool immediate) {
 	it++, i++) {
 
 	if (__focus && i==__curs_pos)
-	    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX_FOCUS);
+	    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX_HILITE);
 	else
 	    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX);
 
@@ -327,7 +327,9 @@ ListBox::refresh(bool immediate) {
 	    winsch(widget_subwin(), '>');
 	}
     }
-
+    
+    // This is required in order to color the listbox properly when
+    // highlighting hits the bottom under X/Open Curses
     YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX);
 
     //

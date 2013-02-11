@@ -120,25 +120,22 @@ Colors::set_color (WINDOW* w, COLORS c) {
     if (!__initialized)
 	throw ColorsNotInitialized();
 
-    if (has_colors() == TRUE) {
-	wattrset(w, COLOR_PAIR (__colors[c].no) );
-	wbkgdset(w, ' ' | COLOR_PAIR (__colors[c].no) );
-    } else {
+    if (has_colors() == TRUE)
+	wattrset(w, COLOR_PAIR (__colors[c].no));
+    else
 	wattrset(w, __colors[c].attr);
-	wbkgdset(w, ' ' | __colors[c].attr);
-    }
 }
 
 void
-Colors::unset_color (WINDOW* w, COLORS c) {
+Colors::set_bg(WINDOW* w, COLORS c) {
+   if (!__initialized)
+	throw ColorsNotInitialized();
+
     if (has_colors() == TRUE)
-        wattroff (w, COLOR_PAIR (__colors[c].no) );
+	wbkgd(w, ' ' | COLOR_PAIR (__colors[c].no) );
     else
-        wattroff (w, __colors[c].attr);
-
-    wbkgd (w, ' ');
+	wbkgd(w, ' ' | __colors[c].attr);
 }
-
 
 short
 Colors::get_color (COLORS c) {

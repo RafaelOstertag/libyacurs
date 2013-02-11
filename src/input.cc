@@ -13,23 +13,6 @@
 //
 // Private
 //
-void
-Input::visibly_change_focus() {
-    if (__focus) {
-	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::INPUTWIDGET_FOCUS);
-	curs_set(1);
-	if (leaveok(widget_subwin(), FALSE)==ERR)
-	    throw LeaveOKFailed();
-    } else {
-	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::INPUTWIDGET_NOFOCUS);
-	curs_set(0);
-	if (leaveok(widget_subwin(), TRUE)==ERR)
-	    throw LeaveOKFailed();
-    }
-
-    // we have to immediately refresh to let the colors take effect.
-    refresh(true);
-}
 
 //
 // Protected
@@ -342,7 +325,7 @@ Input::focus(bool _f) {
     __focus = _f;
 
     if (realization()==REALIZED)
-	visibly_change_focus();
+	refresh(true);
 }
 
 bool
@@ -358,10 +341,21 @@ Input::refresh(bool immediate) {
 
     assert(widget_subwin()!=NULL);
 
+    // setting background is essential for coloring entire input
+    // widget.
+
     if (__focus) {
 	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::INPUTWIDGET_FOCUS);
+	YAPET::UI::Colors::set_bg(widget_subwin(), YAPET::UI::INPUTWIDGET_FOCUS);
+	curs_set(1);
+	if (leaveok(widget_subwin(), FALSE)==ERR)
+	    throw LeaveOKFailed();
     } else {
 	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::INPUTWIDGET_NOFOCUS);
+	YAPET::UI::Colors::set_bg(widget_subwin(), YAPET::UI::INPUTWIDGET_NOFOCUS);
+	curs_set(0);
+	if (leaveok(widget_subwin(), TRUE)==ERR)
+	    throw LeaveOKFailed();
     }
 
     if (werase(widget_subwin())==ERR)

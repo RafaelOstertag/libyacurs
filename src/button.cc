@@ -12,21 +12,6 @@
 //
 // Private
 //
-void
-Button::visibly_change_focus() {
-    if (__focus) {
-	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_FOCUS);
-	if (leaveok(widget_subwin(), FALSE)==ERR)
-	    throw LeaveOKFailed();
-    } else {
-	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_NOFOCUS);
-	if (leaveok(widget_subwin(), TRUE)==ERR)
-	    throw LeaveOKFailed();
-    }
-
-    // we have to immediately refresh to let the colors take effect.
-    refresh(true);
-}
 
 //
 // Protected
@@ -142,7 +127,7 @@ Button::focus(bool _f) {
     __focus = _f;
 
     if (realization()==REALIZED)
-	visibly_change_focus();
+	refresh(true);
 }
 
 bool
@@ -155,6 +140,16 @@ Button::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
 
     assert(widget_subwin()!=NULL);
+
+    if (__focus) {
+	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_FOCUS);
+	if (leaveok(widget_subwin(), FALSE)==ERR)
+	    throw LeaveOKFailed();
+    } else {
+	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_NOFOCUS);
+	if (leaveok(widget_subwin(), TRUE)==ERR)
+	    throw LeaveOKFailed();
+    }
 
     Label::refresh(immediate);
 }

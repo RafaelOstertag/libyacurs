@@ -92,11 +92,6 @@ class Input: public Widget {
 	 */
 	Size __size;
 
-	/**
-	 * Visibly change focus.
-	 */
-	void visibly_change_focus();
-
     protected:
 	virtual int key_handler(Event& _e);
 

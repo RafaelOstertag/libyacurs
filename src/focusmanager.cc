@@ -100,6 +100,12 @@ FocusManager::destroy_focus_group(fgid_t _id) {
     // focus, so we simply destroy the group.
     delete __focus_groups[_id];
     __focus_groups[_id] = NULL;
+
+    // Now, we assume that when the Focus Group has been destroyed, a
+    // Window just disappeared, so a refresh will take place
+    // soon. Hence we set the Active Focus Group to -1, which should
+    // be changed as soon as the Window(s) do a refresh.
+    __active_focusgroup=(fgid_t)-1;
 }
 
 void
@@ -148,6 +154,7 @@ FocusManager::focus_group_activate(fgid_t _id) {
 void
 FocusManager::refocus() {
     if (__focus_groups.empty()) return;
+    assert(__active_focusgroup!=(fgid_t)-1);
     // This would make many tests fail. Also, it should be no problem
     // if we don't assert.
     //

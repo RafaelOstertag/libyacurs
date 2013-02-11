@@ -21,11 +21,6 @@ class Button: public Label {
     private:
 	bool __focus;
 
-	/**
-	 * Visibly change focus.
-	 */
-	void visibly_change_focus();
-
     protected:
 	virtual int key_handler(Event& _e);
 

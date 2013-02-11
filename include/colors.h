@@ -168,7 +168,7 @@ namespace YAPET {
                  */
                 static void set_color (WINDOW* w, COLORS c);
 
-                static void unset_color (WINDOW* w, COLORS c);
+                static void set_bg (WINDOW* w, COLORS c);
 
                 /**
                  * @brief Returns the number of the color pair.

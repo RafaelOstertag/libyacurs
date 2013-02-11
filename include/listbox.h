@@ -43,11 +43,6 @@ class ListBox: public Widget {
 	 */
 	Size __size;
 
-	/**
-	 * Visibly change focus.
-	 */
-	void visibly_change_focus();
-
     protected:
 	virtual int key_handler(Event& _e);
 
@@ -72,6 +67,8 @@ class ListBox: public Widget {
 	virtual void add(const std::string& _i);
 
 	virtual void set(const std::list<std::string>& _l);
+
+	virtual void clear();
 
 	virtual std::list<std::string>::size_type selected() const;
 

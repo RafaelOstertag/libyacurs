@@ -10,13 +10,12 @@
 #include "cursex.h"
 #include "colors.h"
 
+#define __cast_lt(x) (static_cast<std::list<std::string>::size_type>(x))
+#define __cast_st(x) (static_cast<std::string::size_type>(x))
+
 //
 // Private
 //
-void
-ListBox::visibly_change_focus() {
-    assert(0);
-}
 
 //
 // Protected
@@ -47,7 +46,7 @@ ListBox::key_handler(Event& _e) {
 	if ((__offset+__curs_pos)>__list.size() ||
 	    __list.empty()) break;
 
-	if (__curs_pos<__size.rows()-3 && /* We have to take the box into account */
+	if (__curs_pos<__cast_lt(__size.rows())-3 && /* We have to take the box into account */
 	    __curs_pos<__list.size()-1) {
 	    __curs_pos++;
 	} else {
@@ -82,7 +81,7 @@ ListBox::key_handler(Event& _e) {
     case KEY_CTRL_E:
 	if (__list.empty()) break;
 
-	if (__list.size()<=__size.rows()-2) {
+	if (__list.size()<=__cast_lt(__size.rows())-2) {
 	    __curs_pos=__list.size()-1;
 	} else {
 	    __offset=__list.size()-__size.rows()+2;
@@ -90,20 +89,20 @@ ListBox::key_handler(Event& _e) {
 	}
 	break;
     case KEY_NPAGE:
-	if (__list.size()<=__size.rows()-2 ||
+	if (__list.size()<=__cast_lt(__size.rows())-2 ||
 	    __list.empty()) break;
 
-	if (__offset+__size.rows()-2<=__list.size()-__size.rows()+2)
+	if (__cast_lt(__offset+__size.rows())-2<=__list.size()-__size.rows()+2)
 	    __offset+=__size.rows()-2;
 	else
 	    __offset=__list.size()-__size.rows()+2;
 
 	break;
     case KEY_PPAGE:
-	if (__list.size()<=__size.rows()-2 ||
+	if (__list.size()<=__cast_lt(__size.rows())-2 ||
 	    __list.empty()) break;
 
-	if (__offset>__size.rows()-2)
+	if (__offset>__cast_lt(__size.rows())-2)
 	    __offset-=__size.rows()-2;
 	else
 	    __offset=0;
@@ -213,6 +212,20 @@ ListBox::set(const std::list<std::string>& _l) {
 	refresh(true);
 }
 
+void
+ListBox::clear() {
+    __list.clear();
+    __offset=0;
+    __curs_pos=0;
+
+    if (realization()==REALIZED) {
+	if (wclear(widget_subwin())==ERR)
+	    throw ClearFailed();
+
+	refresh(true);
+    }
+}
+
 std::list<std::string>::size_type
 ListBox::selected() const {
     return __curs_pos + __offset;
@@ -274,12 +287,12 @@ ListBox::refresh(bool immediate) {
 
     // Make sure cursor position is not off the list, i.e. on the
     // border of the widget.
-    __curs_pos=__curs_pos>__size.rows()-3 ? __size.rows()-3 : __curs_pos;
+    __curs_pos=__curs_pos>__cast_lt(__size.rows())-3 ? __size.rows()-3 : __curs_pos;
 
     // Make sure the offset will not produce an out of bound, for
     // instance due to a screen resize.
-    if (__size.rows()-2>__list.size()||
-	__size.rows()-2+__offset>__list.size())
+    if (__cast_lt(__size.rows())-2>__list.size()||
+	__cast_lt(__size.rows()-2+__offset)>__list.size())
 	__offset=0; // we must not use an offset.
 
     // Advance to offset
@@ -300,9 +313,9 @@ ListBox::refresh(bool immediate) {
 	std::string line(*it);
 
 	// Find out if we have to indicate that the line has been truncated
-	if (line.length()<=__size.cols()-2) {
+	if (line.length()<=__cast_st(__size.cols())-2) {
 	    // line is shorter than visible area
-	    if (line.length()<__size.cols()-2)
+	    if (line.length()<__cast_st(__size.cols())-2)
 		line.append((__size.cols()-2)-line.length(),' ');
 	    mymvwaddnstr(widget_subwin(),
 			 i+1,1,
@@ -327,7 +340,7 @@ ListBox::refresh(bool immediate) {
 	throw BoxFailed();
 
     // set scroll markers
-    if (__list.size()>__size.rows()-2) {
+    if (__list.size()>__cast_lt(__size.rows())-2) {
 	// Can we scroll up? This is indicated by an __offset > 0
 	if (__offset>0)
 	    mvwaddch(widget_subwin(), 1, __size.cols()-1, '^');

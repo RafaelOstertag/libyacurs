@@ -88,6 +88,9 @@ Window::refresh(bool immediate) {
     DEBUGOUT(*this);
 
     YAPET::UI::Colors::set_color(curses_window(), YAPET::UI::DEFAULT);
+    // Setting background also helps getting rid of artifacts of
+    // overlapped windows.
+    YAPET::UI::Colors::set_bg(curses_window(), YAPET::UI::DEFAULT);
 
     WindowBase::refresh(immediate);
 

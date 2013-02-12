@@ -121,9 +121,11 @@ Colors::set_color (WINDOW* w, COLORS c) {
 	throw ColorsNotInitialized();
 
     if (has_colors() == TRUE)
-	wattrset(w, COLOR_PAIR (__colors[c].no));
+	if (wattrset(w, COLOR_PAIR (__colors[c].no))==ERR)
+	    throw WAttrSetFailed();
     else
-	wattrset(w, __colors[c].attr);
+	if (wattrset(w, __colors[c].attr)==ERR)
+	    throw WAttrSetFailed();
 }
 
 void

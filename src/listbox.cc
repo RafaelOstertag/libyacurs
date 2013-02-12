@@ -345,10 +345,10 @@ ListBox::refresh(bool immediate) {
     if (__list.size()>__cast_lt(__size.rows())-2) {
 	// Can we scroll up? This is indicated by an __offset > 0
 	if (__offset>0)
-	    mvwaddch(widget_subwin(), 1, __size.cols()-1, '^');
+	    (void)mvwaddch(widget_subwin(), 1, __size.cols()-1, '^');
 	// can we scroll further down?
 	if (__offset+__size.rows()-3<__list.size()-1)
-	    mvwaddch(widget_subwin(), __size.rows()-2, __size.cols()-1, 'v');
+	    (void)mvwaddch(widget_subwin(), __size.rows()-2, __size.cols()-1, 'v');
     }
 
     // Set the cursor at the right position if we have focus.

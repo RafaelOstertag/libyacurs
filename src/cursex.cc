@@ -128,3 +128,6 @@ AreaExceeded::AreaExceeded():
 
 WInsChFailed::WInsChFailed():
     BaseCurEx("winsch() failed") {}
+
+WAttrSetFailed::WAttrSetFailed():
+    BaseCurEx("wattrset() failed") {}

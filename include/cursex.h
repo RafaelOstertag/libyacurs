@@ -218,4 +218,9 @@ class WInsChFailed: public BaseCurEx {
 	WInsChFailed();
 };
 
+class WAttrSetFailed: public BaseCurEx {
+    public:
+	WAttrSetFailed();
+};
+
 #endif // CUREX_H

@@ -11,10 +11,9 @@
 
 #include "yacurs.h"
 
-int alrm(Event& _e) {
+void alrm(Event& _e) {
     assert(_e == EVT_SIGALRM);
     EventQueue::submit(Event(EVT_QUIT));
-    return 0;
 }
 
 int main() {

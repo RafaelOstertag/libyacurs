@@ -80,9 +80,21 @@ class Realizeable {
 
     public:
 	Realizeable();
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param r reference to Realizable object.
+	 */
 	Realizeable(const Realizeable& r);
+
 	virtual ~Realizeable();
 
+	/**
+	 * Assignment operator.
+	 *
+	 * @param r reference to Realizable object.
+	 */
 	Realizeable& operator=(const Realizeable& r);
 
 	/**

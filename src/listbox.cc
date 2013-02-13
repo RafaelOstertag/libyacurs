@@ -20,13 +20,13 @@
 //
 // Protected
 //
-int
+void
 ListBox::key_handler(Event& _e) {
     assert(_e==EVT_KEY);
 
-    if (!__focus) return 0;
+    if (!__focus) return;
 
-    EventKey& ekey=dynamic_cast<EventKey&>(_e);
+    EventEx<int>& ekey=dynamic_cast<EventEx<int>&>(_e);
 
     switch (ekey.data()) {
     case KEY_ENTER:
@@ -110,8 +110,6 @@ ListBox::key_handler(Event& _e) {
     }
 
     refresh(true);
-
-    return 0;
 }
 
 void

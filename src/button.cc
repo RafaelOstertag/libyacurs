@@ -16,13 +16,13 @@
 //
 // Protected
 //
-int
+void
 Button::key_handler(Event& _e) {
     assert(_e.type()==EVT_KEY);
 
-    if (!__focus) return 0;
+    if (!__focus) return;
 
-    EventKey& ekey=dynamic_cast<EventKey&>(_e);
+    EventEx<int>& ekey=dynamic_cast<EventEx<int>&>(_e);
 
     switch (ekey.data()) {
     case KEY_DOWN:
@@ -41,8 +41,6 @@ Button::key_handler(Event& _e) {
 	EventQueue::submit(EventEx<Button*>(EVT_BUTTON_PRESS,this));
 	break;
     }
-
-    return 0;
 }
 
 void

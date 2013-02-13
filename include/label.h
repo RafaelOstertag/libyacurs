@@ -36,9 +36,27 @@ class Label: public Widget {
 	Size __size;
 
     public:
+	/**
+	 * Constructor.
+	 *
+	 * @param _l label
+	 */
 	Label(const std::string& _l=std::string());
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param _l reference to Label object.
+	 */
 	Label(const Label& _l);
+
 	virtual ~Label();
+
+	/**
+	 * Assignment operator.
+	 *
+	 * @param _l reference to Label object.
+	 */
 	Label& operator=(const Label& _l);
 
 	virtual void label(const std::string& _l);

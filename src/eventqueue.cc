@@ -330,7 +330,7 @@ EventQueue::signal_handler(int signo)
     case SIGWINCH:
 	try {
 	    evt_queue.push(new Event(EVT_TERMRESETUP));
-	    evt_queue.push(new EventWinCh(Curses::inquiry_screensize()));
+	    evt_queue.push(new EventEx<Size>(EVT_SIGWINCH, Curses::inquiry_screensize()));
 	    evt_queue.push(new Event(EVT_REFRESH));
 	    evt_queue.push(new Event(EVT_DOUPDATE));
 	} catch(std::exception& e) {
@@ -603,7 +603,7 @@ EventQueue::run() {
 		submit(Event(EVT_DOUPDATE));
 		break;
 	    default:
-		submit(EventKey(c));
+		submit(EventEx<int>(EVT_KEY, c));
 	    }
 
 

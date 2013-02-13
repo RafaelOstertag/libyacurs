@@ -62,6 +62,8 @@ LineObject::put_line() {
 
     assert(area().cols()>=MIN_COLS);
     if (static_cast<std::string::size_type>(area().cols())<=__linetext.length()) {
+	// Since we are here, the text is too big for the screen
+	// width, so we can't align anyway.
 #ifndef NDEBUG
 	std::ostringstream _a, _a2, _l;
 	_a << area().cols();
@@ -87,10 +89,33 @@ LineObject::put_line() {
 		 _l.str()+",taking:"+
 		 _l.str());
 #endif // NDEBUG
-	if (mymvwaddstr(curses_window(),
-			0,0,
-			__linetext.c_str())==ERR)
-	    throw AddStrFailed();
+	int hpos=0;
+	switch (__alignment) {
+	case LEFT:
+	    // Nothing to do, since hpos is == 0
+	    assert(hpos==0);
+	    break;
+	case CENTER:
+	    assert(static_cast<std::string::size_type>(area().cols())>=__linetext.length());
+	    hpos=(area().cols()-__linetext.length())/2;
+	    break;
+	case RIGHT:
+	    assert(static_cast<std::string::size_type>(area().cols())>=__linetext.length());
+	    hpos=area().cols()-__linetext.length();
+	    break;
+	}
+
+	// We don't check the return code, since we max out the space
+	// when doing right alignment.
+	//
+	//	if (mymvwaddstr(curses_window(),
+	//		hpos,0,
+	//		__linetext.c_str())==ERR)
+	//  throw AddStrFailed();
+
+	(void)mymvwaddstr(curses_window(),
+			 0,hpos,
+			  __linetext.c_str());
     }
     DEBUGOUT(*this);
     DEBUGOUT("-- OUT: LineObject::put_line()");
@@ -100,7 +125,7 @@ LineObject::put_line() {
 // Public
 //
 LineObject::LineObject(POSITION _pos, const std::string& _t):
-    WindowBase(), __linetext(_t), __position(_pos) {
+    WindowBase(), __linetext(_t), __position(_pos), __alignment(LEFT) {
     // We don't have to connect to EVT_REFRESH and EVT_RESIZE, since
     // that has already been done by BaseWindow. We simply have to
     // override the handler functions.
@@ -109,10 +134,11 @@ LineObject::LineObject(POSITION _pos, const std::string& _t):
 LineObject::~LineObject() {
 }
 
-LineObject::LineObject(const LineObject& lo): 
+LineObject::LineObject(const LineObject& lo):
     WindowBase(lo),
     __linetext(lo.__linetext),
-    __position(lo.__position) 
+    __position(lo.__position),
+    __alignment(lo.__alignment)
 {
 }
 
@@ -122,6 +148,7 @@ LineObject::operator=(const LineObject& lo) {
 
     __linetext = lo.__linetext;
     __position = lo.__position;
+    __alignment = lo.__alignment;
 
     return *this;
 }
@@ -134,6 +161,19 @@ LineObject::line(const std::string& _str) {
     // refresh can happen, for instance, it cannot happen if the
     // object is not realized.
     refresh(true);
+}
+
+void
+LineObject::alignment(ALIGNMENT _a) {
+    __alignment=_a;
+
+    if (realization()==REALIZED)
+	refresh(true);
+}
+
+LineObject::ALIGNMENT
+LineObject::alignment() const {
+    return __alignment;
 }
 
 std::string
@@ -149,7 +189,7 @@ LineObject::realize() {
 
     compute_margin();
     WindowBase::realize();
-    
+
     DEBUGOUT("-- OUT: LineObject::realize()");
     REALIZE_LEAVE;
 }

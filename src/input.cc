@@ -17,13 +17,13 @@
 //
 // Protected
 //
-int
+void
 Input::key_handler(Event& _e) {
     assert(_e.type()==EVT_KEY);
 
-    if (!__focus) return 0;
+    if (!__focus) return;
 
-    EventKey& ekey=dynamic_cast<EventKey&>(_e);
+    EventEx<int>& ekey=dynamic_cast<EventEx<int>&>(_e);
 
     assert(__offset+__curs_pos<=__buffer.length());
 
@@ -153,8 +153,6 @@ Input::key_handler(Event& _e) {
     }
 
     refresh(true);
-
-    return 0;
 }
 
 

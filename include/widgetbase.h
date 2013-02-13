@@ -163,8 +163,21 @@ class WidgetBase: public Realizeable {
 	 * - size available (i.e. Size::zero())
 	 */
 	WidgetBase();
+
 	virtual ~WidgetBase();
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param _w reference to WidgetBase object.
+	 */
 	WidgetBase(const WidgetBase& _w);
+
+	/**
+	 * Assignment operator.
+	 *
+	 * @param w refernce to WidgetBase object.
+	 */
 	WidgetBase& operator=(const WidgetBase& w);
 
 	/**
@@ -312,6 +325,9 @@ class WidgetBase: public Realizeable {
 	 *
 	 * If a Widget is not capable of focusing, it must throw an
 	 * CannotFocus exception when trying to set the focus.
+	 *
+	 * @param _f @c true if the Widget has focus, @c false
+	 * otherwise.
 	 */
 	virtual void focus(bool _f) = 0;
 

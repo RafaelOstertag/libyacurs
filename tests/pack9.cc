@@ -39,7 +39,7 @@ Label* label14;
 Label* label15;
 Label* label16;
 
-int alrm(Event& _e) {
+void alrm(Event& _e) {
     static int i=0;
 
     assert(_e == EVT_SIGALRM);
@@ -124,7 +124,6 @@ int alrm(Event& _e) {
 	EventQueue::submit(Event(EVT_QUIT));
 	break;
     }
-    return 0;
 }
 
 int main() {

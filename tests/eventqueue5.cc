@@ -24,44 +24,42 @@ class Handler {
 	EVENT_TYPE expected_evt;
 	int calls;
     public:
-	inline Handler(EVENT_TYPE evt):
+	Handler(EVENT_TYPE evt):
 	    expected_evt(evt), calls(0) {}
-	inline Handler(const Handler& _h) {
+	Handler(const Handler& _h) {
 	    expected_evt = _h.expected_evt;
 	    calls = _h.calls;
 	}
-	inline virtual ~Handler() {}
-	inline virtual int handler(Event& e) {
+	virtual ~Handler() {}
+	virtual void handler(Event& e) {
 	    if (e.type() != expected_evt) std::abort();
 	    calls++;
-	    return 0;
 	}
-	inline int getCalls() { return calls; }
+	int getCalls() { return calls; }
 };
 
 class AlrmHandler: public Handler {
     public:
-	inline AlrmHandler(): Handler(EVT_SIGALRM) {}
-	inline int handler(Event& e) {
+	AlrmHandler(): Handler(EVT_SIGALRM) {}
+	void handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "AlrmHandler::handler()\r" << std::endl;
 	    if (getCalls() < 4) {
 		alarm(1);
-		return 0;
+		return;
 	    }
 	    std::cout << "QUIT" << std::endl;
 	    EventQueue::submit(Event(EVT_QUIT));
-	    return 0;
 	}
 };
 
 class AlrmHandler2: public AlrmHandler {
     public:
-	inline AlrmHandler2(): AlrmHandler() {}
-	inline int handler(Event& e) {
+	AlrmHandler2(): AlrmHandler() {}
+	void handler(Event& e) {
 	    EventQueue::disconnect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGALRM, this, &AlrmHandler2::handler));
 	    std::cout << "AlrmHandler2::handler()\r" << std::endl;
-	    return Handler::handler(e);
+	    Handler::handler(e);
 	}
 };
 

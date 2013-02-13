@@ -87,7 +87,7 @@ class FocusManager {
 	/**
 	 * Handles EVT_FOCUS_NEXT and EVT_FOCUS_PREVIOUS.
 	 */
-	static int focus_change_handler(Event& _e);
+	static void focus_change_handler(Event& _e);
 
     public:
 	/**

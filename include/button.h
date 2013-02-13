@@ -15,14 +15,27 @@
 /**
  * A button that can be pressed.
  *
- * Derived classes must implement on_press().
+ * Upon press, a button emits @c EVT_BUTTON_PRESS. All Event
+ * Connectors will receive that event. The can distinguish between
+ * different buttons by comparing EventEx<Button*>::data() to the
+ * address of the Button they're interested in.
  */
 class Button: public Label {
     private:
+	/**
+	 * Indicates whether or not Button has focus.
+	 */
 	bool __focus;
 
     protected:
-	virtual int key_handler(Event& _e);
+	/**
+	 * Key Handler.
+	 *
+	 * Handles @c EVT_KEY events.
+	 *
+	 * @param _e EventEx<int>.
+	 */
+	virtual void key_handler(Event& _e);
 
 	// From Realizeable
 	virtual void realize();
@@ -30,12 +43,41 @@ class Button: public Label {
 
 
     public:
+	/**
+	 * Constructor.
+	 *
+	 * @param _b label
+	 */
 	Button(const std::string& _b);
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param _b reference to Button object.
+	 */
 	Button(const Button& _b);
+
 	virtual ~Button();
+
+	/**
+	 * Assignment operator.
+	 *
+	 * @param _b reference to Button object.
+	 */
 	Button& operator=(const Button& _b);
 
+	/**
+	 * Set label.
+	 *
+	 * @param _l label
+	 */
 	void label(const std::string& _l);
+
+	/**
+	 * Get label.
+	 *
+	 * @return label of Button.
+	 */
 	std::string label() const;
 
 	// From WidgetBase

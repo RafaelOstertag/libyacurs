@@ -15,6 +15,11 @@
 
 #include "lineobject.h"
 
+/**
+ * Status Line.
+ *
+ * Maintains a stack of messages, where the top most message will be displayed.
+ */
 class StatusLine: public LineObject {
     private:
 	std::stack<std::string> __messages;

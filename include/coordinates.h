@@ -26,7 +26,22 @@ class Coordinates {
 	int __x;
 
     public:
+	/**
+	 * Constructor.
+	 *
+	 * When no arguments are provided, it initializes the object
+	 * to zero, i.e. x=0, y=0.
+	 *
+	 * @param _x x-component
+	 * @param _y y-component
+	 */
 	Coordinates(int _x=0, int _y=0);
+
+	/**
+	 * Copy Constructor.
+	 *
+	 * @param _c reference to Coordinates object.
+	 */
 	Coordinates(const Coordinates& _c);
 
 	/**
@@ -137,6 +152,11 @@ class Coordinates {
 	 */
 	static const Coordinates& zero();
 
+	/**
+	 * Convert to std::string.
+	 *
+	 * Convert the object to a std::string. Used for debugging.
+	 */
 	operator std::string() const;
 };
 

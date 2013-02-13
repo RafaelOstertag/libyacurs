@@ -73,9 +73,9 @@ WindowBase::unrealize() {
     UNREALIZE_LEAVE;
 }
 
-int
+void
 WindowBase::force_refresh_handler(Event& _e) {
-    if (realization()!=REALIZED) return 0;
+    if (realization()!=REALIZED) return;
 
     assert(_e == EVT_FORCEREFRESH);
     assert(__curses_window!=NULL);
@@ -83,22 +83,19 @@ WindowBase::force_refresh_handler(Event& _e) {
 
     if (clearok(*__curses_window, TRUE)==ERR)
 	throw ClearOKFailed();
-    return 0;
 }
 
-int
+void
 WindowBase::refresh_handler(Event& _e) {
     assert(_e == EVT_REFRESH);
     refresh(false);
-    return 0;
 }
 
-int
+void
 WindowBase::resize_handler(Event& _e) {
     assert(_e == EVT_SIGWINCH);
-    EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
+    EventEx<Size>& winch = dynamic_cast<EventEx<Size>&>(_e);
     resize(Area(Coordinates(0,0),winch.data()));
-    return 0;
 }
 
 //
@@ -210,7 +207,7 @@ WindowBase::show() {
 
     realize();
     refresh(true);
-    EventQueue::submit(EventWindowShow(this));
+    EventQueue::submit(EventEx<WindowBase*>(EVT_WINDOW_SHOW,this));
 }
 
 void
@@ -223,7 +220,7 @@ WindowBase::close() {
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
 
-    EventQueue::submit(EventWindowClose(this));
+    EventQueue::submit(EventEx<WindowBase*>(EVT_WINDOW_CLOSE,this));
 
     // We might have obstructed another window, so make sure it
     // receives a refresh.

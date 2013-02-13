@@ -93,7 +93,7 @@ class Input: public Widget {
 	Size __size;
 
     protected:
-	virtual int key_handler(Event& _e);
+	virtual void key_handler(Event& _e);
 
 	// From Realizeable
 	void realize();

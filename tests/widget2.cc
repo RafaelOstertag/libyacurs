@@ -23,7 +23,7 @@ Label* label2;
 Input* input1;
 Input* input2;
 
-int alrm(Event& _e) {
+void alrm(Event& _e) {
     static int i=0;
 
     assert(_e == EVT_SIGALRM);
@@ -52,7 +52,6 @@ int alrm(Event& _e) {
     }
 
     alarm(1);
-    return 0;
 }
 
 int main() {

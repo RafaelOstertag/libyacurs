@@ -15,9 +15,9 @@
 //
 // Protected
 //
-int
+void
 Widget::force_refresh_handler(Event& _e) {
-    if (realization()!=REALIZED) return 0;
+    if (realization()!=REALIZED) return;
 
     assert(_e == EVT_FORCEREFRESH);
     assert(__widget_subwin!=NULL);
@@ -25,8 +25,6 @@ Widget::force_refresh_handler(Event& _e) {
 
     if (clearok(*__widget_subwin, TRUE)==ERR)
 	throw ClearOKFailed();
-
-    return 0;
 }
 
 void

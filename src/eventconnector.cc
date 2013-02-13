@@ -118,13 +118,13 @@ EventConnectorFunction1::operator=(const EventConnectorFunction1& _ec) {
     return *this;
 }
 
-int
+void
 EventConnectorFunction1::call(Event& _e) const {
     assert(__func != NULL);
 
-    if (suspended()) return -1;
+    if (suspended()) return;
 
-    return __func(_e);
+    __func(_e);
 }
 
 EventConnectorBase*

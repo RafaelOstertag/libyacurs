@@ -24,33 +24,31 @@ class Handler {
 	EVENT_TYPE expected_evt;
 	int calls;
     public:
-	inline Handler(EVENT_TYPE expected):
+	Handler(EVENT_TYPE expected):
 	    expected_evt(expected), calls(0) {}
-	inline virtual int handler(Event& e) {
+	virtual void handler(Event& e) {
 	    if (e.type() != expected_evt) std::abort();
 	    calls++;
-	    return 0;
 	}
-	inline int getCalls() { return calls; }
+	int getCalls() { return calls; }
 };
 
 class WinChHandler: public Handler {
     public:
 	inline WinChHandler(): Handler(EVT_SIGWINCH) {}
-	inline int handler(Event& e) {
+	void handler(Event& e) {
 	    Handler::handler(e);
-	    Size tmp(dynamic_cast<EventWinCh&>(e).data());
+	    Size tmp(dynamic_cast<EventEx<Size>&>(e).data());
 	    std::cout << "WinChHandler\r" << std::endl;
-	    return 0;
 	}
 };
 
 class AlrmHandler: public Handler {
     public:
 	inline AlrmHandler(): Handler(EVT_SIGALRM) {}
-	inline int handler(Event& e) { 
+	void handler(Event& e) { 
 	    std::cout << "WinChHandler\r" << std::endl;
-	    return Handler::handler(e); 
+	    Handler::handler(e); 
 	}
 };
 
@@ -62,7 +60,7 @@ int main() {
 	EventQueue::connect_event(EventConnectorMethod1<WinChHandler>(EVT_SIGWINCH, &whandler,&WinChHandler::handler) );
 	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler,&AlrmHandler::handler) );
 
-	EventQueue::submit(EventWinCh(Area ()));
+	EventQueue::submit(EventEx<Size>(EVT_SIGWINCH, Area ()));
 	EventQueue::submit(Event(EVT_SIGALRM));
 	EventQueue::submit(Event(EVT_QUIT));
 

@@ -35,7 +35,7 @@
 
 #include "yacurs.h"
 
-int alrm(Event& _e) {
+void alrm(Event& _e) {
     static int calls = 0;
     assert(_e == EVT_SIGALRM);
 
@@ -56,22 +56,20 @@ int alrm(Event& _e) {
 
     winsize ws;
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1) {
-	return -1;
+	return;
     }
 
     ws.ws_row--;
     ws.ws_col--;
 
     if (ioctl(STDIN_FILENO, TIOCSWINSZ, &ws) == -1) {
-	return -1;
+	return;
     }
 
     if (calls++ > 3)
 	EventQueue::submit(Event(EVT_QUIT));
     else
 	alarm(1);
-
-    return 0;
 }
 
 int main() {

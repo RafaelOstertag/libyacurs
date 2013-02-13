@@ -43,17 +43,16 @@ bool Curses::initialized = false;
 //
 // Protected
 //
-int
+void
 Curses::doupdate_handler(Event& e) {
     assert(e==EVT_DOUPDATE);
 
     if (doupdate() == ERR)
 	throw DoupdateFailed();
 
-    return 0;
 }
 
-int
+void
 Curses::termresetup_handler(Event& e) {
     assert(e==EVT_TERMRESETUP);
 #ifdef HAVE_RESIZE_TERM
@@ -64,7 +63,7 @@ Curses::termresetup_handler(Event& e) {
 
     // If minimum size is underrun, resizing stops.
     if (_tmp.rows()<MIN_ROWS || _tmp.cols()<MIN_COLS) 
-	return -1;
+	return;
 
     resize_term(_tmp.rows(), _tmp.cols());
 
@@ -74,8 +73,6 @@ Curses::termresetup_handler(Event& e) {
     if (wrefresh(stdscr) == ERR)
 	throw RefreshFailed();
 #endif // HAVE_RESIZE_TERM
-
-    return 0;
 }
 
 //

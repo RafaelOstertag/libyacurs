@@ -24,23 +24,22 @@ class Handler {
 	EVENT_TYPE expected_evt;
 	int calls;
     public:
-	inline Handler(EVENT_TYPE evt):
+	Handler(EVENT_TYPE evt):
 	    expected_evt(evt), calls(0) {}
-	inline Handler(const Handler& _h) {
+	Handler(const Handler& _h) {
 	    expected_evt = _h.expected_evt;
 	    calls = _h.calls;
 	}
-	inline virtual ~Handler() {}
-	inline virtual int handler(Event& e) {
+	virtual ~Handler() {}
+	virtual void handler(Event& e) {
 	    if (e.type() != expected_evt) {
 		std::cerr << "Unexpected event type" << std::endl;
 		std::abort();
 	    }
 	    calls++;
-	    return 0;
 	}
-	inline int getCalls() { return calls; }
-	inline void reset() { calls=0; };
+	int getCalls() { return calls; }
+	void reset() { calls=0; };
 };
 
 class MyHandler: public Handler {
@@ -48,18 +47,17 @@ class MyHandler: public Handler {
 	std::string _str;
 
     public:
-	inline MyHandler(): Handler(EVT_KEY), _str() {}
-	inline int handler(Event& e) {
+	MyHandler(): Handler(EVT_KEY), _str() {}
+	void handler(Event& e) {
 	    Handler::handler(e);
-	    if (typeid(e) != typeid(EventKey)) std::abort();
+	    if (typeid(e) != typeid(EventEx<int>)) std::abort();
 
-	    EventKey& tmp = dynamic_cast<EventKey&>(e);
+	    EventEx<int>& tmp = dynamic_cast<EventEx<int>&>(e);
 	    char c = static_cast<char>(tmp.data());
 	    _str.push_back(c);
 
 	    if (_str == "Hello, World!")
 	    	EventQueue::submit(Event(EVT_QUIT));
-	    return 0;
 	}
 };
 

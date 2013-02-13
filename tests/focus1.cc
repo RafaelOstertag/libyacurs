@@ -21,25 +21,25 @@ Button* b1;
 Button* b2;
 Button* b3;
 
-int button_press_handler(Event& _e) {
+void button_press_handler(Event& _e) {
     assert(_e==EVT_BUTTON_PRESS);
 
     EventEx<Button*>& ev=dynamic_cast<EventEx<Button*>&>(_e);
     if (ev.data() == b1) {
 	Curses::statusline()->push_msg(ifixed->input());
-	return 0;
+	return;
     }
 
     if (ev.data() == b2) {
 	Curses::statusline()->push_msg(idyn->input());
-	return 0;
+	return;
     }
 
     if (ev.data() == b3) {
 	EventQueue::submit(EVT_QUIT);
-	return 0;
+	return;
     }
-    return 1;
+    return;
 }
 
 int main() {

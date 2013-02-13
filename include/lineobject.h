@@ -24,14 +24,35 @@
  */
 class LineObject: public WindowBase {
     public:
+	/**
+	 * Vertical position.
+	 *
+	 * Specifies the vertical position of the LineObject.
+	 */
 	enum POSITION {
+	    /**
+	     * At the top of the screen.
+	     */
 	    POS_TOP,
+	    /**
+	     * At the bottom of the screen.
+	     */
 	    POS_BOTTOM
+	};
+
+	/**
+	 * Alignment of text.
+	 */
+	enum ALIGNMENT {
+	    CENTER,
+	    LEFT,
+	    RIGHT
 	};
 
     private:
 	std::string __linetext;
 	POSITION __position;
+	ALIGNMENT __alignment;
 
 	/**
 	 * Compute and sets the margin of WindowBase to achieve the
@@ -47,6 +68,9 @@ class LineObject: public WindowBase {
 	virtual ~LineObject();
 	LineObject(const LineObject& lo);
 	LineObject& operator=(const LineObject& lo);
+
+	void alignment(ALIGNMENT _a);
+	ALIGNMENT alignment() const;
 
 	void line(const std::string& _str);
 	std::string line() const;

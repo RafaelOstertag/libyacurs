@@ -181,7 +181,7 @@ FocusGroup::remove(WidgetBase* _w) {
     CountFocus cf=std::for_each(__widgets.begin(),
 				__widgets.end(),
 				CountFocus());
-    assert(cf.count()==1);
+    assert(cf.count()<2);
 #endif // NDEBUG
 }
 

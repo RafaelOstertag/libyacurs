@@ -19,7 +19,7 @@
 
 #include "yacurs.h"
 
-int alrm(Event& _e) {
+void alrm(Event& _e) {
     static int calls = 0;
     assert(_e == EVT_SIGALRM);
 
@@ -42,8 +42,6 @@ int alrm(Event& _e) {
 	EventQueue::submit(Event(EVT_QUIT));
     else
 	alarm(1);
-
-    return 0;
 }
 
 int main() {

@@ -24,26 +24,25 @@ class Handler {
 	EVENT_TYPE expected_evt;
 	int calls;
     public:
-	inline Handler(EVENT_TYPE evt):
+	Handler(EVENT_TYPE evt):
 	    expected_evt(evt), calls(0) {}
-	inline Handler(const Handler& _h) {
+	Handler(const Handler& _h) {
 	    expected_evt = _h.expected_evt;
 	    calls = _h.calls;
 	}
-	inline virtual ~Handler() {}
-	inline virtual int handler(Event& e) {
+	virtual ~Handler() {}
+	virtual void handler(Event& e) {
 	    if (e.type() != expected_evt) std::abort();
 	    calls++;
-	    return 0;
 	}
-	inline int getCalls() { return calls; }
-	inline void reset() { calls=0; };
+	int getCalls() { return calls; }
+	void reset() { calls=0; };
 };
 
 class AlrmHandler: public Handler {
     public:
-	inline AlrmHandler(): Handler(EVT_SIGALRM) {}
-	inline int handler(Event& e) {
+	AlrmHandler(): Handler(EVT_SIGALRM) {}
+	void handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "AlrmHandler2::handler()\r" << std::endl;
 	    // During processing of the queue, USR1 is blocked, so we cheat and unblock it
@@ -53,7 +52,6 @@ class AlrmHandler: public Handler {
 	    if (sigprocmask(SIG_UNBLOCK, &_sset, NULL))
 		abort();
 	    raise(SIGUSR1);
-	    return 0;
 	}
 };
 
@@ -61,8 +59,8 @@ class Usr1Handler: public Handler {
     private:
 	bool quit;
     public:
-	inline Usr1Handler(bool q=false): Handler(EVT_SIGUSR1), quit(q) {}
-	inline int handler(Event& e) {
+	Usr1Handler(bool q=false): Handler(EVT_SIGUSR1), quit(q) {}
+	void handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "Usr1Handler::handler()\r" << std::endl;
 	    if (quit)
@@ -77,19 +75,17 @@ class Usr1Handler: public Handler {
 		    abort();
 		raise(SIGUSR2);
 	    }
-	    return 0;
 	}
-	inline void setQuit(bool q) { quit=q; }
+	void setQuit(bool q) { quit=q; }
 };
 
 class Usr2Handler: public Handler {
     public:
-	inline Usr2Handler(): Handler(EVT_SIGUSR2) {}
-	inline int handler(Event& e) {
+	Usr2Handler(): Handler(EVT_SIGUSR2) {}
+	void handler(Event& e) {
 	    Handler::handler(e);
 	    std::cout << "Usr2Handler::handler()\r" << std::endl;
 	    EventQueue::submit(Event(EVT_QUIT));
-	    return 0;
 	}
 };
 

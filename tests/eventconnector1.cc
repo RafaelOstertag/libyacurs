@@ -24,58 +24,53 @@ class Handler {
 	EVENT_TYPE expected_evt;
 	int calls;
     public:
-	inline Handler(EVENT_TYPE evt):
+	Handler(EVENT_TYPE evt):
 	    expected_evt(evt), calls(0) {}
-	inline Handler(const Handler& _h) {
+	Handler(const Handler& _h) {
 	    expected_evt = _h.expected_evt;
 	    calls = _h.calls;
 	}
-	inline virtual ~Handler() {}
-	inline virtual int handler(Event& e) {
+	virtual ~Handler() {}
+	virtual void handler(Event& e) {
 	    if (e.type() != expected_evt) std::abort();
 	    calls++;
-	    return 0;
 	}
-	inline int getCalls() { return calls; }
+	int getCalls() { return calls; }
 };
 
 class WinChHandler: public Handler {
     public:
-	inline WinChHandler(): Handler(EVT_SIGWINCH) {}
-	inline int handler(Event& e) {
+	WinChHandler(): Handler(EVT_SIGWINCH) {}
+	void handler(Event& e) {
 	    Handler::handler(e);
-	    return 0;
 	}
 };
 
 class AlrmHandler: public Handler {
     public:
-	inline AlrmHandler(): Handler(EVT_SIGALRM) {}
-	inline int handler(Event& e) {
+	AlrmHandler(): Handler(EVT_SIGALRM) {}
+	void handler(Event& e) {
 	    Handler::handler(e);
-	    return 0;
 	}
 };
 
 class AlrmHandler2: public AlrmHandler {
     public:
-	inline AlrmHandler2(): AlrmHandler() {}
-	inline int handler(Event& e) {
+	AlrmHandler2(): AlrmHandler() {}
+	void handler(Event& e) {
 	    return Handler::handler(e);
 	}
 };
 
 class Static1 {
     public:
-	static int fcthandler1(Event&) {
-	    return 0;
+	static void fcthandler1(Event&) {
 	}
 };
 
 class Static2 {
     public:
-	static int fcthandler1(Event&) {
-	    return 0;
+	static void fcthandler1(Event&) {
 	}
 };
 

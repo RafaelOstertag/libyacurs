@@ -74,8 +74,9 @@ class Curses {
 	 *
 	 * @param e doupdate event.
 	 */
-	static int doupdate_handler(Event& e);
-	static int termresetup_handler(Event& e);
+	static void doupdate_handler(Event& e);
+
+	static void termresetup_handler(Event& e);
 
     public:
 	static void init();

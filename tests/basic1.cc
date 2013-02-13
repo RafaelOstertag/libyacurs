@@ -19,10 +19,34 @@
 
 #include "yacurs.h"
 
-int alrm(Event& _e) {
+LineObject* title=NULL;
+
+void alrm(Event& _e) {
+    static int counter=0;
+
     assert(_e == EVT_SIGALRM);
-    EventQueue::submit(Event(EVT_QUIT));
-    return 0;
+    assert(title != NULL);
+
+    switch (counter) {
+    case 0:
+	counter++;
+	title->alignment(LineObject::RIGHT);
+	alarm(1);
+	break;
+    case 1:
+	counter++;
+	title->alignment(LineObject::CENTER);
+	alarm(1);
+	break;
+    case 2:
+	counter++;
+	title->alignment(LineObject::LEFT);
+	alarm(1);
+	break;
+    default:
+	EventQueue::submit(Event(EVT_QUIT));
+	break;
+    }
 }
 
 int main() {
@@ -33,7 +57,7 @@ int main() {
     try {
 	Curses::init();
 
-	LineObject* title = new LineObject(LineObject::POS_TOP,
+	title = new LineObject(LineObject::POS_TOP,
 					   "Basic 1");
 	Curses::title(title);
 

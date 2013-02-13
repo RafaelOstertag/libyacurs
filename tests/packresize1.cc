@@ -35,7 +35,7 @@
 
 #include "yacurs.h"
 
-int alrm(Event& _e) {
+void alrm(Event& _e) {
     assert(_e == EVT_SIGALRM);
 
     std::string status_msg("Size: rows=");
@@ -55,14 +55,14 @@ int alrm(Event& _e) {
 
     winsize ws;
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1) {
-	return -1;
+	return;
     }
 
     ws.ws_row--;
     ws.ws_col-=4;
 
     if (ioctl(STDIN_FILENO, TIOCSWINSZ, &ws) == -1) {
-	return -1;
+	return;
     }
 
     if (ws.ws_row<=MIN_ROWS ||
@@ -70,8 +70,6 @@ int alrm(Event& _e) {
 	EventQueue::submit(Event(EVT_QUIT));
     else
 	alarm(1);
-
-    return 0;
 }
 
 int main() {

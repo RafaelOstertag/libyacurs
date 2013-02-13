@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
+#include <sstream>
 
 #include "yacurs.h"
 
@@ -20,14 +21,14 @@ class Win1: public Window {
 	VPack* vp1;
 
     protected:
-	int button_press_handler(Event& _e) {
+	void button_press_handler(Event& _e) {
 	    assert(_e==EVT_BUTTON_PRESS);
 	    EventEx<Button*>& e=dynamic_cast<EventEx<Button*>&>(_e);
 
 	    if (e.data()==close1) {
 		close();
 	    }
-	    return 0;
+	    return;
 	}
 
     public:
@@ -55,26 +56,101 @@ class Win1: public Window {
 	}
 };
 
+class ListBoxWin: public Window {
+    private:
+	VPack* vpack1;
+	HPack* hpack1;
+	ListBox* listbox;
+	Button* bclear;
+	Button* badd;
+	Button* bclose;
+
+    protected:
+	void button_press_handler(Event& _e) {
+	    assert(_e==EVT_BUTTON_PRESS);
+	    EventEx<Button*>& e=dynamic_cast<EventEx<Button*>&>(_e);
+
+	    if (e.data()==bclear) {
+		listbox->clear();
+		return;
+	    }
+
+	    if (e.data()==badd) {
+		for (int i=0; i<120; i++) {
+		    std::ostringstream n;
+		    n<<i;
+		    listbox->add("Long Name ListBox Item Number " + n.str());
+		}
+		return;
+	    }
+	    
+	    if (e.data()==bclose) {
+		close();
+	    }
+	    return;
+	}
+	
+    public:
+	ListBoxWin(): Window(Margin(3,2,3,2)) {
+	    frame(true);
+	    listbox=new ListBox;
+	    bclear=new Button("Clear");
+	    badd=new Button("Fill");
+	    bclose=new Button("Close");
+	    vpack1=new VPack;
+	    hpack1=new HPack;
+
+	    hpack1->add_back(bclear);
+	    hpack1->add_back(badd);
+	    hpack1->add_back(bclose);
+	    vpack1->add_back(listbox);
+	    vpack1->add_back(hpack1);
+	    
+	    widget(vpack1);
+
+	    EventQueue::connect_event(EventConnectorMethod1<ListBoxWin>(EVT_BUTTON_PRESS, this, &ListBoxWin::button_press_handler));
+	}
+
+	~ListBoxWin() {
+	    delete listbox;
+	    delete bclear;
+	    delete bclose;
+	    delete vpack1;
+	    delete hpack1;
+
+	    EventQueue::disconnect_event(EventConnectorMethod1<ListBoxWin>(EVT_BUTTON_PRESS, this, &ListBoxWin::button_press_handler));
+	}
+};
+
 class MainWindow: public Window {
     private:
 	HPack* hpack1;
 	Button* button1;
 	Button* button2;
-	Window* win1;
+	Button* button3;
+	Win1* win1;
+	ListBoxWin* lbwin;
 
+	
     protected:
-	int window_close_handler(Event& _e) {
+	void window_close_handler(Event& _e) {
 	    assert(_e==EVT_WINDOW_CLOSE);
-	    EventWindowClose& evt=dynamic_cast<EventWindowClose&>(_e);
+	    EventEx<WindowBase*>& evt=dynamic_cast<EventEx<WindowBase*>&>(_e);
+	    if (win1!=NULL && evt.data()==win1) {
+		Curses::statusline()->push_msg("Window 1 closed");
+		delete win1;
+		win1=NULL;
+		return;
+	    }
 
-	    if (evt.data()!=win1) return 0;
-	    Curses::statusline()->push_msg("Window 1 closed");
-	    delete win1;
-	    win1=NULL;
-	    return 0;
+	    if (lbwin!=NULL && evt.data()==lbwin) {
+		delete lbwin;
+		lbwin=NULL;
+		return;
+	    }
 	}
 
-	int button_press_handler(Event& _e) {
+	void button_press_handler(Event& _e) {
 	    assert(_e==EVT_BUTTON_PRESS);
 	    EventEx<Button*>& e=dynamic_cast<EventEx<Button*>&>(_e);
 
@@ -83,23 +159,31 @@ class MainWindow: public Window {
 
 		win1=new Win1;
 		win1->show();
-		return 0;
+		return;
+	    }
+
+	    if (e.data()==button3) {
+		assert(lbwin==NULL);
+
+		lbwin=new ListBoxWin;
+		lbwin->show();
+		return;
 	    }
 
 	    if (e.data()==button2) {
 		EventQueue::submit(EVT_QUIT);
-		return 0;
+		return;
 	    }
-
-	    return 0;
 	}
 
     public:
-	MainWindow(): Window(Margin(1,0,1,0)), win1(NULL) {
+	MainWindow(): Window(Margin(1,0,1,0)), win1(NULL), lbwin(NULL) {
 	    button1=new Button("New Window");
 	    button2=new Button("Quit");
+	    button3=new Button("List Box Win");
 	    hpack1=new HPack();
 	    hpack1->add_back(button1);
+	    hpack1->add_back(button3);
 	    hpack1->add_back(button2);
 	    widget(hpack1);
 
@@ -111,8 +195,12 @@ class MainWindow: public Window {
 	    if (win1)
 		delete win1;
 
+	    if (lbwin)
+		delete lbwin;
+
 	    delete button1;
 	    delete button2;
+	    delete button3;
 	    delete hpack1;
 
 	    EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));

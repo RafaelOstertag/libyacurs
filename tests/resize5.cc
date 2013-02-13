@@ -57,10 +57,10 @@ class MyWindow: public Window {
 
 };
 
-int key_handler(Event& _e) {
+void key_handler(Event& _e) {
     assert(_e == EVT_KEY);
  
-    EventKey& _ek = dynamic_cast<EventKey&>(_e);
+    EventEx<int>& _ek = dynamic_cast<EventEx<int>&>(_e);
 
     switch (_ek.data()) {
     case 'q':
@@ -70,7 +70,6 @@ int key_handler(Event& _e) {
     default:
 	break;
     }
-    return 0;
 }
 
 int main() {

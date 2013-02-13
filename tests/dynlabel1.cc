@@ -36,10 +36,10 @@
 #include "yacurs.h"
 
 #ifdef INTERACTIVE
-int key_handler(Event& _e) {
+void key_handler(Event& _e) {
     assert(_e == EVT_KEY);
  
-    EventKey& _ek = dynamic_cast<EventKey&>(_e);
+    EventEx<int>& _ek = dynamic_cast<EventEx<int>&>(_e);
 
     switch (_ek.data()) {
     case 'q':
@@ -49,12 +49,11 @@ int key_handler(Event& _e) {
     default:
 	break;
     }
-    return 0;
 }
 
 #else // INTERACTIVE
 
-int alrm(Event& _e) {
+void alrm(Event& _e) {
     assert(_e == EVT_SIGALRM);
 
     std::string status_msg("Size: rows=");
@@ -74,14 +73,14 @@ int alrm(Event& _e) {
 
     winsize ws;
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1) {
-	return -1;
+	return;
     }
 
     ws.ws_row--;
     ws.ws_col-=5;
 
     if (ioctl(STDIN_FILENO, TIOCSWINSZ, &ws) == -1) {
-	return -1;
+	return;
     }
 
     if (ws.ws_row<=MIN_ROWS ||
@@ -89,8 +88,6 @@ int alrm(Event& _e) {
 	EventQueue::submit(Event(EVT_QUIT));
     else
 	alarm(1);
-
-    return 0;
 }
 #endif // INTERACTIVE
 

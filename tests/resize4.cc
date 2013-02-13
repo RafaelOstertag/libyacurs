@@ -35,10 +35,10 @@
 
 class MyWindow: public Window {
     protected:
-	int resize_handler(Event& _e) {
+	void resize_handler(Event& _e) {
 	    Window::resize_handler(_e);
 
-	    EventWinCh& winch = dynamic_cast<EventWinCh&>(_e);
+	    EventEx<Size>& winch = dynamic_cast<EventEx<Size>&>(_e);
 	    std::string status_msg("Size: rows=");
 	    
 	    char buff[32];
@@ -51,7 +51,6 @@ class MyWindow: public Window {
 	    status_msg+=buff;
 	    
 	    Curses::statusline()->push_msg(status_msg);
-	    return 0;
 	};
 
     public:
@@ -62,10 +61,10 @@ class MyWindow: public Window {
 
 };
 
-int key_handler(Event& _e) {
+void key_handler(Event& _e) {
     assert(_e == EVT_KEY);
  
-    EventKey& _ek = dynamic_cast<EventKey&>(_e);
+    EventEx<int>& _ek = dynamic_cast<EventEx<int>&>(_e);
 
     switch (_ek.data()) {
     case 'q':
@@ -75,7 +74,6 @@ int key_handler(Event& _e) {
     default:
 	break;
     }
-    return 0;
 }
 
 int main() {

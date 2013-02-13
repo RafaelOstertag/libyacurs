@@ -24,46 +24,45 @@ class Handler {
 	EVENT_TYPE expected_evt;
 	int calls;
     public:
-	inline Handler(EVENT_TYPE expected):
+	Handler(EVENT_TYPE expected):
 	    expected_evt(expected), calls(0) {}
-	inline virtual int handler(Event& e) {
+	virtual void handler(Event& e) {
 	    if (e.type() != expected_evt) std::abort();
 	    calls++;
-	    return 0;
 	}
-	inline int getCalls() { return calls; }
+	int getCalls() { return calls; }
 };
 
 class AlrmHandler: public Handler {
     public:
-	inline AlrmHandler(): Handler(EVT_SIGALRM) {}
-	inline int handler(Event& e) {
+	AlrmHandler(): Handler(EVT_SIGALRM) {}
+	void handler(Event& e) {
 	    std::cout << "AlrmHandler::handler()\r" << std::endl;
 	    EventQueue::submit(Event(EVT_QUIT));
-	    return Handler::handler(e);
+	    Handler::handler(e);
 	}
 };
 
 class SelfRegister : public Handler {
     public:
-	inline SelfRegister(): Handler(EVT_SIGALRM) {
+	SelfRegister(): Handler(EVT_SIGALRM) {
 	    EventQueue::connect_event(EventConnectorMethod1<SelfRegister>(EVT_SIGALRM, this ,&SelfRegister::handler) );
 	}
-	inline int handler(Event& e) {
+	void handler(Event& e) {
 	    std::cout << "SelfRegister::handler()\r" << std::endl;
-	    return Handler::handler(e);
+	    Handler::handler(e);
 	}
 };
 
 class SelfRegister2 : public SelfRegister {
     public:
-	inline SelfRegister2(): SelfRegister() {
+	SelfRegister2(): SelfRegister() {
 	    EventQueue::connect_event(EventConnectorMethod1<SelfRegister2>(EVT_SIGALRM, this ,&SelfRegister2::handler) );
 	}
-	inline int handler(Event& e) {
+	void handler(Event& e) {
 	    EventQueue::submit(Event(EVT_QUIT));
 	    std::cout << "SelfRegister2::handler()\r" << std::endl;
-	    return SelfRegister::handler(e);
+	    SelfRegister::handler(e);
 	}
 };
 

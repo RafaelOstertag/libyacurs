@@ -61,8 +61,9 @@ class EventConnectorBase {
     private:
 	/// The event type the handler is connected to.
 	EVENT_TYPE evt;
+
 	/**
-	 * indication whether (\c true) or not (\c false) the event
+	 * indication whether (@c true) or not (@c false) the event
 	 * handler is suspended. Suspended event handler won't be
 	 * called.
 	 */
@@ -73,21 +74,25 @@ class EventConnectorBase {
 	 * The value returned by id() together with the event type has
 	 * to uniquely identifiy the event connector
 	 *
-	 * @return value of type \c uintptr_t uniquely identifying the
+	 * @return value of type @c uintptr_t uniquely identifying the
 	 * handler.
 	 */
 	virtual uintptr_t id() const = 0;
 
     public:
 	/**
+	 * Constructor.
+	 *
 	 * @param _e the event type
 	 * @param _s whether or not the handler is suspended.
 	 */
 	EventConnectorBase(EVENT_TYPE _e, bool _s = false);
+
 	EventConnectorBase(const EventConnectorBase& _ec);
 	virtual ~EventConnectorBase();
 
 	EventConnectorBase& operator=(const EventConnectorBase& _ec);
+
 	/**
 	 * Tests two event connector for equality. It tests for
 	 * equality by comparing the event type of both connectors and
@@ -112,11 +117,13 @@ class EventConnectorBase {
 	 *  EventConnectorBase(&d,&derived::handler) == EventConnectorBase(bptr, &base::handler);
 	 * </pre>
 	 *
-	 * @return \c true if evt and id() are equal, \c false
+	 * @return @c true if evt and id() are equal, @c false
 	 * otherwise.
 	 */
 	bool operator==(const EventConnectorBase& _ec) const;
+
 	bool operator!=(const EventConnectorBase& _ec) const;
+
 	/**
 	 * Compare the event type.
 	 *
@@ -124,11 +131,13 @@ class EventConnectorBase {
 	 *
 	 * @param _eb reference to an Event object.
 	 *
-	 * @return \c true if the value of evt and _eb.type() are
-	 * equal, \c false otherwise.
+	 * @return @c true if the value of evt and _eb.type() are
+	 * equal, @c false otherwise.
 	 */
 	bool operator==(const Event& _eb) const;
+
 	bool operator!=(const Event& _eb) const;
+
 	/**
 	 * Compare the event type.
 	 *
@@ -136,11 +145,13 @@ class EventConnectorBase {
 	 *
 	 * @param _et event type
 	 *
-	 * @return \c true if _evt and \c _et are equal, \c false
+	 * @return @c true if _evt and @c _et are equal, @c false
 	 * otherwise.
 	 */
 	bool operator==(EVENT_TYPE _et) const;
+
 	bool operator!=(EVENT_TYPE _et) const;
+
 	/**
 	 * Returns the event the handler is connected to.
 	 *
@@ -151,8 +162,8 @@ class EventConnectorBase {
 	/**
 	 * Set the suspended state to the given value.
 	 *
-	 * @param _s boolean value indicating whether (\c true) or not
-	 * (\c false) the event handler is called upon the occurrence
+	 * @param _s boolean value indicating whether (@c true) or not
+	 * (@c false) the event handler is called upon the occurrence
 	 * of the event.
 	 */
 	void suspended(bool _s);
@@ -160,7 +171,8 @@ class EventConnectorBase {
 	/**
 	 * Query the suspended state.
 	 *
-	 * @return @c true if event connector is suspended, @c false otherwise.
+	 * @return @c true if event connector is suspended, @c false
+	 * otherwise.
 	 */
 	bool suspended() const;
 
@@ -171,7 +183,8 @@ class EventConnectorBase {
 	 *
 	 * @return the value returned by the handler.
 	 */
-	virtual int call(Event& _e) const = 0;
+	virtual void call(Event& _e) const = 0;
+
 	/**
 	 * The EventQueue creates a local copy of the EventConnector
 	 * object. This method has to return a copy of the object. The
@@ -196,7 +209,7 @@ class EventConnectorBase {
 template<class T /* Type of object called */>
 class EventConnectorMethod1: public EventConnectorBase {
     public:
-	typedef int (T::*__mem_fun_t)(Event&);
+	typedef void (T::*__mem_fun_t)(Event&);
 	typedef T* _obj_ptr_t;
     private:
 	/// Holds the pointer to the member function of a class of
@@ -251,6 +264,7 @@ class EventConnectorMethod1: public EventConnectorBase {
 	    assert(__func != NULL);
 	    assert(__obj_ptr != NULL);
 	}
+
 	EventConnectorMethod1(const EventConnectorMethod1<T>& _ec): EventConnectorBase(_ec),
 								    __func(_ec.__func),
 								    __obj_ptr(_ec.__obj_ptr) {
@@ -278,12 +292,12 @@ class EventConnectorMethod1: public EventConnectorBase {
 	 * @return the value returned by the member function called,
 	 * or -1 if the connector is suspended
 	 */
-	int call(Event& _e) const {
+	void call(Event& _e) const {
 	    assert(__obj_ptr != NULL);
 	    assert(__func != NULL);
 
-	    if (suspended()) return -1;
-	    return (__obj_ptr->*__func)(_e);
+	    if (suspended()) return;
+	    (__obj_ptr->*__func)(_e);
 	}
 
 	/**
@@ -314,7 +328,8 @@ class EventConnectorFunction1: public EventConnectorBase {
     public:
 	/// Type of the function pointer that will be called upon an
 	/// event.
-	typedef int (*fptr_t)(Event&);
+	typedef void (*fptr_t)(Event&);
+
     private:
 	/// Holds the pointer to the function to be called.
 	fptr_t __func;
@@ -338,8 +353,10 @@ class EventConnectorFunction1: public EventConnectorBase {
 	 * @param _func the pointer to the function.
 	 */
 	EventConnectorFunction1(EVENT_TYPE _e, fptr_t _func);
+
 	EventConnectorFunction1(const EventConnectorFunction1& _ec);
 	EventConnectorFunction1& operator=(const EventConnectorFunction1& _ec);
+
 	/**
 	 * The EventQueue calls this function and passes a reference
 	 * to the event to it.
@@ -349,7 +366,8 @@ class EventConnectorFunction1: public EventConnectorBase {
 	 * @return the value returned by the function called,
 	 * or -1 if the connector is suspended
 	 */
-	int call(Event& _e) const;
+	void call(Event& _e) const;
+
 	/**
 	 * Creates a copy of this object. The caller is responsible
 	 * for freeing the memory.

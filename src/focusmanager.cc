@@ -12,9 +12,9 @@ std::vector<FocusGroup*> FocusManager::__focus_groups;
 //
 // Private
 //
-int
+void
 FocusManager::focus_change_handler(Event& _e) {
-    if (__focus_groups.empty()) return 0;
+    if (__focus_groups.empty()) return;
     assert(__active_focusgroup<__focus_groups.size());
     assert(__focus_groups[__active_focusgroup]!=NULL);
     assert(__focus_groups[__active_focusgroup]->active());
@@ -29,8 +29,6 @@ FocusManager::focus_change_handler(Event& _e) {
     default:
 	throw UnexpectedEvent();
     };
-
-    return 0;
 }
 
 //

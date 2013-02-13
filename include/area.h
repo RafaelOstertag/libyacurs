@@ -18,6 +18,8 @@
 class Area: public Coordinates, public Size {
     public:
 	/**
+	 * Constructor.
+	 *
 	 * @param _y value of y component
 	 *
 	 * @param _x value of x component
@@ -69,7 +71,7 @@ class Area: public Coordinates, public Size {
 	 * Assign Coordinates object.
 	 *
 	 * Only the Coordinates part of Area will be affected. The
-	 * Size part remains untouched.
+	 * Size component remains untouched.
 	 *
 	 * @param _c reference to Coordinates object.
 	 *
@@ -80,13 +82,48 @@ class Area: public Coordinates, public Size {
 	/**
 	 * Test two Area object for equality.
 	 *
-	 * Test two Area object for equality, i.e.
+	 * Test whether Size and Position are equal.
+	 *
+	 * @param _a right hand side.
+	 *
+	 * @return @c true if both objects are of identical
+	 * dimension. @c false otherwise.
 	 */
 	bool operator==(const Area& _a) const;
+
+	/**
+	 * Test two Area object for inequality.
+	 *
+	 * @param _a right hand side.
+	 *
+	 * @return @c true if objects are not equal, @c false
+	 * otherwise.
+	 */
 	bool operator!=(const Area& _a) const;
+
+	/**
+	 * Subtract Margin from Area.
+	 *
+	 * @param rhs right hand side of type Margin
+	 *
+	 * @return const reference to the result.
+	 */
 	const Area& operator-=(const Margin& rhs);
+
+	/**
+	 * Subtract Margin from Area.
+	 *
+	 * @param rhs right hand side of type Margin.
+	 *
+	 * @return result, i.e. Area-Margin.
+	 */
 	Area operator-(const Margin& rhs) const;
 
+	/**
+	 * Convert to std::string.
+	 *
+	 * Convert the object to a std::string. Used for debugging.
+	 */
 	operator std::string() const;
 };
 

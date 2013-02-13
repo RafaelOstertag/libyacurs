@@ -41,7 +41,7 @@ class Widget: public WidgetBase {
 	WINDOW** __widget_subwin;
 
     protected:
-	int force_refresh_handler(Event& _e);
+	void force_refresh_handler(Event& _e);
 
 	void unrealize();
 
@@ -49,8 +49,21 @@ class Widget: public WidgetBase {
 
     public:
 	Widget();
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param _w reference to Widget object.
+	 */
 	Widget(const Widget& _w);
+
 	virtual ~Widget();
+
+	/**
+	 * Assignment operator.
+	 *
+	 * @param _w reference to Widget object.
+	 */
 	Widget& operator=(const Widget& _w);
 
 	// Must be overriden in derived classes
@@ -68,6 +81,11 @@ class Widget: public WidgetBase {
 	 */
 	void realize();
 
+	/**
+	 * Convert to std::string.
+	 *
+	 * Convert the object to a std::string. Used for debugging.
+	 */
 	operator std::string() const;
 };
 

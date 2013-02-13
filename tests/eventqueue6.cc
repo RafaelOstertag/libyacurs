@@ -24,28 +24,27 @@ class Handler {
 	EVENT_TYPE expected_evt;
 	int calls;
     public:
-	inline Handler(EVENT_TYPE evt):
+	Handler(EVENT_TYPE evt):
 	    expected_evt(evt), calls(0) {}
-	inline Handler(const Handler& _h) {
+	Handler(const Handler& _h) {
 	    expected_evt = _h.expected_evt;
 	    calls = _h.calls;
 	}
-	inline virtual ~Handler() {}
-	inline virtual int handler(Event& e) {
+	virtual ~Handler() {}
+	virtual void handler(Event& e) {
 	    if (e.type() != expected_evt) std::abort();
 	    calls++;
-	    return 0;
 	}
-	inline int getCalls() { return calls; }
+	int getCalls() { return calls; }
 };
 
 class AlrmHandler: public Handler {
     public:
-	inline AlrmHandler(): Handler(EVT_SIGALRM) {}
-	inline int handler(Event& e) {
+	AlrmHandler(): Handler(EVT_SIGALRM) {}
+	void handler(Event& e) {
 	    std::cout << "AlrmHandler::handler()\r" << std::endl;
 	    EventQueue::submit(Event(EVT_QUIT));
-	    return Handler::handler(e);
+	    Handler::handler(e);
 	}
 };
 
@@ -54,21 +53,21 @@ class AlrmHandler2: public AlrmHandler {
 	int calls_handler2;
 	int calls_handler3;
     public:
-	inline AlrmHandler2(): AlrmHandler(), calls_handler2(0), calls_handler3(0) {}
-	inline int handler(Event& e) {
+	AlrmHandler2(): AlrmHandler(), calls_handler2(0), calls_handler3(0) {}
+	void handler(Event& e) {
 	    std::cout << "AlrmHandler2::handler()\r" << std::endl;
-	    return Handler::handler(e);
+	    Handler::handler(e);
 	}
-	inline int handler2(Event& e) {
+	void handler2(Event& e) {
 	    std::cout << "AlrmHandler2::handler2()\r" << std::endl;
-	    return ++calls_handler2;
+	    calls_handler2++;
 	}
-	inline int handler3(Event& e) {
+	void handler3(Event& e) {
 	    std::cout << "AlrmHandler2::handler3()\r" << std::endl;
-	    return ++calls_handler3;
+	    calls_handler3++;
 	}
-	inline int getCalls2() const {return calls_handler2;}
-	inline int getCalls3() const {return calls_handler3;}
+	int getCalls2() const {return calls_handler2;}
+	int getCalls3() const {return calls_handler3;}
 };
 
 int main() {
@@ -87,7 +86,7 @@ int main() {
 	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGWINCH, &ahandler2, &AlrmHandler2::handler3) );
 	
 	Curses::init();
-	EventQueue::submit(EventWinCh(Area() ));
+	EventQueue::submit(EventEx<Size>(EVT_SIGWINCH, Area() ));
 	alarm(4);
 	EventQueue::run();
 

@@ -120,12 +120,21 @@ Colors::set_color (WINDOW* w, COLORS c) {
     if (!__initialized)
 	throw ColorsNotInitialized();
 
-    if (has_colors() == TRUE)
+    if (has_colors() == TRUE) {
+#if NCURSES_VERSION_PATCH < 20100313
+        wattrset(w, COLOR_PAIR (__colors[c].no));
+#else
 	if (wattrset(w, COLOR_PAIR (__colors[c].no))==ERR)
 	    throw WAttrSetFailed();
-    else
+#endif
+    } else {
+#if NCURSES_VERSION_PATCH < 20100313
+        wattrset(w, __colors[c].attr);
+#else
 	if (wattrset(w, __colors[c].attr)==ERR)
 	    throw WAttrSetFailed();
+#endif
+    }
 }
 
 void

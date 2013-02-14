@@ -1,4 +1,4 @@
-// $Id: focus1.cc 4810 2013-02-04 18:32:50Z rafisol $
+// $Id$
 //
 // Test application
 #ifdef HAVE_CONFIG_H

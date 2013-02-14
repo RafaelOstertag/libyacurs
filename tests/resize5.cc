@@ -1,4 +1,4 @@
-// $Id: resize4.cc 4802 2013-02-03 14:42:46Z rafisol $
+// $Id$
 //
 // Test resizing with overlapping windows.
 #ifdef HAVE_CONFIG_H

@@ -32,6 +32,7 @@
 #include "button.h"
 #include "input.h"
 #include "listbox.h"
+#include "dialog.h"
 
 #endif // YACURS_H
 

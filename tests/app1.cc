@@ -60,7 +60,7 @@ class ListBoxWin: public Window {
     private:
 	VPack* vpack1;
 	HPack* hpack1;
-	ListBox* listbox;
+	ListBox<>* listbox;
 	Button* bclear;
 	Button* badd;
 	Button* bclose;
@@ -93,7 +93,7 @@ class ListBoxWin: public Window {
     public:
 	ListBoxWin(): Window(Margin(3,2,3,2)) {
 	    frame(true);
-	    listbox=new ListBox;
+	    listbox=new ListBox<>;
 	    bclear=new Button("Clear");
 	    badd=new Button("Fill");
 	    bclose=new Button("Close");

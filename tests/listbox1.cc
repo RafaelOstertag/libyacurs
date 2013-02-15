@@ -76,7 +76,7 @@ int main() {
 	Window* w1 = new Window(Margin(1,0,1,0));
 	w1->frame(true);
 
-	ListBox* lb1 = new ListBox;
+	ListBox<>* lb1 = new ListBox<>;
 	lb1->set(items);
 
 	w1->widget(lb1);

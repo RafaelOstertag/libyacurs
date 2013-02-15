@@ -41,17 +41,22 @@ class Dialog: public Window {
 
 	std::string __title;
 
+	// Not supported
+	Dialog(const Dialog&);
+	Dialog& operator=(const Dialog&);
     protected:
 	virtual void button_press_handler(Event& _e);
 
 	void unrealize();
+
     public:
 	Dialog(const std::string& _title, DIALOG_TYPE _dt=OKCANCEL);
-	Dialog(const Dialog& _dialog);
 	virtual ~Dialog();
-	Dialog& operator=(const Dialog& _dialog);
+
 
 	STATE dialog_state() const;
+
+	void widget(WidgetBase* _w);
 	
 	// Those are from Realizable
 	void refresh(bool immediate);

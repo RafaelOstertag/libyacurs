@@ -1,6 +1,7 @@
 // $Id$
 
 #include <cassert>
+#include <cstdlib>
 
 #include "dialog.h"
 
@@ -9,6 +10,15 @@
 //
 // Private
 //
+Dialog::Dialog(const Dialog&) {
+    abort();
+}
+
+Dialog&
+Dialog::operator=(const Dialog&) {
+    abort();
+    return *this;
+}
 
 //
 // Protected
@@ -84,18 +94,8 @@ Dialog::Dialog(const std::string& _title, DIALOG_TYPE _dt): Window(),
     }
 
     // from Window
-    widget(__vpack);
+    Window::widget(__vpack);
     frame(true);
-}
-
-Dialog::Dialog(const Dialog& _dialog): Window(_dialog),
-				       __vpack(_dialog.__vpack),
-				       __hpack(_dialog.__hpack),
-				       __bok(_dialog.__bok),
-				       __bcancel(_dialog.__bcancel),
-				       __dstate(_dialog.__dstate),
-				       __dialog_type(_dialog.__dialog_type) {
-    EventQueue::connect_event(EventConnectorMethod1<Dialog>(EVT_BUTTON_PRESS, this, &Dialog::button_press_handler));
 }
 
 Dialog::~Dialog() {
@@ -115,18 +115,10 @@ Dialog::~Dialog() {
     EventQueue::disconnect_event(EventConnectorMethod1<Dialog>(EVT_BUTTON_PRESS, this, &Dialog::button_press_handler));
 }
 
-Dialog&
-Dialog::operator=(const Dialog& _dialog) {
-    Window::operator=(_dialog);
-    
-    __vpack = _dialog.__vpack;
-    __hpack = _dialog.__hpack;
-    __bok = _dialog.__bok;
-    __bcancel = _dialog.__bcancel;
-    __dstate = _dialog.__dstate;
-    __dialog_type = _dialog.__dialog_type;
-
-    return *this;
+void
+Dialog::widget(WidgetBase* _w) {
+    assert(__vpack!=NULL);
+    __vpack->add_front(_w);
 }
 
 Dialog::STATE
@@ -151,7 +143,7 @@ Dialog::realize() {
     EventQueue::connect_event(EventConnectorMethod1<Dialog>(EVT_BUTTON_PRESS, this, &Dialog::button_press_handler));
 
     // Compute the margin. We try to vertically center the dialog.
-    int hinted_rows = widget()->size_hint().rows();
+    int hinted_rows = Window::widget()->size_hint().rows();
     if (hinted_rows>0 && hinted_rows<area().rows()-2) {
 	int vert_margin=(area().rows()-hinted_rows)/2-1;
 	margin(Margin(vert_margin, 2, vert_margin, 2));

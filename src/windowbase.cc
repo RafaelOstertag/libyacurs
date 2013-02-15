@@ -220,12 +220,17 @@ WindowBase::close() {
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
 
-    EventQueue::submit(EventEx<WindowBase*>(EVT_WINDOW_CLOSE,this));
-
     // We might have obstructed another window, so make sure it
     // receives a refresh.
     EventQueue::submit(EVT_REFRESH);
     EventQueue::submit(EVT_DOUPDATE);
+
+    // Change: earlier, it was submitted before
+    // EVT_REFRESH/EVT_DOUPDATE
+    //
+    // This caused problems with the focus manager, if a Label was
+    // updated in the EVT_WINDOW_CLOSE handler.
+    EventQueue::submit(EventEx<WindowBase*>(EVT_WINDOW_CLOSE,this));
 }
 
 

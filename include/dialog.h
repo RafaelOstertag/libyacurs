@@ -18,9 +18,16 @@
  */
 class Dialog: public Window {
     public:
-	enum DIALOG_STATE {
+	enum STATE {
 	    DIALOG_OK,
 	    DIALOG_CANCEL
+	};
+
+	enum DIALOG_TYPE {
+	    OK_ONLY,
+	    YES_ONLY,
+	    OKCANCEL,
+	    YESNO
 	};
 
     private:
@@ -28,8 +35,8 @@ class Dialog: public Window {
 	HPack* __hpack;
 	Button* __bok;
 	Button* __bcancel;
-	DIALOG_STATE __dstate;
-	bool __ok_only;
+	STATE __dstate;
+        DIALOG_TYPE __dialog_type;
 	
 
 	std::string __title;
@@ -39,10 +46,12 @@ class Dialog: public Window {
 
 	void unrealize();
     public:
-	Dialog(const std::string& _title, bool _ok_only=false);
+	Dialog(const std::string& _title, DIALOG_TYPE _dt=OKCANCEL);
 	Dialog(const Dialog& _dialog);
 	virtual ~Dialog();
 	Dialog& operator=(const Dialog& _dialog);
+
+	STATE dialog_state() const;
 	
 	// Those are from Realizable
 	void refresh(bool immediate);

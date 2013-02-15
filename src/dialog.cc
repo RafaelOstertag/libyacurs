@@ -50,25 +50,38 @@ Dialog::unrealize() {
 // Public
 //
 
-Dialog::Dialog(const std::string& _title, bool _ok_only): Window(),
+Dialog::Dialog(const std::string& _title, DIALOG_TYPE _dt): Window(),
 							 __vpack(NULL),
 							 __hpack(NULL),
 							 __bok(NULL),
 							 __bcancel(NULL),
 							 __dstate(DIALOG_CANCEL),
-							 __ok_only(_ok_only),
+							 __dialog_type(_dt),
 							 __title(_title) {
     __vpack=new VPack;
     __hpack=new HPack;
-    __bok=new Button("OK");
-    if (!__ok_only)
-	__bcancel=new Button("Cancel");
 
     __vpack->add_back(__hpack);
-    __hpack->add_back(__bok);
 
-    if (!__ok_only)
+    switch (__dialog_type) {
+    case OKCANCEL:
+	__bcancel=new Button("Cancel");
 	__hpack->add_back(__bcancel);
+    case OK_ONLY:
+	__bok=new Button("OK");
+	__hpack->add_back(__bok);
+	break;
+    case YESNO:
+	__bcancel=new Button("No");
+	__hpack->add_back(__bcancel);
+    case YES_ONLY:
+	__bok=new Button("Yes");
+	__hpack->add_back(__bok);
+	break;
+    default:
+	abort();
+	break;
+    }
 
     // from Window
     widget(__vpack);
@@ -81,7 +94,7 @@ Dialog::Dialog(const Dialog& _dialog): Window(_dialog),
 				       __bok(_dialog.__bok),
 				       __bcancel(_dialog.__bcancel),
 				       __dstate(_dialog.__dstate),
-				       __ok_only(_dialog.__ok_only) {
+				       __dialog_type(_dialog.__dialog_type) {
     EventQueue::connect_event(EventConnectorMethod1<Dialog>(EVT_BUTTON_PRESS, this, &Dialog::button_press_handler));
 }
 
@@ -94,7 +107,7 @@ Dialog::~Dialog() {
     delete __hpack;
     delete __bok;
 
-    if (__ok_only) {
+    if (__dialog_type) {
 	assert(__bcancel!=NULL);
 	delete __bcancel;
     }
@@ -111,9 +124,14 @@ Dialog::operator=(const Dialog& _dialog) {
     __bok = _dialog.__bok;
     __bcancel = _dialog.__bcancel;
     __dstate = _dialog.__dstate;
-    __ok_only = _dialog.__ok_only;
+    __dialog_type = _dialog.__dialog_type;
 
     return *this;
+}
+
+Dialog::STATE
+Dialog::dialog_state() const {
+    return __dstate;
 }
 
 void
@@ -132,7 +150,14 @@ Dialog::realize() {
 
     EventQueue::connect_event(EventConnectorMethod1<Dialog>(EVT_BUTTON_PRESS, this, &Dialog::button_press_handler));
 
+    // Compute the margin. We try to vertically center the dialog.
+    int hinted_rows = widget()->size_hint().rows();
+    if (hinted_rows>0 && hinted_rows<area().rows()-2) {
+	int vert_margin=(area().rows()-hinted_rows)/2-1;
+	margin(Margin(vert_margin, 2, vert_margin, 2));
+    }
+
     Window::realize();
+
     REALIZE_LEAVE;
 }
-

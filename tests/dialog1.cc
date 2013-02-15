@@ -15,6 +15,7 @@
 
 class MainWindow: public Window {
     private:
+	VPack* vpack1;
 	HPack* hpack1;
 	Button* button1;
 	Button* button2;
@@ -27,7 +28,13 @@ class MainWindow: public Window {
 	    assert(_e==EVT_WINDOW_CLOSE);
 	    EventEx<WindowBase*>& evt=dynamic_cast<EventEx<WindowBase*>&>(_e);
 	    if (dialog1!=NULL && evt.data()==dialog1) {
-		Curses::statusline()->push_msg("Window 1 closed");
+		Curses::statusline()->push_msg("Dialog 1 closed");
+
+		if (dialog1->dialog_state()==Dialog::DIALOG_OK)
+		    label1->label("DIALOG_OK");
+		else
+		    label1->label("DIALOG_CANCEL");
+
 		delete dialog1;
 		dialog1=NULL;
 	    }
@@ -40,6 +47,7 @@ class MainWindow: public Window {
 
 	    if (e.data()==button1) {
 		assert(dialog1==NULL);
+
 
 		dialog1=new Dialog("Test Dialog");
 		dialog1->show();
@@ -56,10 +64,14 @@ class MainWindow: public Window {
 	MainWindow(): Window(Margin(1,0,1,0)), dialog1(NULL) {
 	    button1=new Button("New Window");
 	    button2=new Button("Quit");
-	    hpack1=new HPack();
+	    vpack1=new VPack;
+	    hpack1=new HPack;
+	    label1=new Label("dialog state");
 	    hpack1->add_back(button1);
 	    hpack1->add_back(button2);
-	    widget(hpack1);
+	    vpack1->add_front(label1);
+	    vpack1->add_back(hpack1);
+	    widget(vpack1);
 
 	    EventQueue::connect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
 	    EventQueue::connect_event(EventConnectorMethod1<MainWindow>(EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
@@ -72,6 +84,8 @@ class MainWindow: public Window {
 	    delete button1;
 	    delete button2;
 	    delete hpack1;
+	    delete vpack1;
+	    delete label1;
 
 	    EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
 	    EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));

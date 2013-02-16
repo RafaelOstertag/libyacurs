@@ -11,7 +11,9 @@
 
 #include <string>
 #include <list>
+#include <functional>
 #include <cassert>
+#include <cstdlib>
 
 #include "widget.h"
 #include "eventqueue.h"
@@ -27,6 +29,21 @@
  */
 template<class _T=std::string>
 class ListBox: public Widget {
+    public:
+	enum SORT_ORDER {
+	    ASCENDING,
+	    DESCENDING,
+	    UNSORTED
+	};
+
+	static bool cmp_asc(typename const _T& a,
+			    typename const _T& b) {
+	    return a<b;
+	}
+	static bool cmp_dsc(typename const _T& a,
+			    typename const _T& b) {
+	    return a>b;
+	}
     private:
 	typename std::list<_T> __list;
 
@@ -52,14 +69,27 @@ class ListBox: public Widget {
 	 */
 	Size __size;
 
+	/**
+	 * Sort order of the list.
+	 *
+	 * Sort order maintained by the list.
+	 */
+	SORT_ORDER __sort_order;
+
+	// Not supported
+	ListBox<_T>& operator=(const ListBox<_T>&) {
+	    abort();
+	    return *this;
+	}
+
     protected:
 	virtual void key_handler(Event& _e) {
 	    assert(_e==EVT_KEY);
-	    
+
 	    if (!__focus) return;
-	    
+
 	    EventEx<int>& ekey=dynamic_cast<EventEx<int>&>(_e);
-	    
+
 	    switch (ekey.data()) {
 	    case KEY_ENTER:
 	    case KEY_RETURN:
@@ -77,29 +107,29 @@ class ListBox: public Widget {
 	    case 'j': // VIM key
 		if ((__offset+__curs_pos)>__list.size() ||
 		    __list.empty()) break;
-		
+
 		// We have to take the box into account, hence
 		// __size.rows()-3
-		if (__curs_pos<__cast_lt(__size.rows())-3 && 
+		if (__curs_pos<__cast_lt(__size.rows())-3 &&
 		    __curs_pos<__list.size()-1) {
 		    __curs_pos++;
 		} else {
 		    if (__offset+__curs_pos+1 < __list.size())
 			__offset++;
 		}
-		
+
 		break;
 	    case KEY_UP:
 	    case KEY_CTRL_P: // Emacs key
 	    case 'k': // VIM key
 		if ((__offset==0 && __curs_pos==0) ||
 		    __list.empty()) break;
-		
+
 		if (__curs_pos>0)
 		    __curs_pos--;
 		else
 		    __offset--;
-		
+
 		break;
 		// Solaris' X/Open Curses and System Curses do not
 		// support HOME key on PC keyboard, i.e. they tell me
@@ -114,7 +144,7 @@ class ListBox: public Widget {
 	    case KEY_END:
 	    case KEY_CTRL_E:
 		if (__list.empty()) break;
-		
+
 		if (__list.size()<=__cast_lt(__size.rows())-2) {
 		    __curs_pos=__list.size()-1;
 		} else {
@@ -125,57 +155,86 @@ class ListBox: public Widget {
 	    case KEY_NPAGE:
 		if (__list.size()<=__cast_lt(__size.rows())-2 ||
 		    __list.empty()) break;
-		
+
 		if (__cast_lt(__offset+__size.rows())-2<=__list.size()-__size.rows()+2)
 		    __offset+=__size.rows()-2;
 		else
 		    __offset=__list.size()-__size.rows()+2;
-		
+
 		break;
 	    case KEY_PPAGE:
 		if (__list.size()<=__cast_lt(__size.rows())-2 ||
 		    __list.empty()) break;
-		
+
 		if (__offset>__cast_lt(__size.rows())-2)
 		    __offset-=__size.rows()-2;
 		else
 		    __offset=0;
 		break;
+	    case 'o':
+	    case 'O':
+		// Change sort order
+		switch (__sort_order) {
+		case ASCENDING:
+		    __sort_order=DESCENDING;
+		    break;
+		case DESCENDING:
+		    __sort_order=ASCENDING;
+		    break;
+		case UNSORTED:
+		    __sort_order=ASCENDING;
+		    break;
+		}
+		sort();
+		break;
 	    }
-	    
+
 	    refresh(true);
 	}
-	
+
 	// From Realizeable
 	void realize() {
 	    REALIZE_ENTER;
-	    
-	    
+
+
 	    Widget::realize();
 
 	    EventQueue::connect_event(EventConnectorMethod1<ListBox>(EVT_KEY,this, &ListBox::key_handler));
-	    
+
 	    assert(focusgroup_id()!=(fgid_t)-1);
-	    
+
 	    FocusManager::focus_group_add(focusgroup_id(), this);
-	    
-	    
+
+
 	    REALIZE_LEAVE;
 	}
-	
+
 	void unrealize() {
 	    UNREALIZE_ENTER;
-	    
-	    
+
+
 	    EventQueue::disconnect_event(EventConnectorMethod1<ListBox>(EVT_KEY,this, &ListBox::key_handler));
-	    
+
 	    assert(focusgroup_id()!=(fgid_t)-1);
-	    
+
 	    FocusManager::focus_group_remove(focusgroup_id(), this);
-	    
+
 	    Widget::unrealize();
-	    
+
 	    UNREALIZE_LEAVE;
+	}
+
+	void sort() {
+	    switch (__sort_order) {
+	    case ASCENDING:
+		__list.sort(ListBox<_T>::cmp_asc);
+		break;
+	    case DESCENDING:
+		__list.sort(ListBox<_T>::cmp_dsc);
+		break;
+	    case UNSORTED:
+		break;
+	    }
 	}
 
     public:
@@ -186,77 +245,74 @@ class ListBox: public Widget {
 		   __focus(false),
 		   __offset(0),
 		   __curs_pos(0),
-		   __size(Size::zero()) {}
-	
-	ListBox(const ListBox<_T>& _lb): Widget(_lb),
-				     __list(_lb.__list),
-				     __focus(_lb.__focus),
-				     __offset(_lb.__offset),
-				     __curs_pos(_lb.__curs_pos),
-				     __size(_lb.__size) {}
+		   __size(Size::zero()),
+		   __sort_order(UNSORTED) {}
 
 	virtual ~ListBox() {
 	    EventQueue::disconnect_event(EventConnectorMethod1<ListBox>(EVT_KEY, this, &ListBox::key_handler));
-	}
-
-	ListBox<_T>& operator=(const ListBox<_T>& _i) {
-	    Widget::operator=(_i);
-	    
-	    __list = _i.__list;
-	    __focus = _i.__focus;
-	    __offset = _i.__offset;
-	    __curs_pos = _i.__curs_pos;
-	    __size = _i.__size;
-	    
-	    return *this;
 	}
 
 	/**
 	 */
 	virtual void add(const _T& _i) {
 	    __list.push_back(_i);
-	    __list.sort();
-	    
+
+	    sort();
+
 	    if (realization()==REALIZED)
 		refresh(true);
 	}
 
 	virtual void set(const std::list<_T>& _l) {
 	    __list=_l;
-	    __list.sort();
-	    
+
+	    sort();
+
 	    // Reset these. I don't see a proper way of maintaining
 	    // these when a completely new `data set' is set.
 	    __offset=0;
 	    __curs_pos=0;
-	    
+
 	    if (realization()==REALIZED)
 		refresh(true);
 	}
-	
+
 	virtual void clear()  {
 	    __list.clear();
 	    __offset=0;
 	    __curs_pos=0;
-	    
+
 	    if (realization()==REALIZED) {
 		if (wclear(widget_subwin())==ERR)
 		    throw ClearFailed();
-		
+
 		refresh(true);
 	    }
+	}
+
+	void sort_order(SORT_ORDER _sort_order) {
+	    __sort_order=_sort_order;
+
+	    sort();
+
+	    if (realization()==REALIZED)
+		refresh(true);
+	}
+
+	SORT_ORDER sort_order() const {
+	    return __sort_order;
 	}
 
 	virtual typename std::list<_T>::size_type selected() const {
 	    return __curs_pos + __offset;
 	}
-	
+
 	// From WidgetBase
-	
+
 	void size_available(const Size& _s) {
 	    WidgetBase::size_available(__size=_s);
 	}
-	
+
 	/**
 	 * Size the Input Widget requires.
 	 *
@@ -298,7 +354,7 @@ class ListBox: public Widget {
 
 	void focus(bool _f) {
 	    __focus=_f;
-	    
+
 	    if (realization()==REALIZED)
 		refresh(true);
 	}
@@ -306,7 +362,7 @@ class ListBox: public Widget {
 	bool focus() const {
 	    return __focus;
 	}
-	
+
 	// From Realizeable
 	/**
 	 * Refresh the Input.
@@ -316,42 +372,42 @@ class ListBox: public Widget {
 	 */
 	void refresh(bool immediate) {
 	    if (realization()!=REALIZED) return;
-	    
-	    
+
+
 	    assert(widget_subwin()!=NULL);
-	    
+
 	    std::list<std::string>::iterator it=__list.begin();
-	    
+
 	    // Make sure cursor position is not off the list, i.e. on
 	    // the border of the widget.
 	    __curs_pos=__curs_pos>__cast_lt(__size.rows())-3 ?
 		__size.rows()-3 :
 		__curs_pos;
-	    
+
 	    // Make sure the offset will not produce an out of bound,
 	    // for instance due to a screen resize.
 	    if (__cast_lt(__size.rows())-2>__list.size()||
 		__cast_lt(__size.rows()-2+__offset)>__list.size())
 		__offset=0; // we must not use an offset.
-	    
+
 	    // Advance to offset
 	    for(std::list<std::string>::size_type i=0;
 		i<__offset;
 		it++, i++);
-	    
+
 	    for(std::list<std::string>::size_type i=0;
 		i<std::min<std::list<std::string>::size_type>(__size.rows()-2, __list.size());
 		it++, i++) {
-		
+
 		if (__focus && i==__curs_pos)
 		    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX_HILITE);
 		else
 		    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX);
-		
+
 		// We prepare our own line, so that we can fill up
 		// with spaces
 		std::string line(*it);
-		
+
 		// Find out if we have to indicate that the line has
 		// been truncated
 		if (line.length()<=__cast_st(__size.cols())-2) {
@@ -368,11 +424,11 @@ class ListBox: public Widget {
 		    winsch(widget_subwin(), '>');
 		}
 	    }
-	    
+
 	    // This is required in order to color the listbox properly
 	    // when highlighting hits the bottom under X/Open Curses
 	    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX);
-	    
+
 	    //
 	    // Box creation and scroll marker setting was moved here,
 	    // because it didn't work properly, i.e. there were
@@ -381,7 +437,7 @@ class ListBox: public Widget {
 	    //
 	    if (box(widget_subwin(), 0, 0)==ERR)
 		throw BoxFailed();
-	    
+
 	    // set scroll markers
 	    if (__list.size()>__cast_lt(__size.rows())-2) {
 		// Can we scroll up? This is indicated by an __offset
@@ -392,13 +448,27 @@ class ListBox: public Widget {
 		if (__offset+__size.rows()-3<__list.size()-1)
 		    (void)mvwaddch(widget_subwin(), __size.rows()-2, __size.cols()-1, 'v');
 	    }
-	    
+
+	    // set sort order indicator
+	    switch (__sort_order) {
+	    case ASCENDING:
+		if (mvwaddch(widget_subwin(), 0, 1, '^')==ERR)
+		    throw AddStrFailed();
+		break;
+	    case DESCENDING:
+		if (mvwaddch(widget_subwin(), 0, 1, 'v')==ERR)
+		    throw AddStrFailed();
+		break;
+	    case UNSORTED:
+		break;
+	    }
+
 	    // Set the cursor at the right position if we have focus.
 	    if (__focus && !__list.empty()) {
 		curs_set(1);
 		if (leaveok(widget_subwin(), FALSE)==ERR)
 		    throw LeaveOKFailed();
-		
+
 		if (wmove(widget_subwin(), __curs_pos+1, 1)==ERR)
 		    throw WMoveFailed();
 	    } else {
@@ -406,9 +476,9 @@ class ListBox: public Widget {
 		if (leaveok(widget_subwin(), TRUE)==ERR)
 		    throw LeaveOKFailed();
 	    }
-	    
+
 	    Widget::refresh(immediate);
-	    
+
 	}
 };
 

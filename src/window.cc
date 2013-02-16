@@ -7,7 +7,6 @@
 #include <stdexcept>
 #include <cassert>
 
-#include "debug.h"
 
 #include "curs.h"
 #include "cursex.h"
@@ -27,10 +26,6 @@
 void
 Window::unrealize() {
     UNREALIZE_ENTER;
-
-    DEBUGOUT("-- IN: Window::unrealize()");
-    DEBUGOUT(*this);
-
     if (__widget) __widget->unrealize();
     WindowBase::unrealize();
 
@@ -39,10 +34,6 @@ Window::unrealize() {
     // Focus Group.
     FocusManager::destroy_focus_group(__fgid);
     __fgid = (fgid_t)-1;
-
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: Window::unrealize()");
-
     UNREALIZE_LEAVE;
 }
 
@@ -57,8 +48,6 @@ Window::Window(const Margin& m): WindowBase(m),
 Window::Window(const Window& W): WindowBase(W),
 				 __widget(W.__widget),
 				 __fgid(W.__fgid) {}
-
-
 Window::~Window() {}
 
 Window&
@@ -84,9 +73,6 @@ Window::widget() const {
 void
 Window::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
-    DEBUGOUT("-- IN: Window::refresh()");
-    DEBUGOUT(*this);
-
     YAPET::UI::Colors::set_color(curses_window(), YAPET::UI::DEFAULT);
     // Setting background also helps getting rid of artifacts of
     // overlapped windows.
@@ -97,18 +83,11 @@ Window::refresh(bool immediate) {
     FocusManager::focus_group_activate(__fgid);
 
     if (__widget) __widget->refresh(immediate);
-
-    DEBUGOUT("-- OUT: Window::refresh()");
-    DEBUGOUT(*this);
 }
 
 void
 Window::realize() {
     REALIZE_ENTER;
-
-    DEBUGOUT("-- IN: Window::realize()");
-    DEBUGOUT(*this);
-
     WindowBase::realize();
 
     // It is imperative that a new Focus Group is created before the
@@ -134,14 +113,5 @@ Window::realize() {
 
 	__widget->realize();
     }
-
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: Window::realize()");
-
     REALIZE_LEAVE;
-}
-
-Window::operator std::string() const {
-    return "Window{\n\t(__widget_area:" + 
-	static_cast<std::string>(widget_area()) + ")\n}";
 }

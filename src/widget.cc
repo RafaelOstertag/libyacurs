@@ -2,7 +2,6 @@
 
 #include <cassert>
 
-#include "debug.h"
 
 #include "cursex.h"
 #include "widget.h"
@@ -31,9 +30,6 @@ void
 Widget::unrealize() {
     UNREALIZE_ENTER;
     WidgetBase::unrealize();
-
-    DEBUGOUT("-- IN: Widget::unrealize()");
-    DEBUGOUT(*this);
 
     EventQueue::disconnect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
     
@@ -64,9 +60,6 @@ Widget::unrealize() {
 	realization(UNREALIZED);
 	throw RefreshFailed();
     }
-
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: Widget::unrealize()");
 
     UNREALIZE_LEAVE;
 }
@@ -139,9 +132,6 @@ Widget::refresh(bool immediate) {
     if (!(realization()==REALIZED ||
 	  realization()==REALIZING) ) return;
 
-    DEBUGOUT("-- IN: Widget::refresh()");
-    DEBUGOUT(*this);
-
     assert(__widget_subwin!=NULL);
     assert(*__widget_subwin!=NULL);
     assert(focusgroup_id()!=(fgid_t)-1);
@@ -155,8 +145,6 @@ Widget::refresh(bool immediate) {
     if (retval == ERR)
 	throw RefreshFailed();
 
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: Widget::refresh()");
 }
 	
 void
@@ -167,8 +155,6 @@ Widget::resize(const Area& _a) {
     // 2. The actual resize has to be done in a derived class
     //
     if (!realization()==REALIZED) return;
-    DEBUGOUT("-- IN: Widget::resize()");
-    DEBUGOUT(*this);
 
     unrealize();
 
@@ -177,16 +163,12 @@ Widget::resize(const Area& _a) {
 
     realize();
     
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: Widget::resize()");
+
 }
 
 void
 Widget::realize() {
     REALIZE_ENTER;
-
-    DEBUGOUT("-- IN: Widget::realize()");
-    DEBUGOUT(*this);
 
     const Coordinates& pos = position();
     const Size& _size = size();
@@ -235,16 +217,5 @@ Widget::realize() {
 	throw LeaveOKFailed();
     }
 
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: Widget::realize()");
-
     REALIZE_LEAVE;
-}
-
-Widget::operator std::string() const {
-    return "Widget{\n\t(pos:" + 
-	static_cast<std::string>(position()) + ")\n\t(" +
-	"szav:" + static_cast<std::string>(size_available()) + ")\n\t(" +
-	"sz:" + static_cast<std::string>(size()) + ")\n\t(" +
-	"hint:" + static_cast<std::string>(size_hint()) + ")\n}";
 }

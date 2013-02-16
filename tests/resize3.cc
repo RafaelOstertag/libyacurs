@@ -34,7 +34,6 @@
 #endif // HAVE_IOSTREAM
 
 #include "yacurs.h"
-#include "debug.h"
 
 class MyWindow: public Window {
     protected:
@@ -82,7 +81,6 @@ void key_handler(Event& _e) {
 
 int main() {
     try {
-	DEBUG::start();
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,

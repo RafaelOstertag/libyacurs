@@ -3,15 +3,12 @@
 #include <cassert>
 #include <stdexcept>
 
-#include <sstream>
-
 #include "size.h"
 
 //
 // Static
 //
 Size Size::__zero=Size(0,0);
-
 
 //
 // Private
@@ -116,11 +113,4 @@ Size::operator!=(const Size& rhs) const {
 const Size&
 Size::zero() {
     return __zero;
-}
-
-Size::operator std::string() const {
-    std::ostringstream _rows, _cols;
-    _rows << __rows;
-    _cols << __cols;
-    return "rows=" + _rows.str() + ",cols=" + _cols.str();
 }

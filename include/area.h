@@ -118,13 +118,6 @@ class Area: public Coordinates, public Size {
 	 * @return result, i.e. Area-Margin.
 	 */
 	Area operator-(const Margin& rhs) const;
-
-	/**
-	 * Convert to std::string.
-	 *
-	 * Convert the object to a std::string. Used for debugging.
-	 */
-	operator std::string() const;
 };
 
 #endif

@@ -5,7 +5,6 @@
 #include "config.h"
 #endif
 
-#include <debug.h>
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -16,7 +15,7 @@
 // Event handler requires access
 Input* ifixed;
 Input* idyn;
-ListBox* listbox;
+ListBox<>* listbox;
 Button* b1;
 Button* b2;
 Button* b3;
@@ -55,11 +54,9 @@ int main() {
     sleep(15);
 #endif
     try {
-	DEBUG::start();
 	Curses::init();
 
 	EventQueue::connect_event(EventConnectorFunction1(EVT_BUTTON_PRESS,button_press_handler));
-
 
 	Curses::title(new LineObject(LineObject::POS_TOP,
 				     "Focus 1"));
@@ -75,7 +72,7 @@ int main() {
 	b3=new Button("Button3");
 	ifixed=new Input(10);
 	idyn=new Input;
-	listbox=new ListBox;
+	listbox=new ListBox<>;
 	listbox->set(items);
 	Input* ireadonly=new Input;
 	ireadonly->input("Read only");

@@ -61,7 +61,6 @@ int main() {
 	Window* w1 = new Window(Margin(1,0,0,0));
 	w1->frame(true);
 
-
 	HPack* hpack = new HPack;
 
 	VPack* vpack1 = new VPack;

@@ -40,8 +40,6 @@ class Button: public Label {
 	// From Realizeable
 	virtual void realize();
 	virtual void unrealize();
-
-
     public:
 	/**
 	 * Constructor.

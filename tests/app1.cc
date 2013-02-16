@@ -5,7 +5,6 @@
 #include "config.h"
 #endif
 
-#include <debug.h>
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -215,14 +214,11 @@ int main() {
 #endif
 
     try {
-	DEBUG::start();
 	Curses::init();
-
 
 	Curses::title(new LineObject(LineObject::POS_TOP,
 				     "App 1"));
 	Curses::statusline(new StatusLine);
-
 
 	MainWindow* mainwindow=new MainWindow;
 	Curses::mainwindow(mainwindow);

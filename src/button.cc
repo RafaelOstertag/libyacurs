@@ -72,8 +72,6 @@ Button::unrealize() {
 
     UNREALIZE_LEAVE;
 }
-
-
 //
 // Public
 //
@@ -113,8 +111,6 @@ Button::label() const {
     // get rid of the square brackets
     return tmp.substr(2, tmp.length()-4);
 }
-
-
 bool
 Button::can_focus() const {
     return true;

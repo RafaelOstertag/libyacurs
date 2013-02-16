@@ -13,7 +13,6 @@
 #include "mycurses.h"
 #include "widgetbase.h"
 
-
 /**
  * Implements a Widget.
  *
@@ -80,14 +79,5 @@ class Widget: public WidgetBase {
 	 * can be used by derived classes.
 	 */
 	void realize();
-
-	/**
-	 * Convert to std::string.
-	 *
-	 * Convert the object to a std::string. Used for debugging.
-	 */
-	operator std::string() const;
 };
-
-
 #endif // WIDGET_H

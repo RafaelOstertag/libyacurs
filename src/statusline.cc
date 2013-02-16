@@ -7,8 +7,6 @@
 #include "curs.h"
 #include "cursex.h"
 #include "statusline.h"
-
-
 //
 // Private
 //
@@ -20,8 +18,6 @@ StatusLine::put_top_msg() {
     else
 	line(__messages.top());
 }
-
-
 //
 // Protected
 //

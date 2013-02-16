@@ -1,7 +1,5 @@
 // $Id$
 
-#include <sstream>
-
 #include "coordinates.h"
 
 //
@@ -22,8 +20,6 @@ Coordinates Coordinates::__zero=Coordinates(0,0);
 //
 Coordinates::Coordinates(int _x, int _y): __y(_y), __x(_x){
 }
-
-
 Coordinates::Coordinates(const Coordinates& _c) {
     __x = _c.__x;
     __y = _c.__y;
@@ -95,11 +91,4 @@ Coordinates::operator!=(const Coordinates& rhs) const {
 const Coordinates&
 Coordinates::zero() {
     return __zero;
-}
-
-Coordinates::operator std::string() const {
-    std::ostringstream _x, _y;
-    _x << __x;
-    _y << __y;
-    return "x=" + _x.str() + ",y=" + _y.str();
 }

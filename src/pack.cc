@@ -4,7 +4,6 @@
 #include "config.h"
 #endif
 
-
 #include <cassert>
 #include <cstdlib>
 #include <algorithm>
@@ -104,8 +103,6 @@ Pack::add_front(WidgetBase* _w) {
     assert(_w != NULL);
 
     if (realization()!=UNREALIZED) throw AlreadyRealized();
-
-
     widget_list.push_front(_w);
 
     _w->parent(this);
@@ -125,8 +122,6 @@ Pack::add_back(WidgetBase* _w) {
     _w->curses_window(WidgetBase::curses_window());
     _w->focusgroup_id(WidgetBase::focusgroup_id());
 }
-
-
 void
 Pack::remove(WidgetBase* _w) {
     assert(_w != NULL);

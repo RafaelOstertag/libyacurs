@@ -30,7 +30,6 @@ class CountFocus {
 };
 #endif
 
-
 //
 // Private
 //

@@ -186,8 +186,6 @@ class Input: public Widget {
 	 * passed to Widget::refresh().
 	 */
 	void refresh(bool immediate);
-
-	operator std::string() const;
 };
 
 #endif // INPUT_H

@@ -78,10 +78,3 @@ Area::operator-(const Margin& rhs) const {
     Area tmp = *this;
     return tmp-=rhs;
 }
-
-Area::operator std::string() const {
-    const Size& _size=*this;
-    const Coordinates& _coords=*this;
-    return "size:" + static_cast<std::string>(_size) + 
-	",coords:" + static_cast<std::string>(_coords);
-}

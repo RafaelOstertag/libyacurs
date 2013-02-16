@@ -9,6 +9,8 @@
 #include "config.h"
 #endif
 
+#include <string>
+
 #include "mycurses.h"
 #include "yacurstypes.h"
 #include "realizeable.h"
@@ -254,8 +256,6 @@ class WidgetBase: public Realizeable {
 	 * @return size available to the widget.
 	 */
 	const Size& size_available() const;
-
-
 	/**
 	 * Notification of size change of a child.
 	 *

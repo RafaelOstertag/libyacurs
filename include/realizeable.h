@@ -9,6 +9,8 @@
 #include "config.h"
 #endif
 
+#include <string>
+
 #include "area.h"
 
 /**

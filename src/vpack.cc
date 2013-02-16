@@ -9,7 +9,6 @@
 #include <algorithm>
 #include <functional>
 
-#include "debug.h"
 
 #include "cursex.h"
 #include "vpack.h"
@@ -35,7 +34,7 @@ class VRealizeWidgets {
 		_w->realize();
 	    } catch (BaseCurEx& e) {
 		std::string str("!! VRealizeWidgets Exception: ");
-		DEBUGOUT(str + e.what());
+
 	    }
 	}
 };
@@ -208,8 +207,6 @@ class VCalcNSetSize {
 	    if (__size.rows()>__size_available.rows() ||
 		__size.cols()>__size_available.cols())
 		throw AreaExceeded();
-
-
 	    // Also set the size availabe for the widget. Dynamically
 	    // sized widgets are handled when CalcNSetSize::finish()
 	    // is called.
@@ -222,8 +219,6 @@ class VCalcNSetSize {
 		// nothing left to do
 		return;
 	    }
-
-
 	    // In order to process hinted widgets, get the cols. We
 	    // only consider Widgets hinting on rows
 	    Size cols_unhinted(0, __size_available.cols());
@@ -382,8 +377,6 @@ VPack::calc_size_non_dynamic() const {
 //
 VPack::VPack(): Pack() {
 }
-
-
 VPack::VPack(const VPack& _vp): Pack(_vp) {
 }
 
@@ -420,8 +413,6 @@ VPack::realize() {
 	recalc_size();
     } catch (AreaExceeded& ae) {
 	std::string str("!! VPack::recalc_size() Exception: ");
-	DEBUGOUT(str + ae.what());
-
 	// Back off
 	std::for_each(widget_list.begin(),
 		      widget_list.end(),

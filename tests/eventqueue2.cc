@@ -66,7 +66,6 @@ class SelfRegister2 : public SelfRegister {
 	}
 };
 
-
 int main() {
 
     try {

@@ -5,7 +5,6 @@
 #include "config.h"
 #endif
 
-#include <debug.h>
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -47,7 +46,6 @@ class MainWindow: public Window {
 
 	    if (e.data()==button1) {
 		assert(dialog1==NULL);
-
 
 		dialog1=new Dialog("Test Dialog");
 		dialog1->show();
@@ -99,14 +97,11 @@ int main() {
 #endif
 
     try {
-	DEBUG::start();
 	Curses::init();
-
 
 	Curses::title(new LineObject(LineObject::POS_TOP,
 				     "Dialog 1"));
 	Curses::statusline(new StatusLine);
-
 
 	MainWindow* mainwindow=new MainWindow;
 	Curses::mainwindow(mainwindow);

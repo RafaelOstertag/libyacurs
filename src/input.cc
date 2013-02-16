@@ -1,9 +1,7 @@
 // $Id$
 
 #include <cassert>
-#include <sstream>
 
-#include "debug.h"
 #include "input.h"
 #include "eventqueue.h"
 #include "focusmanager.h"
@@ -154,15 +152,10 @@ Input::key_handler(Event& _e) {
 
     refresh(true);
 }
-
-
 void
 Input::realize() {
     REALIZE_ENTER;
 	
-    DEBUGOUT("-- IN: Input::realize()");
-    DEBUGOUT(*this);
-
     Widget::realize();
 
     EventQueue::connect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));
@@ -170,20 +163,12 @@ Input::realize() {
     assert(focusgroup_id()!=(fgid_t)-1);
 
     FocusManager::focus_group_add(focusgroup_id(), this);
-
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: Input::realize()");
-
     REALIZE_LEAVE;
 }
 
 void
 Input::unrealize() {
     UNREALIZE_ENTER;
-
-    DEBUGOUT("-- IN: Input::unrealize()");
-    DEBUGOUT(*this);
-
     EventQueue::disconnect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));
 
     assert(focusgroup_id()!=(fgid_t)-1);
@@ -191,9 +176,6 @@ Input::unrealize() {
     FocusManager::focus_group_remove(focusgroup_id(), this);
 
     Widget::unrealize();
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: Input::unrealize()");
-
     UNREALIZE_LEAVE;
 }
 //
@@ -334,9 +316,6 @@ Input::focus() const {
 void
 Input::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
-    DEBUGOUT("-- IN: Input::refresh()");
-    DEBUGOUT(*this);
-
     assert(widget_subwin()!=NULL);
 
     // setting background is essential for coloring entire input
@@ -385,22 +364,4 @@ Input::refresh(bool immediate) {
 	 throw WMoveFailed();
 
     Widget::refresh(immediate);
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: Input::refresh()");
-}
-
-Input::operator std::string() const {
-    std::ostringstream _f, _o, _p, _msz, _len;
-    _f << __focus;
-    _o << __offset;
-    _p << __curs_pos;
-    _msz << __max_size;
-    _len << __length;
-    return "Input{\n\t(focus:" + 
-	_f.str() + ")\n\t(" +
-	"offset:" + _o.str() + ")\n\t(" +
-	"curspos:" + _p.str()  + ")\n\t(" +
-	"maxsize:" + _msz.str() + ")\n\t(" +
-	"length:" + _len.str() + ")\n\t(" +
-	"size:" + static_cast<std::string>(__size) + ")\n}";
 }

@@ -82,8 +82,6 @@ class FocusGroup {
 	 * otherwise.
 	 */
 	bool active() const;
-
-
 	/**
 	 * Add Widget to Focus Group.
 	 *

@@ -3,10 +3,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#include <sstream>
-
-#include "debug.h"
 #include "curs.h"
 #include "eventqueue.h"
 #include "cursex.h"
@@ -50,8 +46,6 @@ LineObject::compute_margin() {
 
 void
 LineObject::put_line() {
-    DEBUGOUT("-- IN: LineObject::put_line()");
-    DEBUGOUT(*this);
     if (!(realization()==REALIZED ||
 	  realization()==REALIZING)) return;
 
@@ -64,15 +58,6 @@ LineObject::put_line() {
     if (static_cast<std::string::size_type>(area().cols())<=__linetext.length()) {
 	// Since we are here, the text is too big for the screen
 	// width, so we can't align anyway.
-#ifndef NDEBUG
-	std::ostringstream _a, _a2, _l;
-	_a << area().cols();
-	_a2 << area().cols()-1;
-	_l << __linetext.length();
-	DEBUGOUT("LineObject::put_line():(cols:"+_a.str()+",tlen:"+
-		 _l.str()+",taking:"+
-		 _a2.str());
-#endif // NDEBUG
 	if (mymvwaddnstr(curses_window(),
 			 0,0,
 			 __linetext.c_str(),
@@ -81,14 +66,6 @@ LineObject::put_line() {
 	if (winsch(curses_window(),'>')==ERR)
 	    throw WInsChFailed();
     } else {
-#ifndef NDEBUG
-	std::ostringstream _a, _l;
-	_a << area().cols();
-	_l << __linetext.length();
-	DEBUGOUT("LineObject::put_line():(cols:"+_a.str()+",tlen:"+
-		 _l.str()+",taking:"+
-		 _l.str());
-#endif // NDEBUG
 	int hpos=0;
 	switch (__alignment) {
 	case LEFT:
@@ -117,8 +94,6 @@ LineObject::put_line() {
 			 0,hpos,
 			  __linetext.c_str());
     }
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: LineObject::put_line()");
 }
 
 //
@@ -152,8 +127,6 @@ LineObject::operator=(const LineObject& lo) {
 
     return *this;
 }
-
-
 void
 LineObject::line(const std::string& _str) {
     __linetext = _str;
@@ -184,33 +157,19 @@ LineObject::line() const {
 void
 LineObject::realize() {
     REALIZE_ENTER;
-
-    DEBUGOUT("-- IN: LineObject::realize()");
-
     compute_margin();
     WindowBase::realize();
-
-    DEBUGOUT("-- OUT: LineObject::realize()");
     REALIZE_LEAVE;
 }
 
 void
 LineObject::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
-    DEBUGOUT("-- IN: LineObject::refresh()");
-
     put_line();
 
     YAPET::UI::Colors::set_color(curses_window(), YAPET::UI::DEFAULT);
     YAPET::UI::Colors::set_bg(curses_window(), YAPET::UI::DEFAULT);
 
     WindowBase::refresh(immediate);
-    DEBUGOUT("-- OUT: LineObject::refresh()");
-}
 
-LineObject::operator std::string() {
-    std::ostringstream _l;
-    _l << __linetext.length();
-    return "LineObject{\n\t(" +
-	_l.str() + ")\n}";
 }

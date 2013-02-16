@@ -143,8 +143,6 @@ class WindowBase : public Realizeable {
 	void refresh(bool immediate);
 	void resize(const Area& _a);
 	void realize();
-
-	operator std::string() const;
 };
 
 #endif // WINDOWBASE_H

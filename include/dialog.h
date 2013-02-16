@@ -9,6 +9,8 @@
 #include "config.h"
 #endif
 
+#include <string>
+
 #include "window.h"
 #include "vpack.h"
 #include "hpack.h"
@@ -52,8 +54,6 @@ class Dialog: public Window {
     public:
 	Dialog(const std::string& _title, DIALOG_TYPE _dt=OKCANCEL);
 	virtual ~Dialog();
-
-
 	STATE dialog_state() const;
 
 	void widget(WidgetBase* _w);

@@ -91,7 +91,6 @@ int main() {
 	Window* w1 = new Window(Margin(1,0,1,0));
 	w1->frame(true);
 
-
 	VPack* vpack = new VPack;
 	HPack* hpack = new HPack;
 	HPack* hpack1 = new HPack();
@@ -100,7 +99,6 @@ int main() {
 	VPack* vpack2 = new VPack;
 	VPack* vpack2_1 = new VPack();
 	VPack* vpack2_2 = new VPack();
-
 
 	Label* label1 = new Label("Test label");
 	Label* label2 = new Label("Test label2");
@@ -168,7 +166,6 @@ int main() {
 	label2->label("New Test Label2");
 	label3->label("New Test Label3");
 	label4->label("New Test Label4");
-
 
 	w1->widget(vpack);
 

@@ -153,13 +153,6 @@ class Size {
 	 * @return Size object representing zero.
 	 */
 	static const Size& zero();
-
-	/**
-	 * Convert to std::string.
-	 *
-	 * Convert the object to a std::string. Used for debugging.
-	 */
-	operator std::string() const;
 };
 
 #endif // SIZE_H

@@ -36,7 +36,6 @@ int main() {
 	o3.cols()!=11)
 	return 1;
 
-
     Area o(0,0,25,80);
     Margin m(1,2,3,5);
 

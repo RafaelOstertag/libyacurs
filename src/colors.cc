@@ -93,8 +93,6 @@ color Colors::__colors[] = {
     {0, 0, 0, 0}
 };
 #endif
-
-
 void
 Colors::init_colors() {
     if (__initialized) return;

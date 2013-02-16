@@ -7,7 +7,6 @@
 #include <cerrno>
 #include <cassert>
 
-#include "debug.h"
 
 #include "curs.h"
 #include "cursex.h"
@@ -54,9 +53,6 @@ void
 WindowBase::unrealize() {
     UNREALIZE_ENTER;
 
-    DEBUGOUT("-- IN: WindowBase::unrealize()");
-    DEBUGOUT(*this);
-
     assert(__curses_window!=NULL);
     assert(*__curses_window!=NULL);
 
@@ -67,8 +63,7 @@ WindowBase::unrealize() {
 
     *__curses_window = NULL;
     
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: WindowBase::unrealize()");
+
     
     UNREALIZE_LEAVE;
 }
@@ -196,7 +191,6 @@ WindowBase::frame(bool b) {
     __frame = b;
 }
 
-
 void
 WindowBase::show() {
     if (realization()!=UNREALIZED) return;
@@ -233,13 +227,9 @@ WindowBase::close() {
     EventQueue::submit(EventEx<WindowBase*>(EVT_WINDOW_CLOSE,this));
 }
 
-
 void
 WindowBase::refresh(bool immediate) {
     if (realization()!=REALIZED && realization()!=REALIZING) return;
-
-    DEBUGOUT("-- IN: WindowBase::refresh()");
-    DEBUGOUT(*this);
 
     assert(__curses_window!=NULL);
     assert(*__curses_window!=NULL);
@@ -253,8 +243,6 @@ WindowBase::refresh(bool immediate) {
     if (retval == ERR)
 	throw RefreshFailed();
 
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: WindowBase::refresh()");
 }
 
 void
@@ -263,8 +251,6 @@ WindowBase::resize(const Area& _a) {
     // Keep in mind: a resize does not refresh!
     //
     if (realization()!=REALIZED) return;
-    DEBUGOUT("-- IN: WindowBase::resize(): _a=" + static_cast<std::string>(_a));
-    DEBUGOUT(*this);
 
     assert(_a.x()>-1);
     assert(_a.y()>-1);
@@ -276,16 +262,12 @@ WindowBase::resize(const Area& _a) {
     __area = _a;
 
     realize();
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: WindowBase::resize()");
+
 }
 
 void
 WindowBase::realize() {
     REALIZE_ENTER;
-
-    DEBUGOUT("-- IN: WindowBase::realize()");
-    DEBUGOUT(*this);
 
     assert(__area.x()>=0);
     assert(__area.y()>=0);
@@ -293,8 +275,6 @@ WindowBase::realize() {
     assert(__area.cols()>0);
 
     Area _tmp = __area - __margin;
-    DEBUGOUT("window Area:" + static_cast<std::string>(_tmp));
-
 
     if (_tmp.x()<0 ||
 	_tmp.y()<0 ||
@@ -338,14 +318,5 @@ WindowBase::realize() {
 	}
     }
 
-    DEBUGOUT(*this);
-    DEBUGOUT("-- OUT: WindowBase::realize()");
-
     REALIZE_LEAVE;
-}
-
-WindowBase::operator std::string() const {
-    return "WindowBase{\n\t(Screen Area:" + 
-	static_cast<std::string>(__area) + ")\n\t(Margin:" +
-	static_cast<std::string>(__margin) + ")\n}";
 }

@@ -33,8 +33,6 @@ class Margin {
 	Margin operator-(const Margin& m) const;
 	bool operator==(const Margin& m) const;
 	bool operator!=(const Margin& m) const;
-
-	operator std::string() const;
 };
 
 #endif

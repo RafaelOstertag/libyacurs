@@ -8,7 +8,6 @@
 
 #include "yacurs.h"
 
-
 class TWindow: public Window {
     public:
 	inline unsigned int _test() const {

@@ -12,17 +12,15 @@
 #include <string>
 #include <list>
 #include <cassert>
-#include <sstream>
 
 #include "widget.h"
-#include "debug.h"
 #include "eventqueue.h"
 #include "focusmanager.h"
 #include "cursex.h"
 #include "colors.h"
 
-#define __cast_lt(x) (static_cast<std::list<_T>::size_type>(x))
-#define __cast_st(x) (static_cast<_T::size_type>(x))
+#define __cast_lt(x) (static_cast<typename std::list<_T>::size_type>(x))
+#define __cast_st(x) (static_cast<typename _T::size_type>(x))
 
 /**
  *
@@ -152,8 +150,6 @@ class ListBox: public Widget {
 	void realize() {
 	    REALIZE_ENTER;
 	    
-	    DEBUGOUT("-- IN: ListBox<T>::realize()");
-	    DEBUGOUT(*this);
 	    
 	    Widget::realize();
 
@@ -163,8 +159,6 @@ class ListBox: public Widget {
 	    
 	    FocusManager::focus_group_add(focusgroup_id(), this);
 	    
-	    DEBUGOUT(*this);
-	    DEBUGOUT("-- OUT: ListBox<T>::realize()");
 	    
 	    REALIZE_LEAVE;
 	}
@@ -172,8 +166,6 @@ class ListBox: public Widget {
 	void unrealize() {
 	    UNREALIZE_ENTER;
 	    
-	    DEBUGOUT("-- IN: ListBox<T>::unrealize()");
-	    DEBUGOUT(*this);
 	    
 	    EventQueue::disconnect_event(EventConnectorMethod1<ListBox>(EVT_KEY,this, &ListBox::key_handler));
 	    
@@ -182,8 +174,6 @@ class ListBox: public Widget {
 	    FocusManager::focus_group_remove(focusgroup_id(), this);
 	    
 	    Widget::unrealize();
-	    DEBUGOUT(*this);
-	    DEBUGOUT("-- OUT: ListBox<T>::unrealize()");
 	    
 	    UNREALIZE_LEAVE;
 	}
@@ -327,8 +317,6 @@ class ListBox: public Widget {
 	void refresh(bool immediate) {
 	    if (realization()!=REALIZED) return;
 	    
-	    DEBUGOUT("-- IN: ListBox<T>::refresh()");
-	    DEBUGOUT(*this);
 	    
 	    assert(widget_subwin()!=NULL);
 	    
@@ -421,21 +409,6 @@ class ListBox: public Widget {
 	    
 	    Widget::refresh(immediate);
 	    
-	    DEBUGOUT(*this);
-	    DEBUGOUT("-- OUT: ListBox<T>::refresh()");
-	}
-	
-	operator std::string() const {
-	    std::ostringstream _f, _o, _p, _s;
-	    _f << __focus;
-	    _o << __offset;
-	    _p << __curs_pos;
-	    _s << __list.size();
-	    return "ListBox<T>{\n\t(focus:" +
-		_f.str() + ")\n\t(" +
-		"offset:" + _o.str() + ")\n\t(" +
-		"curspos:" + _p.str()  + ")\n\t(" +
-		"size:" + _s.str() + ")\n}";
 	}
 };
 

@@ -31,7 +31,6 @@
 #include <sstream>
 
 #include "yacurs.h"
-#include "debug.h"
 
 class MyWindow: public Window {
     private:
@@ -78,7 +77,7 @@ int main() {
     sleep(15);
 #endif
     try {
-	DEBUG::start();
+
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,
@@ -142,10 +141,10 @@ int main() {
 	delete w1;
 	delete sl;
 	Curses::end();
-	DEBUG::end();
+
     } catch (std::exception& e) {
 	Curses::end();
-	DEBUG::end();
+
 	std::cerr << e.what() << std::endl;
 	return 1;
     }

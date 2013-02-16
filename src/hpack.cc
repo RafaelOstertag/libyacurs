@@ -9,7 +9,6 @@
 #include <algorithm>
 #include <functional>
 
-#include "debug.h"
 
 #include "cursex.h"
 #include "hpack.h"
@@ -35,7 +34,7 @@ class HRealizeWidgets {
 		_w->realize();
 	    } catch (BaseCurEx& e) {
 		std::string str("!! HRealizeWidgets Exception: ");
-		DEBUGOUT(str + e.what());
+
 	    } 
 	}
 };
@@ -240,7 +239,6 @@ class HCalcNSetSize {
 
 	    remaining_size-=hinted_size.size_used();
 
-
 	    // We ignore remaining_size.rows() because we horizontally
 	    // stack widgets and the dynamically sized widgets get the
 	    // amount of __size.rows()
@@ -346,8 +344,6 @@ class HSetPosWidget {
 	    __pos.x(__pos.x() + _w->size().cols());
 	}
 };
-
-
 //
 // Private
 //
@@ -420,8 +416,6 @@ HPack::realize() {
 	recalc_size();
     } catch (AreaExceeded& ae) {
 	std::string str("!! HPack::recalc_size() Exception: ");
-	DEBUGOUT(str + ae.what());
-
 	// Back off
 	std::for_each(widget_list.begin(),
 		  widget_list.end(),
@@ -429,8 +423,6 @@ HPack::realize() {
 	realization(UNREALIZED);
 	return;
     }
-
-
     // Set position for each associated widget. That's the only reason
     // we implement realize() in a derived class, i.e. here
     std::for_each(widget_list.begin(),

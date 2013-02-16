@@ -128,8 +128,6 @@ Curses::end() {
 	throw ClearFailed();
     if (wrefresh(stdscr) == ERR)
 	throw RefreshFailed();
-
-
     if (endwin() == ERR)
 	throw EndWinError();
 
@@ -208,8 +206,6 @@ Curses::inquiry_screensize() {
     Size __scrdim;
 #ifdef HAVE_RESIZE_TERM
     winsize ws;
-
-
     if (ioctl(STDIN_FILENO, TIOCGWINSZ, &ws) != -1) {
 	if (ws.ws_row > 0 && ws.ws_col > 0) {
 	    __scrdim.rows(ws.ws_row);

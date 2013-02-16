@@ -15,7 +15,6 @@
 
 #include "windowbase.h"
 
-
 /**
  * A line object occupies one entire line of the screen.
  *
@@ -78,8 +77,6 @@ class LineObject: public WindowBase {
 	// from Realizeable
 	void realize();
 	void refresh(bool immediate);
-
-	operator std::string();
 };
 
 #endif // LINEOBJECT_H

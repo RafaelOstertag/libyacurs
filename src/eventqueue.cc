@@ -605,8 +605,6 @@ EventQueue::run() {
 	    default:
 		submit(EventEx<int>(EVT_KEY, c));
 	    }
-
-
 	// process any pending EventConnector removal requests
 	proc_rem_request();
 

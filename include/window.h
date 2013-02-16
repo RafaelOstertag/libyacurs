@@ -83,8 +83,6 @@ class Window: public WindowBase {
 	// Does nothing, everything handled in parent.
 	//void resize(const Area& _a);
 	void realize();
-
-	operator std::string() const;
 };
 
 #endif // WINDOW_H

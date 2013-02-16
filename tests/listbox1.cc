@@ -31,7 +31,6 @@
 #include <sstream>
 
 #include "yacurs.h"
-#include "debug.h"
 
 void key_handler(Event& _e) {
     assert(_e == EVT_KEY);
@@ -57,7 +56,6 @@ int main() {
 	items.push_back("Long Name ListBox Item Number " + n.str());
     }
     try {
-	DEBUG::start();
 	Curses::init();
 
 	LineObject* title = new LineObject(LineObject::POS_TOP,

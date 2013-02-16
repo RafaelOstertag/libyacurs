@@ -344,6 +344,11 @@ class VSetPosWidget {
 //
 // Private
 //
+VPack&
+VPack::operator=(const VPack&) {
+    abort();
+    return *this;
+}
 
 //
 // Protected
@@ -377,16 +382,8 @@ VPack::calc_size_non_dynamic() const {
 //
 VPack::VPack(): Pack() {
 }
-VPack::VPack(const VPack& _vp): Pack(_vp) {
-}
 
 VPack::~VPack() {}
-
-const VPack&
-VPack::operator=(const VPack& _vp) {
-    Pack::operator=(_vp);
-    return *this;
-}
 
 Size
 VPack::size_hint() const {

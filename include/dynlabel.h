@@ -22,11 +22,13 @@
  * available space by truncating label text.
  */
 class DynLabel: public Label {
+    private:
+	// Not supported
+	DynLabel& operator=(const DynLabel&);
+
     public:
 	DynLabel(const std::string& _l=std::string());
-	DynLabel(const DynLabel& _l);
 	virtual ~DynLabel();
-	DynLabel& operator=(const DynLabel& _l);
 
 	// From Label
 	void label(const std::string& _l);

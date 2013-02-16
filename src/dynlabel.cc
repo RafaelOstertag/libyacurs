@@ -1,6 +1,7 @@
 // $Id$
 
 #include <cassert>
+#include <cstdlib>
 
 #include "dynlabel.h"
 #include "cursex.h"
@@ -8,6 +9,11 @@
 //
 // Private
 //
+DynLabel&
+DynLabel::operator=(const DynLabel&) {
+    abort();
+    return *this;
+}
 
 //
 // Protected
@@ -19,17 +25,7 @@
 DynLabel::DynLabel(const std::string& _l): Label(_l) {    
 }
 
-DynLabel::DynLabel(const DynLabel& _l):
-    Label(_l) {
-}
-
 DynLabel::~DynLabel() {
-}
-
-DynLabel&
-DynLabel::operator=(const DynLabel& _l) {
-    Label::operator=(_l);
-    return *this;
 }
 
 void

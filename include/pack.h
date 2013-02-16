@@ -105,6 +105,8 @@ class Pack: public WidgetBase {
 	 */
 	virtual Size calc_size_non_dynamic() const = 0;
 
+	// Not supported
+	Pack& operator=(const Pack&);
     protected:
 	/**
 	 * List of all Widgets associated with the Pack.
@@ -116,8 +118,6 @@ class Pack: public WidgetBase {
     public:
 	Pack();
 	virtual ~Pack();
-	Pack(const Pack& _p);
-	const Pack& operator=(const Pack& _p);
 
 	/**
 	 * Add a widget to the Pack. The widget will be added in front

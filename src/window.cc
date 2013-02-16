@@ -6,6 +6,7 @@
 
 #include <stdexcept>
 #include <cassert>
+#include <cstdlib>
 
 
 #include "curs.h"
@@ -19,6 +20,15 @@
 //
 // Private
 //
+Window::Window(const Window&){
+    abort();
+}
+
+Window&
+Window::operator=(const Window&) {
+    abort();
+    return *this;
+}
 
 //
 // Protected
@@ -45,20 +55,7 @@ Window::Window(const Margin& m): WindowBase(m),
 				 __widget(NULL),
 				 __fgid((fgid_t)-1) {}
 
-Window::Window(const Window& W): WindowBase(W),
-				 __widget(W.__widget),
-				 __fgid(W.__fgid) {}
 Window::~Window() {}
-
-Window&
-Window::operator=(const Window& W) {
-    WindowBase::operator=(W);
-
-    __widget = W.__widget;
-    __fgid = W.__fgid;
-
-    return *this;
-}
 
 void
 Window::widget(WidgetBase* _w) {

@@ -64,27 +64,20 @@ class WindowBase : public Realizeable {
 	Margin __margin;
 
 	/**
-	 * Keeps track of how many instance objects have been created
-	 * sharing the same WINDOW structure
+	 * Curses window 
 	 */
-	unsigned int* __instance_count;
-
-	/**
-	 * Pointer to a pointer so that we can replace the window for
-	 * all instances simultaneously.
-	 */
-	WINDOW** __curses_window;
+	WINDOW* __curses_window;
 
 	/**
 	 * Whether or not the window has a border
 	 */
 	bool __frame;
 
+	// No supported
+	WindowBase(const WindowBase&);
+	WindowBase& operator=(const WindowBase&);
     protected:
 	WINDOW* curses_window() const;
-
-	/// Keep this. Used by tests/windowrefs.cc.
-	unsigned int instance_count() const;
 
 	const Area& area() const;
 	/**
@@ -106,9 +99,8 @@ class WindowBase : public Realizeable {
 	 * @param _m margin to be used.
 	 */
 	WindowBase(const Margin& _m = Margin());
-	WindowBase(const WindowBase& so);
 	virtual ~WindowBase();
-	WindowBase& operator=(const WindowBase& so);
+
 
 	/**
 	 * @todo when setting margin and window is realized, resize

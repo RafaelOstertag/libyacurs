@@ -6,6 +6,7 @@
 
 #include <cerrno>
 #include <cassert>
+#include <cstdlib>
 
 
 #include "curs.h"
@@ -16,19 +17,24 @@
 //
 // Private
 //
+WindowBase::WindowBase(const WindowBase&) {
+    abort();
+}
+
+WindowBase&
+WindowBase::operator=(const WindowBase&) {
+    abort();
+    return *this;
+}
 
 //
 // Protected
 //
 WINDOW*
 WindowBase::curses_window() const {
-    return *__curses_window;
- }
-
-unsigned int
-WindowBase::instance_count() const {
-    return *__instance_count;
+    return __curses_window;
 }
+
 const Area&
 WindowBase::area() const {
     return __area;
@@ -54,16 +60,13 @@ WindowBase::unrealize() {
     UNREALIZE_ENTER;
 
     assert(__curses_window!=NULL);
-    assert(*__curses_window!=NULL);
 
-    if (delwin(*__curses_window) == ERR) {
+    if (delwin(__curses_window) == ERR) {
 	realization(UNREALIZED);
 	throw DelWindowFailed();
     }
 
-    *__curses_window = NULL;
-    
-
+    __curses_window = NULL;
     
     UNREALIZE_LEAVE;
 }
@@ -74,9 +77,8 @@ WindowBase::force_refresh_handler(Event& _e) {
 
     assert(_e == EVT_FORCEREFRESH);
     assert(__curses_window!=NULL);
-    assert(*__curses_window!=NULL);
 
-    if (clearok(*__curses_window, TRUE)==ERR)
+    if (clearok(__curses_window, TRUE)==ERR)
 	throw ClearOKFailed();
 }
 
@@ -101,73 +103,20 @@ WindowBase::WindowBase(const Margin& _m):
     Realizeable(),
     __area(Coordinates(),Curses::inquiry_screensize()),
     __margin(_m),
-    __instance_count(NULL),
     __curses_window(NULL),
-    __frame(false) {
-
-    __curses_window = new WINDOW*;
-    *__curses_window = NULL;
-
-    __instance_count = new unsigned int;
-    *__instance_count = 1;
-
-}
-
-WindowBase::WindowBase(const WindowBase& so):
-    Realizeable(so),
-    __area(so.__area),
-    __margin(so.__margin),
-    __instance_count(so.__instance_count),
-    __curses_window(so.__curses_window),
-    __frame(so.__frame)
-{
-    (*__instance_count)++;
-}
+    __frame(false) {}
 
 WindowBase::~WindowBase() {
-    assert(__instance_count!=NULL);
-
-    if (*__instance_count > 1) {
-	(*__instance_count)--;
-	return;
-    }
-
-    delete __instance_count;
-
-    assert(__curses_window!=NULL);
-
-    bool delwin_failed=false;
-    if (realization()==REALIZED)
-	delwin_failed=delwin(*__curses_window)==ERR;
-
-    delete __curses_window;
 
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_FORCEREFRESH,this, &WindowBase::force_refresh_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
-   
-    if (delwin_failed)
-	throw DelWindowFailed();
-}
 
-WindowBase&
-WindowBase::operator=(const WindowBase& so) {
-    if ( this == &so)
-	return *this;
-
-    Realizeable::operator=(so);
-
-    __instance_count = so.__instance_count;
-    assert(__instance_count!=NULL);
-    (*__instance_count)++;
-
-    __curses_window = so.__curses_window;
-
-    __area = so.__area;
-
-    __margin = so.__margin;
-
-    return *this;
+    if (realization()==REALIZED) {
+	assert(__curses_window!=NULL);
+	if (delwin(__curses_window)==ERR)
+	    throw DelWindowFailed();
+    }
 }
 
 void
@@ -232,13 +181,12 @@ WindowBase::refresh(bool immediate) {
     if (realization()!=REALIZED && realization()!=REALIZING) return;
 
     assert(__curses_window!=NULL);
-    assert(*__curses_window!=NULL);
 
     int retval;
     if (immediate)
-	retval = wrefresh(*__curses_window);
+	retval = wrefresh(__curses_window);
     else
-	retval = wnoutrefresh(*__curses_window);
+	retval = wnoutrefresh(__curses_window);
 
     if (retval == ERR)
 	throw RefreshFailed();
@@ -284,36 +232,35 @@ WindowBase::realize() {
 	return;
     }
 
-    assert(__curses_window!=NULL);
-    assert(*__curses_window==NULL);
-    *__curses_window = newwin(_tmp.rows(),
-				  _tmp.cols(),
-				  _tmp.y(),
-				  _tmp.x());
-    if (*__curses_window == NULL) {
+    assert(__curses_window==NULL);
+    __curses_window = newwin(_tmp.rows(),
+			     _tmp.cols(),
+			     _tmp.y(),
+			     _tmp.x());
+    if (__curses_window == NULL) {
 	realization(UNREALIZED);
 	throw NewWindowFailed();
     }
 
-    if (scrollok(*__curses_window, FALSE)==ERR) {
+    if (scrollok(__curses_window, FALSE)==ERR) {
 	realization(UNREALIZED);
-	delwin(*__curses_window);
-	*__curses_window=NULL;
+	delwin(__curses_window);
+	__curses_window=NULL;
 	throw ScrollOKFailed();
     }
 
-    if (leaveok(*__curses_window, TRUE)==ERR) {
+    if (leaveok(__curses_window, TRUE)==ERR) {
 	realization(UNREALIZED);
-	delwin(*__curses_window);
-	*__curses_window=NULL;
+	delwin(__curses_window);
+	__curses_window=NULL;
 	throw LeaveOKFailed();
     }
 
     if (__frame) {
-	if (box(*__curses_window, 0, 0) == ERR) {
+	if (box(__curses_window, 0, 0) == ERR) {
 	    realization(UNREALIZED);
-	    delwin(*__curses_window);
-	    *__curses_window=NULL;
+	    delwin(__curses_window);
+	    __curses_window=NULL;
 	    throw BoxFailed();
 	}
     }

@@ -1,6 +1,7 @@
 // $Id$
 
 #include <cassert>
+#include <cstdlib>
 
 #include "label.h"
 #include "cursex.h"
@@ -8,6 +9,11 @@
 //
 // Private
 //
+Label&
+Label::operator=(const Label&) {
+    abort();
+    return *this;
+}
 
 //
 // Protected
@@ -21,21 +27,7 @@ Label::Label(const std::string& _l):
     __size(Size(1, _l.length())) {
 }
 
-Label::Label(const Label& _l):
-    Widget(_l), __label(_l.__label), __size(_l.__size) {
-}
-
 Label::~Label() {
-}
-
-Label&
-Label::operator=(const Label& _l) {
-    Widget::operator=(_l);
-
-    __label = _l.__label;
-    __size = _l.__size;
-
-    return *this;
 }
 
 void

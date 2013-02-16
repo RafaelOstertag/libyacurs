@@ -19,15 +19,18 @@
  * realize().
  */
 class HPack: public Pack {
+    private:
+	// Not supported
+	HPack& operator=(const HPack&);
+
     protected:
 	void recalc_size();
 	Size calc_size_non_dynamic() const;
 
     public:
 	HPack();
-	HPack(const HPack& _hp);
 	virtual ~HPack();
-	const HPack& operator=(const HPack& _hp);
+
 
 	Size size_hint() const;
 

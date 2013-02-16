@@ -26,9 +26,9 @@ class StatusLine: public LineObject {
 	
 	void put_top_msg();
 
+	StatusLine& operator=(const StatusLine&);
     public:
 	StatusLine();
-	StatusLine(const StatusLine& sl);
 	virtual ~StatusLine();
 	void push_msg(const std::string& m);
 	void pop_msg();

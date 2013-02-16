@@ -1,8 +1,7 @@
 // $Id$
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include <cstdlib>
+
 #include "curs.h"
 #include "eventqueue.h"
 #include "cursex.h"
@@ -40,6 +39,15 @@ LineObject::compute_margin() {
     }
 }
 
+LineObject::LineObject(const LineObject&) {
+    abort();
+}
+
+LineObject&
+LineObject::operator=(const LineObject& lo) {
+    abort();
+    return *this;
+}
 //
 // Protected
 //
@@ -109,24 +117,6 @@ LineObject::LineObject(POSITION _pos, const std::string& _t):
 LineObject::~LineObject() {
 }
 
-LineObject::LineObject(const LineObject& lo):
-    WindowBase(lo),
-    __linetext(lo.__linetext),
-    __position(lo.__position),
-    __alignment(lo.__alignment)
-{
-}
-
-LineObject&
-LineObject::operator=(const LineObject& lo) {
-    WindowBase::operator=(lo);
-
-    __linetext = lo.__linetext;
-    __position = lo.__position;
-    __alignment = lo.__alignment;
-
-    return *this;
-}
 void
 LineObject::line(const std::string& _str) {
     __linetext = _str;

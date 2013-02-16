@@ -1,8 +1,6 @@
 // $Id$
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include <cstdlib>
 
 #include "curs.h"
 #include "cursex.h"
@@ -18,6 +16,12 @@ StatusLine::put_top_msg() {
     else
 	line(__messages.top());
 }
+
+StatusLine&
+StatusLine::operator=(const StatusLine&) {
+    abort();
+    return *this;
+}
 //
 // Protected
 //
@@ -29,8 +33,7 @@ StatusLine::put_top_msg() {
 StatusLine::StatusLine():
     LineObject(POS_BOTTOM) {}
 
-StatusLine::StatusLine(const StatusLine& sl):
-    LineObject(sl) {}
+
 
 StatusLine::~StatusLine() {}
 

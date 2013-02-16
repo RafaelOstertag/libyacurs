@@ -124,6 +124,9 @@ class WidgetBase: public Realizeable {
 	 */
 	Size __size_available;
 
+	// Not supported
+	WidgetBase(const WidgetBase&);
+	WidgetBase& operator=(const WidgetBase&);
     protected:
 	/**
 	 * Get pointer to the parent of the widget.
@@ -167,20 +170,6 @@ class WidgetBase: public Realizeable {
 	WidgetBase();
 
 	virtual ~WidgetBase();
-
-	/**
-	 * Copy constructor.
-	 *
-	 * @param _w reference to WidgetBase object.
-	 */
-	WidgetBase(const WidgetBase& _w);
-
-	/**
-	 * Assignment operator.
-	 *
-	 * @param w refernce to WidgetBase object.
-	 */
-	WidgetBase& operator=(const WidgetBase& w);
 
 	/**
 	 * Set parent of widget.

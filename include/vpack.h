@@ -19,15 +19,17 @@
  * realize().
  */
 class VPack: public Pack {
+    private:
+	// Not supported
+	VPack& operator=(const VPack&);
+
     protected:
 	void recalc_size();
 	Size calc_size_non_dynamic() const;
 
     public:
 	VPack();
-	VPack(const VPack& _vp);
 	virtual ~VPack();
-	const VPack& operator=(const VPack& _vp);
 
 	Size size_hint() const;
 

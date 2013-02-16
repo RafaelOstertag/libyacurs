@@ -13,6 +13,12 @@
 // Private
 //
 
+Button&
+Button::operator=(const Button&) {
+    abort();
+    return *this;
+}
+
 //
 // Protected
 //
@@ -84,19 +90,8 @@ Button::Button(const std::string& _b): Label(),
     label(_b);
 }
 
-Button::Button(const Button& _b): Label(_b), __focus(_b.__focus) {
-}
-
 Button::~Button() {
     EventQueue::disconnect_event(EventConnectorMethod1<Button>(EVT_KEY,this, &Button::key_handler));
-}
-
-Button&
-Button::operator=(const Button& _b) {
-    Label::operator=(_b);
-
-    __focus=_b.__focus;
-    return *this;
 }
 
 void

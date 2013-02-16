@@ -1,6 +1,7 @@
 // $Id$
 
 #include <cassert>
+#include <cstdlib>
 
 
 #include "cursex.h"
@@ -11,6 +12,12 @@
 // Private
 //
 
+Widget&
+Widget::operator=(const Widget&) {
+    abort();
+    return *this;
+}
+
 //
 // Protected
 //
@@ -20,9 +27,8 @@ Widget::force_refresh_handler(Event& _e) {
 
     assert(_e == EVT_FORCEREFRESH);
     assert(__widget_subwin!=NULL);
-    assert(*__widget_subwin!=NULL);
 
-    if (clearok(*__widget_subwin, TRUE)==ERR)
+    if (clearok(__widget_subwin, TRUE)==ERR)
 	throw ClearOKFailed();
 }
 
@@ -34,22 +40,21 @@ Widget::unrealize() {
     EventQueue::disconnect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
     
     assert(__widget_subwin!=NULL);
-    assert(*__widget_subwin!=NULL);
 
     // We have to clear the window since the new size might be
     // smaller, and thus leaving artifacts on the screen if we omit to
     // clear the entire subwin()
-    if (wclear(*__widget_subwin) == ERR) {
+    if (wclear(__widget_subwin) == ERR) {
 	realization(UNREALIZED);
 	throw ClearFailed();
     }
 
-    if (delwin(*__widget_subwin) == ERR) {
+    if (delwin(__widget_subwin) == ERR) {
 	realization(UNREALIZED);
 	throw DelWindowFailed();
     }
 
-    *__widget_subwin = NULL;
+    __widget_subwin = NULL;
 
     // This is also needed to remove artifacts on the screen
     if (touchwin(curses_window()) == ERR) {
@@ -66,65 +71,24 @@ Widget::unrealize() {
 
 WINDOW*
 Widget::widget_subwin() const {
-    return *__widget_subwin;
+    return __widget_subwin;
 }
 
 //
 // Public
 //
 
-Widget::Widget():
-    WidgetBase(), __instance_count(NULL), __widget_subwin(NULL) {
-    __widget_subwin = new WINDOW*;
-    *__widget_subwin = NULL;
-
-    __instance_count = new unsigned int;
-    *__instance_count = 1;
-}
-
-Widget::Widget(const Widget& _w):
-    WidgetBase(_w), __instance_count(_w.__instance_count),
-    __widget_subwin(_w.__widget_subwin) {
-    (*__instance_count)++;
+Widget::Widget(): WidgetBase(), __widget_subwin(NULL) {
 }
 
 Widget::~Widget() {
-    assert(__instance_count!=NULL);
-    if (*__instance_count > 1) {
-	(*__instance_count)--;
-	return;
-    }
-
-    delete __instance_count;
-
-    assert(__widget_subwin!=NULL);
-    
-    bool delwin_failed=false;;
-    if (realization()==REALIZED)
-	delwin_failed=delwin(*__widget_subwin)==ERR;
-
-    delete __widget_subwin;
-
     EventQueue::disconnect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
-
-    if (delwin_failed)
-	throw DelWindowFailed();
-}
-
-Widget&
-Widget::operator=(const Widget& _w) {
-    if (this == &_w)
-	return *this;
-
-    WidgetBase::operator=(_w);
-
-    __instance_count = _w.__instance_count;
-    assert(__instance_count!=NULL);
-    (*__instance_count)++;
-
-    __widget_subwin = _w.__widget_subwin;
-
-    return *this;
+    
+    if (realization()==REALIZED) {
+	assert(__widget_subwin!=NULL);
+	if (delwin(__widget_subwin)==ERR)
+	    throw DelWindowFailed();
+    }
 }
     
 void
@@ -133,14 +97,13 @@ Widget::refresh(bool immediate) {
 	  realization()==REALIZING) ) return;
 
     assert(__widget_subwin!=NULL);
-    assert(*__widget_subwin!=NULL);
     assert(focusgroup_id()!=(fgid_t)-1);
 
     int retval;
     if (immediate)
-	retval = wrefresh(*__widget_subwin);
+	retval = wrefresh(__widget_subwin);
     else
-	retval = wnoutrefresh(*__widget_subwin);
+	retval = wnoutrefresh(__widget_subwin);
 
     if (retval == ERR)
 	throw RefreshFailed();
@@ -190,30 +153,29 @@ Widget::realize() {
 	return;
 
     assert(curses_window()!=NULL);
-    assert(__widget_subwin!=NULL);
-    assert(*__widget_subwin==NULL);
+    assert(__widget_subwin==NULL);
 
-    *__widget_subwin = ::subwin(curses_window(),
+    __widget_subwin = ::subwin(curses_window(),
 		       _size.rows(),
 		       _size.cols(),
 		       pos.y(),
 		       pos.x());
-    if (*__widget_subwin == NULL) {
+    if (__widget_subwin == NULL) {
 	realization(UNREALIZED);
 	throw SubwinFailed();
     }
 
-    if (scrollok(*__widget_subwin, FALSE)==ERR) {
+    if (scrollok(__widget_subwin, FALSE)==ERR) {
 	realization(UNREALIZED);
-	delwin(*__widget_subwin);
-	*__widget_subwin=NULL;
+	delwin(__widget_subwin);
+	__widget_subwin=NULL;
 	throw ScrollOKFailed();
     }
 
-    if (leaveok(*__widget_subwin, TRUE)==ERR) {
+    if (leaveok(__widget_subwin, TRUE)==ERR) {
 	realization(UNREALIZED);
-	delwin(*__widget_subwin);
-	*__widget_subwin=NULL;
+	delwin(__widget_subwin);
+	__widget_subwin=NULL;
 	throw LeaveOKFailed();
     }
 

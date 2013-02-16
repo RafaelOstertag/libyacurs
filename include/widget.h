@@ -29,16 +29,12 @@
 class Widget: public WidgetBase {
     private:
 	/**
-	 * Keeps track of how many instance objects have been created
-	 * sharing the same WINDOW structure
+	 * curses subwin used by widgets
 	 */
-	unsigned int* __instance_count;
-	/**
-	 * Pointer to a pointer so that we can replace the window for
-	 * all instances simultaneously.
-	 */
-	WINDOW** __widget_subwin;
+	WINDOW* __widget_subwin;
 
+	// Not supported
+	Widget& operator=(const Widget&);
     protected:
 	void force_refresh_handler(Event& _e);
 
@@ -49,21 +45,8 @@ class Widget: public WidgetBase {
     public:
 	Widget();
 
-	/**
-	 * Copy constructor.
-	 *
-	 * @param _w reference to Widget object.
-	 */
-	Widget(const Widget& _w);
-
 	virtual ~Widget();
 
-	/**
-	 * Assignment operator.
-	 *
-	 * @param _w reference to Widget object.
-	 */
-	Widget& operator=(const Widget& _w);
 
 	// Must be overriden in derived classes
 	//bool size_change();

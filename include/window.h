@@ -66,14 +66,15 @@ class Window: public WindowBase {
 	 */
 	fgid_t __fgid;
 
+	// Not supported
+	Window(const Window&);
+	Window& operator=(const Window&);
     protected:
 	void unrealize();
 
     public:
 	Window(const Margin& m=Margin());
-	Window(const Window& W);
 	virtual ~Window();
-	Window& operator=(const Window& W);
 	
 	void widget(WidgetBase* _w);
 	WidgetBase* widget() const;

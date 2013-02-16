@@ -59,14 +59,15 @@ class LineObject: public WindowBase {
 	 */
 	void compute_margin();
 
+	// Not supported
+	LineObject(const LineObject&);
+	LineObject& operator=(const LineObject&);
     protected:
 	void put_line();
 
     public:
 	LineObject(POSITION _pos, const std::string& _t = std::string());
 	virtual ~LineObject();
-	LineObject(const LineObject& lo);
-	LineObject& operator=(const LineObject& lo);
 
 	void alignment(ALIGNMENT _a);
 	ALIGNMENT alignment() const;

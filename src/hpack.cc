@@ -348,6 +348,11 @@ class HSetPosWidget {
 // Private
 //
 
+HPack&
+HPack::operator=(const HPack&) {
+    abort();
+    return *this;
+}
 //
 // Protected
 //
@@ -380,16 +385,7 @@ HPack::calc_size_non_dynamic() const {
 HPack::HPack(): Pack() {
 }
 
-HPack::HPack(const HPack& _hp): Pack(_hp) {
-}
-
 HPack::~HPack() {}
-
-const HPack&
-HPack::operator=(const HPack& _hp) {
-    Pack::operator=(_hp);
-    return *this;
-}
 
 Size
 HPack::size_hint() const {

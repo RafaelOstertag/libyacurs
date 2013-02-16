@@ -52,8 +52,6 @@ class MyWindow: public Window {
 	    
 	MyWindow(const Margin& m) : Window(m), win(NULL) {
 	}
-	MyWindow(const MyWindow& _o) : Window(_o) {}
-
 };
 
 void key_handler(Event& _e) {

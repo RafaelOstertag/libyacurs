@@ -60,8 +60,6 @@ class MyWindow: public Window {
 	    EventQueue::connect_event(EventConnectorMethod1<MyWindow>(EVT_SIGWINCH,this, &MyWindow::resize_handler));
 	}
 	MyWindow(const Margin& _m) : Window(_m) {}
-	MyWindow(const MyWindow& _o) : Window(_o) {}
-
 };
 
 void key_handler(Event& _e) {

@@ -41,6 +41,11 @@ Pack::refresh_all_widgets(bool i) {
 		 std::bind2nd(std::mem_fun<void,WidgetBase,bool>(&WidgetBase::refresh),i));
 }
 
+Pack&
+Pack::operator=(const Pack& _p) {
+    abort();
+    return *this;
+}
 //
 // Protected
 //
@@ -78,24 +83,6 @@ Pack::~Pack() {
     //
     // May be we could implement some self removal of widgets from
     // packs on destruction...
-}
-
-Pack::Pack(const Pack& _p): WidgetBase(_p),
-			    __size(_p.__size),
-			    __hinting(_p.__hinting),
-			    __always_dynamic(_p.__always_dynamic),
-			    widget_list(_p.widget_list) {
-}
-
-const Pack&
-Pack::operator=(const Pack& _p) {
-    WidgetBase::operator=(_p);
-    __size = _p.__size;
-    __hinting = _p.__hinting;
-    __always_dynamic = _p.__always_dynamic;
-    widget_list = _p.widget_list;
-
-    return *this;
 }
 
 void

@@ -22,6 +22,9 @@
  * that it cannot be realized() and throwing an exception.
  */
 class Label: public Widget {
+	// Not supported
+	Label& operator=(const Label&);
+
     protected:
 	/**
 	 * The text to be displayed.
@@ -43,21 +46,7 @@ class Label: public Widget {
 	 */
 	Label(const std::string& _l=std::string());
 
-	/**
-	 * Copy constructor.
-	 *
-	 * @param _l reference to Label object.
-	 */
-	Label(const Label& _l);
-
 	virtual ~Label();
-
-	/**
-	 * Assignment operator.
-	 *
-	 * @param _l reference to Label object.
-	 */
-	Label& operator=(const Label& _l);
 
 	virtual void label(const std::string& _l);
 	virtual std::string label() const;

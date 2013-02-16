@@ -27,6 +27,9 @@ class Button: public Label {
 	 */
 	bool __focus;
 
+	// Not supported
+	Button& operator=(const Button&);
+
     protected:
 	/**
 	 * Key Handler.
@@ -48,21 +51,7 @@ class Button: public Label {
 	 */
 	Button(const std::string& _b);
 
-	/**
-	 * Copy constructor.
-	 *
-	 * @param _b reference to Button object.
-	 */
-	Button(const Button& _b);
-
 	virtual ~Button();
-
-	/**
-	 * Assignment operator.
-	 *
-	 * @param _b reference to Button object.
-	 */
-	Button& operator=(const Button& _b);
 
 	/**
 	 * Set label.

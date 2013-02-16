@@ -1,6 +1,7 @@
 // $Id$
 
 #include <cassert>
+#include <cstdlib>
 
 #include "input.h"
 #include "eventqueue.h"
@@ -11,6 +12,12 @@
 //
 // Private
 //
+
+Input&
+Input::operator=(const Input&) {
+    abort();
+    return *this;
+}
 
 //
 // Protected
@@ -194,33 +201,8 @@ Input::Input(int _length, std::string::size_type _max_size, const std::string& _
     __size(__length>0 ? Size(1, __length) : Size::zero()) {
 }
 
-Input::Input(const Input& _i): Widget(_i),
-			       __focus(_i.__focus),
-			       __offset(_i.__offset),
-			       __curs_pos(_i.__curs_pos),
-			       __max_size(_i.__max_size),
-			       __length(_i.__length),
-			       __read_only(_i.__read_only),
-			       __buffer(_i.__buffer),
-			       __size(_i.__size) {
-}
-
 Input::~Input() {
     EventQueue::disconnect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));
-}
-
-Input&
-Input::operator=(const Input& _i) {
-    Widget::operator=(_i);
-    __focus=_i.__focus;
-    __offset=_i.__offset;
-    __curs_pos=_i.__curs_pos;
-    __max_size=_i.__max_size;
-    __length=_i.__length;
-    __read_only=_i.__read_only;
-    __buffer=_i.__buffer;
-    __size=_i.__size;
-    return *this;
 }
 
 void

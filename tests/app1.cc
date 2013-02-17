@@ -12,6 +12,37 @@
 
 #include "yacurs.h"
 
+// Used when preloading libtestpreload.so
+int __test_data[]= { 
+    // Press first button
+    '\n',
+    // enter text
+    'L','o','r','e','m',' ','i','p','s','u','m',' ','d','o','l','o','r',' ','s','i','t',' ','a','m','e','t',',',' ','c','o','n','s','e','c','t','e','t','u','r',' ','a','d','i','p','i','s','c','i','n','g',' ','e','l','i','t','.',' ','P','h','a','s','e','l','l','u','s',' ','v','e','n','e','n','a','t','i','s','.',
+    '\t', '\n',
+    // next button
+    '\t', '\n',
+    // get off the list box, and select Fill button
+    '\t', '\t',
+    // press button
+    '\n',
+    // Select Fill button,
+    KEY_LEFT, '\n',
+    // close window
+    '\t', '\t', '\n',
+    // Quit
+    '\t', '\n', 0
+};
+
+extern "C" int __test_wgetch(void*) {
+    static int* ptr2=__test_data;
+
+    usleep(70000);
+    if (*ptr2==0) {
+	abort();
+    }
+    return *ptr2++;
+}
+
 class Win1: public Window {
     private:
 	Label* l1;

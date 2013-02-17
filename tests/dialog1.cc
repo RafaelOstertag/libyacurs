@@ -12,6 +12,26 @@
 
 #include "yacurs.h"
 
+// Used when preloading libtestpreload.so
+int __test_data[]= { 
+    // Open dialog, and cancel
+    '\n', '\n',
+    // Open Dialog, and Ok
+    '\n', '\t', '\n',
+    // Quit app
+    '\t', '\n', 0
+};
+
+extern "C" int __test_wgetch(void*) {
+    static int* ptr2=__test_data;
+
+    usleep(70000);
+    if (*ptr2==0) {
+	abort();
+    }
+    return *ptr2++;
+}
+
 class MainWindow: public Window {
     private:
 	VPack* vpack1;

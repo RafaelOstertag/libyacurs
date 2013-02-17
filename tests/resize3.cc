@@ -35,6 +35,11 @@
 
 #include "yacurs.h"
 
+// Used when preloading libtestpreload.so
+extern "C" int __test_wgetch(void*) {
+    return 'q';
+}
+
 class MyWindow: public Window {
     protected:
 	void resize_handler(Event& _e) {

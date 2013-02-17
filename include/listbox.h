@@ -36,12 +36,13 @@ class ListBox: public Widget {
 	    UNSORTED
 	};
 
-	static bool cmp_asc(typename const _T& a,
-			    typename const _T& b) {
+	static bool cmp_asc(const _T& a,
+			    const _T& b) {
 	    return a<b;
 	}
-	static bool cmp_dsc(typename const _T& a,
-			    typename const _T& b) {
+
+	static bool cmp_dsc(const _T& a,
+			    const _T& b) {
 	    return a>b;
 	}
     private:
@@ -196,7 +197,6 @@ class ListBox: public Widget {
 	void realize() {
 	    REALIZE_ENTER;
 
-
 	    Widget::realize();
 
 	    EventQueue::connect_event(EventConnectorMethod1<ListBox>(EVT_KEY,this, &ListBox::key_handler));
@@ -205,13 +205,11 @@ class ListBox: public Widget {
 
 	    FocusManager::focus_group_add(focusgroup_id(), this);
 
-
 	    REALIZE_LEAVE;
 	}
 
 	void unrealize() {
 	    UNREALIZE_ENTER;
-
 
 	    EventQueue::disconnect_event(EventConnectorMethod1<ListBox>(EVT_KEY,this, &ListBox::key_handler));
 
@@ -277,6 +275,10 @@ class ListBox: public Widget {
 		refresh(true);
 	}
 
+	const std::list<_T>& list() const {
+	    return __list;
+	}
+
 	virtual void clear()  {
 	    __list.clear();
 	    __offset=0;
@@ -303,8 +305,45 @@ class ListBox: public Widget {
 	    return __sort_order;
 	}
 
-	virtual typename std::list<_T>::size_type selected() const {
+	virtual typename std::list<_T>::size_type selected_index() const {
 	    return __curs_pos + __offset;
+	}
+
+	const _T& selected() const {
+	    if (__list.empty()) return _T();
+
+	    typename std::list<_T>::iterator it=__list.begin();
+	    for(typename std::list<_T>::size_type i=0;
+		i<=__curs_pos+__offset;
+		it++, i++);
+
+	    return *it;
+	}
+
+	void selected(_T& _item) {
+	    typename std::list<_T>::iterator it=__list.begin();
+	    for(typename std::list<_T>::size_type i=0;
+		i<=__curs_pos+__offset;
+		it++, i++);
+
+	    *it=_item;
+
+	    if (realization()==REALIZED)
+		refresh(true);
+	}
+
+	void delete_selected() {
+	    if (__list.empty()) return;
+
+	    typename std::list<_T>::iterator it=__list.begin();
+	    for(typename std::list<_T>::size_type i=0;
+		i<__curs_pos+__offset;
+		it++, i++);
+
+	    __list.erase(it);
+
+	    if (realization()==REALIZED)
+		refresh(true);
 	}
 
 	// From WidgetBase
@@ -373,8 +412,10 @@ class ListBox: public Widget {
 	void refresh(bool immediate) {
 	    if (realization()!=REALIZED) return;
 
-
 	    assert(widget_subwin()!=NULL);
+
+	    if (werase(widget_subwin())==ERR)
+		throw EraseFailed();
 
 	    std::list<std::string>::iterator it=__list.begin();
 
@@ -399,7 +440,7 @@ class ListBox: public Widget {
 		i<std::min<std::list<std::string>::size_type>(__size.rows()-2, __list.size());
 		it++, i++) {
 
-		if (__focus && i==__curs_pos)
+		if (i==__curs_pos)
 		    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX_HILITE);
 		else
 		    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX);
@@ -435,8 +476,13 @@ class ListBox: public Widget {
 	    // artifcats on the right side of the box, when it is
 	    // placed in front of the above code block.
 	    //
-	    if (box(widget_subwin(), 0, 0)==ERR)
-		throw BoxFailed();
+	    if (__focus) {
+		if (box(widget_subwin(), 0, 0)==ERR)
+		    throw BoxFailed();
+	    } else {
+		if (box(widget_subwin(), '|', '-')==ERR)
+		    throw BoxFailed();
+	    }
 
 	    // set scroll markers
 	    if (__list.size()>__cast_lt(__size.rows())-2) {

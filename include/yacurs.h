@@ -34,6 +34,7 @@
 #include "listbox.h"
 #include "dialog.h"
 #include "messagebox.h"
+#include "inputbox.h"
 
 #endif // YACURS_H
 

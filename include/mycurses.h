@@ -30,6 +30,9 @@ enum {
 #ifndef KEY_CTRL_B
     KEY_CTRL_B=2,
 #endif
+#ifndef KEY_CTRL_D
+    KEY_CTRL_D=4,
+#endif
 #ifndef KEY_CTRL_E
     KEY_CTRL_E=5,
 #endif

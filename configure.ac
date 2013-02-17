@@ -7,12 +7,14 @@ AC_REVISION([$Revision: 4613 $])
 AC_CONFIG_MACRO_DIR([m4])
 
 
-AC_LANG([C++])
-
 AC_PROG_CC
 AC_PROG_CXX
 AM_PROG_AR
 AM_PROG_LIBTOOL
+LT_INIT([disable-static])
+AX_CHECK_LINK_FLAG([-Wl,--export-dynamic],[AC_SUBST([LD_EXPORT_DYNAMIC],[-Wl,--export-dynamic])])
+
+AC_LANG([C++])
 
 AC_CHECK_HEADERS([stropts.h signal.h sys/termios.h termios.h unistd.h stdint.h sys/types.h sys/ioctl.h])
 AC_CHECK_HEADERS([cerrno cstdlib cstring exception string stdexcept stack iostream cstdio queue list algorithm functional typeinfo cassert])
@@ -45,7 +47,6 @@ AS_IF([test "x$have_ncurses_h" = xyes],
 		[AC_MSG_ERROR([curses library required])]
 	    )],
       [AC_MSG_ERROR([neither ncurses nor curses library available])])
-LT_INIT([disable-static])
 
 AC_CHECK_FUNCS([resize_term])
 

@@ -71,6 +71,7 @@ Input::key_handler(Event& _e) {
 	if (!__buffer.empty())
 	    __buffer=__buffer.erase(__offset+__curs_pos,1);
 	break;
+    case KEY_CTRL_D:
     case KEY_DC: // Delete
 	if (__read_only) break;
 	if (__offset+__curs_pos>=__buffer.length() ||
@@ -219,7 +220,7 @@ Input::input(const std::string& i) {
     refresh(true);
 }
 
-std::string
+const std::string&
 Input::input() const {
     return __buffer;
 }

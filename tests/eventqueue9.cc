@@ -19,6 +19,13 @@
 
 #include "yacurs.h"
 
+// Used when preloading libtestpreload.so
+char __test_str[]="Hello, World!";
+extern "C" int __test_wgetch(void*) {
+    static char* ptr=__test_str;
+    return *ptr++;
+}
+
 class Handler {
     private:
 	EVENT_TYPE expected_evt;

@@ -125,7 +125,7 @@ class Input: public Widget {
 	 *
 	 * @return the content of the input buffer.
 	 */
-	virtual std::string input() const;
+	virtual const std::string& input() const;
 
 	/**
 	 * Set readonly mode.

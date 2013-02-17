@@ -8,9 +8,87 @@
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
+#include <cstdlib>
 #include <sstream>
 
 #include "yacurs.h"
+
+// Used when preloading libtestpreload.so
+int __test_data[]= {
+    // First Input Widget
+    'L','o','r','e','m',' ','i','p','s','u','m',' ','d','o','l','o','r',' ','s','i','t',' ','a','m','e','t',',',' ','c','o','n','s','e','c','t','e','t','u','r',' ','a','d','i','p','i','s','c','i','n','g',' ','e','l','i','t','.',' ','P','h','a','s','e','l','l','u','s',' ','v','e','n','e','n','a','t','i','s','.',
+    // Jump to beginning, jump to end
+    KEY_CTRL_A, KEY_CTRL_E,
+    // jump to beginning, move curs forward
+    KEY_CTRL_A, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F,
+    // move cursor backwards
+    KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B,
+    // delete line
+    KEY_CTRL_U,
+    // enter line again
+    'L','o','r','e','m',' ','i','p','s','u','m',' ','d','o','l','o','r',' ','s','i','t',' ','a','m','e','t',',',' ','c','o','n','s','e','c','t','e','t','u','r',' ','a','d','i','p','i','s','c','i','n','g',' ','e','l','i','t','.',' ','P','h','a','s','e','l','l','u','s',' ','v','e','n','e','n','a','t','i','s','.',
+    // goto begin
+    KEY_CTRL_A,
+    // delete character
+    KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D,
+    // delete line
+    KEY_CTRL_A, KEY_CTRL_K,
+    // Reenter line
+    'L','o','r','e','m',' ','i','p','s','u','m',' ','d','o','l','o','r',' ','s','i','t',' ','a','m','e','t',',',' ','c','o','n','s','e','c','t','e','t','u','r',' ','a','d','i','p','i','s','c','i','n','g',' ','e','l','i','t','.',' ','P','h','a','s','e','l','l','u','s',' ','v','e','n','e','n','a','t','i','s','.',
+    // Backspace delete
+    KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL,
+    // Second Input Widget
+    '\t',
+    'L','o','r','e','m',' ','i','p','s','u','m',' ','d','o','l','o','r',' ','s','i','t',' ','a','m','e','t',',',' ','c','o','n','s','e','c','t','e','t','u','r',' ','a','d','i','p','i','s','c','i','n','g',' ','e','l','i','t','.',' ','P','h','a','s','e','l','l','u','s',' ','v','e','n','e','n','a','t','i','s','.',
+    // Jump to beginning, jump to end
+    KEY_CTRL_A, KEY_CTRL_E,
+    // jump to beginning, move curs forward
+    KEY_CTRL_A, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F, KEY_CTRL_F,
+    // move cursor backwards
+    KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B, KEY_CTRL_B,
+    // delete line
+    KEY_CTRL_U,
+    // enter line again
+    'L','o','r','e','m',' ','i','p','s','u','m',' ','d','o','l','o','r',' ','s','i','t',' ','a','m','e','t',',',' ','c','o','n','s','e','c','t','e','t','u','r',' ','a','d','i','p','i','s','c','i','n','g',' ','e','l','i','t','.',' ','P','h','a','s','e','l','l','u','s',' ','v','e','n','e','n','a','t','i','s','.',
+    // goto begin
+    KEY_CTRL_A,
+    // delete character
+    KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D, KEY_CTRL_D,
+    // delete line
+    KEY_CTRL_A, KEY_CTRL_K,
+    // Reenter line
+    'L','o','r','e','m',' ','i','p','s','u','m',' ','d','o','l','o','r',' ','s','i','t',' ','a','m','e','t',',',' ','c','o','n','s','e','c','t','e','t','u','r',' ','a','d','i','p','i','s','c','i','n','g',' ','e','l','i','t','.',' ','P','h','a','s','e','l','l','u','s',' ','v','e','n','e','n','a','t','i','s','.',
+    // Backspace delete
+    KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL,
+    // Read only Input widget
+    '\t',
+    // ListBox Widget
+    '\t',
+    KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN,
+    KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP,
+    KEY_CTRL_A, KEY_CTRL_E, KEY_CTRL_A,
+    KEY_NPAGE, KEY_NPAGE, KEY_NPAGE, KEY_NPAGE, KEY_NPAGE,
+    KEY_PPAGE, KEY_PPAGE, KEY_PPAGE, KEY_PPAGE, KEY_PPAGE,
+    // Button 1
+    '\t', '\n',
+
+    // Buton 2
+    '\t', '\n',
+
+    // Button 3
+    '\t',
+    '\n', 0
+};
+
+extern "C" int __test_wgetch(void*) {
+    static int* ptr2=__test_data;
+
+    usleep(70000);
+    if (*ptr2==0) {
+	abort();
+    }
+    return *ptr2++;
+}
 
 // Event handler requires access
 Input* ifixed;
@@ -77,7 +155,7 @@ int main() {
 	Input* ireadonly=new Input;
 	ireadonly->input("Read only");
 	ireadonly->readonly(true);
-	
+
 	vpack->add_back(ifixed);
 	vpack->add_back(idyn);
 	vpack->add_back(ireadonly);

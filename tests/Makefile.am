@@ -32,4 +32,5 @@ testpreload.lo: testpreload.c
 check-local: $(interactive_tests)
 	for f in $(interactive_tests) ; do \
 		$(LIBTOOL) --mode=execute env LD_PRELOAD="./.libs/libtestpreload.so" $$f ; \
+		test "x$$?" = "x0" || { echo "*** $$f failed" ; exit 1 ; } ; \
 	done

@@ -15,9 +15,9 @@
 // Used when preloading libtestpreload.so
 int __test_data[]= { 
     // Open dialog, and cancel
-    '\n', '\n',
-    // Open Dialog, and Ok
     '\n', '\t', '\n',
+    // Open Dialog, and Ok
+    '\n', '\n',
     // Quit app
     '\t', '\n', 0
 };

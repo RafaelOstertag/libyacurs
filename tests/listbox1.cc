@@ -39,6 +39,7 @@ int __test_data[]= {
     KEY_CTRL_A, KEY_CTRL_E, KEY_CTRL_A,
     KEY_NPAGE, KEY_NPAGE, KEY_NPAGE, KEY_NPAGE, KEY_NPAGE,
     KEY_PPAGE, KEY_PPAGE, KEY_PPAGE, KEY_PPAGE, KEY_PPAGE,
+    'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 
     'q', 0
 };
 

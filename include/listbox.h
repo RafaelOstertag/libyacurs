@@ -284,12 +284,8 @@ class ListBox: public Widget {
 	    __offset=0;
 	    __curs_pos=0;
 
-	    if (realization()==REALIZED) {
-		if (wclear(widget_subwin())==ERR)
-		    throw ClearFailed();
-
+	    if (realization()==REALIZED) 
 		refresh(true);
-	    }
 	}
 
 	void sort_order(SORT_ORDER _sort_order) {
@@ -341,6 +337,14 @@ class ListBox: public Widget {
 		it++, i++);
 
 	    __list.erase(it);
+
+	    // Adjust cursor position
+	    if (__offset>0) {
+		__offset--;
+	    } else {
+		if (__curs_pos>0)
+		    __curs_pos--;
+	    }
 
 	    if (realization()==REALIZED)
 		refresh(true);

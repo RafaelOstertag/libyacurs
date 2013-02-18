@@ -79,14 +79,14 @@ Dialog::Dialog(const std::string& _title, DIALOG_TYPE _dt): Window(),
 	__hpack->add_back(__bcancel);
     case OK_ONLY:
 	__bok=new Button("OK");
-	__hpack->add_back(__bok);
+	__hpack->add_front(__bok);
 	break;
     case YESNO:
 	__bcancel=new Button("No");
 	__hpack->add_back(__bcancel);
     case YES_ONLY:
 	__bok=new Button("Yes");
-	__hpack->add_back(__bok);
+	__hpack->add_front(__bok);
 	break;
     default:
 	abort();

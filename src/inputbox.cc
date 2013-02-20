@@ -34,6 +34,8 @@ InputBox::InputBox(const std::string& _title,
 
     __vpack->add_back(__message);
     __vpack->add_back(__input);
+    __vpack->always_dynamic(true);
+    __vpack->hinting(true);
 
     widget(__vpack);
 }

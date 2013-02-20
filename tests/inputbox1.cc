@@ -1,6 +1,5 @@
-// $Id$
+// $Id: messagebox1.cc 4865 2013-02-18 18:43:42Z rafisol $
 //
-// Test application
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -14,10 +13,18 @@
 
 // Used when preloading libtestpreload.so
 int __test_data[]= { 
-    // Open dialog, and cancel
-    '\n', '\t', '\n',
-    // Open Dialog, and Ok
-    '\n', '\n',
+    // Open dialog
+    '\n',
+    // enter text
+    'L','o','r','e','m',' ','i','p','s','u','m',' ','d','o','l','o','r',' ','s','i','t',' ','a','m','e','t',',',' ','c','o','n','s','e','c','t','e','t','u','r',' ','a','d','i','p','i','s','c','i','n','g',' ','e','l','i','t','.',' ','P','h','a','s','e','l','l','u','s',' ','v','e','n','e','n','a','t','i','s','.',
+    // Ok, dialog
+    '\t', '\n',
+    // Open Dialog
+    '\n',
+    // enter text
+    'L','o','r','e','m',' ','i','p','s','u','m',' ','d','o','l','o','r',' ','s','i','t',' ','a','m','e','t',',',' ','c','o','n','s','e','c','t','e','t','u','r',' ','a','d','i','p','i','s','c','i','n','g',' ','e','l','i','t','.',' ','P','h','a','s','e','l','l','u','s',' ','v','e','n','e','n','a','t','i','s','.',
+    // cancel dialog
+    '\t', '\t', '\n',
     // Quit app
     '\t', '\n', 0
 };
@@ -39,23 +46,23 @@ class MainWindow: public Window {
 	Button* button1;
 	Button* button2;
 	Label* label1;
-	MessageBox* messagebox1;
+	InputBox* inputbox1;
 
 	
     protected:
 	void window_close_handler(Event& _e) {
 	    assert(_e==EVT_WINDOW_CLOSE);
 	    EventEx<WindowBase*>& evt=dynamic_cast<EventEx<WindowBase*>&>(_e);
-	    if (messagebox1!=NULL && evt.data()==messagebox1) {
+	    if (inputbox1!=NULL && evt.data()==inputbox1) {
 		Curses::statusline()->push_msg("Dialog 1 closed");
 
-		if (messagebox1->dialog_state()==Dialog::DIALOG_OK)
+		if (inputbox1->dialog_state()==Dialog::DIALOG_OK)
 		    label1->label("DIALOG_OK");
 		else
 		    label1->label("DIALOG_CANCEL");
 
-		delete messagebox1;
-		messagebox1=NULL;
+		delete inputbox1;
+		inputbox1=NULL;
 	    }
 
 	}
@@ -65,10 +72,10 @@ class MainWindow: public Window {
 	    EventEx<Button*>& e=dynamic_cast<EventEx<Button*>&>(_e);
 
 	    if (e.data()==button1) {
-		assert(messagebox1==NULL);
+		assert(inputbox1==NULL);
 
-		messagebox1=new MessageBox("Test Dialog", "This is the message");
-		messagebox1->show();
+		inputbox1=new InputBox("Test Dialog", "Enter text");
+		inputbox1->show();
 		return;
 	    }
 
@@ -79,7 +86,7 @@ class MainWindow: public Window {
 	}
 
     public:
-	MainWindow(): Window(Margin(1,0,1,0)), messagebox1(NULL) {
+	MainWindow(): Window(Margin(1,0,1,0)), inputbox1(NULL) {
 	    button1=new Button("New Window");
 	    button2=new Button("Quit");
 	    vpack1=new VPack;
@@ -96,8 +103,8 @@ class MainWindow: public Window {
 	}
 
 	~MainWindow() {
-	    if (messagebox1)
-		delete messagebox1;
+	    if (inputbox1)
+		delete inputbox1;
 
 	    delete button1;
 	    delete button2;
@@ -120,7 +127,7 @@ int main() {
 	Curses::init();
 
 	Curses::title(new LineObject(LineObject::POS_TOP,
-				     "MessageBox 1"));
+				     "InputBox 1"));
 	Curses::statusline(new StatusLine);
 
 	MainWindow* mainwindow=new MainWindow;

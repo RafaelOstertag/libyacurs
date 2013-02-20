@@ -56,7 +56,7 @@ class Window;
  * @subsection Focus
  *
  * If a Widget can have focus, can_focus() must return @c true. The
- * Widget mus add itself to the Focus Group upon realize() and remove
+ * Widget must add itself to the Focus Group upon realize() and remove
  * itself from the Focus Group upon unrealize(). The Parent Widget or
  * the Window has to provide the proper Focus Manager ID.
  *
@@ -245,6 +245,7 @@ class WidgetBase: public Realizeable {
 	 * @return size available to the widget.
 	 */
 	const Size& size_available() const;
+
 	/**
 	 * Notification of size change of a child.
 	 *
@@ -314,6 +315,10 @@ class WidgetBase: public Realizeable {
 	 *
 	 * If a Widget is not capable of focusing, it must throw an
 	 * CannotFocus exception when trying to set the focus.
+	 *
+	 * focus() must not refresh() the Widget. The FocusGroup takes
+	 * care of that. Else refreshing of overlapped windows/widgets
+	 * might get confused.
 	 *
 	 * @param _f @c true if the Widget has focus, @c false
 	 * otherwise.

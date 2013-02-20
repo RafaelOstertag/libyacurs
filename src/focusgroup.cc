@@ -200,6 +200,7 @@ FocusGroup::focus_next() {
 
     // remove focus of current Widget.
     (*__focus)->focus(false);
+    (*__focus)->refresh(true);
 
     // Then, advance to the next widget. If we hit the end, we start
     // at the beginning again.
@@ -207,6 +208,7 @@ FocusGroup::focus_next() {
 	__focus = __widgets.begin();
 
     (*__focus)->focus(true);
+    (*__focus)->refresh(true);
 
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
@@ -234,6 +236,7 @@ FocusGroup::focus_previous() {
 
     // remove focus of current Widget.
     (*__focus)->focus(false);
+    (*__focus)->refresh(true);
 
     // Then, advance to the previous widget. If we are already at the
     // start, wrap to the last widget
@@ -243,6 +246,7 @@ FocusGroup::focus_previous() {
     __focus--;
 
     (*__focus)->focus(true);
+    (*__focus)->refresh(true);
 
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
@@ -259,4 +263,5 @@ FocusGroup::refocus() const {
     if (__widgets.empty()) return;
 
     (*__focus)->focus(true);
+    (*__focus)->refresh(true);
 }

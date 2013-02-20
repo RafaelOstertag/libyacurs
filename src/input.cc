@@ -286,9 +286,6 @@ Input::can_focus() const {
 void
 Input::focus(bool _f) {
     __focus = _f;
-
-    if (realization()==REALIZED)
-	refresh(true);
 }
 
 bool

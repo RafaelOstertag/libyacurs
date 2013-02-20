@@ -114,9 +114,6 @@ Button::can_focus() const {
 void
 Button::focus(bool _f) {
     __focus = _f;
-
-    if (realization()==REALIZED)
-	refresh(true);
 }
 
 bool

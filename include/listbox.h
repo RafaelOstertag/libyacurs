@@ -397,9 +397,6 @@ class ListBox: public Widget {
 
 	void focus(bool _f) {
 	    __focus=_f;
-
-	    if (realization()==REALIZED)
-		refresh(true);
 	}
 
 	bool focus() const {

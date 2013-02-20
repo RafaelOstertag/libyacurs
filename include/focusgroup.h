@@ -53,7 +53,19 @@ class FocusGroup {
 	std::list<WidgetBase*>::iterator __focus;
 
     public:
+	/**
+	 * Constructor.
+	 *
+	 * Upon construction, FocusGroup is not active. In order to
+	 * activate the FocusGroup, call FocusGroup::activate.
+	 */
 	FocusGroup();
+	
+	/**
+	 * Copy Constructor.
+	 *
+	 * @parma _f reference to FocusGroup.
+	 */
 	FocusGroup(const FocusGroup& _f);
 	~FocusGroup();
 	FocusGroup& operator=(const FocusGroup& _f);
@@ -61,9 +73,10 @@ class FocusGroup {
 	/**
 	 * Activate Focus Group
 	 *
-	 * When the Focus Group is activated, the Widget having the
-	 * focus last in the Focus Group before deactivation, (or the
-	 * first on initial call) will receive the Focus.
+	 * When activating a FocusGroup, Widgets won't be focused by
+	 * calling focus(). An explicit call to FocusGroup::refocus()
+	 * is necessary. This is in order to prevent refresh issues
+	 * with overlapping Windows during a screen resize.
 	 */
 	void activate();
 
@@ -105,19 +118,21 @@ class FocusGroup {
 	/**
 	 * Focus next Widget.
 	 *
-	 * Focus next Widget in the list.
+	 * Focus next Widget in the list and refreshes both, the
+	 * Widget having had the focus and the newly focused Widget.
 	 */
 	void focus_next();
 
 	/**
 	 * Focus previous Widget.
 	 *
-	 * Focus previous Widget in the list.
+	 * Focus previous Widget in the list and refreshes both, the
+	 * Widget having had the focus and the newly focused Widget.
 	 */
 	void focus_previous();
 
 	/**
-	 * Re-focus the current focussed widgets.
+	 * Re-focus the Widget having the focus.
 	 */
 	void refocus() const;
 

@@ -59,8 +59,6 @@ Button::realize() {
 
     assert(focusgroup_id()!=(fgid_t)-1);
 
-    FocusManager::focus_group_add(focusgroup_id(), this);
-
     REALIZE_LEAVE;
 }
 
@@ -71,8 +69,6 @@ Button::unrealize() {
     EventQueue::disconnect_event(EventConnectorMethod1<Button>(EVT_KEY,this, &Button::key_handler));
 
     assert(focusgroup_id()!=(fgid_t)-1);
-
-    FocusManager::focus_group_remove(focusgroup_id(), this);
 
     Label::unrealize();
 

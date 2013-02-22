@@ -109,6 +109,7 @@ Pack::add_back(WidgetBase* _w) {
     _w->curses_window(WidgetBase::curses_window());
     _w->focusgroup_id(WidgetBase::focusgroup_id());
 }
+
 void
 Pack::remove(WidgetBase* _w) {
     assert(_w != NULL);

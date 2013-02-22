@@ -203,8 +203,6 @@ class ListBox: public Widget {
 
 	    assert(focusgroup_id()!=(fgid_t)-1);
 
-	    FocusManager::focus_group_add(focusgroup_id(), this);
-
 	    REALIZE_LEAVE;
 	}
 
@@ -214,8 +212,6 @@ class ListBox: public Widget {
 	    EventQueue::disconnect_event(EventConnectorMethod1<ListBox>(EVT_KEY,this, &ListBox::key_handler));
 
 	    assert(focusgroup_id()!=(fgid_t)-1);
-
-	    FocusManager::focus_group_remove(focusgroup_id(), this);
 
 	    Widget::unrealize();
 

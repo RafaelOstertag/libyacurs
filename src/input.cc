@@ -170,7 +170,6 @@ Input::realize() {
 
     assert(focusgroup_id()!=(fgid_t)-1);
 
-    FocusManager::focus_group_add(focusgroup_id(), this);
     REALIZE_LEAVE;
 }
 
@@ -180,8 +179,6 @@ Input::unrealize() {
     EventQueue::disconnect_event(EventConnectorMethod1<Input>(EVT_KEY,this, &Input::key_handler));
 
     assert(focusgroup_id()!=(fgid_t)-1);
-
-    FocusManager::focus_group_remove(focusgroup_id(), this);
 
     Widget::unrealize();
     UNREALIZE_LEAVE;

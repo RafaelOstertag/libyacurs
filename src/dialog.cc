@@ -108,8 +108,8 @@ Dialog::~Dialog() {
     delete __bok;
 
     if (__dialog_type) {
-	assert(__bcancel!=NULL);
-	delete __bcancel;
+     	assert(__bcancel!=NULL);
+     	delete __bcancel;
     }
 
     EventQueue::disconnect_event(EventConnectorMethod1<Dialog>(EVT_BUTTON_PRESS, this, &Dialog::button_press_handler));

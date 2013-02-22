@@ -42,8 +42,6 @@ Window::unrealize() {
     // With the introduction of Focus Group IDs, we have to destroy
     // the Focus Group AFTER the Widget has been removed from the
     // Focus Group.
-    FocusManager::destroy_focus_group(__fgid);
-    __fgid = (fgid_t)-1;
     UNREALIZE_LEAVE;
 }
 
@@ -53,13 +51,21 @@ Window::unrealize() {
 
 Window::Window(const Margin& m): WindowBase(m),
 				 __widget(NULL),
-				 __fgid((fgid_t)-1) {}
+				 __fgid((fgid_t)-1) {
+    // It is imperative that a new Focus Group is created before the
+    // Widget is realized()!
+    __fgid = FocusManager::new_focus_group();
+}
 
-Window::~Window() {}
+Window::~Window() {
+    FocusManager::destroy_focus_group(__fgid);
+    __fgid = (fgid_t)-1;
+}
 
 void
 Window::widget(WidgetBase* _w) {
     __widget = _w;
+    __widget->focusgroup_id(__fgid);
 }
 
 WidgetBase*
@@ -77,6 +83,7 @@ Window::refresh(bool immediate) {
 
     WindowBase::refresh(immediate);
 
+    assert(__fgid!=(fgid_t)-1);
     FocusManager::focus_group_activate(__fgid);
 
     if (__widget) __widget->refresh(immediate);
@@ -86,10 +93,6 @@ void
 Window::realize() {
     REALIZE_ENTER;
     WindowBase::realize();
-
-    // It is imperative that a new Focus Group is created before the
-    // Widget is realized()!
-    __fgid = FocusManager::new_focus_group();
 
     if (__widget) {
 	assert(__widget->realization()==UNREALIZED);

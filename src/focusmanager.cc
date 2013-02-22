@@ -92,7 +92,15 @@ void
 FocusManager::destroy_focus_group(fgid_t _id) {
     assert(!__focus_groups.empty());
     assert(_id < __focus_groups.size());
-    assert(__focus_groups[_id]!=NULL);
+
+    // check if the FocusGroup still exists.
+    //
+    // It is possible that the Focus Groups have been destroyed by a
+    // call to ::uninit() due to termination of the event loop, but
+    // destruction of Windows were still not done. See the test
+    // 'listbox2.cc' for an example of this bevavior
+    if (__focus_groups[_id]==NULL)
+	return;
 
     // Destructor of FocusGroup is supposed to take care of removing
     // focus, so we simply destroy the group.
@@ -119,9 +127,16 @@ FocusManager::focus_group_add(fgid_t _id, WidgetBase* _w) {
 void
 FocusManager::focus_group_remove(fgid_t _id, WidgetBase* _w) {
     assert(_w!=NULL);
-    assert(!__focus_groups.empty());
-    assert(_id < __focus_groups.size());
-    assert(__focus_groups[_id]!=NULL);
+    assert(_id!=(fgid_t)-1);
+
+    // check if the FocusGroup still exists.
+    //
+    // It is possible that the Focus Groups have been destroyed by a
+    // call to ::uninit() due to termination of the event loop, but
+    // destruction of Windows were still not done. See the test
+    // 'listbox2.cc' for an example of this bevavior
+    if (__focus_groups[_id]==NULL)
+	return;
 
     __focus_groups[_id]->remove(_w);
 }
@@ -152,7 +167,9 @@ FocusManager::focus_group_activate(fgid_t _id) {
 void
 FocusManager::refocus() {
     if (__focus_groups.empty()) return;
+
     assert(__active_focusgroup!=(fgid_t)-1);
+    assert(__focus_groups[__active_focusgroup]!=NULL);
     // This would make many tests fail. Also, it should be no problem
     // if we don't assert.
     //

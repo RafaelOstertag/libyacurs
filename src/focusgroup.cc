@@ -88,7 +88,7 @@ FocusGroup::activate() {
     CountFocus cf=std::for_each(__widgets.begin(),
 				__widgets.end(),
 				CountFocus());
-    assert(cf.count()==1);
+    assert(cf.count()<2);
 #endif // NDEBUG
 }
 
@@ -129,7 +129,7 @@ FocusGroup::add(WidgetBase* _w) {
     //
     // In any other case, activate() will take (has taken) care of
     // giving the focus to a widget.
-    if (__widgets.empty() && __active) {
+    if (__widgets.empty()) {
 	__widgets.push_back(_w);
 	__focus=__widgets.begin();
 	(*__focus)->focus(true);

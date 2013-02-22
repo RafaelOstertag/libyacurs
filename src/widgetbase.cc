@@ -8,6 +8,7 @@
 #include <cstdlib>
 
 #include "widgetbase.h"
+#include "focusmanager.h"
 #include "cursex.h"
 
 //
@@ -55,6 +56,12 @@ WidgetBase::WidgetBase(): Realizeable(),
 }
 
 WidgetBase::~WidgetBase() {
+    // Make sure the widget is removed from the focus group.
+    //
+    // we don't call can_focus(), since that might already been
+    // destroyed.
+    if (__fgid!=(fgid_t)-1)
+	FocusManager::focus_group_remove(__fgid, this);
 }
 
 void
@@ -69,6 +76,15 @@ WidgetBase::curses_window(WINDOW* _p) {
 
 void
 WidgetBase::focusgroup_id(fgid_t _id) {
+    if (can_focus()) {
+	// Remove the widget from the current focus group, if possible
+	if (__fgid!=(fgid_t)-1)
+	    FocusManager::focus_group_remove(__fgid, this);
+
+	// Add the widget to the new focus group if possible
+	if (_id!=(fgid_t)-1)
+	    FocusManager::focus_group_add(_id, this);
+    }
     __fgid=_id;
 }
 

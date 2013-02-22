@@ -204,7 +204,8 @@ class WidgetBase: public Realizeable {
 	 *
 	 * @param _id Focus Group ID.
 	 *
-	 * @internal it is virtual because Pack implements its own version.
+	 * @internal it is virtual because Pack implements its own
+	 * version.
 	 */
 	virtual void focusgroup_id(fgid_t _id);
 

@@ -853,6 +853,10 @@ class MainWindow: public Window {
 };
 
 int main() {
+#if 0
+    std::cout << getpid() << std::endl;
+    sleep(15);
+#endif
     try {
 	Curses::init();
 

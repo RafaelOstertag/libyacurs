@@ -145,13 +145,13 @@ void
 Curses::run() {
     if (!initialized) throw NotInitialized();
 
+    FocusManager::init();
+
     if (__title) __title->show();
 
     if (__statusline) __statusline->show();
 
     if (__mainwindow) __mainwindow->show();
-
-    FocusManager::init();
 
     EventQueue::run();
 

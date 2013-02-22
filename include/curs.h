@@ -82,6 +82,17 @@ class Curses {
 	static void init();
 	static void end();
 
+	/**
+	 * Start the application.
+	 *
+	 * Starts the application by initializing the Focus Manager,
+	 * showing the title, status line and main window (if any),
+	 * and starting the EventQueue..
+	 *
+	 * Upon termination of the EventQueue by an EVT_QUIT event,
+	 * the title, status line and main window (if any) will be
+	 * closed and the Focus Manager will be uninitialized.
+	 */
 	static void run();
 
 	static void title(LineObject* _title);

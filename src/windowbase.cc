@@ -67,7 +67,7 @@ WindowBase::unrealize() {
     }
 
     __curses_window = NULL;
-    
+
     UNREALIZE_LEAVE;
 }
 

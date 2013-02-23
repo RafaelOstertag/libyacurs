@@ -46,11 +46,6 @@
 class Input: public Widget {
     private:
 	/**
-	 * Focus indication.
-	 */
-	bool __focus;
-
-	/**
 	 * Offset into the buffer. Used when not the entire buffer can
 	 * be displayed in the Input Widget, i.e. scrolling.
 	 */
@@ -173,10 +168,6 @@ class Input: public Widget {
 	 * If __length is zero, resets __size. Else does nothing.
 	 */
 	void reset_size();
-
-	bool can_focus() const;
-	void focus(bool);
-	bool focus() const;
 
 	// From Realizeable
 	/**

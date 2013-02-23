@@ -49,11 +49,6 @@ class ListBox: public Widget {
 	typename std::list<_T> __list;
 
 	/**
-	 * Focus indication.
-	 */
-	bool __focus;
-
-	/**
 	 * Offset into the list.
 	 */
 	typename std::list<_T>::size_type __offset;
@@ -87,7 +82,7 @@ class ListBox: public Widget {
 	virtual void key_handler(Event& _e) {
 	    assert(_e==EVT_KEY);
 
-	    if (!__focus) return;
+	    if (!focus()) return;
 
 	    EventEx<int>& ekey=dynamic_cast<EventEx<int>&>(_e);
 
@@ -236,11 +231,12 @@ class ListBox: public Widget {
 	 */
 	ListBox(): Widget(),
 		   __list(),
-		   __focus(false),
 		   __offset(0),
 		   __curs_pos(0),
 		   __size(Size::zero()),
-		   __sort_order(UNSORTED) {}
+		   __sort_order(UNSORTED) {
+	    can_focus(true);
+	}
 
 	virtual ~ListBox() {
 	    EventQueue::disconnect_event(EventConnectorMethod1<ListBox>(EVT_KEY, this, &ListBox::key_handler));
@@ -387,18 +383,6 @@ class ListBox: public Widget {
 	    __size=Size::zero();
 	}
 
-	bool can_focus() const {
-	    return true;
-	}
-
-	void focus(bool _f) {
-	    __focus=_f;
-	}
-
-	bool focus() const {
-	    return __focus;
-	}
-
 	// From Realizeable
 	/**
 	 * Refresh the Input.
@@ -473,7 +457,7 @@ class ListBox: public Widget {
 	    // artifcats on the right side of the box, when it is
 	    // placed in front of the above code block.
 	    //
-	    if (__focus) {
+	    if (focus()) {
 		if (box(widget_subwin(), 0, 0)==ERR)
 		    throw BoxFailed();
 	    } else {
@@ -507,7 +491,7 @@ class ListBox: public Widget {
 	    }
 
 	    // Set the cursor at the right position if we have focus.
-	    if (__focus && !__list.empty()) {
+	    if (focus() && !__list.empty()) {
 		curs_set(1);
 		if (leaveok(widget_subwin(), FALSE)==ERR)
 		    throw LeaveOKFailed();

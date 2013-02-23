@@ -80,10 +80,6 @@ class Label: public Widget {
 	 */
 	void reset_size();
 
-	bool can_focus() const;
-	void focus(bool);
-	bool focus() const;
-
 	// From Realizeable
 	/**
 	 * Refresh the label.

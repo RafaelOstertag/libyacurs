@@ -32,9 +32,7 @@ class HRealizeWidgets {
 	    // statically sized become too big when stacked.
 	    try {
 		_w->realize();
-	    } catch (BaseCurEx& e) {
-		std::string str("!! HRealizeWidgets Exception: ");
-
+	    } catch (BaseCurEx&) {
 	    } 
 	}
 };
@@ -410,8 +408,7 @@ HPack::realize() {
 
     try {
 	recalc_size();
-    } catch (AreaExceeded& ae) {
-	std::string str("!! HPack::recalc_size() Exception: ");
+    } catch (AreaExceeded&) {
 	// Back off
 	std::for_each(widget_list.begin(),
 		  widget_list.end(),

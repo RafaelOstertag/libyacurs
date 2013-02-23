@@ -32,8 +32,7 @@ class VRealizeWidgets {
 	    // statically sized become too big when stacked.
 	    try {
 		_w->realize();
-	    } catch (BaseCurEx& e) {
-		std::string str("!! VRealizeWidgets Exception: ");
+	    } catch (BaseCurEx&) {
 
 	    }
 	}
@@ -408,8 +407,7 @@ VPack::realize() {
 
     try {
 	recalc_size();
-    } catch (AreaExceeded& ae) {
-	std::string str("!! VPack::recalc_size() Exception: ");
+    } catch (AreaExceeded&) {
 	// Back off
 	std::for_each(widget_list.begin(),
 		      widget_list.end(),

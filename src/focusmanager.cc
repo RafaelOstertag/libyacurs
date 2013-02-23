@@ -107,11 +107,8 @@ FocusManager::destroy_focus_group(fgid_t _id) {
     delete __focus_groups[_id];
     __focus_groups[_id] = NULL;
 
-    // Now, we assume that when the Focus Group has been destroyed, a
-    // Window just disappeared, so a refresh will take place
-    // soon. Hence we set the Active Focus Group to -1, which should
-    // be changed as soon as the Window(s) do a refresh.
-    __active_focusgroup=(fgid_t)-1;
+    if (__active_focusgroup==_id)
+	__active_focusgroup=(fgid_t)-1;
 }
 
 void

@@ -95,6 +95,22 @@ class WidgetBase: public Realizeable {
 	fgid_t __fgid;
 
 	/**
+	 * Flag indicating whether or not the Widget can be focused.
+	 *
+	 * Set to @c false by ctor.
+	 */
+	bool __can_focus;
+
+	/**
+	 * Focus flag.
+	 *
+	 * Indicator whether or not the widget has Focus.
+	 *
+	 * Set to @c false by ctor.
+	 */
+	bool __focus;
+
+	/**
 	 * The parent of the widget. If the widget has no parent, it
 	 * has to be set to NULL.
 	 *
@@ -154,6 +170,11 @@ class WidgetBase: public Realizeable {
 	 * @return Focus Group ID.
 	 */
 	fgid_t focusgroup_id() const;
+
+	/**
+	 * Set whether or not Widget can be focused
+	 */
+	void can_focus(bool _can_focus);
 
     public:
 	/**
@@ -309,7 +330,7 @@ class WidgetBase: public Realizeable {
 	 * @return Widgets not capable of focusing return @c false,
 	 * otherwise @c true.
 	 */
-	virtual bool can_focus() const = 0;
+	virtual bool can_focus() const;
 
 	/**
 	 * Set or unset the focus to the Widget.
@@ -324,7 +345,7 @@ class WidgetBase: public Realizeable {
 	 * @param _f @c true if the Widget has focus, @c false
 	 * otherwise.
 	 */
-	virtual void focus(bool _f) = 0;
+	virtual void focus(bool _f);
 
 	/**
 	 * Get the focus status.
@@ -335,7 +356,7 @@ class WidgetBase: public Realizeable {
 	 * @return @c true if the widget has focus, @c false
 	 * otherwise.
 	 */
-	virtual bool focus() const = 0;
+	virtual bool focus() const;
 
 	// From Realizable
 	void unrealize();

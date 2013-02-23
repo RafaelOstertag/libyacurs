@@ -22,10 +22,6 @@
  */
 class Button: public Label {
     private:
-	/**
-	 * Indicates whether or not Button has focus.
-	 */
-	bool __focus;
 
 	// Not supported
 	Button& operator=(const Button&);
@@ -66,11 +62,6 @@ class Button: public Label {
 	 * @return label of Button.
 	 */
 	std::string label() const;
-
-	// From WidgetBase
-	bool can_focus() const;
-	void focus(bool _f);
-	bool focus() const;
 
 	// From Realizeable
 	void refresh(bool immediate);

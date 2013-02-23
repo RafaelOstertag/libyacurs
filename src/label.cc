@@ -22,9 +22,9 @@ Label::operator=(const Label&) {
 //
 // Public
 //
-Label::Label(const std::string& _l):
-    Widget(), __label(_l),
-    __size(Size(1, _l.length())) {
+Label::Label(const std::string& _l): Widget(),
+				     __label(_l),
+				     __size(Size(1, _l.length())) {
 }
 
 Label::~Label() {
@@ -78,21 +78,6 @@ void
 Label::reset_size() {
     // Intentionally empty, since reset_size() is intended for
     // dynamically sized Widgets.
-}
-
-bool
-Label::can_focus() const {
-    return false;
-}
-
-void
-Label::focus(bool) {
-    throw CannotFocus();
-}
-
-bool 
-Label::focus() const {
-    return false;
 }
 
 void

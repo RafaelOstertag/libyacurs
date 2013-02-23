@@ -43,6 +43,11 @@ WidgetBase::parent() const {
     return __parent;
 }
 
+void
+WidgetBase::can_focus(bool _can_focus) {
+    __can_focus=_can_focus;
+}
+
 //
 // Private
 //
@@ -50,17 +55,15 @@ WidgetBase::parent() const {
 WidgetBase::WidgetBase(): Realizeable(),
 			  __curses_window(NULL),
 			  __fgid((fgid_t)-1),
+			  __can_focus(false),
+			  __focus(false),
 			  __parent(NULL),
 			  __position(),
 			  __size_available() {
 }
 
 WidgetBase::~WidgetBase() {
-    // Make sure the widget is removed from the focus group.
-    //
-    // we don't call can_focus(), since that might already been
-    // destroyed.
-    if (__fgid!=(fgid_t)-1)
+    if (__can_focus && __fgid!=(fgid_t)-1)
 	FocusManager::focus_group_remove(__fgid, this);
 }
 
@@ -76,7 +79,11 @@ WidgetBase::curses_window(WINDOW* _p) {
 
 void
 WidgetBase::focusgroup_id(fgid_t _id) {
-    if (can_focus()) {
+    // Only make changes to the Focus Group if Focus Group ID differs.
+    //
+    // This ensures that the currently focused Widget does not loose
+    // the focus when resizing.
+    if (__can_focus && __fgid!=_id) {
 	// Remove the widget from the current focus group, if possible
 	if (__fgid!=(fgid_t)-1)
 	    FocusManager::focus_group_remove(__fgid, this);
@@ -112,11 +119,32 @@ WidgetBase::size_available() const {
     return __size_available;
 }
 
+bool
+WidgetBase::can_focus() const {
+    return __can_focus;
+}
+
+void
+WidgetBase::focus(bool _f) {
+    if (!can_focus)
+	throw CannotFocus();
+
+    __focus=_f;
+}
+
+bool
+WidgetBase::focus() const {
+    if (!can_focus)
+	throw CannotFocus();
+
+    return __focus;
+}
+
 void
 WidgetBase::unrealize() {
     UNREALIZE_ENTER;
 
-    __fgid=(fgid_t)-1;
+    // Intentionally empty
 
     UNREALIZE_LEAVE;
 }

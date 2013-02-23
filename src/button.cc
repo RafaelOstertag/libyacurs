@@ -26,7 +26,7 @@ void
 Button::key_handler(Event& _e) {
     assert(_e.type()==EVT_KEY);
 
-    if (!__focus) return;
+    if (!focus()) return;
 
     EventEx<int>& ekey=dynamic_cast<EventEx<int>&>(_e);
 
@@ -78,8 +78,8 @@ Button::unrealize() {
 // Public
 //
 
-Button::Button(const std::string& _b): Label(),
-				       __focus(false) {
+Button::Button(const std::string& _b): Label() {
+    can_focus(true);
 
     // We want our label() to be called, so we don't use the Label()
     // constructor to set the label
@@ -102,20 +102,6 @@ Button::label() const {
     // get rid of the square brackets
     return tmp.substr(2, tmp.length()-4);
 }
-bool
-Button::can_focus() const {
-    return true;
-}
-
-void
-Button::focus(bool _f) {
-    __focus = _f;
-}
-
-bool
-Button::focus() const {
-    return __focus;
-}
 
 void
 Button::refresh(bool immediate) {
@@ -123,7 +109,7 @@ Button::refresh(bool immediate) {
 
     assert(widget_subwin()!=NULL);
 
-    if (__focus) {
+    if (focus()) {
 	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_FOCUS);
 	if (leaveok(widget_subwin(), FALSE)==ERR)
 	    throw LeaveOKFailed();

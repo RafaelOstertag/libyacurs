@@ -26,7 +26,7 @@ void
 Input::key_handler(Event& _e) {
     assert(_e.type()==EVT_KEY);
 
-    if (!__focus) return;
+    if (!focus()) return;
 
     EventEx<int>& ekey=dynamic_cast<EventEx<int>&>(_e);
 
@@ -189,7 +189,6 @@ Input::unrealize() {
 
 Input::Input(int _length, std::string::size_type _max_size, const std::string& _t):
     Widget(),
-    __focus(false),
     __offset(0),
     __curs_pos(0),
     __max_size(_max_size),
@@ -197,6 +196,7 @@ Input::Input(int _length, std::string::size_type _max_size, const std::string& _
     __read_only(false),
     __buffer(_t.length()>__max_size?_t.substr(0,__max_size):_t),
     __size(__length>0 ? Size(1, __length) : Size::zero()) {
+    can_focus(true);
 }
 
 Input::~Input() {
@@ -275,21 +275,6 @@ Input::reset_size() {
     __size=Size::zero();
 }
 
-bool
-Input::can_focus() const {
-    return true;
-}
-
-void
-Input::focus(bool _f) {
-    __focus = _f;
-}
-
-bool
-Input::focus() const {
-    return __focus;
-}
-
 void
 Input::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
@@ -298,7 +283,7 @@ Input::refresh(bool immediate) {
     // setting background is essential for coloring entire input
     // widget.
 
-    if (__focus) {
+    if (focus()) {
 	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::INPUTWIDGET_FOCUS);
 	YAPET::UI::Colors::set_bg(widget_subwin(), YAPET::UI::INPUTWIDGET_FOCUS);
 	curs_set(1);

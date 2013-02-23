@@ -65,7 +65,6 @@ Window::~Window() {
 void
 Window::widget(WidgetBase* _w) {
     __widget = _w;
-    __widget->focusgroup_id(__fgid);
 }
 
 WidgetBase*
@@ -93,6 +92,8 @@ void
 Window::realize() {
     REALIZE_ENTER;
     WindowBase::realize();
+
+    FocusManager::focus_group_activate(__fgid);
 
     if (__widget) {
 	assert(__widget->realization()==UNREALIZED);

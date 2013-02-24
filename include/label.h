@@ -49,7 +49,7 @@ class Label: public Widget {
 	virtual ~Label();
 
 	virtual void label(const std::string& _l);
-	virtual std::string label() const;
+	virtual const std::string& label() const;
 
 	// From WidgetBase
 

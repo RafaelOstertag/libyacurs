@@ -52,7 +52,7 @@ Label::label(const std::string& _l) {
     parent()->size_change(); 
 }
 
-std::string
+const std::string&
 Label::label() const {
     return __label;
 }

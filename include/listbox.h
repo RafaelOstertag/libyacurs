@@ -46,6 +46,16 @@ class ListBox: public Widget {
 	    return a>b;
 	}
     private:
+	/**
+	 * Empty value.
+	 *
+	 * Used when selected() is called on empty list. This is
+	 * needed since we return a reference to the item, so we
+	 * cannot create an empty element in selected() and return a
+	 * reference to it.
+	 */
+	_T __empty;
+
 	typename std::list<_T> __list;
 
 	/**
@@ -230,6 +240,7 @@ class ListBox: public Widget {
 	/**
 	 */
 	ListBox(): Widget(),
+		   __empty(),
 		   __list(),
 		   __offset(0),
 		   __curs_pos(0),
@@ -298,9 +309,9 @@ class ListBox: public Widget {
 	}
 
 	const _T& selected() const {
-	    if (__list.empty()) return _T();
+	    if (__list.empty()) return __empty;
 
-	    typename std::list<_T>::iterator it=__list.begin();
+	    typename std::list<_T>::const_iterator it=__list.begin();
 	    for(typename std::list<_T>::size_type i=0;
 		i<=__curs_pos+__offset;
 		it++, i++);
@@ -311,7 +322,7 @@ class ListBox: public Widget {
 	void selected(_T& _item) {
 	    typename std::list<_T>::iterator it=__list.begin();
 	    for(typename std::list<_T>::size_type i=0;
-		i<=__curs_pos+__offset;
+		i<__curs_pos+__offset;
 		it++, i++);
 
 	    *it=_item;

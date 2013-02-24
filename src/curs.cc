@@ -111,7 +111,7 @@ Curses::init() {
 
     // Curses clears stdscr upon first call to getch, which may
     // produce undesired results, i.e. already created Curses Windows
-    // may be overwritten. Therefore we refresh stdscr preventive.
+    // may be overwritten. Therefore we refresh stdscr preventively.
     if (wrefresh(stdscr) == ERR)
 	throw RefreshFailed();
 

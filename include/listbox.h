@@ -313,7 +313,7 @@ class ListBox: public Widget {
 
 	    typename std::list<_T>::const_iterator it=__list.begin();
 	    for(typename std::list<_T>::size_type i=0;
-		i<=__curs_pos+__offset;
+		i<__curs_pos+__offset;
 		it++, i++);
 
 	    return *it;

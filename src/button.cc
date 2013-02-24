@@ -92,15 +92,13 @@ Button::~Button() {
 
 void
 Button::label(const std::string& _l) {
+    __tmp_label = _l;
     Label::label("[ " + _l + " ]");
 }
 
-std::string
+const std::string&
 Button::label() const {
-    std::string tmp(Label::label());
-
-    // get rid of the square brackets
-    return tmp.substr(2, tmp.length()-4);
+    return __tmp_label;
 }
 
 void

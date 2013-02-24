@@ -22,6 +22,10 @@
  */
 class Button: public Label {
     private:
+	/**
+	 * Temporary string used when returning label.
+	 */
+	std::string __tmp_label;
 
 	// Not supported
 	Button& operator=(const Button&);
@@ -61,7 +65,7 @@ class Button: public Label {
 	 *
 	 * @return label of Button.
 	 */
-	std::string label() const;
+	const std::string& label() const;
 
 	// From Realizeable
 	void refresh(bool immediate);

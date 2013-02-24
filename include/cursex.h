@@ -129,8 +129,12 @@ class NotRealized: public BaseCurEx {
 };
 
 class SystemError: public BaseCurEx {
+    private:
+	int __errno;
+
     public:
 	SystemError(int _errno);
+	int errno() const;
 };
 
 class WinSizeInvalid: public BaseCurEx {

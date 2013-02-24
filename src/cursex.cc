@@ -76,7 +76,10 @@ NotRealized::NotRealized():
     BaseCurEx("object not realized") {}
 
 SystemError::SystemError(int _errno):
-    BaseCurEx(strerror(_errno)) {}
+    BaseCurEx(strerror(_errno)),
+    __errno(_errno) {}
+int
+SystemError::errno() const { return __errno; }
 
 WinSizeInvalid::WinSizeInvalid():
     BaseCurEx("TIOCGWINSZ info invalid") {}

@@ -134,7 +134,7 @@ class SystemError: public BaseCurEx {
 
     public:
 	SystemError(int _errno);
-	int errno() const;
+	int errorno() const;
 };
 
 class WinSizeInvalid: public BaseCurEx {

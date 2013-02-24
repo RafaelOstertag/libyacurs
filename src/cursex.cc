@@ -79,7 +79,7 @@ SystemError::SystemError(int _errno):
     BaseCurEx(strerror(_errno)),
     __errno(_errno) {}
 int
-SystemError::errno() const { return __errno; }
+SystemError::errorno() const { return __errno; }
 
 WinSizeInvalid::WinSizeInvalid():
     BaseCurEx("TIOCGWINSZ info invalid") {}

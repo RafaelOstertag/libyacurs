@@ -7,7 +7,7 @@ non_interactive_tests = cursinit coordinates margin area		\
  pack9 packresize1 dynlabel1 widget1 widget2 widget3 
 
 interactive_tests = eventqueue9 resize3 resize4 resize5 focus1 app1	\
- listbox1 listbox2 dialog1 messagebox1 inputbox1
+ listbox1 listbox2 dialog1 messagebox1 inputbox1 filedialog1
 
 check_PROGRAMS =  $(non_interactive_tests) $(interactive_tests)
 # interactive tests must not be listed here
@@ -26,7 +26,7 @@ clean-local:
 libtestpreload.la: testpreload.lo
 	$(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -rpath /usr/local/lib -o $@ $<
 
-testpreload.lo: testpreload.c
+testpreload.lo: testpreload.cc
 	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o $@ $<
 
 check-local: $(interactive_tests)

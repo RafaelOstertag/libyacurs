@@ -32,7 +32,7 @@ class DynLabel: public Label {
 
 	// From Label
 	void label(const std::string& _l);
-	std::string label() const;
+	const std::string& label() const;
 
 	// From WidgetBase
 

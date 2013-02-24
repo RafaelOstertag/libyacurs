@@ -60,14 +60,17 @@ Dialog::unrealize() {
 // Public
 //
 
-Dialog::Dialog(const std::string& _title, DIALOG_TYPE _dt): Window(),
-							 __vpack(NULL),
-							 __hpack(NULL),
-							 __bok(NULL),
-							 __bcancel(NULL),
-							 __dstate(DIALOG_CANCEL),
-							 __dialog_type(_dt),
-							 __title(_title) {
+Dialog::Dialog(const std::string& _title,
+	       DIALOG_TYPE _dt,
+	       DIALOG_SIZE _ds): Window(),
+				 __vpack(NULL),
+				 __hpack(NULL),
+				 __bok(NULL),
+				 __bcancel(NULL),
+				 __dstate(DIALOG_CANCEL),
+				 __dialog_type(_dt),
+				 __dialog_size(_ds),
+				 __title(_title) {
     __vpack=new VPack;
     __hpack=new HPack;
 
@@ -142,13 +145,20 @@ Dialog::realize() {
 
     EventQueue::connect_event(EventConnectorMethod1<Dialog>(EVT_BUTTON_PRESS, this, &Dialog::button_press_handler));
 
-    // Compute the margin. We try to vertically center the dialog.
-    int hinted_rows = Window::widget()->size_hint().rows();
-    if (hinted_rows>0 && hinted_rows<area().rows()-2) {
-	int vert_margin=(area().rows()-hinted_rows)/2-1;
-	margin(Margin(vert_margin, 2, vert_margin, 2));
+    Margin _margin(2,2,2,2);
+    __vpack->hinting(false);
+
+    if (__dialog_size==AUTOMATIC) {
+	__vpack->hinting(true);
+	// Compute the margin. We try to vertically center the dialog.
+	int hinted_rows = Window::widget()->size_hint().rows();
+	if (hinted_rows>0 && hinted_rows<area().rows()-2) {
+	    int vert_margin=(area().rows()-hinted_rows)/2-1;
+	   _margin=Margin(vert_margin, 2, vert_margin, 2);
+	}
     }
 
+    margin(_margin);
     Window::realize();
 
     REALIZE_LEAVE;

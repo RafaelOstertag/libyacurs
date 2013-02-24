@@ -32,6 +32,11 @@ class Dialog: public Window {
 	    YESNO
 	};
 
+	enum DIALOG_SIZE {
+	    AUTOMATIC,
+	    FULLSIZE
+	};
+
     private:
 	VPack* __vpack;
 	HPack* __hpack;
@@ -39,6 +44,7 @@ class Dialog: public Window {
 	Button* __bcancel;
 	STATE __dstate;
         DIALOG_TYPE __dialog_type;
+	DIALOG_SIZE __dialog_size;
 	
 
 	std::string __title;
@@ -51,8 +57,11 @@ class Dialog: public Window {
 
 	void unrealize();
 
+
     public:
-	Dialog(const std::string& _title, DIALOG_TYPE _dt=OKCANCEL);
+	Dialog(const std::string& _title, 
+	       DIALOG_TYPE _dt=OKCANCEL,
+	       DIALOG_SIZE _ds=AUTOMATIC);
 	virtual ~Dialog();
 	STATE dialog_state() const;
 

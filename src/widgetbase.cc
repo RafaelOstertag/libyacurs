@@ -126,7 +126,7 @@ WidgetBase::can_focus() const {
 
 void
 WidgetBase::focus(bool _f) {
-    if (!can_focus)
+    if (!__can_focus)
 	throw CannotFocus();
 
     __focus=_f;
@@ -134,7 +134,7 @@ WidgetBase::focus(bool _f) {
 
 bool
 WidgetBase::focus() const {
-    if (!can_focus)
+    if (!__can_focus)
 	throw CannotFocus();
 
     return __focus;

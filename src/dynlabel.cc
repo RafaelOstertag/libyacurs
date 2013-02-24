@@ -35,7 +35,7 @@ DynLabel::label(const std::string& _l) {
     if (realization()==REALIZED) refresh(true);
 }
 
-std::string
+const std::string&
 DynLabel::label() const {
     return __label;
 }
@@ -50,7 +50,7 @@ DynLabel::size_available(const Size& _s) {
 
 Size
 DynLabel::size_hint() const {
-    return Size::zero();
+    return Size(1,0);
 }
 
 void

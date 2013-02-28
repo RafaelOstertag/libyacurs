@@ -22,6 +22,7 @@
  * that it cannot be realized() and throwing an exception.
  */
 class Label: public Widget {
+    private:
 	// Not supported
 	Label& operator=(const Label&);
 

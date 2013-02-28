@@ -37,6 +37,8 @@
 #include "messagebox2.h"
 #include "inputbox.h"
 #include "filedialog.h"
+#include "checkbox.h"
+#include "radiobox.h"
 
 #endif // YACURS_H
 

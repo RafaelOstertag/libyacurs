@@ -56,6 +56,19 @@ int __test_data_1[] = {
     0
 };
 
+int __dir_up_data[] = {
+    KEY_DOWN, '\n',
+    KEY_DOWN, '\n',
+    KEY_DOWN, '\n',
+    KEY_DOWN, '\n',
+    KEY_DOWN, '\n',
+    KEY_DOWN, '\n',
+    KEY_DOWN, '\n',
+    KEY_DOWN, '\n',
+    KEY_DOWN, '\n',
+    KEY_DOWN, '\n'
+};
+
 // Quit dialog
 int __test_data_end_dialog[]= { 
     '\t', '\t', '\t', '\n', 0
@@ -66,7 +79,7 @@ int __test_data_end_app[]= {
     '\t', '\n', 0
 };
 
-int* selection1[31];
+int* selection1[61];
 
 int select_item() {
     int tmp;
@@ -87,11 +100,12 @@ extern "C" int __test_wgetch(void*) {
     if (*ptr1!=0)
 	return *ptr1++;
 
-    if (selection1[selection_index+1]!=NULL) {
+    if (selection1[selection_index]!=NULL) {
 	if (selection1[selection_index][selection_index2]!=0) {
 	    return selection1[selection_index][selection_index2++];
 	} else {
-	    return selection1[++selection_index][selection_index2=0];
+	    if (selection1[selection_index+1]!=NULL)
+		return selection1[++selection_index][selection_index2=0];
 	}
     }
 
@@ -258,15 +272,21 @@ int main() {
 
     // Initialize test data
     for(int i=0; i<30; i++) {
-	int tmp = select_item();
-	selection1[i]=(int*)calloc(tmp+2, sizeof(int));
-	for(int n=0; n<tmp; n++)
-	    selection1[i][n]=KEY_DOWN;
-
-	selection1[i][tmp]='\n';
-	selection1[i][tmp+1]=0;
+	if (i%2==0) {
+	    int tmp = select_item();
+	    selection1[i]=(int*)calloc(tmp+2, sizeof(int));
+	    for(int n=0; n<tmp; n++)
+		selection1[i][n]=KEY_DOWN;
+	    
+	    selection1[i][tmp]='\n';
+	    selection1[i][tmp+1]=0;
+	} else {
+	    selection1[i]=(int*)calloc(21, sizeof(int));
+	    memcpy(selection1[i],__dir_up_data,20*sizeof(int));
+	    selection1[i][20]=0;
+	}
     }
-    selection1[30]=NULL;
+    selection1[60]=NULL;
 
     try {
 	Curses::init();

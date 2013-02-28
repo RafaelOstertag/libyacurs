@@ -87,6 +87,8 @@ class Input: public Widget {
 	 */
 	Size __size;
 
+	// Not supported
+	Input& operator=(const Input& _i);
     protected:
 	virtual void key_handler(Event& _e);
 
@@ -104,9 +106,7 @@ class Input: public Widget {
 	 * @param _t text to display initially. Default empty.
 	 */
 	Input(int _length=0, std::string::size_type _max_size=255, const std::string& _t=std::string());
-	Input(const Input& _i);
 	virtual ~Input();
-	Input& operator=(const Input& _i);
 
 	/**
 	 * Set the content of the input buffer.

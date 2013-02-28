@@ -40,6 +40,9 @@ FileDialog::dir_up(const std::string& dir) {
 
 void
 FileDialog::read_dir() {
+    std::list<std::string> _dirs;
+    std::list<std::string> _files;
+
     if (__path->label().empty()) {
 	char *ptr=getcwd(NULL, 2048);
 	if (!ptr) {
@@ -54,10 +57,6 @@ FileDialog::read_dir() {
     DIR* dir=opendir(__path->label().c_str());
     if (dir==NULL)
 	throw SystemError(errno);
-
-    __directories->clear();
-    __files->clear();
-
 
     std::string _base(__path->label());
     assert(_base.length()>0);
@@ -80,15 +79,18 @@ FileDialog::read_dir() {
 	}
 
 	if (_stat.st_mode & S_IFDIR) {
-	    __directories->add(dent->d_name);
+	    _dirs.push_back(dent->d_name);
 	    continue;
 	}
 	if (_stat.st_mode & S_IFREG) {
-	    __files->add(dent->d_name);
+	    _files.push_back(dent->d_name);
 	    continue;
 	}
 
     }
+
+    __directories->set(_dirs);
+    __files->set(_files);
 
     if (errno!=0)
 	throw SystemError(errno);

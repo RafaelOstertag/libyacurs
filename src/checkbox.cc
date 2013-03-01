@@ -157,7 +157,7 @@ CheckBox::size() const {
 
 Size
 CheckBox::size_hint() const {
-    return Size::zero();
+    return __size;
 }
 
 bool

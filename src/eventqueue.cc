@@ -7,13 +7,147 @@
 #include <cassert>
 #include <cerrno>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
+#include <fstream>
+#include <functional>
 #include <algorithm>
 
 #include "cursex.h"
 #include "eventqueue.h"
 #include "focusmanager.h"
 #include "curs.h"
+
+#define STATS_EC(x) (statistics.ec_##x)
+#define STATS_EC_S(x) case(EVT_##x):		\
+    STATS_EC(x)++;				\
+    break;
+#define STATS_EC_OUT(str,stats) statsfile << str << STATS_EC(stats) << std::endl
+
+// macro because I don't want to clutter the code
+#define EVENTCONN_STATS(x) switch (x) {		\
+    case EVT_SIGWINCH:				\
+	statistics.ec_SIGWINCH++;		\
+	break;					\
+    case EVT_SIGALRM:				\
+	statistics.ec_SIGALRM++;		\
+    break;					\
+    case EVT_SIGUSR1:				\
+	statistics.ec_SIGUSR1++;		\
+	break;					\
+    case EVT_SIGUSR2:				\
+	statistics.ec_SIGUSR2++;		\
+	break;					\
+    case EVT_SIGINT:				\
+	statistics.ec_SIGINT++;			\
+	break;					\
+	STATS_EC_S(KEY)				\
+	    STATS_EC_S(REFRESH)		\
+	    STATS_EC_S(FORCEREFRESH)		\
+	    STATS_EC_S(DOUPDATE)		\
+	    STATS_EC_S(TERMRESETUP)		\
+	    STATS_EC_S(FOCUS_NEXT)		\
+	    STATS_EC_S(FOCUS_PREVIOUS)		\
+	    STATS_EC_S(WINDOW_SHOW)		\
+	    STATS_EC_S(WINDOW_CLOSE)		\
+	    STATS_EC_S(BUTTON_PRESS)		\
+	    STATS_EC_S(LISTBOX_ENTER)		\
+	    STATS_EC_S(QUIT)			\
+    default:					\
+	    abort();				\
+    }
+
+
+#define STATS_EVT(x) (statistics.evt_##x)
+#define STATS_EVT_S(x) case(EVT_##x):		\
+    STATS_EVT(x)++;				\
+    break;
+#define STATS_EVT_OUT(str,stats) statsfile << str << STATS_EVT(stats) << std::endl
+
+// macro because I don't want to clutter the code
+#define MAINLOOP_STATS(x) switch (x) {		\
+    case EVT_SIGWINCH:				\
+	statistics.evt_SIGWINCH++;		\
+	break;					\
+    case EVT_SIGALRM:				\
+	statistics.evt_SIGALRM++;		\
+    break;					\
+    case EVT_SIGUSR1:				\
+	statistics.evt_SIGUSR1++;		\
+	break;					\
+    case EVT_SIGUSR2:				\
+	statistics.evt_SIGUSR2++;		\
+	break;					\
+    case EVT_SIGINT:				\
+	statistics.evt_SIGINT++;		\
+	break;					\
+	STATS_EVT_S(KEY)			\
+	    STATS_EVT_S(REFRESH)		\
+	    STATS_EVT_S(FORCEREFRESH)		\
+	    STATS_EVT_S(DOUPDATE)		\
+	    STATS_EVT_S(TERMRESETUP)		\
+	    STATS_EVT_S(FOCUS_NEXT)		\
+	    STATS_EVT_S(FOCUS_PREVIOUS)		\
+	    STATS_EVT_S(WINDOW_SHOW)		\
+	    STATS_EVT_S(WINDOW_CLOSE)		\
+	    STATS_EVT_S(BUTTON_PRESS)		\
+	    STATS_EVT_S(LISTBOX_ENTER)		\
+	    STATS_EVT_S(QUIT)			\
+    default:					\
+	    abort();				\
+    }
+
+struct __statistics {
+	// Total events processed
+	unsigned long evt_total;
+	unsigned long evt_SIGWINCH;
+	unsigned long evt_SIGALRM;
+	unsigned long evt_SIGUSR1;
+	unsigned long evt_SIGUSR2;
+	unsigned long evt_SIGINT;
+	unsigned long evt_KEY;
+	unsigned long evt_REFRESH;
+	unsigned long evt_FORCEREFRESH;
+	unsigned long evt_DOUPDATE;
+	unsigned long evt_TERMRESETUP;
+	unsigned long evt_FOCUS_NEXT;
+	unsigned long evt_FOCUS_PREVIOUS;
+	unsigned long evt_WINDOW_SHOW;
+	unsigned long evt_WINDOW_CLOSE;
+	unsigned long evt_BUTTON_PRESS;
+	unsigned long evt_LISTBOX_ENTER;
+	unsigned long evt_QUIT;
+
+	// Event Connectors calls
+	unsigned long ec_total;
+	unsigned long ec_SIGWINCH;
+	unsigned long ec_SIGALRM;
+	unsigned long ec_SIGUSR1;
+	unsigned long ec_SIGUSR2;
+	unsigned long ec_SIGINT;
+	unsigned long ec_KEY;
+	unsigned long ec_REFRESH;
+	unsigned long ec_FORCEREFRESH;
+	unsigned long ec_DOUPDATE;
+	unsigned long ec_TERMRESETUP;
+	unsigned long ec_FOCUS_NEXT;
+	unsigned long ec_FOCUS_PREVIOUS;
+	unsigned long ec_WINDOW_SHOW;
+	unsigned long ec_WINDOW_CLOSE;
+	unsigned long ec_BUTTON_PRESS;
+	unsigned long ec_LISTBOX_ENTER;
+	unsigned long ec_QUIT;
+	
+	// EventConnector remove requests total processed
+	unsigned long ec_rm_total;
+	// Cancelled EventConnector removal requests
+	unsigned long ec_rm_cancelled;
+	// Max size of EventQueue
+	unsigned short evq_size_max;
+	// Max Size of EventConnector Removal Queue.
+	unsigned short ec_rmq_size_max;
+};
+static __statistics statistics;
 
 sigset_t EventQueue::block_sigmask;
 sigset_t EventQueue::tmp_old_sigmask;
@@ -134,7 +268,7 @@ class DestroyEventConnector {
 	 *
 	 * @param eb pointer to EventConnectorBase to be freed.
 	 */
-	inline void operator()(EventConnectorBase* eb) {
+	void operator()(EventConnectorBase* eb) {
 	    assert( eb != NULL );
 	    delete eb;
 	}
@@ -155,7 +289,7 @@ class CallEventConnector {
 	/**
 	 * @param _eb Event for which EventConnectors are called.
 	 */
-	inline CallEventConnector(Event& _eb): __eb(_eb) {}
+	CallEventConnector(Event& _eb): __eb(_eb) {}
 
 	/**
 	 * Calls the given EventConnector conditionally.
@@ -167,9 +301,11 @@ class CallEventConnector {
 	 * @param _ec EventConnector which will be called
 	 * conditionally if it connects to the same EventType as __eb is.
 	 */
-	inline void operator()(EventConnectorBase* _ec) {
+	void operator()(EventConnectorBase* _ec) {
 	    assert(_ec != NULL);
 	    if (_ec->type() == __eb.type()) {
+		statistics.ec_total++;
+		EVENTCONN_STATS(_ec->type());
 		_ec->call(__eb);
 	    }
 	}
@@ -405,10 +541,16 @@ EventQueue::unblocksignal() {
 
 void
 EventQueue::proc_rem_request() {
+    statistics.ec_rmq_size_max=
+	std::max(static_cast<std::queue<Event*>::size_type>(statistics.ec_rmq_size_max),
+		 evtconn_rem_request.size());
+		 
+				     
     std::list<EventConnectorBase*>::iterator it_erq = 
 	evtconn_rem_request.begin();
 
     while(it_erq!=evtconn_rem_request.end()) {
+	statistics.ec_rm_total++;
 	assert(*it_erq!=NULL);
 
 	EventConnectorBase* ecb = *it_erq;
@@ -473,6 +615,8 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 		     EventConnectorEqual(ec));
 
     if (it_erq != evtconn_rem_request.end()) {
+	statistics.ec_rm_cancelled++;
+
 	assert(*it_erq!=NULL);
 	delete *it_erq;
 	evtconn_rem_request.erase(it_erq);
@@ -584,6 +728,8 @@ EventQueue::run() {
 
     setup_signal();
 
+    memset(&statistics, 0, sizeof(statistics));
+
     while(true) {
 	// This is to move the cursor to the focused widget. Before
 	// adding that call tests/focus1 had the cursor always left on
@@ -608,10 +754,17 @@ EventQueue::run() {
 	// process any pending EventConnector removal requests
 	proc_rem_request();
 
-	while(!evt_queue.empty()) {
 
+	while(!evt_queue.empty()) {
+	    statistics.evq_size_max=
+		std::max(static_cast<std::queue<Event*>::size_type>(statistics.evq_size_max),evt_queue.size());
+	    statistics.evt_total++;
+
+	    // listsize_max=max(evt_queue.size(),listsize_max)
+	    // iterations_eventproc++;
 	    Event* evt = evt_queue.front();
 	    assert(evt != NULL);
+	    MAINLOOP_STATS(evt->type());
 
 	    if (evt->type() == EVT_QUIT) {
 		unblocksignal();
@@ -657,4 +810,55 @@ EventQueue::cleanup() {
     }
 
     evtconn_list.clear();
+
+    char* stats_fn;
+    if ((stats_fn = getenv("LIBYACURS_EVT_STATS"))!=NULL) {
+	try {
+	    std::ofstream statsfile;
+	    statsfile.open(stats_fn, std::ios::out | std::ios::trunc);
+	    statsfile << "EventQueue Statistics" << std::endl;
+	    statsfile << "=====================" << std::endl;
+	    statsfile << std::endl;
+	    statsfile << "Events Processed               : " << statistics.evt_total << std::endl;
+	    statsfile << "Event Connector Calls          : " << statistics.ec_total << std::endl;
+	    statsfile << "Max Queue Size                 : " << statistics.evq_size_max << std::endl;
+	    statsfile << "EventConnector Removal Requests: " << statistics.ec_rm_total << std::endl;
+	    statsfile << "EvtConn Removal Requests Cancel: " << statistics.ec_rm_cancelled << std::endl;
+	    statsfile << "Max EventConnecor Rem Queue Sz : " << statistics.ec_rmq_size_max << std::endl;
+	    statsfile << "Event SIGWINCH                 : " << statistics.evt_SIGWINCH << std::endl;
+	    statsfile << "Event SIGALRM                  : " << statistics.evt_SIGALRM << std::endl;
+	    statsfile << "Event SIGUSR1                  : " << statistics.evt_SIGUSR1 << std::endl;
+	    statsfile << "Event SIGUSR2                  : " << statistics.evt_SIGUSR2 << std::endl;
+	    statsfile << "Event SIGINT                   : " << statistics.evt_SIGINT << std::endl;
+	    // Events Statistics
+	    STATS_EVT_OUT("Event KEY                      : ", KEY);
+	    STATS_EVT_OUT("Event REFRESH                  : ", REFRESH);
+	    STATS_EVT_OUT("Event FORCEREFRESH             : ", FORCEREFRESH);
+	    STATS_EVT_OUT("Event DOUPDATE                 : ", DOUPDATE);
+	    STATS_EVT_OUT("Event TERMRESETUP              : ", TERMRESETUP);
+	    STATS_EVT_OUT("Event FOCUS_NEXT               : ", FOCUS_NEXT);
+	    STATS_EVT_OUT("Event FOCUS_PREVIOUS           : ", FOCUS_PREVIOUS);
+	    STATS_EVT_OUT("Event WINDOW_SHOW              : ", WINDOW_SHOW);
+	    STATS_EVT_OUT("Event WINDOW_CLOSE             : ", WINDOW_CLOSE);
+	    STATS_EVT_OUT("Event BUTTON_PRESS             : ", BUTTON_PRESS);
+	    STATS_EVT_OUT("Event LISTBOX_ENTER            : ", LISTBOX_ENTER);
+	    STATS_EVT_OUT("Event QUIT                     : ", QUIT);
+	    // EventConnector Statistics
+	    STATS_EC_OUT("EventConnector KEY             : ", KEY);
+	    STATS_EC_OUT("EventConnector REFRESH         : ", REFRESH);
+	    STATS_EC_OUT("EventConnector FORCEREFRESH    : ", FORCEREFRESH);
+	    STATS_EC_OUT("EventConnector DOUPDATE        : ", DOUPDATE);
+	    STATS_EC_OUT("EventConnector TERMRESETUP     : ", TERMRESETUP);
+	    STATS_EC_OUT("EventConnector FOCUS_NEXT      : ", FOCUS_NEXT);
+	    STATS_EC_OUT("EventConnector FOCUS_PREVIOUS  : ", FOCUS_PREVIOUS);
+	    STATS_EC_OUT("EventConnector WINDOW_SHOW     : ", WINDOW_SHOW);
+	    STATS_EC_OUT("EventConnector WINDOW_CLOSE    : ", WINDOW_CLOSE);
+	    STATS_EC_OUT("EventConnector BUTTON_PRESS    : ", BUTTON_PRESS);
+	    STATS_EC_OUT("EventConnector LISTBOX_ENTER   : ", LISTBOX_ENTER);
+	    STATS_EC_OUT("EventConnector QUIT            : ", QUIT);
+
+	    statsfile.close();
+	} catch (...) {}
+    }
+	
 }

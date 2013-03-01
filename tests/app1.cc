@@ -21,14 +21,47 @@ int __test_data[]= {
     '\t', '\n',
     // next button
     '\t', '\n',
+
     // get off the list box, and select Fill button
     '\t', '\t',
     // press button
-    '\n',
-    // Select Fill button,
+    '\n', 
+    // Select Clear button,
     KEY_LEFT, '\n',
+    // Select Fill button
+    KEY_RIGHT, '\n',
+    // Select Clear button,
+    KEY_LEFT, '\n',
+    // Select Fill button
+    KEY_RIGHT, '\n',
+    // Select Clear button,
+    KEY_LEFT, '\n',
+    // Select Fill button
+    KEY_RIGHT, '\n',
+    
     // close window
-    '\t', '\t', '\n',
+    '\t', '\n',
+
+    // open box dialog
+    KEY_RIGHT, '\n',
+
+    // Select like crazy
+    ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, 
+
+    '\t', 
+    // Radio Box
+    ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, 
+
+    // Check Box again
+    '\t', '\t',
+    ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, 
+
+    // Radio Box again
+    '\t',
+    ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, 
+
+    // Select OK button
+    '\t', '\n',
     // Quit
     '\t', '\n', 0
 };
@@ -36,7 +69,7 @@ int __test_data[]= {
 extern "C" int __test_wgetch(void*) {
     static int* ptr2=__test_data;
 
-    usleep(70000);
+    usleep(20000);
     if (*ptr2==0) {
 	abort();
     }
@@ -152,14 +185,59 @@ class ListBoxWin: public Window {
 	}
 };
 
+class BoxDialog: public Dialog {
+    private:
+	HPack* hpack;
+	CheckBox* checkbox;
+	RadioBox* radiobox;
+
+    public:
+	BoxDialog(): Dialog("Box Dialog", Dialog::OK_ONLY),
+		     hpack(NULL),
+		     checkbox(NULL),
+		     radiobox(NULL) {
+	    hpack=new HPack;
+	    std::vector<std::string> items;
+	    for (int i=0; i<10; i++) {
+		std::ostringstream _i;
+		_i<<i;
+		items.push_back("Check Box Item " + _i.str());
+	    }
+	    checkbox=new CheckBox("", items);
+	    
+	    items.clear();
+	    for (int i=0; i<10; i++) {
+		std::ostringstream _i;
+		_i<<i;
+		items.push_back("Radio Box Item " + _i.str());
+	    }
+	    radiobox=new RadioBox("", items);
+
+	    hpack->add_back(checkbox);
+	    hpack->add_back(radiobox);
+	    widget(hpack);
+	}
+	    
+	~BoxDialog() {
+	    assert(hpack!=NULL);
+	    assert(checkbox!=NULL);
+	    assert(radiobox!=NULL);
+	    delete hpack;
+	    delete checkbox;
+	    delete radiobox;
+	}
+};
+
 class MainWindow: public Window {
     private:
 	HPack* hpack1;
 	Button* button1;
 	Button* button2;
 	Button* button3;
+	Button* button4;
 	Win1* win1;
 	ListBoxWin* lbwin;
+	BoxDialog* boxdialog;
 
 	
     protected:
@@ -176,6 +254,12 @@ class MainWindow: public Window {
 	    if (lbwin!=NULL && evt.data()==lbwin) {
 		delete lbwin;
 		lbwin=NULL;
+		return;
+	    }
+
+	    if (boxdialog!=NULL && evt.data()==boxdialog) {
+		delete boxdialog;
+		boxdialog=NULL;
 		return;
 	    }
 	}
@@ -204,6 +288,12 @@ class MainWindow: public Window {
 		EventQueue::submit(EVT_QUIT);
 		return;
 	    }
+
+	    if (e.data()==button4) {
+		assert(boxdialog==NULL);
+		boxdialog=new BoxDialog;
+		boxdialog->show();
+	    }
 	}
 
     public:
@@ -211,9 +301,11 @@ class MainWindow: public Window {
 	    button1=new Button("New Window");
 	    button2=new Button("Quit");
 	    button3=new Button("List Box Win");
+	    button4=new Button("Box Dialog");
 	    hpack1=new HPack();
 	    hpack1->add_back(button1);
 	    hpack1->add_back(button3);
+	    hpack1->add_back(button4);
 	    hpack1->add_back(button2);
 	    widget(hpack1);
 

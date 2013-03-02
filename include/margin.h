@@ -6,15 +6,14 @@
 #include <string>
 
 /**
- * Margin class
  */
 class Margin {
     private:
+	static Margin __zero;
 	int __top, __bottom, __left, __right;
 
     public:
-	Margin(int _top, int _left, int _bottom, int _right);
-	Margin();
+	Margin(int _top=0, int _left=0, int _bottom=0, int _right=0);
 	Margin(const Margin& m);
 	~Margin();
 
@@ -33,6 +32,8 @@ class Margin {
 	Margin operator-(const Margin& m) const;
 	bool operator==(const Margin& m) const;
 	bool operator!=(const Margin& m) const;
+
+	static const Margin& zero();
 };
 
 #endif

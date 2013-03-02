@@ -5,6 +5,11 @@
 #include "margin.h"
 
 //
+// Static
+//
+Margin Margin::__zero=Margin(0,0,0,0);
+
+//
 // Private
 //
 
@@ -20,9 +25,6 @@ Margin::Margin(int _top, int _left, int _bottom, int _right) :
     __bottom(_bottom),
     __left(_left),
     __right(_right) {}
-
-Margin::Margin():
-    __top(0), __bottom(0), __left(0), __right(0) {}
 
 Margin::Margin(const Margin& m) {
     __top = m.__top;
@@ -119,4 +121,9 @@ Margin::operator==(const Margin& m) const {
 bool
 Margin::operator!=(const Margin& m) const {
     return ! operator==(m);
+}
+
+const Margin&
+Margin::zero() {
+    return __zero;
 }

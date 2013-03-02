@@ -223,6 +223,13 @@ Input::input() const {
 }
 
 void
+Input::clear() {
+    __buffer.clear();
+    __curs_pos=0;
+    __offset=0;
+}
+
+void
 Input::readonly(bool _s) {
     __read_only=_s;
 }

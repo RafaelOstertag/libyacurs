@@ -123,6 +123,11 @@ class Input: public Widget {
 	virtual const std::string& input() const;
 
 	/**
+	 * Clear the input buffer.
+	 */
+	virtual void clear();
+
+	/**
 	 * Set readonly mode.
 	 *
 	 * @param _s @c true, no editing allowed. @c false, editing

@@ -56,3 +56,9 @@ InputBox::input() const {
 
     return __input->input();
 }
+
+void
+InputBox::clear() {
+    assert(__input!=NULL);
+    __input->clear();
+}

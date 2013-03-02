@@ -33,6 +33,8 @@ class InputBox: public Dialog {
 	virtual ~InputBox();
 
 	const std::string& input() const;
+
+	void clear();
 };
 
 #endif // INPUTBOX_H

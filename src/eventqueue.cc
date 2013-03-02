@@ -13,16 +13,28 @@
 #include <functional>
 #include <algorithm>
 
+#include <time.h>
+
 #include "cursex.h"
 #include "eventqueue.h"
 #include "focusmanager.h"
 #include "curs.h"
 
 #define STATS_EC(x) (statistics.ec_##x)
+
 #define STATS_EC_S(x) case(EVT_##x):		\
     STATS_EC(x)++;				\
     break;
+
+#define STATS_EC_CON statistics.ec_max=std::max(		\
+	static_cast<std::list<EventConnectorBase*>::size_type>(statistics.ec_max), \
+	evtconn_list.size());\
+    statistics.ec_min=std::min(						\
+	static_cast<std::list<EventConnectorBase*>::size_type>(statistics.ec_max), \
+	evtconn_list.size())
+
 #define STATS_EC_OUT(str,stats) statsfile << str << STATS_EC(stats) << std::endl
+
 
 // macro because I don't want to clutter the code
 #define EVENTCONN_STATS(x) switch (x) {		\
@@ -98,6 +110,12 @@
     }
 
 struct __statistics {
+	// Max/min time used for processing the eventqueue
+	clock_t evq_max_proc_time;
+	clock_t evq_min_proc_time;
+	// Max/min time used for processing events
+	clock_t evt_max_proc_time;
+	clock_t evt_min_proc_time;
 	// Total events processed
 	unsigned int evt_total;
 	unsigned int evt_SIGWINCH;
@@ -117,6 +135,13 @@ struct __statistics {
 	unsigned int evt_BUTTON_PRESS;
 	unsigned int evt_LISTBOX_ENTER;
 	unsigned int evt_QUIT;
+
+	// Event Connector
+	unsigned int ec_max;
+	unsigned int ec_min;
+	// max/min time spent in event connector
+	clock_t ec_call_max_time;
+	clock_t ec_call_min_time;
 
 	// Event Connectors calls
 	unsigned int ec_calls_total;
@@ -306,7 +331,17 @@ class CallEventConnector {
 	    if (_ec->type() == __eb.type()) {
 		statistics.ec_calls_total++;
 		EVENTCONN_STATS(_ec->type());
+		clock_t t0=clock();
+
 		_ec->call(__eb);
+
+		clock_t t1=clock();
+		statistics.ec_call_max_time=
+		    std::max(statistics.ec_call_max_time,
+			     t1-t0);
+		statistics.ec_call_min_time=
+		    std::min(statistics.ec_call_min_time,
+			     t1-t0);
 	    }
 	}
 };
@@ -731,6 +766,7 @@ EventQueue::run() {
     memset(&statistics, 0, sizeof(statistics));
 
     while(true) {
+	
 	// This is to move the cursor to the focused widget. Before
 	// adding that call tests/focus1 had the cursor always left on
 	// the status line. It's sorta hack, but it works...
@@ -751,10 +787,13 @@ EventQueue::run() {
 	    default:
 		submit(EventEx<int>(EVT_KEY, c));
 	    }
+
+	STATS_EC_CON;
+
 	// process any pending EventConnector removal requests
 	proc_rem_request();
 
-
+	clock_t t0=clock();
 	while(!evt_queue.empty()) {
 	    statistics.evq_size_max=
 		std::max(static_cast<std::queue<Event*>::size_type>(statistics.evq_size_max),evt_queue.size());
@@ -771,15 +810,34 @@ EventQueue::run() {
 		goto QUIT;
 	    }
 
+	    clock_t evt_t0=clock();
 	    std::for_each(evtconn_list.begin(),
 			  evtconn_list.end(),
 			  CallEventConnector(*evt));
+	    clock_t evt_t1=clock();
+	    statistics.evt_max_proc_time=
+		std::max(statistics.evt_max_proc_time,
+			 evt_t1-evt_t0);
+	    statistics.evt_min_proc_time=
+		std::min(statistics.evt_min_proc_time,
+			 evt_t1-evt_t0);	
+
 	    delete evt;
 	    evt_queue.pop();
 	}
+	clock_t t1=clock();
+
+	statistics.evq_max_proc_time=
+	    std::max(statistics.evq_max_proc_time,
+		     t1-t0);
+	statistics.evq_min_proc_time=
+	    std::min(statistics.evq_min_proc_time,
+		     t1-t0);	
 
 	// process any pending EventConnector removal requests
 	proc_rem_request();
+
+	STATS_EC_CON;
 
 	unblocksignal();
 
@@ -820,11 +878,18 @@ EventQueue::cleanup() {
 	    statsfile << "=====================" << std::endl;
 	    statsfile << std::endl;
 	    statsfile << "Events Processed               : " << statistics.evt_total << std::endl;
-	    statsfile << "Event Connector Calls          : " << statistics.ec_calls_total << std::endl;
 	    statsfile << "Max Queue Size                 : " << statistics.evq_size_max << std::endl;
+	    statsfile << "EventQueue process time max    : " << statistics.evq_max_proc_time << std::endl;
+	    statsfile << "EventQueue process time min    : " << statistics.evq_min_proc_time << std::endl;
 	    statsfile << "EventConnector Removal Requests: " << statistics.ec_rm_total << std::endl;
 	    statsfile << "EvtConn Removal Requests Cancel: " << statistics.ec_rm_cancelled << std::endl;
 	    statsfile << "Max EventConnecor Rem Queue Sz : " << statistics.ec_rmq_size_max << std::endl;
+	    statsfile << "EvtConn List max size          : " << statistics.ec_max << std::endl;
+	    statsfile << "EvtConn List min size          : " << statistics.ec_min << std::endl;
+	    statsfile << "Event Connector Calls          : " << statistics.ec_calls_total << std::endl;
+	    statsfile << "Event Connector time spent max : " << statistics.ec_call_max_time << std::endl;
+	    statsfile << "Event Connector time spent min : " << statistics.ec_call_min_time << std::endl;
+	    
 	    statsfile << "Event SIGWINCH                 : " << statistics.evt_SIGWINCH << std::endl;
 	    statsfile << "Event SIGALRM                  : " << statistics.evt_SIGALRM << std::endl;
 	    statsfile << "Event SIGUSR1                  : " << statistics.evt_SIGUSR1 << std::endl;

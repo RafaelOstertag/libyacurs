@@ -134,7 +134,7 @@ Dialog::refresh(bool immediate) {
     if (realization()!=REALIZED &&
 	realization()!=REALIZING) return;
 
-    mvwaddstr(curses_window(), 0, 1, __title.c_str());
+    mymvwaddstr(curses_window(), 0, 1, __title.c_str());
 
     Window::refresh(immediate);
 }

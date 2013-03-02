@@ -119,7 +119,7 @@ struct __statistics {
 	unsigned int evt_QUIT;
 
 	// Event Connectors calls
-	unsigned int ec_total;
+	unsigned int ec_calls_total;
 	unsigned int ec_SIGWINCH;
 	unsigned int ec_SIGALRM;
 	unsigned int ec_SIGUSR1;
@@ -304,7 +304,7 @@ class CallEventConnector {
 	void operator()(EventConnectorBase* _ec) {
 	    assert(_ec != NULL);
 	    if (_ec->type() == __eb.type()) {
-		statistics.ec_total++;
+		statistics.ec_calls_total++;
 		EVENTCONN_STATS(_ec->type());
 		_ec->call(__eb);
 	    }
@@ -820,7 +820,7 @@ EventQueue::cleanup() {
 	    statsfile << "=====================" << std::endl;
 	    statsfile << std::endl;
 	    statsfile << "Events Processed               : " << statistics.evt_total << std::endl;
-	    statsfile << "Event Connector Calls          : " << statistics.ec_total << std::endl;
+	    statsfile << "Event Connector Calls          : " << statistics.ec_calls_total << std::endl;
 	    statsfile << "Max Queue Size                 : " << statistics.evq_size_max << std::endl;
 	    statsfile << "EventConnector Removal Requests: " << statistics.ec_rm_total << std::endl;
 	    statsfile << "EvtConn Removal Requests Cancel: " << statistics.ec_rm_cancelled << std::endl;

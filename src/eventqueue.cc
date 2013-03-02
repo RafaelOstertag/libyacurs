@@ -99,49 +99,49 @@
 
 struct __statistics {
 	// Total events processed
-	unsigned long evt_total;
-	unsigned long evt_SIGWINCH;
-	unsigned long evt_SIGALRM;
-	unsigned long evt_SIGUSR1;
-	unsigned long evt_SIGUSR2;
-	unsigned long evt_SIGINT;
-	unsigned long evt_KEY;
-	unsigned long evt_REFRESH;
-	unsigned long evt_FORCEREFRESH;
-	unsigned long evt_DOUPDATE;
-	unsigned long evt_TERMRESETUP;
-	unsigned long evt_FOCUS_NEXT;
-	unsigned long evt_FOCUS_PREVIOUS;
-	unsigned long evt_WINDOW_SHOW;
-	unsigned long evt_WINDOW_CLOSE;
-	unsigned long evt_BUTTON_PRESS;
-	unsigned long evt_LISTBOX_ENTER;
-	unsigned long evt_QUIT;
+	unsigned int evt_total;
+	unsigned int evt_SIGWINCH;
+	unsigned int evt_SIGALRM;
+	unsigned int evt_SIGUSR1;
+	unsigned int evt_SIGUSR2;
+	unsigned int evt_SIGINT;
+	unsigned int evt_KEY;
+	unsigned int evt_REFRESH;
+	unsigned int evt_FORCEREFRESH;
+	unsigned int evt_DOUPDATE;
+	unsigned int evt_TERMRESETUP;
+	unsigned int evt_FOCUS_NEXT;
+	unsigned int evt_FOCUS_PREVIOUS;
+	unsigned int evt_WINDOW_SHOW;
+	unsigned int evt_WINDOW_CLOSE;
+	unsigned int evt_BUTTON_PRESS;
+	unsigned int evt_LISTBOX_ENTER;
+	unsigned int evt_QUIT;
 
 	// Event Connectors calls
-	unsigned long ec_total;
-	unsigned long ec_SIGWINCH;
-	unsigned long ec_SIGALRM;
-	unsigned long ec_SIGUSR1;
-	unsigned long ec_SIGUSR2;
-	unsigned long ec_SIGINT;
-	unsigned long ec_KEY;
-	unsigned long ec_REFRESH;
-	unsigned long ec_FORCEREFRESH;
-	unsigned long ec_DOUPDATE;
-	unsigned long ec_TERMRESETUP;
-	unsigned long ec_FOCUS_NEXT;
-	unsigned long ec_FOCUS_PREVIOUS;
-	unsigned long ec_WINDOW_SHOW;
-	unsigned long ec_WINDOW_CLOSE;
-	unsigned long ec_BUTTON_PRESS;
-	unsigned long ec_LISTBOX_ENTER;
-	unsigned long ec_QUIT;
+	unsigned int ec_total;
+	unsigned int ec_SIGWINCH;
+	unsigned int ec_SIGALRM;
+	unsigned int ec_SIGUSR1;
+	unsigned int ec_SIGUSR2;
+	unsigned int ec_SIGINT;
+	unsigned int ec_KEY;
+	unsigned int ec_REFRESH;
+	unsigned int ec_FORCEREFRESH;
+	unsigned int ec_DOUPDATE;
+	unsigned int ec_TERMRESETUP;
+	unsigned int ec_FOCUS_NEXT;
+	unsigned int ec_FOCUS_PREVIOUS;
+	unsigned int ec_WINDOW_SHOW;
+	unsigned int ec_WINDOW_CLOSE;
+	unsigned int ec_BUTTON_PRESS;
+	unsigned int ec_LISTBOX_ENTER;
+	unsigned int ec_QUIT;
 	
 	// EventConnector remove requests total processed
-	unsigned long ec_rm_total;
+	unsigned int ec_rm_total;
 	// Cancelled EventConnector removal requests
-	unsigned long ec_rm_cancelled;
+	unsigned int ec_rm_cancelled;
 	// Max size of EventQueue
 	unsigned short evq_size_max;
 	// Max Size of EventConnector Removal Queue.

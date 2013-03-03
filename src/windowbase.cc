@@ -104,7 +104,8 @@ WindowBase::WindowBase(const Margin& _m):
     __area(Coordinates(),Curses::inquiry_screensize()),
     __margin(_m),
     __curses_window(NULL),
-    __frame(false) {}
+    __frame(false),
+    __shown(false) {}
 
 WindowBase::~WindowBase() {
 
@@ -151,6 +152,8 @@ WindowBase::show() {
     realize();
     refresh(true);
     EventQueue::submit(EventEx<WindowBase*>(EVT_WINDOW_SHOW,this));
+
+    __shown=true;
 }
 
 void
@@ -174,6 +177,13 @@ WindowBase::close() {
     // This caused problems with the focus manager, if a Label was
     // updated in the EVT_WINDOW_CLOSE handler.
     EventQueue::submit(EventEx<WindowBase*>(EVT_WINDOW_CLOSE,this));
+
+    __shown=false;
+}
+
+bool
+WindowBase::shown() const {
+    return __shown;
 }
 
 void

@@ -73,6 +73,11 @@ class WindowBase : public Realizeable {
 	 */
 	bool __frame;
 
+	/**
+	 * Flag whether or not Window is shown.
+	 */
+	bool __shown;
+
 	// No supported
 	WindowBase(const WindowBase&);
 	WindowBase& operator=(const WindowBase&);
@@ -130,6 +135,8 @@ class WindowBase : public Realizeable {
 	 * This is supposed to be called by the user.
 	 */
 	virtual void close();
+
+	bool shown() const;
 
 	// Those are from Realizable
 	void refresh(bool immediate);

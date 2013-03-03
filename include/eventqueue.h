@@ -16,6 +16,7 @@
 #include "event.h"
 #include "eventconnector.h"
 #include "area.h"
+#include "lockscreen.h"
 
 /**
  * @ingroup Event
@@ -92,6 +93,19 @@ class EventQueue {
 	static std::list<EventConnectorBase*> evtconn_rem_request;
 	static std::list<EventConnectorBase*> evtconn_list;
 
+	/**
+	 * LockScreen used on timeout
+	 */
+	static LockScreen* __lockscreen;
+
+	/**
+	 * Timeout for keyboard input.
+	 *
+	 * If for __timeout seconds no key (event) is pressed
+	 * (received), the lock screen kicks in, if any.
+	 */
+	static unsigned int __timeout;
+
 	static void setup_signal();
 	static void restore_signal();
 
@@ -104,6 +118,8 @@ class EventQueue {
 	static void blocksignal();
 	static void unblocksignal();
 	static void proc_rem_request();
+
+	static void timeout_handler(Event& _e);
 
     public:
 	/**
@@ -159,6 +175,12 @@ class EventQueue {
 
 	static void run();
 	static void cleanup();
+
+	static void lock_screen(LockScreen* _ls);
+	static LockScreen* lock_screen();
+
+	static void timeout(unsigned int _t);
+	static unsigned int timeout();
 };
 
 #endif // EVENTQUEUE_H

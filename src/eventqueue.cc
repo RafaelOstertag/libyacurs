@@ -188,6 +188,9 @@ std::queue<Event*> EventQueue::evt_queue;
 std::list<EventConnectorBase*> EventQueue::evtconn_rem_request;
 std::list<EventConnectorBase*> EventQueue::evtconn_list;
 
+LockScreen* EventQueue::__lockscreen = NULL;
+unsigned int EventQueue::__timeout = 0;
+
 //
 // Functors
 //
@@ -609,6 +612,16 @@ EventQueue::proc_rem_request() {
     evtconn_rem_request.clear();
 }
 
+void
+EventQueue::timeout_handler(Event& _e) {
+    assert(_e==EVT_SIGALRM);
+
+    if (__lockscreen == NULL) return;
+    if (__lockscreen->shown()) return;
+
+    __lockscreen->show();
+}
+
 //
 // Public
 //
@@ -766,6 +779,8 @@ EventQueue::run() {
     memset(&statistics, 0, sizeof(statistics));
 
     while(true) {
+	if (__lockscreen!=NULL && __timeout!=0)
+	    alarm(__timeout);
 	
 	// This is to move the cursor to the focused widget. Before
 	// adding that call tests/focus1 had the cursor always left on
@@ -926,4 +941,31 @@ EventQueue::cleanup() {
 	} catch (...) {}
     }
 	
+}
+
+void
+EventQueue::lock_screen(LockScreen* _ls) {
+    __lockscreen = _ls;
+}
+
+LockScreen*
+EventQueue::lock_screen() {
+    return __lockscreen;
+}
+
+void
+EventQueue::timeout(unsigned int _t) {
+    __timeout=_t;
+    if (__timeout==0) {
+	alarm(0); // Cancel pending alarm
+	disconnect_event(EventConnectorFunction1(EVT_SIGALRM, &EventQueue::timeout_handler));
+    } else {
+	connect_event(EventConnectorFunction1(EVT_SIGALRM, &EventQueue::timeout_handler));
+    }
+	
+}
+
+unsigned int
+EventQueue::timeout() {
+    return __timeout;
 }

@@ -201,6 +201,8 @@ Curses::mainwindow() {
 
 Size
 Curses::inquiry_screensize() {
+    if (!initialized) throw NotInitialized();
+
     // If we have resize term, we need to get the actual terminal
     // size, because we have the ability to easily resize, and thus
     // support it.

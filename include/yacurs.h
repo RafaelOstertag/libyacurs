@@ -22,6 +22,7 @@
 #include "lineobject.h"
 #include "statusline.h"
 #include "window.h"
+#include "lockscreen.h"
 #include "widgetbase.h"
 #include "pack.h"
 #include "vpack.h"

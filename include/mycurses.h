@@ -76,6 +76,13 @@ enum {
 
 #ifdef HAVE_CURSES_H
 
+#ifdef timeout
+#undef timeout
+inline void timeout(int n) {
+    wtimeout(stdscr, n);
+}
+#endif
+
 #ifdef box
 #undef box
 inline int box (WINDOW* win, int verch, int horch) {

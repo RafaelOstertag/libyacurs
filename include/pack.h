@@ -105,6 +105,8 @@ class Pack: public WidgetBase {
 	 */
 	virtual Size calc_size_non_dynamic() const = 0;
 
+	void take_over(WidgetBase* _w);
+
 	// Not supported
 	Pack& operator=(const Pack&);
     protected:
@@ -118,6 +120,8 @@ class Pack: public WidgetBase {
     public:
 	Pack();
 	virtual ~Pack();
+
+	std::list<WidgetBase*>::size_type widgets() const;
 
 	/**
 	 * Add a widget to the Pack. The widget will be added in front

@@ -41,6 +41,16 @@ Pack::refresh_all_widgets(bool i) {
 		 std::bind2nd(std::mem_fun<void,WidgetBase,bool>(&WidgetBase::refresh),i));
 }
 
+void
+Pack::take_over(WidgetBase* _w) {
+    assert(_w!=NULL);
+
+    _w->parent(this);
+    _w->curses_window(WidgetBase::curses_window());
+    _w->focusgroup_id(WidgetBase::focusgroup_id());
+}
+
+
 Pack&
 Pack::operator=(const Pack& _p) {
     abort();
@@ -85,39 +95,58 @@ Pack::~Pack() {
     // packs on destruction...
 }
 
+std::list<WidgetBase*>::size_type
+Pack::widgets() const {
+    return widget_list.size();
+}
+
 void
 Pack::add_front(WidgetBase* _w) {
     assert(_w != NULL);
 
-    if (realization()!=UNREALIZED) throw AlreadyRealized();
     widget_list.push_front(_w);
+    take_over(_w);
+    
+    if (realization() == REALIZED) {
+	if (_w->realization() == REALIZED)
+	    _w->unrealize();
 
-    _w->parent(this);
-    _w->curses_window(WidgetBase::curses_window());
-    _w->focusgroup_id(WidgetBase::focusgroup_id());
+	size_change();
+    }
 }
 
 void
 Pack::add_back(WidgetBase* _w) {
     assert(_w != NULL);
 
-    if (realization()!=UNREALIZED) throw AlreadyRealized();
-
     widget_list.push_back(_w);
 
-    _w->parent(this);
-    _w->curses_window(WidgetBase::curses_window());
-    _w->focusgroup_id(WidgetBase::focusgroup_id());
+    take_over(_w);
+
+
+    if (realization() == REALIZED) {
+	if (_w->realization() == REALIZED)
+	    _w->unrealize();
+
+	size_change();
+    }
 }
 
 void
 Pack::remove(WidgetBase* _w) {
     assert(_w != NULL);
 
-    if (realization()!=UNREALIZED) throw AlreadyRealized();
+    //    if (realization()!=UNREALIZED) throw AlreadyRealized();
 
     widget_list.remove(_w);
+
+    if (_w->realization() != UNREALIZED)
+	_w->unrealize();
+
     _w->focusgroup_id((fgid_t)-1);
+
+    if (realization() == REALIZED)
+	size_change();
 }
 
 void

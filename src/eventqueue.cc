@@ -14,6 +14,7 @@
 #include <algorithm>
 
 #include <time.h>
+#include <unistd.h>
 
 #include "cursex.h"
 #include "eventqueue.h"

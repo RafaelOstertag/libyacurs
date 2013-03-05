@@ -71,30 +71,6 @@ WindowBase::unrealize() {
     UNREALIZE_LEAVE;
 }
 
-void
-WindowBase::force_refresh_handler(Event& _e) {
-    if (realization()!=REALIZED) return;
-
-    assert(_e == EVT_FORCEREFRESH);
-    assert(__curses_window!=NULL);
-
-    if (clearok(__curses_window, TRUE)==ERR)
-	throw ClearOKFailed();
-}
-
-void
-WindowBase::refresh_handler(Event& _e) {
-    assert(_e == EVT_REFRESH);
-    refresh(false);
-}
-
-void
-WindowBase::resize_handler(Event& _e) {
-    assert(_e == EVT_SIGWINCH);
-    EventEx<Size>& winch = dynamic_cast<EventEx<Size>&>(_e);
-    resize(Area(Coordinates(0,0),winch.data()));
-}
-
 //
 // Public
 //
@@ -105,7 +81,12 @@ WindowBase::WindowBase(const Margin& _m):
     __margin(_m),
     __curses_window(NULL),
     __frame(false),
-    __shown(false) {}
+    __shown(false) {
+
+    // We always want to receive this event. Therefore it was moved
+    // from show() to ctor.
+    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
+}
 
 WindowBase::~WindowBase() {
 
@@ -147,7 +128,6 @@ WindowBase::show() {
 
     EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_FORCEREFRESH,this, &WindowBase::force_refresh_handler));
     EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
-    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
 
     realize();
     refresh(true);
@@ -164,7 +144,6 @@ WindowBase::close() {
 
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_FORCEREFRESH,this, &WindowBase::force_refresh_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
-    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
 
     // We might have obstructed another window, so make sure it
     // receives a refresh.
@@ -184,6 +163,30 @@ WindowBase::close() {
 bool
 WindowBase::shown() const {
     return __shown;
+}
+
+void
+WindowBase::force_refresh_handler(Event& _e) {
+    if (realization()!=REALIZED) return;
+
+    assert(_e == EVT_FORCEREFRESH);
+    assert(__curses_window!=NULL);
+
+    if (clearok(__curses_window, TRUE)==ERR)
+	throw ClearOKFailed();
+}
+
+void
+WindowBase::refresh_handler(Event& _e) {
+    assert(_e == EVT_REFRESH);
+    refresh(false);
+}
+
+void
+WindowBase::resize_handler(Event& _e) {
+    assert(_e == EVT_SIGWINCH);
+    EventEx<Size>& winch = dynamic_cast<EventEx<Size>&>(_e);
+    resize(Area(Coordinates(0,0),winch.data()));
 }
 
 void
@@ -208,7 +211,15 @@ WindowBase::resize(const Area& _a) {
     //
     // Keep in mind: a resize does not refresh!
     //
-    if (realization()!=REALIZED) return;
+
+    if (realization()!=REALIZED) {
+	// Even if we're not realized, we keep track of the area at
+	// our disposition.
+	//
+	// This was mainly introduced for the screen unlock dialog.
+	__area = _a;
+	return;
+    }
 
     assert(_a.x()>-1);
     assert(_a.y()>-1);

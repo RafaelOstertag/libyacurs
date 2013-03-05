@@ -193,7 +193,7 @@ CheckBox::refresh(bool immediate) {
     }
 
     if (!__title.empty()) {
-	if (__title.length()>__size.cols()-2) {
+	if (__title.length()>static_cast<std::string::size_type>(__size.cols())-2) {
 	    if (mymvwaddnstr(widget_subwin(), 0, 1,
 			     __title.c_str(),
 			     __size.cols()-3)==ERR)

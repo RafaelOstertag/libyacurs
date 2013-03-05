@@ -95,10 +95,6 @@ class WindowBase : public Realizeable {
 
 	void unrealize();
 
-	virtual void force_refresh_handler(Event& _e);
-	virtual void refresh_handler(Event& _e);
-	virtual void resize_handler(Event& _e);
-
     public:
 	/**
 	 * @param _m margin to be used.
@@ -137,6 +133,10 @@ class WindowBase : public Realizeable {
 	virtual void close();
 
 	bool shown() const;
+
+	virtual void force_refresh_handler(Event& _e);
+	virtual void refresh_handler(Event& _e);
+	virtual void resize_handler(Event& _e);
 
 	// Those are from Realizable
 	void refresh(bool immediate);

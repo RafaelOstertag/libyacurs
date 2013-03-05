@@ -43,7 +43,7 @@ LockScreen::event_window_close_handler(Event& _e) {
 
     if (_evt.data() == __unlock_dialog) {
 	InputBox* _tmp = dynamic_cast<InputBox*>(_evt.data());
-	
+
 	if (_tmp->dialog_state() == Dialog::DIALOG_OK)
 	    close();
     }
@@ -69,6 +69,7 @@ LockScreen::show() {
 
     EventQueue::connect_event(EventConnectorMethod1<LockScreen>(EVT_KEY, this, &LockScreen::event_key_handler));
     EventQueue::connect_event(EventConnectorMethod1<LockScreen>(EVT_WINDOW_CLOSE, this, &LockScreen::event_window_close_handler));
+
     EventQueue::suspend_except(EventConnectorMethod1<LockScreen>(EVT_FORCEREFRESH,this, &WindowBase::force_refresh_handler));
     EventQueue::suspend_except(EventConnectorMethod1<LockScreen>(EVT_REFRESH,this, &WindowBase::refresh_handler));
     // We don't suspend this handler, since the resize should be

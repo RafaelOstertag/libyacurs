@@ -13,7 +13,7 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-int __test_data[]= { 
+int __test_data[]= {
     // Press first button
     '\n',
     // enter text
@@ -25,7 +25,7 @@ int __test_data[]= {
     // get off the list box, and select Fill button
     '\t', '\t',
     // press button
-    '\n', 
+    '\n',
     // Select Clear button,
     KEY_LEFT, '\n',
     // Select Fill button
@@ -38,7 +38,7 @@ int __test_data[]= {
     KEY_LEFT, '\n',
     // Select Fill button
     KEY_RIGHT, '\n',
-    
+
     // close window
     '\t', '\n',
 
@@ -46,19 +46,19 @@ int __test_data[]= {
     KEY_RIGHT, '\n',
 
     // Select like crazy
-    ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, 
+    ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
 
-    '\t', 
+    '\t',
     // Radio Box
-    ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, 
+    ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
 
     // Check Box again
     '\t', '\t',
-    ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, 
+    ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP,
 
     // Radio Box again
     '\t',
-    ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, 
+    ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP, ' ', KEY_UP,
 
     // Select OK button
     '\t', '\n',
@@ -75,6 +75,58 @@ extern "C" int __test_wgetch(void*) {
     }
     return *ptr2++;
 }
+
+
+class UnlockDia: public UnlockDialog {
+    private:
+	std::string __secret;
+	VPack* __vpack;
+	Label* __text;
+	Input* __secret_input;
+
+	UnlockDia& operator=(const UnlockDia&) {
+	    std::abort();
+	    return *this;
+	}
+
+    public:
+	UnlockDia(const std::string& _secret):
+	    UnlockDialog("Unlock Screen"),
+	    __secret(_secret),
+	    __vpack(NULL),
+	    __text(NULL),
+	    __secret_input(NULL) {
+	    __vpack=new VPack;
+	    __text=new Label("Please enter password in order to unlock screen");
+	    __secret_input=new Input;
+
+	    __vpack->add_back(__text);
+	    __vpack->add_back(__secret_input);
+	    widget(__vpack);
+	}
+
+	~UnlockDia() {
+	    assert(__vpack!=NULL);
+	    assert(__text!=NULL);
+	    assert(__secret_input!=NULL);
+
+	    delete __vpack;
+	    delete __text;
+	    delete __secret_input;
+	}
+
+	bool unlock() {
+	    if (dialog_state() == DIALOG_OK &&
+		__secret_input->input() == __secret)
+		return true;
+
+	    return false;
+	}
+
+	void clear() {
+	    __secret_input->clear();
+	}
+};
 
 class Win1: public Window {
     private:
@@ -146,13 +198,13 @@ class ListBoxWin: public Window {
 		}
 		return;
 	    }
-	    
+
 	    if (e.data()==bclose) {
 		close();
 	    }
 	    return;
 	}
-	
+
     public:
 	ListBoxWin(): Window(Margin(3,2,3,2)) {
 	    frame(true);
@@ -168,7 +220,7 @@ class ListBoxWin: public Window {
 	    hpack1->add_back(bclose);
 	    vpack1->add_back(listbox);
 	    vpack1->add_back(hpack1);
-	    
+
 	    widget(vpack1);
 
 	    EventQueue::connect_event(EventConnectorMethod1<ListBoxWin>(EVT_BUTTON_PRESS, this, &ListBoxWin::button_press_handler));
@@ -204,7 +256,7 @@ class BoxDialog: public Dialog {
 		items.push_back("Check Box Item " + _i.str());
 	    }
 	    checkbox=new CheckBox("", items);
-	    
+
 	    items.clear();
 	    for (int i=0; i<10; i++) {
 		std::ostringstream _i;
@@ -217,7 +269,7 @@ class BoxDialog: public Dialog {
 	    hpack->add_back(radiobox);
 	    widget(hpack);
 	}
-	    
+
 	~BoxDialog() {
 	    assert(hpack!=NULL);
 	    assert(checkbox!=NULL);
@@ -239,7 +291,7 @@ class MainWindow: public Window {
 	ListBoxWin* lbwin;
 	BoxDialog* boxdialog;
 
-	
+
     protected:
 	void window_close_handler(Event& _e) {
 	    assert(_e==EVT_WINDOW_CLOSE);
@@ -331,6 +383,8 @@ class MainWindow: public Window {
 };
 
 int main() {
+    LockScreen* lckscr;
+    UnlockDia* ulckdia;
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
@@ -339,7 +393,10 @@ int main() {
     try {
 	Curses::init();
 
-	EventQueue::lock_screen(new LockScreen(new InputBox("Unlock Screen", "Enter anything")));
+	ulckdia=new UnlockDia("Unlock Screen");
+	lckscr=new LockScreen(ulckdia);
+
+	EventQueue::lock_screen(lckscr);
 	EventQueue::timeout(10);
 
 	Curses::title(new LineObject(LineObject::POS_TOP,
@@ -353,6 +410,8 @@ int main() {
 	Curses::run();
 
 	delete mainwindow;
+	delete ulckdia;
+	delete lckscr;
 
 	Curses::end();
     } catch (std::exception& e) {

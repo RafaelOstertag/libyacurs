@@ -42,10 +42,23 @@ LockScreen::event_window_close_handler(Event& _e) {
     EventEx<WindowBase*>& _evt = dynamic_cast<EventEx<WindowBase*>&>(_e);
 
     if (_evt.data() == __unlock_dialog) {
-	InputBox* _tmp = dynamic_cast<InputBox*>(_evt.data());
-
-	if (_tmp->dialog_state() == Dialog::DIALOG_OK)
+	if (__unlock_dialog->unlock()) {
 	    close();
+	} else {
+	    if (__unlock_dialog->dialog_state() == Dialog::DIALOG_OK) {
+		assert(__msgbox==NULL);
+		__msgbox=new MessageBox("Unlock Failed",
+					"Wrong Password",
+					Dialog::OK_ONLY);
+		__msgbox->show();
+	    }
+	}
+	return;
+    }
+
+    if (_evt.data() == __msgbox) {
+	delete __msgbox;
+	__msgbox=NULL;
     }
 }
 
@@ -55,8 +68,9 @@ LockScreen::event_window_close_handler(Event& _e) {
 // Public
 //
 
-LockScreen::LockScreen(InputBox* _unlock): Window(Margin::zero()),
-					      __unlock_dialog(_unlock) {
+LockScreen::LockScreen(UnlockDialog* _unlock): Window(Margin::zero()),
+					       __unlock_dialog(_unlock),
+					       __msgbox(NULL) {
     if (!__unlock_dialog) throw std::invalid_argument("InputDialog may not be NULL");
 }
 

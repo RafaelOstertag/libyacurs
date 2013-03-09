@@ -12,11 +12,13 @@
 #include <string>
 
 #include "window.h"
-#include "inputbox.h"
+#include "unlockdialog.h"
+#include "messagebox.h"
 
 class LockScreen: public Window {
     private:
-	InputBox* __unlock_dialog;
+	UnlockDialog* __unlock_dialog;
+	MessageBox* __msgbox;
 	// Not supported
 	LockScreen& operator=(const LockScreen&);
 
@@ -25,7 +27,7 @@ class LockScreen: public Window {
 	virtual void event_window_close_handler(Event& _e);
 
     public:
-	LockScreen(InputBox* _unlock);
+	LockScreen(UnlockDialog* _unlock);
 	virtual ~LockScreen();
 
 	// From WindowBase

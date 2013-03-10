@@ -21,6 +21,22 @@
 #include "focusmanager.h"
 #include "curs.h"
 
+#ifndef NDEBUG
+#define DEBUGOUT(x) try {							\
+	char* __debugfile_name__;					\
+	if ((__debugfile_name__ = getenv("LIBYACURS_EVT_DBGFN"))!=NULL) { \
+	    if (!__debugfile.is_open())					\
+		__debugfile.open(__debugfile_name__,			\
+				 std::ios::out | std::ios::trunc);	\
+	    __debugfile << x << std::endl;				\
+	}								\
+    } catch (...) {							\
+    }
+#else
+#define DEBUGOUT(x)
+#endif
+
+
 #define STATS_EC(x) (statistics.ec_##x)
 
 #define STATS_EC_S(x) case(EVT_##x):		\
@@ -34,7 +50,7 @@
 	static_cast<std::list<EventConnectorBase*>::size_type>(statistics.ec_max), \
 	evtconn_list.size())
 
-#define STATS_EC_OUT(str,stats) statsfile << str << STATS_EC(stats) << std::endl
+#define STATS_EC_OUT(str,stats) __statsfile << str << STATS_EC(stats) << std::endl
 
 
 // macro because I don't want to clutter the code
@@ -75,7 +91,7 @@
 #define STATS_EVT_S(x) case(EVT_##x):		\
     STATS_EVT(x)++;				\
     break;
-#define STATS_EVT_OUT(str,stats) statsfile << str << STATS_EVT(stats) << std::endl
+#define STATS_EVT_OUT(str,stats) __statsfile << str << STATS_EVT(stats) << std::endl
 
 // macro because I don't want to clutter the code
 #define MAINLOOP_STATS(x) switch (x) {		\
@@ -174,6 +190,8 @@ struct __statistics {
 	unsigned short ec_rmq_size_max;
 };
 static __statistics statistics;
+static std::ofstream __statsfile;
+static std::ofstream __debugfile;
 
 sigset_t EventQueue::block_sigmask;
 sigset_t EventQueue::tmp_old_sigmask;
@@ -242,10 +260,13 @@ class EvtConnSetSuspend {
 	void operator()(EventConnectorBase* eb) {
 	    assert ( eb != NULL );
 	    if ( *eb == __evt) {
-		if (__suspend)
+		if (__suspend) {
+		    DEBUGOUT("Suspend: " << (void*)(eb->id()) << ": " << Event::evt2str(*eb));
 		    eb->suspended(true);
-		else
+		} else {
+		    DEBUGOUT("Unsuspend: " << (void*)(eb->id()) << ": " << Event::evt2str(*eb));
 		    eb->suspended(false);
+		}
 	    }
 	}
 };
@@ -277,10 +298,13 @@ class EvtConnSetSuspendExcept {
 	    assert ( eb != NULL );
 	    if (*eb == __evt.type() &&
 		! (__evt == *eb) ) {
-		if (__suspend)
+		if (__suspend) {
+		    DEBUGOUT("Suspend Except: " << (void*)(eb->id()) << ": " << Event::evt2str(*eb));
 		    eb->suspended(true);
-		else
+		} else {
+		    DEBUGOUT("Unsuspend Except: " << (void*)(eb->id()) << ": " << Event::evt2str(*eb));
 		    eb->suspended(false);
+		}
 	    }
 	}
 };
@@ -337,6 +361,7 @@ class CallEventConnector {
 		EVENTCONN_STATS(_ec->type());
 		clock_t t0=clock();
 
+		DEBUGOUT("Call: " << (void*)(_ec->id()) << ": " << Event::evt2str(*_ec));
 		_ec->call(__eb);
 
 		clock_t t1=clock();
@@ -639,6 +664,8 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 	// object on the given event. Replace that connection.
 	delete *it;
 	*it = ec.clone();
+
+	DEBUGOUT("Replaced Connector: " << (void*)(*it)->id() << ": " << Event::evt2str(ec));
     } else {
 	// We have to push_back(). The last registered event connector
 	// has to be called last. This is required when:
@@ -646,7 +673,10 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 	//  - Refreshing
 	//
 	// It ensures proper display of overlapping windows.
-	evtconn_list.push_back(ec.clone());
+	EventConnectorBase* __tmp=ec.clone();
+	evtconn_list.push_back(__tmp);
+
+	DEBUGOUT("Connect: " << (void*)__tmp->id() << ": " << Event::evt2str(ec));
     }
 
     //
@@ -667,6 +697,9 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 	statistics.ec_rm_cancelled++;
 
 	assert(*it_erq!=NULL);
+
+	DEBUGOUT("Cancelled Removal: " << (void*)(*it_erq)->id() << ": " << Event::evt2str(ec));
+
 	delete *it_erq;
 	evtconn_rem_request.erase(it_erq);
     }
@@ -681,6 +714,8 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
     // would freak out. So we wait until we're sure that nobody is
     // reading the list.
     evtconn_rem_request.push_back(ec.clone());
+
+    DEBUGOUT("Disconnect: " << (void*)ec.id() << ": " << Event::evt2str(ec));
 
     // However, the event connector must not be called anymore,
     // because the object might have been destroyed meanwhile.
@@ -702,6 +737,8 @@ EventQueue::suspend(const EventConnectorBase& ec) {
 		     EventConnectorEqual(ec));
 
     if ( it == evtconn_list.end() ) return;
+
+    DEBUGOUT("Suspend: " << (void*)ec.id() << ": " << Event::evt2str(ec));
 
     (*it)->suspended(true);
 }
@@ -728,6 +765,8 @@ EventQueue::unsuspend(const EventConnectorBase& ec) {
 		     EventConnectorEqual(ec));
 
     if ( it == evtconn_list.end() ) return;
+
+    DEBUGOUT("Unsuspend: " << (void*)ec.id() << ": " << Event::evt2str(ec));
 
     (*it)->suspended(false);
 }
@@ -888,29 +927,29 @@ EventQueue::cleanup() {
     char* stats_fn;
     if ((stats_fn = getenv("LIBYACURS_EVT_STATS"))!=NULL) {
 	try {
-	    std::ofstream statsfile;
-	    statsfile.open(stats_fn, std::ios::out | std::ios::trunc);
-	    statsfile << "EventQueue Statistics" << std::endl;
-	    statsfile << "=====================" << std::endl;
-	    statsfile << std::endl;
-	    statsfile << "Events Processed               : " << statistics.evt_total << std::endl;
-	    statsfile << "Max Queue Size                 : " << statistics.evq_size_max << std::endl;
-	    statsfile << "EventQueue process time max    : " << statistics.evq_max_proc_time << std::endl;
-	    statsfile << "EventQueue process time min    : " << statistics.evq_min_proc_time << std::endl;
-	    statsfile << "EventConnector Removal Requests: " << statistics.ec_rm_total << std::endl;
-	    statsfile << "EvtConn Removal Requests Cancel: " << statistics.ec_rm_cancelled << std::endl;
-	    statsfile << "Max EventConnecor Rem Queue Sz : " << statistics.ec_rmq_size_max << std::endl;
-	    statsfile << "EvtConn List max size          : " << statistics.ec_max << std::endl;
-	    statsfile << "EvtConn List min size          : " << statistics.ec_min << std::endl;
-	    statsfile << "Event Connector Calls          : " << statistics.ec_calls_total << std::endl;
-	    statsfile << "Event Connector time spent max : " << statistics.ec_call_max_time << std::endl;
-	    statsfile << "Event Connector time spent min : " << statistics.ec_call_min_time << std::endl;
+	    if (!__statsfile.is_open())
+		__statsfile.open(stats_fn, std::ios::out | std::ios::trunc);
+	    __statsfile << "EventQueue Statistics" << std::endl;
+	    __statsfile << "=====================" << std::endl;
+	    __statsfile << std::endl;
+	    __statsfile << "Events Processed               : " << statistics.evt_total << std::endl;
+	    __statsfile << "Max Queue Size                 : " << statistics.evq_size_max << std::endl;
+	    __statsfile << "EventQueue process time max    : " << statistics.evq_max_proc_time << std::endl;
+	    __statsfile << "EventQueue process time min    : " << statistics.evq_min_proc_time << std::endl;
+	    __statsfile << "EventConnector Removal Requests: " << statistics.ec_rm_total << std::endl;
+	    __statsfile << "EvtConn Removal Requests Cancel: " << statistics.ec_rm_cancelled << std::endl;
+	    __statsfile << "Max EventConnecor Rem Queue Sz : " << statistics.ec_rmq_size_max << std::endl;
+	    __statsfile << "EvtConn List max size          : " << statistics.ec_max << std::endl;
+	    __statsfile << "EvtConn List min size          : " << statistics.ec_min << std::endl;
+	    __statsfile << "Event Connector Calls          : " << statistics.ec_calls_total << std::endl;
+	    __statsfile << "Event Connector time spent max : " << statistics.ec_call_max_time << std::endl;
+	    __statsfile << "Event Connector time spent min : " << statistics.ec_call_min_time << std::endl;
 	    
-	    statsfile << "Event SIGWINCH                 : " << statistics.evt_SIGWINCH << std::endl;
-	    statsfile << "Event SIGALRM                  : " << statistics.evt_SIGALRM << std::endl;
-	    statsfile << "Event SIGUSR1                  : " << statistics.evt_SIGUSR1 << std::endl;
-	    statsfile << "Event SIGUSR2                  : " << statistics.evt_SIGUSR2 << std::endl;
-	    statsfile << "Event SIGINT                   : " << statistics.evt_SIGINT << std::endl;
+	    __statsfile << "Event SIGWINCH                 : " << statistics.evt_SIGWINCH << std::endl;
+	    __statsfile << "Event SIGALRM                  : " << statistics.evt_SIGALRM << std::endl;
+	    __statsfile << "Event SIGUSR1                  : " << statistics.evt_SIGUSR1 << std::endl;
+	    __statsfile << "Event SIGUSR2                  : " << statistics.evt_SIGUSR2 << std::endl;
+	    __statsfile << "Event SIGINT                   : " << statistics.evt_SIGINT << std::endl;
 	    // Events Statistics
 	    STATS_EVT_OUT("Event KEY                      : ", KEY);
 	    STATS_EVT_OUT("Event REFRESH                  : ", REFRESH);
@@ -938,7 +977,7 @@ EventQueue::cleanup() {
 	    STATS_EC_OUT("EventConnector LISTBOX_ENTER   : ", LISTBOX_ENTER);
 	    STATS_EC_OUT("EventConnector QUIT            : ", QUIT);
 
-	    statsfile.close();
+	    __statsfile.close();
 	} catch (...) {}
     }
 	

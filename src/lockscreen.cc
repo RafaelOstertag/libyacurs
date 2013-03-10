@@ -29,7 +29,7 @@ void
 LockScreen::event_key_handler(Event& _e) {
     assert(_e==EVT_KEY);
 
-    if (!__unlock_dialog->shown()) {
+    if (!__unlock_dialog->shown() && __msgbox==NULL) {
 	__unlock_dialog->clear();
 	__unlock_dialog->show();
     }

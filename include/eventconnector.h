@@ -69,16 +69,6 @@ class EventConnectorBase {
 	 */
 	bool __suspended;
 
-    protected:
-	/**
-	 * The value returned by id() together with the event type has
-	 * to uniquely identifiy the event connector
-	 *
-	 * @return value of type @c uintptr_t uniquely identifying the
-	 * handler.
-	 */
-	virtual uintptr_t id() const = 0;
-
     public:
 	/**
 	 * Constructor.
@@ -92,6 +82,15 @@ class EventConnectorBase {
 	virtual ~EventConnectorBase();
 
 	EventConnectorBase& operator=(const EventConnectorBase& _ec);
+
+	/**
+	 * The value returned by id() together with the event type has
+	 * to uniquely identifiy the event connector
+	 *
+	 * @return value of type @c uintptr_t uniquely identifying the
+	 * handler.
+	 */
+	virtual uintptr_t id() const = 0;
 
 	/**
 	 * Tests two event connector for equality. It tests for
@@ -194,6 +193,8 @@ class EventConnectorBase {
 	 * caller is responsible for freeing the memory.
 	 */
 	virtual EventConnectorBase* clone() const = 0;
+
+	operator EVENT_TYPE() const;
 };
 
 /**
@@ -217,16 +218,6 @@ class EventConnectorMethod1: public EventConnectorBase {
 	__mem_fun_t __func;
 	/// Holds the pointer to the object of type T
 	_obj_ptr_t __obj_ptr;
-
-    protected:
-	/**
-	 * The id returned is the pointer to the object converted to
-	 * an uintptr_t.
-	 *
-	 * @return the id used for testing for equality with other
-	 * event connectors.
-	 */
-	uintptr_t id() const { return (uintptr_t)__obj_ptr; }
 
     public:
 	/**
@@ -284,6 +275,15 @@ class EventConnectorMethod1: public EventConnectorBase {
 	}
 
 	/**
+	 * The id returned is the pointer to the object converted to
+	 * an uintptr_t.
+	 *
+	 * @return the id used for testing for equality with other
+	 * event connectors.
+	 */
+	uintptr_t id() const { return (uintptr_t)__obj_ptr; }
+
+	/**
 	 * The EventQueue calls this function and passes a reference
 	 * to the event to it.
 	 *
@@ -334,16 +334,6 @@ class EventConnectorFunction1: public EventConnectorBase {
 	/// Holds the pointer to the function to be called.
 	fptr_t __func;
 
-    protected:
-	/**
-	 * The id returned is the pointer to the function converted to
-	 * an uintptr_t.
-	 *
-	 * @return the id used for testing for equality with other
-	 * event connectors.
-	 */
-	uintptr_t id() const;
-
     public:
 	/**
 	 * Create an event connector to a function.
@@ -356,6 +346,15 @@ class EventConnectorFunction1: public EventConnectorBase {
 
 	EventConnectorFunction1(const EventConnectorFunction1& _ec);
 	EventConnectorFunction1& operator=(const EventConnectorFunction1& _ec);
+
+	/**
+	 * The id returned is the pointer to the function converted to
+	 * an uintptr_t.
+	 *
+	 * @return the id used for testing for equality with other
+	 * event connectors.
+	 */
+	uintptr_t id() const;
 
 	/**
 	 * The EventQueue calls this function and passes a reference

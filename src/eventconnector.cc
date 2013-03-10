@@ -81,6 +81,10 @@ EventConnectorBase::suspended() const {
     return __suspended;
 }
 
+EventConnectorBase::operator EVENT_TYPE() const {
+    return evt;
+}
+
 ////////////////////////////////////////////////////////
 //
 // class EventConnectorFunction1

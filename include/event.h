@@ -39,7 +39,7 @@ class WindowBase;
  */
 enum EVENT_TYPE {
     /// Terminates the EventQueue main loop
-    EVT_QUIT,
+    EVT_QUIT = 0,
     /**
      * Notification of window size change.
      *
@@ -166,6 +166,10 @@ class Event {
 	 * be freed by the caller.
 	 */
 	virtual Event* clone() const;
+
+	operator EVENT_TYPE() const;
+
+	static std::string evt2str(EVENT_TYPE _et);
 };
 
 /**

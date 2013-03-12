@@ -45,17 +45,6 @@ Dialog::button_press_handler(Event& _e) {
     }
 }
 
-void
-Dialog::unrealize() {
-    UNREALIZE_ENTER;
-
-    EventQueue::disconnect_event(EventConnectorMethod1<Dialog>(EVT_BUTTON_PRESS, this, &Dialog::button_press_handler));
-
-    Window::unrealize();
-
-    UNREALIZE_LEAVE;
-}
-
 //
 // Public
 //
@@ -162,4 +151,15 @@ Dialog::realize() {
     Window::realize();
 
     REALIZE_LEAVE;
+}
+
+void
+Dialog::unrealize() {
+    UNREALIZE_ENTER;
+
+    EventQueue::disconnect_event(EventConnectorMethod1<Dialog>(EVT_BUTTON_PRESS, this, &Dialog::button_press_handler));
+
+    Window::unrealize();
+
+    UNREALIZE_LEAVE;
 }

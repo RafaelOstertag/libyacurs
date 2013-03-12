@@ -55,9 +55,6 @@ class Dialog: public Window {
     protected:
 	virtual void button_press_handler(Event& _e);
 
-	void unrealize();
-
-
     public:
 	Dialog(const std::string& _title, 
 	       DIALOG_TYPE _dt=OKCANCEL,
@@ -72,6 +69,7 @@ class Dialog: public Window {
 	// Does nothing, everything handled in parent.
 	//void resize(const Area& _a);
 	void realize();
+	void unrealize();
 };
 
 #endif // DIALOG_H

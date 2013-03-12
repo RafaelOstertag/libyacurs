@@ -12,6 +12,8 @@
 
 #include "yacurs.h"
 
+#define KEY_SLEEP -1978
+
 // Used when preloading libtestpreload.so
 int __test_data[]= {
     // Press first button
@@ -62,71 +64,45 @@ int __test_data[]= {
 
     // Select OK button
     '\t', '\n',
+
+    // Advance to the first button
+    '\t', '\t', 
+
+    // Let Screen Lock kick in
+    KEY_SLEEP,
+
     // Quit
     '\t', '\n', 0
+};
+
+int __unlock_screen[] = {
+    // Make sure we are in the input box.
+    KEY_LEFT,
+
+    // Enter Secret
+    'U', 'n', 'l', 'o', 'c', 'k', ' ', 'S', 'c', 'r', 'e', 'e', 'n',
+    '\n', '\n',
+    0
 };
 
 extern "C" int __test_wgetch(void*) {
     static int* ptr2=__test_data;
 
-    usleep(20000);
+    usleep(10000);
+    
     if (*ptr2==0) {
-	abort();
+	ptr2=__test_data;
+    }
+
+    if (*ptr2==KEY_SLEEP) {
+	sleep(7);
+	ptr2=__unlock_screen;
+	return ERR;
     }
     return *ptr2++;
 }
 
 
-class UnlockDia: public UnlockDialog {
-    private:
-	std::string __secret;
-	VPack* __vpack;
-	Label* __text;
-	Input* __secret_input;
-
-	UnlockDia& operator=(const UnlockDia&) {
-	    std::abort();
-	    return *this;
-	}
-
-    public:
-	UnlockDia(const std::string& _secret):
-	    UnlockDialog("Unlock Screen"),
-	    __secret(_secret),
-	    __vpack(NULL),
-	    __text(NULL),
-	    __secret_input(NULL) {
-	    __vpack=new VPack;
-	    __text=new Label("Please enter password in order to unlock screen");
-	    __secret_input=new Input;
-
-	    __vpack->add_back(__text);
-	    __vpack->add_back(__secret_input);
-	    widget(__vpack);
-	}
-
-	~UnlockDia() {
-	    assert(__vpack!=NULL);
-	    assert(__text!=NULL);
-	    assert(__secret_input!=NULL);
-
-	    delete __vpack;
-	    delete __text;
-	    delete __secret_input;
-	}
-
-	bool unlock() {
-	    if (dialog_state() == DIALOG_OK &&
-		__secret_input->input() == __secret)
-		return true;
-
-	    return false;
-	}
-
-	void clear() {
-	    __secret_input->clear();
-	}
-};
 
 class Win1: public Window {
     private:
@@ -384,7 +360,7 @@ class MainWindow: public Window {
 
 int main() {
     LockScreen* lckscr;
-    UnlockDia* ulckdia;
+    UnlockDialogDefault* ulckdia;
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
@@ -393,11 +369,11 @@ int main() {
     try {
 	Curses::init();
 
-	ulckdia=new UnlockDia("Unlock Screen");
+	ulckdia=new UnlockDialogDefault("Unlock Screen");
 	lckscr=new LockScreen(ulckdia);
 
 	EventQueue::lock_screen(lckscr);
-	EventQueue::timeout(10);
+	EventQueue::timeout(5);
 
 	Curses::title(new LineObject(LineObject::POS_TOP,
 				     "LockScreen 1"));

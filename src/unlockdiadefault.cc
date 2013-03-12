@@ -1,0 +1,61 @@
+// $Id$
+
+#include <cassert>
+
+#include "unlockdiadefault.h"
+
+//
+// Private
+//
+UnlockDialogDefault& 
+UnlockDialogDefault::operator=(const UnlockDialogDefault&) {
+    std::abort();
+    return *this;
+}
+
+//
+// Protected
+//
+UnlockDialogDefault::UnlockDialogDefault(const std::string& _secret):
+    UnlockDialog("Unlock Screen"),
+    __secret(_secret),
+    __vpack(NULL),
+    __text(NULL),
+    __secret_input(NULL) {
+    __vpack=new VPack;
+    __vpack->always_dynamic(true);
+    __text=new Label("Please enter password in order to unlock screen");
+    __secret_input=new Input;
+    
+    __vpack->add_back(__text);
+    __vpack->add_back(__secret_input);
+    widget(__vpack);
+}
+
+UnlockDialogDefault::~UnlockDialogDefault() {
+    assert(__vpack!=NULL);
+    assert(__text!=NULL);
+    assert(__secret_input!=NULL);
+
+    delete __vpack;
+    delete __text;
+    delete __secret_input;
+}
+
+bool
+UnlockDialogDefault::unlock() {
+    if (dialog_state() == DIALOG_OK &&
+	__secret_input->input() == __secret)
+	return true;
+    
+    return false;
+}
+
+void 
+UnlockDialogDefault::clear() {
+    __secret_input->clear();
+}
+
+//
+// Public
+//

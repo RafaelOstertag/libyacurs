@@ -24,6 +24,7 @@
 #include "window.h"
 #include "lockscreen.h"
 #include "unlockdialog.h"
+#include "unlockdiadefault.h"
 #include "widgetbase.h"
 #include "pack.h"
 #include "vpack.h"

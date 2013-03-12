@@ -52,7 +52,7 @@ Event::operator EVENT_TYPE() const {
 
 std::string
 Event::evt2str(EVENT_TYPE _et) {
-    char* __str_table[] = {
+    const char* __str_table[] = {
 	"EVT_QUIT",
 	"EVT_SIGWINCH",
 	"EVT_SIGALRM",

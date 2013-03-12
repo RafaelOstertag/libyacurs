@@ -126,8 +126,6 @@ Widget::resize(const Area& _a) {
     size_available(_a);
 
     realize();
-    
-
 }
 
 void

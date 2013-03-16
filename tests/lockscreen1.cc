@@ -231,9 +231,9 @@ class BoxDialog: public Dialog {
 
     public:
 	BoxDialog(): Dialog("Box Dialog", Dialog::OK_ONLY),
-		     hpack(NULL),
-		     checkbox(NULL),
-		     radiobox(NULL) {
+		     hpack(0),
+		     checkbox(0),
+		     radiobox(0) {
 	    hpack=new HPack;
 	    std::vector<std::string> items;
 	    for (int i=0; i<10; i++) {
@@ -257,9 +257,9 @@ class BoxDialog: public Dialog {
 	}
 
 	~BoxDialog() {
-	    assert(hpack!=NULL);
-	    assert(checkbox!=NULL);
-	    assert(radiobox!=NULL);
+	    assert(hpack!=0);
+	    assert(checkbox!=0);
+	    assert(radiobox!=0);
 	    delete hpack;
 	    delete checkbox;
 	    delete radiobox;
@@ -282,22 +282,22 @@ class MainWindow: public Window {
 	void window_close_handler(Event& _e) {
 	    assert(_e==EVT_WINDOW_CLOSE);
 	    EventEx<WindowBase*>& evt=dynamic_cast<EventEx<WindowBase*>&>(_e);
-	    if (win1!=NULL && evt.data()==win1) {
+	    if (win1!=0 && evt.data()==win1) {
 		Curses::statusline()->push_msg("Window 1 closed");
 		delete win1;
-		win1=NULL;
+		win1=0;
 		return;
 	    }
 
-	    if (lbwin!=NULL && evt.data()==lbwin) {
+	    if (lbwin!=0 && evt.data()==lbwin) {
 		delete lbwin;
-		lbwin=NULL;
+		lbwin=0;
 		return;
 	    }
 
-	    if (boxdialog!=NULL && evt.data()==boxdialog) {
+	    if (boxdialog!=0 && evt.data()==boxdialog) {
 		delete boxdialog;
-		boxdialog=NULL;
+		boxdialog=0;
 		return;
 	    }
 	}
@@ -307,7 +307,7 @@ class MainWindow: public Window {
 	    EventEx<Button*>& e=dynamic_cast<EventEx<Button*>&>(_e);
 
 	    if (e.data()==button1) {
-		assert(win1==NULL);
+		assert(win1==0);
 
 		win1=new Win1;
 		win1->show();
@@ -315,7 +315,7 @@ class MainWindow: public Window {
 	    }
 
 	    if (e.data()==button3) {
-		assert(lbwin==NULL);
+		assert(lbwin==0);
 
 		lbwin=new ListBoxWin;
 		lbwin->show();
@@ -328,14 +328,14 @@ class MainWindow: public Window {
 	    }
 
 	    if (e.data()==button4) {
-		assert(boxdialog==NULL);
+		assert(boxdialog==0);
 		boxdialog=new BoxDialog;
 		boxdialog->show();
 	    }
 	}
 
     public:
-	MainWindow(): Window(Margin(1,0,1,0)), win1(NULL), lbwin(NULL) {
+	MainWindow(): Window(Margin(1,0,1,0)), win1(0), lbwin(0) {
 	    button1=new Button("New Window");
 	    button2=new Button("Quit");
 	    button3=new Button("List Box Win");

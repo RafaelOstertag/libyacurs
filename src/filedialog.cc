@@ -44,7 +44,7 @@ FileDialog::read_dir() {
     std::list<std::string> _files;
 
     if (__path->label().empty()) {
-	char *ptr=getcwd(NULL, 2048);
+	char *ptr=getcwd(0, 2048);
 	if (!ptr) {
 	    if (errno==EACCES)
 		__path->label("/");
@@ -55,7 +55,7 @@ FileDialog::read_dir() {
     }
 
     DIR* dir=opendir(__path->label().c_str());
-    if (dir==NULL)
+    if (dir==0)
 	throw SystemError(errno);
 
     std::string _base(__path->label());
@@ -66,7 +66,7 @@ FileDialog::read_dir() {
     if (_base.length()>1)
 	_base+="/";
 
-    dirent* dent = NULL;
+    dirent* dent = 0;
     errno=0;
     while((dent=readdir(dir))) {
 	std::string _tmp(_base + dent->d_name);
@@ -153,10 +153,10 @@ FileDialog::window_close_handler(Event& _e) {
     
     EventEx<WindowBase*>& _evt = dynamic_cast<EventEx<WindowBase*>&>(_e);
 
-    if (__msgbox!=NULL && __msgbox==_evt.data()) {
+    if (__msgbox!=0 && __msgbox==_evt.data()) {
 	__msgbox->close();
 	delete __msgbox;
-	__msgbox=NULL;
+	__msgbox=0;
     }
 }
     
@@ -170,13 +170,13 @@ FileDialog::window_close_handler(Event& _e) {
 
 FileDialog::FileDialog(std::string _path,
 		       DIALOG_TYPE _dt): Dialog("File", _dt, Dialog::FULLSIZE),
-					 __msgbox(NULL),
-					 __path(NULL),
-					 __directories(NULL),
-					 __files(NULL),
-					 __filename(NULL),
-					 __hpack(NULL),
-					 __vpack(NULL) {
+					 __msgbox(0),
+					 __path(0),
+					 __directories(0),
+					 __files(0),
+					 __filename(0),
+					 __hpack(0),
+					 __vpack(0) {
     __vpack = new VPack;
     __hpack = new HPack;
 
@@ -214,12 +214,12 @@ FileDialog::~FileDialog() {
     EventQueue::disconnect_event(EventConnectorMethod1<FileDialog>(EVT_LISTBOX_ENTER,this,&FileDialog::listbox_enter_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<FileDialog>(EVT_WINDOW_CLOSE, this, &FileDialog::window_close_handler));
 
-    assert(__path!=NULL);
-    assert(__directories!=NULL);
-    assert(__files!=NULL);
-    assert(__filename!=NULL);
-    assert(__hpack!=NULL);
-    assert(__vpack!=NULL);
+    assert(__path!=0);
+    assert(__directories!=0);
+    assert(__files!=0);
+    assert(__filename!=0);
+    assert(__hpack!=0);
+    assert(__vpack!=0);
 
     delete __path;
     delete __directories;
@@ -231,10 +231,10 @@ FileDialog::~FileDialog() {
 
 std::string
 FileDialog::filepath() const {
-    assert(__path!=NULL);
-    assert(__directories!=NULL);
-    assert(__files!=NULL);
-    assert(__filename!=NULL);
+    assert(__path!=0);
+    assert(__directories!=0);
+    assert(__files!=0);
+    assert(__filename!=0);
 
     std::string retval;
 
@@ -248,10 +248,10 @@ FileDialog::filepath() const {
 
 const std::string&
 FileDialog::directory() const {
-    assert(__path!=NULL);
-    assert(__directories!=NULL);
-    assert(__files!=NULL);
-    assert(__filename!=NULL);
+    assert(__path!=0);
+    assert(__directories!=0);
+    assert(__files!=0);
+    assert(__filename!=0);
 
     return __path->label();
 }

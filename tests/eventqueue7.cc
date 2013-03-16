@@ -49,7 +49,7 @@ class AlrmHandler: public Handler {
 	    sigset_t _sset;
 	    sigemptyset(&_sset);
 	    sigaddset(&_sset,SIGUSR1);
-	    if (sigprocmask(SIG_UNBLOCK, &_sset, NULL))
+	    if (sigprocmask(SIG_UNBLOCK, &_sset, 0))
 		abort();
 	    raise(SIGUSR1);
 	}
@@ -65,7 +65,7 @@ class Usr1Handler: public Handler {
 	    sigset_t _sset;
 	    sigemptyset(&_sset);
 	    sigaddset(&_sset,SIGUSR2);
-	    if (sigprocmask(SIG_UNBLOCK, &_sset, NULL))
+	    if (sigprocmask(SIG_UNBLOCK, &_sset, 0))
 		abort();
 	    raise(SIGUSR2);
 	}

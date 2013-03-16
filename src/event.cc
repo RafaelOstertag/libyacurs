@@ -70,7 +70,7 @@ Event::evt2str(EVENT_TYPE _et) {
 	"EVT_WINDOW_CLOSE",
 	"EVT_BUTTON_PRESS",
 	"EVT_LISTBOX_ENTER",
-	NULL
+	0
     };
 
     return __str_table[_et];

@@ -52,7 +52,7 @@ FocusGroup::~FocusGroup() {
     if (__widgets.empty()) return;
 
     assert(__focus!=__widgets.end());
-    assert((*__focus) != NULL);
+    assert((*__focus) != 0);
     (*__focus)->focus(false);
 }
 
@@ -78,7 +78,7 @@ FocusGroup::activate() {
     if (__focus == __widgets.end())
 	__focus = __widgets.begin();
 
-    assert((*__focus)!=NULL);
+    assert((*__focus)!=0);
 
     (*__focus)->focus(true);
 
@@ -101,7 +101,7 @@ FocusGroup::deactivate() {
     if (__widgets.empty()) return;
 
     assert(__focus!=__widgets.end());
-    assert((*__focus)!=NULL);
+    assert((*__focus)!=0);
 
     (*__focus)->focus(false);
 #ifndef NDEBUG
@@ -121,7 +121,7 @@ FocusGroup::active() const {
 
 void
 FocusGroup::add(WidgetBase* _w) {
-    assert(_w!=NULL);
+    assert(_w!=0);
 
     // If the Focus Groups is empty but activate, we set the focus to
     // the first Widget added, so that we don't end up with an
@@ -148,7 +148,7 @@ FocusGroup::add(WidgetBase* _w) {
 
 void
 FocusGroup::remove(WidgetBase* _w) {
-    assert(_w!=NULL);
+    assert(_w!=0);
     assert(!__widgets.empty());
 
     // Will be set to true, if the removed widget had the focus

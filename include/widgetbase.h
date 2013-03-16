@@ -112,7 +112,7 @@ class WidgetBase: public Realizeable {
 
 	/**
 	 * The parent of the widget. If the widget has no parent, it
-	 * has to be set to NULL.
+	 * has to be set to 0.
 	 *
 	 * Basically, only container widgets such as Packs can be
 	 * parents.
@@ -147,9 +147,9 @@ class WidgetBase: public Realizeable {
 	/**
 	 * Get pointer to the parent of the widget.
 	 *
-	 * If the widget has no parent, NULL is returned.
+	 * If the widget has no parent, 0 is returned.
 	 *
-	 * @return the address of the parent widget or NULL if the is
+	 * @return the address of the parent widget or 0 if the is
 	 * no parent.
 	 */
 	WidgetBase* parent() const;

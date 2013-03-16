@@ -25,9 +25,9 @@ InputBox::operator=(const InputBox&) {
 InputBox::InputBox(const std::string& _title,
 		   const std::string& _message,
 		   DIALOG_TYPE _dt): Dialog(_title, _dt),
-				     __message(NULL),
-				     __input(NULL),
-				     __vpack(NULL) {
+				     __message(0),
+				     __input(0),
+				     __vpack(0) {
     __message=new Label(_message);
     __input=new Input;
     __vpack=new VPack;
@@ -41,9 +41,9 @@ InputBox::InputBox(const std::string& _title,
 }
 
 InputBox::~InputBox() {
-    assert(__message!=NULL);
-    assert(__input!=NULL);
-    assert(__vpack!=NULL);
+    assert(__message!=0);
+    assert(__input!=0);
+    assert(__vpack!=0);
 
     delete __input;
     delete __message;
@@ -52,13 +52,13 @@ InputBox::~InputBox() {
 
 const std::string&
 InputBox::input() const {
-    assert(__input!=NULL);
+    assert(__input!=0);
 
     return __input->input();
 }
 
 void
 InputBox::clear() {
-    assert(__input!=NULL);
+    assert(__input!=0);
     __input->clear();
 }

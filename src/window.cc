@@ -50,7 +50,7 @@ Window::unrealize() {
 //
 
 Window::Window(const Margin& m): WindowBase(m),
-				 __widget(NULL),
+				 __widget(0),
 				 __fgid((fgid_t)-1) {
     // It is imperative that a new Focus Group is created before the
     // Widget is realized()!
@@ -104,7 +104,7 @@ Window::realize() {
 	__widget->curses_window(curses_window());
 
 	// This widget does not have another widget as parent.
-	__widget->parent(NULL);
+	__widget->parent(0);
 
 	__widget->focusgroup_id(__fgid);
 

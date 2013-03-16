@@ -62,7 +62,7 @@ void
 DynLabel::refresh(bool immediate) {
     if (realization()!=REALIZED && realization()!=REALIZING) return;
 
-    assert(widget_subwin()!=NULL);
+    assert(widget_subwin()!=0);
 
     // Make sure there are no left overs in case of text being set by
     // a call to label() case we're realized.

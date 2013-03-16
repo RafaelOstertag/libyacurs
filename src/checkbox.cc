@@ -173,7 +173,7 @@ CheckBox::reset_size() {
 void
 CheckBox::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
-    assert(widget_subwin()!=NULL);
+    assert(widget_subwin()!=0);
 
     std::vector<Selectable>::iterator it = __items.begin();
     std::vector<Selectable>::size_type pos=0;

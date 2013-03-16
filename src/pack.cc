@@ -43,7 +43,7 @@ Pack::refresh_all_widgets(bool i) {
 
 void
 Pack::take_over(WidgetBase* _w) {
-    assert(_w!=NULL);
+    assert(_w!=0);
 
     _w->parent(this);
     _w->curses_window(WidgetBase::curses_window());
@@ -102,7 +102,7 @@ Pack::widgets() const {
 
 void
 Pack::add_front(WidgetBase* _w) {
-    assert(_w != NULL);
+    assert(_w != 0);
 
     widget_list.push_front(_w);
     take_over(_w);
@@ -117,7 +117,7 @@ Pack::add_front(WidgetBase* _w) {
 
 void
 Pack::add_back(WidgetBase* _w) {
-    assert(_w != NULL);
+    assert(_w != 0);
 
     widget_list.push_back(_w);
 
@@ -134,7 +134,7 @@ Pack::add_back(WidgetBase* _w) {
 
 void
 Pack::remove(WidgetBase* _w) {
-    assert(_w != NULL);
+    assert(_w != 0);
 
     //    if (realization()!=UNREALIZED) throw AlreadyRealized();
 
@@ -220,7 +220,7 @@ Pack::reset_size() {
 
 bool
 Pack::size_change() {
-    if (parent()!=NULL)
+    if (parent()!=0)
 	return parent()->size_change();
 
     if (realization()!=REALIZED) return true;

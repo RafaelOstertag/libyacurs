@@ -38,12 +38,12 @@ Label::label(const std::string& _l) {
 
     __size = Size(1, __label.length());
 
-    // If parent is NULL, we have nobody to inform about a possible
+    // If parent is 0, we have nobody to inform about a possible
     // size change. If old size is the same as the new size, we simply
     // have to refresh immediately.
     //
     // In any case, we can leave the function.
-    if (parent()==NULL || oldsize.cols() >= __size.cols()) {
+    if (parent()==0 || oldsize.cols() >= __size.cols()) {
 	if (realization()==REALIZED) refresh(true);
 	return;
     }
@@ -84,7 +84,7 @@ void
 Label::refresh(bool immediate) {
     if (realization()!=REALIZED && realization()!=REALIZING) return;
 
-    assert(widget_subwin()!=NULL);
+    assert(widget_subwin()!=0);
 
     // We don't resize if a new string is set that was smaller than
     // the previous one. This leads to artifacts, so do a werase()

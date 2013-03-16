@@ -25,7 +25,7 @@
 class VRealizeWidgets {
     public:
 	void operator()(WidgetBase* _w) {
-	    assert(_w!=NULL);
+	    assert(_w!=0);
 	    // It is possible, that upon a resize the widget became to
 	    // big for the screen, or overshoots it due to its
 	    // position and size. Packs do not check whether or not
@@ -58,7 +58,7 @@ class VGetMaxSizeHint {
 	}
 
 	void operator()(const WidgetBase* w) {
-	    assert(w!=NULL);
+	    assert(w!=0);
 	    __size_max.cols(std::max(w->size_hint().cols(),
 				     __size_max.cols()));
 	    __size_max.rows(w->size_hint().rows()+__size_max.rows());
@@ -84,7 +84,7 @@ class VSetSizeAvail {
 	VSetSizeAvail(const Size& _avail): __avail(_avail) {}
 	VSetSizeAvail(const VSetSizeAvail& _s): __avail(_s.__avail) {}
 	void operator()(WidgetBase* w) {
-	    assert(w!=NULL);
+	    assert(w!=0);
 	    assert(__avail.rows()>0);
 	    assert(__avail.cols()>0);
 	    w->size_available(__avail);
@@ -118,7 +118,7 @@ class VSetSizeHinted {
 	}
 
 	void operator()(WidgetBase* _w) {
-	    assert(_w!=NULL);
+	    assert(_w!=0);
 	    assert(_w->size_hint().rows()>0);
 
 	    // _sa is supposed to hold the constant row value and the
@@ -178,7 +178,7 @@ class VCalcNSetSize {
 	}
 
 	void operator()(WidgetBase* _w) {
-	    assert(_w != NULL);
+	    assert(_w != 0);
 
 	    // First, reset the size, so that we can identify
 	    // dynamically sized Widgets
@@ -281,7 +281,7 @@ class VCalcSizeNonDynamic {
 	    return *this;
 	}
 	void operator()(const WidgetBase* _w) {
-	    assert(_w!=NULL);
+	    assert(_w!=0);
 
 	    // Do nothing if we already found a dynamic widget
 	    if (__had_dynamic) return;

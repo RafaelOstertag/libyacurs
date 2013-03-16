@@ -19,9 +19,9 @@ UnlockDialogDefault::operator=(const UnlockDialogDefault&) {
 UnlockDialogDefault::UnlockDialogDefault(const std::string& _secret):
     UnlockDialog("Unlock Screen"),
     __secret(_secret),
-    __vpack(NULL),
-    __text(NULL),
-    __secret_input(NULL) {
+    __vpack(0),
+    __text(0),
+    __secret_input(0) {
     __vpack=new VPack;
     __vpack->always_dynamic(true);
     __text=new Label("Please enter password in order to unlock screen");
@@ -33,9 +33,9 @@ UnlockDialogDefault::UnlockDialogDefault(const std::string& _secret):
 }
 
 UnlockDialogDefault::~UnlockDialogDefault() {
-    assert(__vpack!=NULL);
-    assert(__text!=NULL);
-    assert(__secret_input!=NULL);
+    assert(__vpack!=0);
+    assert(__text!=0);
+    assert(__secret_input!=0);
 
     delete __vpack;
     delete __text;

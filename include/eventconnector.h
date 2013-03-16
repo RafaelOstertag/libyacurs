@@ -238,23 +238,23 @@ class EventConnectorMethod1: public EventConnectorBase {
 			      __mem_fun_t _func): EventConnectorBase(_e),
 						  __func(_func),
 						  __obj_ptr(_obj_ptr) {
-	    assert(__func != NULL);
-	    assert(__obj_ptr != NULL);
+	    assert(__func != 0);
+	    assert(__obj_ptr != 0);
 	}
 
 	EventConnectorMethod1(const EventConnectorMethod1<T>& _ec): EventConnectorBase(_ec),
 								    __func(_ec.__func),
 								    __obj_ptr(_ec.__obj_ptr) {
-	    assert(__func != NULL);
-	    assert(__obj_ptr != NULL);
+	    assert(__func != 0);
+	    assert(__obj_ptr != 0);
 	}
 
 	EventConnectorMethod1<T>& operator=(const EventConnectorMethod1<T>& _ec) {
 	    EventConnectorBase::operator=(_ec);
-	    assert(_ec.__func != NULL);
+	    assert(_ec.__func != 0);
 	    __func = _ec.__func;
 
-	    assert(_ec.__obj_ptr != NULL);
+	    assert(_ec.__obj_ptr != 0);
 	    __obj_ptr = _ec.__obj_ptr;
 
 	    return *this;
@@ -279,8 +279,8 @@ class EventConnectorMethod1: public EventConnectorBase {
 	 * or -1 if the connector is suspended
 	 */
 	void call(Event& _e) const {
-	    assert(__obj_ptr != NULL);
-	    assert(__func != NULL);
+	    assert(__obj_ptr != 0);
+	    assert(__func != 0);
 
 	    if (suspended()) return;
 	    (__obj_ptr->*__func)(_e);

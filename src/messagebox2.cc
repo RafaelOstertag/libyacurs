@@ -26,9 +26,9 @@ MessageBox2::MessageBox2(const std::string& _title,
 			 const std::string& _message1,
 			 const std::string& _message2,
 			 DIALOG_TYPE _dt): Dialog(_title, _dt),
-					   __vpack(NULL),
-					   __message1(NULL),
-					   __message2(NULL) {
+					   __vpack(0),
+					   __message1(0),
+					   __message2(0) {
     __message1=new Label(_message1);
     __message2=new Label(_message2);
 
@@ -41,9 +41,9 @@ MessageBox2::MessageBox2(const std::string& _title,
 }
 
 MessageBox2::~MessageBox2() {
-    assert(__vpack!=NULL);
-    assert(__message1!=NULL);
-    assert(__message2!=NULL);
+    assert(__vpack!=0);
+    assert(__message1!=0);
+    assert(__message2!=0);
 
     delete __vpack;
     delete __message1;

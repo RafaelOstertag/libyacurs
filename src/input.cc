@@ -285,7 +285,7 @@ Input::reset_size() {
 void
 Input::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
-    assert(widget_subwin()!=NULL);
+    assert(widget_subwin()!=0);
 
     // setting background is essential for coloring entire input
     // widget.

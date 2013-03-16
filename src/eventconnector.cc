@@ -104,19 +104,19 @@ EventConnectorFunction1::id() const {
 //
 EventConnectorFunction1::EventConnectorFunction1(EVENT_TYPE _e, fptr_t _func):
     EventConnectorBase(_e), __func(_func) {
-    assert(__func != NULL);
+    assert(__func != 0);
 }
 
 EventConnectorFunction1::EventConnectorFunction1(const EventConnectorFunction1& _ec):
     EventConnectorBase(_ec), __func(_ec.__func) {
-    assert(__func != NULL);
+    assert(__func != 0);
 }
 
 EventConnectorFunction1&
 EventConnectorFunction1::operator=(const EventConnectorFunction1& _ec) {
     EventConnectorBase::operator=(_ec);
 
-    assert(__func != NULL);
+    assert(__func != 0);
     __func = _ec.__func;
 
     return *this;
@@ -124,7 +124,7 @@ EventConnectorFunction1::operator=(const EventConnectorFunction1& _ec) {
 
 void
 EventConnectorFunction1::call(Event& _e) const {
-    assert(__func != NULL);
+    assert(__func != 0);
 
     if (suspended()) return;
 

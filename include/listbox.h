@@ -404,7 +404,7 @@ class ListBox: public Widget {
 	void refresh(bool immediate) {
 	    if (realization()!=REALIZED) return;
 
-	    assert(widget_subwin()!=NULL);
+	    assert(widget_subwin()!=0);
 
 	    if (werase(widget_subwin())==ERR)
 		throw EraseFailed();

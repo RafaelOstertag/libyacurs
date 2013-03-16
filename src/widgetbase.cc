@@ -53,11 +53,11 @@ WidgetBase::can_focus(bool _can_focus) {
 //
 
 WidgetBase::WidgetBase(): Realizeable(),
-			  __curses_window(NULL),
+			  __curses_window(0),
 			  __fgid((fgid_t)-1),
 			  __can_focus(false),
 			  __focus(false),
-			  __parent(NULL),
+			  __parent(0),
 			  __position(),
 			  __size_available() {
 }

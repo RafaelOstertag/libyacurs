@@ -59,14 +59,14 @@ void
 WindowBase::unrealize() {
     UNREALIZE_ENTER;
 
-    assert(__curses_window!=NULL);
+    assert(__curses_window!=0);
 
     if (delwin(__curses_window) == ERR) {
 	realization(UNREALIZED);
 	throw DelWindowFailed();
     }
 
-    __curses_window = NULL;
+    __curses_window = 0;
 
     UNREALIZE_LEAVE;
 }
@@ -79,7 +79,7 @@ WindowBase::WindowBase(const Margin& _m):
     Realizeable(),
     __area(Coordinates(),Curses::inquiry_screensize()),
     __margin(_m),
-    __curses_window(NULL),
+    __curses_window(0),
     __frame(false),
     __shown(false) {
 
@@ -95,7 +95,7 @@ WindowBase::~WindowBase() {
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
 
     if (realization()==REALIZED) {
-	assert(__curses_window!=NULL);
+	assert(__curses_window!=0);
 	if (delwin(__curses_window)==ERR)
 	    throw DelWindowFailed();
     }
@@ -170,7 +170,7 @@ WindowBase::force_refresh_handler(Event& _e) {
     if (realization()!=REALIZED) return;
 
     assert(_e == EVT_FORCEREFRESH);
-    assert(__curses_window!=NULL);
+    assert(__curses_window!=0);
 
     if (clearok(__curses_window, TRUE)==ERR)
 	throw ClearOKFailed();
@@ -193,7 +193,7 @@ void
 WindowBase::refresh(bool immediate) {
     if (realization()!=REALIZED && realization()!=REALIZING) return;
 
-    assert(__curses_window!=NULL);
+    assert(__curses_window!=0);
 
     int retval;
     if (immediate)
@@ -253,12 +253,12 @@ WindowBase::realize() {
 	return;
     }
 
-    assert(__curses_window==NULL);
+    assert(__curses_window==0);
     __curses_window = newwin(_tmp.rows(),
 			     _tmp.cols(),
 			     _tmp.y(),
 			     _tmp.x());
-    if (__curses_window == NULL) {
+    if (__curses_window == 0) {
 	realization(UNREALIZED);
 	throw NewWindowFailed();
     }
@@ -266,14 +266,14 @@ WindowBase::realize() {
     if (scrollok(__curses_window, FALSE)==ERR) {
 	realization(UNREALIZED);
 	delwin(__curses_window);
-	__curses_window=NULL;
+	__curses_window=0;
 	throw ScrollOKFailed();
     }
 
     if (leaveok(__curses_window, TRUE)==ERR) {
 	realization(UNREALIZED);
 	delwin(__curses_window);
-	__curses_window=NULL;
+	__curses_window=0;
 	throw LeaveOKFailed();
     }
 
@@ -281,7 +281,7 @@ WindowBase::realize() {
 	if (box(__curses_window, 0, 0) == ERR) {
 	    realization(UNREALIZED);
 	    delwin(__curses_window);
-	    __curses_window=NULL;
+	    __curses_window=0;
 	    throw BoxFailed();
 	}
     }

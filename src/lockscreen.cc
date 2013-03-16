@@ -29,7 +29,7 @@ void
 LockScreen::event_key_handler(Event& _e) {
     assert(_e==EVT_KEY);
 
-    if (!__unlock_dialog->shown() && __msgbox==NULL) {
+    if (!__unlock_dialog->shown() && __msgbox==0) {
 	__unlock_dialog->clear();
 	__unlock_dialog->show();
     }
@@ -46,7 +46,7 @@ LockScreen::event_window_close_handler(Event& _e) {
 	    close();
 	} else {
 	    if (__unlock_dialog->dialog_state() == Dialog::DIALOG_OK) {
-		assert(__msgbox==NULL);
+		assert(__msgbox==0);
 		__msgbox=new MessageBox("Unlock Failed",
 					"Wrong Password",
 					Dialog::OK_ONLY);
@@ -58,7 +58,7 @@ LockScreen::event_window_close_handler(Event& _e) {
 
     if (_evt.data() == __msgbox) {
 	delete __msgbox;
-	__msgbox=NULL;
+	__msgbox=0;
     }
 }
 
@@ -70,8 +70,8 @@ LockScreen::event_window_close_handler(Event& _e) {
 
 LockScreen::LockScreen(UnlockDialog* _unlock): Window(Margin::zero()),
 					       __unlock_dialog(_unlock),
-					       __msgbox(NULL) {
-    if (!__unlock_dialog) throw std::invalid_argument("InputDialog may not be NULL");
+					       __msgbox(0) {
+    if (!__unlock_dialog) throw std::invalid_argument("InputDialog may not be 0");
 }
 
 LockScreen::~LockScreen() {

@@ -31,9 +31,9 @@
 #include "focusmanager.h"
 #include "colors.h"
 
-StatusLine* Curses::__statusline = NULL;
-LineObject* Curses::__title = NULL;
-Window* Curses::__mainwindow = NULL;
+StatusLine* Curses::__statusline = 0;
+LineObject* Curses::__title = 0;
+Window* Curses::__mainwindow = 0;
 bool Curses::initialized = false;
 
 //
@@ -83,7 +83,7 @@ Curses::init() {
     if (Curses::initialized)
 	throw AlreadyInitialized();
 
-    if (initscr() == NULL)
+    if (initscr() == 0)
 	throw UnableToInitialize();
 
     EventQueue::connect_event(EventConnectorFunction1(EVT_DOUPDATE, Curses::doupdate_handler));
@@ -224,7 +224,7 @@ Curses::inquiry_screensize() {
 	char* crows = std::getenv("LINES");
 	char* ccols = std::getenv("COLUMNS");
 
-	if ( crows != NULL && ccols != NULL ) {
+	if ( crows != 0 && ccols != 0 ) {
 	    int _rows = std::atoi(crows);
 	    int _cols = std::atoi(ccols);
 

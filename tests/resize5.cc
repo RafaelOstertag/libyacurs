@@ -49,13 +49,13 @@ class MyWindow: public Window {
 	}
 
 	void close() {
-	    assert(win!=NULL);
+	    assert(win!=0);
 	    win->close();
 	    delete win;
-	    win=NULL;
+	    win=0;
 	}
 	    
-	MyWindow(const Margin& m) : Window(m), win(NULL) {
+	MyWindow(const Margin& m) : Window(m), win(0) {
 	}
 };
 

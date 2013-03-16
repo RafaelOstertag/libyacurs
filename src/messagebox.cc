@@ -25,13 +25,13 @@ MessageBox::operator=(const MessageBox&) {
 MessageBox::MessageBox(const std::string& _title,
 		       const std::string& _message,
 		       DIALOG_TYPE _dt): Dialog(_title, _dt),
-					 __message(NULL) {
+					 __message(0) {
     __message=new Label(_message);
     widget(__message);
 }
 
 MessageBox::~MessageBox() {
-    assert(__message!=NULL);
+    assert(__message!=0);
     delete __message;
 }
 

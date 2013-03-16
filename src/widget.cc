@@ -26,7 +26,7 @@ Widget::force_refresh_handler(Event& _e) {
     if (realization()!=REALIZED) return;
 
     assert(_e == EVT_FORCEREFRESH);
-    assert(__widget_subwin!=NULL);
+    assert(__widget_subwin!=0);
 
     if (clearok(__widget_subwin, TRUE)==ERR)
 	throw ClearOKFailed();
@@ -39,7 +39,7 @@ Widget::unrealize() {
 
     EventQueue::disconnect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
     
-    assert(__widget_subwin!=NULL);
+    assert(__widget_subwin!=0);
 
     // We have to clear the window since the new size might be
     // smaller, and thus leaving artifacts on the screen if we omit to
@@ -54,7 +54,7 @@ Widget::unrealize() {
 	throw DelWindowFailed();
     }
 
-    __widget_subwin = NULL;
+    __widget_subwin = 0;
 
     // This is also needed to remove artifacts on the screen
     if (touchwin(curses_window()) == ERR) {
@@ -79,14 +79,14 @@ Widget::widget_subwin() const {
 //
 
 Widget::Widget(): WidgetBase(),
-		  __widget_subwin(NULL) {
+		  __widget_subwin(0) {
 }
 
 Widget::~Widget() {
     EventQueue::disconnect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
     
     if (realization()==REALIZED) {
-	assert(__widget_subwin!=NULL);
+	assert(__widget_subwin!=0);
 	if (delwin(__widget_subwin)==ERR)
 	    throw DelWindowFailed();
     }
@@ -97,7 +97,7 @@ Widget::refresh(bool immediate) {
     if (!(realization()==REALIZED ||
 	  realization()==REALIZING) ) return;
 
-    assert(__widget_subwin!=NULL);
+    assert(__widget_subwin!=0);
     assert(focusgroup_id()!=(fgid_t)-1);
 
     int retval;
@@ -140,8 +140,8 @@ Widget::realize() {
 
     EventQueue::connect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,this, &Widget::force_refresh_handler));
 
-    // We cannot assert on parent() since it might be legally NULL
-    // assert(parent()!=NULL
+    // We cannot assert on parent() since it might be legally 0
+    // assert(parent()!=0
 
     assert(_size!=Size::zero());
     assert(size_a!=Size::zero());
@@ -151,15 +151,15 @@ Widget::realize() {
 	_size.cols()>size_a.cols() )
 	return;
 
-    assert(curses_window()!=NULL);
-    assert(__widget_subwin==NULL);
+    assert(curses_window()!=0);
+    assert(__widget_subwin==0);
 
     __widget_subwin = ::subwin(curses_window(),
 		       _size.rows(),
 		       _size.cols(),
 		       pos.y(),
 		       pos.x());
-    if (__widget_subwin == NULL) {
+    if (__widget_subwin == 0) {
 	realization(UNREALIZED);
 	throw SubwinFailed();
     }
@@ -167,14 +167,14 @@ Widget::realize() {
     if (scrollok(__widget_subwin, FALSE)==ERR) {
 	realization(UNREALIZED);
 	delwin(__widget_subwin);
-	__widget_subwin=NULL;
+	__widget_subwin=0;
 	throw ScrollOKFailed();
     }
 
     if (leaveok(__widget_subwin, TRUE)==ERR) {
 	realization(UNREALIZED);
 	delwin(__widget_subwin);
-	__widget_subwin=NULL;
+	__widget_subwin=0;
 	throw LeaveOKFailed();
     }
 

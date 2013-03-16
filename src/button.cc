@@ -105,7 +105,7 @@ void
 Button::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
 
-    assert(widget_subwin()!=NULL);
+    assert(widget_subwin()!=0);
 
     if (focus()) {
 	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_FOCUS);

@@ -100,11 +100,11 @@ extern "C" int __test_wgetch(void*) {
     if (*ptr1!=0)
 	return *ptr1++;
 
-    if (selection1[selection_index]!=NULL) {
+    if (selection1[selection_index]!=0) {
 	if (selection1[selection_index][selection_index2]!=0) {
 	    return selection1[selection_index][selection_index2++];
 	} else {
-	    if (selection1[selection_index+1]!=NULL)
+	    if (selection1[selection_index+1]!=0)
 		return selection1[++selection_index][selection_index2=0];
 	}
     }
@@ -144,7 +144,7 @@ class MainWindow: public Window {
 	void window_close_handler(Event& _e) {
 	    assert(_e==EVT_WINDOW_CLOSE);
 	    EventEx<WindowBase*>& evt=dynamic_cast<EventEx<WindowBase*>&>(_e);
-	    if (filedialog!=NULL && evt.data()==filedialog) {
+	    if (filedialog!=0 && evt.data()==filedialog) {
 		Curses::statusline()->push_msg("FileDialog closed");
 
 		if (filedialog->dialog_state()==Dialog::DIALOG_OK) {
@@ -160,7 +160,7 @@ class MainWindow: public Window {
 		}
 
 		delete filedialog;
-		filedialog=NULL;
+		filedialog=0;
 	    }
 
 	}
@@ -170,7 +170,7 @@ class MainWindow: public Window {
 	    EventEx<Button*>& e=dynamic_cast<EventEx<Button*>&>(_e);
 
 	    if (e.data()==button1) {
-		assert(filedialog==NULL);
+		assert(filedialog==0);
 
 		filedialog=new FileDialog;
 		filedialog->show();
@@ -184,7 +184,7 @@ class MainWindow: public Window {
 	}
 
     public:
-	MainWindow(): Window(Margin(1,0,1,0)), filedialog(NULL) {
+	MainWindow(): Window(Margin(1,0,1,0)), filedialog(0) {
 	    button1=new Button("New Window");
 	    button2=new Button("Quit");
 	    vpack1=new VPack;
@@ -268,7 +268,7 @@ int main() {
     sleep(15);
 #endif
 
-    srand48(time(NULL));
+    srand48(time(0));
 
     // Initialize test data
     for(int i=0; i<30; i++) {
@@ -286,7 +286,7 @@ int main() {
 	    selection1[i][20]=0;
 	}
     }
-    selection1[60]=NULL;
+    selection1[60]=0;
 
     try {
 	Curses::init();

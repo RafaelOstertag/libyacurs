@@ -19,13 +19,13 @@
 
 #include "yacurs.h"
 
-LineObject* title=NULL;
+LineObject* title=0;
 
 void alrm(Event& _e) {
     static int counter=0;
 
     assert(_e == EVT_SIGALRM);
-    assert(title != NULL);
+    assert(title != 0);
 
     switch (counter) {
     case 0:

@@ -63,7 +63,7 @@
  *
  * @internal the Focus Group ID is simply the index of the Focus Group
  * in the vector. We don't remove items from the vector, but set them
- * to @c NULL upon destruction, so that we can identify empty slots.
+ * to @c 0 upon destruction, so that we can identify empty slots.
  */
 class FocusManager {
     private:

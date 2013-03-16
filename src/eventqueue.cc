@@ -24,7 +24,7 @@
 #ifndef NDEBUG
 #define DEBUGOUT(x) try {							\
 	char* __debugfile_name__;					\
-	if ((__debugfile_name__ = getenv("LIBYACURS_EVT_DBGFN"))!=NULL) { \
+	if ((__debugfile_name__ = getenv("LIBYACURS_EVT_DBGFN"))!=0) { \
 	    if (!__debugfile.is_open())					\
 		__debugfile.open(__debugfile_name__,			\
 				 std::ios::out | std::ios::trunc);	\
@@ -207,7 +207,7 @@ std::queue<Event*> EventQueue::evt_queue;
 std::list<EventConnectorBase*> EventQueue::evtconn_rem_request;
 std::list<EventConnectorBase*> EventQueue::evtconn_list;
 
-LockScreen* EventQueue::__lockscreen = NULL;
+LockScreen* EventQueue::__lockscreen = 0;
 unsigned int EventQueue::__timeout = 0;
 
 //
@@ -231,7 +231,7 @@ class EventConnectorEqual {
 	 * @return @c true if __eb == *eb, @c false otherwise.
 	 */
 	bool operator()(EventConnectorBase* eb) {
-	    assert( eb != NULL );
+	    assert( eb != 0 );
 	    return *eb == __eb;
 	}
 };
@@ -258,7 +258,7 @@ class EvtConnSetSuspend {
 	EvtConnSetSuspend(EVENT_TYPE _e, bool _s):
 	    __evt(_e), __suspend(_s) {}
 	void operator()(EventConnectorBase* eb) {
-	    assert ( eb != NULL );
+	    assert ( eb != 0 );
 	    if ( *eb == __evt) {
 		if (__suspend) {
 		    DEBUGOUT("Suspend: " << (void*)(eb->id()) << ": " << Event::evt2str(*eb));
@@ -295,7 +295,7 @@ class EvtConnSetSuspendExcept {
 				    bool _s): __evt(_e),
 					      __suspend(_s){}
 	void operator()(EventConnectorBase* eb) {
-	    assert ( eb != NULL );
+	    assert ( eb != 0 );
 	    if (*eb == __evt.type() &&
 		! (__evt == *eb) ) {
 		if (__suspend) {
@@ -322,7 +322,7 @@ class DestroyEventConnector {
 	 * @param eb pointer to EventConnectorBase to be freed.
 	 */
 	void operator()(EventConnectorBase* eb) {
-	    assert( eb != NULL );
+	    assert( eb != 0 );
 	    delete eb;
 	}
 };
@@ -355,7 +355,7 @@ class CallEventConnector {
 	 * conditionally if it connects to the same EventType as __eb is.
 	 */
 	void operator()(EventConnectorBase* _ec) {
-	    assert(_ec != NULL);
+	    assert(_ec != 0);
 	    if (_ec->type() == __eb.type()) {
 		statistics.ec_calls_total++;
 		EVENTCONN_STATS(_ec->type());
@@ -485,23 +485,23 @@ void
 EventQueue::restore_signal() {
     int err;
 
-    err = sigaction(SIGWINCH, &old_winch_act, NULL);
+    err = sigaction(SIGWINCH, &old_winch_act, 0);
     if (err)
 	throw SystemError(errno);
-    err = sigaction(SIGWINCH, &old_alrm_act, NULL);
+    err = sigaction(SIGWINCH, &old_alrm_act, 0);
     if (err)
 	throw SystemError(errno);
-    err = sigaction(SIGUSR1, &old_usr1_act, NULL);
+    err = sigaction(SIGUSR1, &old_usr1_act, 0);
     if (err)
 	throw SystemError(errno);
-    err = sigaction(SIGUSR2, &old_usr2_act, NULL);
+    err = sigaction(SIGUSR2, &old_usr2_act, 0);
     if (err)
 	throw SystemError(errno);
-    err = sigaction(SIGINT, &old_int_act, NULL);
+    err = sigaction(SIGINT, &old_int_act, 0);
     if (err)
 	throw SystemError(errno);
 
-    err = sigprocmask(SIG_SETMASK, &old_sigmask, NULL);
+    err = sigprocmask(SIG_SETMASK, &old_sigmask, 0);
     if (err)
 	throw SystemError(errno);
 }
@@ -595,7 +595,7 @@ EventQueue::unblocksignal() {
 
     signal_blocked = false;
 
-    if (sigprocmask(SIG_SETMASK, &tmp_old_sigmask, NULL))
+    if (sigprocmask(SIG_SETMASK, &tmp_old_sigmask, 0))
 	throw SystemError(errno);
 }
 
@@ -615,7 +615,7 @@ EventQueue::proc_rem_request() {
 
     while(it_erq!=evtconn_rem_request.end()) {
 	statistics.ec_rm_total++;
-	assert(*it_erq!=NULL);
+	assert(*it_erq!=0);
 
 	EventConnectorBase* ecb = *it_erq;
 
@@ -629,7 +629,7 @@ EventQueue::proc_rem_request() {
 
 	if (it == evtconn_list.end()) continue;
 
-	assert(*it!=NULL);
+	assert(*it!=0);
 
 	delete *it;
 	evtconn_list.erase(it);
@@ -642,7 +642,7 @@ void
 EventQueue::timeout_handler(Event& _e) {
     assert(_e==EVT_SIGALRM);
 
-    if (__lockscreen == NULL) return;
+    if (__lockscreen == 0) return;
     if (__lockscreen->shown()) return;
 
     __lockscreen->show();
@@ -659,7 +659,7 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 		     evtconn_list.end(),
 		     EventConnectorEqual(ec));
     if ( it != evtconn_list.end() ) {
-	assert(*it!=NULL);
+	assert(*it!=0);
 	// there is already a member function registered for the
 	// object on the given event. Replace that connection.
 
@@ -696,7 +696,7 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
     if (it_erq != evtconn_rem_request.end()) {
 	statistics.ec_rm_cancelled++;
 
-	assert(*it_erq!=NULL);
+	assert(*it_erq!=0);
 
 	DEBUGOUT("Cancelled Removal: " << (void*)(*it_erq)->id() << ": " << Event::evt2str(ec));
 
@@ -724,7 +724,7 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
 		     evtconn_list.end(),
 		     EventConnectorEqual(ec));
     if ( it != evtconn_list.end() ) {
-	assert(*it!=NULL);
+	assert(*it!=0);
 	(*it)->suspended(true);
     }
 }
@@ -819,7 +819,7 @@ EventQueue::run() {
     memset(&statistics, 0, sizeof(statistics));
 
     for(;;) {
-	if (__lockscreen!=NULL && __timeout!=0)
+	if (__lockscreen!=0 && __timeout!=0)
 	    alarm(__timeout);
 	
 	// This is to move the cursor to the focused widget. Before
@@ -857,7 +857,7 @@ EventQueue::run() {
 	    // listsize_max=max(evt_queue.size(),listsize_max)
 	    // iterations_eventproc++;
 	    Event* evt = evt_queue.front();
-	    assert(evt != NULL);
+	    assert(evt != 0);
 	    MAINLOOP_STATS(evt->type());
 
 	    if (evt->type() == EVT_QUIT) {
@@ -918,14 +918,14 @@ EventQueue::cleanup() {
     // Free the memory occupied by remaining connectors
     std::list<EventConnectorBase*>::iterator it=evtconn_list.begin();
     while(it != evtconn_list.end()) {
-	assert(*it != NULL);
+	assert(*it != 0);
 	delete *it++;
     }
 
     evtconn_list.clear();
 
     char* stats_fn;
-    if ((stats_fn = getenv("LIBYACURS_EVT_STATS"))!=NULL) {
+    if ((stats_fn = getenv("LIBYACURS_EVT_STATS"))!=0) {
 	try {
 	    if (!__statsfile.is_open())
 		__statsfile.open(stats_fn, std::ios::out | std::ios::trunc);

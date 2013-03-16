@@ -30,7 +30,7 @@ Dialog::button_press_handler(Event& _e) {
     assert(_e==EVT_BUTTON_PRESS);
     EventEx<Button*>& evt = dynamic_cast<EventEx<Button*>&>(_e);
 
-    assert(__bok!=NULL);
+    assert(__bok!=0);
 
     if (evt.data()==__bok) {
 	__dstate=DIALOG_OK;
@@ -52,10 +52,10 @@ Dialog::button_press_handler(Event& _e) {
 Dialog::Dialog(const std::string& _title,
 	       DIALOG_TYPE _dt,
 	       DIALOG_SIZE _ds): Window(),
-				 __vpack(NULL),
-				 __hpack(NULL),
-				 __bok(NULL),
-				 __bcancel(NULL),
+				 __vpack(0),
+				 __hpack(0),
+				 __bok(0),
+				 __bcancel(0),
 				 __dstate(DIALOG_CANCEL),
 				 __dialog_type(_dt),
 				 __dialog_size(_ds),
@@ -91,16 +91,16 @@ Dialog::Dialog(const std::string& _title,
 }
 
 Dialog::~Dialog() {
-    assert(__vpack!=NULL);
-    assert(__hpack!=NULL);
-    assert(__bok!=NULL);
+    assert(__vpack!=0);
+    assert(__hpack!=0);
+    assert(__bok!=0);
 
     delete __vpack;
     delete __hpack;
     delete __bok;
 
     if (__dialog_type) {
-     	assert(__bcancel!=NULL);
+     	assert(__bcancel!=0);
      	delete __bcancel;
     }
 
@@ -109,7 +109,7 @@ Dialog::~Dialog() {
 
 void
 Dialog::widget(WidgetBase* _w) {
-    assert(__vpack!=NULL);
+    assert(__vpack!=0);
     __vpack->add_front(_w);
 }
 

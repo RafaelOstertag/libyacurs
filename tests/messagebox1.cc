@@ -46,7 +46,7 @@ class MainWindow: public Window {
 	void window_close_handler(Event& _e) {
 	    assert(_e==EVT_WINDOW_CLOSE);
 	    EventEx<WindowBase*>& evt=dynamic_cast<EventEx<WindowBase*>&>(_e);
-	    if (messagebox1!=NULL && evt.data()==messagebox1) {
+	    if (messagebox1!=0 && evt.data()==messagebox1) {
 		Curses::statusline()->push_msg("Dialog 1 closed");
 
 		if (messagebox1->dialog_state()==Dialog::DIALOG_OK)
@@ -55,7 +55,7 @@ class MainWindow: public Window {
 		    label1->label("DIALOG_CANCEL");
 
 		delete messagebox1;
-		messagebox1=NULL;
+		messagebox1=0;
 	    }
 
 	}
@@ -65,7 +65,7 @@ class MainWindow: public Window {
 	    EventEx<Button*>& e=dynamic_cast<EventEx<Button*>&>(_e);
 
 	    if (e.data()==button1) {
-		assert(messagebox1==NULL);
+		assert(messagebox1==0);
 
 		messagebox1=new MessageBox("Test Dialog", "This is the message");
 		messagebox1->show();
@@ -79,7 +79,7 @@ class MainWindow: public Window {
 	}
 
     public:
-	MainWindow(): Window(Margin(1,0,1,0)), messagebox1(NULL) {
+	MainWindow(): Window(Margin(1,0,1,0)), messagebox1(0) {
 	    button1=new Button("New Window");
 	    button2=new Button("Quit");
 	    vpack1=new VPack;

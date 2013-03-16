@@ -804,20 +804,20 @@ class MainWindow: public Window {
 		}
 
 		delete inputdialog;
-		inputdialog=NULL;
+		inputdialog=0;
 		return;
 	    }
 	}
 
     public:
 	MainWindow(const Margin& _m): Window(_m),
-				      badd(NULL),
-				      bdelete(NULL),
-				      bquit(NULL),
-				      vpack1(NULL),
-				      hpack1(NULL),
-				      listbox(NULL),
-				      inputdialog(NULL) {
+				      badd(0),
+				      bdelete(0),
+				      bquit(0),
+				      vpack1(0),
+				      hpack1(0),
+				      listbox(0),
+				      inputdialog(0) {
 	    badd=new Button("Add");
 	    bdelete=new Button("Delete");
 	    bquit=new Button("Quit");

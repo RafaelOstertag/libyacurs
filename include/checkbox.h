@@ -80,7 +80,7 @@ class CheckBox: public Widget {
 	/**
 	 * Dummy. Does nothing.
 	 *
-	 * Input Widget is not a container Widget, hence it may not
+	 * CheckBox is not a container Widget, hence it may not
 	 * notified of size changes().
 	 *
 	 * @return always @false

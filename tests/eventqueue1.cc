@@ -38,7 +38,8 @@ class WinChHandler: public Handler {
 	inline WinChHandler(): Handler(EVT_SIGWINCH) {}
 	void handler(Event& e) {
 	    Handler::handler(e);
-	    Size tmp(dynamic_cast<EventEx<Size>&>(e).data());
+	    // Test if we received a Size reference.
+	    dynamic_cast<EventEx<Size>&>(e).data();
 	    std::cout << "WinChHandler\r" << std::endl;
 	}
 };

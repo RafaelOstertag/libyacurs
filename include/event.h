@@ -39,7 +39,7 @@ class WindowBase;
  */
 enum EVENT_TYPE {
     /// Terminates the EventQueue main loop
-    EVT_QUIT = 0,
+    EVT_QUIT,
     /**
      * Notification of window size change.
      *

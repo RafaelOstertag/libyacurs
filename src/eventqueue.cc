@@ -663,14 +663,7 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 	// there is already a member function registered for the
 	// object on the given event. Replace that connection.
 
-	// but first, get the suspended state, so we can maintain that
-	// state.
-	bool tmp_suspended = (*it)->suspended();
-
-	delete *it;
-	*it = ec.clone();
-
-	(*it)->suspended(tmp_suspended);
+	*(*it)= ec;
 
 	DEBUGOUT("Replaced Connector: " << (void*)(*it)->id() << ": " << Event::evt2str(ec));
     } else {
@@ -825,7 +818,7 @@ EventQueue::run() {
 
     memset(&statistics, 0, sizeof(statistics));
 
-    while(true) {
+    for(;;) {
 	if (__lockscreen!=NULL && __timeout!=0)
 	    alarm(__timeout);
 	

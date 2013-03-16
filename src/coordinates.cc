@@ -5,7 +5,7 @@
 //
 // Static
 //
-Coordinates Coordinates::__zero=Coordinates(0,0);
+Coordinates Coordinates::__zero(0,0);
 
 //
 // Private

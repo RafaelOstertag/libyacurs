@@ -8,7 +8,7 @@
 //
 // Static
 //
-Size Size::__zero=Size(0,0);
+Size Size::__zero(0,0);
 
 //
 // Private

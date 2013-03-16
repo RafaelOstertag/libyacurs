@@ -7,7 +7,7 @@
 //
 // Static
 //
-Margin Margin::__zero=Margin(0,0,0,0);
+Margin Margin::__zero(0,0,0,0);
 
 //
 // Private

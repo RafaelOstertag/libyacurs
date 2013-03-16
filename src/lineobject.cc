@@ -58,7 +58,7 @@ LineObject::put_line() {
 	  realization()==REALIZING)) return;
 
     if (werase(curses_window())==ERR)
-	throw EraseFailed();
+	throw CursesException("werase");
 
     if (__linetext.length()<1) return;
 
@@ -70,9 +70,9 @@ LineObject::put_line() {
 			 0,0,
 			 __linetext.c_str(),
 			 area().cols()-1)==ERR)
-	    throw AddStrFailed();
+	    throw CursesException("mvwaddstr");
 	if (winsch(curses_window(),'>')==ERR)
-	    throw WInsChFailed();
+	    throw CursesException("winsch");
     } else {
 	int hpos=0;
 	switch (__alignment) {
@@ -91,7 +91,8 @@ LineObject::put_line() {
 	}
 
 	// We don't check the return code, since we max out the space
-	// when doing right alignment.
+	// when doing right alignment. This will fail, but we achieve
+	// the desired effect
 	//
 	//	if (mymvwaddstr(curses_window(),
 	//		hpos,0,

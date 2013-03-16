@@ -63,7 +63,7 @@ WindowBase::unrealize() {
 
     if (delwin(__curses_window) == ERR) {
 	realization(UNREALIZED);
-	throw DelWindowFailed();
+	throw CursesException("delwin");
     }
 
     __curses_window = 0;
@@ -97,7 +97,7 @@ WindowBase::~WindowBase() {
     if (realization()==REALIZED) {
 	assert(__curses_window!=0);
 	if (delwin(__curses_window)==ERR)
-	    throw DelWindowFailed();
+	    throw CursesException("delwin");
     }
 }
 
@@ -173,7 +173,7 @@ WindowBase::force_refresh_handler(Event& _e) {
     assert(__curses_window!=0);
 
     if (clearok(__curses_window, TRUE)==ERR)
-	throw ClearOKFailed();
+	throw CursesException("clearok");
 }
 
 void
@@ -195,15 +195,13 @@ WindowBase::refresh(bool immediate) {
 
     assert(__curses_window!=0);
 
-    int retval;
-    if (immediate)
-	retval = wrefresh(__curses_window);
-    else
-	retval = wnoutrefresh(__curses_window);
-
-    if (retval == ERR)
-	throw RefreshFailed();
-
+    if (immediate) {
+	if (wrefresh(__curses_window)==ERR)
+	    throw CursesException("wrefresh");
+    } else {
+	if (wnoutrefresh(__curses_window)==ERR)
+	    throw CursesException("wnoutrefresh");
+    }
 }
 
 void
@@ -260,21 +258,21 @@ WindowBase::realize() {
 			     _tmp.x());
     if (__curses_window == 0) {
 	realization(UNREALIZED);
-	throw NewWindowFailed();
+	throw CursesException("newwin");
     }
 
     if (scrollok(__curses_window, FALSE)==ERR) {
 	realization(UNREALIZED);
 	delwin(__curses_window);
 	__curses_window=0;
-	throw ScrollOKFailed();
+	throw CursesException("scrollok");
     }
 
     if (leaveok(__curses_window, TRUE)==ERR) {
 	realization(UNREALIZED);
 	delwin(__curses_window);
 	__curses_window=0;
-	throw LeaveOKFailed();
+	throw CursesException("leaveok");
     }
 
     if (__frame) {
@@ -282,7 +280,7 @@ WindowBase::realize() {
 	    realization(UNREALIZED);
 	    delwin(__curses_window);
 	    __curses_window=0;
-	    throw BoxFailed();
+	    throw CursesException("box");
 	}
     }
 

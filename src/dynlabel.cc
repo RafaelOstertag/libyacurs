@@ -67,7 +67,7 @@ DynLabel::refresh(bool immediate) {
     // Make sure there are no left overs in case of text being set by
     // a call to label() case we're realized.
     if (werase(widget_subwin())==ERR)
-	throw EraseFailed();
+	throw CursesException("werase");
 
     if (__label.length()<=static_cast<std::string::size_type>(__size.cols()) ) {
 	// if (mymvwaddstr(widget_subwin(), 0, 0,
@@ -81,10 +81,10 @@ DynLabel::refresh(bool immediate) {
     } else {
 	if (mymvwaddnstr(widget_subwin(), 0, 0,
 			 __label.c_str(), __size.cols()-1)==ERR)
-	    throw AddStrFailed();
+	    throw CursesException("mvwadnstr");
 
 	if (winsch(widget_subwin(), '>')==ERR)
-	    throw WInsChFailed();
+	    throw CursesException("winsch");
     }
 	    
 		     

@@ -8,21 +8,15 @@
 
 BaseCurEx::BaseCurEx(const char* m) : msg(m) {}
 
-BaseCurEx::BaseCurEx(const BaseCurEx &c) { msg = c.msg; }
-
-BaseCurEx&
-BaseCurEx::operator=(const BaseCurEx &c) {
-    if (this == &c)
-	return *this;
-
-    msg = c.msg;
-    return *this;
-}
+BaseCurEx::BaseCurEx(const std::string& m): msg(m) {}
 
 BaseCurEx::~BaseCurEx() throw() {}
 
 const char*
 BaseCurEx::what() const throw() { return msg.c_str(); }
+
+CursesException::CursesException(const char* cfct):
+    BaseCurEx(std::string(cfct) + std::string("() failed.")) {}
 
 UnableToInitialize::UnableToInitialize() :
     BaseCurEx("unable to initialize curses") {}
@@ -30,44 +24,8 @@ UnableToInitialize::UnableToInitialize() :
 NotInitialized::NotInitialized() :
     BaseCurEx("curses not initialized") {}
 
-EndWinError::EndWinError() :
-    BaseCurEx("Endwin() had an error") {}
-
 AlreadyInitialized::AlreadyInitialized() :
     BaseCurEx("curses has already been initialized") {}
-
-RefreshFailed::RefreshFailed() :
-    BaseCurEx("refresh failed") {}
-
-NewWindowFailed::NewWindowFailed() :
-    BaseCurEx("creating new window failed") {}
-
-DelWindowFailed::DelWindowFailed() :
-    BaseCurEx("deleting window failed") {}
-
-BoxFailed::BoxFailed() :
-    BaseCurEx("creating box (border) on window failed") {}
-
-DoupdateFailed::DoupdateFailed() :
-    BaseCurEx("doupdate() failed") {}
-
-AddStrFailed::AddStrFailed() :
-    BaseCurEx("adding string to window failed") {}
-
-EraseFailed::EraseFailed() :
-    BaseCurEx("erase of window failed") {}
-
-ScrollOKFailed::ScrollOKFailed() :
-    BaseCurEx("call to scrollok() failed") {}
-
-LeaveOKFailed::LeaveOKFailed() :
-    BaseCurEx("call to leaveok() failed") {}
-
-ClearOKFailed::ClearOKFailed() :
-    BaseCurEx("call to clearok() failed") {}
-
-NoNLFailed::NoNLFailed() :
-    BaseCurEx("call to nonl() failed") {}
 
 AlreadyRealized::AlreadyRealized():
     BaseCurEx("object already realized") {}
@@ -78,6 +36,7 @@ NotRealized::NotRealized():
 SystemError::SystemError(int _errno):
     BaseCurEx(strerror(_errno)),
     __errno(_errno) {}
+
 int
 SystemError::errorno() const { return __errno; }
 
@@ -87,50 +46,15 @@ WinSizeInvalid::WinSizeInvalid():
 UnableToGetWinSize::UnableToGetWinSize():
     BaseCurEx("unable to get window size") {}
 
-DelCurTermFailed::DelCurTermFailed():
-    BaseCurEx("error in call to del_curterm()") {}
-
-SetupTermFailed::SetupTermFailed():
-    BaseCurEx("error in call to setupterm()") {}
-
-TouchFailed::TouchFailed():
-    BaseCurEx("error in call to setupterm()") {}
-
-CbreakFailed::CbreakFailed():
-    BaseCurEx("error in call to setupterm()") {}
-
-NoEchoFailed::NoEchoFailed():
-    BaseCurEx("error in call to setupterm()") {}
-
-SubwinFailed::SubwinFailed():
-    BaseCurEx("derwin() failed") {}
-
-ClearFailed::ClearFailed():
-    BaseCurEx("*clear() failed") {}
-
 CannotFocus::CannotFocus():
     BaseCurEx("Cannot focus") {}
-
-KeyPadFailed::KeyPadFailed():
-    BaseCurEx("keypad() failed") {}
 
 UnexpectedEvent::UnexpectedEvent():
     BaseCurEx("Unexpected event received") {}
 
-UnableToStartColor::UnableToStartColor():
-    BaseCurEx("Unable to start color") {}
-
 ColorsNotInitialized::ColorsNotInitialized():
     BaseCurEx("Colors not initialized") {}
-
-WMoveFailed::WMoveFailed():
-    BaseCurEx("wmove() failed") {}
 
 AreaExceeded::AreaExceeded():
     BaseCurEx("An object exceeded space constraints.") {}
 
-WInsChFailed::WInsChFailed():
-    BaseCurEx("winsch() failed") {}
-
-WAttrSetFailed::WAttrSetFailed():
-    BaseCurEx("wattrset() failed") {}

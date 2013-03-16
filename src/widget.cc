@@ -29,7 +29,7 @@ Widget::force_refresh_handler(Event& _e) {
     assert(__widget_subwin!=0);
 
     if (clearok(__widget_subwin, TRUE)==ERR)
-	throw ClearOKFailed();
+	throw CursesException("clearok");
 }
 
 void
@@ -46,12 +46,12 @@ Widget::unrealize() {
     // clear the entire subwin()
     if (wclear(__widget_subwin) == ERR) {
 	realization(UNREALIZED);
-	throw ClearFailed();
+	throw CursesException("wclear");
     }
 
     if (delwin(__widget_subwin) == ERR) {
 	realization(UNREALIZED);
-	throw DelWindowFailed();
+	throw CursesException("delwin");
     }
 
     __widget_subwin = 0;
@@ -59,11 +59,11 @@ Widget::unrealize() {
     // This is also needed to remove artifacts on the screen
     if (touchwin(curses_window()) == ERR) {
 	realization(UNREALIZED);
-	throw TouchFailed();
+	throw CursesException("touchwin");
     }
     if (wrefresh(curses_window()) == ERR) {
 	realization(UNREALIZED);
-	throw RefreshFailed();
+	throw CursesException("wrefresh");
     }
 
     UNREALIZE_LEAVE;
@@ -88,7 +88,7 @@ Widget::~Widget() {
     if (realization()==REALIZED) {
 	assert(__widget_subwin!=0);
 	if (delwin(__widget_subwin)==ERR)
-	    throw DelWindowFailed();
+	    throw CursesException("delwin");
     }
 }
     
@@ -100,15 +100,13 @@ Widget::refresh(bool immediate) {
     assert(__widget_subwin!=0);
     assert(focusgroup_id()!=(fgid_t)-1);
 
-    int retval;
-    if (immediate)
-	retval = wrefresh(__widget_subwin);
-    else
-	retval = wnoutrefresh(__widget_subwin);
-
-    if (retval == ERR)
-	throw RefreshFailed();
-
+    if (immediate) {
+	if (wrefresh(__widget_subwin)==ERR)
+	    throw CursesException("wrefresh");
+    } else {
+	if (wnoutrefresh(__widget_subwin)==ERR)
+	    throw CursesException("wnoutrefresh");
+    }
 }
 	
 void
@@ -161,21 +159,21 @@ Widget::realize() {
 		       pos.x());
     if (__widget_subwin == 0) {
 	realization(UNREALIZED);
-	throw SubwinFailed();
+	throw CursesException("subwin");
     }
 
     if (scrollok(__widget_subwin, FALSE)==ERR) {
 	realization(UNREALIZED);
 	delwin(__widget_subwin);
 	__widget_subwin=0;
-	throw ScrollOKFailed();
+	throw CursesException("scrollok");
     }
 
     if (leaveok(__widget_subwin, TRUE)==ERR) {
 	realization(UNREALIZED);
 	delwin(__widget_subwin);
 	__widget_subwin=0;
-	throw LeaveOKFailed();
+	throw CursesException("leaveok");
     }
 
     REALIZE_LEAVE;

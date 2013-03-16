@@ -110,11 +110,11 @@ Button::refresh(bool immediate) {
     if (focus()) {
 	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_FOCUS);
 	if (leaveok(widget_subwin(), FALSE)==ERR)
-	    throw LeaveOKFailed();
+	    throw CursesException("leaveok");
     } else {
 	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_NOFOCUS);
 	if (leaveok(widget_subwin(), TRUE)==ERR)
-	    throw LeaveOKFailed();
+	    throw CursesException("leaveok");
     }
 
     Label::refresh(immediate);

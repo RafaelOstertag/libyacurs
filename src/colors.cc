@@ -123,14 +123,14 @@ Colors::set_color (WINDOW* w, COLORS c) {
         wattrset(w, COLOR_PAIR (__colors[c].no));
 #else
 	if (wattrset(w, COLOR_PAIR (__colors[c].no))==ERR)
-	    throw WAttrSetFailed();
+	    throw CursesException("wattrset");
 #endif
     } else {
 #if NCURSES_VERSION_PATCH < 20100313
         wattrset(w, __colors[c].attr);
 #else
 	if (wattrset(w, __colors[c].attr)==ERR)
-	    throw WAttrSetFailed();
+	    throw CursesException("wattrset");
 #endif
     }
 }

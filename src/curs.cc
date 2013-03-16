@@ -48,7 +48,7 @@ Curses::doupdate_handler(Event& e) {
     assert(e==EVT_DOUPDATE);
 
     if (doupdate() == ERR)
-	throw DoupdateFailed();
+	throw CursesException("doupdate");
 
 }
 
@@ -68,10 +68,10 @@ Curses::termresetup_handler(Event& e) {
     resize_term(_tmp.rows(), _tmp.cols());
 
     if (wclear(stdscr) == ERR)
-	throw EraseFailed();
+	throw CursesException("wclear");
 
     if (wrefresh(stdscr) == ERR)
-	throw RefreshFailed();
+	throw CursesException("wrefresh");
 #endif // HAVE_RESIZE_TERM
 }
 
@@ -90,19 +90,19 @@ Curses::init() {
     EventQueue::connect_event(EventConnectorFunction1(EVT_TERMRESETUP, Curses::termresetup_handler));
 
     if (nonl() == ERR)
-	throw NoNLFailed();
+	throw CursesException("nonl");
 
     if (cbreak() == ERR)
-	throw CbreakFailed();
+	throw CursesException("cbreak");
 
     if (noecho() == ERR)
-	throw NoEchoFailed();
+	throw CursesException("noecho");
 
     if (keypad(stdscr, TRUE) == ERR)
-	throw KeyPadFailed();
+	throw CursesException("keypad");
 
     if (leaveok(stdscr, TRUE) == ERR)
-	throw LeaveOKFailed();
+	throw CursesException("leaveok");
 
     // We don't fail if that doesn't work, so no check on retval.
     curs_set(0);
@@ -113,7 +113,7 @@ Curses::init() {
     // produce undesired results, i.e. already created Curses Windows
     // may be overwritten. Therefore we refresh stdscr preventively.
     if (wrefresh(stdscr) == ERR)
-	throw RefreshFailed();
+	throw CursesException("wrefresh");
 
     initialized = true;
 }
@@ -125,11 +125,11 @@ Curses::end() {
     // On FreeBSD, for instance, endwin() does not clear screen, so we
     // unconditionally issue calls to do so
     if (wclear(stdscr) == ERR)
-	throw ClearFailed();
+	throw CursesException("wclear");
     if (wrefresh(stdscr) == ERR)
-	throw RefreshFailed();
+	throw CursesException("wfresh");
     if (endwin() == ERR)
-	throw EndWinError();
+	throw CursesException("endwin");
 
     // Widgets and Windows delete after the EventQueue loop has
     // terminated will have put Event Connector Removal requests into

@@ -407,7 +407,7 @@ class ListBox: public Widget {
 	    assert(widget_subwin()!=0);
 
 	    if (werase(widget_subwin())==ERR)
-		throw EraseFailed();
+		throw CursesException("werase");
 
 	    std::list<std::string>::iterator it=__list.begin();
 
@@ -470,10 +470,10 @@ class ListBox: public Widget {
 	    //
 	    if (focus()) {
 		if (box(widget_subwin(), 0, 0)==ERR)
-		    throw BoxFailed();
+		    throw CursesException("box");
 	    } else {
 		if (box(widget_subwin(), '|', '-')==ERR)
-		    throw BoxFailed();
+		    throw CursesException("box");
 	    }
 
 	    // set scroll markers
@@ -491,11 +491,11 @@ class ListBox: public Widget {
 	    switch (__sort_order) {
 	    case ASCENDING:
 		if (mvwaddch(widget_subwin(), 0, 1, '^')==ERR)
-		    throw AddStrFailed();
+		    throw CursesException("mvwaddch");
 		break;
 	    case DESCENDING:
 		if (mvwaddch(widget_subwin(), 0, 1, 'v')==ERR)
-		    throw AddStrFailed();
+		    throw CursesException("mvwaddch");
 		break;
 	    case UNSORTED:
 		break;
@@ -505,14 +505,14 @@ class ListBox: public Widget {
 	    if (focus() && !__list.empty()) {
 		curs_set(1);
 		if (leaveok(widget_subwin(), FALSE)==ERR)
-		    throw LeaveOKFailed();
+		    throw CursesException("leaveok");
 
 		if (wmove(widget_subwin(), __curs_pos+1, 1)==ERR)
-		    throw WMoveFailed();
+		    throw CursesException("wmove");
 	    } else {
 		curs_set(0);
 		if (leaveok(widget_subwin(), TRUE)==ERR)
-		    throw LeaveOKFailed();
+		    throw CursesException("leaveok");
 	    }
 
 	    Widget::refresh(immediate);

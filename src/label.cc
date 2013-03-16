@@ -90,7 +90,7 @@ Label::refresh(bool immediate) {
     // the previous one. This leads to artifacts, so do a werase()
     // first.
     if (werase(widget_subwin())==ERR)
-	throw EraseFailed();
+	throw CursesException("werase");
 
     // if (mymvwaddstr(widget_subwin(), 0, 0,
     // 		    __label.c_str()) == ERR)

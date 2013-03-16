@@ -295,17 +295,17 @@ Input::refresh(bool immediate) {
 	YAPET::UI::Colors::set_bg(widget_subwin(), YAPET::UI::INPUTWIDGET_FOCUS);
 	curs_set(1);
 	if (leaveok(widget_subwin(), FALSE)==ERR)
-	    throw LeaveOKFailed();
+	    throw CursesException("leaveok");
     } else {
 	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::INPUTWIDGET_NOFOCUS);
 	YAPET::UI::Colors::set_bg(widget_subwin(), YAPET::UI::INPUTWIDGET_NOFOCUS);
 	curs_set(0);
 	if (leaveok(widget_subwin(), TRUE)==ERR)
-	    throw LeaveOKFailed();
+	    throw CursesException("leaveok");
     }
 
     if (werase(widget_subwin())==ERR)
-	throw EraseFailed();
+	throw CursesException("werase");
 
     assert(__offset<=__buffer.length());
     // if (mymvwaddstr(widget_subwin(), 0, 0,
@@ -330,7 +330,7 @@ Input::refresh(bool immediate) {
     }
     
     if (wmove(widget_subwin(), 0, __curs_pos)==ERR)
-	 throw WMoveFailed();
+	 throw CursesException("wmove");
 
     Widget::refresh(immediate);
 }

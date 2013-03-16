@@ -186,10 +186,10 @@ CheckBox::refresh(bool immediate) {
 
     if (focus()) {
 	if (box(widget_subwin(), 0, 0)==ERR)
-		    throw BoxFailed();
+	    throw CursesException("box");
     } else {
 	if (box(widget_subwin(), '|', '-')==ERR)
-	    throw BoxFailed();
+	    throw CursesException("box");
     }
 
     if (!__title.empty()) {
@@ -197,28 +197,28 @@ CheckBox::refresh(bool immediate) {
 	    if (mymvwaddnstr(widget_subwin(), 0, 1,
 			     __title.c_str(),
 			     __size.cols()-3)==ERR)
-		throw AddStrFailed();
+		throw CursesException("mvwaddnstr");
 
 	    if (waddch(widget_subwin(), '>')==ERR)
-		throw WInsChFailed();
+		throw CursesException("waddch");
 	} else {
 	    if (mymvwaddstr(widget_subwin(), 0, 1,
 			     __title.c_str())==ERR)
-		throw AddStrFailed();
+		throw CursesException("mvwaddstr");
 	}
     }
 
     if (focus()) {
 	curs_set(1);
 	if (leaveok(widget_subwin(), FALSE)==ERR)
-	    throw LeaveOKFailed();
+	    throw CursesException("leaveok");
 	
 	if (wmove(widget_subwin(), __cursor+1, 2)==ERR)
-	    throw WMoveFailed();
+	    throw CursesException("wmove");
     } else {
 	curs_set(0);
 	if (leaveok(widget_subwin(), TRUE)==ERR)
-	    throw LeaveOKFailed();
+	    throw CursesException("leaveok");
     }
 
     Widget::refresh(immediate);

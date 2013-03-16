@@ -85,19 +85,29 @@ int __unlock_screen[] = {
     0
 };
 
+int __quit_data[] = {
+    KEY_LEFT, '\n', 0
+};
+
 extern "C" int __test_wgetch(void*) {
     static int* ptr2=__test_data;
+    static int rounds=0;
 
-    usleep(10000);
+    usleep(1000);
     
     if (*ptr2==0) {
 	ptr2=__test_data;
     }
 
     if (*ptr2==KEY_SLEEP) {
-	sleep(7);
-	ptr2=__unlock_screen;
-	return ERR;
+	if (rounds>10) {
+	    ptr2=__quit_data;
+	} else {
+	    sleep(7);
+	    ptr2=__unlock_screen;
+	    rounds++;
+	    return ERR;
+	}
     }
     return *ptr2++;
 }

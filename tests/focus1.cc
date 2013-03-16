@@ -83,7 +83,7 @@ int __test_data[]= {
 extern "C" int __test_wgetch(void*) {
     static int* ptr2=__test_data;
 
-    usleep(70000);
+    usleep(40000);
     if (*ptr2==0) {
 	abort();
     }

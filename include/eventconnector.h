@@ -13,25 +13,11 @@
 #include <stdint.h>
 #endif // HAVE_STDINT_H
 
-#ifdef HAVE_CSTDLIB
 #include <cstdlib>
-#endif // HAVE_CSTDLIB
-
-#ifdef HAVE_STRING
 #include <string>
-#endif // HAVE_STRING
-
-#ifdef HAVE_CASSERT
 #include <cassert>
-#endif // HAVE_CASSERT
-
-#ifdef HAVE_FUNCTIONAL
 #include <functional>
-#endif // HAVE_FUNCTIONAL
-
-#ifdef HAVE_TYPEINFO
 #include <typeinfo>
-#endif // HAVE_TYPEINFO
 
 #include "event.h"
 

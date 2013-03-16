@@ -22,18 +22,7 @@
 EventConnectorBase::EventConnectorBase(EVENT_TYPE _e, bool _s):
     evt(_e), __suspended(_s) {}
 
-EventConnectorBase::EventConnectorBase(const EventConnectorBase& _ec) :
-    evt(_ec.evt), __suspended(_ec.__suspended) {
-}
-
 EventConnectorBase::~EventConnectorBase() {}
-
-EventConnectorBase&
-EventConnectorBase::operator=(const EventConnectorBase& _ec) {
-    evt = _ec.evt;
-    __suspended = _ec.__suspended;
-    return *this;
-}
 
 bool
 EventConnectorBase::operator==(const EventConnectorBase& _ec) const {
@@ -105,21 +94,6 @@ EventConnectorFunction1::id() const {
 EventConnectorFunction1::EventConnectorFunction1(EVENT_TYPE _e, fptr_t _func):
     EventConnectorBase(_e), __func(_func) {
     assert(__func != 0);
-}
-
-EventConnectorFunction1::EventConnectorFunction1(const EventConnectorFunction1& _ec):
-    EventConnectorBase(_ec), __func(_ec.__func) {
-    assert(__func != 0);
-}
-
-EventConnectorFunction1&
-EventConnectorFunction1::operator=(const EventConnectorFunction1& _ec) {
-    EventConnectorBase::operator=(_ec);
-
-    assert(__func != 0);
-    __func = _ec.__func;
-
-    return *this;
 }
 
 void

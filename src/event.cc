@@ -14,16 +14,6 @@
 
 Event::Event(EVENT_TYPE _et): event_type(_et) {}
 
-Event::Event(const Event& _e) {
-    event_type = _e.event_type;
-}
-
-Event&
-Event::operator=(const Event& _e) {
-    event_type = _e.event_type;
-    return *this;
-}
-
 Event::~Event() {}
 
 bool

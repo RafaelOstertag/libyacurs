@@ -64,10 +64,7 @@ class EventConnectorBase {
 	 */
 	EventConnectorBase(EVENT_TYPE _e, bool _s = false);
 
-	EventConnectorBase(const EventConnectorBase& _ec);
 	virtual ~EventConnectorBase();
-
-	EventConnectorBase& operator=(const EventConnectorBase& _ec);
 
 	/**
 	 * The value returned by id() together with the event type has
@@ -242,24 +239,6 @@ class EventConnectorMethod1: public EventConnectorBase {
 	    assert(__obj_ptr != 0);
 	}
 
-	EventConnectorMethod1(const EventConnectorMethod1<T>& _ec): EventConnectorBase(_ec),
-								    __func(_ec.__func),
-								    __obj_ptr(_ec.__obj_ptr) {
-	    assert(__func != 0);
-	    assert(__obj_ptr != 0);
-	}
-
-	EventConnectorMethod1<T>& operator=(const EventConnectorMethod1<T>& _ec) {
-	    EventConnectorBase::operator=(_ec);
-	    assert(_ec.__func != 0);
-	    __func = _ec.__func;
-
-	    assert(_ec.__obj_ptr != 0);
-	    __obj_ptr = _ec.__obj_ptr;
-
-	    return *this;
-	}
-
 	/**
 	 * The id returned is the pointer to the object converted to
 	 * an uintptr_t.
@@ -329,9 +308,6 @@ class EventConnectorFunction1: public EventConnectorBase {
 	 * @param _func the pointer to the function.
 	 */
 	EventConnectorFunction1(EVENT_TYPE _e, fptr_t _func);
-
-	EventConnectorFunction1(const EventConnectorFunction1& _ec);
-	EventConnectorFunction1& operator=(const EventConnectorFunction1& _ec);
 
 	/**
 	 * The id returned is the pointer to the function converted to

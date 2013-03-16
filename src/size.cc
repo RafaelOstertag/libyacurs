@@ -29,13 +29,6 @@ Size::Size(int _rows, int _cols) : __rows(_rows), __cols(_cols) {
 	throw std::out_of_range("Columns cannot be <0");
 }
 
-Size::Size(const Size& _s) {
-    assert(_s.__cols >= 0);
-    assert(_s.__cols >= 0);
-    __cols = _s.__cols;
-    __rows = _s.__rows;
-}
-
 int
 Size::cols() const {
     return __cols;
@@ -58,15 +51,6 @@ Size::rows(int _rows) {
     if (_rows < 0)
 	throw std::out_of_range("Rows cannot be <0");
     __rows = _rows;
-}
-
-const Size&
-Size::operator=(const Size& rhs) {
-    assert(rhs.__cols>=0);
-    assert(rhs.__rows>=0);
-    __cols = rhs.__cols;
-    __rows = rhs.__rows;
-    return *this;
 }
 
 const Size&

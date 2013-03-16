@@ -117,17 +117,6 @@ class Event {
 	 */
 	Event(EVENT_TYPE _et);
 
-	Event(const Event& _e);
-
-	/**
-	 * Assigns one event to anothoer
-	 *
-	 * @param _e reference to to rhs
-	 *
-	 * @return reference to *this.
-	 */
-	Event& operator=(const Event& _e);
-
 	virtual ~Event();
 
 	/**
@@ -195,16 +184,6 @@ class EventEx: public Event {
 	 */
 	EventEx(EVENT_TYPE _et, const T& _payload): Event(_et) {
 	    __payload = _payload;
-	}
-
-	EventEx(const EventEx<T>& _e): Event(_e),
-				       __payload(_e.__payload) {
-	}
-
-	EventEx<T>& operator=(const EventEx<T>& _e) {
-	    Event::operator=(_e);
-	    __payload = _e.__payload;
-	    return *this;
 	}
 
 	/**

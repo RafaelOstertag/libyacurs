@@ -20,10 +20,6 @@ Coordinates Coordinates::__zero=Coordinates(0,0);
 //
 Coordinates::Coordinates(int _x, int _y): __y(_y), __x(_x){
 }
-Coordinates::Coordinates(const Coordinates& _c) {
-    __x = _c.__x;
-    __y = _c.__y;
-}
 
 int
 Coordinates::x() const {
@@ -43,13 +39,6 @@ Coordinates::x(int _x) {
 void
 Coordinates::y(int _y) {
     __y = _y;
-}
-
-Coordinates&
-Coordinates::operator=(const Coordinates& rhs) {
-    __x = rhs.__x;
-    __y = rhs.__y;
-    return *this;
 }
 
 Coordinates&

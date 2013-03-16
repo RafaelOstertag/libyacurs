@@ -38,13 +38,6 @@ class Coordinates {
 	Coordinates(int _x=0, int _y=0);
 
 	/**
-	 * Copy Constructor.
-	 *
-	 * @param _c reference to Coordinates object.
-	 */
-	Coordinates(const Coordinates& _c);
-
-	/**
 	 * Get x component.
 	 *
 	 * @return x component
@@ -71,8 +64,6 @@ class Coordinates {
 	 * @param _y value of y
 	 */
 	void y(int _y);
-
-	Coordinates& operator=(const Coordinates& rhs);
 
 	/**
 	 * Add and assign another Coordinates object.

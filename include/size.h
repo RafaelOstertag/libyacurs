@@ -36,13 +36,6 @@ class Size {
 	Size(int _rows=0, int _cols=0);
 
 	/**
-	 * Copy Constructor
-	 *
-	 * @param _s refernce to Size object.
-	 */
-	Size(const Size& _s);
-
-	/**
 	 * Get the colums.
 	 *
 	 * @return the number of columns.
@@ -76,7 +69,6 @@ class Size {
 	 */
 	void rows(int _rows);
 
-	const Size& operator=(const Size& rhs);
 	/**
 	 * Add Size to this object.
 	 *

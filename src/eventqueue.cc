@@ -22,7 +22,7 @@
 #include "curs.h"
 #include "evtqueuestats.h"
 
-#ifndef NDEBUG
+#if !defined(NDEBUG) && defined(EVTQDEBUG)
 #define DEBUGOUT(x) try {							\
 	char* __debugfile_name__;					\
 	if ((__debugfile_name__ = getenv("LIBYACURS_EVT_DBGFN"))!=0) { \

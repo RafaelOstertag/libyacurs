@@ -111,6 +111,8 @@ class Event {
 	/// The type of the Event
 	EVENT_TYPE event_type;
 
+	static const char* __str_table[];
+
     public:
 	/**
 	 * @param _et the event type

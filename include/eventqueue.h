@@ -11,6 +11,7 @@
 
 #include <signal.h>
 #include <list>
+#include <map>
 #include <queue>
 
 #include "event.h"
@@ -91,7 +92,7 @@ class EventQueue {
 	 * requests are queue up for processing later.
 	 */
 	static std::list<EventConnectorBase*> evtconn_rem_request;
-	static std::list<EventConnectorBase*> evtconn_list;
+	static std::map<EVENT_TYPE,std::list<EventConnectorBase*> > evtconn_map;
 
 	/**
 	 * LockScreen used on timeout

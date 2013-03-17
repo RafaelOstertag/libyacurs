@@ -45,10 +45,10 @@
 
 #define STATS_EC_CON statistics.ec_max=std::max(		\
 	static_cast<std::list<EventConnectorBase*>::size_type>(statistics.ec_max), \
-	evtconn_list.size());\
+	evtconn_map.size());\
     statistics.ec_min=std::min(						\
 	static_cast<std::list<EventConnectorBase*>::size_type>(statistics.ec_max), \
-	evtconn_list.size())
+	evtconn_map.size())
 
 #define STATS_EC_OUT(str,stats) __statsfile << str << STATS_EC(stats) << std::endl
 
@@ -205,7 +205,7 @@ bool EventQueue::signal_blocked = false;
 
 std::queue<Event*> EventQueue::evt_queue;
 std::list<EventConnectorBase*> EventQueue::evtconn_rem_request;
-std::list<EventConnectorBase*> EventQueue::evtconn_list;
+std::map<EVENT_TYPE,std::list<EventConnectorBase*> > EventQueue::evtconn_map;
 
 LockScreen* EventQueue::__lockscreen = 0;
 unsigned int EventQueue::__timeout = 0;
@@ -619,20 +619,22 @@ EventQueue::proc_rem_request() {
 
 	EventConnectorBase* ecb = *it_erq;
 
+	std::list<EventConnectorBase*>& list = evtconn_map[*ecb];
+
 	std::list<EventConnectorBase*>::iterator it =
-	    std::find_if(evtconn_list.begin(),
-			 evtconn_list.end(),
+	    std::find_if(list.begin(),
+			 list.end(),
 			 EventConnectorEqual(*ecb));
 
 	delete ecb;
 	it_erq++;
 
-	if (it == evtconn_list.end()) continue;
+	if (it == list.end()) continue;
 
 	assert(*it!=0);
 
 	delete *it;
-	evtconn_list.erase(it);
+	list.erase(it);
     }
 
     evtconn_rem_request.clear();
@@ -653,12 +655,17 @@ EventQueue::timeout_handler(Event& _e) {
 //
 void
 EventQueue::connect_event(const EventConnectorBase& ec) {
-    // Only one event handler per event per object can be connectd
+    //
+    // Only one event handler per event per object can be connected
+    //
+
+    std::list<EventConnectorBase*>& list = evtconn_map[ec];
+
     std::list<EventConnectorBase*>::iterator it =
-	std::find_if(evtconn_list.begin(),
-		     evtconn_list.end(),
+	std::find_if(list.begin(),
+		     list.end(),
 		     EventConnectorEqual(ec));
-    if ( it != evtconn_list.end() ) {
+    if ( it != list.end() ) {
 	assert(*it!=0);
 	// there is already a member function registered for the
 	// object on the given event. Replace that connection.
@@ -674,7 +681,7 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 	//
 	// It ensures proper display of overlapping windows.
 	EventConnectorBase* __tmp=ec.clone();
-	evtconn_list.push_back(__tmp);
+	list.push_back(__tmp);
 
 	DEBUGOUT("Connect: " << (void*)__tmp->id() << ": " << Event::evt2str(ec));
     }
@@ -708,22 +715,25 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 
 void
 EventQueue::disconnect_event(const EventConnectorBase& ec) {
-    // does not delete the connector, but adds it to a queue for later
+    // does not delete the connector, but adds it to a list for later
     // removal. Why? What happens if an EventConnector disconnects
-    // itself? std::for_each iterating over evtconn_list in run()
-    // would freak out. So we wait until we're sure that nobody is
-    // reading the list.
+    // itself? std::for_each iterating over the connector list in
+    // run() would freak out. So we wait until we're sure that nobody
+    // is reading the list.
     evtconn_rem_request.push_back(ec.clone());
 
     DEBUGOUT("Disconnect: " << (void*)ec.id() << ": " << Event::evt2str(ec));
 
     // However, the event connector must not be called anymore,
     // because the object might have been destroyed meanwhile.
+
+    std::list<EventConnectorBase*>& list = evtconn_map[ec];
+
     std::list<EventConnectorBase*>::iterator it =
-	std::find_if(evtconn_list.begin(),
-		     evtconn_list.end(),
+	std::find_if(list.begin(),
+		     list.end(),
 		     EventConnectorEqual(ec));
-    if ( it != evtconn_list.end() ) {
+    if ( it != list.end() ) {
 	assert(*it!=0);
 	(*it)->suspended(true);
     }
@@ -731,58 +741,68 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
 
 void
 EventQueue::suspend(const EventConnectorBase& ec) {
-    std::list<EventConnectorBase*>::iterator it =
-	std::find_if(evtconn_list.begin(),
-		     evtconn_list.end(),
-		     EventConnectorEqual(ec));
+   std::list<EventConnectorBase*>& list = evtconn_map[ec];
 
-    if ( it == evtconn_list.end() ) return;
-
-    DEBUGOUT("Suspend: " << (void*)ec.id() << ": " << Event::evt2str(ec));
-
-    (*it)->suspended(true);
+   std::list<EventConnectorBase*>::iterator it =
+       std::find_if(list.begin(),
+		    list.end(),
+		    EventConnectorEqual(ec));
+   
+   if ( it == list.end() ) return;
+   
+   DEBUGOUT("Suspend: " << (void*)ec.id() << ": " << Event::evt2str(ec));
+   
+   (*it)->suspended(true);
 }
 
 void
 EventQueue::suspend_all(EVENT_TYPE _t) {
-    std::for_each(evtconn_list.begin(),
-		  evtconn_list.end(),
-		  EvtConnSetSuspend(_t, true));
+   std::list<EventConnectorBase*>& list = evtconn_map[_t];
+
+   std::for_each(list.begin(),
+		 list.end(),
+		 EvtConnSetSuspend(_t, true));
 }
 
 void
 EventQueue::suspend_except(const EventConnectorBase& ec) {
-    std::for_each(evtconn_list.begin(),
-		  evtconn_list.end(),
-		  EvtConnSetSuspendExcept(ec, true));
+   std::list<EventConnectorBase*>& list = evtconn_map[ec];
+
+   std::for_each(list.begin(),
+		 list.end(),
+		 EvtConnSetSuspendExcept(ec, true));
 }
 
 void
 EventQueue::unsuspend(const EventConnectorBase& ec) {
-    std::list<EventConnectorBase*>::iterator it =
-	std::find_if(evtconn_list.begin(),
-		     evtconn_list.end(),
-		     EventConnectorEqual(ec));
+   std::list<EventConnectorBase*>& list = evtconn_map[ec];
 
-    if ( it == evtconn_list.end() ) return;
+   std::list<EventConnectorBase*>::iterator it =
+       std::find_if(list.begin(),
+		    list.end(),
+		    EventConnectorEqual(ec));
 
-    DEBUGOUT("Unsuspend: " << (void*)ec.id() << ": " << Event::evt2str(ec));
+   if ( it == list.end() ) return;
+   
+   DEBUGOUT("Unsuspend: " << (void*)ec.id() << ": " << Event::evt2str(ec));
 
     (*it)->suspended(false);
 }
 
 void
 EventQueue::unsuspend_all(EVENT_TYPE _t) {
-    std::for_each(evtconn_list.begin(),
-		  evtconn_list.end(),
-		  EvtConnSetSuspend(_t, false));
+   std::list<EventConnectorBase*>& list = evtconn_map[_t];
+   std::for_each(list.begin(),
+		 list.end(),
+		 EvtConnSetSuspend(_t, false));
 }
 
 void
 EventQueue::unsuspend_except(const EventConnectorBase& ec) {
-    std::for_each(evtconn_list.begin(),
-		  evtconn_list.end(),
-		  EvtConnSetSuspendExcept(ec, false));
+   std::list<EventConnectorBase*>& list = evtconn_map[ec];
+   std::for_each(list.begin(),
+		 list.end(),
+		 EvtConnSetSuspendExcept(ec, false));
 }
 
 void
@@ -866,8 +886,9 @@ EventQueue::run() {
 	    }
 
 	    clock_t evt_t0=clock();
-	    std::for_each(evtconn_list.begin(),
-			  evtconn_list.end(),
+	    std::list<EventConnectorBase*>& list = evtconn_map[*evt];
+	    std::for_each(list.begin(),
+			  list.end(),
 			  CallEventConnector(*evt));
 	    clock_t evt_t1=clock();
 	    statistics.evt_max_proc_time=
@@ -916,13 +937,17 @@ EventQueue::cleanup() {
     proc_rem_request();
 
     // Free the memory occupied by remaining connectors
-    std::list<EventConnectorBase*>::iterator it=evtconn_list.begin();
-    while(it != evtconn_list.end()) {
-	assert(*it != 0);
-	delete *it++;
+    std::map<EVENT_TYPE, std::list<EventConnectorBase*> >::iterator m_it = evtconn_map.begin();
+    while (m_it!=evtconn_map.end() ) {
+	std::list<EventConnectorBase*>::iterator it=m_it->second.begin();
+	while(it != m_it->second.end()) {
+	    assert(*it != 0);
+	    delete *it++;
+	}
+	m_it++;
     }
 
-    evtconn_list.clear();
+    evtconn_map.clear();
 
     char* stats_fn;
     if ((stats_fn = getenv("LIBYACURS_EVT_STATS"))!=0) {

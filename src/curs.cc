@@ -141,11 +141,6 @@ Curses::end() {
     initialized = false;
 }
 
-/**
- * @todo wrap everything in run in a <tt>try{...} catch () {...}</tt>
- * and provide the user with an option to react to an exception before
- * dying.
- */
 void
 Curses::run() {
     if (!initialized) throw NotInitialized();

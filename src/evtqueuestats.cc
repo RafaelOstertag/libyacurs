@@ -4,7 +4,7 @@
 #include "config.h"
 #endif
 
-#include <queue>
+#include <iostream>
 
 #include "evtqueuestats.h"
 
@@ -28,21 +28,22 @@ void
 EventQueueStats::clear()  {
     evq_max_proc_time=
 	evt_max_proc_time=
+	ec_call_max_time=
 	evt_submitted=
 	evt_pending_cleanup=
 	evt_proc_total=
 	ec_max=
-	ec_call_max_time=
 	ec_calls_total=
 	ec_rm_total=
 	ec_rm_cancelled=
 	evq_size_max=
 	ec_rmq_size_max=0;
 
+    ec_min=(uint32_t)-1;
+
     evq_min_proc_time=
 	evt_min_proc_time=
-	ec_min=
-	ec_call_min_time=(unsigned int)-1;
+	ec_call_min_time= ~(1 << (sizeof(evq_min_proc_time)*8-1));
 
     evt_submitted_by_type.clear();
     evt_proc_by_type.clear();
@@ -52,10 +53,10 @@ EventQueueStats::clear()  {
 
 void
 EventQueueStats::dump(std::ostream& _os) const {
-#define PRINTSTATS(t,v) _os.width(40);\
+#define PRINTSTATS(t,v) _os.width(40);					\
     _os.fill('.');							\
     _os.setf(std::ios_base::left,std::ios_base::adjustfield);		\
-    _os << t;						\
+    _os << t;								\
     _os.width(6);							\
     _os.fill(' ');							\
     _os.setf(std::ios_base::right,std::ios_base::adjustfield);		\

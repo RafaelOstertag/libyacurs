@@ -197,7 +197,7 @@ FileDialog::FileDialog(std::string _path,
     __vpack->add_back(__path);
     __vpack->add_back(__hpack);
 
-    __filename = new Input;
+    __filename = new Input<>;
 
     __vpack->add_back(__filename);
 

@@ -29,7 +29,7 @@ InputBox::InputBox(const std::string& _title,
 				     __input(0),
 				     __vpack(0) {
     __message=new Label(_message);
-    __input=new Input;
+    __input=new Input<>;
     __vpack=new VPack;
 
     __vpack->add_back(__message);

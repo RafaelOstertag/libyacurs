@@ -91,8 +91,8 @@ extern "C" int __test_wgetch(void*) {
 }
 
 // Event handler requires access
-Input* ifixed;
-Input* idyn;
+Input<>* ifixed;
+Input<>* idyn;
 ListBox<>* listbox;
 Button* b1;
 Button* b2;
@@ -148,11 +148,11 @@ int main() {
 	b1=new Button("Button1");
 	b2=new Button("Button2");
 	b3=new Button("Button3");
-	ifixed=new Input(10);
-	idyn=new Input;
+	ifixed=new Input<>(10);
+	idyn=new Input<>;
 	listbox=new ListBox<>;
 	listbox->set(items);
-	Input* ireadonly=new Input;
+	Input<>* ireadonly=new Input<>;
 	ireadonly->input("Read only");
 	ireadonly->readonly(true);
 

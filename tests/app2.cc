@@ -91,7 +91,7 @@ extern "C" int __test_wgetch(void*) {
 class Win1: public Window {
     private:
 	Label* l1;
-	Input* i1;
+	Input<>* i1;
 	Button* close1;
 	VPack* vp1;
 
@@ -110,7 +110,7 @@ class Win1: public Window {
 	Win1(): Window(Margin(3,2,3,2)) {
 	    frame(true);
 	    l1 = new Label("Enter Text");
-	    i1 = new Input;
+	    i1 = new Input<>;
 	    close1 = new Button("Close");
 	    vp1 = new VPack;
 	    vp1->add_back(l1);

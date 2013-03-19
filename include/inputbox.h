@@ -20,7 +20,7 @@
 class InputBox: public Dialog {
     private:
 	Label* __message;
-	Input* __input;
+	Input<>* __input;
 	VPack* __vpack;
 
 	// Not supported

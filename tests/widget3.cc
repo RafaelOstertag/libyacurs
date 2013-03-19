@@ -18,8 +18,8 @@ VPack* vpack2;
 
 DynLabel* label1;
 DynLabel* label2;
-Input* input1;
-Input* input2;
+Input<>* input1;
+Input<>* input2;
 
 void alrm(Event& _e) {
     static int i=0;
@@ -66,13 +66,13 @@ int main() {
 	vpack2 = new VPack;
 
 	label1 = new DynLabel("DynLabel1");
-	input1 = new Input;
+	input1 = new Input<>;
 	vpack1->add_back(label1);
 	vpack1->add_back(input1);
 	vpack1->hinting(false);
 
 	label2 = new DynLabel("DynLabel2");
-	input2 = new Input;
+	input2 = new Input<>;
 	vpack2->add_back(label2);
 	vpack2->add_back(input2);
 	vpack2->hinting(false);

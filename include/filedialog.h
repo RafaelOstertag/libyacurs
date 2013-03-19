@@ -27,7 +27,7 @@ class FileDialog: public Dialog {
 	DynLabel* __path;
 	ListBox<>* __directories;
 	ListBox<>* __files;
-	Input* __filename;
+	Input<>* __filename;
 	HPack* __hpack;
 	VPack* __vpack;
 

@@ -25,7 +25,7 @@ UnlockDialogDefault::UnlockDialogDefault(const std::string& _secret):
     __vpack=new VPack;
     __vpack->always_dynamic(true);
     __text=new Label("Please enter password in order to unlock screen");
-    __secret_input=new Input;
+    __secret_input=new Input<>;
     
     __vpack->add_back(__text);
     __vpack->add_back(__secret_input);

@@ -21,7 +21,7 @@ class UnlockDialogDefault: public UnlockDialog {
 	std::string __secret;
 	VPack* __vpack;
 	Label* __text;
-	Input* __secret_input;
+	Input<>* __secret_input;
 
 	UnlockDialogDefault& operator=(const UnlockDialogDefault&);
 

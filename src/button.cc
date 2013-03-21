@@ -78,7 +78,7 @@ Button::unrealize() {
 // Public
 //
 
-Button::Button(const std::string& _b): Label() {
+Button::Button(const std::string& _b) {
     can_focus(true);
 
     // We want our label() to be called, so we don't use the Label()

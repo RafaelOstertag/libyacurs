@@ -51,8 +51,7 @@ Dialog::button_press_handler(Event& _e) {
 
 Dialog::Dialog(const std::string& _title,
 	       DIALOG_TYPE _dt,
-	       DIALOG_SIZE _ds): Window(),
-				 __vpack(0),
+	       DIALOG_SIZE _ds): __vpack(0),
 				 __hpack(0),
 				 __bok(0),
 				 __bcancel(0),

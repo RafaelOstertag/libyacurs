@@ -22,8 +22,7 @@ Label::operator=(const Label&) {
 //
 // Public
 //
-Label::Label(const std::string& _l): Widget(),
-				     __label(_l),
+Label::Label(const std::string& _l): __label(_l),
 				     __size(Size(1, _l.length())) {
 }
 

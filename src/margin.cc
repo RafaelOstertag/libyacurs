@@ -26,11 +26,11 @@ Margin::Margin(int _top, int _left, int _bottom, int _right) :
     __left(_left),
     __right(_right) {}
 
-Margin::Margin(const Margin& m) {
-    __top = m.__top;
-    __bottom = m.__bottom;
-    __left = m.__left;
-    __right = m.__right;
+Margin::Margin(const Margin& m) :
+    __top(m.__top),
+    __bottom(m.__bottom),
+    __left(m.__left),
+    __right(m.__right) {
 }
 
 Margin::~Margin() {}

@@ -18,6 +18,12 @@ struct Selectable {
 	bool selected;
 	std::string item;
 
+	/**
+	 * Used when initializing vector.
+	 */
+	Selectable():
+	    selected(false) {}
+
 	Selectable(const std::string& _str):
 	    selected(false),
 	    item(_str) {}

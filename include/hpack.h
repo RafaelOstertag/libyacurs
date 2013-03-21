@@ -28,7 +28,6 @@ class HPack: public Pack {
 	Size calc_size_non_dynamic() const;
 
     public:
-	HPack();
 	virtual ~HPack();
 
 

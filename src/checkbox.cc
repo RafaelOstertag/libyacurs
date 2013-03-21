@@ -100,23 +100,20 @@ CheckBox::set_selection(unsigned short _cursor) {
 
 CheckBox::CheckBox(const std::string& _title,
 		   const std::vector<std::string>& _items):
-    Widget(),
     __size(Size::zero()),
     __cursor(0),
-    __title(_title),
-    __items() {
-    __indicators[0]= "[ ] ";
-    __indicators[1]= "[x] ";
+    __title(_title) {
+    __indicators[0] = "[ ] ";
+    __indicators[1] = "[x] ";
     can_focus(true);
     
     MaxStrLen len = std::for_each(_items.begin(), _items.end(), MaxStrLen());
 
-    for (std::vector<std::string>::size_type i=0; i<_items.size(); i++)
-	__items.push_back(Selectable(_items[i]));
-
+    __items.resize(_items.size());
+    std::copy(_items.begin(), _items.end(), __items.begin());
 
     // +2 because we have a border. +6 because we add the check box
-    // and the border.
+    // indicators and the border.
     __size=Size(__items.size()+2, len.max_len()+6);
 }
 

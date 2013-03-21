@@ -184,8 +184,8 @@ class EventEx: public Event {
 	 * @param _payload reference to the data. The data will be copied to
 	 * an internal variable.
 	 */
-	EventEx(EVENT_TYPE _et, const T& _payload): Event(_et) {
-	    __payload = _payload;
+	EventEx(EVENT_TYPE _et, const T& _payload): Event(_et),
+						    __payload(_payload) {
 	}
 
 	/**

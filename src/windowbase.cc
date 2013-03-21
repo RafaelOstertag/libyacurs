@@ -75,8 +75,7 @@ WindowBase::unrealize() {
 // Public
 //
 
-WindowBase::WindowBase(const Margin& _m):
-    Realizeable(),
+WindowBase::WindowBase(const Margin& _m): 
     __area(Coordinates(),Curses::inquiry_screensize()),
     __margin(_m),
     __curses_window(0),

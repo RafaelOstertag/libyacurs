@@ -380,9 +380,6 @@ HPack::calc_size_non_dynamic() const {
 //
 // Public
 //
-HPack::HPack(): Pack() {
-}
-
 HPack::~HPack() {}
 
 Size

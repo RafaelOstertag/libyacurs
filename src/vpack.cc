@@ -379,9 +379,6 @@ VPack::calc_size_non_dynamic() const {
 //
 // Public
 //
-VPack::VPack(): Pack() {
-}
-
 VPack::~VPack() {}
 
 Size

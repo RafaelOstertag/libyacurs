@@ -77,11 +77,8 @@ Pack::unrealize() {
 //
 // Public
 //
-Pack::Pack(): WidgetBase(),
-	      __size(),
-	      __hinting(true),
-	      __always_dynamic(false),
-	      widget_list() {
+Pack::Pack(): __hinting(true),
+	      __always_dynamic(false) {
 }
 
 Pack::~Pack() {

@@ -78,8 +78,7 @@ Widget::widget_subwin() const {
 // Public
 //
 
-Widget::Widget(): WidgetBase(),
-		  __widget_subwin(0) {
+Widget::Widget(): __widget_subwin(0) {
 }
 
 Widget::~Widget() {

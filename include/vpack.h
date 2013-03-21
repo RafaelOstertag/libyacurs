@@ -28,7 +28,6 @@ class VPack: public Pack {
 	Size calc_size_non_dynamic() const;
 
     public:
-	VPack();
 	virtual ~VPack();
 
 	Size size_hint() const;

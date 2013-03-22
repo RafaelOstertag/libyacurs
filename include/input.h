@@ -84,6 +84,16 @@ class Input: public Widget {
 	bool __read_only;
 
 	/**
+	 * Mode, whether or not input is obscurred.
+	 */
+	bool __obscure_input;
+
+	/**
+	 * Character used for obscurring input.
+	 */
+	char __obscure_char;
+
+	/**
 	 * The input
 	 */
 	T __buffer;
@@ -151,6 +161,32 @@ class Input: public Widget {
 	 * false otherwise.
 	 */
 	bool readonly() const;
+
+	/**
+	 * Set input obscure mode
+	 *
+	 * @param _m @c true, will obscure input, @c false will show input.
+	 */
+	void obscure_input(bool _m);
+
+	/**
+	 * Get obscure input mode.
+	 *
+	 * @return @c true if obscure input mode is enabled, @c false
+	 * otherwise.
+	 */
+	bool obscure_input() const;
+
+	/**
+	 * @param c character used to obscure input. Only used when
+	 * obscuring input
+	 */
+	void obscure_char(char _c);
+
+	/**
+	 * @return character used to obscure input.
+	 */
+	char obscure_char() const;
 
 	// From WidgetBase
 
@@ -380,6 +416,8 @@ Input<T>::Input(int _length, typename T::size_type _max_size, const T& _t):
     __max_size(_max_size),
     __length(_length),
     __read_only(false),
+    __obscure_input(false),
+    __obscure_char('*'),
     __buffer(_t.length()>__max_size?_t.substr(0,__max_size):_t),
     __size(__length>0 ? Size(1, __length) : Size::zero()) {
     can_focus(true);
@@ -424,6 +462,26 @@ Input<T>::readonly(bool _s) {
 template<class T> bool
 Input<T>::readonly() const {
     return __read_only;
+}
+
+template<class T> void
+Input<T>::obscure_input(bool _m) {
+    __obscure_input=_m;
+}
+
+template<class T> bool
+Input<T>::obscure_input() const {
+    return __obscure_input;
+}
+
+template<class T> void
+Input<T>::obscure_char(char _c) {
+    __obscure_char=_c;
+}
+
+template<class T> char
+Input<T>::obscure_char() const {
+    return __obscure_char;
 }
 
 template<class T> void
@@ -503,9 +561,19 @@ Input<T>::refresh(bool immediate) {
     // advanced past the end, and thus the string is
     // truncated. However, the truncation has no effect on the input.
     if (__buffer.length()>0) {
+	std::string& output=__buffer;
+	std::string obscure_out; //only used when obscuring output
+
+	if (__obscure_input) {
+	    typename T::size_type outlen=
+		__buffer.substr(__offset, __size.cols()-1).length();
+	    obscure_out.assign(outlen, __obscure_char);
+	    output=obscure_out;
+	}
+
 	mymvwaddstr(widget_subwin(),
 		    0, 0,
-		    __buffer.substr(__offset, __size.cols()-1).c_str());
+		    output.substr(__offset, __size.cols()-1).c_str());
 	// Sanitize the cursor position if necessary, for example due
 	// to a shrink of the screen, the cursor position might
 	// overshoot the available subwin size.

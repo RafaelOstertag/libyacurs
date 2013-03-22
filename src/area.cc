@@ -58,11 +58,6 @@ Area::operator==(const Area& _a) const {
 	Size::operator==(_a);
 }
 
-bool
-Area::operator!=(const Area& _a) const {
-    return !operator==(_a);
-}
-
 const Area&
 Area::operator-=(const Margin& rhs) {
     y(y() + rhs.top());
@@ -73,8 +68,13 @@ Area::operator-=(const Margin& rhs) {
     return *this;
 }
 
+bool
+operator!=(const Area& lhs, const Area& _a) {
+    return !(lhs==_a);
+}
+
 Area
-Area::operator-(const Margin& rhs) const {
-    Area tmp = *this;
+operator-(const Area& lhs, const Margin& rhs) {
+    Area tmp = lhs;
     return tmp-=rhs;
 }

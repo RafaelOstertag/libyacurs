@@ -89,28 +89,6 @@ class Coordinates {
 	Coordinates& operator-=(const Coordinates& rhs);
 
 	/**
-	 * Component wise addition.
-	 *
-	 * Adds two Coordinates objects component wise.
-	 *
-	 * @param rhs right hand side of addition.
-	 *
-	 * @return sum of two Coordinate objects.
-	 */
-	Coordinates operator+(const Coordinates& rhs) const;
-
-	/**
-	 * Component wise subtraction.
-	 *
-	 * Subtracts two Coordinates objects comonent wise.
-	 *
-	 * @param rhs right hand side of subtraction.
-	 *
-	 * @return difference of two Coordinate objects.
-	 */
-	Coordinates operator-(const Coordinates& rhs) const;
-
-	/**
 	 * Test two Coordinates objects for equality.
 	 *
 	 * Test two Coordinates object component wise for equality.
@@ -123,25 +101,47 @@ class Coordinates {
 	bool operator==(const Coordinates& rhs) const;
 
 	/**
-	 * Test two Coordinates object for inequality.
-	 *
-	 * Simply
-	 *
-	 *  <code>!Coordinates::operator==()</code>
-	 *
-	 * @param rhs right hand side of comparison.
-	 *
-	 * @return @c true if Coordinates object are not equal, @c
-	 * false otherwise.
-	 */
-	bool operator!=(const Coordinates& rhs) const;
-
-	/**
 	 * Return the object representing zero.
 	 *
 	 * @return Coordinates object representing zero.
 	 */
 	static const Coordinates& zero();
 };
+
+/**
+ * Component wise addition.
+ *
+ * Adds two Coordinates objects component wise.
+ *
+ * @param rhs right hand side of addition.
+ *
+ * @return sum of two Coordinate objects.
+ */
+Coordinates operator+(const Coordinates& lhs, const Coordinates& rhs);
+
+/**
+ * Component wise subtraction.
+ *
+ * Subtracts two Coordinates objects comonent wise.
+ *
+ * @param rhs right hand side of subtraction.
+ *
+ * @return difference of two Coordinate objects.
+ */
+Coordinates operator-(const Coordinates& lhs, const Coordinates& rhs);
+
+/**
+ * Test two Coordinates object for inequality.
+ *
+ * Simply
+ *
+ *  <code>!Coordinates::operator==()</code>
+ *
+ * @param rhs right hand side of comparison.
+ *
+ * @return @c true if Coordinates object are not equal, @c
+ * false otherwise.
+ */
+bool operator!=(const Coordinates& lhs, const Coordinates& rhs);
 
 #endif // COORDINATES_H

@@ -92,16 +92,6 @@ class Area: public Coordinates, public Size {
 	bool operator==(const Area& _a) const;
 
 	/**
-	 * Test two Area object for inequality.
-	 *
-	 * @param _a right hand side.
-	 *
-	 * @return @c true if objects are not equal, @c false
-	 * otherwise.
-	 */
-	bool operator!=(const Area& _a) const;
-
-	/**
 	 * Subtract Margin from Area.
 	 *
 	 * @param rhs right hand side of type Margin
@@ -109,15 +99,25 @@ class Area: public Coordinates, public Size {
 	 * @return const reference to the result.
 	 */
 	const Area& operator-=(const Margin& rhs);
-
-	/**
-	 * Subtract Margin from Area.
-	 *
-	 * @param rhs right hand side of type Margin.
-	 *
-	 * @return result, i.e. Area-Margin.
-	 */
-	Area operator-(const Margin& rhs) const;
 };
+
+/**
+ * Test two Area object for inequality.
+ *
+ * @param _a right hand side.
+ *
+ * @return @c true if objects are not equal, @c false
+ * otherwise.
+ */
+bool operator!=(const Area& lhs, const Area& _a);
+
+/**
+ * Subtract Margin from Area.
+ *
+ * @param rhs right hand side of type Margin.
+ *
+ * @return result, i.e. Area-Margin.
+ */
+Area operator-(const Area& lhs, const Margin& rhs);
 
 #endif

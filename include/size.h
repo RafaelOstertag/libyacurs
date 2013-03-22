@@ -95,31 +95,6 @@ class Size {
 	const Size& operator-=(const Size& rhs);
 
 	/**
-	 * Add Size to this object.
-	 *
-	 * Addition will be performed component wise, i.e. rows +
-	 * rows, columns + columns.
-	 *
-	 * @param rhs Size to add.
-	 *
-	 * @returns size object holding sum
-	 */
-	Size operator+(const Size& rhs) const;
-
-	/**
-	 * Subtract this from Size object
-	 *
-	 * Subtraction will be performed component wise, i.e. rows -
-	 * rows, columns - columns. If either resulting component
-	 * would be less than 0, it will be silently set to 0.
-	 *
-	 * @param rhs Size object
-	 *
-	 * @returns size object holding difference
-	 */
-	Size operator-(const Size& rhs) const;
-
-	/**
 	 * Test two Size objects for equality.
 	 *
 	 * @param rhs right hand side
@@ -130,21 +105,46 @@ class Size {
 	bool operator==(const Size& rhs) const;
 
 	/**
-	 * Test two Size objects for inequality.
-	 *
-	 * @param rhs right hand side.
-	 *
-	 * @return @c true if lines or rows are not equal, @c false
-	 * otherwise.
-	 */
-	bool operator!=(const Size& rhs) const;
-
-	/**
 	 * Return the object representing zero.
 	 *
 	 * @return Size object representing zero.
 	 */
 	static const Size& zero();
 };
+
+/**
+ * Add Size to this object.
+ *
+ * Addition will be performed component wise, i.e. rows +
+ * rows, columns + columns.
+ *
+ * @param rhs Size to add.
+ *
+ * @returns size object holding sum
+ */
+Size operator+(const Size& lhs, const Size& rhs);
+
+/**
+ * Subtract this from Size object
+ *
+ * Subtraction will be performed component wise, i.e. rows -
+ * rows, columns - columns. If either resulting component
+ * would be less than 0, it will be silently set to 0.
+ *
+ * @param rhs Size object
+ *
+ * @returns size object holding difference
+ */
+Size operator-(const Size& lhs, const Size& rhs);
+
+/**
+ * Test two Size objects for inequality.
+ *
+ * @param rhs right hand side.
+ *
+ * @return @c true if lines or rows are not equal, @c false
+ * otherwise.
+ */
+bool operator!=(const Size& lhs, const Size& rhs);
 
 #endif // SIZE_H

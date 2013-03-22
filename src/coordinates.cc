@@ -55,29 +55,29 @@ Coordinates::operator-=(const Coordinates& rhs) {
     return *this;
 }
 
-Coordinates
-Coordinates::operator+(const Coordinates& rhs) const {
-    Coordinates tmp = *this;
-    return tmp+=rhs;
-}
-
-Coordinates
-Coordinates::operator-(const Coordinates& rhs) const {
-    Coordinates tmp = *this;
-    return tmp-=rhs;
-}
-
 bool
 Coordinates::operator==(const Coordinates& rhs) const {
     return __x == rhs.__x && __y == rhs.__y;
 }
 
-bool
-Coordinates::operator!=(const Coordinates& rhs) const {
-    return !operator==(rhs);
-}
-
 const Coordinates&
 Coordinates::zero() {
     return __zero;
+}
+
+Coordinates
+operator+(const Coordinates& lhs, const Coordinates& rhs) {
+    Coordinates tmp = lhs;
+    return tmp+=rhs;
+}
+
+Coordinates
+operator-(const Coordinates& lhs, const Coordinates& rhs) {
+    Coordinates tmp = lhs;
+    return tmp-=rhs;
+}
+
+bool
+operator!=(const Coordinates& lhs, const Coordinates& rhs) {
+    return !(lhs==rhs);
 }

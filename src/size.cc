@@ -72,29 +72,29 @@ Size::operator-=(const Size& rhs) {
     return *this;
 }
 
-Size
-Size::operator+(const Size& rhs) const {
-    Size tmp = *this;
-    return tmp+=rhs;
-}
-
-Size
-Size::operator-(const Size& rhs) const {
-    Size tmp = *this;
-    return tmp-=rhs;
-}
-
 bool
 Size::operator==(const Size& rhs) const {
     return __cols == rhs.__cols && __rows == rhs.__rows;
 }
 
-bool
-Size::operator!=(const Size& rhs) const {
-    return !operator==(rhs);
-}
-
 const Size&
 Size::zero() {
     return __zero;
+}
+
+Size
+operator+(const Size& lhs, const Size& rhs) {
+    Size tmp = lhs;
+    return tmp+=rhs;
+}
+
+Size
+operator-(const Size& lhs, const Size& rhs) {
+    Size tmp = lhs;
+    return tmp-=rhs;
+}
+
+bool
+operator!=(const Size& lhs, const Size& rhs) {
+    return !(lhs==rhs);
 }

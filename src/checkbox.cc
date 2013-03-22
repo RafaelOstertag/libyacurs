@@ -29,14 +29,6 @@ class MaxStrLen {
 	}
 };
 
-class TransformVector {
-    public:
-	Selectable operator()(const std::string& _str) {
-	    return Selectable(_str);
-	}
-};
-	    
-
 //
 // Private
 //

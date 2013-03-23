@@ -561,19 +561,19 @@ Input<T>::refresh(bool immediate) {
     // advanced past the end, and thus the string is
     // truncated. However, the truncation has no effect on the input.
     if (__buffer.length()>0) {
-	std::string& output=__buffer;
+	std::string* output=&__buffer;
 	std::string obscure_out; //only used when obscuring output
 
 	if (__obscure_input) {
 	    typename T::size_type outlen=
 		__buffer.substr(__offset, __size.cols()-1).length();
 	    obscure_out.assign(outlen, __obscure_char);
-	    output=obscure_out;
+	    output=&obscure_out;
 	}
 
 	mymvwaddstr(widget_subwin(),
 		    0, 0,
-		    output.substr(__offset, __size.cols()-1).c_str());
+		    output->substr(__offset, __size.cols()-1).c_str());
 	// Sanitize the cursor position if necessary, for example due
 	// to a shrink of the screen, the cursor position might
 	// overshoot the available subwin size.

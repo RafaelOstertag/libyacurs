@@ -38,7 +38,9 @@ class WindowBase;
  * @see EventQueue
  */
 enum EVENT_TYPE {
-    /// Terminates the EventQueue main loop
+    /**
+     * Terminates the EventQueue main loop
+     */
     EVT_QUIT,
     /**
      * Notification of window size change.
@@ -47,23 +49,36 @@ enum EVENT_TYPE {
      * Windows should not use it in order to resize.
      */
     EVT_SIGWINCH,
-    /// Notification of alarm signal
+    /**
+     * Notification of alarm signal
+     */
     EVT_SIGALRM,
-    /// Key pressed
+    /**
+     * Key pressed
+     */
     EVT_KEY,
-    /// A refresh is usually issued after an resize. The refresh must
-    /// not be immediate, i.e. no wrefresh(), but wnoutrefresh().
+    /**
+     * A refresh is usually issued after an resize. The refresh must
+     * not be immediate, i.e. no wrefresh(), but wnoutrefresh().
+     */
     EVT_REFRESH,
-    /// Force curses window to refresh. This is used to completely
-    /// redraw the screen upon Ctrl-L. The handler can be implemented
-    /// as simple call to clearok().
+    /**
+     * Force curses window to refresh. This is used to completely
+     * redraw the screen upon Ctrl-L. The handler can be implemented
+     * as simple call to clearok().
+     */
     EVT_FORCEREFRESH,
-    /// A doupdate is usually issued after a refresh. Only one
-    /// EVT_DOUPDATE handler should exist, since curses takes care of
-    /// refreshing all windows.
+    /**
+     *
+     * A doupdate is usually issued after a refresh. Only one
+     * VT_DOUPDATE handler should exist, since curses takes care of
+     * refreshing all windows.
+     */
     EVT_DOUPDATE,
-    /// Re-setup terminal. Mainly used when resizing screen or
-    /// complete screen refresh. @sa EventQueue
+    /**
+     * Re-setup terminal. Mainly used when resizing screen or
+     * complete screen refresh. @sa EventQueue
+     */
     EVT_TERMRESETUP,
     /// SIGUSR1
     EVT_SIGUSR1,

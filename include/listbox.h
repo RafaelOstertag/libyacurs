@@ -21,9 +21,6 @@
 #include "cursex.h"
 #include "colors.h"
 
-#define __cast_lt(x) (static_cast<typename std::list<_T>::size_type>(x))
-#define __cast_st(x) (static_cast<typename _T::size_type>(x))
-
 /**
  *
  */
@@ -45,6 +42,11 @@ class ListBox: public Widget {
 			    const _T& b) {
 	    return a>b;
 	}
+
+	typedef typename std::list<_T>::size_type lsz_t;
+	typedef typename _T::size_type tsz_t;
+#define __cast_lt(x) (static_cast<lsz_t>(x))
+#define __cast_st(x) (static_cast<tsz_t>(x))
     private:
 	/**
 	 * Empty value.
@@ -61,12 +63,12 @@ class ListBox: public Widget {
 	/**
 	 * Offset into the list.
 	 */
-	typename std::list<_T>::size_type __offset;
+	lsz_t __offset;
 
 	/**
 	 * Position of the cursor in the visiable area
 	 */
-	typename std::list<_T>::size_type __curs_pos;
+	lsz_t __curs_pos;
 
 	/**
 	 * Size of the Widget.
@@ -304,7 +306,7 @@ class ListBox: public Widget {
 	    return __sort_order;
 	}
 
-	virtual typename std::list<_T>::size_type selected_index() const {
+	virtual lsz_t selected_index() const {
 	    return __curs_pos + __offset;
 	}
 
@@ -312,18 +314,14 @@ class ListBox: public Widget {
 	    if (__list.empty()) return __empty;
 
 	    typename std::list<_T>::const_iterator it=__list.begin();
-	    for(typename std::list<_T>::size_type i=0;
-		i<__curs_pos+__offset;
-		it++, i++);
+	    for(lsz_t i=0; i<__curs_pos+__offset; it++, i++);
 
 	    return *it;
 	}
 
 	void selected(_T& _item) {
 	    typename std::list<_T>::iterator it=__list.begin();
-	    for(typename std::list<_T>::size_type i=0;
-		i<__curs_pos+__offset;
-		it++, i++);
+	    for(lsz_t i=0; i<__curs_pos+__offset; it++, i++);
 
 	    *it=_item;
 
@@ -335,9 +333,7 @@ class ListBox: public Widget {
 	    if (__list.empty()) return;
 
 	    typename std::list<_T>::iterator it=__list.begin();
-	    for(typename std::list<_T>::size_type i=0;
-		i<__curs_pos+__offset;
-		it++, i++);
+	    for(lsz_t i=0;i<__curs_pos+__offset; it++, i++);
 
 	    __list.erase(it);
 

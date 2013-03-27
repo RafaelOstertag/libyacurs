@@ -52,24 +52,26 @@
  */
 template<class T=std::string>
 class Input: public Widget {
+    public:
+	typedef typename T::size_type tsz_t;
     private:
 	/**
 	 * Offset into the buffer. Used when not the entire buffer can
 	 * be displayed in the Input Widget, i.e. scrolling.
 	 */
-	typename T::size_type __offset;
+	tsz_t __offset;
 
 	/**
 	 * Cursor position relative to offset, absolute to Widget.
 	 */
-	typename T::size_type __curs_pos;
+	tsz_t __curs_pos;
 
 	/**
 	 * Maximum size of input.
 	 *
 	 * If it is 0, there is no limit.
 	 */
-	typename T::size_type __max_size;
+	tsz_t __max_size;
 
 	/**
 	 * Length of the input line.
@@ -123,7 +125,7 @@ class Input: public Widget {
 	 *
 	 * @param _t text to display initially. Default empty.
 	 */
-	Input(int _length=0, typename T::size_type _max_size=255,
+	Input(int _length=0, tsz_t _max_size=255,
 	      const T& _t=std::string());
 	virtual ~Input();
 
@@ -304,7 +306,7 @@ Input<T>::key_handler(Event& _e) {
 	__offset=0;
 	break;
     case KEY_CTRL_E:
-	if (__buffer.length()>=static_cast<typename T::size_type>(__size.cols())) {
+	if (__buffer.length()>=static_cast<tsz_t>(__size.cols())) {
 	    __offset=__buffer.length()-__size.cols()+1;
 	    __curs_pos=__size.cols();
 	} else {
@@ -329,7 +331,7 @@ Input<T>::key_handler(Event& _e) {
     case KEY_CTRL_F:
 	if (__curs_pos+__offset>=__buffer.length()) break;
 
-	if (__curs_pos+1==static_cast<typename T::size_type>(__size.cols())) {
+	if (__curs_pos+1==static_cast<tsz_t>(__size.cols())) {
 	    __offset++;
 	} else {
 	    // we're somewhere in the widget, but not the end, advance
@@ -362,13 +364,13 @@ Input<T>::key_handler(Event& _e) {
 
 	// Make sure the __curs_pos does not overshoot the
 	// border of the window
-	assert(__curs_pos<static_cast<typename T::size_type>(__size.cols()));
+	assert(__curs_pos<static_cast<tsz_t>(__size.cols()));
 
 	// Advance the cursor position. If __curs_pos+1 hits
 	// the border, advance the offset. This way we always have a
 	// space at the end of the string (on the screen only, not in
 	// the __buffer of course).
-	if (__curs_pos+1==static_cast<typename T::size_type>(__size.cols())) {
+	if (__curs_pos+1==static_cast<tsz_t>(__size.cols())) {
 	    __offset++;
 	} else {
 	    // we're somewhere in the widget, but not the end, advance
@@ -409,7 +411,7 @@ Input<T>::unrealize() {
 // Public
 //
 template<class T>
-Input<T>::Input(int _length, typename T::size_type _max_size, const T& _t):
+Input<T>::Input(int _length, tsz_t _max_size, const T& _t):
     Widget(),
     __offset(0),
     __curs_pos(0),
@@ -565,7 +567,7 @@ Input<T>::refresh(bool immediate) {
 	std::string obscure_out; //only used when obscuring output
 
 	if (__obscure_input) {
-	    typename T::size_type outlen=
+	    tsz_t outlen=
 		__buffer.substr(__offset, __size.cols()-1).length();
 	    obscure_out.assign(outlen, __obscure_char);
 	    output=&obscure_out;
@@ -577,7 +579,7 @@ Input<T>::refresh(bool immediate) {
 	// Sanitize the cursor position if necessary, for example due
 	// to a shrink of the screen, the cursor position might
 	// overshoot the available subwin size.
-	if (__curs_pos>=static_cast<typename T::size_type>(__size.cols()) ) __curs_pos=__size.cols()-1;
+	if (__curs_pos>=static_cast<tsz_t>(__size.cols()) ) __curs_pos=__size.cols()-1;
     } else {
 	// since the buffer is empty, make sure the cursor position is
 	// set to the biginning.

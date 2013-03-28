@@ -40,12 +40,12 @@ LineObject::compute_margin() {
 }
 
 LineObject::LineObject(const LineObject&) {
-    abort();
+    throw NotSupported();
 }
 
 LineObject&
 LineObject::operator=(const LineObject& lo) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 //

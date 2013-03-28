@@ -11,7 +11,7 @@
 //
 DynLabel&
 DynLabel::operator=(const DynLabel&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

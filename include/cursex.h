@@ -111,4 +111,14 @@ class AreaExceeded: public BaseCurEx {
 	AreaExceeded();
 };
 
+class NotSupported: public BaseCurEx {
+    public:
+	NotSupported();
+};
+
+class InvalidDialogType: public BaseCurEx {
+    public:
+	InvalidDialogType();
+};
+
 #endif // CUREX_H

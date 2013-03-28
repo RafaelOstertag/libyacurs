@@ -17,7 +17,7 @@
 //
 FileDialog&
 FileDialog::operator=(const FileDialog&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

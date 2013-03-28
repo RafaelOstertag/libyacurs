@@ -4,6 +4,7 @@
 #include <cstdlib>
 
 #include "radiobox.h"
+#include "cursex.h"
 
 //
 // Private
@@ -11,7 +12,7 @@
 
 RadioBox&
 RadioBox::operator=(const RadioBox&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

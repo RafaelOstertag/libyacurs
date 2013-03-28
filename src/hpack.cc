@@ -348,7 +348,7 @@ class HSetPosWidget {
 
 HPack&
 HPack::operator=(const HPack&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 //

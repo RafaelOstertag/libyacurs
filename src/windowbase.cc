@@ -18,12 +18,12 @@
 // Private
 //
 WindowBase::WindowBase(const WindowBase&) {
-    abort();
+    throw NotSupported();
 }
 
 WindowBase&
 WindowBase::operator=(const WindowBase&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

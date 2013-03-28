@@ -19,7 +19,7 @@ StatusLine::put_top_msg() {
 
 StatusLine&
 StatusLine::operator=(const StatusLine&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 //

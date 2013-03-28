@@ -345,7 +345,7 @@ class VSetPosWidget {
 //
 VPack&
 VPack::operator=(const VPack&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

@@ -237,7 +237,7 @@ class Input: public Widget {
 
 template<class T> Input<T>&
 Input<T>::operator=(const Input<T>&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

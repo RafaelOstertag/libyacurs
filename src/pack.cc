@@ -53,7 +53,7 @@ Pack::take_over(WidgetBase* _w) {
 
 Pack&
 Pack::operator=(const Pack& _p) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 //

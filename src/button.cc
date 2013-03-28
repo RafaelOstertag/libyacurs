@@ -15,7 +15,7 @@
 
 Button&
 Button::operator=(const Button&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

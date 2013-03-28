@@ -21,12 +21,12 @@
 // Private
 //
 Window::Window(const Window&){
-    abort();
+    throw NotSupported();
 }
 
 Window&
 Window::operator=(const Window&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

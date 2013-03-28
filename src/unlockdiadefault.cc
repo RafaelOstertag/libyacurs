@@ -9,7 +9,7 @@
 //
 UnlockDialogDefault& 
 UnlockDialogDefault::operator=(const UnlockDialogDefault&) {
-    std::abort();
+    throw NotSupported();
     return *this;
 }
 

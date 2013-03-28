@@ -14,7 +14,7 @@
 
 Widget&
 Widget::operator=(const Widget&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

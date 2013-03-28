@@ -11,7 +11,7 @@
 //
 Label&
 Label::operator=(const Label&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

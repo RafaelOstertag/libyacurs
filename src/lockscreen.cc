@@ -11,6 +11,7 @@
 
 #include "lockscreen.h"
 #include "eventqueue.h"
+#include "cursex.h"
 
 //
 // Private
@@ -18,7 +19,7 @@
 
 LockScreen&
 LockScreen::operator=(const LockScreen&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

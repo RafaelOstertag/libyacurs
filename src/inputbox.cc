@@ -10,7 +10,7 @@
 //
 InputBox&
 InputBox::operator=(const InputBox&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

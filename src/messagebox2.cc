@@ -4,13 +4,14 @@
 #include <cassert>
 
 #include "messagebox2.h"
+#include "cursex.h"
 
 //
 // Private
 //
 MessageBox2&
 MessageBox2::operator=(const MessageBox2&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

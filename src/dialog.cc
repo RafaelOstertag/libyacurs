@@ -6,17 +6,18 @@
 #include "dialog.h"
 
 #include "eventqueue.h"
+#include "cursex.h"
 
 //
 // Private
 //
 Dialog::Dialog(const Dialog&) {
-    abort();
+    throw NotSupported();
 }
 
 Dialog&
 Dialog::operator=(const Dialog&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 
@@ -80,7 +81,7 @@ Dialog::Dialog(const std::string& _title,
 	__hpack->add_front(__bok);
 	break;
     default:
-	abort();
+	throw InvalidDialogType();
 	break;
     }
 

@@ -6,13 +6,14 @@
 #include "unlockdialog.h"
 
 #include "eventqueue.h"
+#include "cursex.h"
 
 //
 // Private
 //
 UnlockDialog&
 UnlockDialog::operator=(const UnlockDialog&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

@@ -56,5 +56,10 @@ ColorsNotInitialized::ColorsNotInitialized():
     BaseCurEx("Colors not initialized") {}
 
 AreaExceeded::AreaExceeded():
-    BaseCurEx("An object exceeded space constraints.") {}
+    BaseCurEx("An object exceeded space constraints") {}
 
+NotSupported::NotSupported():
+    BaseCurEx("Operation not supported") {}
+
+InvalidDialogType::InvalidDialogType():
+    BaseCurEx("Invalid dialog type") {}

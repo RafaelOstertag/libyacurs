@@ -16,12 +16,12 @@
 //
 
 WidgetBase::WidgetBase(const WidgetBase&){
-    abort();
+    throw NotSupported();
 }
 
 WidgetBase&
 WidgetBase::operator=(const WidgetBase&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

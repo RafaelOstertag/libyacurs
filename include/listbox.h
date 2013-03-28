@@ -86,7 +86,7 @@ class ListBox: public Widget {
 
 	// Not supported
 	ListBox<_T>& operator=(const ListBox<_T>&) {
-	    abort();
+	    throw NotSupported();
 	    return *this;
 	}
 

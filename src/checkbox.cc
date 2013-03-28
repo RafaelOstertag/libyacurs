@@ -35,7 +35,7 @@ class MaxStrLen {
 
 CheckBox&
 CheckBox::operator=(const CheckBox&) {
-    abort();
+    throw NotSupported();
     return *this;
 }
 

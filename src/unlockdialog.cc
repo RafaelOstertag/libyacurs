@@ -5,6 +5,7 @@
 
 #include "unlockdialog.h"
 
+#include "focusmanager.h"
 #include "eventqueue.h"
 #include "cursex.h"
 
@@ -30,4 +31,15 @@ UnlockDialog::UnlockDialog(const std::string& _title):
 }
 
 UnlockDialog::~UnlockDialog() {
+}
+
+void
+UnlockDialog::realize() {
+    REALIZE_ENTER;
+
+    Dialog::realize();
+
+    FocusManager::reset();
+
+    REALIZE_LEAVE;
 }

@@ -21,6 +21,9 @@ class UnlockDialog: public Dialog {
     public:
 	UnlockDialog(const std::string& _title);
 	virtual ~UnlockDialog();
+
+	// From Dialog
+	void realize();
 	
 	/**
 	 * @return @c true if unlock should happen, @c false

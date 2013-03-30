@@ -25,7 +25,7 @@
 #if !defined(NDEBUG) && defined(EVTQDEBUG)
 #define DEBUGOUT(x) try {							\
 	char* __debugfile_name__;					\
-	if ((__debugfile_name__ = getenv("LIBYACURS_EVT_DBGFN"))!=0) { \
+	if ((__debugfile_name__ = std::getenv("LIBYACURS_EVT_DBGFN"))!=0) { \
 	    if (!__debugfile.is_open())					\
 		__debugfile.open(__debugfile_name__,			\
 				 std::ios::out | std::ios::trunc);	\
@@ -206,7 +206,8 @@ class CallEventConnector {
 	 */
 	void operator()(EventConnectorBase* _ec) {
 	    assert(_ec != 0);
-	    if (_ec->type() == __eb.type()) {
+	    if (_ec->type() == __eb.type() &&
+		__eb.stop() == false) {
 		statistics.update_ec_calls_by_type(_ec->type());
 
 		DEBUGOUT("Call: " << 
@@ -746,7 +747,7 @@ EventQueue::cleanup() {
     evtconn_map.clear();
 
     char* stats_fn;
-    if ((stats_fn = getenv("LIBYACURS_EVT_STATS"))!=0) {
+    if ((stats_fn = std::getenv("LIBYACURS_EVT_STATS"))!=0) {
 	try {
 	    if (!__statsfile.is_open())
 		__statsfile.open(stats_fn, std::ios::out | std::ios::trunc);

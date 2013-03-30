@@ -327,7 +327,7 @@ host_odin() {
 		gmake -j
 		had_error $? "Error in ${c}:$arch:$flags"
 
-		gmake -j check
+		gmake check
 		had_error $? "Error in ${c}:$arch:$flags"
 	    done
 	done
@@ -376,7 +376,7 @@ host_starchild() {
 		gmake -j
 		had_error $? "Error in ${c}:$arch:$flags"
 
-		gmake -j check
+		gmake check
 		had_error $? "Error in ${c}:$arch:$flags"
 	    done
 	done

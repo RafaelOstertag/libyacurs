@@ -32,7 +32,7 @@ const char* Event::__str_table[] = {
 //
 ////////////////////////////////////////////////////////
 
-Event::Event(EVENT_TYPE _et): event_type(_et) {}
+Event::Event(EVENT_TYPE _et): event_type(_et), __stop(false) {}
 
 Event::~Event() {}
 
@@ -49,6 +49,16 @@ Event::operator==(EVENT_TYPE _et) const {
 EVENT_TYPE
 Event::type() const {
     return event_type;
+}
+
+void
+Event::stop(bool _s) {
+    __stop = _s;
+}
+
+bool
+Event::stop() const {
+    return __stop;
 }
 
 Event*

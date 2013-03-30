@@ -123,8 +123,17 @@ enum EVENT_TYPE {
  */
 class Event {
     private:
-	/// The type of the Event
+	/**
+	 * The type of the Event
+	 */
 	EVENT_TYPE event_type;
+
+	/**
+	 * Indicate whether or not the Event should not be processed
+	 * further.
+	 */
+	bool __stop;
+	
 
 	static const char* __str_table[];
 
@@ -163,6 +172,25 @@ class Event {
 	 * @return event type of the object.
 	 */
 	EVENT_TYPE type() const;
+
+	/**
+	 * Set stop flag.
+	 *
+	 * When stop flag is set (@c true) the event will no be
+	 * processed further.
+	 *
+	 * @param _s when set to @c true, the event will not be
+	 * processed further.
+	 */
+	void stop(bool _s);
+
+	/**
+	 * Get stop flag.
+	 *
+	 * @return @c true, the event will not be processed further,
+	 * @c false otherwise.
+	 */
+	bool stop() const;
 
 	/**
 	 * Create a copy of the object. The caller is responsible for

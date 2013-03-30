@@ -34,7 +34,7 @@ NotRealized::NotRealized():
     BaseCurEx("object not realized") {}
 
 SystemError::SystemError(int _errno):
-    BaseCurEx(strerror(_errno)),
+    BaseCurEx(std::strerror(_errno)),
     __errno(_errno) {}
 
 int

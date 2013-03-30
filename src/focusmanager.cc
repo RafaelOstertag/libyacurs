@@ -174,3 +174,12 @@ FocusManager::refocus() {
 
     __focus_groups[__active_focusgroup]->refocus();
 }
+
+void
+FocusManager::reset() {
+    if (__focus_groups.empty()) return;
+    assert(__active_focusgroup!=(fgid_t)-1);
+    assert(__focus_groups[__active_focusgroup]!=0);
+    __focus_groups[__active_focusgroup]->reset();
+}
+    

@@ -152,6 +152,11 @@ class FocusManager {
 	 * Calls refocus() on Active Focus Group.
 	 */
 	static void refocus();
+
+	/**
+	 * Reset the focus on the active Focus Group.
+	 */
+	static void reset();
 };
 
 #endif // FOCUSMANAGER_H

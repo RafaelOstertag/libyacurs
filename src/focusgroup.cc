@@ -265,3 +265,20 @@ FocusGroup::refocus() const {
     (*__focus)->focus(true);
     (*__focus)->refresh(true);
 }
+
+void
+FocusGroup::reset() {
+    if (__widgets.empty()) return;
+
+    if (__active && __focus != __widgets.end()) {
+	(*__focus)->focus(false);
+	(*__focus)->refresh(true);
+    }
+
+    __focus = __widgets.begin();
+
+    if (__active) {
+	(*__focus)->focus(true);
+	(*__focus)->refresh(true);
+    }
+}

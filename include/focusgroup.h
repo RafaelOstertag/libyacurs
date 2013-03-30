@@ -136,6 +136,14 @@ class FocusGroup {
 	 */
 	void refocus() const;
 
+	/**
+	 * Reset the focus.
+	 *
+	 * Resetting focus will result in first widget in the focus
+	 * list receiving focus.
+	 */
+	void reset();
+
 };
 
 #endif // FOCUSGROUP_H

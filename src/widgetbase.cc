@@ -9,7 +9,7 @@
 
 #include "widgetbase.h"
 #include "focusmanager.h"
-#include "cursex.h"
+#include "yacursex.h"
 
 //
 // Private

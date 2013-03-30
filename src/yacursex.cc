@@ -4,7 +4,7 @@
 #include "config.h"
 #endif
 
-#include "cursex.h"
+#include "yacursex.h"
 
 BaseCurEx::BaseCurEx(const char* m) : msg(m) {}
 

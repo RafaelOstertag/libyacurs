@@ -4,7 +4,7 @@
 #include <cstdlib>
 
 
-#include "cursex.h"
+#include "yacursex.h"
 #include "widget.h"
 #include "eventqueue.h"
 

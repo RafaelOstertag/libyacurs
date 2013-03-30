@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <functional>
 
-#include "cursex.h"
+#include "yacursex.h"
 #include "pack.h"
 #include "eventqueue.h"
 

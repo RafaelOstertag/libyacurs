@@ -3,7 +3,7 @@
 #include <cstdlib>
 
 #include "curs.h"
-#include "cursex.h"
+#include "yacursex.h"
 #include "statusline.h"
 //
 // Private

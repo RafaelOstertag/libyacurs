@@ -4,7 +4,7 @@
 #include <cassert>
 
 #include "messagebox.h"
-#include "cursex.h"
+#include "yacursex.h"
 
 //
 // Private

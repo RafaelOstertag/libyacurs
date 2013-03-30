@@ -16,7 +16,7 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "cursex.h"
+#include "yacursex.h"
 #include "eventqueue.h"
 #include "focusmanager.h"
 #include "curs.h"

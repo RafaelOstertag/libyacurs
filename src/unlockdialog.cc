@@ -7,7 +7,7 @@
 
 #include "focusmanager.h"
 #include "eventqueue.h"
-#include "cursex.h"
+#include "yacursex.h"
 
 //
 // Private

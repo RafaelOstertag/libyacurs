@@ -4,7 +4,7 @@
 #include <cstdlib>
 
 #include "label.h"
-#include "cursex.h"
+#include "yacursex.h"
 
 //
 // Private

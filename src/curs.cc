@@ -27,7 +27,7 @@
 
 #include "curs.h"
 #include "eventqueue.h"
-#include "cursex.h"
+#include "yacursex.h"
 #include "focusmanager.h"
 #include "colors.h"
 

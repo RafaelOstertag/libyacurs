@@ -10,7 +10,7 @@
 
 
 #include "curs.h"
-#include "cursex.h"
+#include "yacursex.h"
 #include "window.h"
 #include "area.h"
 #include "eventqueue.h"

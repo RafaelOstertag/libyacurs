@@ -25,7 +25,7 @@
 #include <cassert>
 
 #include "colors.h"
-#include "cursex.h"
+#include "yacursex.h"
 
 using namespace YAPET::UI;
 

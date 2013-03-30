@@ -10,7 +10,7 @@
 #include "coordinates.h"
 #include "margin.h"
 #include "area.h"
-#include "cursex.h"
+#include "yacursex.h"
 #include "event.h"
 #include "eventconnector.h"
 #include "eventqueue.h"

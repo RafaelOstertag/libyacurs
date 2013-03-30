@@ -16,7 +16,7 @@
 #include "input.h"
 #include "eventqueue.h"
 #include "focusmanager.h"
-#include "cursex.h"
+#include "yacursex.h"
 #include "colors.h"
 #include "widget.h"
 

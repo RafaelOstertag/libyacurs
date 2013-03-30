@@ -3,7 +3,7 @@
 #include <cassert>
 
 #include "focusmanager.h"
-#include "cursex.h"
+#include "yacursex.h"
 #include "eventqueue.h"
 
 fgid_t FocusManager::__active_focusgroup=(fgid_t)-1;

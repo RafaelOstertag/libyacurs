@@ -33,6 +33,11 @@ LockScreen::event_key_handler(Event& _e) {
     if (!__unlock_dialog->shown() && __msgbox==0) {
 	__unlock_dialog->clear();
 	__unlock_dialog->show();
+
+	// The event should not be processed any further, else the key
+	// might be passed on to the Unlock Dialog. Further key
+	// presses must come thru, tough.
+	_e.stop(false);
     }
 }
 

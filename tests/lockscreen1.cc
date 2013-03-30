@@ -76,9 +76,8 @@ int __test_data[]= {
 };
 
 int __unlock_screen[] = {
-    // Make sure we are in the input box.
-    KEY_LEFT,
-
+    // Press any key to activate unlock dialog
+    'a',
     // Enter Secret
     'U', 'n', 'l', 'o', 'c', 'k', ' ', 'S', 'c', 'r', 'e', 'e', 'n',
     '\n', '\n',
@@ -93,7 +92,7 @@ extern "C" int __test_wgetch(void*) {
     static int* ptr2=__test_data;
     static int rounds=0;
 
-    usleep(1000);
+    usleep(100);
     
     if (*ptr2==0) {
 	ptr2=__test_data;

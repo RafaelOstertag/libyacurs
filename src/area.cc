@@ -13,6 +13,7 @@
 //
 // Private
 //
+Area Area::__zero(0,0,0,0);
 
 //
 // Protected
@@ -58,7 +59,17 @@ Area::operator==(const Area& _a) const {
 	Size::operator==(_a);
 }
 
-const Area&
+bool
+Area::operator==(const Size& _s) const {
+    return Size::operator==(_s);
+}
+
+bool
+Area::operator==(const Coordinates& _c) const {
+    return Coordinates::operator==(_c);
+}
+
+Area&
 Area::operator-=(const Margin& rhs) {
     y(y() + rhs.top());
     x(x() + rhs.left());
@@ -77,4 +88,9 @@ Area
 operator-(const Area& lhs, const Margin& rhs) {
     Area tmp = lhs;
     return tmp-=rhs;
+}
+
+const Area&
+Area::zero() {
+    return Area::__zero;
 }

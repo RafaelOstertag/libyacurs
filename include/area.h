@@ -16,6 +16,9 @@
  * lines and columns of extent.
  */
 class Area: public Coordinates, public Size {
+    private:
+	static Area __zero;
+
     public:
 	/**
 	 * Constructor.
@@ -91,6 +94,10 @@ class Area: public Coordinates, public Size {
 	 */
 	bool operator==(const Area& _a) const;
 
+	bool operator==(const Size& _s) const;
+
+	bool operator==(const Coordinates& _c) const;
+
 	/**
 	 * Subtract Margin from Area.
 	 *
@@ -98,7 +105,9 @@ class Area: public Coordinates, public Size {
 	 *
 	 * @return const reference to the result.
 	 */
-	const Area& operator-=(const Margin& rhs);
+	Area& operator-=(const Margin& rhs);
+
+	static const Area& zero();
 };
 
 /**

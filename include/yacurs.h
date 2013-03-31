@@ -5,6 +5,8 @@
 #ifndef YACURS_H
 #define YACURS_H
 
+#include "curswin.h"
+#include "curstr.h"
 #include "yacurstypes.h"
 #include "realizeable.h"
 #include "coordinates.h"

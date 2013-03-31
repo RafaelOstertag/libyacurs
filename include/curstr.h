@@ -30,8 +30,8 @@ namespace YACURS {
 
 		const Coordinates& position() const;
 	};
-    }; // namespace INTERNAL
-}; // namespace YACURS
+    } // namespace INTERNAL
+} // namespace YACURS
 
 
 

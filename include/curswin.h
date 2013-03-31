@@ -129,8 +129,8 @@ namespace YACURS {
 		CursWin& operator<<(const std::string str);
 
 	};
-    }; // namespace INTERNAL
-}; // namespace YACURS
+    } // namespace INTERNAL
+} // namespace YACURS
 
 
 

@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "curswin.h"
 #include "yacursex.h"
 

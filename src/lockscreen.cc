@@ -37,12 +37,7 @@ LockScreen::event_key_handler(Event& _e) {
 	// The event should not be processed any further, else the key
 	// might be passed on to the Unlock Dialog. Further key
 	// presses must come thru, tough.
-	/**
-	 * @bug eventhough we tell the event queue to stop processing
-	 * EVT_KEY, the UnlockDialog still receives the key stroke
-	 * when compiled with GCC.
-	 */
-	_e.stop(false);
+	_e.stop(true);
     }
 }
 

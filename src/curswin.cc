@@ -150,7 +150,7 @@ CursWin::refresh(bool immediate) {
 }
 
 bool
-CursWin::is_subwin() const {
+CursWin::issubwin() const {
     return __subwin;
 }
 

@@ -100,7 +100,7 @@ namespace YACURS {
 		 */
 		CursWin& refresh(bool immediate=true);
 
-		bool is_subwin() const;
+		bool issubwin() const;
 
 		bool has_box() const;
 

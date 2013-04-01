@@ -90,6 +90,15 @@ operator-(const Area& lhs, const Margin& rhs) {
     return tmp-=rhs;
 }
 
+bool operator>(const Area& lhs, const Coordinates& rhs) {
+    return lhs.x()<=rhs.x() && lhs.cols()>=rhs.x() &&
+	lhs.y()<=rhs.y() && lhs.rows()>=rhs.y();
+}
+
+bool operator<(const Coordinates& lhs, const Area& rhs) {
+    return rhs>lhs;
+}
+
 const Area&
 Area::zero() {
     return Area::__zero;

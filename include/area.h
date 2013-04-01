@@ -129,4 +129,14 @@ bool operator!=(const Area& lhs, const Area& _a);
  */
 Area operator-(const Area& lhs, const Margin& rhs);
 
+/**
+ * Test whether coordinates lie within area.
+ */
+bool operator>(const Area& lhs, const Coordinates& rhs);
+
+/**
+ * Test whether coordinates lie within area.
+ */
+bool operator<(const Coordinates& lhs, const Area& rhs);
+
 #endif

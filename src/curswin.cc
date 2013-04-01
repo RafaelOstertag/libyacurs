@@ -7,12 +7,14 @@ using namespace YACURS::INTERNAL;
 //
 // Private
 //
+CursWin::CursWin(const CursWin& cw) {
+    throw NotSupported();
+}
 
 //
 // Protected
 //
 CursWin::CursWin(WINDOW* win): __window(win),
-			       __references(new int),
 			       __box(false) {
     if (win==0)
 	throw std::invalid_argument("argument 'win' must not be 0");
@@ -27,57 +29,34 @@ CursWin::CursWin(WINDOW* win): __window(win),
     __area.rows(y);
 
     __client_area=__area;
-
-    *__references=1;
 }
 
 //
 // Public
 //
 CursWin::CursWin(const Area& _a): __window(0),
-				  __references(new int),
 				  __box(false),
 				  __subwin(false) {
 
     if (_a == Area::zero()) {
-	delete __references;
 	throw std::invalid_argument("Area must not be zero");
     }
 
     __area=__client_area=_a;
 
-    *__references=1;
-
-}
-
-CursWin::CursWin(const CursWin& cw): __window(cw.__window),
-				     __references(cw.__references),
-				     __box(cw.__box),
-				     __subwin(cw.__subwin),
-				     __area(cw.__area),
-				     __client_area(cw.__client_area) {
-    (*__references)++;
 }
 
 CursWin& CursWin::operator=(const CursWin& cw) {
     if (this==&cw) return *this;
 
-    (*__references)--;
+    if (__window!=0) {
+	if (delwin(__window)==ERR)
+	    throw CursesException("delwin");
 
-    // Make sure we clean up in case we were the last reference to the
-    // Curses Window.
-    if ( (*__references)<1 &&
-	 __window!=0 ) {
-	// What should we do if delwin() fails? Throwing an
-	// exception leaves an partially initialized window, so we
-	// ignore it.
-	if (delwin(__window) != ERR)
-	    __window=0;
+	__window=0;
     }
 
     __window=cw.__window;
-
-    (*(__references=cw.__references))++;
 
     __box=cw.__box;
     __subwin=cw.__subwin;
@@ -88,14 +67,9 @@ CursWin& CursWin::operator=(const CursWin& cw) {
 }
 
 CursWin::~CursWin() {
-    (*__references)--;
-
-    if ( (*__references)<1 ) {
-	delete __references;
-
-	if (__window!=0)
-	    (void)delwin(__window);
-    }
+    if (__window!=0)
+	if(delwin(__window)==ERR)
+	    throw CursesException("delwin");
 }
 
 const Area&
@@ -162,10 +136,10 @@ CursWin::has_box() const {
 }
 
 CursWin&
-CursWin::set_box(chtype verch, chtype horch) {
+CursWin::box(chtype verch, chtype horch) {
     if (__window==0) return *this;
 
-    if (box(__window, verch, horch)==ERR)
+    if (::box(__window, verch, horch)==ERR)
 	throw CursesException("box");
 
     __box=true;
@@ -193,7 +167,7 @@ CursWin::get_cursor() const {
 }
 
 CursWin&
-CursWin::set_cursor(const Coordinates& pos) {
+CursWin::move(const Coordinates& pos) {
     if (__window==0) return *this;
 
     int y=__client_area.y()-__area.y()+pos.y();
@@ -252,13 +226,119 @@ CursWin::is_touched() const {
     return is_wintouched(__window)==TRUE;
 }
 
-CursWin
-CursWin::derwin(const Area& a) const {
-    if (__window==0)
-	throw NotInitialized();
+CursWin& 
+CursWin::addstr(const CurStr& str) {
+    if (__window==0) return *this;
 
-    CursWin tmp(::derwin(__window, a.rows(), a.cols(), a.y(), a.x()));
-    tmp.__subwin=true;
+    int y=__client_area.y()-__area.y()+str.position().y();
+    int x=__client_area.x()-__area.x()+str.position().x();
+
+    if (mymvwaddstr(__window, y, x, str.c_str())==ERR)
+	throw CursesException("mvwaddstr");
+
+    return *this;
+}
+
+CursWin& 
+CursWin::addstr(const std::string& str) {
+    if (__window==0) return *this;
+
+    if (mywaddstr(__window, str.c_str())==ERR)
+	throw CursesException("waddstr");
+
+    return *this;
+}
+
+CursWin& 
+CursWin::addstrx(const CurStr& str) {
+    if (__window==0) return *this;
+
+    if (!(__client_area>str.position()))
+	throw std::invalid_argument("Position outside of area");
+
+    int x=__client_area.x()-__area.x()+str.position().x();
+
+    // space available to string with box taken into account
+    int space=std::min(__client_area.cols(),__area.cols())-x;
+
+    if (space<str.length()) {
+	addnstr(str, space-1).addch('>');
+    } else {
+	addstr(str);
+    }
+
+    return *this;
+}
+
+CursWin& 
+CursWin::addstrx(const std::string& str) {
+    if (__window==0) return *this;
+
+    Coordinates tmp(get_cursor());
+
+    int space=std::min(__client_area.cols(),__area.cols())-tmp.x();
+
+    if (space<str.length()) {
+	addnstr(str, space-1).addch('>');
+    } else {
+	addstr(str);
+    }
+
+    return *this;
+}
+
+CursWin& 
+CursWin::addnstr(const CurStr& str, int n) {
+    if (__window==0) return *this;
+
+    int y=__client_area.y()-__area.y()+str.position().y();
+    int x=__client_area.x()-__area.x()+str.position().x();
+
+    if (mymvwaddnstr(__window, y, x, str.c_str(), n)==ERR)
+	throw CursesException("mvwaddnstr");
+
+    return *this;
+}
+
+CursWin& 
+CursWin::addnstr(const std::string& str, int n) {
+    if (__window==0) return *this;
+
+    if (mywaddnstr(__window, str.c_str(), n)==ERR)
+	throw CursesException("waddnstr");
+
+    return *this;
+}
+
+CursWin& 
+CursWin::addch(const chtype ch) {
+    if (__window==0) return *this;
+
+    if (waddch(__window, ch)==ERR)
+	throw CursesException("waddch");
+
+    return *this;
+}
+
+CursWin& 
+CursWin::mvaddch(const chtype ch, const Coordinates& pos) {
+    if (__window==0) return *this;
+
+    int y=__client_area.y()-__area.y()+pos.y();
+    int x=__client_area.x()-__area.x()+pos.x();
+    
+    if (mvwaddch(__window, y, x, ch)==ERR)
+	throw CursesException("mvwaddch");
+    
+    return *this;
+}
+
+CursWin*
+CursWin::derwin(const Area& a) const {
+    if (__window==0) return 0;
+
+    CursWin* tmp=new CursWin(::derwin(__window, a.rows(), a.cols(), a.y(), a.x()));
+    tmp->__subwin=true;
 
     return tmp;
 }

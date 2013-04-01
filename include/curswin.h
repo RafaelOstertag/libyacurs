@@ -27,11 +27,6 @@ namespace YACURS {
 		WINDOW* __window;
 
 		/**
-		 * References to this object.
-		 */
-		int* __references;
-
-		/**
 		 * Flag whether or not Curses Window has a box.
 		 */
 		bool __box;
@@ -51,13 +46,27 @@ namespace YACURS {
 		 */
 		Area __client_area;
 
+		/**
+		 * Not supported.
+		 *
+		 * @internal Supporting those would become
+		 * unintuitive. Depending on the implementation, for
+		 * instance, one copy of an object might set a border,
+		 * but all other instances wouldn't know about it, i.e
+		 * the Curses Window knows it, but the __box flag
+		 * isn't set accordingly. Another approach would be
+		 * making all instances aware of such changes, but
+		 * then again, why not using references in the first
+		 * place?.
+		 */
+		CursWin(const CursWin& cw);
 	    protected:
 		CursWin(WINDOW* win);
 
 	    public:
 		CursWin(const Area& _a);
-		CursWin(const CursWin& cw);
 		CursWin& operator=(const CursWin& cw);
+
 		~CursWin();
 
 		/**
@@ -104,13 +113,13 @@ namespace YACURS {
 
 		bool has_box() const;
 
-		CursWin& set_box(chtype verch=0, chtype horch=0);
+		CursWin& box(chtype verch=0, chtype horch=0);
 
 		CursWin& unset_box();
 
 		Coordinates get_cursor() const;
 
-		CursWin& set_cursor(const Coordinates& pos);
+		CursWin& move(const Coordinates& pos);
 
 		CursWin& clear();
 
@@ -122,7 +131,27 @@ namespace YACURS {
 
 		bool is_touched() const;
 
-		CursWin derwin(const Area& a) const;
+		CursWin& addstr(const CurStr& str);
+
+		CursWin& addstr(const std::string& str);
+
+		CursWin& addstrx(const CurStr& str);
+
+		CursWin& addstrx(const std::string& str);
+
+		CursWin& addnstr(const CurStr& str, int n);
+
+		CursWin& addnstr(const std::string& str, int n);
+		
+		CursWin& addch(const chtype ch);
+
+		CursWin& mvaddch(const chtype ch, const Coordinates& pos);
+
+		CursWin& insch(const chtype ch);
+
+		CursWin& mvinsch(const chtype ch, const Coordinates& pos);
+
+		CursWin* derwin(const Area& a) const;
 
 		CursWin& operator<<(const CurStr& str);
 

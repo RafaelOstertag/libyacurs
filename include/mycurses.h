@@ -74,7 +74,48 @@ enum {
 #undef tab
 #endif
 
-#ifdef HAVE_CURSES_H
+// Those macros collide with CursWin
+#ifdef addstr
+#undef addstr
+inline int addstr(const char *str) {
+    return waddstr(stdscr, str);
+}
+#endif
+
+#ifdef addnstr
+#undef addnstr
+inline int addnstr(const char *str, int n) {
+    return waddnstr(stdscr, str, n);
+}
+#endif
+
+#ifdef addch
+#undef addch
+inline int addch(const chtype ch) {
+    return waddch(stdscr, ch);
+}
+#endif
+
+#ifdef mvaddch
+#undef mvaddch
+inline int mvaddch(int y, int x, const chtype ch) {
+    return mvwaddch(stdscr, y, x, ch);
+}
+#endif
+
+#ifdef insch
+#undef insch
+inline int insch(const chtype ch) {
+    return winsch(stdscr, ch);
+}
+#endif
+
+#ifdef mvinsch
+#undef mvinsch
+inline int mvinsch(int y, int x, const chtype ch) {
+    return mvwinsch(stdscr, y, x, ch);
+}
+#endif
 
 #ifdef timeout
 #undef timeout
@@ -117,8 +158,6 @@ inline int refresh() {
     return wrefresh (stdscr);
 }
 #endif
-
-#endif // HAVE_CURSES_H
 
 #ifdef WADDSTR_USE_CHAR
 #ifdef __SVR4
@@ -182,5 +221,26 @@ inline int mvwaddnstr_c (WINDOW* win, int y, int x, const char* str, int n) {
 #else // MVWADDSTR_USE_CHAR
 #define mymvwaddnstr(a,b,c,d,e) mvwaddnstr(a,b,c,d,e)
 #endif // MVWADDSTR_USE_CHAR
+
+#ifdef WADDNSTR_USE_CHAR
+#ifdef __SVR4
+# include <stdlib.h>
+# include <string.h>
+#else // __SVR4
+# include <cstdlib>
+# include <cstring>
+#endif // __SVR4
+
+inline int waddnstr_c (WINDOW* win, const char* str, int n) {
+    char* tmp_ptr = strdup(str);
+    int retval = waddnstr (win, tmp_ptr, n);
+    memset (tmp_ptr, 0, strlen(tmp_ptr));
+    free (tmp_ptr);
+    return retval;
+}
+#define mywaddnstr(a,b,c) waddnstr_c(a,b,c)
+#else // WADDSTR_USE_CHAR
+#define mywaddnstr(a,b,c) waddnstr(a,b,c)
+#endif // WADDSTR_USE_CHAR
 
 #endif

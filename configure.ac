@@ -65,6 +65,20 @@ AC_COMPILE_IFELSE(
 	[AC_MSG_RESULT([no])
 	AC_DEFINE([WADDSTR_USE_CHAR],[1],[Set to 1 if waddstr() doesn't use const char*])])
 
+AC_MSG_CHECKING([whether waddnstr() use const char*])
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM([[
+	#ifdef HAVE_NCURSES_H
+	#include <ncurses.h>
+	#else
+	#include <curses.h>
+	#endif
+	const char teststr[] = "Const string";]],
+				  [[initscr(); waddnstr(stdscr, teststr, 4); endwin();]])],
+	[AC_MSG_RESULT([yes])],
+	[AC_MSG_RESULT([no])
+	AC_DEFINE([WADDNSTR_USE_CHAR],[1],[Set to 1 if waddnstr() doesn't use const char*])])
+
 AC_MSG_CHECKING([whether mvwaddstr() use const char*])
 AC_COMPILE_IFELSE(
 	[AC_LANG_PROGRAM([[
@@ -92,6 +106,7 @@ AC_COMPILE_IFELSE(
 	[AC_MSG_RESULT([yes])],
 	[AC_MSG_RESULT([no])
 	AC_DEFINE([MVWADDNSTR_USE_CHAR],[1],[Set to 1 if mvwaddnstr() doesn't use const char*])])
+
 AC_MSG_CHECKING([whether keypad() return int])
 AC_COMPILE_IFELSE(
 	[AC_LANG_PROGRAM([[

@@ -107,6 +107,13 @@ class Area: public Coordinates, public Size {
 	 */
 	Area& operator-=(const Margin& rhs);
 
+	/**
+	 * Coordinates of the lower right corner.
+	 *
+	 * @return coordinates of the lower right corner.
+	 */
+	Coordinates end() const;
+
 	static const Area& zero();
 };
 

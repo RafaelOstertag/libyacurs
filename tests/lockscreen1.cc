@@ -214,6 +214,7 @@ class ListBoxWin: public Window {
 	~ListBoxWin() {
 	    delete listbox;
 	    delete bclear;
+	    delete badd;
 	    delete bclose;
 	    delete vpack1;
 	    delete hpack1;
@@ -334,7 +335,7 @@ class MainWindow: public Window {
 	}
 
     public:
-	MainWindow(): Window(Margin(1,0,1,0)), win1(0), lbwin(0) {
+	MainWindow(): Window(Margin(1,0,1,0)), win1(0), lbwin(0), boxdialog(0) {
 	    button1=new Button("New Window");
 	    button2=new Button("Quit");
 	    button3=new Button("List Box Win");
@@ -360,6 +361,7 @@ class MainWindow: public Window {
 	    delete button1;
 	    delete button2;
 	    delete button3;
+	    delete button4;
 	    delete hpack1;
 
 	    EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
@@ -397,6 +399,8 @@ int main() {
 	delete mainwindow;
 	delete ulckdia;
 	delete lckscr;
+	delete Curses::statusline();
+	delete Curses::title();
 
 	Curses::end();
     } catch (std::exception& e) {

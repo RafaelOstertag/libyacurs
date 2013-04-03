@@ -145,6 +145,20 @@ inline int erase() {
 }
 #endif
 
+#ifdef mvdelch
+#undef mvdelch
+inline int mvdelch(int y, int x) {
+    return mvwdelch(stdscr, y, x);
+}
+#endif
+
+#ifdef delch
+#undef delch
+inline int erase() {
+    return wdelch(stdscr);
+}
+#endif
+
 #ifdef move
 #undef move
 inline int move (int y, int x) {

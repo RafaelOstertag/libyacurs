@@ -79,6 +79,11 @@ Area::operator-=(const Margin& rhs) {
     return *this;
 }
 
+Coordinates
+Area::end() const {
+    return Coordinates(x()+cols(), y()+rows());
+}
+
 bool
 operator!=(const Area& lhs, const Area& _a) {
     return !(lhs==_a);
@@ -91,8 +96,8 @@ operator-(const Area& lhs, const Margin& rhs) {
 }
 
 bool operator>(const Area& lhs, const Coordinates& rhs) {
-    return lhs.x()<=rhs.x() && lhs.cols()>=rhs.x() &&
-	lhs.y()<=rhs.y() && lhs.rows()>=rhs.y();
+    return lhs.x()<=rhs.x() && lhs.cols()+lhs.x()>=rhs.x() &&
+	lhs.y()<=rhs.y() && lhs.rows()+lhs.y()>=rhs.y();
 }
 
 bool operator<(const Coordinates& lhs, const Area& rhs) {

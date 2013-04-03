@@ -15,10 +15,6 @@
 
 namespace YACURS {
     namespace INTERNAL {
-
-	/**
-	 * Wrapper class for Curses Window.
-	 */
 	class CursWin {
 	    private:
 		/**
@@ -45,26 +41,12 @@ namespace YACURS {
 		 * Area available to client.
 		 */
 		Area __client_area;
-
-		/**
-		 * Not supported.
-		 *
-		 * @internal Supporting those would become
-		 * unintuitive. Depending on the implementation, for
-		 * instance, one copy of an object might set a border,
-		 * but all other instances wouldn't know about it, i.e
-		 * the Curses Window knows it, but the __box flag
-		 * isn't set accordingly. Another approach would be
-		 * making all instances aware of such changes, but
-		 * then again, why not using references in the first
-		 * place?.
-		 */
-		CursWin(const CursWin& cw);
 	    protected:
 		CursWin(WINDOW* win);
 
 	    public:
 		CursWin(const Area& _a);
+		CursWin(const CursWin& cw);
 		CursWin& operator=(const CursWin& cw);
 
 		~CursWin();
@@ -90,11 +72,6 @@ namespace YACURS {
 		 * created.
 		 */
 		bool created() const;
-
-		/**
-		 * Create the Curses Window.
-		 */
-		CursWin& create();
 
 		/**
 		 * Destroy Curses Window.
@@ -145,18 +122,27 @@ namespace YACURS {
 		
 		CursWin& addch(const chtype ch);
 
-		CursWin& mvaddch(const chtype ch, const Coordinates& pos);
+		CursWin& mvaddch(const Coordinates& pos, const chtype ch);
 
 		CursWin& insch(const chtype ch);
 
-		CursWin& mvinsch(const chtype ch, const Coordinates& pos);
+		CursWin& mvinsch(const Coordinates& pos, const chtype ch);
+
+		CursWin& mvdelch(const Coordinates& pos);
+
+		CursWin& delch();
 
 		CursWin* derwin(const Area& a) const;
 
+		CursWin* subwin(const Area& a) const;
+
+		CursWin& operator+=(const CurStr& str);
+
+		CursWin& operator+=(const std::string& str);
+		
 		CursWin& operator<<(const CurStr& str);
-
-		CursWin& operator<<(const std::string str);
-
+	
+		CursWin& operator<<(const std::string& str);
 	};
     } // namespace INTERNAL
 } // namespace YACURS

@@ -53,7 +53,7 @@ test2() {
 
 void
 test3() {
-    YACURS::INTERNAL::CursWin win(Area(10,0,10,10));
+    YACURS::INTERNAL::CursWin win(Area(0,10,10,10));
     win.box();
     for (int i=1; i<10; i++) {
 	YACURS::INTERNAL::CurStr str("abcdefghiklmnopqrstuvwxyz",
@@ -65,7 +65,7 @@ test3() {
 
 void
 test4() {
-    YACURS::INTERNAL::CursWin win(Area(20,0,10,10));
+    YACURS::INTERNAL::CursWin win(Area(0,20,10,10));
 
     char chr='A';
     for (int y=0; y<10; y++) {
@@ -90,21 +90,73 @@ test4() {
 
 void
 test5() {
-    YACURS::INTERNAL::CursWin win1(Area(30,0,10,10));
-    YACURS::INTERNAL::CursWin win2(Area(30,10,10,10));
-    for (int i=0; i<10; i++) {
-	YACURS::INTERNAL::CurStr str("abcdefghiklmnopqrstuvwxyz",
-				     Coordinates(i,9-i));
-	win1.addstrx(str);
-    }
-    win1.refresh();
+    for (int anic=0; anic<10; anic++) {
+	YACURS::INTERNAL::CursWin win1(Area(0,0,10,10));
+	for (int i=0; i<10; i++) {
+	    YACURS::INTERNAL::CurStr str("abcdefghiklmnopqrstuvwxyz",
+					 Coordinates(i,9-i));
+	    win1.addstrx(str);
+	    usleep(50000);
+	    win1.refresh();
+	}
+	
+	
+	YACURS::INTERNAL::CursWin win2(Area(10,0,10,10));
+	for (int i=0; i<10; i++) {
+	    YACURS::INTERNAL::CurStr str("abcdefghiklmnopqrstuvwxyz",
+					 Coordinates(i,i));
+	    win2.addstrx(str);
+	    usleep(50000);
+	    win2.refresh();
+	}
+	
+	YACURS::INTERNAL::CursWin win4(Area(10,10,10,10));
+	for (int i=0; i<10; i++) {
+	    YACURS::INTERNAL::CurStr str("abcdefghiklmnopqrstuvwxyz",
+					 Coordinates(0,i));
+	    win4.addnstr(str,9-i);
+	    usleep(50000);
+	    win4.refresh();
+	}
+	
+	YACURS::INTERNAL::CursWin win3(Area(0,10,10,10));
+	for (int i=0; i<10; i++) {
+	    YACURS::INTERNAL::CurStr str("abcdefghiklmnopqrstuvwxyz",
+					 Coordinates(0,i));
+	    win3.addnstr(str,i);
+	    usleep(50000);
+	    win3.refresh();
+	}
+	usleep(50000);
 
-    for (int i=0; i<10; i++) {
-	YACURS::INTERNAL::CurStr str("abcdefghiklmnopqrstuvwxyz",
-				     Coordinates(i,i));
-	win2.addstrx(str);
+	win1.clear();
+	win1.refresh();
+	usleep(50000);
+
+	win2.clear();
+	win2.refresh();
+	usleep(50000);
+
+	win3.clear();
+	win3.refresh();
+	usleep(50000);
+
+	win4.clear();
+	win4.refresh();
+	usleep(50000);
     }
-    win2.refresh();
+}
+
+void
+test6() {
+    YACURS::INTERNAL::CursWin win(Area(0,0,10,20));
+
+    std::string str("abcdefghijklmnopqrstuvwxyz");
+    for (int i=0; i<10; i++) {
+	win.move(Coordinates(0,i));
+	win.addstrx(str);
+	win.refresh();
+    }
 }
 
 int main() {
@@ -127,6 +179,13 @@ int main() {
     wrefresh(stdscr);
 
     test5();
+
+    sleep(1);
+   
+    wclear(stdscr);
+    wrefresh(stdscr);
+
+    test6();
 
     sleep(1);
 

@@ -84,9 +84,11 @@ extern "C" int __test_wgetch(void*) {
     static int* ptr2=__test_data;
 
     usleep(40000);
+
     if (*ptr2==0) {
-	abort();
+        abort();
     }
+
     return *ptr2++;
 }
 
@@ -102,20 +104,22 @@ void button_press_handler(Event& _e) {
     assert(_e==EVT_BUTTON_PRESS);
 
     EventEx<Button*>& ev=dynamic_cast<EventEx<Button*>&>(_e);
+
     if (ev.data() == b1) {
-	Curses::statusline()->push_msg(ifixed->input());
-	return;
+        Curses::statusline()->push_msg(ifixed->input());
+        return;
     }
 
     if (ev.data() == b2) {
-	Curses::statusline()->push_msg(idyn->input());
-	return;
+        Curses::statusline()->push_msg(idyn->input());
+        return;
     }
 
     if (ev.data() == b3) {
-	EventQueue::submit(EVT_QUIT);
-	return;
+        EventQueue::submit(EVT_QUIT);
+        return;
     }
+
     return;
 }
 
@@ -123,77 +127,79 @@ int main() {
     std::list<std::string> items;
 
     for (int i=0; i<120; i++) {
-	std::ostringstream n;
-	n<<i;
-	items.push_back("Long Name ListBox Item Number " + n.str());
+        std::ostringstream n;
+        n<<i;
+        items.push_back("Long Name ListBox Item Number " + n.str());
     }
+
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
 #endif
+
     try {
-	Curses::init();
+        Curses::init();
 
-	EventQueue::connect_event(EventConnectorFunction1(EVT_BUTTON_PRESS,button_press_handler));
+        EventQueue::connect_event(EventConnectorFunction1(EVT_BUTTON_PRESS,button_press_handler));
 
-	Curses::title(new LineObject(LineObject::POS_TOP,
-				     "Focus 1"));
-	Curses::statusline(new StatusLine);
+        Curses::title(new LineObject(LineObject::POS_TOP,
+                                     "Focus 1"));
+        Curses::statusline(new StatusLine);
 
-	Curses::mainwindow(new Window(Margin(1,0,1,0)));
-	Curses::mainwindow()->frame(true);
+        Curses::mainwindow(new Window(Margin(1,0,1,0)));
+        Curses::mainwindow()->frame(true);
 
-	VPack* vpack=new VPack;
-	HPack* hpack=new HPack;
-	b1=new Button("Button1");
-	b2=new Button("Button2");
-	b3=new Button("Button3");
-	ifixed=new Input<>(10);
-	idyn=new Input<>;
-	listbox=new ListBox<>;
-	listbox->set(items);
-	Input<>* ireadonly=new Input<>;
-	ireadonly->input("Read only");
-	ireadonly->readonly(true);
+        VPack* vpack=new VPack;
+        HPack* hpack=new HPack;
+        b1=new Button("Button1");
+        b2=new Button("Button2");
+        b3=new Button("Button3");
+        ifixed=new Input<>(10);
+        idyn=new Input<>;
+        listbox=new ListBox<>;
+        listbox->set(items);
+        Input<>* ireadonly=new Input<>;
+        ireadonly->input("Read only");
+        ireadonly->readonly(true);
 
-	vpack->add_back(ifixed);
-	vpack->add_back(idyn);
-	vpack->add_back(ireadonly);
-	vpack->add_back(listbox);
-	vpack->hinting(false);
+        vpack->add_back(ifixed);
+        vpack->add_back(idyn);
+        vpack->add_back(ireadonly);
+        vpack->add_back(listbox);
+        vpack->hinting(false);
 
-	hpack->add_back(b1);
-	hpack->add_back(b2);
-	hpack->add_back(b3);
-	hpack->hinting(false);
+        hpack->add_back(b1);
+        hpack->add_back(b2);
+        hpack->add_back(b3);
+        hpack->hinting(false);
 
-	vpack->add_back(hpack);
+        vpack->add_back(hpack);
 
-	assert(b1->label()=="Button1");
-	assert(b2->label()=="Button2");
-	assert(b3->label()=="Button3");
+        assert(b1->label()=="Button1");
+        assert(b2->label()=="Button2");
+        assert(b3->label()=="Button3");
 
-	Curses::mainwindow()->widget(vpack);
+        Curses::mainwindow()->widget(vpack);
 
-	Curses::run();
+        Curses::run();
 
-	delete b1;
-	delete b2;
-	delete b3;
-	delete idyn;
-	delete ifixed;
-	delete ireadonly;
-	delete listbox;
-	delete hpack;
-	delete vpack;
-	delete Curses::mainwindow();
-	delete Curses::title();
-	delete Curses::statusline();
-	Curses::end();
+        delete b1;
+        delete b2;
+        delete b3;
+        delete idyn;
+        delete ifixed;
+        delete ireadonly;
+        delete listbox;
+        delete hpack;
+        delete vpack;
+        delete Curses::mainwindow();
+        delete Curses::title();
+        delete Curses::statusline();
+        Curses::end();
     } catch (std::exception& e) {
-	Curses::end();
-	std::cerr << e.what() << std::endl;
-	return 1;
+        Curses::end();
+        std::cerr << e.what() << std::endl;
+        return 1;
     }
 
     return 0;

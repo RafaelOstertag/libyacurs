@@ -33,13 +33,13 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-int __test_data[]= { 
+int __test_data[]= {
     KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN,
     KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP, KEY_UP,
     KEY_CTRL_A, KEY_CTRL_E, KEY_CTRL_A,
     KEY_NPAGE, KEY_NPAGE, KEY_NPAGE, KEY_NPAGE, KEY_NPAGE,
     KEY_PPAGE, KEY_PPAGE, KEY_PPAGE, KEY_PPAGE, KEY_PPAGE,
-    'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 
+    'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o',
     'q', 0
 };
 
@@ -47,9 +47,11 @@ extern "C" int __test_wgetch(void*) {
     static int* ptr2=__test_data;
 
     usleep(70000);
+
     if (*ptr2==0) {
-	abort();
+        abort();
     }
+
     return *ptr2++;
 }
 
@@ -62,10 +64,11 @@ void key_handler(Event& _e) {
     switch (_ek.data()) {
     case 'q':
     case 'Q':
-	EventQueue::submit(Event(EVT_QUIT));
-	break;
+        EventQueue::submit(Event(EVT_QUIT));
+        break;
+
     default:
-	break;
+        break;
     }
 }
 
@@ -73,53 +76,54 @@ int main() {
     std::list<std::string> items;
 
     for (int i=0; i<24; i++) {
-	std::ostringstream n;
-	n<<i;
-	items.push_back("Long Name ListBox Item Number " + n.str());
+        std::ostringstream n;
+        n<<i;
+        items.push_back("Long Name ListBox Item Number " + n.str());
     }
+
     try {
-	Curses::init();
+        Curses::init();
 
-	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   "ListBox 1");
-	Curses::title(title);
+        LineObject* title = new LineObject(LineObject::POS_TOP,
+                                           "ListBox 1");
+        Curses::title(title);
 
-	// NOTE:
-	//
-	// The order the objects are created (MyWindow, StatusLine) is
-	// important here. Because MyWindow calls
-	// StatusLine::put_msg() on resize we have to make sure
-	// StatusLine is resized first. Since EventQueue calls the
-	// last EventConnector connected first, StatusLine has to be
-	// created AFTER MyWindow.
+        // NOTE:
+        //
+        // The order the objects are created (MyWindow, StatusLine) is
+        // important here. Because MyWindow calls
+        // StatusLine::put_msg() on resize we have to make sure
+        // StatusLine is resized first. Since EventQueue calls the
+        // last EventConnector connected first, StatusLine has to be
+        // created AFTER MyWindow.
 
-	Window* w1 = new Window(Margin(1,0,1,0));
-	w1->frame(true);
+        Window* w1 = new Window(Margin(1,0,1,0));
+        w1->frame(true);
 
-	ListBox<>* lb1 = new ListBox<>;
-	lb1->set(items);
+        ListBox<>* lb1 = new ListBox<>;
+        lb1->set(items);
 
-	w1->widget(lb1);
+        w1->widget(lb1);
 
-	StatusLine* sl = new StatusLine();
-	Curses::statusline(sl);
-	sl->push_msg("Press Q to quit");
+        StatusLine* sl = new StatusLine();
+        Curses::statusline(sl);
+        sl->push_msg("Press Q to quit");
 
-	Curses::mainwindow(w1);
+        Curses::mainwindow(w1);
 
-	EventQueue::connect_event(EventConnectorFunction1(EVT_KEY,&key_handler));
+        EventQueue::connect_event(EventConnectorFunction1(EVT_KEY,&key_handler));
 
-	Curses::run();
+        Curses::run();
 
-	delete title;
-	delete lb1;
-	delete w1;
-	delete sl;
-	Curses::end();
+        delete title;
+        delete lb1;
+        delete w1;
+        delete sl;
+        Curses::end();
     } catch (std::exception& e) {
-	Curses::end();
-	std::cerr << e.what() << std::endl;
-	return 1;
+        Curses::end();
+        std::cerr << e.what() << std::endl;
+        return 1;
     }
 
     return 0;

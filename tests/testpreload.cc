@@ -12,9 +12,9 @@
 extern "C" {
 #endif
     int __test_wgetch(void*);
-    
+
     int wgetch(void* wdc) {
-	return __test_wgetch(wdc);
+        return __test_wgetch(wdc);
     }
 
 #ifdef __cplusplus

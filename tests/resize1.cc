@@ -37,35 +37,35 @@
 
 int main() {
     try {
-	Curses::init();
+        Curses::init();
 
-	Window* w1 = new Window(Margin(1,0,1,0));
-	w1->frame(true);
+        Window* w1 = new Window(Margin(1,0,1,0));
+        w1->frame(true);
 
-	w1->realize();
-	w1->refresh(true);
+        w1->realize();
+        w1->refresh(true);
 
-	sleep(1);
+        sleep(1);
 
-	Size scrsz(Curses::inquiry_screensize());
-	Area newsz(0, 0, scrsz.rows()-1, scrsz.cols()-1);
-	w1->resize(newsz);
-	w1->refresh(true);
+        Size scrsz(Curses::inquiry_screensize());
+        Area newsz(0, 0, scrsz.rows()-1, scrsz.cols()-1);
+        w1->resize(newsz);
+        w1->refresh(true);
 
-	sleep(1);
+        sleep(1);
 
-	newsz=Area(0,0,scrsz.rows()-2, scrsz.cols()-2);
-	w1->resize(newsz);
-	w1->refresh(true);
+        newsz=Area(0,0,scrsz.rows()-2, scrsz.cols()-2);
+        w1->resize(newsz);
+        w1->refresh(true);
 
-	sleep(1);
+        sleep(1);
 
-	delete w1;
-	Curses::end();
+        delete w1;
+        Curses::end();
     } catch (std::exception& e) {
-	Curses::end();
-	std::cerr << e.what() << std::endl;
-	return 1;
+        Curses::end();
+        std::cerr << e.what() << std::endl;
+        return 1;
     }
 
     return 0;

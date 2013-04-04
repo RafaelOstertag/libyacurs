@@ -17,11 +17,11 @@
 
 int main() {
     try {
-	Curses::init();
-	Curses::end();
+        Curses::init();
+        Curses::end();
     } catch (std::exception &e) {
-	std::cerr << e.what() << std::endl;
-	return 1;
+        std::cerr << e.what() << std::endl;
+        return 1;
     }
 
     return 0;

@@ -749,107 +749,109 @@ extern "C" int __test_wgetch(void*) {
     static int* ptr2=__test_data;
 
     usleep(10000);
+
     if (*ptr2==0) {
-	abort();
+        abort();
     }
+
     return *ptr2++;
 }
 
 class MainWindow: public Window {
     private:
-	Button* badd;
-	Button* bdelete;
-	Button* bquit;
-	VPack* vpack1;
-	HPack* hpack1;
-	ListBox<>* listbox;
-	InputBox* inputdialog;
+        Button* badd;
+        Button* bdelete;
+        Button* bquit;
+        VPack* vpack1;
+        HPack* hpack1;
+        ListBox<>* listbox;
+        InputBox* inputdialog;
 
     protected:
-	void button_press_handler(Event& _e) {
-	    assert(_e==EVT_BUTTON_PRESS);
+        void button_press_handler(Event& _e) {
+            assert(_e==EVT_BUTTON_PRESS);
 
-	    EventEx<Button*>& _ex = dynamic_cast<EventEx<Button*>&>(_e);
+            EventEx<Button*>& _ex = dynamic_cast<EventEx<Button*>&>(_e);
 
-	    if (bquit==_ex.data()) {
-		EventQueue::submit(EVT_QUIT);
-		return;
-	    }
+            if (bquit==_ex.data()) {
+                EventQueue::submit(EVT_QUIT);
+                return;
+            }
 
-	    if (badd==_ex.data()) {
-		inputdialog=new InputBox("Add item", "String to add");
-		inputdialog->show();
-		return;
-	    }
+            if (badd==_ex.data()) {
+                inputdialog=new InputBox("Add item", "String to add");
+                inputdialog->show();
+                return;
+            }
 
-	    if (bdelete==_ex.data()) {
-		listbox->delete_selected();
-		return;
-	    }
-	}
+            if (bdelete==_ex.data()) {
+                listbox->delete_selected();
+                return;
+            }
+        }
 
-	void window_close_handler(Event& _e) {
-	    assert(_e==EVT_WINDOW_CLOSE);
+        void window_close_handler(Event& _e) {
+            assert(_e==EVT_WINDOW_CLOSE);
 
-	    EventEx<WindowBase*>& _ex = dynamic_cast<EventEx<WindowBase*>&>(_e);
+            EventEx<WindowBase*>& _ex = dynamic_cast<EventEx<WindowBase*>&>(_e);
 
-	    if (inputdialog==_ex.data()) {
-		if (inputdialog->dialog_state()==Dialog::DIALOG_OK) {
-		    listbox->add(inputdialog->input());
-		    Curses::statusline()->pop_msg();
-		    Curses::statusline()->push_msg("Dialog OK");
-		} else {
-		    Curses::statusline()->pop_msg();
-		    Curses::statusline()->push_msg("Dialog Cancelled");
-		}
+            if (inputdialog==_ex.data()) {
+                if (inputdialog->dialog_state()==Dialog::DIALOG_OK) {
+                    listbox->add(inputdialog->input());
+                    Curses::statusline()->pop_msg();
+                    Curses::statusline()->push_msg("Dialog OK");
+                } else {
+                    Curses::statusline()->pop_msg();
+                    Curses::statusline()->push_msg("Dialog Cancelled");
+                }
 
-		delete inputdialog;
-		inputdialog=0;
-		return;
-	    }
-	}
+                delete inputdialog;
+                inputdialog=0;
+                return;
+            }
+        }
 
     public:
-	MainWindow(const Margin& _m): Window(_m),
-				      badd(0),
-				      bdelete(0),
-				      bquit(0),
-				      vpack1(0),
-				      hpack1(0),
-				      listbox(0),
-				      inputdialog(0) {
-	    badd=new Button("Add");
-	    bdelete=new Button("Delete");
-	    bquit=new Button("Quit");
+        MainWindow(const Margin& _m): Window(_m),
+            badd(0),
+            bdelete(0),
+            bquit(0),
+            vpack1(0),
+            hpack1(0),
+            listbox(0),
+            inputdialog(0) {
+            badd=new Button("Add");
+            bdelete=new Button("Delete");
+            bquit=new Button("Quit");
 
-	    vpack1=new VPack;
-	    hpack1=new HPack;
+            vpack1=new VPack;
+            hpack1=new HPack;
 
-	    listbox=new ListBox<>;
+            listbox=new ListBox<>;
 
-	    vpack1->add_back(badd);
-	    vpack1->add_back(bdelete);
-	    vpack1->add_back(bquit);
+            vpack1->add_back(badd);
+            vpack1->add_back(bdelete);
+            vpack1->add_back(bquit);
 
-	    hpack1->add_back(listbox);
-	    hpack1->add_back(vpack1);
+            hpack1->add_back(listbox);
+            hpack1->add_back(vpack1);
 
-	    widget(hpack1);
+            widget(hpack1);
 
-	    EventQueue::connect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
-	    EventQueue::connect_event(EventConnectorMethod1<MainWindow>(EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
-	}
+            EventQueue::connect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
+            EventQueue::connect_event(EventConnectorMethod1<MainWindow>(EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
+        }
 
-	~MainWindow() {
-	    EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
-	    EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
-	    delete badd;
-	    delete bdelete;
-	    delete bquit;
-	    delete vpack1;
-	    delete hpack1;
-	    delete listbox;
-	}
+        ~MainWindow() {
+            EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
+            EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
+            delete badd;
+            delete bdelete;
+            delete bquit;
+            delete vpack1;
+            delete hpack1;
+            delete listbox;
+        }
 };
 
 int main() {
@@ -857,31 +859,32 @@ int main() {
     std::cout << getpid() << std::endl;
     sleep(15);
 #endif
+
     try {
-	Curses::init();
+        Curses::init();
 
-	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   "ListBox 2");
-	Curses::title(title);
+        LineObject* title = new LineObject(LineObject::POS_TOP,
+                                           "ListBox 2");
+        Curses::title(title);
 
-	MainWindow* w1 = new MainWindow(Margin(1,0,1,0));
-	w1->frame(true);
+        MainWindow* w1 = new MainWindow(Margin(1,0,1,0));
+        w1->frame(true);
 
-	StatusLine* sl = new StatusLine();
-	Curses::statusline(sl);
+        StatusLine* sl = new StatusLine();
+        Curses::statusline(sl);
 
-	Curses::mainwindow(w1);
+        Curses::mainwindow(w1);
 
-	Curses::run();
+        Curses::run();
 
-	delete title;
-	delete w1;
-	delete sl;
-	Curses::end();
+        delete title;
+        delete w1;
+        delete sl;
+        Curses::end();
     } catch (std::exception& e) {
-	Curses::end();
-	std::cerr << e.what() << std::endl;
-	return 1;
+        Curses::end();
+        std::cerr << e.what() << std::endl;
+        return 1;
     }
 
     return 0;

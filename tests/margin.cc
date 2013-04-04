@@ -18,32 +18,32 @@ int main() {
     Margin r = m1 + m2;
 
     if ( r.top() != 11 ||
-	 r.left() != 13 ||
-	 r.bottom() != 17 ||
-	 r.right() != 19 )
-	return 1;
+            r.left() != 13 ||
+            r.bottom() != 17 ||
+            r.right() != 19 )
+        return 1;
 
     r = m1 - m2;
 
     if ( r.top() != 2 ||
-	 r.left() != 3 ||
-	 r.bottom() != 5 ||
-	 r.right() != 7 )
-	return 1;
+            r.left() != 3 ||
+            r.bottom() != 5 ||
+            r.right() != 7 )
+        return 1;
 
     if ( r != m1 - m2)
-	return 1;
+        return 1;
 
     if (!(r == m1 - m2))
-	return 1;
+        return 1;
 
     m1 = m2;
 
     if ( m1 != m2 )
-	return 1;
+        return 1;
 
     if (!(m1 == m2))
-	return 1;
+        return 1;
 
     return 0;
 }

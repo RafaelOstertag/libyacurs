@@ -39,38 +39,39 @@ extern "C" int __test_wgetch(void*) {
 
 class MyWindow: public Window {
     private:
-	Window* win;
+        Window* win;
     public:
-	void show() {
-	    Window::show();
-	    win=new Window(Margin(3,3,3,3));
-	    win->frame(true);
-	    win->show();
-	}
+        void show() {
+            Window::show();
+            win=new Window(Margin(3,3,3,3));
+            win->frame(true);
+            win->show();
+        }
 
-	void close() {
-	    assert(win!=0);
-	    win->close();
-	    delete win;
-	    win=0;
-	}
-	    
-	MyWindow(const Margin& m) : Window(m), win(0) {
-	}
+        void close() {
+            assert(win!=0);
+            win->close();
+            delete win;
+            win=0;
+        }
+
+        MyWindow(const Margin& m) : Window(m), win(0) {
+        }
 };
 
 void key_handler(Event& _e) {
     assert(_e == EVT_KEY);
- 
+
     EventEx<int>& _ek = dynamic_cast<EventEx<int>&>(_e);
 
     switch (_ek.data()) {
     case 'q':
     case 'Q':
-	EventQueue::submit(Event(EVT_QUIT));
-	break;
+        EventQueue::submit(Event(EVT_QUIT));
+        break;
+
     default:
-	break;
+        break;
     }
 }
 
@@ -79,77 +80,81 @@ int main() {
     std::cout << getpid() << std::endl;
     sleep(15);
 #endif
+
     try {
 
-	Curses::init();
+        Curses::init();
 
-	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   "Resize 5: Overlapping windows");
-	Curses::title(title);
+        LineObject* title = new LineObject(LineObject::POS_TOP,
+                                           "Resize 5: Overlapping windows");
+        Curses::title(title);
 
-	// NOTE:
-	// 
-	// The order the objects are created (MyWindow, StatusLine) is
-	// important here. Because MyWindow calls
-	// StatusLine::put_msg() on resize we have to make sure
-	// StatusLine is resized first. Since EventQueue calls the
-	// last EventConnector connected first, StatusLine has to be
-	// created AFTER MyWindow.
+        // NOTE:
+        //
+        // The order the objects are created (MyWindow, StatusLine) is
+        // important here. Because MyWindow calls
+        // StatusLine::put_msg() on resize we have to make sure
+        // StatusLine is resized first. Since EventQueue calls the
+        // last EventConnector connected first, StatusLine has to be
+        // created AFTER MyWindow.
 
-	MyWindow* w1 = new MyWindow(Margin(1,0,1,0));
-	w1->frame(true);
+        MyWindow* w1 = new MyWindow(Margin(1,0,1,0));
+        w1->frame(true);
 
-	StatusLine* sl = new StatusLine();
-	sl->push_msg("Press Q to quit");
-	Curses::statusline(sl);
+        StatusLine* sl = new StatusLine();
+        sl->push_msg("Press Q to quit");
+        Curses::statusline(sl);
 
-	HPack* hpack = new HPack;
-	Label* hl1 = new Label("abcdefghijklmnopqrstuvwxyz");
-	Label* hl2 = new Label("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-	Label* hl3 = new Label("0123456789");
+        HPack* hpack = new HPack;
+        Label* hl1 = new Label("abcdefghijklmnopqrstuvwxyz");
+        Label* hl2 = new Label("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        Label* hl3 = new Label("0123456789");
 
-    
-	hpack->add_front(hl1);
-	hpack->add_front(hl2);
-	hpack->add_back(hl3);
 
-	VPack* vpack = new VPack;
-	Label* vls[20];
-	for(int i=0; i<20; i++) {
-	    std::ostringstream _i;
-	    _i<<i;
-	    vls[i]=new Label("VLabel " + _i.str());
-	    vpack->add_back(vls[i]);
-	}
-	
-	hpack->add_front(vpack);
+        hpack->add_front(hl1);
+        hpack->add_front(hl2);
+        hpack->add_back(hl3);
 
-	w1->widget(hpack);
+        VPack* vpack = new VPack;
+        Label* vls[20];
 
-	Curses::mainwindow(w1);
+        for(int i=0; i<20; i++) {
+            std::ostringstream _i;
+            _i<<i;
+            vls[i]=new Label("VLabel " + _i.str());
+            vpack->add_back(vls[i]);
+        }
 
-	EventQueue::connect_event(EventConnectorFunction1(EVT_KEY,&key_handler));
+        hpack->add_front(vpack);
 
-	Curses::run();
+        w1->widget(hpack);
 
-	delete vpack;
-	for(int i=0; i<20; i++) {
-	    delete vls[i];
-	}
-	delete title;
-	delete hl1;
-	delete hl2;
-	delete hl3;
-	delete hpack;
-	delete w1;
-	delete sl;
-	Curses::end();
+        Curses::mainwindow(w1);
+
+        EventQueue::connect_event(EventConnectorFunction1(EVT_KEY,&key_handler));
+
+        Curses::run();
+
+        delete vpack;
+
+        for(int i=0; i<20; i++) {
+            delete vls[i];
+        }
+
+        delete title;
+        delete hl1;
+        delete hl2;
+        delete hl3;
+        delete hpack;
+        delete w1;
+        delete sl;
+        Curses::end();
 
     } catch (std::exception& e) {
-	Curses::end();
+        Curses::end();
 
-	std::cerr << e.what() << std::endl;
-	return 1;
+        std::cerr << e.what() << std::endl;
+        return 1;
     }
 
     return 0;

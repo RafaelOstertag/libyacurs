@@ -21,70 +21,74 @@
 
 class Handler {
     private:
-	EVENT_TYPE expected_evt;
-	int calls;
+        EVENT_TYPE expected_evt;
+        int calls;
     public:
-	Handler(EVENT_TYPE expected):
-	    expected_evt(expected), calls(0) {}
-	virtual void handler(Event& e) {
-	    if (e.type() != expected_evt) std::abort();
-	    calls++;
-	}
-	int getCalls() { return calls; }
+        Handler(EVENT_TYPE expected):
+            expected_evt(expected), calls(0) {}
+        virtual void handler(Event& e) {
+            if (e.type() != expected_evt) std::abort();
+
+            calls++;
+        }
+        int getCalls() {
+            return calls;
+        }
 };
 
 class WinChHandler: public Handler {
     public:
-	inline WinChHandler(): Handler(EVT_SIGWINCH) {}
-	void handler(Event& e) {
-	    Handler::handler(e);
-	    // Test if we received a Size reference.
-	    dynamic_cast<EventEx<Size>&>(e).data();
-	    std::cout << "WinChHandler\r" << std::endl;
-	}
+        inline WinChHandler(): Handler(EVT_SIGWINCH) {}
+        void handler(Event& e) {
+            Handler::handler(e);
+            // Test if we received a Size reference.
+            dynamic_cast<EventEx<Size>&>(e).data();
+            std::cout << "WinChHandler\r" << std::endl;
+        }
 };
 
 class AlrmHandler: public Handler {
     public:
-	inline AlrmHandler(): Handler(EVT_SIGALRM) {}
-	void handler(Event& e) { 
-	    std::cout << "WinChHandler\r" << std::endl;
-	    Handler::handler(e); 
-	}
+        inline AlrmHandler(): Handler(EVT_SIGALRM) {}
+        void handler(Event& e) {
+            std::cout << "WinChHandler\r" << std::endl;
+            Handler::handler(e);
+        }
 };
 
 int main() {
     try {
-	WinChHandler whandler;
-	AlrmHandler ahandler;
+        WinChHandler whandler;
+        AlrmHandler ahandler;
 
-	EventQueue::connect_event(EventConnectorMethod1<WinChHandler>(EVT_SIGWINCH, &whandler,&WinChHandler::handler) );
-	EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler,&AlrmHandler::handler) );
+        EventQueue::connect_event(EventConnectorMethod1<WinChHandler>(EVT_SIGWINCH, &whandler,&WinChHandler::handler) );
+        EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler,&AlrmHandler::handler) );
 
-	EventQueue::submit(EventEx<Size>(EVT_SIGWINCH, Area ()));
-	EventQueue::submit(Event(EVT_SIGALRM));
-	EventQueue::submit(Event(EVT_QUIT));
+        EventQueue::submit(EventEx<Size>(EVT_SIGWINCH, Area ()));
+        EventQueue::submit(Event(EVT_SIGALRM));
+        EventQueue::submit(Event(EVT_QUIT));
 
-	Curses::init();
-	// EventQueue:run() blocks in getch().
-	ungetch('a');
+        Curses::init();
+        // EventQueue:run() blocks in getch().
+        ungetch('a');
 
-	EventQueue::run();
+        EventQueue::run();
 
-	if (whandler.getCalls() != 1)
-	    goto _ERR;
-	if (ahandler.getCalls() != 1)
-	    goto _ERR;
+        if (whandler.getCalls() != 1)
+            goto _ERR;
 
-	Curses::end();
+        if (ahandler.getCalls() != 1)
+            goto _ERR;
+
+        Curses::end();
     } catch (std::exception& e) {
-	Curses::end();
-	std::cerr << e.what() << std::endl;
-	return 1;
+        Curses::end();
+        std::cerr << e.what() << std::endl;
+        return 1;
     }
 
     return 0;
- _ERR:
+_ERR:
     Curses::end();
     return 1;
 }

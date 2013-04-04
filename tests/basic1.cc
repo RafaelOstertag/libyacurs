@@ -29,23 +29,26 @@ void alrm(Event& _e) {
 
     switch (counter) {
     case 0:
-	counter++;
-	title->alignment(LineObject::RIGHT);
-	alarm(1);
-	break;
+        counter++;
+        title->alignment(LineObject::RIGHT);
+        alarm(1);
+        break;
+
     case 1:
-	counter++;
-	title->alignment(LineObject::CENTER);
-	alarm(1);
-	break;
+        counter++;
+        title->alignment(LineObject::CENTER);
+        alarm(1);
+        break;
+
     case 2:
-	counter++;
-	title->alignment(LineObject::LEFT);
-	alarm(1);
-	break;
+        counter++;
+        title->alignment(LineObject::LEFT);
+        alarm(1);
+        break;
+
     default:
-	EventQueue::submit(Event(EVT_QUIT));
-	break;
+        EventQueue::submit(Event(EVT_QUIT));
+        break;
     }
 }
 
@@ -54,31 +57,32 @@ int main() {
     std::cout << getpid() << std::endl;
     sleep(15);
 #endif
+
     try {
-	Curses::init();
+        Curses::init();
 
-	title = new LineObject(LineObject::POS_TOP,
-					   "Basic 1");
-	Curses::title(title);
+        title = new LineObject(LineObject::POS_TOP,
+                               "Basic 1");
+        Curses::title(title);
 
-	Window* w1 = new Window(Margin(1,0,0,0));
-	w1->frame(true);
+        Window* w1 = new Window(Margin(1,0,0,0));
+        w1->frame(true);
 
-	Curses::mainwindow(w1);
+        Curses::mainwindow(w1);
 
-	EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
+        EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
 
-	alarm(1);
-	Curses::run();
+        alarm(1);
+        Curses::run();
 
-	delete title;
-	delete w1;
+        delete title;
+        delete w1;
 
-	Curses::end();
+        Curses::end();
     } catch (std::exception& e) {
-	Curses::end();
-	std::cerr << e.what() << std::endl;
-	return 1;
+        Curses::end();
+        std::cerr << e.what() << std::endl;
+        return 1;
     }
 
     return 0;

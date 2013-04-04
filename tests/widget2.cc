@@ -27,28 +27,35 @@ void alrm(Event& _e) {
     static int i=0;
 
     assert(_e == EVT_SIGALRM);
+
     switch (i++) {
     case 0:
-	input1->input("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
-	break;
+        input1->input("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+        break;
+
     case 1:
-	input2->input("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
-	break;
+        input2->input("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+        break;
+
     case 2:
-	label1->label("abcdefghiklmnopqrstuvwxyz");
-	break;
+        label1->label("abcdefghiklmnopqrstuvwxyz");
+        break;
+
     case 3:
-	label2->label("abcdefghiklmnopqrstuvwxyz");
-	break;
+        label2->label("abcdefghiklmnopqrstuvwxyz");
+        break;
+
     case 4:
-	label1->label("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
-	break;
+        label1->label("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+        break;
+
     case 5:
-	label2->label("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
-	break;
+        label2->label("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+        break;
+
     default:
-	EventQueue::submit(Event(EVT_QUIT));
-	break;
+        EventQueue::submit(Event(EVT_QUIT));
+        break;
     }
 
     alarm(1);
@@ -59,59 +66,60 @@ int main() {
     std::cout << getpid() << std::endl;
     sleep(15);
 #endif
+
     try {
-	Curses::init();
+        Curses::init();
 
-	LineObject* title = new LineObject(LineObject::POS_TOP,
-					   "Widget 2: setting text in realized Input/Label");
-	Curses::title(title);
+        LineObject* title = new LineObject(LineObject::POS_TOP,
+                                           "Widget 2: setting text in realized Input/Label");
+        Curses::title(title);
 
-	Window* w1 = new Window(Margin(1,0,0,0));
-	w1->frame(true);
+        Window* w1 = new Window(Margin(1,0,0,0));
+        w1->frame(true);
 
-	hpack = new HPack;
-	vpack1 = new VPack;
-	vpack2 = new VPack;
+        hpack = new HPack;
+        vpack1 = new VPack;
+        vpack2 = new VPack;
 
-	label1 = new Label("Label1");
-	input1 = new Input<>;
-	vpack1->add_back(label1);
-	vpack1->add_back(input1);
-	vpack1->hinting(false);
+        label1 = new Label("Label1");
+        input1 = new Input<>;
+        vpack1->add_back(label1);
+        vpack1->add_back(input1);
+        vpack1->hinting(false);
 
-	label2 = new Label("Label2");
-	input2 = new Input<>;
-	vpack2->add_back(label2);
-	vpack2->add_back(input2);
-	vpack2->hinting(false);
+        label2 = new Label("Label2");
+        input2 = new Input<>;
+        vpack2->add_back(label2);
+        vpack2->add_back(input2);
+        vpack2->hinting(false);
 
-	hpack->add_back(vpack1);
-	hpack->add_back(vpack2);
+        hpack->add_back(vpack1);
+        hpack->add_back(vpack2);
 
-	w1->widget(hpack);
+        w1->widget(hpack);
 
-	Curses::mainwindow(w1);
+        Curses::mainwindow(w1);
 
-	EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
+        EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
 
-	alarm(5);
-	Curses::run();
+        alarm(5);
+        Curses::run();
 
-	delete title;
-	delete hpack;
-	delete vpack1;
-	delete vpack2;
-	delete label1;
-	delete label2;
-	delete input1;
-	delete input2;
-	delete w1;
+        delete title;
+        delete hpack;
+        delete vpack1;
+        delete vpack2;
+        delete label1;
+        delete label2;
+        delete input1;
+        delete input2;
+        delete w1;
 
-	Curses::end();
+        Curses::end();
     } catch (std::exception& e) {
-	Curses::end();
-	std::cerr << e.what() << std::endl;
-	return 1;
+        Curses::end();
+        std::cerr << e.what() << std::endl;
+        return 1;
     }
 
     return 0;

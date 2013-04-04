@@ -43,8 +43,8 @@ CursWin::CursWin(const Area& _a): __window(0),
 
     if ( (__window=newwin(__area.rows(),
 			  __area.cols(),
-			  __area.x(),
-			  __area.y()))==0 )
+			  __area.y(),
+			  __area.x()))==0 )
 	throw CursesException("newwin");
 }
 

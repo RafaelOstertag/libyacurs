@@ -22,15 +22,19 @@
 # include "config.h"
 #endif
 
+#include <vector>
 #include <cassert>
 
 #include "colors.h"
 #include "yacursex.h"
 
-using namespace YAPET::UI;
+using namespace YACURS;
 
 bool Colors::__initialized = false;
 
+std::vector<CursColor> __colors;
+
+#if 0
 #ifndef _GIRLYCOLORS
 color Colors::__colors[] = {
     // Normal
@@ -93,6 +97,7 @@ color Colors::__colors[] = {
     {0, 0, 0, 0}
 };
 #endif
+#endif
 void
 Colors::init_colors() {
     if (__initialized) return;
@@ -103,7 +108,6 @@ Colors::init_colors() {
     }
 
     start_color();
-    assert (__colors[CHECKBOXGROUP_TITLE+1].no == 0);
 
     for (int i = 0; __colors[i].no != 0; i++)
 	init_pair (__colors[i].no,

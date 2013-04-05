@@ -108,11 +108,11 @@ Button::refresh(bool immediate) {
     assert(widget_subwin()!=0);
 
     if (focus()) {
-	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_FOCUS);
+	YACURS::Colors::set_color(widget_subwin(), YACURS::BUTTON_FOCUS);
 	if (leaveok(widget_subwin(), FALSE)==ERR)
 	    throw CursesException("leaveok");
     } else {
-	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::BUTTON_NOFOCUS);
+	YACURS::Colors::set_color(widget_subwin(), YACURS::BUTTON_NOFOCUS);
 	if (leaveok(widget_subwin(), TRUE)==ERR)
 	    throw CursesException("leaveok");
     }

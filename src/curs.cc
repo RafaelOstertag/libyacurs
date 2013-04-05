@@ -107,7 +107,7 @@ Curses::init() {
     // We don't fail if that doesn't work, so no check on retval.
     curs_set(0);
 
-    YAPET::UI::Colors::init_colors();
+    YACURS::Colors::init_colors();
 
     // Curses clears stdscr upon first call to getch, which may
     // produce undesired results, i.e. already created Curses Windows

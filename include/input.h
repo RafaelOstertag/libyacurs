@@ -538,14 +538,14 @@ Input<T>::refresh(bool immediate) {
     // widget.
 
     if (focus()) {
-	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::INPUTWIDGET_FOCUS);
-	YAPET::UI::Colors::set_bg(widget_subwin(), YAPET::UI::INPUTWIDGET_FOCUS);
+	YACURS::Colors::set_color(widget_subwin(), YACURS::INPUTWIDGET_FOCUS);
+	YACURS::Colors::set_bg(widget_subwin(), YACURS::INPUTWIDGET_FOCUS);
 	curs_set(1);
 	if (leaveok(widget_subwin(), FALSE)==ERR)
 	    throw CursesException("leaveok");
     } else {
-	YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::INPUTWIDGET_NOFOCUS);
-	YAPET::UI::Colors::set_bg(widget_subwin(), YAPET::UI::INPUTWIDGET_NOFOCUS);
+	YACURS::Colors::set_color(widget_subwin(), YACURS::INPUTWIDGET_NOFOCUS);
+	YACURS::Colors::set_bg(widget_subwin(), YACURS::INPUTWIDGET_NOFOCUS);
 	curs_set(0);
 	if (leaveok(widget_subwin(), TRUE)==ERR)
 	    throw CursesException("leaveok");

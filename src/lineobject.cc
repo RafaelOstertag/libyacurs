@@ -155,8 +155,8 @@ LineObject::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
     put_line();
 
-    YAPET::UI::Colors::set_color(curses_window(), YAPET::UI::DEFAULT);
-    YAPET::UI::Colors::set_bg(curses_window(), YAPET::UI::DEFAULT);
+    YACURS::Colors::set_color(curses_window(), YACURS::DEFAULT);
+    YACURS::Colors::set_bg(curses_window(), YACURS::DEFAULT);
 
     WindowBase::refresh(immediate);
 

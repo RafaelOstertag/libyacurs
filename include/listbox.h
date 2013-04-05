@@ -429,9 +429,9 @@ class ListBox: public Widget {
 		it++, i++) {
 
 		if (i==__curs_pos)
-		    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX_HILITE);
+		    YACURS::Colors::set_color(widget_subwin(), YACURS::LISTBOX_HILITE);
 		else
-		    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX);
+		    YACURS::Colors::set_color(widget_subwin(), YACURS::LISTBOX);
 
 		// We prepare our own line, so that we can fill up
 		// with spaces
@@ -456,7 +456,7 @@ class ListBox: public Widget {
 
 	    // This is required in order to color the listbox properly
 	    // when highlighting hits the bottom under X/Open Curses
-	    YAPET::UI::Colors::set_color(widget_subwin(), YAPET::UI::LISTBOX);
+	    YACURS::Colors::set_color(widget_subwin(), YACURS::LISTBOX);
 
 	    //
 	    // Box creation and scroll marker setting was moved here,

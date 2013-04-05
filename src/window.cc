@@ -75,10 +75,10 @@ Window::widget() const {
 void
 Window::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
-    YAPET::UI::Colors::set_color(curses_window(), YAPET::UI::DEFAULT);
+    YACURS::Colors::set_color(curses_window(), YACURS::DEFAULT);
     // Setting background also helps getting rid of artifacts of
     // overlapped windows.
-    YAPET::UI::Colors::set_bg(curses_window(), YAPET::UI::DEFAULT);
+    YACURS::Colors::set_bg(curses_window(), YACURS::DEFAULT);
 
     WindowBase::refresh(immediate);
 

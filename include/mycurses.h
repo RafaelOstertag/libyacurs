@@ -154,7 +154,7 @@ inline int mvdelch(int y, int x) {
 
 #ifdef delch
 #undef delch
-inline int erase() {
+inline int delch() {
     return wdelch(stdscr);
 }
 #endif

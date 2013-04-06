@@ -20,6 +20,7 @@
 #include "focusmanager.h"
 #include "curs.h"
 #include "colors.h"
+#include "colorparser.h"
 #include "windowbase.h"
 #include "lineobject.h"
 #include "statusline.h"

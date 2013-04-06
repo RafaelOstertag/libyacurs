@@ -145,6 +145,11 @@ namespace YACURS {
              * The attribute used when no color is available.
              */
             int attr;
+
+	    CursColor(): no(-1),
+			 fg(-1),
+			 bg(-1),
+			 attr(-1) {}
     };
 
     /**

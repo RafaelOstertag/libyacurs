@@ -26,13 +26,14 @@
 #include <cassert>
 
 #include "colors.h"
+#include "colorparser.h"
 #include "yacursex.h"
 
 using namespace YACURS;
 
 bool Colors::__initialized = false;
 
-std::vector<CursColor> __colors;
+std::vector<CursColor> Colors::__colors;
 
 #if 0
 #ifndef _GIRLYCOLORS
@@ -102,6 +103,11 @@ void
 Colors::init_colors() {
     if (__initialized) return;
 
+    ColorParser cp;
+
+    // There is currently only the default color scheme
+    __colors=cp();
+
     if (has_colors() == FALSE) {
 	__initialized = true;
 	return;
@@ -109,10 +115,10 @@ Colors::init_colors() {
 
     start_color();
 
-    for (int i = 0; __colors[i].no != 0; i++)
-	init_pair (__colors[i].no,
-		   __colors[i].fg,
-		   __colors[i].bg);
+    for (int i = 0; i < NUMBER_OF_COLORS ; i++)
+	init_pair (__colors.at(i).no,
+		   __colors.at(i).fg,
+		   __colors.at(i).bg);
 
     __initialized = true;
 }
@@ -124,16 +130,16 @@ Colors::set_color (WINDOW* w, COLORS c) {
 
     if (has_colors() == TRUE) {
 #if NCURSES_VERSION_PATCH < 20100313
-        wattrset(w, COLOR_PAIR (__colors[c].no));
+        wattrset(w, COLOR_PAIR (__colors.at(c).no));
 #else
-	if (wattrset(w, COLOR_PAIR (__colors[c].no))==ERR)
+	if (wattrset(w, COLOR_PAIR (__colors.at(c).no))==ERR)
 	    throw CursesException("wattrset");
 #endif
     } else {
 #if NCURSES_VERSION_PATCH < 20100313
-        wattrset(w, __colors[c].attr);
+        wattrset(w, __colors.at(c).attr);
 #else
-	if (wattrset(w, __colors[c].attr)==ERR)
+	if (wattrset(w, __colors.at(c).attr)==ERR)
 	    throw CursesException("wattrset");
 #endif
     }
@@ -145,15 +151,15 @@ Colors::set_bg(WINDOW* w, COLORS c) {
 	throw ColorsNotInitialized();
 
     if (has_colors() == TRUE)
-	wbkgd(w, ' ' | COLOR_PAIR (__colors[c].no) );
+	wbkgd(w, ' ' | COLOR_PAIR (__colors.at(c).no) );
     else
-	wbkgd(w, ' ' | __colors[c].attr);
+	wbkgd(w, ' ' | __colors.at(c).attr);
 }
 
 short
 Colors::get_color (COLORS c) {
     if (has_colors() == TRUE) {
-	return __colors[c].no;
+	return __colors.at(c).no;
     }
 
     return 0;

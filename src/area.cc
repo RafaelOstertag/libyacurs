@@ -4,11 +4,11 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_CASSERT
 #include <cassert>
-#endif // HAVE_CASSERT
 
 #include "area.h"
+
+using namespace YACURS;
 
 //
 // Private
@@ -85,22 +85,24 @@ Area::end() const {
 }
 
 bool
-operator!=(const Area& lhs, const Area& _a) {
+YACURS::operator!=(const Area& lhs, const Area& _a) {
     return !(lhs==_a);
 }
 
 Area
-operator-(const Area& lhs, const Margin& rhs) {
+YACURS::operator-(const Area& lhs, const Margin& rhs) {
     Area tmp = lhs;
     return tmp-=rhs;
 }
 
-bool operator>(const Area& lhs, const Coordinates& rhs) {
+bool 
+YACURS::operator>(const Area& lhs, const Coordinates& rhs) {
     return lhs.x()<=rhs.x() && lhs.cols()+lhs.x()>=rhs.x() &&
 	lhs.y()<=rhs.y() && lhs.rows()+lhs.y()>=rhs.y();
 }
 
-bool operator<(const Coordinates& lhs, const Area& rhs) {
+bool 
+YACURS::operator<(const Coordinates& lhs, const Area& rhs) {
     return rhs>lhs;
 }
 

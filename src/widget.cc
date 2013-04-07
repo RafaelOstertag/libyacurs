@@ -3,10 +3,11 @@
 #include <cassert>
 #include <cstdlib>
 
-
 #include "yacursex.h"
 #include "widget.h"
 #include "eventqueue.h"
+
+using namespace YACURS;
 
 //
 // Private

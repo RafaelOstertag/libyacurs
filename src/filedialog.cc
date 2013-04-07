@@ -12,6 +12,8 @@
 
 #include "filedialog.h"
 
+using namespace YACURS;
+
 //
 // Private
 //

@@ -15,26 +15,27 @@
 #include "label.h"
 #include "input.h"
 
-/**
- */
-class InputBox: public Dialog {
-    private:
-	Label* __message;
-	Input<>* __input;
-	VPack* __vpack;
+namespace YACURS {
 
-	// Not supported
-	InputBox& operator=(const InputBox&);
-    public:
-	InputBox(const std::string& _title,
-		   const std::string& _message,
-		   DIALOG_TYPE _dt=OKCANCEL);
+    class InputBox: public Dialog {
+	private:
+	    Label* __message;
+	    Input<>* __input;
+	    VPack* __vpack;
 
-	virtual ~InputBox();
+	    // Not supported
+	    InputBox& operator=(const InputBox&);
+	public:
+	    InputBox(const std::string& _title,
+		     const std::string& _message,
+		     DIALOG_TYPE _dt=OKCANCEL);
 
-	const std::string& input() const;
+	    virtual ~InputBox();
 
-	void clear();
-};
+	    const std::string& input() const;
+
+	    void clear();
+    };
+}
 
 #endif // INPUTBOX_H

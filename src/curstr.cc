@@ -38,7 +38,7 @@ CurStr& CurStr::operator=(const CurStr& cs) {
     return *this;
 }
 
-const Coordinates&
+const YACURS::Coordinates&
 CurStr::position() const {
     return __position;
 }

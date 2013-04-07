@@ -12,13 +12,13 @@
 #include "yacurs.h"
 
 // The alarm handler needs access to those
-Label* label1;
-Label* label3;
+YACURS::Label* label1;
+YACURS::Label* label3;
 
-void alrm(Event& _e) {
+void alrm(YACURS::Event& _e) {
     static int i=0;
 
-    assert(_e == EVT_SIGALRM);
+    assert(_e == YACURS::EVT_SIGALRM);
 
     switch (i++) {
     case 0:
@@ -42,7 +42,7 @@ void alrm(Event& _e) {
         break;
 
     default:
-        EventQueue::submit(Event(EVT_QUIT));
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
         break;
     }
 }
@@ -54,40 +54,40 @@ int main() {
 #endif
 
     try {
-        Curses::init();
+        YACURS::Curses::init();
 
-        LineObject* title = new LineObject(LineObject::POS_TOP,
+        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
                                            "Pack 5: Always dynamic, no hinting");
-        Curses::title(title);
+        YACURS::Curses::title(title);
 
-        Window* w1 = new Window(Margin(1,0,0,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,0,0));
         w1->frame(true);
 
-        VPack* vpack = new VPack;
-        HPack* hpack = new HPack;
-        HPack* hpack1 = new HPack();
-        HPack* hpack2 = new HPack();
-        VPack* vpack1 = new VPack;
-        VPack* vpack2 = new VPack;
-        VPack* vpack2_1 = new VPack();
-        VPack* vpack2_2 = new VPack();
+        YACURS::VPack* vpack = new YACURS::VPack;
+        YACURS::HPack* hpack = new YACURS::HPack;
+        YACURS::HPack* hpack1 = new YACURS::HPack();
+        YACURS::HPack* hpack2 = new YACURS::HPack();
+        YACURS::VPack* vpack1 = new YACURS::VPack;
+        YACURS::VPack* vpack2 = new YACURS::VPack;
+        YACURS::VPack* vpack2_1 = new YACURS::VPack();
+        YACURS::VPack* vpack2_2 = new YACURS::VPack();
 
-        label1 = new Label("Test label");
-        Label* label2 = new Label("Test label2");
-        label3 = new Label("Test label3");
-        Label* label4 = new Label("Test label4");
-        Label* label5=new Label("Label 5");
-        Label* label6=new Label("Label 6");
-        Label* label7=new Label("Label 7");
-        Label* label8=new Label("Label 8");
-        Label* label9=new Label("Label 9");
-        Label* label10=new Label("Label 10");
-        Label* label11=new Label("Label 11");
-        Label* label12=new Label("Label 12");
-        Label* label13=new Label("Label 13");
-        Label* label14=new Label("Label 14");
-        Label* label15=new Label("Label 15");
-        Label* label16=new Label("Label 16");
+        label1 = new YACURS::Label("Test label");
+        YACURS::Label* label2 = new YACURS::Label("Test label2");
+        label3 = new YACURS::Label("Test label3");
+        YACURS::Label* label4 = new YACURS::Label("Test label4");
+        YACURS::Label* label5=new YACURS::Label("Label 5");
+        YACURS::Label* label6=new YACURS::Label("Label 6");
+        YACURS::Label* label7=new YACURS::Label("Label 7");
+        YACURS::Label* label8=new YACURS::Label("Label 8");
+        YACURS::Label* label9=new YACURS::Label("Label 9");
+        YACURS::Label* label10=new YACURS::Label("Label 10");
+        YACURS::Label* label11=new YACURS::Label("Label 11");
+        YACURS::Label* label12=new YACURS::Label("Label 12");
+        YACURS::Label* label13=new YACURS::Label("Label 13");
+        YACURS::Label* label14=new YACURS::Label("Label 14");
+        YACURS::Label* label15=new YACURS::Label("Label 15");
+        YACURS::Label* label16=new YACURS::Label("Label 16");
 
         vpack->add_front(hpack);
         vpack->add_front(hpack1);
@@ -141,12 +141,12 @@ int main() {
 
         w1->widget(vpack);
 
-        Curses::mainwindow(w1);
+	YACURS::Curses::mainwindow(w1);
 
-        EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
 
         alarm(5);
-        Curses::run();
+        YACURS::Curses::run();
 
         delete title;
         delete label1;
@@ -175,9 +175,9 @@ int main() {
         delete hpack;
         delete w1;
 
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }

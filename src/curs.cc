@@ -31,6 +31,8 @@
 #include "focusmanager.h"
 #include "colors.h"
 
+using namespace YACURS;
+
 StatusLine* Curses::__statusline = 0;
 LineObject* Curses::__title = 0;
 Window* Curses::__mainwindow = 0;

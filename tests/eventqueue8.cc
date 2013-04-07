@@ -21,17 +21,17 @@
 
 class Handler {
     private:
-        EVENT_TYPE expected_evt;
+        YACURS::EVENT_TYPE expected_evt;
         int calls;
     public:
-        Handler(EVENT_TYPE evt):
+        Handler(YACURS::EVENT_TYPE evt):
             expected_evt(evt), calls(0) {}
         Handler(const Handler& _h) {
             expected_evt = _h.expected_evt;
             calls = _h.calls;
         }
         virtual ~Handler() {}
-        virtual void handler(Event& e) {
+        virtual void handler(YACURS::Event& e) {
             if (e.type() != expected_evt) std::abort();
 
             calls++;
@@ -46,8 +46,8 @@ class Handler {
 
 class AlrmHandler: public Handler {
     public:
-        AlrmHandler(): Handler(EVT_SIGALRM) {}
-        void handler(Event& e) {
+        AlrmHandler(): Handler(YACURS::EVT_SIGALRM) {}
+        void handler(YACURS::Event& e) {
             Handler::handler(e);
             std::cout << "AlrmHandler2::handler()\r" << std::endl;
             // During processing of the queue, USR1 is blocked, so we cheat and unblock it
@@ -66,13 +66,13 @@ class Usr1Handler: public Handler {
     private:
         bool quit;
     public:
-        Usr1Handler(bool q=false): Handler(EVT_SIGUSR1), quit(q) {}
-        void handler(Event& e) {
+        Usr1Handler(bool q=false): Handler(YACURS::EVT_SIGUSR1), quit(q) {}
+        void handler(YACURS::Event& e) {
             Handler::handler(e);
             std::cout << "Usr1Handler::handler()\r" << std::endl;
 
             if (quit)
-                EventQueue::submit(Event(EVT_QUIT));
+                YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
             else {
                 // During processing of the queue, USR2 is blocked, so we cheat
                 // and unblock it
@@ -93,11 +93,11 @@ class Usr1Handler: public Handler {
 
 class Usr2Handler: public Handler {
     public:
-        Usr2Handler(): Handler(EVT_SIGUSR2) {}
-        void handler(Event& e) {
+        Usr2Handler(): Handler(YACURS::EVT_SIGUSR2) {}
+        void handler(YACURS::Event& e) {
             Handler::handler(e);
             std::cout << "Usr2Handler::handler()\r" << std::endl;
-            EventQueue::submit(Event(EVT_QUIT));
+            YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
         }
 };
 
@@ -108,15 +108,15 @@ int main() {
         Usr1Handler u1handler;
         Usr2Handler u2handler, u2handler2, u2handler3;
 
-        EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler>(YACURS::EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr1Handler>(YACURS::EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
 
-        Curses::init();
+        YACURS::Curses::init();
         alarm(4);
-        EventQueue::run();
+        YACURS::EventQueue::run();
 
         if (ahandler.getCalls() != 1)
             goto _ERR;
@@ -139,21 +139,21 @@ int main() {
         u2handler2.reset();
         u2handler3.reset();
 
-        EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler>(YACURS::EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr1Handler>(YACURS::EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
         //
         // u2handler* may not have any calls
         //
-        EventQueue::suspend_all(EVT_SIGUSR2);
+        YACURS::EventQueue::suspend_all(YACURS::EVT_SIGUSR2);
 
         // u1handler must terminate queue loop
         u1handler.setQuit(true);
 
         alarm(4);
-        EventQueue::run();
+        YACURS::EventQueue::run();
 
         if (ahandler.getCalls() != 1)
             goto _ERR;
@@ -176,20 +176,20 @@ int main() {
         u2handler2.reset();
         u2handler3.reset();
 
-        EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler>(YACURS::EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr1Handler>(YACURS::EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
         //
         // u2handler* must have calls
         //
-        EventQueue::unsuspend_all(EVT_SIGUSR2);
+        YACURS::EventQueue::unsuspend_all(YACURS::EVT_SIGUSR2);
 
         u1handler.setQuit(false);
 
         alarm(4);
-        EventQueue::run();
+        YACURS::EventQueue::run();
 
         if (ahandler.getCalls() != 1)
             goto _ERR;
@@ -212,20 +212,20 @@ int main() {
         u2handler2.reset();
         u2handler3.reset();
 
-        EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler>(YACURS::EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr1Handler>(YACURS::EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
         //
         // only u2handler2 must have calls
         //
-        EventQueue::suspend_except(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler));
+        YACURS::EventQueue::suspend_except(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler));
 
         u1handler.setQuit(false);
 
         alarm(4);
-        EventQueue::run();
+        YACURS::EventQueue::run();
 
         if (ahandler.getCalls() != 1)
             goto _ERR;
@@ -248,20 +248,20 @@ int main() {
         u2handler2.reset();
         u2handler3.reset();
 
-        EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler>(YACURS::EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr1Handler>(YACURS::EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
         //
         // only u2handler2 must have no calls
         //
 
-        EventQueue::suspend_all(EVT_SIGUSR2);
-        EventQueue::unsuspend_except(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler));
+        YACURS::EventQueue::suspend_all(YACURS::EVT_SIGUSR2);
+        YACURS::EventQueue::unsuspend_except(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler));
 
         alarm(4);
-        EventQueue::run();
+        YACURS::EventQueue::run();
 
         if (ahandler.getCalls() != 1)
             goto _ERR;
@@ -284,19 +284,19 @@ int main() {
         u2handler2.reset();
         u2handler3.reset();
 
-        EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr1Handler>(EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler>(YACURS::EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr1Handler>(YACURS::EVT_SIGUSR1, &u1handler, &Usr1Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler3, &Usr2Handler::handler) );
         //
         // only u2handler2 must have no calls
         //
 
-        EventQueue::suspend(EventConnectorMethod1<Usr2Handler>(EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler));
+        YACURS::EventQueue::suspend(YACURS::EventConnectorMethod1<Usr2Handler>(YACURS::EVT_SIGUSR2, &u2handler2, &Usr2Handler::handler));
 
         alarm(4);
-        EventQueue::run();
+        YACURS::EventQueue::run();
 
         if (ahandler.getCalls() != 1)
             goto _ERR;
@@ -319,15 +319,15 @@ int main() {
         u2handler2.reset();
         u2handler3.reset();
 
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }
 
     return 0;
 _ERR:
-    Curses::end();
+    YACURS::Curses::end();
     return 1;
 }

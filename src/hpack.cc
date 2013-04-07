@@ -9,9 +9,10 @@
 #include <algorithm>
 #include <functional>
 
-
 #include "yacursex.h"
 #include "hpack.h"
+
+using namespace YACURS;
 
 //
 // Functors

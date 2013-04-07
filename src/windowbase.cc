@@ -8,11 +8,12 @@
 #include <cassert>
 #include <cstdlib>
 
-
 #include "curs.h"
 #include "yacursex.h"
 #include "windowbase.h"
 #include "eventqueue.h"
+
+using namespace YACURS;
 
 //
 // Private

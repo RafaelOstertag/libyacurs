@@ -13,6 +13,8 @@
 #include "yacursex.h"
 #include "colors.h"
 
+using namespace YACURS;
+
 class MaxStrLen {
     private:
 	std::string::size_type __max_len;

@@ -2,6 +2,8 @@
 
 #include "coordinates.h"
 
+using namespace YACURS;
+
 //
 // Static
 //
@@ -66,18 +68,18 @@ Coordinates::zero() {
 }
 
 Coordinates
-operator+(const Coordinates& lhs, const Coordinates& rhs) {
+YACURS::operator+(const Coordinates& lhs, const Coordinates& rhs) {
     Coordinates tmp = lhs;
     return tmp+=rhs;
 }
 
 Coordinates
-operator-(const Coordinates& lhs, const Coordinates& rhs) {
+YACURS::operator-(const Coordinates& lhs, const Coordinates& rhs) {
     Coordinates tmp = lhs;
     return tmp-=rhs;
 }
 
 bool
-operator!=(const Coordinates& lhs, const Coordinates& rhs) {
+YACURS::operator!=(const Coordinates& lhs, const Coordinates& rhs) {
     return !(lhs==rhs);
 }

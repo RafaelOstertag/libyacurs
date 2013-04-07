@@ -14,20 +14,20 @@
 #include "dialog.h"
 #include "label.h"
 
-/**
- */
-class MessageBox: public Dialog {
-    private:
-	Label* __message;
+namespace YACURS {
+    class MessageBox: public Dialog {
+	private:
+	    Label* __message;
 
-	// Not supported
-	MessageBox& operator=(const MessageBox&);
-    public:
-	MessageBox(const std::string& _title,
-		   const std::string& _message,
-		   DIALOG_TYPE _dt=OKCANCEL);
+	    // Not supported
+	    MessageBox& operator=(const MessageBox&);
+	public:
+	    MessageBox(const std::string& _title,
+		       const std::string& _message,
+		       DIALOG_TYPE _dt=OKCANCEL);
 
-	virtual ~MessageBox();
-};
+	    virtual ~MessageBox();
+    };
+}
 
 #endif // MESSAGEBOX_H

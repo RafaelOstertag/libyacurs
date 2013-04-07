@@ -1,4 +1,4 @@
-// $Id: dialog.cc 4900 2013-03-02 07:35:28Z rafisol $
+// $Id$
 
 #include <cassert>
 #include <cstdlib>
@@ -8,6 +8,8 @@
 #include "focusmanager.h"
 #include "eventqueue.h"
 #include "yacursex.h"
+
+using namespace YACURS;
 
 //
 // Private

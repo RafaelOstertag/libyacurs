@@ -35,13 +35,13 @@
 
 #include "yacurs.h"
 
-void alrm(Event& _e) {
+void alrm(YACURS::Event& _e) {
     static int calls = 0;
-    assert(_e == EVT_SIGALRM);
+    assert(_e == YACURS::EVT_SIGALRM);
 
-    std::string status_msg("Size: rows=");
+    std::string status_msg("YACURS::Size: rows=");
 
-    Size _scrdim(Curses::inquiry_screensize());
+    YACURS::Size _scrdim(YACURS::Curses::inquiry_screensize());
 
     char buff[32];
     snprintf(buff,32,"%d",_scrdim.rows());
@@ -52,7 +52,7 @@ void alrm(Event& _e) {
     snprintf(buff,32,"%d",_scrdim.cols());
     status_msg+=buff;
 
-    Curses::statusline()->push_msg(status_msg);
+    YACURS::Curses::statusline()->push_msg(status_msg);
 
     winsize ws;
 
@@ -68,7 +68,7 @@ void alrm(Event& _e) {
     }
 
     if (calls++ > 3)
-        EventQueue::submit(Event(EVT_QUIT));
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
     else
         alarm(1);
 }
@@ -81,31 +81,31 @@ int main() {
     }
 
     try {
-        Curses::init();
+        YACURS::Curses::init();
 
-        LineObject* title = new LineObject(LineObject::POS_TOP,
+        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
                                            "Resize 2");
-        Curses::title(title);
+        YACURS::Curses::title(title);
 
-        Window* w1 = new Window(Margin(1,0,1,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,1,0));
         w1->frame(true);
 
-        Curses::mainwindow(w1);
+        YACURS::Curses::mainwindow(w1);
 
-        StatusLine* sl = new StatusLine();
-        Curses::statusline(sl);
+        YACURS::StatusLine* sl = new YACURS::StatusLine();
+        YACURS::Curses::statusline(sl);
 
-        EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
 
         alarm(1);
-        Curses::run();
+        YACURS::Curses::run();
 
         delete title;
         delete w1;
         delete sl;
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
 
         if (ioctl(STDIN_FILENO, TIOCSWINSZ, &wsave) == -1) {
             return 1;

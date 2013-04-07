@@ -8,6 +8,8 @@
 
 #include "evtqueuestats.h"
 
+using namespace YACURS;
+
 //
 // Private
 //

@@ -14,19 +14,19 @@
 #include "yacurs.h"
 
 // The alarm handler needs access to those
-HPack* hpack;
-VPack* vpack1;
-VPack* vpack2;
+YACURS::HPack* hpack;
+YACURS::VPack* vpack1;
+YACURS::VPack* vpack2;
 
-Label* label1;
-Label* label2;
-Input<>* input1;
-Input<>* input2;
+YACURS::Label* label1;
+YACURS::Label* label2;
+YACURS::Input<>* input1;
+YACURS::Input<>* input2;
 
-void alrm(Event& _e) {
+void alrm(YACURS::Event& _e) {
     static int i=0;
 
-    assert(_e == EVT_SIGALRM);
+    assert(_e == YACURS::EVT_SIGALRM);
 
     switch (i++) {
     case 0:
@@ -54,7 +54,7 @@ void alrm(Event& _e) {
         break;
 
     default:
-        EventQueue::submit(Event(EVT_QUIT));
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
         break;
     }
 
@@ -68,27 +68,27 @@ int main() {
 #endif
 
     try {
-        Curses::init();
+        YACURS::Curses::init();
 
-        LineObject* title = new LineObject(LineObject::POS_TOP,
-                                           "Widget 2: setting text in realized Input/Label");
-        Curses::title(title);
+        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
+                                           "Widget 2: setting text in realized YACURS::Input/YACURS::Label");
+        YACURS::Curses::title(title);
 
-        Window* w1 = new Window(Margin(1,0,0,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,0,0));
         w1->frame(true);
 
-        hpack = new HPack;
-        vpack1 = new VPack;
-        vpack2 = new VPack;
+        hpack = new YACURS::HPack;
+        vpack1 = new YACURS::VPack;
+        vpack2 = new YACURS::VPack;
 
-        label1 = new Label("Label1");
-        input1 = new Input<>;
+        label1 = new YACURS::Label("YACURS::Label1");
+        input1 = new YACURS::Input<>;
         vpack1->add_back(label1);
         vpack1->add_back(input1);
         vpack1->hinting(false);
 
-        label2 = new Label("Label2");
-        input2 = new Input<>;
+        label2 = new YACURS::Label("YACURS::Label2");
+        input2 = new YACURS::Input<>;
         vpack2->add_back(label2);
         vpack2->add_back(input2);
         vpack2->hinting(false);
@@ -98,12 +98,12 @@ int main() {
 
         w1->widget(hpack);
 
-        Curses::mainwindow(w1);
+        YACURS::Curses::mainwindow(w1);
 
-        EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
 
         alarm(5);
-        Curses::run();
+        YACURS::Curses::run();
 
         delete title;
         delete hpack;
@@ -115,9 +115,9 @@ int main() {
         delete input2;
         delete w1;
 
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }

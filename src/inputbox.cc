@@ -5,6 +5,8 @@
 
 #include "inputbox.h"
 
+using namespace YACURS;
+
 //
 // Private
 //

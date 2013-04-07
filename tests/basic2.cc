@@ -19,61 +19,61 @@
 
 #include "yacurs.h"
 
-void alrm(Event& _e) {
+void alrm(YACURS::Event& _e) {
     static int calls = 0;
-    assert(_e == EVT_SIGALRM);
+    assert(_e == YACURS::EVT_SIGALRM);
 
     switch (calls) {
     case 0:
-        Curses::statusline()->push_msg("Status 1");
+        YACURS::Curses::statusline()->push_msg("Status 1");
         break;
 
     case 1:
-        Curses::statusline()->push_msg("Status 2");
+        YACURS::Curses::statusline()->push_msg("Status 2");
         break;
 
     case 2:
-        Curses::statusline()->pop_msg();
+        YACURS::Curses::statusline()->pop_msg();
         break;
 
     case 3:
-        Curses::statusline()->pop_msg();
+        YACURS::Curses::statusline()->pop_msg();
         break;
     }
 
     if (calls++ > 3)
-        EventQueue::submit(Event(EVT_QUIT));
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
     else
         alarm(1);
 }
 
 int main() {
     try {
-        Curses::init();
+        YACURS::Curses::init();
 
-        LineObject* title = new LineObject(LineObject::POS_TOP,
+        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
                                            "Basic 2");
-        Curses::title(title);
+        YACURS::Curses::title(title);
 
-        Window* w1 = new Window(Margin(1,0,1,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,1,0));
         w1->frame(true);
 
-        Curses::mainwindow(w1);
+        YACURS::Curses::mainwindow(w1);
 
-        StatusLine* sl = new StatusLine();
-        Curses::statusline(sl);
+        YACURS::StatusLine* sl = new YACURS::StatusLine();
+        YACURS::Curses::statusline(sl);
 
-        EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
 
         alarm(1);
-        Curses::run();
+        YACURS::Curses::run();
 
         delete title;
         delete w1;
         delete sl;
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }

@@ -11,28 +11,30 @@
 
 #include "pack.h"
 
-/**
- * Packs Widgets vertically.
- *
- * The main purpose of this class is the implement the size
- * calculation of and for the associated Widgets and to implement
- * realize().
- */
-class VPack: public Pack {
-    private:
-	// Not supported
-	VPack& operator=(const VPack&);
+namespace YACURS {
+    /**
+     * Packs Widgets vertically.
+     *
+     * The main purpose of this class is the implement the size
+     * calculation of and for the associated Widgets and to implement
+     * realize().
+     */
+    class VPack: public Pack {
+	private:
+	    // Not supported
+	    VPack& operator=(const VPack&);
 
-    protected:
-	void recalc_size();
-	Size calc_size_non_dynamic() const;
+	protected:
+	    void recalc_size();
+	    Size calc_size_non_dynamic() const;
 
-    public:
-	virtual ~VPack();
+	public:
+	    virtual ~VPack();
 
-	Size size_hint() const;
+	    Size size_hint() const;
 
-	void realize();
-};
+	    void realize();
+    };
+}
 
 #endif // VPACK_H

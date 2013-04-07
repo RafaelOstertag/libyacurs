@@ -11,9 +11,9 @@
 
 #include "yacurs.h"
 
-void alrm(Event& _e) {
-    assert(_e == EVT_SIGALRM);
-    EventQueue::submit(Event(EVT_QUIT));
+void alrm(YACURS::Event& _e) {
+    assert(_e == YACURS::EVT_SIGALRM);
+    YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
 }
 
 int main() {
@@ -23,42 +23,42 @@ int main() {
 #endif
 
     try {
-        Curses::init();
+        YACURS::Curses::init();
 
-        LineObject* title = new LineObject(LineObject::POS_TOP,
+        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
                                            "Pack 2");
-        Curses::title(title);
+        YACURS::Curses::title(title);
 
-        Window* w1 = new Window(Margin(1,0,0,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,0,0));
         w1->frame(true);
 
-        HPack* hpack = new HPack;
+        YACURS::HPack* hpack = new YACURS::HPack;
 
-        VPack* vpack1 = new VPack;
-        VPack* vpack2 = new VPack;
+        YACURS::VPack* vpack1 = new YACURS::VPack;
+        YACURS::VPack* vpack2 = new YACURS::VPack;
 
         hpack->add_back(vpack1);
         hpack->add_back(vpack2);
 
 
-        Label* label1 = new Label("Test label");
+        YACURS::Label* label1 = new YACURS::Label("Test label");
         vpack1->add_front(label1);
-        Label* label2 = new Label("Test label2");
+        YACURS::Label* label2 = new YACURS::Label("Test label2");
         vpack1->add_back(label2);
 
-        Label* label3 = new Label("Test label3");
-        Label* label4 = new Label("Test label4");
+        YACURS::Label* label3 = new YACURS::Label("Test label3");
+        YACURS::Label* label4 = new YACURS::Label("Test label4");
         vpack2->add_back(label3);
         vpack2->add_back(label4);
 
         w1->widget(hpack);
 
-        Curses::mainwindow(w1);
+        YACURS::Curses::mainwindow(w1);
 
-        EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
 
         alarm(1);
-        Curses::run();
+        YACURS::Curses::run();
 
         delete title;
         delete label1;
@@ -70,9 +70,9 @@ int main() {
         delete hpack;
         delete w1;
 
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }

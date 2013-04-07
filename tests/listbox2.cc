@@ -757,29 +757,29 @@ extern "C" int __test_wgetch(void*) {
     return *ptr2++;
 }
 
-class MainWindow: public Window {
+class MainWindow: public YACURS::Window {
     private:
-        Button* badd;
-        Button* bdelete;
-        Button* bquit;
-        VPack* vpack1;
-        HPack* hpack1;
-        ListBox<>* listbox;
-        InputBox* inputdialog;
+        YACURS::Button* badd;
+        YACURS::Button* bdelete;
+        YACURS::Button* bquit;
+        YACURS::VPack* vpack1;
+        YACURS::HPack* hpack1;
+        YACURS::ListBox<>* listbox;
+        YACURS::InputBox* inputdialog;
 
     protected:
-        void button_press_handler(Event& _e) {
-            assert(_e==EVT_BUTTON_PRESS);
+        void button_press_handler(YACURS::Event& _e) {
+            assert(_e==YACURS::EVT_BUTTON_PRESS);
 
-            EventEx<Button*>& _ex = dynamic_cast<EventEx<Button*>&>(_e);
+            YACURS::EventEx<YACURS::Button*>& _ex = dynamic_cast<YACURS::EventEx<YACURS::Button*>&>(_e);
 
             if (bquit==_ex.data()) {
-                EventQueue::submit(EVT_QUIT);
+                YACURS::EventQueue::submit(YACURS::EVT_QUIT);
                 return;
             }
 
             if (badd==_ex.data()) {
-                inputdialog=new InputBox("Add item", "String to add");
+                inputdialog=new YACURS::InputBox("Add item", "String to add");
                 inputdialog->show();
                 return;
             }
@@ -790,19 +790,19 @@ class MainWindow: public Window {
             }
         }
 
-        void window_close_handler(Event& _e) {
-            assert(_e==EVT_WINDOW_CLOSE);
+        void window_close_handler(YACURS::Event& _e) {
+            assert(_e==YACURS::EVT_WINDOW_CLOSE);
 
-            EventEx<WindowBase*>& _ex = dynamic_cast<EventEx<WindowBase*>&>(_e);
+            YACURS::EventEx<YACURS::WindowBase*>& _ex = dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
             if (inputdialog==_ex.data()) {
-                if (inputdialog->dialog_state()==Dialog::DIALOG_OK) {
+                if (inputdialog->dialog_state()==YACURS::Dialog::DIALOG_OK) {
                     listbox->add(inputdialog->input());
-                    Curses::statusline()->pop_msg();
-                    Curses::statusline()->push_msg("Dialog OK");
+                    YACURS::Curses::statusline()->pop_msg();
+                    YACURS::Curses::statusline()->push_msg("Dialog OK");
                 } else {
-                    Curses::statusline()->pop_msg();
-                    Curses::statusline()->push_msg("Dialog Cancelled");
+                    YACURS::Curses::statusline()->pop_msg();
+                    YACURS::Curses::statusline()->push_msg("Dialog Cancelled");
                 }
 
                 delete inputdialog;
@@ -812,7 +812,7 @@ class MainWindow: public Window {
         }
 
     public:
-        MainWindow(const Margin& _m): Window(_m),
+        MainWindow(const YACURS::Margin& _m): YACURS::Window(_m),
             badd(0),
             bdelete(0),
             bquit(0),
@@ -820,14 +820,14 @@ class MainWindow: public Window {
             hpack1(0),
             listbox(0),
             inputdialog(0) {
-            badd=new Button("Add");
-            bdelete=new Button("Delete");
-            bquit=new Button("Quit");
+            badd=new YACURS::Button("Add");
+            bdelete=new YACURS::Button("Delete");
+            bquit=new YACURS::Button("Quit");
 
-            vpack1=new VPack;
-            hpack1=new HPack;
+            vpack1=new YACURS::VPack;
+            hpack1=new YACURS::HPack;
 
-            listbox=new ListBox<>;
+            listbox=new YACURS::ListBox<>;
 
             vpack1->add_back(badd);
             vpack1->add_back(bdelete);
@@ -838,13 +838,13 @@ class MainWindow: public Window {
 
             widget(hpack1);
 
-            EventQueue::connect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
-            EventQueue::connect_event(EventConnectorMethod1<MainWindow>(EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
+            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
+            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
         }
 
         ~MainWindow() {
-            EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
-            EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
+            YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
+            YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
             delete badd;
             delete bdelete;
             delete bquit;
@@ -861,28 +861,28 @@ int main() {
 #endif
 
     try {
-        Curses::init();
+        YACURS::Curses::init();
 
-        LineObject* title = new LineObject(LineObject::POS_TOP,
+        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
                                            "ListBox 2");
-        Curses::title(title);
+        YACURS::Curses::title(title);
 
-        MainWindow* w1 = new MainWindow(Margin(1,0,1,0));
+        MainWindow* w1 = new MainWindow(YACURS::Margin(1,0,1,0));
         w1->frame(true);
 
-        StatusLine* sl = new StatusLine();
-        Curses::statusline(sl);
+        YACURS::StatusLine* sl = new YACURS::StatusLine();
+        YACURS::Curses::statusline(sl);
 
-        Curses::mainwindow(w1);
+        YACURS::Curses::mainwindow(w1);
 
-        Curses::run();
+        YACURS::Curses::run();
 
         delete title;
         delete w1;
         delete sl;
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }

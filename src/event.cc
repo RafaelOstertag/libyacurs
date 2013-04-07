@@ -6,6 +6,8 @@
 
 #include "event.h"
 
+using namespace YACURS;
+
 const char* Event::__str_table[] = {
     "EVT_QUIT",
     "EVT_SIGWINCH",

@@ -19,37 +19,37 @@
 #include "listbox.h"
 #include "messagebox2.h"
 
-/**
- */
-class FileDialog: public Dialog {
-    private:
-	MessageBox2* __msgbox;
-	DynLabel* __path;
-	ListBox<>* __directories;
-	ListBox<>* __files;
-	Input<>* __filename;
-	HPack* __hpack;
-	VPack* __vpack;
+namespace YACURS {
+    class FileDialog: public Dialog {
+	private:
+	    MessageBox2* __msgbox;
+	    DynLabel* __path;
+	    ListBox<>* __directories;
+	    ListBox<>* __files;
+	    Input<>* __filename;
+	    HPack* __hpack;
+	    VPack* __vpack;
 
-	// Not supported
-	FileDialog& operator=(const FileDialog&);
+	    // Not supported
+	    FileDialog& operator=(const FileDialog&);
 
-	std::string dir_up(const std::string& dir);
-	void read_dir();
+	    std::string dir_up(const std::string& dir);
+	    void read_dir();
 
-	void listbox_enter_handler(Event& _e);
-	void window_close_handler(Event& _e);
-    public:
-	FileDialog(std::string _path=std::string(),
-		   DIALOG_TYPE _dt=OKCANCEL);
+	    void listbox_enter_handler(Event& _e);
+	    void window_close_handler(Event& _e);
+	public:
+	    FileDialog(std::string _path=std::string(),
+		       DIALOG_TYPE _dt=OKCANCEL);
 
-	virtual ~FileDialog();
+	    virtual ~FileDialog();
 
-	std::string filepath() const;
-	const std::string& directory() const;
-	const std::string& filename() const;
+	    std::string filepath() const;
+	    const std::string& directory() const;
+	    const std::string& filename() const;
 
-	void refresh(bool immediate);
-};
+	    void refresh(bool immediate);
+    };
+}
 
 #endif // FILEDIALOG_H

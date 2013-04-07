@@ -41,25 +41,25 @@ extern "C" int __test_wgetch(void*) {
     return *ptr2++;
 }
 
-class MainWindow: public Window {
+class MainWindow: public YACURS::Window {
     private:
-        VPack* vpack1;
-        HPack* hpack1;
-        Button* button1;
-        Button* button2;
-        Label* label1;
-        InputBox* inputbox1;
+        YACURS::VPack* vpack1;
+        YACURS::HPack* hpack1;
+        YACURS::Button* button1;
+        YACURS::Button* button2;
+        YACURS::Label* label1;
+        YACURS::InputBox* inputbox1;
 
 
     protected:
-        void window_close_handler(Event& _e) {
-            assert(_e==EVT_WINDOW_CLOSE);
-            EventEx<WindowBase*>& evt=dynamic_cast<EventEx<WindowBase*>&>(_e);
+        void window_close_handler(YACURS::Event& _e) {
+            assert(_e==YACURS::EVT_WINDOW_CLOSE);
+            YACURS::EventEx<YACURS::WindowBase*>& evt=dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
             if (inputbox1!=0 && evt.data()==inputbox1) {
-                Curses::statusline()->push_msg("Dialog 1 closed");
+                YACURS::Curses::statusline()->push_msg("Dialog 1 closed");
 
-                if (inputbox1->dialog_state()==Dialog::DIALOG_OK)
+                if (inputbox1->dialog_state()==YACURS::Dialog::DIALOG_OK)
                     label1->label("DIALOG_OK");
                 else
                     label1->label("DIALOG_CANCEL");
@@ -70,39 +70,39 @@ class MainWindow: public Window {
 
         }
 
-        void button_press_handler(Event& _e) {
-            assert(_e==EVT_BUTTON_PRESS);
-            EventEx<Button*>& e=dynamic_cast<EventEx<Button*>&>(_e);
+        void button_press_handler(YACURS::Event& _e) {
+            assert(_e==YACURS::EVT_BUTTON_PRESS);
+            YACURS::EventEx<YACURS::Button*>& e=dynamic_cast<YACURS::EventEx<YACURS::Button*>&>(_e);
 
             if (e.data()==button1) {
                 assert(inputbox1==0);
 
-                inputbox1=new InputBox("Test Dialog", "Enter text");
+                inputbox1=new YACURS::InputBox("Test Dialog", "Enter text");
                 inputbox1->show();
                 return;
             }
 
             if (e.data()==button2) {
-                EventQueue::submit(EVT_QUIT);
+                YACURS::EventQueue::submit(YACURS::EVT_QUIT);
                 return;
             }
         }
 
     public:
-        MainWindow(): Window(Margin(1,0,1,0)), inputbox1(0) {
-            button1=new Button("New Window");
-            button2=new Button("Quit");
-            vpack1=new VPack;
-            hpack1=new HPack;
-            label1=new Label("dialog state");
+        MainWindow(): YACURS::Window(YACURS::Margin(1,0,1,0)), inputbox1(0) {
+            button1=new YACURS::Button("New Window");
+            button2=new YACURS::Button("Quit");
+            vpack1=new YACURS::VPack;
+            hpack1=new YACURS::HPack;
+            label1=new YACURS::Label("dialog state");
             hpack1->add_back(button1);
             hpack1->add_back(button2);
             vpack1->add_front(label1);
             vpack1->add_back(hpack1);
             widget(vpack1);
 
-            EventQueue::connect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
-            EventQueue::connect_event(EventConnectorMethod1<MainWindow>(EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
+            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
+            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
         }
 
         ~MainWindow() {
@@ -115,8 +115,8 @@ class MainWindow: public Window {
             delete vpack1;
             delete label1;
 
-            EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
-            EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
+            YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
+            YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
         }
 };
 
@@ -127,23 +127,23 @@ int main() {
 #endif
 
     try {
-        Curses::init();
+        YACURS::Curses::init();
 
-        Curses::title(new LineObject(LineObject::POS_TOP,
-                                     "InputBox 1"));
-        Curses::statusline(new StatusLine);
+        YACURS::Curses::title(new YACURS::LineObject(YACURS::LineObject::POS_TOP,
+                                     "YACURS::InputBox 1"));
+        YACURS::Curses::statusline(new YACURS::StatusLine);
 
         MainWindow* mainwindow=new MainWindow;
-        Curses::mainwindow(mainwindow);
-        Curses::mainwindow()->frame(true);
+        YACURS::Curses::mainwindow(mainwindow);
+        YACURS::Curses::mainwindow()->frame(true);
 
-        Curses::run();
+        YACURS::Curses::run();
 
         delete mainwindow;
 
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }

@@ -16,22 +16,25 @@
 #include "label.h"
 #include "input.h"
 
-class UnlockDialogDefault: public UnlockDialog {
-    private:
-	std::string __secret;
-	VPack* __vpack;
-	Label* __text;
-	Input<>* __secret_input;
+namespace YACURS {
 
-	UnlockDialogDefault& operator=(const UnlockDialogDefault&);
+    class UnlockDialogDefault: public UnlockDialog {
+	private:
+	    std::string __secret;
+	    VPack* __vpack;
+	    Label* __text;
+	    Input<>* __secret_input;
 
-    public:
-	UnlockDialogDefault(const std::string& _secret);
+	    UnlockDialogDefault& operator=(const UnlockDialogDefault&);
 
-	~UnlockDialogDefault();
+	public:
+	    UnlockDialogDefault(const std::string& _secret);
 
-	bool unlock();
-	void clear();
-};
+	    ~UnlockDialogDefault();
+
+	    bool unlock();
+	    void clear();
+    };
+}
 
 #endif // UNLOCKDIADEFAULT_H

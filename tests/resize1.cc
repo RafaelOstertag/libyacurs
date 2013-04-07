@@ -37,9 +37,9 @@
 
 int main() {
     try {
-        Curses::init();
+        YACURS::Curses::init();
 
-        Window* w1 = new Window(Margin(1,0,1,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,1,0));
         w1->frame(true);
 
         w1->realize();
@@ -47,23 +47,23 @@ int main() {
 
         sleep(1);
 
-        Size scrsz(Curses::inquiry_screensize());
-        Area newsz(0, 0, scrsz.rows()-1, scrsz.cols()-1);
+        YACURS::Size scrsz(YACURS::Curses::inquiry_screensize());
+        YACURS::Area newsz(0, 0, scrsz.rows()-1, scrsz.cols()-1);
         w1->resize(newsz);
         w1->refresh(true);
 
         sleep(1);
 
-        newsz=Area(0,0,scrsz.rows()-2, scrsz.cols()-2);
+        newsz=YACURS::Area(0,0,scrsz.rows()-2, scrsz.cols()-2);
         w1->resize(newsz);
         w1->refresh(true);
 
         sleep(1);
 
         delete w1;
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }

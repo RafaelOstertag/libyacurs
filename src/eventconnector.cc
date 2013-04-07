@@ -6,6 +6,8 @@
 
 #include "eventconnector.h"
 
+using namespace YACURS;
+
 ////////////////////////////////////////////////////////
 //
 // class EventConnectorBase

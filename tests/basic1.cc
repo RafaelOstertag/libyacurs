@@ -19,35 +19,35 @@
 
 #include "yacurs.h"
 
-LineObject* title=0;
+YACURS::LineObject* title=0;
 
-void alrm(Event& _e) {
+void alrm(YACURS::Event& _e) {
     static int counter=0;
 
-    assert(_e == EVT_SIGALRM);
+    assert(_e == YACURS::EVT_SIGALRM);
     assert(title != 0);
 
     switch (counter) {
     case 0:
         counter++;
-        title->alignment(LineObject::RIGHT);
+        title->alignment(YACURS::LineObject::RIGHT);
         alarm(1);
         break;
 
     case 1:
         counter++;
-        title->alignment(LineObject::CENTER);
+        title->alignment(YACURS::LineObject::CENTER);
         alarm(1);
         break;
 
     case 2:
         counter++;
-        title->alignment(LineObject::LEFT);
+        title->alignment(YACURS::LineObject::LEFT);
         alarm(1);
         break;
 
     default:
-        EventQueue::submit(Event(EVT_QUIT));
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
         break;
     }
 }
@@ -59,28 +59,28 @@ int main() {
 #endif
 
     try {
-        Curses::init();
+        YACURS::Curses::init();
 
-        title = new LineObject(LineObject::POS_TOP,
-                               "Basic 1");
-        Curses::title(title);
+        title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
+				       "Basic 1");
+        YACURS::Curses::title(title);
 
-        Window* w1 = new Window(Margin(1,0,0,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,0,0));
         w1->frame(true);
 
-        Curses::mainwindow(w1);
+        YACURS::Curses::mainwindow(w1);
 
-        EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
 
         alarm(1);
-        Curses::run();
+        YACURS::Curses::run();
 
         delete title;
         delete w1;
 
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }

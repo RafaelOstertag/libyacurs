@@ -5,6 +5,8 @@
 
 #include "size.h"
 
+using namespace YACURS;
+
 //
 // Static
 //
@@ -83,18 +85,18 @@ Size::zero() {
 }
 
 Size
-operator+(const Size& lhs, const Size& rhs) {
+YACURS::operator+(const Size& lhs, const Size& rhs) {
     Size tmp = lhs;
     return tmp+=rhs;
 }
 
 Size
-operator-(const Size& lhs, const Size& rhs) {
+YACURS::operator-(const Size& lhs, const Size& rhs) {
     Size tmp = lhs;
     return tmp-=rhs;
 }
 
 bool
-operator!=(const Size& lhs, const Size& rhs) {
+YACURS::operator!=(const Size& lhs, const Size& rhs) {
     return !(lhs==rhs);
 }

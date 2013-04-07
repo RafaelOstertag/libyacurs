@@ -6,6 +6,8 @@
 
 #include "focusgroup.h"
 
+using namespace YACURS;
+
 //
 // Functors
 //

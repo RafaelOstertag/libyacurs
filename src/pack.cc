@@ -13,6 +13,8 @@
 #include "pack.h"
 #include "eventqueue.h"
 
+using namespace YACURS;
+
 //
 // Functors
 //

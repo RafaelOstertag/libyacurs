@@ -21,17 +21,17 @@
 
 class Handler {
     private:
-        EVENT_TYPE expected_evt;
+        YACURS::EVENT_TYPE expected_evt;
         int calls;
     public:
-        Handler(EVENT_TYPE evt):
+        Handler(YACURS::EVENT_TYPE evt):
             expected_evt(evt), calls(0) {}
         Handler(const Handler& _h) {
             expected_evt = _h.expected_evt;
             calls = _h.calls;
         }
         virtual ~Handler() {}
-        virtual void handler(Event& e) {
+        virtual void handler(YACURS::Event& e) {
             if (e.type() != expected_evt) std::abort();
 
             calls++;
@@ -43,8 +43,8 @@ class Handler {
 
 class AlrmHandler: public Handler {
     public:
-        AlrmHandler(): Handler(EVT_SIGALRM) {}
-        void handler(Event& e) {
+        AlrmHandler(): Handler(YACURS::EVT_SIGALRM) {}
+        void handler(YACURS::Event& e) {
             Handler::handler(e);
             std::cout << "AlrmHandler::handler()\r" << std::endl;
 
@@ -54,14 +54,14 @@ class AlrmHandler: public Handler {
             }
 
             std::cout << "QUIT" << std::endl;
-            EventQueue::submit(Event(EVT_QUIT));
+            YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
         }
 };
 
 class AlrmHandler2: public AlrmHandler {
     public:
         AlrmHandler2(): AlrmHandler() {}
-        void handler(Event& e) {
+        void handler(YACURS::Event& e) {
             std::cout << "AlrmHandler2::handler()\r" << std::endl;
             Handler::handler(e);
         }
@@ -76,15 +76,15 @@ int main() {
         AlrmHandler2 ahandler2_3;
         AlrmHandler2 ahandler2_4;
 
-        EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler,&AlrmHandler::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGALRM, &ahandler2_1,&AlrmHandler2::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGALRM, &ahandler2_2,&AlrmHandler2::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGALRM, &ahandler2_3,&AlrmHandler2::handler) );
-        EventQueue::connect_event(EventConnectorMethod1<AlrmHandler2>(EVT_SIGALRM, &ahandler2_4,&AlrmHandler2::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler>(YACURS::EVT_SIGALRM, &ahandler,&AlrmHandler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler2>(YACURS::EVT_SIGALRM, &ahandler2_1,&AlrmHandler2::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler2>(YACURS::EVT_SIGALRM, &ahandler2_2,&AlrmHandler2::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler2>(YACURS::EVT_SIGALRM, &ahandler2_3,&AlrmHandler2::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler2>(YACURS::EVT_SIGALRM, &ahandler2_4,&AlrmHandler2::handler) );
 
-        Curses::init();
+        YACURS::Curses::init();
         alarm(4);
-        EventQueue::run();
+        YACURS::EventQueue::run();
 
         if (ahandler.getCalls() != 4)
             goto _ERR;
@@ -101,15 +101,15 @@ int main() {
         if (ahandler2_4.getCalls() != 4)
             goto _ERR;
 
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }
 
     return 0;
 _ERR:
-    Curses::end();
+    YACURS::Curses::end();
     return 1;
 }

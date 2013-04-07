@@ -37,13 +37,13 @@ extern "C" int __test_wgetch(void*) {
     return 'q';
 }
 
-class MyWindow: public Window {
+class MyWindow: public YACURS::Window {
     protected:
-        void resize_handler(Event& _e) {
-            Window::resize_handler(_e);
+        void resize_handler(YACURS::Event& _e) {
+            YACURS::Window::resize_handler(_e);
 
-            EventEx<Size>& winch = dynamic_cast<EventEx<Size>&>(_e);
-            std::string status_msg("Size: rows=");
+            YACURS::EventEx<YACURS::Size>& winch = dynamic_cast<YACURS::EventEx<YACURS::Size>&>(_e);
+            std::string status_msg("YACURS::Size: rows=");
 
             char buff[32];
             snprintf(buff,32,"%d",winch.data().rows());
@@ -54,24 +54,24 @@ class MyWindow: public Window {
             snprintf(buff,32,"%d",winch.data().cols());
             status_msg+=buff;
 
-            Curses::statusline()->push_msg(status_msg);
+            YACURS::Curses::statusline()->push_msg(status_msg);
         };
 
     public:
-        MyWindow(const Margin& m) : Window(m) {
-            EventQueue::connect_event(EventConnectorMethod1<MyWindow>(EVT_SIGWINCH,this, &MyWindow::resize_handler));
+        MyWindow(const YACURS::Margin& m) : YACURS::Window(m) {
+            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<MyWindow>(YACURS::EVT_SIGWINCH,this, &MyWindow::resize_handler));
         }
 };
 
-void key_handler(Event& _e) {
-    assert(_e == EVT_KEY);
+void key_handler(YACURS::Event& _e) {
+    assert(_e == YACURS::EVT_KEY);
 
-    EventEx<int>& _ek = dynamic_cast<EventEx<int>&>(_e);
+    YACURS::EventEx<int>& _ek = dynamic_cast<YACURS::EventEx<int>&>(_e);
 
     switch (_ek.data()) {
     case 'q':
     case 'Q':
-        EventQueue::submit(Event(EVT_QUIT));
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
         break;
 
     default:
@@ -87,45 +87,45 @@ int main() {
 
     try {
 
-        Curses::init();
+        YACURS::Curses::init();
 
-        LineObject* title = new LineObject(LineObject::POS_TOP,
+        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
                                            "Resize 4");
-        Curses::title(title);
+        YACURS::Curses::title(title);
 
         // NOTE:
         //
         // The order the objects are created (MyWindow, StatusLine) is
         // important here. Because MyWindow calls
         // StatusLine::put_msg() on resize we have to make sure
-        // StatusLine is resized first. Since EventQueue calls the
-        // last EventConnector connected first, StatusLine has to be
+        // StatusLine is resized first. Since YACURS::EventQueue calls the
+        // last YACURS::EventConnector connected first, StatusLine has to be
         // created AFTER MyWindow.
 
-        MyWindow* w1 = new MyWindow(Margin(1,0,1,0));
+        MyWindow* w1 = new MyWindow(YACURS::Margin(1,0,1,0));
         w1->frame(true);
 
-        StatusLine* sl = new StatusLine();
+        YACURS::StatusLine* sl = new YACURS::StatusLine();
         sl->push_msg("Press Q to quit");
-        Curses::statusline(sl);
+        YACURS::Curses::statusline(sl);
 
-        HPack* hpack = new HPack;
-        Label* hl1 = new Label("abcdefghijklmnopqrstuvwxyz");
-        Label* hl2 = new Label("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        Label* hl3 = new Label("0123456789");
+        YACURS::HPack* hpack = new YACURS::HPack;
+        YACURS::Label* hl1 = new YACURS::Label("abcdefghijklmnopqrstuvwxyz");
+        YACURS::Label* hl2 = new YACURS::Label("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        YACURS::Label* hl3 = new YACURS::Label("0123456789");
 
 
         hpack->add_front(hl1);
         hpack->add_front(hl2);
         hpack->add_back(hl3);
 
-        VPack* vpack = new VPack;
-        Label* vls[20];
+        YACURS::VPack* vpack = new YACURS::VPack;
+        YACURS::Label* vls[20];
 
         for(int i=0; i<20; i++) {
             std::ostringstream _i;
             _i<<i;
-            vls[i]=new Label("VLabel " + _i.str());
+            vls[i]=new YACURS::Label("VYACURS::Label " + _i.str());
             vpack->add_back(vls[i]);
         }
 
@@ -133,11 +133,11 @@ int main() {
 
         w1->widget(hpack);
 
-        Curses::mainwindow(w1);
+        YACURS::Curses::mainwindow(w1);
 
-        EventQueue::connect_event(EventConnectorFunction1(EVT_KEY,&key_handler));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_KEY,&key_handler));
 
-        Curses::run();
+        YACURS::Curses::run();
 
         delete vpack;
 
@@ -152,10 +152,10 @@ int main() {
         delete hpack;
         delete w1;
         delete sl;
-        Curses::end();
+        YACURS::Curses::end();
 
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }

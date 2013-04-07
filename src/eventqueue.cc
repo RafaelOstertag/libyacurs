@@ -22,6 +22,8 @@
 #include "curs.h"
 #include "evtqueuestats.h"
 
+using namespace YACURS;
+
 #if !defined(NDEBUG) && defined(EVTQDEBUG)
 #define DEBUGOUT(x) try {							\
 	char* __debugfile_name__;					\

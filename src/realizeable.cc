@@ -4,6 +4,8 @@
 
 #include "realizeable.h"
 
+using namespace YACURS;
+
 //
 // Protected
 //

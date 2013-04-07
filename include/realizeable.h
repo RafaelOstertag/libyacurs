@@ -13,131 +13,134 @@
 
 #include "area.h"
 
-/**
- * Realization states that can be assumed by an object.
- */
-enum REALIZATION_STATE {
-    REALIZING,
-    REALIZED,
-    UNREALIZING,
-    UNREALIZED
-};
+namespace YACURS {
 
-/**
- * Realizeable defines a basic interfaces for displaying and resizing
- * Curses objects on the screen.
- *
- * Realizeable classes display objects on the screen, or provide a way
- * for other objects to be displayed (see Pack).
- *
- * The functions
- *
- * - refresh()
- * - realize()
- * - unrealize()
- * - resize()
- *
- * must not rely on being only called when the object is in the proper
- * state. They must handle calls while being in inproper state
- * gracefully, i.e. not throwing exceptions due to an unexpected
- * state. For instance: refresh() must not throw an exception when
- * called on unrealized objects. Another example would be realize()
- * being called twice.
- *
- * Realizing consists of two states
- *
- * - REALIZING: the object is in the course of being realized, its
- *     state might not be stable
- *
- * - REALIZED: the object is realized. Its state is stable
- *
- *
- * Unrealizing consists of two state
- *
- * - UNREALIZING: the object is in the course of being unrealized, its
- *     state might not be stable
- *
- * - UNREALIZED: the object is unrealized. Its state is stable.
- *
- * Please keep in mind, the implementation has to set the proper
- * states. The helper macros @c REALIZE_ENTER and @c REALIZE_LEAVE can
- * be used when entering and leaving realize() function, @c
- * UNREALIZE_ENTER and @c UNREALIZE_LEAVE for unrealize.
- *
- */
-class Realizeable {
-    private:
-	/**
-	 * The realization state of the object.
-	 */
-	REALIZATION_STATE __realization_state;
+    /**
+     * Realization states that can be assumed by an object.
+     */
+    enum REALIZATION_STATE {
+	REALIZING,
+	REALIZED,
+	UNREALIZING,
+	UNREALIZED
+    };
 
-    protected:
-	/**
-	 * Set realization state.
-	 *
-	 * @param _s state of the object.
-	 */
-	virtual void realization(REALIZATION_STATE _s);
+    /**
+     * Realizeable defines a basic interfaces for displaying and resizing
+     * Curses objects on the screen.
+     *
+     * Realizeable classes display objects on the screen, or provide a way
+     * for other objects to be displayed (see Pack).
+     *
+     * The functions
+     *
+     * - refresh()
+     * - realize()
+     * - unrealize()
+     * - resize()
+     *
+     * must not rely on being only called when the object is in the proper
+     * state. They must handle calls while being in inproper state
+     * gracefully, i.e. not throwing exceptions due to an unexpected
+     * state. For instance: refresh() must not throw an exception when
+     * called on unrealized objects. Another example would be realize()
+     * being called twice.
+     *
+     * Realizing consists of two states
+     *
+     * - REALIZING: the object is in the course of being realized, its
+     *     state might not be stable
+     *
+     * - REALIZED: the object is realized. Its state is stable
+     *
+     *
+     * Unrealizing consists of two state
+     *
+     * - UNREALIZING: the object is in the course of being unrealized, its
+     *     state might not be stable
+     *
+     * - UNREALIZED: the object is unrealized. Its state is stable.
+     *
+     * Please keep in mind, the implementation has to set the proper
+     * states. The helper macros @c REALIZE_ENTER and @c REALIZE_LEAVE can
+     * be used when entering and leaving realize() function, @c
+     * UNREALIZE_ENTER and @c UNREALIZE_LEAVE for unrealize.
+     *
+     */
+    class Realizeable {
+	private:
+	    /**
+	     * The realization state of the object.
+	     */
+	    REALIZATION_STATE __realization_state;
 
-    public:
-	Realizeable();
+	protected:
+	    /**
+	     * Set realization state.
+	     *
+	     * @param _s state of the object.
+	     */
+	    virtual void realization(REALIZATION_STATE _s);
 
-	virtual ~Realizeable();
+	public:
+	    Realizeable();
 
-	/**
-	 * Refresh the object. Derrived classes have to implement two
-	 * modes:
-	 *
-	 * - immediate refresh makes changes immediately visible using
-	 *   Curses wrefresh().
-	 * - non-immediate refresh has to prepare for a Curses
-	 *   doupdate()
-	 *
-	 * A refresh is supposed make changes to the screen. Adding
-	 * text to a curses window, for instance, would be implemented
-	 * in a refresh.
-	 *
-	 * @param immediate @c true indicating an immediate refresh,
-	 * @c false indicating non-immediate refresh.
-	 */
-	virtual void refresh(bool immediate) = 0;
+	    virtual ~Realizeable();
 
-	/**
-	 * Resizes the object.
-	 *
-	 * How the new Area is interpreted depends on the
-	 * implementation.
-	 *
-	 * @internal A resize must not refresh. It is usually a sequence of
-	 * unrealize(), realize().
-	 *
-	 * @param _a the new Area available to the object.
-	 */
-	virtual void resize(const Area& _a) = 0;
+	    /**
+	     * Refresh the object. Derrived classes have to implement two
+	     * modes:
+	     *
+	     * - immediate refresh makes changes immediately visible using
+	     *   Curses wrefresh().
+	     * - non-immediate refresh has to prepare for a Curses
+	     *   doupdate()
+	     *
+	     * A refresh is supposed make changes to the screen. Adding
+	     * text to a curses window, for instance, would be implemented
+	     * in a refresh.
+	     *
+	     * @param immediate @c true indicating an immediate refresh,
+	     * @c false indicating non-immediate refresh.
+	     */
+	    virtual void refresh(bool immediate) = 0;
 
-	/**
-	 * Realize the object by calling Curses functions and prepare
-	 * the object for a refresh.
-	 *
-	 * Realize is supposed to create curses window. It should not
-	 * be used for adding text for instance. Adding text and
-	 * related operations would be implemented in refresh().
-	 */
-	virtual void realize() = 0;
+	    /**
+	     * Resizes the object.
+	     *
+	     * How the new Area is interpreted depends on the
+	     * implementation.
+	     *
+	     * @internal A resize must not refresh. It is usually a sequence of
+	     * unrealize(), realize().
+	     *
+	     * @param _a the new Area available to the object.
+	     */
+	    virtual void resize(const Area& _a) = 0;
 
-	/**
-	 * Unrealize the object again.
-	 */
-	virtual void unrealize() = 0;
+	    /**
+	     * Realize the object by calling Curses functions and prepare
+	     * the object for a refresh.
+	     *
+	     * Realize is supposed to create curses window. It should not
+	     * be used for adding text for instance. Adding text and
+	     * related operations would be implemented in refresh().
+	     */
+	    virtual void realize() = 0;
 
-	/**
-	 * Get the realization state of the object.
-	 *
-	 * @return the realization state.
-	 */
-	REALIZATION_STATE realization() const;
-};
+	    /**
+	     * Unrealize the object again.
+	     */
+	    virtual void unrealize() = 0;
+
+	    /**
+	     * Get the realization state of the object.
+	     *
+	     * @return the realization state.
+	     */
+	    REALIZATION_STATE realization() const;
+    };
+}
 
 /**
  * @relates Realizeable
@@ -172,20 +175,20 @@ class Realizeable {
  *    REALIZE_LEAVE;
  * </pre>
  */
-#define REALIZE_ENTER bool __was_realizing_on_enter__=false;		\
-    switch (realization()) {						\
-    case REALIZED:							\
-    case UNREALIZING:							\
-	return;								\
-    case UNREALIZED:							\
-	realization(REALIZING);						\
-	break;								\
-    case REALIZING:							\
-	__was_realizing_on_enter__=true;				\
-	break;								\
-    default:								\
-	assert(0);							\
-	break;								\
+#define REALIZE_ENTER bool __was_realizing_on_enter__=false;	\
+    switch (realization()) {					\
+    case REALIZED:						\
+    case UNREALIZING:						\
+	return;							\
+    case UNREALIZED:						\
+	realization(REALIZING);					\
+	break;							\
+    case REALIZING:						\
+	__was_realizing_on_enter__=true;			\
+	break;							\
+    default:							\
+	assert(0);						\
+	break;							\
     }
 
 /**
@@ -211,7 +214,7 @@ class Realizeable {
  */
 #define UNREALIZE_ENTER bool __was_unrealizing_on_enter__=false;	\
     switch (realization()) {						\
-    case REALIZED:								\
+    case REALIZED:							\
 	realization(UNREALIZING);					\
 	break;								\
     case UNREALIZING:							\

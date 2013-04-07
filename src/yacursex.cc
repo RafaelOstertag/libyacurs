@@ -6,6 +6,8 @@
 
 #include "yacursex.h"
 
+using namespace YACURS;
+
 BaseCurEx::BaseCurEx(const char* m) : msg(m) {}
 
 BaseCurEx::BaseCurEx(const std::string& m): msg(m) {}

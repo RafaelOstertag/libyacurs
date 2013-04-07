@@ -9,7 +9,7 @@
 #include <unistd.h>
 #endif // HAVE_UNISTD_H
 
-#if HAVE_IOSTREAM
+#ifdef HAVE_IOSTREAM
 #include <iostream>
 #endif // HAVE_IOSTREAM
 
@@ -17,8 +17,8 @@
 
 int main() {
     try {
-        Curses::init();
-        Curses::end();
+	YACURS::Curses::init();
+        YACURS::Curses::end();
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
         return 1;

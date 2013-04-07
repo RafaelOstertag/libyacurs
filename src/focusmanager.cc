@@ -6,6 +6,8 @@
 #include "yacursex.h"
 #include "eventqueue.h"
 
+using namespace YACURS;
+
 fgid_t FocusManager::__active_focusgroup=(fgid_t)-1;
 std::vector<FocusGroup*> FocusManager::__focus_groups;
 

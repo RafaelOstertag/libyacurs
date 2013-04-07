@@ -122,35 +122,35 @@ extern "C" int __test_wgetch(void*) {
     return 0;
 }
 
-class MainWindow: public Window {
+class MainWindow: public YACURS::Window {
     private:
-        VPack* vpack1;
-        HPack* hpack2;
-        VPack* vpack21;
-        VPack* vpack22;
-        HPack* hpack1;
-        Button* button1;
-        Button* button2;
-        Label* diagstatus;
-        Label* file;
-        Label* path;
-        Label* filepath;
-        DynLabel* label1;
-        DynLabel* label2;
-        DynLabel* label3;
-        DynLabel* label4;
-        FileDialog* filedialog;
+        YACURS::VPack* vpack1;
+        YACURS::HPack* hpack2;
+        YACURS::VPack* vpack21;
+        YACURS::VPack* vpack22;
+        YACURS::HPack* hpack1;
+        YACURS::Button* button1;
+        YACURS::Button* button2;
+        YACURS::Label* diagstatus;
+        YACURS::Label* file;
+        YACURS::Label* path;
+        YACURS::Label* filepath;
+        YACURS::DynLabel* label1;
+        YACURS::DynLabel* label2;
+        YACURS::DynLabel* label3;
+        YACURS::DynLabel* label4;
+        YACURS::FileDialog* filedialog;
 
 
     protected:
-        void window_close_handler(Event& _e) {
-            assert(_e==EVT_WINDOW_CLOSE);
-            EventEx<WindowBase*>& evt=dynamic_cast<EventEx<WindowBase*>&>(_e);
+        void window_close_handler(YACURS::Event& _e) {
+            assert(_e==YACURS::EVT_WINDOW_CLOSE);
+            YACURS::EventEx<YACURS::WindowBase*>& evt=dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
             if (filedialog!=0 && evt.data()==filedialog) {
-                Curses::statusline()->push_msg("FileDialog closed");
+                YACURS::Curses::statusline()->push_msg("FileDialog closed");
 
-                if (filedialog->dialog_state()==Dialog::DIALOG_OK) {
+                if (filedialog->dialog_state()==YACURS::Dialog::DIALOG_OK) {
                     label1->label("DIALOG_OK");
                     label2->label(filedialog->filepath());
                     label3->label(filedialog->directory());
@@ -168,43 +168,43 @@ class MainWindow: public Window {
 
         }
 
-        void button_press_handler(Event& _e) {
-            assert(_e==EVT_BUTTON_PRESS);
-            EventEx<Button*>& e=dynamic_cast<EventEx<Button*>&>(_e);
+        void button_press_handler(YACURS::Event& _e) {
+            assert(_e==YACURS::EVT_BUTTON_PRESS);
+            YACURS::EventEx<YACURS::Button*>& e=dynamic_cast<YACURS::EventEx<YACURS::Button*>&>(_e);
 
             if (e.data()==button1) {
                 assert(filedialog==0);
 
-                filedialog=new FileDialog;
+                filedialog=new YACURS::FileDialog;
                 filedialog->show();
                 return;
             }
 
             if (e.data()==button2) {
-                EventQueue::submit(EVT_QUIT);
+                YACURS::EventQueue::submit(YACURS::EVT_QUIT);
                 return;
             }
         }
 
     public:
-        MainWindow(): Window(Margin(1,0,1,0)), filedialog(0) {
-            button1=new Button("New Window");
-            button2=new Button("Quit");
-            vpack1=new VPack;
-            hpack1=new HPack;
-            label1=new DynLabel;
-            label2=new DynLabel;
-            label3=new DynLabel;
-            label4=new DynLabel;
+        MainWindow(): YACURS::Window(YACURS::Margin(1,0,1,0)), filedialog(0) {
+            button1=new YACURS::Button("New Window");
+            button2=new YACURS::Button("Quit");
+            vpack1=new YACURS::VPack;
+            hpack1=new YACURS::HPack;
+            label1=new YACURS::DynLabel;
+            label2=new YACURS::DynLabel;
+            label3=new YACURS::DynLabel;
+            label4=new YACURS::DynLabel;
 
-            diagstatus=new Label("Dialog Status:");
-            file=new Label("File:");
-            path=new Label("Path:");
-            filepath=new Label("File Path:");
+            diagstatus=new YACURS::Label("Dialog Status:");
+            file=new YACURS::Label("File:");
+            path=new YACURS::Label("Path:");
+            filepath=new YACURS::Label("File Path:");
 
-            hpack2=new HPack;
-            vpack21=new VPack;
-            vpack22=new VPack;
+            hpack2=new YACURS::HPack;
+            vpack21=new YACURS::VPack;
+            vpack22=new YACURS::VPack;
 
             //vpack21->always_automatic(true);
             vpack22->always_dynamic(true);
@@ -236,8 +236,8 @@ class MainWindow: public Window {
 
             widget(vpack1);
 
-            EventQueue::connect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
-            EventQueue::connect_event(EventConnectorMethod1<MainWindow>(EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
+            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
+            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
         }
 
         ~MainWindow() {
@@ -260,8 +260,8 @@ class MainWindow: public Window {
             delete path;
             delete filepath;
 
-            EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
-            EventQueue::disconnect_event(EventConnectorMethod1<MainWindow>(EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
+            YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
+            YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
         }
 };
 
@@ -294,23 +294,23 @@ int main() {
     selection1[60]=0;
 
     try {
-        Curses::init();
+        YACURS::Curses::init();
 
-        Curses::title(new LineObject(LineObject::POS_TOP,
+        YACURS::Curses::title(new YACURS::LineObject(YACURS::LineObject::POS_TOP,
                                      "FileDialog 1"));
-        Curses::statusline(new StatusLine);
+        YACURS::Curses::statusline(new YACURS::StatusLine);
 
         MainWindow* mainwindow=new MainWindow;
-        Curses::mainwindow(mainwindow);
-        Curses::mainwindow()->frame(true);
+        YACURS::Curses::mainwindow(mainwindow);
+        YACURS::Curses::mainwindow()->frame(true);
 
-        Curses::run();
+        YACURS::Curses::run();
 
         delete mainwindow;
 
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }

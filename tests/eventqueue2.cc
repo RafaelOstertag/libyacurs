@@ -21,12 +21,12 @@
 
 class Handler {
     private:
-        EVENT_TYPE expected_evt;
+        YACURS::EVENT_TYPE expected_evt;
         int calls;
     public:
-        Handler(EVENT_TYPE expected):
+        Handler(YACURS::EVENT_TYPE expected):
             expected_evt(expected), calls(0) {}
-        virtual void handler(Event& e) {
+        virtual void handler(YACURS::Event& e) {
             if (e.type() != expected_evt) std::abort();
 
             calls++;
@@ -38,20 +38,20 @@ class Handler {
 
 class AlrmHandler: public Handler {
     public:
-        AlrmHandler(): Handler(EVT_SIGALRM) {}
-        void handler(Event& e) {
+        AlrmHandler(): Handler(YACURS::EVT_SIGALRM) {}
+        void handler(YACURS::Event& e) {
             std::cout << "AlrmHandler::handler()\r" << std::endl;
-            EventQueue::submit(Event(EVT_QUIT));
+            YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
             Handler::handler(e);
         }
 };
 
 class SelfRegister : public Handler {
     public:
-        SelfRegister(): Handler(EVT_SIGALRM) {
-            EventQueue::connect_event(EventConnectorMethod1<SelfRegister>(EVT_SIGALRM, this ,&SelfRegister::handler) );
+        SelfRegister(): Handler(YACURS::EVT_SIGALRM) {
+            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<SelfRegister>(YACURS::EVT_SIGALRM, this ,&SelfRegister::handler) );
         }
-        void handler(Event& e) {
+        void handler(YACURS::Event& e) {
             std::cout << "SelfRegister::handler()\r" << std::endl;
             Handler::handler(e);
         }
@@ -60,10 +60,10 @@ class SelfRegister : public Handler {
 class SelfRegister2 : public SelfRegister {
     public:
         SelfRegister2(): SelfRegister() {
-            EventQueue::connect_event(EventConnectorMethod1<SelfRegister2>(EVT_SIGALRM, this ,&SelfRegister2::handler) );
+            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<SelfRegister2>(YACURS::EVT_SIGALRM, this ,&SelfRegister2::handler) );
         }
-        void handler(Event& e) {
-            EventQueue::submit(Event(EVT_QUIT));
+        void handler(YACURS::Event& e) {
+            YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
             std::cout << "SelfRegister2::handler()\r" << std::endl;
             SelfRegister::handler(e);
         }
@@ -74,31 +74,31 @@ int main() {
     try {
         AlrmHandler ahandler;
 
-        EventQueue::connect_event(EventConnectorMethod1<AlrmHandler>(EVT_SIGALRM, &ahandler,&AlrmHandler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler>(YACURS::EVT_SIGALRM, &ahandler,&AlrmHandler::handler) );
 
-        Curses::init();
+        YACURS::Curses::init();
         alarm(2);
-        EventQueue::run();
+        YACURS::EventQueue::run();
 
         if (ahandler.getCalls() != 1)
             goto _ERR;
 
         SelfRegister2 sr2;
         alarm(2);
-        EventQueue::run();
+        YACURS::EventQueue::run();
 
         if (sr2.getCalls() != 1)
             goto _ERR;
 
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }
 
     return 0;
 _ERR:
-    Curses::end();
+    YACURS::Curses::end();
     return 1;
 }

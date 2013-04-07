@@ -5,6 +5,9 @@
 #include "curs.h"
 #include "yacursex.h"
 #include "statusline.h"
+
+using namespace YACURS;
+
 //
 // Private
 //

@@ -6,6 +6,8 @@
 #include "radiobox.h"
 #include "yacursex.h"
 
+using namespace YACURS;
+
 //
 // Private
 //

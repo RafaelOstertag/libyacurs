@@ -90,12 +90,12 @@ CursWin::~CursWin() {
 	    throw CursesException("delwin");
 }
 
-const Area&
+const YACURS::Area&
 CursWin::area() const {
     return __area;
 }
 
-const Area&
+const YACURS::Area&
 CursWin::client_area() const {
     return __client_area;
 }
@@ -158,7 +158,7 @@ CursWin::unset_box() {
     return *this;
 }
 
-Coordinates
+YACURS::Coordinates
 CursWin::get_cursor() const {
     int y, x;
     getyx(__window, y, x);

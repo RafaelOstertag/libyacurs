@@ -6,6 +6,8 @@
 #include "messagebox.h"
 #include "yacursex.h"
 
+using namespace YACURS;
+
 //
 // Private
 //

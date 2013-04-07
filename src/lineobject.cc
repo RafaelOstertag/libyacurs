@@ -8,6 +8,8 @@
 #include "lineobject.h"
 #include "colors.h"
 
+using namespace YACURS;
+
 //
 // Private
 //

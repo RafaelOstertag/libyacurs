@@ -93,30 +93,30 @@ extern "C" int __test_wgetch(void*) {
 }
 
 // Event handler requires access
-Input<>* ifixed;
-Input<>* idyn;
-ListBox<>* listbox;
-Button* b1;
-Button* b2;
-Button* b3;
+YACURS::Input<>* ifixed;
+YACURS::Input<>* idyn;
+YACURS::ListBox<>* listbox;
+YACURS::Button* b1;
+YACURS::Button* b2;
+YACURS::Button* b3;
 
-void button_press_handler(Event& _e) {
-    assert(_e==EVT_BUTTON_PRESS);
+void button_press_handler(YACURS::Event& _e) {
+    assert(_e==YACURS::EVT_BUTTON_PRESS);
 
-    EventEx<Button*>& ev=dynamic_cast<EventEx<Button*>&>(_e);
+    YACURS::EventEx<YACURS::Button*>& ev=dynamic_cast<YACURS::EventEx<YACURS::Button*>&>(_e);
 
     if (ev.data() == b1) {
-        Curses::statusline()->push_msg(ifixed->input());
+        YACURS::Curses::statusline()->push_msg(ifixed->input());
         return;
     }
 
     if (ev.data() == b2) {
-        Curses::statusline()->push_msg(idyn->input());
+        YACURS::Curses::statusline()->push_msg(idyn->input());
         return;
     }
 
     if (ev.data() == b3) {
-        EventQueue::submit(EVT_QUIT);
+        YACURS::EventQueue::submit(YACURS::EVT_QUIT);
         return;
     }
 
@@ -138,27 +138,27 @@ int main() {
 #endif
 
     try {
-        Curses::init();
+        YACURS::Curses::init();
 
-        EventQueue::connect_event(EventConnectorFunction1(EVT_BUTTON_PRESS,button_press_handler));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_BUTTON_PRESS,button_press_handler));
 
-        Curses::title(new LineObject(LineObject::POS_TOP,
+        YACURS::Curses::title(new YACURS::LineObject(YACURS::LineObject::POS_TOP,
                                      "Focus 1"));
-        Curses::statusline(new StatusLine);
+        YACURS::Curses::statusline(new YACURS::StatusLine);
 
-        Curses::mainwindow(new Window(Margin(1,0,1,0)));
-        Curses::mainwindow()->frame(true);
+        YACURS::Curses::mainwindow(new YACURS::Window(YACURS::Margin(1,0,1,0)));
+        YACURS::Curses::mainwindow()->frame(true);
 
-        VPack* vpack=new VPack;
-        HPack* hpack=new HPack;
-        b1=new Button("Button1");
-        b2=new Button("Button2");
-        b3=new Button("Button3");
-        ifixed=new Input<>(10);
-        idyn=new Input<>;
-        listbox=new ListBox<>;
+        YACURS::VPack* vpack=new YACURS::VPack;
+        YACURS::HPack* hpack=new YACURS::HPack;
+        b1=new YACURS::Button("YACURS::Button1");
+        b2=new YACURS::Button("YACURS::Button2");
+        b3=new YACURS::Button("YACURS::Button3");
+        ifixed=new YACURS::Input<>(10);
+        idyn=new YACURS::Input<>;
+        listbox=new YACURS::ListBox<>;
         listbox->set(items);
-        Input<>* ireadonly=new Input<>;
+        YACURS::Input<>* ireadonly=new YACURS::Input<>;
         ireadonly->input("Read only");
         ireadonly->readonly(true);
 
@@ -175,13 +175,13 @@ int main() {
 
         vpack->add_back(hpack);
 
-        assert(b1->label()=="Button1");
-        assert(b2->label()=="Button2");
-        assert(b3->label()=="Button3");
+        assert(b1->label()=="YACURS::Button1");
+        assert(b2->label()=="YACURS::Button2");
+        assert(b3->label()=="YACURS::Button3");
 
-        Curses::mainwindow()->widget(vpack);
+        YACURS::Curses::mainwindow()->widget(vpack);
 
-        Curses::run();
+        YACURS::Curses::run();
 
         delete b1;
         delete b2;
@@ -192,12 +192,12 @@ int main() {
         delete listbox;
         delete hpack;
         delete vpack;
-        delete Curses::mainwindow();
-        delete Curses::title();
-        delete Curses::statusline();
-        Curses::end();
+        delete YACURS::Curses::mainwindow();
+        delete YACURS::Curses::title();
+        delete YACURS::Curses::statusline();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }

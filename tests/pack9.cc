@@ -12,40 +12,40 @@
 #include "yacurs.h"
 
 // The alarm handler needs access to those
-VPack* vpack;
-HPack* hpack;
-HPack* hpack1;
-HPack* hpack2;
-VPack* vpack1;
-VPack* vpack2;
-VPack* vpack2_1;
-VPack* vpack2_2;
+YACURS::VPack* vpack;
+YACURS::HPack* hpack;
+YACURS::HPack* hpack1;
+YACURS::HPack* hpack2;
+YACURS::VPack* vpack1;
+YACURS::VPack* vpack2;
+YACURS::VPack* vpack2_1;
+YACURS::VPack* vpack2_2;
 
-Label* label1;
-Label* label2;
-Label* label3;
-Label* label4;
-Label* label5;
-Label* label6;
-Label* label7;
-Label* label8;
-Label* label9;
-Label* label10;
-Label* label11;
-Label* label12;
-Label* label13;
-Label* label14;
-Label* label15;
-Label* label16;
+YACURS::Label* label1;
+YACURS::Label* label2;
+YACURS::Label* label3;
+YACURS::Label* label4;
+YACURS::Label* label5;
+YACURS::Label* label6;
+YACURS::Label* label7;
+YACURS::Label* label8;
+YACURS::Label* label9;
+YACURS::Label* label10;
+YACURS::Label* label11;
+YACURS::Label* label12;
+YACURS::Label* label13;
+YACURS::Label* label14;
+YACURS::Label* label15;
+YACURS::Label* label16;
 
-void alrm(Event& _e) {
+void alrm(YACURS::Event& _e) {
     static int i=0;
 
-    assert(_e == EVT_SIGALRM);
+    assert(_e == YACURS::EVT_SIGALRM);
 
     switch (i++) {
     case 0:
-        Curses::title()->line("Pack 9: always_dynamic=false, hinting=false");
+        YACURS::Curses::title()->line("Pack 9: always_dynamic=false, hinting=false");
         hpack->always_dynamic(false);
         hpack->hinting(false);
         hpack1->always_dynamic(false);
@@ -64,7 +64,7 @@ void alrm(Event& _e) {
         break;
 
     case 1:
-        Curses::title()->line("Pack 9: always_dynamic=true, hinting=false");
+        YACURS::Curses::title()->line("Pack 9: always_dynamic=true, hinting=false");
         hpack->always_dynamic(true);
         hpack->hinting(false);
         hpack1->always_dynamic(true);
@@ -83,7 +83,7 @@ void alrm(Event& _e) {
         break;
 
     case 2:
-        Curses::title()->line("Pack 9: always_dynamic=false, hinting=true");
+        YACURS::Curses::title()->line("Pack 9: always_dynamic=false, hinting=true");
         hpack->always_dynamic(false);
         hpack->hinting(true);
         hpack1->always_dynamic(false);
@@ -102,7 +102,7 @@ void alrm(Event& _e) {
         break;
 
     case 3:
-        Curses::title()->line("Pack 9: always_dynamic=true, hinting=true");
+        YACURS::Curses::title()->line("Pack 9: always_dynamic=true, hinting=true");
         hpack->always_dynamic(true);
         hpack->hinting(true);
         hpack1->always_dynamic(true);
@@ -121,7 +121,7 @@ void alrm(Event& _e) {
         break;
 
     default:
-        EventQueue::submit(Event(EVT_QUIT));
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
         break;
     }
 }
@@ -133,40 +133,40 @@ int main() {
 #endif
 
     try {
-        Curses::init();
+        YACURS::Curses::init();
 
-        LineObject* title = new LineObject(LineObject::POS_TOP,
+        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
                                            "Pack 9:");
-        Curses::title(title);
+        YACURS::Curses::title(title);
 
-        Window* w1 = new Window(Margin(1,0,0,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,0,0));
         w1->frame(true);
 
-        vpack = new VPack;
-        hpack = new HPack;
-        hpack1 = new HPack();
-        hpack2 = new HPack();
-        vpack1 = new VPack;
-        vpack2 = new VPack;
-        vpack2_1 = new VPack();
-        vpack2_2 = new VPack();
+        vpack = new YACURS::VPack;
+        hpack = new YACURS::HPack;
+        hpack1 = new YACURS::HPack();
+        hpack2 = new YACURS::HPack();
+        vpack1 = new YACURS::VPack;
+        vpack2 = new YACURS::VPack;
+        vpack2_1 = new YACURS::VPack();
+        vpack2_2 = new YACURS::VPack();
 
-        label1 = new Label("Test label");
-        label2 = new Label("Test label2");
-        label3 = new Label("Test label3");
-        label4 = new Label("Test label4");
-        label5 = new Label("Label 5");
-        label6 = new Label("Label 6");
-        label7 = new Label("Label 7");
-        label8 = new Label("Label 8");
-        label9 = new Label("Label 9");
-        label10 = new Label("Label 10");
-        label11 = new Label("Label 11");
-        label12 = new Label("Label 12");
-        label13 = new Label("Label 13");
-        label14 = new Label("Label 14");
-        label15 = new Label("Label 15");
-        label16 = new Label("Label 16");
+        label1 = new YACURS::Label("Test label");
+        label2 = new YACURS::Label("Test label2");
+        label3 = new YACURS::Label("Test label3");
+        label4 = new YACURS::Label("Test label4");
+        label5 = new YACURS::Label("Label 5");
+        label6 = new YACURS::Label("Label 6");
+        label7 = new YACURS::Label("Label 7");
+        label8 = new YACURS::Label("Label 8");
+        label9 = new YACURS::Label("Label 9");
+        label10 = new YACURS::Label("Label 10");
+        label11 = new YACURS::Label("Label 11");
+        label12 = new YACURS::Label("Label 12");
+        label13 = new YACURS::Label("Label 13");
+        label14 = new YACURS::Label("Label 14");
+        label15 = new YACURS::Label("Label 15");
+        label16 = new YACURS::Label("Label 16");
 
         vpack->add_front(hpack);
         vpack->add_front(hpack1);
@@ -220,12 +220,12 @@ int main() {
 
         w1->widget(vpack);
 
-        Curses::mainwindow(w1);
+        YACURS::Curses::mainwindow(w1);
 
-        EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
 
         alarm(5);
-        Curses::run();
+        YACURS::Curses::run();
 
         delete title;
         delete label1;
@@ -254,9 +254,9 @@ int main() {
         delete hpack;
         delete w1;
 
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
         std::cerr << e.what() << std::endl;
         return 1;
     }

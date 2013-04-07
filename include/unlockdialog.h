@@ -13,25 +13,25 @@
 
 #include "dialog.h"
 
-/**
- */
-class UnlockDialog: public Dialog {
-    private:
-	UnlockDialog& operator=(const UnlockDialog&);
-    public:
-	UnlockDialog(const std::string& _title);
-	virtual ~UnlockDialog();
+namespace YACURS {
+    class UnlockDialog: public Dialog {
+	private:
+	    UnlockDialog& operator=(const UnlockDialog&);
+	public:
+	    UnlockDialog(const std::string& _title);
+	    virtual ~UnlockDialog();
 
-	// From Dialog
-	void realize();
+	    // From Dialog
+	    void realize();
 	
-	/**
-	 * @return @c true if unlock should happen, @c false
-	 * otherwise.
-	 */
-	virtual bool unlock() = 0;
+	    /**
+	     * @return @c true if unlock should happen, @c false
+	     * otherwise.
+	     */
+	    virtual bool unlock() = 0;
 
-	virtual void clear() = 0;
-};
+	    virtual void clear() = 0;
+    };
+}
 
 #endif // UNLOCKDIALOG_H

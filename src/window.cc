@@ -8,7 +8,6 @@
 #include <cassert>
 #include <cstdlib>
 
-
 #include "curs.h"
 #include "yacursex.h"
 #include "window.h"
@@ -16,6 +15,8 @@
 #include "eventqueue.h"
 #include "focusmanager.h"
 #include "colors.h"
+
+using namespace YACURS;
 
 //
 // Private

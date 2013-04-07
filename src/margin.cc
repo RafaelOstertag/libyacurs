@@ -4,6 +4,8 @@
 
 #include "margin.h"
 
+using namespace YACURS;
+
 //
 // Static
 //

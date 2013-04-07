@@ -36,15 +36,15 @@
 #include "yacurs.h"
 
 #ifdef INTERACTIVE
-void key_handler(Event& _e) {
-    assert(_e == EVT_KEY);
+void key_handler(YACURS::Event& _e) {
+    assert(_e == YACURS::EVT_KEY);
 
-    EventEx<int>& _ek = dynamic_cast<EventEx<int>&>(_e);
+    YACURS::EventEx<int>& _ek = dynamic_cast<YACURS::EventEx<int>&>(_e);
 
     switch (_ek.data()) {
     case 'q':
     case 'Q':
-        EventQueue::submit(Event(EVT_QUIT));
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
         break;
 
     default:
@@ -54,12 +54,12 @@ void key_handler(Event& _e) {
 
 #else // INTERACTIVE
 
-void alrm(Event& _e) {
-    assert(_e == EVT_SIGALRM);
+void alrm(YACURS::Event& _e) {
+    assert(_e == YACURS::EVT_SIGALRM);
 
-    std::string status_msg("Size: rows=");
+    std::string status_msg("YACURS::Size: rows=");
 
-    Size _scrdim(Curses::inquiry_screensize());
+    YACURS::Size _scrdim(YACURS::Curses::inquiry_screensize());
 
     char buff[32];
     snprintf(buff,32,"%d",_scrdim.rows());
@@ -70,7 +70,7 @@ void alrm(Event& _e) {
     snprintf(buff,32,"%d",_scrdim.cols());
     status_msg+=buff;
 
-    Curses::statusline()->push_msg(status_msg);
+    YACURS::Curses::statusline()->push_msg(status_msg);
 
     winsize ws;
 
@@ -85,9 +85,9 @@ void alrm(Event& _e) {
         return;
     }
 
-    if (ws.ws_row<=MIN_ROWS ||
-            ws.ws_col<=MIN_COLS)
-        EventQueue::submit(Event(EVT_QUIT));
+    if (ws.ws_row<=YACURS::MIN_ROWS ||
+	ws.ws_col<=YACURS::MIN_COLS)
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
     else
         alarm(1);
 }
@@ -109,28 +109,28 @@ int main() {
 #endif // INTERACTIVE
 
     try {
-        Curses::init();
+        YACURS::Curses::init();
 
-        LineObject* title = new LineObject(LineObject::POS_TOP,
+        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
                                            "DynLabel 1");
-        Curses::title(title);
+        YACURS::Curses::title(title);
 
-        Window* w1 = new Window(Margin(1,0,1,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,1,0));
         w1->frame(true);
 
-        StatusLine* sl = new StatusLine();
-        Curses::statusline(sl);
+        YACURS::StatusLine* sl = new YACURS::StatusLine();
+        YACURS::Curses::statusline(sl);
 
-        VPack* vpack = new VPack;
+        YACURS::VPack* vpack = new YACURS::VPack;
 
-        DynLabel* dlabel1 = new DynLabel("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+        YACURS::DynLabel* dlabel1 = new YACURS::DynLabel("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
         vpack->add_back(dlabel1);
 
-        HPack* hpack = new HPack;
+        YACURS::HPack* hpack = new YACURS::HPack;
         vpack->add_back(hpack);
 
-        DynLabel* dlabel2 = new DynLabel("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
-        DynLabel* dlabel3 = new DynLabel("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+        YACURS::DynLabel* dlabel2 = new YACURS::DynLabel("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+        YACURS::DynLabel* dlabel3 = new YACURS::DynLabel("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
         hpack->add_back(dlabel2);
         hpack->add_back(dlabel3);
         hpack->hinting(false);
@@ -138,16 +138,16 @@ int main() {
 
         w1->widget(vpack);
 
-        Curses::mainwindow(w1);
+        YACURS::Curses::mainwindow(w1);
 
 #ifdef INTERACTIVE
         sl->push_msg("Press Q to quit");
-        EventQueue::connect_event(EventConnectorFunction1(EVT_KEY,&key_handler));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_KEY,&key_handler));
 #else // INTERACTIVE
-        EventQueue::connect_event(EventConnectorFunction1(EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
         alarm(2);
 #endif
-        Curses::run();
+        YACURS::Curses::run();
 
         delete title;
 
@@ -159,9 +159,9 @@ int main() {
 
         delete w1;
         delete sl;
-        Curses::end();
+        YACURS::Curses::end();
     } catch (std::exception& e) {
-        Curses::end();
+        YACURS::Curses::end();
 #ifndef INTERACTIVE
 
         if (ioctl(STDIN_FILENO, TIOCSWINSZ, &wsave) == -1) {

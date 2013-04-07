@@ -8,6 +8,8 @@
 #include "eventqueue.h"
 #include "yacursex.h"
 
+using namespace YACURS;
+
 //
 // Private
 //

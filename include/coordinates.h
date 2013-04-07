@@ -5,151 +5,146 @@
 #ifndef COORDINATES_H
 #define COORDINATES_H
 
-#ifdef HAVE_CSTDINT
-# include <cstdint>
-#else // HAVE_CSTDINT
-# ifdef HAVE_STDINT_H
-#  include <stdint.h>
-# endif // HAVE_STDINT_H
-#endif // HAVE_CSTDINT
-
+#include <stdint.h>
 #include <string>
 
-/**
- * Coordinates as used throughout Curses.
- */
-class Coordinates {
-    private:
-	/**
-	 * Object representing zero.
-	 */
-	static Coordinates __zero;
-	/**
-	 * y component.
-	 */
-	int16_t __y;
-	/**
-	 * x component
-	 */
-	int16_t __x;
+namespace YACURS {
+    /**
+     * Coordinates as used throughout Curses.
+     */
+    class Coordinates {
+	private:
+	    /**
+	     * Object representing zero.
+	     */
+	    static Coordinates __zero;
+	    /**
+	     * y component.
+	     */
+	    int16_t __y;
+	    /**
+	     * x component
+	     */
+	    int16_t __x;
 
-    public:
-	/**
-	 * Constructor.
-	 *
-	 * When no arguments are provided, it initializes the object
-	 * to zero, i.e. x=0, y=0.
-	 *
-	 * @param _x x-component
-	 * @param _y y-component
-	 */
-	Coordinates(int16_t _x=0, int16_t _y=0);
+	public:
+	    /**
+	     * Constructor.
+	     *
+	     * When no arguments are provided, it initializes the object
+	     * to zero, i.e. x=0, y=0.
+	     *
+	     * @param _x x-component
+	     * @param _y y-component
+	     */
+	    Coordinates(int16_t _x=0, int16_t _y=0);
 
-	/**
-	 * Get x component.
-	 *
-	 * @return x component
-	 */
-	int16_t x() const;
+	    /**
+	     * Get x component.
+	     *
+	     * @return x component
+	     */
+	    int16_t x() const;
 
-	/**
-	 * Get y component
-	 *
-	 * @return y component
-	 */
-	int16_t y() const;
+	    /**
+	     * Get y component
+	     *
+	     * @return y component
+	     */
+	    int16_t y() const;
 
-	/**
-	 * Set x component.
-	 *
-	 * @param _x value of x
-	 */
-	void x(int16_t _x);
+	    /**
+	     * Set x component.
+	     *
+	     * @param _x value of x
+	     */
+	    void x(int16_t _x);
 
-	/**
-	 * Set y component.
-	 *
-	 * @param _y value of y
-	 */
-	void y(int16_t _y);
+	    /**
+	     * Set y component.
+	     *
+	     * @param _y value of y
+	     */
+	    void y(int16_t _y);
 
-	/**
-	 * Add and assign another Coordinates object.
-	 *
-	 * Component wise add and assign another Coordinates object.
-	 *
-	 * @param rhs right hand side to add
-	 *
-	 * @return reference to @c this.
-	 */
-	Coordinates& operator+=(const Coordinates& rhs);
+	    /**
+	     * Add and assign another Coordinates object.
+	     *
+	     * Component wise add and assign another Coordinates object.
+	     *
+	     * @param rhs right hand side to add
+	     *
+	     * @return reference to @c this.
+	     */
+	    Coordinates& operator+=(const Coordinates& rhs);
 
-	/**
-	 * Subtract and assign another Coordinates object.
-	 *
-	 * Component wise subtract and assign another Coordinates
-	 * object.
-	 *
-	 * @param rhs right hand side to subtract.
-	 *
-	 * @return reference to @c this.
-	 */
-	Coordinates& operator-=(const Coordinates& rhs);
+	    /**
+	     * Subtract and assign another Coordinates object.
+	     *
+	     * Component wise subtract and assign another Coordinates
+	     * object.
+	     *
+	     * @param rhs right hand side to subtract.
+	     *
+	     * @return reference to @c this.
+	     */
+	    Coordinates& operator-=(const Coordinates& rhs);
 
-	/**
-	 * Test two Coordinates objects for equality.
-	 *
-	 * Test two Coordinates object component wise for equality.
-	 *
-	 * @param rhs right hand side to test for equality.
-	 *
-	 * @return @c true if both Coordinates objects are component
-	 * wise equal, @c false otherwise.
-	 */
-	bool operator==(const Coordinates& rhs) const;
+	    /**
+	     * Test two Coordinates objects for equality.
+	     *
+	     * Test two Coordinates object component wise for equality.
+	     *
+	     * @param rhs right hand side to test for equality.
+	     *
+	     * @return @c true if both Coordinates objects are component
+	     * wise equal, @c false otherwise.
+	     */
+	    bool operator==(const Coordinates& rhs) const;
 
-	/**
-	 * Return the object representing zero.
-	 *
-	 * @return Coordinates object representing zero.
-	 */
-	static const Coordinates& zero();
-};
+	    /**
+	     * Return the object representing zero.
+	     *
+	     * @return Coordinates object representing zero.
+	     */
+	    static const Coordinates& zero();
+    };
 
-/**
- * Component wise addition.
- *
- * Adds two Coordinates objects component wise.
- *
- * @param rhs right hand side of addition.
- *
- * @return sum of two Coordinate objects.
- */
-Coordinates operator+(const Coordinates& lhs, const Coordinates& rhs);
+    /**
+     * Component wise addition.
+     *
+     * Adds two Coordinates objects component wise.
+     *
+     * @param rhs right hand side of addition.
+     *
+     * @return sum of two Coordinate objects.
+     */
+    Coordinates operator+(const Coordinates& lhs, const Coordinates& rhs);
 
-/**
- * Component wise subtraction.
- *
- * Subtracts two Coordinates objects comonent wise.
- *
- * @param rhs right hand side of subtraction.
- *
- * @return difference of two Coordinate objects.
- */
-Coordinates operator-(const Coordinates& lhs, const Coordinates& rhs);
+    /**
+     * Component wise subtraction.
+     *
+     * Subtracts two Coordinates objects comonent wise.
+     *
+     * @param rhs right hand side of subtraction.
+     *
+     * @return difference of two Coordinate objects.
+     */
+    Coordinates operator-(const Coordinates& lhs, const Coordinates& rhs);
 
-/**
- * Test two Coordinates object for inequality.
- *
- * Simply
- *
- *  <code>!Coordinates::operator==()</code>
- *
- * @param rhs right hand side of comparison.
- *
- * @return @c true if Coordinates object are not equal, @c
- * false otherwise.
- */
-bool operator!=(const Coordinates& lhs, const Coordinates& rhs);
+    /**
+     * Test two Coordinates object for inequality.
+     *
+     * Simply
+     *
+     *  <code>!Coordinates::operator==()</code>
+     *
+     * @param rhs right hand side of comparison.
+     *
+     * @return @c true if Coordinates object are not equal, @c
+     * false otherwise.
+     */
+    bool operator!=(const Coordinates& lhs, const Coordinates& rhs);
+}
 
 #endif // COORDINATES_H

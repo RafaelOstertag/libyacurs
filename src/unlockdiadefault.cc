@@ -4,6 +4,8 @@
 
 #include "unlockdiadefault.h"
 
+using namespace YACURS;
+
 //
 // Private
 //

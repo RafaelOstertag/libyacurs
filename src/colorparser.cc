@@ -65,12 +65,7 @@ using namespace YACURS;
 //
 // Private
 //
-const std::string ColorParser::__default_colors("DEF:wk0;MBT:cy0;MBX:yc0;IWN:yw3;IWF:yg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;LBH:kg3;CBG:yc0;CBT:cy0");
-
-const std::string&
-ColorParser::default_colors() {
-    return __default_colors;
-}
+const std::string ColorParser::__default_colors("DEF:wk0;MBT:cy0;MBX:yc0;IWN:kw3;IWF:kg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;LBH:kg3;CBG:yc0;CBT:cy0");
 
 std::vector<std::string>
 ColorParser::tokenize(const std::string& str) const {
@@ -128,7 +123,7 @@ std::vector<CursColor>
 ColorParser::get_default_scheme() {
     std::vector<std::string> default_tokens(tokenize(default_colors()));
 
-    std::vector<CursColor> retval(NUMBER_OF_COLORS);
+    std::vector<CursColor> retval(NUMBER_OF_COLOROBJ);
 
     std::vector<std::string>::iterator it=default_tokens.begin();
     while (it!=default_tokens.end()) {
@@ -203,7 +198,7 @@ ColorParser::operator()(const std::string& colorstr) {
 
     std::vector<std::string> tokens(tokenize(colorstr));
 
-    std::vector<CursColor> retval(NUMBER_OF_COLORS);
+    std::vector<CursColor> retval(NUMBER_OF_COLOROBJ);
     if (tokens.size()>0) {
 	std::vector<std::string>::iterator it=tokens.begin();
 	while (it!=tokens.end()) {
@@ -217,7 +212,7 @@ ColorParser::operator()(const std::string& colorstr) {
 
 	// Merge with default colors, so unspecified colors will be
 	// initialized.
-	for (int i=0; i<NUMBER_OF_COLORS; i++) {
+	for (int i=0; i<NUMBER_OF_COLOROBJ; i++) {
 	    if (retval.at(i).no==-1)
 		retval.at(i)=default_scheme.at(i);
 	}
@@ -227,3 +222,9 @@ ColorParser::operator()(const std::string& colorstr) {
 
     return retval;
 }
+
+const std::string&
+ColorParser::default_colors() {
+    return __default_colors;
+}
+

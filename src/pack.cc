@@ -24,7 +24,7 @@ void
 Pack::set_all_curses_window() {
     std::for_each(widget_list.begin(),
 		  widget_list.end(),
-		  std::bind2nd(std::mem_fun<void,WidgetBase,WINDOW*>(&WidgetBase::curses_window),WidgetBase::curses_window()));
+		  std::bind2nd(std::mem_fun<void,WidgetBase,YACURS::INTERNAL::CursWin*>(&WidgetBase::curses_window),WidgetBase::curses_window()));
 }
 
 void
@@ -147,7 +147,7 @@ Pack::remove(WidgetBase* _w) {
 }
 
 void
-Pack::curses_window(WINDOW* _p) {
+Pack::curses_window(YACURS::INTERNAL::CursWin* _p) {
     WidgetBase::curses_window(_p);
 
     // We have to make sure that the associated widgets have the same

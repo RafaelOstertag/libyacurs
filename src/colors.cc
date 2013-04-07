@@ -99,36 +99,42 @@ color Colors::__colors[] = {
 };
 #endif
 #endif
+
 void
-Colors::init_colors() {
+Colors::init_colors(const std::string& colorstr) {
     if (__initialized) return;
 
     ColorParser cp;
 
-    // There is currently only the default color scheme
-    __colors=cp();
+    if (colorstr.empty())
+	__colors=cp();
+    else
+	__colors=cp(colorstr);
 
-    if (has_colors() == FALSE) {
+    if (has_colors() == FALSE || can_change_color() == FALSE ) {
 	__initialized = true;
 	return;
     }
 
     start_color();
 
-    for (int i = 0; i < NUMBER_OF_COLORS ; i++)
+    __initialized = true;
+
+    if (COLORS <= NUMBER_OF_COLOROBJ)
+	return;
+
+    for (int i = 0; i < NUMBER_OF_COLOROBJ ; i++)
 	init_pair (__colors.at(i).no,
 		   __colors.at(i).fg,
 		   __colors.at(i).bg);
-
-    __initialized = true;
 }
 
 void
-Colors::set_color (WINDOW* w, COLORS c) {
+Colors::set_color (WINDOW* w, COLOROBJ c) {
     if (!__initialized)
 	throw ColorsNotInitialized();
 
-    if (has_colors() == TRUE) {
+    if (has_colors() == TRUE && COLORS >= NUMBER_OF_COLOROBJ) {
 #if NCURSES_VERSION_PATCH < 20100313
         wattrset(w, COLOR_PAIR (__colors.at(c).no));
 #else
@@ -146,19 +152,19 @@ Colors::set_color (WINDOW* w, COLORS c) {
 }
 
 void
-Colors::set_bg(WINDOW* w, COLORS c) {
+Colors::set_bg(WINDOW* w, COLOROBJ c) {
    if (!__initialized)
 	throw ColorsNotInitialized();
 
-    if (has_colors() == TRUE)
+    if (has_colors() == TRUE && COLORS >= NUMBER_OF_COLOROBJ)
 	wbkgd(w, ' ' | COLOR_PAIR (__colors.at(c).no) );
     else
 	wbkgd(w, ' ' | __colors.at(c).attr);
 }
 
 short
-Colors::get_color (COLORS c) {
-    if (has_colors() == TRUE) {
+Colors::get_color (COLOROBJ c) {
+    if (has_colors() == TRUE && COLORS >= NUMBER_OF_COLOROBJ) {
 	return __colors.at(c).no;
     }
 

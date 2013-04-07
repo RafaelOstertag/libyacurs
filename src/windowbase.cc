@@ -17,7 +17,7 @@
 //
 // Private
 //
-WindowBase::WindowBase(const WindowBase&) {
+WindowBase::WindowBase(const WindowBase& wb) {
     throw NotSupported();
 }
 
@@ -30,7 +30,7 @@ WindowBase::operator=(const WindowBase&) {
 //
 // Protected
 //
-WINDOW*
+YACURS::INTERNAL::CursWin*
 WindowBase::curses_window() const {
     return __curses_window;
 }
@@ -61,11 +61,7 @@ WindowBase::unrealize() {
 
     assert(__curses_window!=0);
 
-    if (delwin(__curses_window) == ERR) {
-	realization(UNREALIZED);
-	throw CursesException("delwin");
-    }
-
+    delete __curses_window;
     __curses_window = 0;
 
     UNREALIZE_LEAVE;
@@ -88,15 +84,13 @@ WindowBase::WindowBase(const Margin& _m):
 }
 
 WindowBase::~WindowBase() {
-
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_FORCEREFRESH,this, &WindowBase::force_refresh_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,this, &WindowBase::refresh_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,this, &WindowBase::resize_handler));
 
     if (realization()==REALIZED) {
 	assert(__curses_window!=0);
-	if (delwin(__curses_window)==ERR)
-	    throw CursesException("delwin");
+	delete __curses_window;
     }
 }
 
@@ -171,8 +165,7 @@ WindowBase::force_refresh_handler(Event& _e) {
     assert(_e == EVT_FORCEREFRESH);
     assert(__curses_window!=0);
 
-    if (clearok(__curses_window, TRUE)==ERR)
-	throw CursesException("clearok");
+    __curses_window->clearok(true);
 }
 
 void
@@ -194,13 +187,7 @@ WindowBase::refresh(bool immediate) {
 
     assert(__curses_window!=0);
 
-    if (immediate) {
-	if (wrefresh(__curses_window)==ERR)
-	    throw CursesException("wrefresh");
-    } else {
-	if (wnoutrefresh(__curses_window)==ERR)
-	    throw CursesException("wnoutrefresh");
-    }
+    __curses_window->refresh(immediate);
 }
 
 void
@@ -251,36 +238,21 @@ WindowBase::realize() {
     }
 
     assert(__curses_window==0);
-    __curses_window = newwin(_tmp.rows(),
-			     _tmp.cols(),
-			     _tmp.y(),
-			     _tmp.x());
-    if (__curses_window == 0) {
-	realization(UNREALIZED);
-	throw CursesException("newwin");
-    }
-
-    if (scrollok(__curses_window, FALSE)==ERR) {
-	realization(UNREALIZED);
-	delwin(__curses_window);
-	__curses_window=0;
-	throw CursesException("scrollok");
-    }
-
-    if (leaveok(__curses_window, TRUE)==ERR) {
-	realization(UNREALIZED);
-	delwin(__curses_window);
-	__curses_window=0;
-	throw CursesException("leaveok");
-    }
-
-    if (__frame) {
-	if (box(__curses_window, 0, 0) == ERR) {
-	    realization(UNREALIZED);
-	    delwin(__curses_window);
-	    __curses_window=0;
-	    throw CursesException("box");
+    try {
+	__curses_window = new YACURS::INTERNAL::CursWin(_tmp);
+	__curses_window->scrollok(false);
+	__curses_window->leaveok(true);
+	
+	if (__frame) {
+	    __curses_window->box();
 	}
+    } catch (CursesException&) {
+	if (__curses_window!=0) {
+	    delete __curses_window;
+	    __curses_window=0;
+	}
+	realization(UNREALIZED);
+	throw;
     }
 
     REALIZE_LEAVE;

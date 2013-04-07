@@ -43,7 +43,7 @@ EventQueueStats::clear()  {
 
     evq_min_proc_time=
 	evt_min_proc_time=
-	ec_call_min_time= ~(1 << (sizeof(evq_min_proc_time)*8-1));
+	ec_call_min_time= ~(((clock_t)1) << (sizeof(clock_t)*8-1));
 
     evt_submitted_by_type.clear();
     evt_proc_by_type.clear();

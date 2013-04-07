@@ -66,28 +66,10 @@ DynLabel::refresh(bool immediate) {
 
     // Make sure there are no left overs in case of text being set by
     // a call to label() case we're realized.
-    if (werase(widget_subwin())==ERR)
-	throw CursesException("werase");
 
-    if (__label.length()<=static_cast<std::string::size_type>(__size.cols()) ) {
-	// if (mymvwaddstr(widget_subwin(), 0, 0,
-	// 		    __label.c_str()) == ERR)
-	// 	throw AddStrFailed();
-	//
-	// We ignore the error returned, since the cursor cannot be
-	// advanced past the end, and thus the string is
-	// truncated. However, the truncation has no effect on label.
-	mymvwaddstr(widget_subwin(), 0, 0,  __label.c_str());
-    } else {
-	if (mymvwaddnstr(widget_subwin(), 0, 0,
-			 __label.c_str(), __size.cols()-1)==ERR)
-	    throw CursesException("mvwadnstr");
-
-	if (winsch(widget_subwin(), '>')==ERR)
-	    throw CursesException("winsch");
-    }
-	    
-		     
+    widget_subwin()->erase();
+    YACURS::INTERNAL::CurStr tmp(__label,Coordinates());
+    widget_subwin()->addstrx(tmp);
 
     Widget::refresh(immediate);
 }

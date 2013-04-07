@@ -27,26 +27,18 @@
 # include <config.h>
 #endif
 
+#include <vector>
+#include <string>
+
 #include "mycurses.h"
 
-#ifdef __CYGWIN__
-// Cygwin #defines COLORS which leads to compile errors.
-# ifdef COLORS
-#  undef COLORS
-# endif
-#endif
-
 namespace YACURS {
-    // Forward decl because colorparser.h includes colors.h
-    class ColorParser;
-
-
     /**
      * @brief The indices of the color array.
      *
      * This are the indices of the color array.
      */
-    enum COLORS {
+    enum COLOROBJ {
 	/**
 	 * The default color.
 	 */
@@ -110,11 +102,11 @@ namespace YACURS {
 	/**
 	 * Number of Colors
 	 */
-	NUMBER_OF_COLORS
+	NUMBER_OF_COLOROBJ
     };
 
     /**
-     * @brief Struct holding the color.
+     * Struct holding the color.
      *
      * The purpose of this struct is to hold the color and the
      * attribute for the given color. The attribute is used in case
@@ -122,30 +114,35 @@ namespace YACURS {
      */
     struct CursColor {
             /**
-             * @brief The number of the pair.
+             * Number of the pair.
              *
              * The number of the pair as used by (n)curses.
              */
             short no;
             /**
-             * @brief The foreground color.
+             * Foreground color.
              *
              * The foreground color of the color pair
              */
             short fg;
             /**
-             * @brief The background color.
+             * Background color.
              *
              * The background color of the pair.
              */
             short bg;
             /**
-             * @brief The attribute.
+             * Attribute.
              *
              * The attribute used when no color is available.
              */
             int attr;
 
+	    /**
+	     * Initialize.
+	     *
+	     * Initialize all attributes to -1.
+	     */
 	    CursColor(): no(-1),
 			 fg(-1),
 			 bg(-1),
@@ -174,6 +171,8 @@ namespace YACURS {
 	     * names defined in the \c COLOR enum.
 	     */
 	    static std::vector<CursColor> __colors;
+
+
 	public:
 	    /**
 	     * @brief Initializes the color pairs.
@@ -181,18 +180,18 @@ namespace YACURS {
 	     * Initializes the color pairs used by curses if the
 	     * terminal supports colors.
 	     */
-	    static void init_colors();
+	    static void init_colors(const std::string& colorstr=std::string());
 	    
 	    /**
 	     * @brief Set the color of the curses window.
 	     *
 	     * Sets the color of the curses window. If colors are not
-	     * supported by the terminal, it returns the value of the
-	     * \c attr field of the \c color struct.
+	     * supported by the terminal, it sets the value of the
+	     * @c attr field of the @c color struct.
 	     */
-	    static void set_color (WINDOW* w, COLORS c);
+	    static void set_color (WINDOW* w, COLOROBJ c);
 	    
-	    static void set_bg (WINDOW* w, COLORS c);
+	    static void set_bg (WINDOW* w, COLOROBJ c);
 	    
 	    /**
 	     * @brief Returns the number of the color pair.
@@ -204,7 +203,7 @@ namespace YACURS {
 	     * @return the number of the color pair, or zero if color
 	     * support is not available.
 	     */
-	    static short get_color (COLORS c);
+	    static short get_color (COLOROBJ c);
     };
 }
 

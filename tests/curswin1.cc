@@ -95,8 +95,9 @@ test4() {
 
 void
 test5() {
-    for (int anic=0; anic<10; anic++) {
+    for (int anic=0; anic<5; anic++) {
         YACURS::INTERNAL::CursWin win1(Area(0,0,10,10));
+	win1.set_color(YACURS::MESSAGEBOX_TITLE);
 
         for (int i=0; i<10; i++) {
             YACURS::INTERNAL::CurStr str("abcdefghiklmnopqrstuvwxyz",
@@ -170,6 +171,26 @@ test6() {
     }
 }
 
+void test7() {
+    YACURS::INTERNAL::CurStr str1("abcdefgh", Coordinates(1,1), YACURS::LISTBOX_HILITE);
+    YACURS::INTERNAL::CurStr str2("abcde", Coordinates(3,2), YACURS::LISTBOX_HILITE);
+
+    YACURS::INTERNAL::CursWin win1(Area(0,10,10,10));
+    win1.box();
+    win1.addlinex(str1);
+    win1.addlinex(str2);
+    win1.move(Coordinates(0,3));
+    win1.addlinex("abcdefgh");
+    win1.refresh();
+
+    YACURS::INTERNAL::CursWin win2(Area(10,10,10,10));
+    win2.addlinex(str1);
+    win2.addlinex(str2);
+    win2.move(Coordinates(0,3));
+    win2.addlinex("abcdefgh");
+    win2.refresh();
+}
+
 int main() {
 #if 0
     std::cout << getpid() << std::endl;
@@ -197,6 +218,10 @@ int main() {
     wrefresh(stdscr);
 
     test6();
+
+    sleep(1);
+
+    test7();
 
     sleep(1);
 

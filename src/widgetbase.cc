@@ -28,7 +28,7 @@ WidgetBase::operator=(const WidgetBase&) {
 //
 // Protected
 //
-WINDOW*
+YACURS::INTERNAL::CursWin*
 WidgetBase::curses_window() const {
     return __curses_window;
 }
@@ -70,7 +70,7 @@ WidgetBase::parent(WidgetBase* _p) {
 }
 
 void
-WidgetBase::curses_window(WINDOW* _p) {
+WidgetBase::curses_window(YACURS::INTERNAL::CursWin* _p) {
     __curses_window=_p;
 }
 

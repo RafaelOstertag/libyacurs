@@ -28,8 +28,7 @@ Widget::force_refresh_handler(Event& _e) {
     assert(_e == EVT_FORCEREFRESH);
     assert(__widget_subwin!=0);
 
-    if (clearok(__widget_subwin, TRUE)==ERR)
-	throw CursesException("clearok");
+    __widget_subwin->clearok(true);
 }
 
 void
@@ -41,35 +40,32 @@ Widget::unrealize() {
     
     assert(__widget_subwin!=0);
 
-    // We have to clear the window since the new size might be
-    // smaller, and thus leaving artifacts on the screen if we omit to
-    // clear the entire subwin()
-    if (wclear(__widget_subwin) == ERR) {
-	realization(UNREALIZED);
-	throw CursesException("wclear");
-    }
+    try {
+	// We have to clear the window since the new size might be
+	// smaller, and thus leaving artifacts on the screen if we omit to
+	// clear the entire subwin()
+	__widget_subwin->clear();
 
-    if (delwin(__widget_subwin) == ERR) {
-	realization(UNREALIZED);
-	throw CursesException("delwin");
-    }
+	delete __widget_subwin;
+	__widget_subwin = 0;
 
-    __widget_subwin = 0;
 
-    // This is also needed to remove artifacts on the screen
-    if (touchwin(curses_window()) == ERR) {
+	// This is also needed to remove artifacts on the screen
+	curses_window()->touch();
+	curses_window()->refresh();
+    } catch (CursesException&) {
+	if (__widget_subwin!=0)
+	    delete __widget_subwin;
+
+	__widget_subwin=0;
 	realization(UNREALIZED);
-	throw CursesException("touchwin");
-    }
-    if (wrefresh(curses_window()) == ERR) {
-	realization(UNREALIZED);
-	throw CursesException("wrefresh");
+	throw;
     }
 
     UNREALIZE_LEAVE;
 }
 
-WINDOW*
+YACURS::INTERNAL::CursWin*
 Widget::widget_subwin() const {
     return __widget_subwin;
 }
@@ -86,8 +82,7 @@ Widget::~Widget() {
     
     if (realization()==REALIZED) {
 	assert(__widget_subwin!=0);
-	if (delwin(__widget_subwin)==ERR)
-	    throw CursesException("delwin");
+	delete __widget_subwin;
     }
 }
     
@@ -99,13 +94,7 @@ Widget::refresh(bool immediate) {
     assert(__widget_subwin!=0);
     assert(focusgroup_id()!=(fgid_t)-1);
 
-    if (immediate) {
-	if (wrefresh(__widget_subwin)==ERR)
-	    throw CursesException("wrefresh");
-    } else {
-	if (wnoutrefresh(__widget_subwin)==ERR)
-	    throw CursesException("wnoutrefresh");
-    }
+    __widget_subwin->refresh(immediate);
 }
 	
 void
@@ -151,29 +140,18 @@ Widget::realize() {
     assert(curses_window()!=0);
     assert(__widget_subwin==0);
 
-    __widget_subwin = ::subwin(curses_window(),
-		       _size.rows(),
-		       _size.cols(),
-		       pos.y(),
-		       pos.x());
-    if (__widget_subwin == 0) {
+    try {
+	__widget_subwin = curses_window()->subwin(Area(pos,_size));
+	__widget_subwin->scrollok(false);
+	__widget_subwin->leaveok(true);
+    } catch (CursesException&) {
 	realization(UNREALIZED);
-	throw CursesException("subwin");
+	if (__widget_subwin!=0) {
+	    delete __widget_subwin;
+	    __widget_subwin=0;
+	}
+	throw;
     }
-
-    if (scrollok(__widget_subwin, FALSE)==ERR) {
-	realization(UNREALIZED);
-	delwin(__widget_subwin);
-	__widget_subwin=0;
-	throw CursesException("scrollok");
-    }
-
-    if (leaveok(__widget_subwin, TRUE)==ERR) {
-	realization(UNREALIZED);
-	delwin(__widget_subwin);
-	__widget_subwin=0;
-	throw CursesException("leaveok");
-    }
-
+    
     REALIZE_LEAVE;
 }

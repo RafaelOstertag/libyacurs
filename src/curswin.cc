@@ -11,8 +11,9 @@ using namespace YACURS::INTERNAL;
 //
 // Protected
 //
-CursWin::CursWin(WINDOW* win): __window(win),
-			       __box(false) {
+CursWin::CursWin(WINDOW* win, COLOROBJ dc): __window(win),
+					  __def_color(dc),
+					  __box(false) {
     if (win==0)
 	throw std::invalid_argument("argument 'win' must not be 0");
 
@@ -31,9 +32,10 @@ CursWin::CursWin(WINDOW* win): __window(win),
 //
 // Public
 //
-CursWin::CursWin(const Area& _a): __window(0),
-				  __box(false),
-				  __subwin(false) {
+CursWin::CursWin(const Area& _a, COLOROBJ c): __window(0),
+					    __def_color(c),
+					    __box(false),
+					    __subwin(false) {
 
     if (_a == Area::zero()) {
 	throw std::invalid_argument("Area must not be zero");
@@ -46,9 +48,13 @@ CursWin::CursWin(const Area& _a): __window(0),
 			  __area.y(),
 			  __area.x()))==0 )
 	throw CursesException("newwin");
+
+    Colors::set_bg(__window,__def_color);
+    set_color(__def_color);
 }
 
 CursWin::CursWin(const CursWin& cw): __window(dupwin(cw.__window)),
+				     __def_color(cw.__def_color),
 				     __box(cw.__box),
 				     __subwin(cw.__subwin),
 				     __area(cw.__area),
@@ -68,6 +74,7 @@ CursWin& CursWin::operator=(const CursWin& cw) {
     }
 
     __window=cw.__window;
+    __def_color=cw.__def_color;
 
     __box=cw.__box;
     __subwin=cw.__subwin;
@@ -126,8 +133,20 @@ CursWin::box(chtype verch, chtype horch) {
 	throw CursesException("box");
 
     __box=true;
-    __client_area-=Margin(1,1,1,1);
+    __client_area=__area-Margin(1,1,1,1);
 
+    return *this;
+}
+
+CursWin&
+CursWin::set_color(COLOROBJ c) {
+    YACURS::Colors::set_color(__window, c);
+    return *this;
+}
+
+CursWin&
+CursWin::set_bg(COLOROBJ c) {
+    YACURS::Colors::set_bg(__window, c);
     return *this;
 }
 
@@ -194,17 +213,24 @@ CursWin::is_touched() const {
 
 CursWin& 
 CursWin::addstr(const CurStr& str) {
+    Colors::set_color(__window, str.color());
+
     if (mymvwaddstr(__window,
 		    str.position().y(),
-		    str.position().x(), str.c_str())==ERR)
+		    str.position().x(), str.c_str())==ERR &&
+	str.position().x()+static_cast<int16_t>(str.length())<__client_area.cols())
 	throw CursesException("mvwaddstr");
 
+    Colors::set_color(__window, __def_color);
     return *this;
 }
 
 CursWin& 
 CursWin::addstr(const std::string& str) {
-    if (mywaddstr(__window, str.c_str())==ERR)
+    Coordinates coord(get_cursor());
+
+    if (mywaddstr(__window, str.c_str())==ERR &&
+	coord.x()+static_cast<int16_t>(str.length())<__client_area.cols())
 	throw CursesException("waddstr");
 
     return *this;
@@ -213,9 +239,10 @@ CursWin::addstr(const std::string& str) {
 CursWin& 
 CursWin::addstrx(const CurStr& str) {
     // space available to string
-    int space=__client_area.cols()-str.position().x()+(__box?1:0);
+    int16_t space=__client_area.cols()-str.position().x()+(__box?1:0);
 
     if (space==1) {
+	Colors::set_color(__window, str.color());
 	if (__box) {
 	    // mvaddch advances cursor, but does not move characters
 	    // under cursor, which is ideal when placing character
@@ -228,6 +255,7 @@ CursWin::addstrx(const CurStr& str) {
 	    // next to the cursor is moved off the window.
 	    mvinsch(str.position(), '>');
 	}
+	Colors::set_color(__window, __def_color);
 	return *this;
     }
 
@@ -235,11 +263,13 @@ CursWin::addstrx(const CurStr& str) {
 	return *this;
     }
 
-    if (space<str.length()) {
+    Colors::set_color(__window, str.color());
+    if (space<static_cast<int16_t>(str.length())) {
 	addnstr(str, space-1).addch('>');
     } else {
 	addstr(str);
     }
+    Colors::set_color(__window, __def_color);
 
     return *this;
 }
@@ -249,20 +279,44 @@ CursWin::addstrx(const std::string& str) {
     return addstrx(CurStr(str, get_cursor()));
 }
 
+CursWin&
+CursWin::addlinex(const CurStr& str) {
+    CurStr tmp(str,Coordinates(__box?1:0,str.position().y()),str.color());
+    if (static_cast<int16_t>(tmp.length()+(__box?1:0))<=__client_area.cols()) {
+	tmp.append(__client_area.cols()-str.length(), ' ');
+	return addstrx(tmp);
+    }
+
+    return addstrx(tmp);
+}
+
+CursWin&
+CursWin::addlinex(const std::string& str) {
+    return addlinex(CurStr(str,get_cursor()));
+}
+
 CursWin& 
 CursWin::addnstr(const CurStr& str, int n) {
+    Colors::set_color(__window, str.color());
+
     if (mymvwaddnstr(__window, 
 		     str.position().y(),
 		     str.position().x(),
-		     str.c_str(), n)==ERR)
+		     str.c_str(), n)==ERR &&
+	str.position().x()+n<__client_area.x())
 	throw CursesException("mvwaddnstr");
+
+    Colors::set_color(__window, __def_color);
 
     return *this;
 }
 
 CursWin& 
 CursWin::addnstr(const std::string& str, int n) {
-    if (mywaddnstr(__window, str.c_str(), n)==ERR)
+    Coordinates coord(get_cursor());
+
+    if (mywaddnstr(__window, str.c_str(), n)==ERR &&
+	coord.x()+n<__client_area.x())
 	throw CursesException("waddnstr");
 
     return *this;
@@ -329,9 +383,33 @@ CursWin::delch() {
     return *this;
 }
 
+CursWin&
+CursWin::clearok(bool fl) {
+    if (::clearok(__window, fl?TRUE:FALSE)==ERR)
+	throw CursesException("clearok");
+
+    return *this;
+}
+
+CursWin&
+CursWin::scrollok(bool fl) {
+    if (::scrollok(__window, fl?TRUE:FALSE)==ERR)
+	throw CursesException("scrollok");
+
+    return *this;
+}
+
+CursWin&
+CursWin::leaveok(bool fl) {
+    if (::leaveok(__window, fl?TRUE:FALSE)==ERR)
+	throw CursesException("leaveok");
+
+    return *this;
+}
+
 CursWin*
 CursWin::derwin(const Area& a) const {
-    CursWin* tmp=new CursWin(::derwin(__window, a.rows(), a.cols(), a.y(), a.x()));
+    CursWin* tmp=new CursWin(::derwin(__window, a.rows(), a.cols(), a.y(), a.x()), __def_color);
     tmp->__subwin=true;
 
     return tmp;
@@ -339,7 +417,7 @@ CursWin::derwin(const Area& a) const {
 
 CursWin*
 CursWin::subwin(const Area& a) const {
-    CursWin* tmp=new CursWin(::subwin(__window, a.rows(), a.cols(), a.y(), a.x()));
+    CursWin* tmp=new CursWin(::subwin(__window, a.rows(), a.cols(), a.y(), a.x()), __def_color);
     tmp->__subwin=true;
 
     return tmp;

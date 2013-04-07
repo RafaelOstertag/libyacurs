@@ -57,8 +57,7 @@ LineObject::put_line() {
     if (!(realization()==REALIZED ||
 	  realization()==REALIZING)) return;
 
-    if (werase(curses_window())==ERR)
-	throw CursesException("werase");
+    curses_window()->erase();
 
     if (__linetext.length()<1) return;
 
@@ -66,13 +65,8 @@ LineObject::put_line() {
     if (static_cast<std::string::size_type>(area().cols())<=__linetext.length()) {
 	// Since we are here, the text is too big for the screen
 	// width, so we can't align anyway.
-	if (mymvwaddnstr(curses_window(),
-			 0,0,
-			 __linetext.c_str(),
-			 area().cols()-1)==ERR)
-	    throw CursesException("mvwaddstr");
-	if (winsch(curses_window(),'>')==ERR)
-	    throw CursesException("winsch");
+	YACURS::INTERNAL::CurStr tmp(__linetext, Coordinates(0,0));
+	curses_window()->addstrx(tmp);
     } else {
 	int hpos=0;
 	switch (__alignment) {
@@ -90,18 +84,8 @@ LineObject::put_line() {
 	    break;
 	}
 
-	// We don't check the return code, since we max out the space
-	// when doing right alignment. This will fail, but we achieve
-	// the desired effect
-	//
-	//	if (mymvwaddstr(curses_window(),
-	//		hpos,0,
-	//		__linetext.c_str())==ERR)
-	//  throw AddStrFailed();
-
-	(void)mymvwaddstr(curses_window(),
-			 0,hpos,
-			  __linetext.c_str());
+	YACURS::INTERNAL::CurStr tmp(__linetext,Coordinates(hpos,0));
+	curses_window()->addstr(tmp);
     }
 }
 
@@ -155,8 +139,8 @@ LineObject::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
     put_line();
 
-    YACURS::Colors::set_color(curses_window(), YACURS::DEFAULT);
-    YACURS::Colors::set_bg(curses_window(), YACURS::DEFAULT);
+    curses_window()->set_color(YACURS::DEFAULT);
+    curses_window()->set_bg(YACURS::DEFAULT);
 
     WindowBase::refresh(immediate);
 

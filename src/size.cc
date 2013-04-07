@@ -22,32 +22,32 @@ Size Size::__zero(0,0);
 // Public
 //
 
-Size::Size(int _rows, int _cols) : __rows(_rows), __cols(_cols) {
+Size::Size(int16_t _rows, int16_t _cols) : __rows(_rows), __cols(_cols) {
     if (__rows < 0)
 	throw std::out_of_range("Rows cannot be <0");
     if (__cols < 0)
 	throw std::out_of_range("Columns cannot be <0");
 }
 
-int
+int16_t
 Size::cols() const {
     return __cols;
 }
 
-int
+int16_t
 Size::rows() const {
     return __rows;
 }
 
 void
-Size::cols(int _cols) {
+Size::cols(int16_t _cols) {
     if (_cols < 0)
 	throw std::out_of_range("Columns cannot be <0");
      __cols = _cols;
 }
 
 void
-Size::rows(int _rows) {
+Size::rows(int16_t _rows) {
     if (_rows < 0)
 	throw std::out_of_range("Rows cannot be <0");
     __rows = _rows;

@@ -9,10 +9,11 @@
 #include "config.h"
 #endif
 
-#include "mycurses.h"
+#include "curswin.h"
 #include "realizeable.h"
 #include "margin.h"
 #include "event.h"
+#include "mycurses.h"
 
 enum {
     MIN_WINDOW_ROWS=1,
@@ -64,9 +65,9 @@ class WindowBase : public Realizeable {
 	Margin __margin;
 
 	/**
-	 * Curses window 
+	 * Curses window
 	 */
-	WINDOW* __curses_window;
+	YACURS::INTERNAL::CursWin* __curses_window;
 
 	/**
 	 * Whether or not the window has a border
@@ -82,7 +83,7 @@ class WindowBase : public Realizeable {
 	WindowBase(const WindowBase&);
 	WindowBase& operator=(const WindowBase&);
     protected:
-	WINDOW* curses_window() const;
+	YACURS::INTERNAL::CursWin* curses_window() const;
 
 	const Area& area() const;
 	/**

@@ -108,13 +108,11 @@ Button::refresh(bool immediate) {
     assert(widget_subwin()!=0);
 
     if (focus()) {
-	YACURS::Colors::set_color(widget_subwin(), YACURS::BUTTON_FOCUS);
-	if (leaveok(widget_subwin(), FALSE)==ERR)
-	    throw CursesException("leaveok");
+	widget_subwin()->set_color(YACURS::BUTTON_FOCUS);
+	widget_subwin()->leaveok(false);
     } else {
-	YACURS::Colors::set_color(widget_subwin(), YACURS::BUTTON_NOFOCUS);
-	if (leaveok(widget_subwin(), TRUE)==ERR)
-	    throw CursesException("leaveok");
+	widget_subwin()->set_color(YACURS::BUTTON_NOFOCUS);
+	widget_subwin()->leaveok(true);
     }
 
     Label::refresh(immediate);

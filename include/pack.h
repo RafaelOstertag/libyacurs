@@ -175,7 +175,7 @@ class Pack: public WidgetBase {
 	 *
 	 * @param _p pointer to curses window
 	 */
-	void curses_window(WINDOW* _p);
+	void curses_window(YACURS::INTERNAL::CursWin* _p);
 
 	/**
 	 * Set the Focus Group ID of the Pack and all associated

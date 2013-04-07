@@ -18,26 +18,26 @@ Coordinates Coordinates::__zero(0,0);
 //
 // Public
 //
-Coordinates::Coordinates(int _x, int _y): __y(_y), __x(_x){
+Coordinates::Coordinates(int16_t _x, int16_t _y): __y(_y), __x(_x){
 }
 
-int
+int16_t
 Coordinates::x() const {
     return __x;
 }
 
-int
+int16_t
 Coordinates::y() const {
     return __y;
 }
 
 void
-Coordinates::x(int _x) {
+Coordinates::x(int16_t _x) {
      __x = _x;
 }
 
 void
-Coordinates::y(int _y) {
+Coordinates::y(int16_t _y) {
     __y = _y;
 }
 

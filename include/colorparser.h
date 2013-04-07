@@ -16,9 +16,8 @@ namespace YACURS {
     class ColorParser {
 	private:
 	    static const std::string __default_colors;
-	    static const std::string& default_colors();
 
-	    std::map<std::string,COLORS> color_name_map;
+	    std::map<std::string,COLOROBJ> color_name_map;
 	    std::map<char,short> curs_colors_map;
 	    std::map<char,int> curs_attrs_map;
 
@@ -31,6 +30,8 @@ namespace YACURS {
 	    ColorParser(const ColorParser& cp);
 	    ColorParser& operator=(const ColorParser& cp);
 	    std::vector<CursColor> operator()(const std::string& colorstr=default_colors());
+
+	    static const std::string& default_colors();
     };
 }
 

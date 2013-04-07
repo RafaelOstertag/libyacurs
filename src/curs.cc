@@ -86,6 +86,8 @@ Curses::init() {
     if (initscr() == 0)
 	throw UnableToInitialize();
 
+    YACURS::Colors::init_colors();
+
     EventQueue::connect_event(EventConnectorFunction1(EVT_DOUPDATE, Curses::doupdate_handler));
     EventQueue::connect_event(EventConnectorFunction1(EVT_TERMRESETUP, Curses::termresetup_handler));
 
@@ -104,10 +106,11 @@ Curses::init() {
     if (leaveok(stdscr, TRUE) == ERR)
 	throw CursesException("leaveok");
 
+    if (intrflush(stdscr, FALSE) == ERR)
+	throw CursesException("intrflush");
+
     // We don't fail if that doesn't work, so no check on retval.
     curs_set(0);
-
-    YACURS::Colors::init_colors();
 
     // Curses clears stdscr upon first call to getch, which may
     // produce undesired results, i.e. already created Curses Windows
@@ -128,13 +131,14 @@ Curses::end() {
 	throw CursesException("wclear");
     if (wrefresh(stdscr) == ERR)
 	throw CursesException("wfresh");
+
     if (endwin() == ERR)
 	throw CursesException("endwin");
 
-    // Widgets and Windows delete after the EventQueue loop has
+    // Widgets and Windows deleted after the EventQueue loop has
     // terminated will have put Event Connector Removal requests into
     // the EventQueue, which are not processed (of course, the
-    // EventQueue terminated). Calling EventQueue::cleanup() will
+    // EventQueue is terminated). Calling EventQueue::cleanup() will
     // remove the requests and free the associated memory
     EventQueue::cleanup();
 

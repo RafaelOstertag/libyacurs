@@ -402,8 +402,7 @@ class ListBox: public Widget {
 
 	    assert(widget_subwin()!=0);
 
-	    if (werase(widget_subwin())==ERR)
-		throw CursesException("werase");
+	    widget_subwin()->erase();
 
 	    std::list<std::string>::iterator it=__list.begin();
 
@@ -429,34 +428,18 @@ class ListBox: public Widget {
 		it++, i++) {
 
 		if (i==__curs_pos)
-		    YACURS::Colors::set_color(widget_subwin(), YACURS::LISTBOX_HILITE);
+		    widget_subwin()->set_color(YACURS::LISTBOX_HILITE);
 		else
-		    YACURS::Colors::set_color(widget_subwin(), YACURS::LISTBOX);
+		    widget_subwin()->set_color(YACURS::LISTBOX);
 
-		// We prepare our own line, so that we can fill up
-		// with spaces
-		std::string line(*it);
+		YACURS::INTERNAL::CurStr line(*it, Coordinates(0,i+1));
 
-		// Find out if we have to indicate that the line has
-		// been truncated
-		if (line.length()<=__cast_st(__size.cols())-2) {
-		    // line is shorter than visible area
-		    if (line.length()<__cast_st(__size.cols())-2)
-			line.append((__size.cols()-2)-line.length(),' ');
-		    mymvwaddnstr(widget_subwin(),
-				 i+1,1,
-				 line.c_str(), __size.cols()-2);
-		} else {
-		    mymvwaddnstr(widget_subwin(),
-				 i+1,1,
-				 line.c_str(), __size.cols()-3);
-		    winsch(widget_subwin(), '>');
-		}
+		widget_subwin()->addlinex(line);
 	    }
 
 	    // This is required in order to color the listbox properly
 	    // when highlighting hits the bottom under X/Open Curses
-	    YACURS::Colors::set_color(widget_subwin(), YACURS::LISTBOX);
+	    widget_subwin()->set_color(YACURS::LISTBOX);
 
 	    //
 	    // Box creation and scroll marker setting was moved here,
@@ -464,34 +447,29 @@ class ListBox: public Widget {
 	    // artifcats on the right side of the box, when it is
 	    // placed in front of the above code block.
 	    //
-	    if (focus()) {
-		if (box(widget_subwin(), 0, 0)==ERR)
-		    throw CursesException("box");
-	    } else {
-		if (box(widget_subwin(), '|', '-')==ERR)
-		    throw CursesException("box");
-	    }
+	    if (focus())
+		widget_subwin()->box();
+	    else
+		widget_subwin()->box('|', '-');
 
 	    // set scroll markers
 	    if (__list.size()>__cast_lt(__size.rows())-2) {
 		// Can we scroll up? This is indicated by an __offset
 		// > 0
 		if (__offset>0)
-		    (void)mvwaddch(widget_subwin(), 1, __size.cols()-1, '^');
+		    widget_subwin()->mvaddch(Coordinates(__size.cols()-1, 1), '^');
 		// can we scroll further down?
 		if (__offset+__size.rows()-3<__list.size()-1)
-		    (void)mvwaddch(widget_subwin(), __size.rows()-2, __size.cols()-1, 'v');
+		    widget_subwin()->mvaddch(Coordinates(__size.cols()-1,__size.rows()-2), 'v');
 	    }
 
 	    // set sort order indicator
 	    switch (__sort_order) {
 	    case ASCENDING:
-		if (mvwaddch(widget_subwin(), 0, 1, '^')==ERR)
-		    throw CursesException("mvwaddch");
+		widget_subwin()->mvaddch(Coordinates(1,0), '^');
 		break;
 	    case DESCENDING:
-		if (mvwaddch(widget_subwin(), 0, 1, 'v')==ERR)
-		    throw CursesException("mvwaddch");
+		widget_subwin()->mvaddch(Coordinates(1,0), 'v');
 		break;
 	    case UNSORTED:
 		break;
@@ -500,15 +478,11 @@ class ListBox: public Widget {
 	    // Set the cursor at the right position if we have focus.
 	    if (focus() && !__list.empty()) {
 		curs_set(1);
-		if (leaveok(widget_subwin(), FALSE)==ERR)
-		    throw CursesException("leaveok");
-
-		if (wmove(widget_subwin(), __curs_pos+1, 1)==ERR)
-		    throw CursesException("wmove");
+		widget_subwin()->leaveok(false);
+		widget_subwin()->move(Coordinates(1,__curs_pos+1));
 	    } else {
 		curs_set(0);
-		if (leaveok(widget_subwin(), TRUE)==ERR)
-		    throw CursesException("leaveok");
+		widget_subwin()->leaveok(true);
 	    }
 
 	    Widget::refresh(immediate);

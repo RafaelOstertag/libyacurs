@@ -9,9 +9,10 @@
 
 #include <list>
 
-#include "mycurses.h"
+#include "colors.h"
 #include "area.h"
 #include "curstr.h"
+#include "mycurses.h"
 
 namespace YACURS {
     namespace INTERNAL {
@@ -21,6 +22,11 @@ namespace YACURS {
 		 * Pointer to Curses Window.
 		 */
 		WINDOW* __window;
+
+		/**
+		 * Default color for Curses Window.
+		 */
+		COLOROBJ __def_color;
 
 		/**
 		 * Flag whether or not Curses Window has a box.
@@ -42,10 +48,10 @@ namespace YACURS {
 		 */
 		Area __client_area;
 	    protected:
-		CursWin(WINDOW* win);
+		CursWin(WINDOW* win, COLOROBJ dc);
 
 	    public:
-		CursWin(const Area& _a);
+		CursWin(const Area& _a, COLOROBJ dc=DEFAULT);
 		CursWin(const CursWin& cw);
 		CursWin& operator=(const CursWin& cw);
 
@@ -92,6 +98,10 @@ namespace YACURS {
 
 		CursWin& box(chtype verch=0, chtype horch=0);
 
+		CursWin& set_color(YACURS::COLOROBJ c);
+		
+		CursWin& set_bg(YACURS::COLOROBJ c);
+
 		CursWin& unset_box();
 
 		Coordinates get_cursor() const;
@@ -116,6 +126,10 @@ namespace YACURS {
 
 		CursWin& addstrx(const std::string& str);
 
+		CursWin& addlinex(const CurStr& str);
+
+		CursWin& addlinex(const std::string& str);
+
 		CursWin& addnstr(const CurStr& str, int n);
 
 		CursWin& addnstr(const std::string& str, int n);
@@ -131,6 +145,12 @@ namespace YACURS {
 		CursWin& mvdelch(const Coordinates& pos);
 
 		CursWin& delch();
+
+		CursWin& clearok(bool fl);
+
+		CursWin& scrollok(bool fl);
+
+		CursWin& leaveok(bool fl);
 
 		CursWin* derwin(const Area& a) const;
 

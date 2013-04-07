@@ -11,11 +11,12 @@
 
 #include <string>
 
-#include "mycurses.h"
+#include "curswin.h"
 #include "yacurstypes.h"
 #include "realizeable.h"
 #include "area.h"
 #include "window.h"
+#include "mycurses.h"
 
 // Forward declaration because window.h already included widgetbase.h
 class Window;
@@ -83,7 +84,7 @@ class WidgetBase: public Realizeable {
 	 * the pointer has to be valid for the entire lifetime of the
 	 * object.
 	 */
-	WINDOW* __curses_window;
+	YACURS::INTERNAL::CursWin* __curses_window;
 
 	/**
 	 * Focus Group ID
@@ -162,7 +163,7 @@ class WidgetBase: public Realizeable {
 	 *
 	 * @return pointer to the curses window.
 	 */
-	WINDOW* curses_window() const;
+	YACURS::INTERNAL::CursWin* curses_window() const;
 
 	/**
 	 * Get the Focus Group ID.
@@ -218,7 +219,7 @@ class WidgetBase: public Realizeable {
 	 * @internal it is virtual because Pack implements its own
 	 * version
 	 */
-	virtual void curses_window(WINDOW* _p);
+	virtual void curses_window(YACURS::INTERNAL::CursWin* _p);
 
 	/**
 	 * Set Focus Group ID.

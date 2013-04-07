@@ -85,20 +85,9 @@ Label::refresh(bool immediate) {
 
     assert(widget_subwin()!=0);
 
-    // We don't resize if a new string is set that was smaller than
-    // the previous one. This leads to artifacts, so do a werase()
-    // first.
-    if (werase(widget_subwin())==ERR)
-	throw CursesException("werase");
-
-    // if (mymvwaddstr(widget_subwin(), 0, 0,
-    // 		    __label.c_str()) == ERR)
-    // 	throw AddStrFailed();
-    //
-    // We ignore the error returned, since the cursor cannot be
-    // advanced past the end, and thus the string is
-    // truncated. However, the truncation has no effect on label.
-    mymvwaddstr(widget_subwin(), 0, 0,  __label.c_str());
+    widget_subwin()->erase();
+    YACURS::INTERNAL::CurStr tmp(__label,Coordinates());
+    widget_subwin()->addstr(tmp);
 
     Widget::refresh(immediate);
 }

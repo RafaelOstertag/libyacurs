@@ -348,7 +348,7 @@ Input<T>::key_handler(Event& _e) {
 	// Add the char to the curses window
 	//
 	// (void) used to silence clang w/ -Wall -pedantic
-	(void)mvwaddch(widget_subwin(), 0, __curs_pos, ekey.data());
+	widget_subwin()->mvaddch(Coordinates(__curs_pos,0), ekey.data());
 
 	// Add (insert) the char to the buffer. No cursor motion, this
 	// is done in the next block.
@@ -538,21 +538,18 @@ Input<T>::refresh(bool immediate) {
     // widget.
 
     if (focus()) {
-	YACURS::Colors::set_color(widget_subwin(), YACURS::INPUTWIDGET_FOCUS);
-	YACURS::Colors::set_bg(widget_subwin(), YACURS::INPUTWIDGET_FOCUS);
+	widget_subwin()->set_color(YACURS::INPUTWIDGET_FOCUS);
+	widget_subwin()->set_bg(YACURS::INPUTWIDGET_FOCUS);
 	curs_set(1);
-	if (leaveok(widget_subwin(), FALSE)==ERR)
-	    throw CursesException("leaveok");
+	widget_subwin()->leaveok(false);
     } else {
-	YACURS::Colors::set_color(widget_subwin(), YACURS::INPUTWIDGET_NOFOCUS);
-	YACURS::Colors::set_bg(widget_subwin(), YACURS::INPUTWIDGET_NOFOCUS);
+	widget_subwin()->set_color(YACURS::INPUTWIDGET_NOFOCUS);
+	widget_subwin()->set_bg(YACURS::INPUTWIDGET_NOFOCUS);
 	curs_set(0);
-	if (leaveok(widget_subwin(), TRUE)==ERR)
-	    throw CursesException("leaveok");
+	widget_subwin()->leaveok(true);
     }
 
-    if (werase(widget_subwin())==ERR)
-	throw CursesException("werase");
+    widget_subwin()->erase();
 
     assert(__offset<=__buffer.length());
     // if (mymvwaddstr(widget_subwin(), 0, 0,
@@ -573,9 +570,9 @@ Input<T>::refresh(bool immediate) {
 	    output=&obscure_out;
 	}
 
-	mymvwaddstr(widget_subwin(),
-		    0, 0,
-		    output->substr(__offset, __size.cols()-1).c_str());
+	YACURS::INTERNAL::CurStr tmp(output->substr(__offset, __size.cols()-1).c_str(),Coordinates());
+	widget_subwin()->addstr(tmp);
+
 	// Sanitize the cursor position if necessary, for example due
 	// to a shrink of the screen, the cursor position might
 	// overshoot the available subwin size.
@@ -586,8 +583,7 @@ Input<T>::refresh(bool immediate) {
 	assert(__curs_pos==0); 
     }
     
-    if (wmove(widget_subwin(), 0, __curs_pos)==ERR)
-	 throw CursesException("wmove");
+    widget_subwin()->move(Coordinates(__curs_pos,0));
 
     Widget::refresh(immediate);
 }

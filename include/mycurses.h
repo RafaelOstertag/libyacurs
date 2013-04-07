@@ -173,6 +173,10 @@ inline int refresh() {
 }
 #endif
 
+#ifdef wclear
+#undef wclear
+#endif
+
 #ifdef WADDSTR_USE_CHAR
 #ifdef __SVR4
 # include <stdlib.h>

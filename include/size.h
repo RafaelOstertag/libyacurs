@@ -5,6 +5,14 @@
 #ifndef SIZE_H
 #define SIZE_H
 
+#ifdef HAVE_CSTDINT
+# include <cstdint>
+#else // HAVE_CSTDINT
+# ifdef HAVE_STDINT_H
+#  include <stdint.h>
+# endif // HAVE_STDINT_H
+#endif // HAVE_CSTDINT
+
 #include <string>
 
 /**
@@ -21,7 +29,7 @@ class Size {
 	 * Object representing zero.
 	 */
 	static Size __zero;
-	int __rows, __cols;
+	int16_t __rows, __cols;
 
     public:
 	/**
@@ -33,21 +41,21 @@ class Size {
 	 * @param _rows amount of rows
 	 * @param _cols amount of columns.
 	 */
-	Size(int _rows=0, int _cols=0);
+	Size(int16_t _rows=0, int16_t _cols=0);
 
 	/**
 	 * Get the colums.
 	 *
 	 * @return the number of columns.
 	 */
-	int cols() const;
+	int16_t cols() const;
 
 	/**
 	 * Get the rows.
 	 *
 	 * @return the number of rows.
 	 */
-	int rows() const;
+	int16_t rows() const;
 
 	/**
 	 * Set the number of columns.
@@ -57,7 +65,7 @@ class Size {
 	 *
 	 * @param _cols number of columns
 	 */
-	void cols(int _cols);
+	void cols(int16_t _cols);
 
 	/**
 	 * Set the number of rows.
@@ -67,7 +75,7 @@ class Size {
 	 *
 	 * @param _rows number of rows
 	 */
-	void rows(int _rows);
+	void rows(int16_t _rows);
 
 	/**
 	 * Add Size to this object.

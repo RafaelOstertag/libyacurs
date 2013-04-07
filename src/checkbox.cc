@@ -169,45 +169,27 @@ CheckBox::refresh(bool immediate) {
     std::string item;
     while (++pos,it!=__items.end()) {
 	item=__indicators[(*it).selected?1:0] + (*it).item;
-	(void)mymvwaddstr(widget_subwin(),pos,1,item.c_str());
+	widget_subwin()->addstr(YACURS::INTERNAL::CurStr(item,Coordinates(1,pos)));
 	it++;
     }
 
     if (focus()) {
-	if (box(widget_subwin(), 0, 0)==ERR)
-	    throw CursesException("box");
+	widget_subwin()->box(0,0);
     } else {
-	if (box(widget_subwin(), '|', '-')==ERR)
-	    throw CursesException("box");
+	widget_subwin()->box('|', '-');
     }
 
     if (!__title.empty()) {
-	if (__title.length()>static_cast<std::string::size_type>(__size.cols())-2) {
-	    if (mymvwaddnstr(widget_subwin(), 0, 1,
-			     __title.c_str(),
-			     __size.cols()-3)==ERR)
-		throw CursesException("mvwaddnstr");
-
-	    if (waddch(widget_subwin(), '>')==ERR)
-		throw CursesException("waddch");
-	} else {
-	    if (mymvwaddstr(widget_subwin(), 0, 1,
-			     __title.c_str())==ERR)
-		throw CursesException("mvwaddstr");
-	}
+	widget_subwin()->addstrx(YACURS::INTERNAL::CurStr(__title,Coordinates(1,0)));
     }
 
     if (focus()) {
 	curs_set(1);
-	if (leaveok(widget_subwin(), FALSE)==ERR)
-	    throw CursesException("leaveok");
-	
-	if (wmove(widget_subwin(), __cursor+1, 2)==ERR)
-	    throw CursesException("wmove");
+	widget_subwin()->leaveok(false);
+	widget_subwin()->move(Coordinates(2,__cursor+1));
     } else {
 	curs_set(0);
-	if (leaveok(widget_subwin(), TRUE)==ERR)
-	    throw CursesException("leaveok");
+	widget_subwin()->leaveok(true);
     }
 
     Widget::refresh(immediate);

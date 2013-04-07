@@ -10,8 +10,8 @@
 #include <cstdlib>
 #include <string>
 
-#include "mycurses.h"
 #include "widgetbase.h"
+#include "mycurses.h"
 
 /**
  * Implements a Widget.
@@ -31,7 +31,7 @@ class Widget: public WidgetBase {
 	/**
 	 * curses subwin used by widgets
 	 */
-	WINDOW* __widget_subwin;
+	YACURS::INTERNAL::CursWin* __widget_subwin;
 
 	// Not supported
 	Widget& operator=(const Widget&);
@@ -40,7 +40,7 @@ class Widget: public WidgetBase {
 
 	void unrealize();
 
-	WINDOW* widget_subwin() const;
+	YACURS::INTERNAL::CursWin* widget_subwin() const;
 
     public:
 	Widget();

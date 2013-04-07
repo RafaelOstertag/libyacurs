@@ -5,6 +5,14 @@
 #ifndef COORDINATES_H
 #define COORDINATES_H
 
+#ifdef HAVE_CSTDINT
+# include <cstdint>
+#else // HAVE_CSTDINT
+# ifdef HAVE_STDINT_H
+#  include <stdint.h>
+# endif // HAVE_STDINT_H
+#endif // HAVE_CSTDINT
+
 #include <string>
 
 /**
@@ -19,11 +27,11 @@ class Coordinates {
 	/**
 	 * y component.
 	 */
-	int __y;
+	int16_t __y;
 	/**
 	 * x component
 	 */
-	int __x;
+	int16_t __x;
 
     public:
 	/**
@@ -35,35 +43,35 @@ class Coordinates {
 	 * @param _x x-component
 	 * @param _y y-component
 	 */
-	Coordinates(int _x=0, int _y=0);
+	Coordinates(int16_t _x=0, int16_t _y=0);
 
 	/**
 	 * Get x component.
 	 *
 	 * @return x component
 	 */
-	int x() const;
+	int16_t x() const;
 
 	/**
 	 * Get y component
 	 *
 	 * @return y component
 	 */
-	int y() const;
+	int16_t y() const;
 
 	/**
 	 * Set x component.
 	 *
 	 * @param _x value of x
 	 */
-	void x(int _x);
+	void x(int16_t _x);
 
 	/**
 	 * Set y component.
 	 *
 	 * @param _y value of y
 	 */
-	void y(int _y);
+	void y(int16_t _y);
 
 	/**
 	 * Add and assign another Coordinates object.

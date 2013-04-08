@@ -447,8 +447,12 @@ void
 EventQueue::timeout_handler(Event& _e) {
     assert(_e==EVT_SIGALRM);
 
-    if (__lockscreen == 0 ||
-	__lockscreen->shown()) return;
+    if (__lockscreen == 0) return;
+
+    if (__lockscreen->shown()) {
+	__lockscreen->close_unlock_dialog();
+	return;
+    }
 
     __lockscreen->show();
 }
@@ -648,8 +652,10 @@ EventQueue::run() {
     //statistics.clear();
 
     for(;;) {
-	if (__lockscreen!=0 && __timeout!=0)
-	    alarm(__timeout);
+	if (__lockscreen!=0) {
+	    // Adding lockscreen will set timeout.
+	    alarm(__timeout); 
+	}
 
 	// This is to move the cursor to the focused widget. Before
 	// adding that call tests/focus1 had the cursor always left on
@@ -764,6 +770,13 @@ EventQueue::cleanup() {
 void
 EventQueue::lock_screen(LockScreen* _ls) {
     __lockscreen = _ls;
+    if (__lockscreen==0) {
+	alarm(0);
+	disconnect_event(EventConnectorFunction1(EVT_SIGALRM, &EventQueue::timeout_handler));
+    } else {
+	timeout(__lockscreen->timeout());
+	connect_event(EventConnectorFunction1(EVT_SIGALRM, &EventQueue::timeout_handler));
+    }
 }
 
 LockScreen*
@@ -774,15 +787,9 @@ EventQueue::lock_screen() {
 void
 EventQueue::timeout(unsigned int _t) {
     __timeout=_t;
-    if (__timeout==0) {
-	alarm(0); // Cancel pending alarm
-	disconnect_event(EventConnectorFunction1(EVT_SIGALRM, &EventQueue::timeout_handler));
-    } else {
-	connect_event(EventConnectorFunction1(EVT_SIGALRM, &EventQueue::timeout_handler));
-    }
-
+    alarm(__timeout);
 }
-
+ 
 unsigned int
 EventQueue::timeout() {
     return __timeout;

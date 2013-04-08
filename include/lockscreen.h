@@ -18,6 +18,8 @@
 namespace YACURS {
     class LockScreen: public Window {
 	private:
+	    unsigned int __timeout;
+	    unsigned int __unlock_diag_timeout;
 	    UnlockDialog* __unlock_dialog;
 	    MessageBox* __msgbox;
 	    // Not supported
@@ -28,8 +30,13 @@ namespace YACURS {
 	    virtual void event_window_close_handler(Event& _e);
 
 	public:
-	    LockScreen(UnlockDialog* _unlock);
+	    LockScreen(UnlockDialog* _unlock, unsigned int timeout, unsigned int ulck_timeout);
 	    virtual ~LockScreen();
+
+	    unsigned int timeout() const;
+	    unsigned int unlock_dialog_timeout() const;
+
+	    virtual void close_unlock_dialog();
 
 	    // From WindowBase
 	    void show();

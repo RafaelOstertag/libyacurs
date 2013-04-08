@@ -35,6 +35,8 @@ LockScreen::event_key_handler(Event& _e) {
     if (!__unlock_dialog->shown() && __msgbox==0) {
 	__unlock_dialog->clear();
 	__unlock_dialog->show();
+	// Set the timeout for the unlock dialog
+	EventQueue::timeout(__unlock_diag_timeout);
 
 	// The event should not be processed any further, else the key
 	// might be passed on to the Unlock Dialog. Further key
@@ -61,6 +63,9 @@ LockScreen::event_window_close_handler(Event& _e) {
 		__msgbox->show();
 	    }
 	}
+	// Set the timeout back to the timeout until lock screen kicks
+	// in
+	EventQueue::timeout(__timeout);
 	return;
     }
 
@@ -76,13 +81,41 @@ LockScreen::event_window_close_handler(Event& _e) {
 // Public
 //
 
-LockScreen::LockScreen(UnlockDialog* _unlock): Window(Margin::zero()),
-					       __unlock_dialog(_unlock),
-					       __msgbox(0) {
+LockScreen::LockScreen(UnlockDialog* _unlock,
+		       unsigned int timeout,
+		       unsigned int ulck_timeout): Window(Margin::zero()),
+						   __timeout(timeout),
+						   __unlock_diag_timeout(ulck_timeout),
+						   __unlock_dialog(_unlock),
+								     __msgbox(0) {
     if (!__unlock_dialog) throw std::invalid_argument("InputDialog may not be 0");
 }
 
 LockScreen::~LockScreen() {
+}
+
+unsigned int
+LockScreen::timeout() const {
+    return __timeout;
+}
+
+unsigned int
+LockScreen::unlock_dialog_timeout() const {
+    return __unlock_diag_timeout;
+}
+
+void
+LockScreen::close_unlock_dialog() {
+    if (__unlock_dialog->shown())
+	// We clear here, since the user might have entered the
+	// password but not yet closed the dialog. If we simply would
+	// close without reset, the Window Close handler would kick
+	// in, ask the dialog if the password is OK (which we assume
+	// it is) and unlock the screen.
+	__unlock_dialog->clear();
+	__unlock_dialog->close();
+    if (__msgbox!=0 && __msgbox->shown())
+	__msgbox->close();
 }
 
 void

@@ -390,10 +390,9 @@ int main() {
         YACURS::Curses::init();
 
         ulckdia=new YACURS::UnlockDialogDefault("Unlock Screen");
-        lckscr=new YACURS::LockScreen(ulckdia);
+        lckscr=new YACURS::LockScreen(ulckdia, 5, 10);
 
         YACURS::EventQueue::lock_screen(lckscr);
-        YACURS::EventQueue::timeout(5);
 
         YACURS::Curses::title(new YACURS::LineObject(YACURS::LineObject::POS_TOP,
                                      "LockScreen 1"));

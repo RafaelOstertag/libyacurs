@@ -426,12 +426,9 @@ namespace YACURS {
 		    i<std::min<std::list<std::string>::size_type>(__size.rows()-2, __list.size());
 		    it++, i++) {
 
-		    if (i==__curs_pos)
-			widget_subwin()->set_color(YACURS::LISTBOX_HILITE);
-		    else
-			widget_subwin()->set_color(YACURS::LISTBOX);
-
-		    YACURS::INTERNAL::CurStr line(*it, Coordinates(0,i+1));
+		    YACURS::INTERNAL::CurStr line(*it,
+						  Coordinates(0,i+1),
+						  i==__curs_pos?YACURS::LISTBOX_HILITE:YACURS::LISTBOX);
 
 		    widget_subwin()->addlinex(line);
 		}

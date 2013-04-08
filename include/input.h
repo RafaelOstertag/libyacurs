@@ -539,13 +539,9 @@ namespace YACURS {
 	// widget.
 
 	if (focus()) {
-	    widget_subwin()->set_color(YACURS::INPUTWIDGET_FOCUS);
-	    widget_subwin()->set_bg(YACURS::INPUTWIDGET_FOCUS);
 	    curs_set(1);
 	    widget_subwin()->leaveok(false);
 	} else {
-	    widget_subwin()->set_color(YACURS::INPUTWIDGET_NOFOCUS);
-	    widget_subwin()->set_bg(YACURS::INPUTWIDGET_NOFOCUS);
 	    curs_set(0);
 	    widget_subwin()->leaveok(true);
 	}
@@ -571,19 +567,23 @@ namespace YACURS {
 		output=&obscure_out;
 	    }
 
-	    YACURS::INTERNAL::CurStr tmp(output->substr(__offset, __size.cols()-1).c_str(),Coordinates());
-	    widget_subwin()->addstr(tmp);
+	    YACURS::INTERNAL::CurStr tmp(output->substr(__offset, __size.cols()-1).c_str(),
+					 Coordinates(),
+					 focus()?YACURS::INPUTWIDGET_FOCUS:YACURS::INPUTWIDGET_NOFOCUS);
+	    widget_subwin()->addlinex(tmp);
 
 	    // Sanitize the cursor position if necessary, for example due
 	    // to a shrink of the screen, the cursor position might
 	    // overshoot the available subwin size.
 	    if (__curs_pos>=static_cast<tsz_t>(__size.cols()) ) __curs_pos=__size.cols()-1;
 	} else {
+	    // Fill the widget with spaces.
+	    YACURS::INTERNAL::CurStr tmp("",Coordinates(),focus()?YACURS::INPUTWIDGET_FOCUS:YACURS::INPUTWIDGET_NOFOCUS);
+	    widget_subwin()->addlinex(tmp);
 	    // since the buffer is empty, make sure the cursor position is
 	    // set to the biginning.
 	    assert(__curs_pos==0); 
-	}
-    
+	}    
 	widget_subwin()->move(Coordinates(__curs_pos,0));
 
 	Widget::refresh(immediate);

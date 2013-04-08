@@ -24,7 +24,8 @@ Label::operator=(const Label&) {
 //
 // Public
 //
-Label::Label(const std::string& _l): __label(_l),
+Label::Label(const std::string& _l): __color(DEFAULT),
+				     __label(_l),
 				     __size(Size(1, _l.length())) {
 }
 
@@ -88,8 +89,27 @@ Label::refresh(bool immediate) {
     assert(widget_subwin()!=0);
 
     widget_subwin()->erase();
-    YACURS::INTERNAL::CurStr tmp(__label,Coordinates());
+    YACURS::INTERNAL::CurStr tmp(__label,Coordinates(), color());
     widget_subwin()->addstr(tmp);
 
     Widget::refresh(immediate);
+}
+
+void
+WidgetBase::unrealize() {
+    UNREALIZE_ENTER;
+
+    // Intentionally empty
+
+    UNREALIZE_LEAVE;
+}
+
+void
+Label::color(COLOROBJ c) {
+    __color=c;
+}
+
+COLOROBJ
+Label::color() const {
+    return __color;
 }

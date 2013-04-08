@@ -110,10 +110,10 @@ Button::refresh(bool immediate) {
     assert(widget_subwin()!=0);
 
     if (focus()) {
-	widget_subwin()->set_color(YACURS::BUTTON_FOCUS);
+	color(YACURS::BUTTON_FOCUS);
 	widget_subwin()->leaveok(false);
     } else {
-	widget_subwin()->set_color(YACURS::BUTTON_NOFOCUS);
+	color(YACURS::BUTTON_NOFOCUS);
 	widget_subwin()->leaveok(true);
     }
 

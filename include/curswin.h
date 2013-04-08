@@ -98,10 +98,12 @@ namespace YACURS {
 
 		CursWin& box(chtype verch=0, chtype horch=0);
 
-		CursWin& set_color(YACURS::COLOROBJ c);
-		
-		CursWin& set_bg(YACURS::COLOROBJ c);
+		CursWin& bkgd(chtype ch);
 
+		CursWin& set_color(COLOROBJ c);
+
+		CursWin& set_bg(COLOROBJ c);
+		
 		CursWin& unset_box();
 
 		Coordinates get_cursor() const;

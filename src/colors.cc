@@ -46,62 +46,37 @@ Colors::init_colors(const std::string& colorstr) {
     else
 	__colors=cp(colorstr);
 
-    if (has_colors() == FALSE || can_change_color() == FALSE ) {
+    // If colors are not supported, we're done, since we rely on
+    // attributes solely.
+    if (has_colors() == FALSE) {
 	__initialized = true;
 	return;
     }
 
-    start_color();
+    if (start_color()==ERR)
+	throw CursesException("start_color");
 
     __initialized = true;
 
-    if (COLORS <= NUMBER_OF_COLOROBJ)
+    if (COLOR_PAIRS < NUMBER_OF_COLOROBJ)
 	return;
 
-    for (int i = 0; i < NUMBER_OF_COLOROBJ ; i++)
-	init_pair (__colors.at(i).no,
-		   __colors.at(i).fg,
-		   __colors.at(i).bg);
+    for (int i = 0; i < NUMBER_OF_COLOROBJ ; i++) {
+	if (init_pair (__colors.at(i).no,
+		       __colors.at(i).fg,
+		       __colors.at(i).bg)==ERR)
+	    throw CursesException("init_pair");
+    }
 }
 
-void
-Colors::set_color (WINDOW* w, COLOROBJ c) {
+int
+Colors::color_pair(COLOROBJ c) {
     if (!__initialized)
 	throw ColorsNotInitialized();
 
-    if (has_colors() == TRUE && COLORS >= NUMBER_OF_COLOROBJ) {
-#if NCURSES_VERSION_PATCH < 20100313
-        wattrset(w, COLOR_PAIR (__colors.at(c).no));
-#else
-	if (wattrset(w, COLOR_PAIR (__colors.at(c).no))==ERR)
-	    throw CursesException("wattrset");
-#endif
+    if (has_colors() == TRUE && COLOR_PAIRS >= NUMBER_OF_COLOROBJ) {
+        return COLOR_PAIR (__colors[c].no);
     } else {
-#if NCURSES_VERSION_PATCH < 20100313
-        wattrset(w, __colors.at(c).attr);
-#else
-	if (wattrset(w, __colors.at(c).attr)==ERR)
-	    throw CursesException("wattrset");
-#endif
+        return __colors[c].attr;
     }
-}
-
-void
-Colors::set_bg(WINDOW* w, COLOROBJ c) {
-   if (!__initialized)
-	throw ColorsNotInitialized();
-
-    if (has_colors() == TRUE && COLORS >= NUMBER_OF_COLOROBJ)
-	wbkgd(w, ' ' | COLOR_PAIR (__colors.at(c).no) );
-    else
-	wbkgd(w, ' ' | __colors.at(c).attr);
-}
-
-short
-Colors::get_color (COLOROBJ c) {
-    if (has_colors() == TRUE && COLORS >= NUMBER_OF_COLOROBJ) {
-	return __colors.at(c).no;
-    }
-
-    return 0;
 }

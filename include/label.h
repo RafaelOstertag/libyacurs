@@ -28,6 +28,8 @@ namespace YACURS {
 	    // Not supported
 	    Label& operator=(const Label&);
 
+	    COLOROBJ __color;
+
 	protected:
 	    /**
 	     * The text to be displayed.
@@ -53,6 +55,9 @@ namespace YACURS {
 
 	    virtual void label(const std::string& _l);
 	    virtual const std::string& label() const;
+
+	    void color(COLOROBJ c);
+	    COLOROBJ color() const;
 
 	    // From WidgetBase
 

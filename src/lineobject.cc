@@ -142,7 +142,6 @@ LineObject::refresh(bool immediate) {
     put_line();
 
     curses_window()->set_color(YACURS::DEFAULT);
-    curses_window()->set_bg(YACURS::DEFAULT);
 
     WindowBase::refresh(immediate);
 

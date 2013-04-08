@@ -130,7 +130,8 @@ ColorParser::get_default_scheme() {
 	// We don't catch exceptions, since there must be none. The
 	// default color scheme has to be flawless.
 	CursColor tmp(process_token(*it++));
-	retval.at(tmp.no)=tmp;
+	// The color numbers are off by +1 due to NCurses
+	retval.at(tmp.no-1)=tmp;
     }
 
     return retval;
@@ -145,18 +146,21 @@ ColorParser::get_default_scheme() {
 // Public
 //
 ColorParser::ColorParser() {
-    color_name_map["DEF"]=DEFAULT;
-    color_name_map["MBT"]=MESSAGEBOX_TITLE;
-    color_name_map["MBX"]=MESSAGEBOX;
-    color_name_map["IWN"]=INPUTWIDGET_NOFOCUS;
-    color_name_map["IWF"]=INPUTWIDGET_FOCUS;
-    color_name_map["IWH"]=INPUTWIDGET_HIDDEN;
-    color_name_map["BTN"]=BUTTON_NOFOCUS;
-    color_name_map["BTF"]=BUTTON_FOCUS;
-    color_name_map["LBX"]=LISTBOX;
-    color_name_map["LBH"]=LISTBOX_HILITE;
-    color_name_map["CBG"]=CHECKBOXGROUP;
-    color_name_map["CBT"]=CHECKBOXGROUP_TITLE;
+    // The numerical values of the color name has an offset of 1,
+    // because NCurses expects the color pair numbering to start with
+    // 1. X/Open Curses allows the numbering to start with 0, though.
+    color_name_map["DEF"]=DEFAULT+1;
+    color_name_map["MBT"]=MESSAGEBOX_TITLE+1;
+    color_name_map["MBX"]=MESSAGEBOX+1;
+    color_name_map["IWN"]=INPUTWIDGET_NOFOCUS+1;
+    color_name_map["IWF"]=INPUTWIDGET_FOCUS+1;
+    color_name_map["IWH"]=INPUTWIDGET_HIDDEN+1;
+    color_name_map["BTN"]=BUTTON_NOFOCUS+1;
+    color_name_map["BTF"]=BUTTON_FOCUS+1;
+    color_name_map["LBX"]=LISTBOX+1;
+    color_name_map["LBH"]=LISTBOX_HILITE+1;
+    color_name_map["CBG"]=CHECKBOXGROUP+1;
+    color_name_map["CBT"]=CHECKBOXGROUP_TITLE+1;
 
     curs_colors_map['k']=COLOR_BLACK;
     curs_colors_map['r']=COLOR_RED;
@@ -204,7 +208,8 @@ ColorParser::operator()(const std::string& colorstr) {
 	while (it!=tokens.end()) {
 	    try {
 		CursColor tmp(process_token(*it++));
-		retval.at(tmp.no)=tmp;
+		// Color number is off by +1 due to NCurses
+		retval.at(tmp.no-1)=tmp;
 	    } catch (std::out_of_range&) {
 		// ignore
 	    }

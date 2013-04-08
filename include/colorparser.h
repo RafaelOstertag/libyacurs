@@ -17,7 +17,7 @@ namespace YACURS {
 	private:
 	    static const std::string __default_colors;
 
-	    std::map<std::string,COLOROBJ> color_name_map;
+	    std::map<std::string,short> color_name_map;
 	    std::map<char,short> curs_colors_map;
 	    std::map<char,int> curs_attrs_map;
 

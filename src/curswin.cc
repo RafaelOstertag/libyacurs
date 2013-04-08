@@ -27,6 +27,9 @@ CursWin::CursWin(WINDOW* win, COLOROBJ dc): __window(win),
     __area.rows(y);
 
     __client_area=__area;
+
+    set_bg(__def_color);
+    set_color(__def_color);
 }
 
 //
@@ -49,7 +52,7 @@ CursWin::CursWin(const Area& _a, COLOROBJ c): __window(0),
 			  __area.x()))==0 )
 	throw CursesException("newwin");
 
-    Colors::set_bg(__window,__def_color);
+    set_bg(__def_color);
     set_color(__def_color);
 }
 
@@ -139,14 +142,27 @@ CursWin::box(chtype verch, chtype horch) {
 }
 
 CursWin&
+CursWin::bkgd(chtype ch) {
+    if (wbkgd(__window, ch)==ERR)
+	throw CursesException("wbkgd");
+
+    return *this;
+}
+
+CursWin&
 CursWin::set_color(COLOROBJ c) {
-    YACURS::Colors::set_color(__window, c);
+#if NCURSES_VERSION_PATCH < 20100313
+    wattrset(__window, Colors::color_pair(c));
+#else
+    if (wattrset(__window, Colors::color_pair(c))==ERR)
+	throw CursesException("wattrset");
+#endif
     return *this;
 }
 
 CursWin&
 CursWin::set_bg(COLOROBJ c) {
-    YACURS::Colors::set_bg(__window, c);
+    bkgd(' ' | Colors::color_pair(c) );
     return *this;
 }
 
@@ -213,7 +229,7 @@ CursWin::is_touched() const {
 
 CursWin& 
 CursWin::addstr(const CurStr& str) {
-    Colors::set_color(__window, str.color());
+    set_color(str.color());
 
     if (mymvwaddstr(__window,
 		    str.position().y(),
@@ -221,7 +237,7 @@ CursWin::addstr(const CurStr& str) {
 	str.position().x()+static_cast<int16_t>(str.length())<__client_area.cols())
 	throw CursesException("mvwaddstr");
 
-    Colors::set_color(__window, __def_color);
+    set_color(__def_color);
     return *this;
 }
 
@@ -242,7 +258,7 @@ CursWin::addstrx(const CurStr& str) {
     int16_t space=__client_area.cols()-str.position().x()+(__box?1:0);
 
     if (space==1) {
-	Colors::set_color(__window, str.color());
+	set_color(str.color());
 	if (__box) {
 	    // mvaddch advances cursor, but does not move characters
 	    // under cursor, which is ideal when placing character
@@ -255,7 +271,7 @@ CursWin::addstrx(const CurStr& str) {
 	    // next to the cursor is moved off the window.
 	    mvinsch(str.position(), '>');
 	}
-	Colors::set_color(__window, __def_color);
+	set_color(__def_color);
 	return *this;
     }
 
@@ -263,13 +279,13 @@ CursWin::addstrx(const CurStr& str) {
 	return *this;
     }
 
-    Colors::set_color(__window, str.color());
+    set_color(str.color());
     if (space<static_cast<int16_t>(str.length())) {
 	addnstr(str, space-1).addch('>');
     } else {
 	addstr(str);
     }
-    Colors::set_color(__window, __def_color);
+    set_color(__def_color);
 
     return *this;
 }
@@ -297,7 +313,7 @@ CursWin::addlinex(const std::string& str) {
 
 CursWin& 
 CursWin::addnstr(const CurStr& str, int n) {
-    Colors::set_color(__window, str.color());
+    set_color(str.color());
 
     if (mymvwaddnstr(__window, 
 		     str.position().y(),
@@ -306,7 +322,7 @@ CursWin::addnstr(const CurStr& str, int n) {
 	str.position().x()+n<__client_area.x())
 	throw CursesException("mvwaddnstr");
 
-    Colors::set_color(__window, __def_color);
+    set_color(__def_color);
 
     return *this;
 }

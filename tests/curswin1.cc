@@ -191,6 +191,58 @@ void test7() {
     win2.refresh();
 }
 
+void test8() {
+    YACURS::INTERNAL::CurStr str1("abcdefghik", 
+				  YACURS::Coordinates(0,0), 
+				  YACURS::MESSAGEBOX_TITLE);
+    YACURS::INTERNAL::CurStr str2("abcde", 
+				  YACURS::Coordinates(0,1), 
+				  YACURS::MESSAGEBOX);
+    YACURS::INTERNAL::CurStr str21("fghik",
+				   YACURS::Coordinates(5,1),
+				   YACURS::INPUTWIDGET_FOCUS);
+    YACURS::INTERNAL::CurStr str3("abcdefghik", 
+				  YACURS::Coordinates(0,2), 
+				  YACURS::INPUTWIDGET_NOFOCUS);
+    YACURS::INTERNAL::CurStr str4("abcdefghik", 
+				  YACURS::Coordinates(0,3), 
+				  YACURS::INPUTWIDGET_FOCUS);
+    YACURS::INTERNAL::CurStr str5("abcdefghik", 
+				  YACURS::Coordinates(0,4), 
+				  YACURS::INPUTWIDGET_HIDDEN);
+    YACURS::INTERNAL::CurStr str6("abcdefghik", 
+				  YACURS::Coordinates(0,5), 
+				  YACURS::BUTTON_NOFOCUS);
+    YACURS::INTERNAL::CurStr str7("abcdefghik", 
+				  YACURS::Coordinates(0,6), 
+				  YACURS::BUTTON_FOCUS);
+    YACURS::INTERNAL::CurStr str8("abcdefghik", 
+				  YACURS::Coordinates(0,7), 
+				  YACURS::LISTBOX);
+    YACURS::INTERNAL::CurStr str9("abcdefghik", 
+				  YACURS::Coordinates(0,8), 
+				  YACURS::LISTBOX_HILITE);
+    YACURS::INTERNAL::CurStr str10("abcdefghik", 
+				  YACURS::Coordinates(0,9), 
+				  YACURS::CHECKBOXGROUP);
+
+    YACURS::INTERNAL::CursWin win(YACURS::Area(0,10,10,20));
+    win.set_color(YACURS::DEFAULT);
+
+    win.addlinex(str1);
+    win+=str2;
+    win+=str21;
+    win.addlinex(str3);
+    win+=str4;
+    win.addlinex(str5);
+    win+=str6;
+    win.addlinex(str7);
+    win+=str8;
+    win.addlinex(str9);
+    win+=str10;
+    win.refresh();
+}
+
 int main() {
 #if 0
     std::cout << getpid() << std::endl;
@@ -221,8 +273,17 @@ int main() {
 
     sleep(1);
 
+    wclear(stdscr);
+    wrefresh(stdscr);
+
     test7();
 
+    sleep(1);
+
+    wclear(stdscr);
+    wrefresh(stdscr);
+
+    test8();
     sleep(1);
 
     YACURS::Curses::end();

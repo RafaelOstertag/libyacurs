@@ -173,6 +173,13 @@ inline int refresh() {
 }
 #endif
 
+#ifdef bkgd
+#undef bkgd
+inline int bkgd(chtype ch) {
+    return wbkgd(stdscr, ch);
+}
+#endif
+
 #ifdef wclear
 #undef wclear
 #endif

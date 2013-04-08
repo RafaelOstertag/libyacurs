@@ -181,29 +181,8 @@ namespace YACURS {
 	     * terminal supports colors.
 	     */
 	    static void init_colors(const std::string& colorstr=std::string());
-	    
-	    /**
-	     * @brief Set the color of the curses window.
-	     *
-	     * Sets the color of the curses window. If colors are not
-	     * supported by the terminal, it sets the value of the
-	     * @c attr field of the @c color struct.
-	     */
-	    static void set_color (WINDOW* w, COLOROBJ c);
-	    
-	    static void set_bg (WINDOW* w, COLOROBJ c);
-	    
-	    /**
-	     * @brief Returns the number of the color pair.
-	     *
-	     * Returns the number used by curses for the given
-	     * color. If color support is unavailable, it always
-	     * returns 0.
-	     *
-	     * @return the number of the color pair, or zero if color
-	     * support is not available.
-	     */
-	    static short get_color (COLOROBJ c);
+
+	    static int color_pair(COLOROBJ c);
     };
 }
 

@@ -26,6 +26,21 @@ Dialog::operator=(const Dialog&) {
 //
 // Protected
 //
+const Button* const
+Dialog::ok_button() const {
+    return __bok;
+}
+
+const Button* const
+Dialog::cancel_button() const {
+    return __bcancel;
+}
+
+void
+Dialog::dialog_state(STATE st) {
+    __dstate=st;
+}
+
 void
 Dialog::button_press_handler(Event& _e) {
     if (realization()!=REALIZED) return;
@@ -134,6 +149,9 @@ Dialog::refresh(bool immediate) {
 void
 Dialog::realize() {
     REALIZE_ENTER;
+
+    // Reset the dialog state
+    __dstate=DIALOG_CANCEL;
 
     EventQueue::connect_event(EventConnectorMethod1<Dialog>(EVT_BUTTON_PRESS, this, &Dialog::button_press_handler));
 

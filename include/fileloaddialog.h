@@ -2,8 +2,8 @@
 //
 // $Id$
 
-#ifndef FILEDIALOG_H
-#define FILEDIALOG_H
+#ifndef FILELOADDIALOG_H
+#define FILELOADDIALOG_H
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,7 @@
 #include "messagebox2.h"
 
 namespace YACURS {
-    class FileDialog: public Dialog {
+    class FileLoadDialog: public Dialog {
 	private:
 	    MessageBox2* __msgbox;
 	    DynLabel* __path;
@@ -31,7 +31,7 @@ namespace YACURS {
 	    VPack* __vpack;
 
 	    // Not supported
-	    FileDialog& operator=(const FileDialog&);
+	    FileLoadDialog& operator=(const FileLoadDialog&);
 
 	    std::string dir_up(const std::string& dir);
 	    void read_dir();
@@ -39,10 +39,10 @@ namespace YACURS {
 	    void listbox_enter_handler(Event& _e);
 	    void window_close_handler(Event& _e);
 	public:
-	    FileDialog(std::string _path=std::string(),
+	    FileLoadDialog(std::string _path=std::string(),
 		       DIALOG_TYPE _dt=OKCANCEL);
 
-	    virtual ~FileDialog();
+	    virtual ~FileLoadDialog();
 
 	    std::string filepath() const;
 	    const std::string& directory() const;
@@ -52,4 +52,4 @@ namespace YACURS {
     };
 }
 
-#endif // FILEDIALOG_H
+#endif // FILELOADDIALOG_H

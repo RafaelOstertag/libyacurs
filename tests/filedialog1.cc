@@ -71,12 +71,12 @@ int __dir_up_data[] = {
 
 // Quit dialog
 int __test_data_end_dialog[]= {
-    '\t', '\t', '\t', '\n', 0
+    '\t', '\t', '\t', '\t', '\n', 0
 };
 
 // Quit app
 int __test_data_end_app[]= {
-    '\t', '\n', 0
+    '\t', '\t', '\n', 0
 };
 
 int* selection1[61];
@@ -131,6 +131,7 @@ class MainWindow: public YACURS::Window {
         YACURS::HPack* hpack1;
         YACURS::Button* button1;
         YACURS::Button* button2;
+        YACURS::Button* button3;
         YACURS::Label* diagstatus;
         YACURS::Label* file;
         YACURS::Label* path;
@@ -139,7 +140,8 @@ class MainWindow: public YACURS::Window {
         YACURS::DynLabel* label2;
         YACURS::DynLabel* label3;
         YACURS::DynLabel* label4;
-        YACURS::FileDialog* filedialog;
+        YACURS::FileSaveDialog* filesavedialog;
+        YACURS::FileLoadDialog* fileloaddialog;
 
 
     protected:
@@ -147,14 +149,14 @@ class MainWindow: public YACURS::Window {
             assert(_e==YACURS::EVT_WINDOW_CLOSE);
             YACURS::EventEx<YACURS::WindowBase*>& evt=dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
-            if (filedialog!=0 && evt.data()==filedialog) {
-                YACURS::Curses::statusline()->push_msg("FileDialog closed");
+            if (filesavedialog!=0 && evt.data()==filesavedialog) {
+                YACURS::Curses::statusline()->push_msg("FileSaveDialog closed");
 
-                if (filedialog->dialog_state()==YACURS::Dialog::DIALOG_OK) {
+                if (filesavedialog->dialog_state()==YACURS::Dialog::DIALOG_OK) {
                     label1->label("DIALOG_OK");
-                    label2->label(filedialog->filepath());
-                    label3->label(filedialog->directory());
-                    label4->label(filedialog->filename());
+                    label2->label(filesavedialog->filepath());
+                    label3->label(filesavedialog->directory());
+                    label4->label(filesavedialog->filename());
                 } else {
                     label1->label("DIALOG_CANCEL");
                     label2->label("");
@@ -162,8 +164,27 @@ class MainWindow: public YACURS::Window {
                     label4->label("");
                 }
 
-                delete filedialog;
-                filedialog=0;
+                delete filesavedialog;
+                filesavedialog=0;
+            }
+
+            if (fileloaddialog!=0 && evt.data()==fileloaddialog) {
+                YACURS::Curses::statusline()->push_msg("FileLoadDialog closed");
+
+                if (fileloaddialog->dialog_state()==YACURS::Dialog::DIALOG_OK) {
+                    label1->label("DIALOG_OK");
+                    label2->label(fileloaddialog->filepath());
+                    label3->label(fileloaddialog->directory());
+                    label4->label(fileloaddialog->filename());
+                } else {
+                    label1->label("DIALOG_CANCEL");
+                    label2->label("");
+                    label3->label("");
+                    label4->label("");
+                }
+
+                delete fileloaddialog;
+                fileloaddialog=0;
             }
 
         }
@@ -173,10 +194,18 @@ class MainWindow: public YACURS::Window {
             YACURS::EventEx<YACURS::Button*>& e=dynamic_cast<YACURS::EventEx<YACURS::Button*>&>(_e);
 
             if (e.data()==button1) {
-                assert(filedialog==0);
+                assert(filesavedialog==0);
 
-                filedialog=new YACURS::FileDialog;
-                filedialog->show();
+                filesavedialog=new YACURS::FileSaveDialog;
+                filesavedialog->show();
+                return;
+            }
+
+            if (e.data()==button3) {
+                assert(fileloaddialog==0);
+
+                fileloaddialog=new YACURS::FileLoadDialog;
+                fileloaddialog->show();
                 return;
             }
 
@@ -187,8 +216,11 @@ class MainWindow: public YACURS::Window {
         }
 
     public:
-        MainWindow(): YACURS::Window(YACURS::Margin(1,0,1,0)), filedialog(0) {
-            button1=new YACURS::Button("New Window");
+        MainWindow(): YACURS::Window(YACURS::Margin(1,0,1,0)),
+		      filesavedialog(0),
+		      fileloaddialog(0) {
+            button1=new YACURS::Button("File Save");
+            button3=new YACURS::Button("File Load");
             button2=new YACURS::Button("Quit");
             vpack1=new YACURS::VPack;
             hpack1=new YACURS::HPack;
@@ -220,19 +252,17 @@ class MainWindow: public YACURS::Window {
             vpack21->add_back(path);
             vpack21->add_back(file);
 
-
             vpack22->add_front(label4);
             vpack22->add_front(label3);
             vpack22->add_front(label2);
             vpack22->add_front(label1);
 
             hpack1->add_back(button1);
+	    hpack1->add_back(button3);
             hpack1->add_back(button2);
 
             vpack1->add_back(hpack2);
             vpack1->add_back(hpack1);
-
-
 
             widget(vpack1);
 
@@ -241,11 +271,14 @@ class MainWindow: public YACURS::Window {
         }
 
         ~MainWindow() {
-            if (filedialog)
-                delete filedialog;
+            if (filesavedialog)
+                delete filesavedialog;
+            if (fileloaddialog)
+                delete fileloaddialog;
 
             delete button1;
             delete button2;
+	    delete button3;
             delete hpack1;
             delete vpack1;
             delete label1;
@@ -297,7 +330,7 @@ int main() {
         YACURS::Curses::init();
 
         YACURS::Curses::title(new YACURS::LineObject(YACURS::LineObject::POS_TOP,
-                                     "FileDialog 1"));
+                                     "FileSaveDialog 1"));
         YACURS::Curses::statusline(new YACURS::StatusLine);
 
         MainWindow* mainwindow=new MainWindow;

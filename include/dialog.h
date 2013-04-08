@@ -52,6 +52,11 @@ namespace YACURS {
 	    Dialog(const Dialog&);
 	    Dialog& operator=(const Dialog&);
 	protected:
+	    const Button* const ok_button() const;
+	    const Button* const cancel_button() const;
+
+	    void dialog_state(STATE st);
+
 	    virtual void button_press_handler(Event& _e);
 
 	public:

@@ -10,21 +10,21 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
-#include "filedialog.h"
+#include "fileloaddialog.h"
 
 using namespace YACURS;
 
 //
 // Private
 //
-FileDialog&
-FileDialog::operator=(const FileDialog&) {
+FileLoadDialog&
+FileLoadDialog::operator=(const FileLoadDialog&) {
     throw NotSupported();
     return *this;
 }
 
 std::string
-FileDialog::dir_up(const std::string& dir) {
+FileLoadDialog::dir_up(const std::string& dir) {
     std::string::size_type pos=dir.rfind('/');
 
     std::string retval;
@@ -41,7 +41,7 @@ FileDialog::dir_up(const std::string& dir) {
 }
 
 void
-FileDialog::read_dir() {
+FileLoadDialog::read_dir() {
     std::list<std::string> _dirs;
     std::list<std::string> _files;
 
@@ -103,7 +103,7 @@ FileDialog::read_dir() {
 }
 
 void
-FileDialog::listbox_enter_handler(Event& _e) {
+FileLoadDialog::listbox_enter_handler(Event& _e) {
     assert(_e==EVT_LISTBOX_ENTER);
 
     EventEx<ListBox<>*>& _evt = dynamic_cast<EventEx<ListBox<>*>&>(_e);
@@ -150,7 +150,7 @@ FileDialog::listbox_enter_handler(Event& _e) {
 }
 
 void
-FileDialog::window_close_handler(Event& _e) {
+FileLoadDialog::window_close_handler(Event& _e) {
     assert(_e==EVT_WINDOW_CLOSE);
     
     EventEx<WindowBase*>& _evt = dynamic_cast<EventEx<WindowBase*>&>(_e);
@@ -170,8 +170,8 @@ FileDialog::window_close_handler(Event& _e) {
 // Public
 //
 
-FileDialog::FileDialog(std::string _path,
-		       DIALOG_TYPE _dt): Dialog("File", _dt, Dialog::FULLSIZE),
+FileLoadDialog::FileLoadDialog(std::string _path,
+		       DIALOG_TYPE _dt): Dialog("Load File", _dt, Dialog::FULLSIZE),
 					 __msgbox(0),
 					 __path(0),
 					 __directories(0),
@@ -200,6 +200,7 @@ FileDialog::FileDialog(std::string _path,
     __vpack->add_back(__hpack);
 
     __filename = new Input<>;
+    __filename->readonly(true);
 
     __vpack->add_back(__filename);
 
@@ -208,13 +209,13 @@ FileDialog::FileDialog(std::string _path,
 
     widget(__vpack);
 
-    EventQueue::connect_event(EventConnectorMethod1<FileDialog>(EVT_LISTBOX_ENTER,this,&FileDialog::listbox_enter_handler));
-    EventQueue::connect_event(EventConnectorMethod1<FileDialog>(EVT_WINDOW_CLOSE, this, &FileDialog::window_close_handler));
+    EventQueue::connect_event(EventConnectorMethod1<FileLoadDialog>(EVT_LISTBOX_ENTER,this,&FileLoadDialog::listbox_enter_handler));
+    EventQueue::connect_event(EventConnectorMethod1<FileLoadDialog>(EVT_WINDOW_CLOSE, this, &FileLoadDialog::window_close_handler));
 }
 
-FileDialog::~FileDialog() {
-    EventQueue::disconnect_event(EventConnectorMethod1<FileDialog>(EVT_LISTBOX_ENTER,this,&FileDialog::listbox_enter_handler));
-    EventQueue::disconnect_event(EventConnectorMethod1<FileDialog>(EVT_WINDOW_CLOSE, this, &FileDialog::window_close_handler));
+FileLoadDialog::~FileLoadDialog() {
+    EventQueue::disconnect_event(EventConnectorMethod1<FileLoadDialog>(EVT_LISTBOX_ENTER,this,&FileLoadDialog::listbox_enter_handler));
+    EventQueue::disconnect_event(EventConnectorMethod1<FileLoadDialog>(EVT_WINDOW_CLOSE, this, &FileLoadDialog::window_close_handler));
 
     assert(__path!=0);
     assert(__directories!=0);
@@ -232,7 +233,7 @@ FileDialog::~FileDialog() {
 }
 
 std::string
-FileDialog::filepath() const {
+FileLoadDialog::filepath() const {
     assert(__path!=0);
     assert(__directories!=0);
     assert(__files!=0);
@@ -249,7 +250,7 @@ FileDialog::filepath() const {
 }
 
 const std::string&
-FileDialog::directory() const {
+FileLoadDialog::directory() const {
     assert(__path!=0);
     assert(__directories!=0);
     assert(__files!=0);
@@ -259,12 +260,12 @@ FileDialog::directory() const {
 }
 
 const std::string&
-FileDialog::filename() const {
+FileLoadDialog::filename() const {
     return __filename->input();
 }
 
 void
-FileDialog::refresh(bool immediate) {
+FileLoadDialog::refresh(bool immediate) {
     Dialog::refresh(immediate);
 
     try {

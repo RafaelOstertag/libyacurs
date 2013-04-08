@@ -42,7 +42,8 @@
 #include "messagebox.h"
 #include "messagebox2.h"
 #include "inputbox.h"
-#include "filedialog.h"
+#include "filesavedialog.h"
+#include "fileloaddialog.h"
 #include "checkbox.h"
 #include "radiobox.h"
 

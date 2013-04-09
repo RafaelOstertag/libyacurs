@@ -270,14 +270,14 @@ host_fish() {
     ./configure \
 	CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
 	CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
-    had_error $? "Error in $arch"
+    had_error $? "Error on fish"
 
     gmake clean
-    gmake -j
-    had_error $? "Error in $arch"
+    gmake -j2
+    had_error $? "Error on fish"
 
     gmake check
-    had_error $? "Error in $arch"
+    had_error $? "Error on fish"
 }
 
 host_openbsd32() {

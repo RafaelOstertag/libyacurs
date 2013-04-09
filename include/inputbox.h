@@ -5,10 +5,6 @@
 #ifndef INPUTBOX_H
 #define INPUTBOX_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <string>
 
 #include "dialog.h"

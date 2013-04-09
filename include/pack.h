@@ -5,10 +5,6 @@
 #ifndef PACK_H
 #define PACK_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <list>
 
 #include "area.h"

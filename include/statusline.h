@@ -5,10 +5,6 @@
 #ifndef STATUSLINE_H
 #define STATUSLINE_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <stack>
 
 #include "lineobject.h"

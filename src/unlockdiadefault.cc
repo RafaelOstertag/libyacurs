@@ -1,8 +1,20 @@
 // $Id$
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "gettext.h"
+
 #include <cassert>
 
 #include "unlockdiadefault.h"
+
+#ifdef ENABLE_NLS
+# define _(String) dgettext(PACKAGE, String)
+#else
+# define _(String) (String)
+#endif
 
 using namespace YACURS;
 
@@ -19,14 +31,14 @@ UnlockDialogDefault::operator=(const UnlockDialogDefault&) {
 // Protected
 //
 UnlockDialogDefault::UnlockDialogDefault(const std::string& _secret):
-    UnlockDialog("Unlock Screen"),
+    UnlockDialog(_("Unlock Screen")),
     __secret(_secret),
     __vpack(0),
     __text(0),
     __secret_input(0) {
     __vpack=new VPack;
     __vpack->always_dynamic(true);
-    __text=new Label("Please enter password in order to unlock screen");
+    __text=new Label(_("Please enter password in order to unlock screen"));
     __secret_input=new Input<>;
     __secret_input->obscure_input(true);
     

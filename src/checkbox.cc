@@ -1,5 +1,11 @@
 // $Id: input.cc 4875 2013-02-23 13:25:34Z rafisol $
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "gettext.h"
+
 #include <cassert>
 #include <cstdlib>
 #include <algorithm>
@@ -12,6 +18,12 @@
 #include "focusmanager.h"
 #include "yacursex.h"
 #include "colors.h"
+
+#ifdef ENABLE_NLS
+# define _(String) dgettext(PACKAGE, String)
+#else
+# define _(String) (String)
+#endif
 
 using namespace YACURS;
 
@@ -120,7 +132,7 @@ CheckBox::selected(unsigned short _i) {
     if (__items.size()<_i) {
 	std::ostringstream _ind;
 	_ind << _i;
-	throw std::out_of_range("CheckBox: index " + _ind.str() + " out of range.");
+	throw std::out_of_range(_("CheckBox: index ") + _ind.str() + _(" out of range."));
     }
 
     return __items[_i].selected;
@@ -133,7 +145,7 @@ CheckBox::selected(const std::string& _i) {
 	if (__items[n].item == _i)
 	    return __items[n].selected;
 
-    throw std::out_of_range("Item '" + _i + "' not found in CheckBox");
+    throw std::out_of_range(_("Item '") + _i + _("' not found in CheckBox"));
 }
 
 void

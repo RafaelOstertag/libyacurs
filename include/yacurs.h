@@ -5,6 +5,7 @@
 #ifndef YACURS_H
 #define YACURS_H
 
+#include "libyacurscfg.h"
 #include "curswin.h"
 #include "curstr.h"
 #include "yacurstypes.h"

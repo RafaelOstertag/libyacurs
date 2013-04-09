@@ -5,10 +5,6 @@
 #ifndef FILELOADDIALOG_H
 #define FILELOADDIALOG_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <string>
 
 #include <unistd.h>

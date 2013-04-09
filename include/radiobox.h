@@ -5,10 +5,6 @@
 #ifndef RADIOBOX_H
 #define RADIOBOX_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "checkbox.h"
 
 namespace YACURS {

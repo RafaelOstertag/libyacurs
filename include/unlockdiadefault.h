@@ -5,10 +5,6 @@
 #ifndef UNLOCKDIADEFAULT_H
 #define UNLOCKDIADEFAULT_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <string>
 
 #include "unlockdialog.h"

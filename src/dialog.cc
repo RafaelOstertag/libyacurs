@@ -1,12 +1,23 @@
 // $Id$
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <gettext.h>
+
 #include <cassert>
 #include <cstdlib>
 
 #include "dialog.h"
-
 #include "eventqueue.h"
 #include "yacursex.h"
+
+#ifdef ENABLE_NLS
+# define _(String) dgettext(PACKAGE, String)
+#else
+# define _(String) (String)
+#endif
 
 using namespace YACURS;
 
@@ -84,17 +95,17 @@ Dialog::Dialog(const std::string& _title,
 
     switch (__dialog_type) {
     case OKCANCEL:
-	__bcancel=new Button("Cancel");
+	__bcancel=new Button(_("Cancel"));
 	__hpack->add_back(__bcancel);
     case OK_ONLY:
-	__bok=new Button("OK");
+	__bok=new Button(_("OK"));
 	__hpack->add_front(__bok);
 	break;
     case YESNO:
-	__bcancel=new Button("No");
+	__bcancel=new Button(_("No"));
 	__hpack->add_back(__bcancel);
     case YES_ONLY:
-	__bok=new Button("Yes");
+	__bok=new Button(_("Yes"));
 	__hpack->add_front(__bok);
 	break;
     default:

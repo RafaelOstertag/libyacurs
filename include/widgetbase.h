@@ -5,10 +5,6 @@
 #ifndef WIDGETBASE_H
 #define WIDGETBASE_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <string>
 
 #include "curswin.h"

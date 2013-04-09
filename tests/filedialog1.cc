@@ -3,6 +3,8 @@
 #include "config.h"
 #endif
 
+#include "gettext.h"
+
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -302,6 +304,12 @@ int main() {
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
+#endif
+
+#if ENABLE_NLS
+    setlocale (LC_ALL, "");
+    bindtextdomain ("filedialog1", LOCALEDIR);
+    textdomain ("filedialog1");
 #endif
 
     srand48(time(0));

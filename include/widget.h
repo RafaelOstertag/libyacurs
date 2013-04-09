@@ -3,10 +3,6 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <cstdlib>
 #include <string>
 

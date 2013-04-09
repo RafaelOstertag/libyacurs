@@ -23,10 +23,6 @@
 #ifndef _COLORS_H
 #define _COLORS_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <vector>
 #include <string>
 

@@ -5,10 +5,6 @@
 #ifndef LOCKSCREEN_H
 #define LOCKSCREEN_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <string>
 
 #include "window.h"

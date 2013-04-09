@@ -1,5 +1,11 @@
 // $Id$
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "gettext.h"
+
 #include <cstdlib>
 #include <cassert>
 #include <cerrno>
@@ -11,6 +17,12 @@
 #include <dirent.h>
 
 #include "filesavedialog.h"
+
+#ifdef ENABLE_NLS
+# define _(String) dgettext(PACKAGE, String)
+#else
+# define _(String) (String)
+#endif
 
 using namespace YACURS;
 
@@ -128,8 +140,8 @@ FileSaveDialog::listbox_enter_handler(Event& _e) {
 	try {
 	    read_dir();
 	} catch (SystemError& ex) {
-	    std::string _tmp("Cannot change to" + __path->label() + ":");
-	    __errmsgbox=new MessageBox2("System Error",
+	    std::string _tmp(_("Cannot change to ") + __path->label() + ":");
+	    __errmsgbox=new MessageBox2(_("System Error"),
 				     _tmp,
 				     ex.what(),
 				     OK_ONLY);
@@ -191,9 +203,9 @@ FileSaveDialog::button_press_handler(Event& _e) {
 	int retval;
 	if ((retval=stat(filepath().c_str(),&wdc))==0) {
 	    assert(__confirmdia==0);
-	    __confirmdia=new MessageBox2("Confirmation",
+	    __confirmdia=new MessageBox2(_("Confirmation"),
 					 filepath(),
-					 "already exists. Do you want to overwrite?",
+					 _("already exists. Do you want to overwrite?"),
 					 YESNO);
 	    __confirmdia->show();
 	    _e.stop(true);
@@ -202,7 +214,7 @@ FileSaveDialog::button_press_handler(Event& _e) {
 	    int s_errno=errno;
 	    switch (s_errno) {
 	    case EACCES:
-		__errmsgbox=new MessageBox2("Error",
+		__errmsgbox=new MessageBox2(_("Error"),
 					    filepath(),
 					    SystemError(s_errno).what(),
 					    OK_ONLY);
@@ -228,7 +240,7 @@ FileSaveDialog::button_press_handler(Event& _e) {
 //
 
 FileSaveDialog::FileSaveDialog(std::string _path,
-			       DIALOG_TYPE _dt): Dialog("Save File", _dt, Dialog::FULLSIZE),
+			       DIALOG_TYPE _dt): Dialog(_("Save File"), _dt, Dialog::FULLSIZE),
 						 __errmsgbox(0),
 						 __confirmdia(0),
 						 __path(0),
@@ -328,8 +340,8 @@ FileSaveDialog::refresh(bool immediate) {
     try {
 	read_dir();
     } catch (SystemError& ex) {
-	std::string _tmp("Cannot change to" + __path->label() + ":");
-	__errmsgbox=new MessageBox2("System Error",
+	std::string _tmp(_("Cannot change to ") + __path->label() + ":");
+	__errmsgbox=new MessageBox2(_("System Error"),
 				_tmp,
 				ex.what(),
 				OK_ONLY);

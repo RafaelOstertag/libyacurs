@@ -1,4 +1,7 @@
 # $Id$
 
 ACLOCAL_AMFLAGS= -I m4
-SUBDIRS = include src tests
+SUBDIRS = po include src tests
+
+EXTRA_DIST = config.rpath
+

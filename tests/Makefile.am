@@ -13,25 +13,28 @@ interactive_tests = eventqueue9 resize3 resize4 resize5 focus1 app1 \
 check_PROGRAMS =  $(non_interactive_tests) $(interactive_tests)
 # interactive tests must not be listed here
 TESTS = $(non_interactive_tests)
-#TESTS_ENVIRONMENT = LD_PRELOAD="./.libs/libtestpreload.so" ; export LD_PRELOAD ;
+
 AM_DEFAULT_SOURCE_EXT = .cc
 
-AM_CPPFLAGS = -I$(top_srcdir)/include
+AM_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\" -I$(top_srcdir)/include
+
 # LD_EXPORT_DYNAMIC is basically only used for interactive_tests
-AM_LDFLAGS = -L$(top_srcdir)/src -lyacurs $(LD_EXPORT_DYNAMIC)
+AM_LDFLAGS = -L$(top_builddir)/src -lyacurs $(LD_EXPORT_DYNAMIC)
+
+EXTRA_DIST = testpreload.cc
 
 all-local: libtestpreload.la
 clean-local:
 	rm -f libtestpreload.la
 
 libtestpreload.la: testpreload.lo
-	$(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -rpath /usr/local/lib -o $@ $<
+	$(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -shared -rpath /usr/local/lib -o $@ $<
 
 testpreload.lo: testpreload.cc
-	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o $@ $<
+	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -shared -c -o $@ $<
 
 check-local: $(interactive_tests)
 	for f in $(interactive_tests) ; do \
-		$(LIBTOOL) --mode=execute env LD_PRELOAD="./.libs/libtestpreload.so" $$f ; \
+		$(LIBTOOL) --mode=execute env LD_PRELOAD="$(builddir)/.libs/libtestpreload.so" $$f ; \
 		test "x$$?" = "x0" || { echo "*** $$f failed" ; exit 1 ; } ; \
 	done

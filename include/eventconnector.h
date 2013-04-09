@@ -5,10 +5,6 @@
 #ifndef EVENTCONNECTOR_H
 #define EVENTCONNECTOR_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <stdint.h>
 
 #include <cstdlib>

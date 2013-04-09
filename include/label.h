@@ -5,10 +5,6 @@
 #ifndef LABEL_H
 #define LABEL_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <string>
 
 #include "widget.h"

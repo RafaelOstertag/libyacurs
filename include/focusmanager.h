@@ -5,10 +5,6 @@
 #ifndef FOCUSMANAGER_H
 #define FOCUSMANAGER_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <vector>
 
 #include "yacurstypes.h"

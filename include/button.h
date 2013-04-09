@@ -5,10 +5,6 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "label.h"
 #include "event.h"
 

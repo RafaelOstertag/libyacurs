@@ -1,5 +1,11 @@
 // $Id$
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "gettext.h"
+
 #include <cstdlib>
 #include <cassert>
 #include <cerrno>
@@ -11,6 +17,12 @@
 #include <dirent.h>
 
 #include "fileloaddialog.h"
+
+#ifdef ENABLE_NLS
+# define _(String) dgettext(PACKAGE, String)
+#else
+# define _(String) (String)
+#endif
 
 using namespace YACURS;
 
@@ -128,8 +140,8 @@ FileLoadDialog::listbox_enter_handler(Event& _e) {
 	try {
 	    read_dir();
 	} catch (SystemError& ex) {
-	    std::string _tmp("Cannot change to" + __path->label() + ":");
-	    __msgbox=new MessageBox2("System Error",
+	    std::string _tmp(_("Cannot change to ") + __path->label() + ":");
+	    __msgbox=new MessageBox2(_("System Error"),
 				     _tmp,
 				     ex.what(),
 				     OK_ONLY);
@@ -171,14 +183,14 @@ FileLoadDialog::window_close_handler(Event& _e) {
 //
 
 FileLoadDialog::FileLoadDialog(std::string _path,
-		       DIALOG_TYPE _dt): Dialog("Load File", _dt, Dialog::FULLSIZE),
-					 __msgbox(0),
-					 __path(0),
-					 __directories(0),
-					 __files(0),
-					 __filename(0),
-					 __hpack(0),
-					 __vpack(0) {
+			       DIALOG_TYPE _dt): Dialog(_("Load File"), _dt, Dialog::FULLSIZE),
+						 __msgbox(0),
+						 __path(0),
+						 __directories(0),
+						 __files(0),
+						 __filename(0),
+						 __hpack(0),
+						 __vpack(0) {
     __vpack = new VPack;
     __hpack = new HPack;
 
@@ -271,8 +283,8 @@ FileLoadDialog::refresh(bool immediate) {
     try {
 	read_dir();
     } catch (SystemError& ex) {
-	std::string _tmp("Cannot change to" + __path->label() + ":");
-	__msgbox=new MessageBox2("System Error",
+	std::string _tmp(_("Cannot change to ") + __path->label() + ":");
+	__msgbox=new MessageBox2(_("System Error"),
 				_tmp,
 				ex.what(),
 				OK_ONLY);

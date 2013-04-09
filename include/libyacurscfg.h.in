@@ -1,0 +1,25 @@
+// -*- mode: c++ -*-
+
+/* Define to 1 if you have ncurses.h */
+#undef HAVE_NCURSES_H
+
+/* Define to 1 if you have curses.h */
+#undef HAVE_CURSES_H
+
+/* Set to 1 if waddnstr() doesn't use const char* */
+#undef WADDNSTR_USE_CHAR
+
+/* Set to 1 if waddstr() doesn't use const char* */
+#undef WADDSTR_USE_CHAR
+
+/* Set to 1 if mvwaddnstr() doesn't use const char* */
+#undef MVWADDNSTR_USE_CHAR
+
+/* Set to 1 if mvwaddstr() doesn't use const char* */
+#undef MVWADDSTR_USE_CHAR
+
+/* Set to 1 if keypad has a return value */
+#undef KEYPAD_RETURN_INT
+
+/* Define to 1 if you have the `resize_term' function. */
+#undef HAVE_RESIZE_TERM

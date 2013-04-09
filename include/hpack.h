@@ -5,10 +5,6 @@
 #ifndef HPACK_H
 #define HPACK_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "pack.h"
 
 namespace YACURS {

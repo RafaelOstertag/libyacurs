@@ -5,10 +5,6 @@
 #ifndef WINDOWBASE_H
 #define WINDOWBASE_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "curswin.h"
 #include "realizeable.h"
 #include "margin.h"

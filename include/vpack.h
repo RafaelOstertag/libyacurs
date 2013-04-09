@@ -5,10 +5,6 @@
 #ifndef VPACK_H
 #define VPACK_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "pack.h"
 
 namespace YACURS {

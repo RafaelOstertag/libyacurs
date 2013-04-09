@@ -5,10 +5,6 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "area.h"
 
 namespace YACURS {

@@ -3,9 +3,7 @@
 #ifndef MYCURSES_H
 #define MYCURSES_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include "libyacurscfg.h"
 
 // In case it is compiled with g++
 #ifndef _BOOL
@@ -74,115 +72,6 @@ enum {
 #undef tab
 #endif
 
-// Those macros collide with CursWin
-#ifdef addstr
-#undef addstr
-inline int addstr(const char *str) {
-    return waddstr(stdscr, str);
-}
-#endif
-
-#ifdef addnstr
-#undef addnstr
-inline int addnstr(const char *str, int n) {
-    return waddnstr(stdscr, str, n);
-}
-#endif
-
-#ifdef addch
-#undef addch
-inline int addch(const chtype ch) {
-    return waddch(stdscr, ch);
-}
-#endif
-
-#ifdef mvaddch
-#undef mvaddch
-inline int mvaddch(int y, int x, const chtype ch) {
-    return mvwaddch(stdscr, y, x, ch);
-}
-#endif
-
-#ifdef insch
-#undef insch
-inline int insch(const chtype ch) {
-    return winsch(stdscr, ch);
-}
-#endif
-
-#ifdef mvinsch
-#undef mvinsch
-inline int mvinsch(int y, int x, const chtype ch) {
-    return mvwinsch(stdscr, y, x, ch);
-}
-#endif
-
-#ifdef timeout
-#undef timeout
-inline void timeout(int n) {
-    wtimeout(stdscr, n);
-}
-#endif
-
-#ifdef box
-#undef box
-inline int box (WINDOW* win, int verch, int horch) {
-    return wborder (win, verch, verch, horch, horch, 0, 0, 0, 0);
-}
-#endif
-
-#ifdef clear
-#undef clear
-inline int clear() {
-    return wclear (stdscr);
-}
-#endif
-
-#ifdef erase
-#undef erase
-inline int erase() {
-    return werase (stdscr);
-}
-#endif
-
-#ifdef mvdelch
-#undef mvdelch
-inline int mvdelch(int y, int x) {
-    return mvwdelch(stdscr, y, x);
-}
-#endif
-
-#ifdef delch
-#undef delch
-inline int delch() {
-    return wdelch(stdscr);
-}
-#endif
-
-#ifdef move
-#undef move
-inline int move (int y, int x) {
-    return wmove (stdscr, y, x);
-}
-#endif
-
-#ifdef refresh
-#undef refresh
-inline int refresh() {
-    return wrefresh (stdscr);
-}
-#endif
-
-#ifdef bkgd
-#undef bkgd
-inline int bkgd(chtype ch) {
-    return wbkgd(stdscr, ch);
-}
-#endif
-
-#ifdef wclear
-#undef wclear
-#endif
 
 #ifdef WADDSTR_USE_CHAR
 #ifdef __SVR4
@@ -267,5 +156,115 @@ inline int waddnstr_c (WINDOW* win, const char* str, int n) {
 #else // WADDSTR_USE_CHAR
 #define mywaddnstr(a,b,c) waddnstr(a,b,c)
 #endif // WADDSTR_USE_CHAR
+
+// Those macros collide with CursWin
+#ifdef addstr
+#undef addstr
+inline int addstr(const char *str) {
+    return mywaddstr(stdscr, str);
+}
+#endif
+
+#ifdef addnstr
+#undef addnstr
+inline int addnstr(const char *str, int n) {
+    return mywaddnstr(stdscr, str, n);
+}
+#endif
+
+#ifdef addch
+#undef addch
+inline int addch(const chtype ch) {
+    return waddch(stdscr, ch);
+}
+#endif
+
+#ifdef mvaddch
+#undef mvaddch
+inline int mvaddch(int y, int x, const chtype ch) {
+    return mvwaddch(stdscr, y, x, ch);
+}
+#endif
+
+#ifdef insch
+#undef insch
+inline int insch(const chtype ch) {
+    return winsch(stdscr, ch);
+}
+#endif
+
+#ifdef mvinsch
+#undef mvinsch
+inline int mvinsch(int y, int x, const chtype ch) {
+    return mvwinsch(stdscr, y, x, ch);
+}
+#endif
+
+#ifdef timeout
+#undef timeout
+inline void timeout(int n) {
+    wtimeout(stdscr, n);
+}
+#endif
+
+#ifdef box
+#undef box
+inline int box(WINDOW* win, int verch, int horch) {
+    return wborder (win, verch, verch, horch, horch, 0, 0, 0, 0);
+}
+#endif
+
+#ifdef clear
+#undef clear
+inline int clear() {
+    return wclear (stdscr);
+}
+#endif
+
+#ifdef erase
+#undef erase
+inline int erase() {
+    return werase (stdscr);
+}
+#endif
+
+#ifdef mvdelch
+#undef mvdelch
+inline int mvdelch(int y, int x) {
+    return mvwdelch(stdscr, y, x);
+}
+#endif
+
+#ifdef delch
+#undef delch
+inline int delch() {
+    return wdelch(stdscr);
+}
+#endif
+
+#ifdef move
+#undef move
+inline int move(int y, int x) {
+    return wmove(stdscr, y, x);
+}
+#endif
+
+#ifdef refresh
+#undef refresh
+inline int refresh() {
+    return wrefresh(stdscr);
+}
+#endif
+
+#ifdef bkgd
+#undef bkgd
+inline int bkgd(chtype ch) {
+    return wbkgd(stdscr, ch);
+}
+#endif
+
+#ifdef wclear
+#undef wclear
+#endif
 
 #endif

@@ -5,10 +5,6 @@
 #ifndef EVENTQUEUE_H
 #define EVENTQUEUE_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <signal.h>
 #include <list>
 #include <map>

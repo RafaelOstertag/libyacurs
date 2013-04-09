@@ -5,10 +5,6 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <string>
 #include <cassert>
 #include <cstdlib>

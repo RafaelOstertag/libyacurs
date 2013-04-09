@@ -4,10 +4,18 @@
 # include "config.h"
 #endif
 
+#include "gettext.h"
+
 #include <stdexcept>
 #include <vector>
 
 #include "colorparser.h"
+
+#ifdef ENABLE_NLS
+# define _(String) dgettext(PACKAGE, String)
+#else
+# define _(String) (String)
+#endif
 
 using namespace YACURS;
 
@@ -89,46 +97,46 @@ CursColor
 ColorParser::process_token(const std::string& tkn) {
     std::string::size_type pos = tkn.find(':');
     if (pos==std::string::npos) {
-	std::string tmp="'" + tkn + " does not contain ':'";
+	std::string tmp="'" + tkn + _(" does not contain ':'");
 	throw std::invalid_argument(tmp);
     }
 
     std::string col_obj=tkn.substr(0,pos);
     if (col_obj.length()!=3) {
-	std::string tmp="Color Object size invalid";
+	std::string tmp=_("Color Object size invalid");
 	throw std::invalid_argument(tmp);
     }
 
     std::string cols=tkn.substr(pos+1,tkn.length()-pos-1);
     if (cols.length()!=3) {
-	std::string tmp="Color size invalid";
+	std::string tmp=_("Color size invalid");
 	throw std::invalid_argument(tmp);
     }
 
     CursColor retval;
     if (color_name_map.find(col_obj)==color_name_map.end()) {
-	col_obj+=" is not valid color object";
+	col_obj+=_(" is not valid color object");
         throw std::out_of_range(col_obj);
     }
 
     retval.no=color_name_map[col_obj];
     
     if (curs_colors_map.find(cols[0])==curs_colors_map.end()) {
-	std::string tmp="not a valid color: ";
+	std::string tmp=_("not a valid color: ");
 	tmp+=cols[0];
         throw std::out_of_range(tmp);
     }
     retval.fg=curs_colors_map[cols[0]];
     
     if (curs_colors_map.find(cols[1])==curs_colors_map.end()) {
-	std::string tmp="not a valid color: ";
+	std::string tmp=_("not a valid color: ");
 	tmp+=cols[1];
         throw std::out_of_range(tmp);
     }
     retval.bg=curs_colors_map[cols[1]];
     
     if (curs_attrs_map.find(cols[2])==curs_attrs_map.end()) {
-	std::string tmp="not a valid attribute: ";
+	std::string tmp=_("not a valid attribute: ");
 	tmp+=cols[2];
         throw std::out_of_range(tmp);
     }

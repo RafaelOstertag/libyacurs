@@ -4,14 +4,21 @@
 #include "config.h"
 #endif
 
+#include "gettext.h"
+
 #include <stdexcept>
 #include <cassert>
 #include <cstdlib>
 
-
 #include "lockscreen.h"
 #include "eventqueue.h"
 #include "yacursex.h"
+
+#ifdef ENABLE_NLS
+# define _(String) dgettext(PACKAGE, String)
+#else
+# define _(String) (String)
+#endif
 
 using namespace YACURS;
 
@@ -57,8 +64,8 @@ LockScreen::event_window_close_handler(Event& _e) {
 	} else {
 	    if (__unlock_dialog->dialog_state() == Dialog::DIALOG_OK) {
 		assert(__msgbox==0);
-		__msgbox=new MessageBox("Unlock Failed",
-					"Wrong Password",
+		__msgbox=new MessageBox(_("Unlock Failed"),
+					_("Wrong Password"),
 					Dialog::OK_ONLY);
 		__msgbox->show();
 	    }
@@ -88,7 +95,7 @@ LockScreen::LockScreen(UnlockDialog* _unlock,
 						   __unlock_diag_timeout(ulck_timeout),
 						   __unlock_dialog(_unlock),
 								     __msgbox(0) {
-    if (!__unlock_dialog) throw std::invalid_argument("InputDialog may not be 0");
+    if (!__unlock_dialog) throw std::invalid_argument(_("InputDialog may not be 0"));
 }
 
 LockScreen::~LockScreen() {

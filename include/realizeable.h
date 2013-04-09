@@ -5,10 +5,6 @@
 #ifndef REALIZEABLE_H
 #define REALIZEABLE_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <string>
 
 #include "area.h"

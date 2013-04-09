@@ -3,20 +3,14 @@
 #ifndef CURS_H
 #define CURS_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#ifdef HAVE_STRING
 #include <string>
-#endif // HAVE_STRING
 
-#include "mycurses.h"
 #include "area.h"
 #include "lineobject.h"
 #include "statusline.h"
 #include "window.h"
 #include "event.h"
+#include "mycurses.h"
 
 namespace YACURS {
 

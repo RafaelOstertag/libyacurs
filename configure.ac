@@ -7,14 +7,16 @@ AC_REVISION([$Revision: 4613 $])
 AC_CONFIG_MACRO_DIR([m4])
 
 
+AC_USE_SYSTEM_EXTENSIONS
 AC_PROG_CC
 AC_PROG_CXX
 AM_PROG_AR
 AM_PROG_LIBTOOL
-LT_INIT([disable-static])
+LT_INIT
 AX_CHECK_LINK_FLAG([-Wl,--export-dynamic],[AC_SUBST([LD_EXPORT_DYNAMIC],[-Wl,--export-dynamic])])
 
 AC_LANG([C++])
+AM_GNU_GETTEXT([external])
 
 AC_CHECK_HEADERS([stropts.h signal.h sys/termios.h termios.h unistd.h stdint.h sys/types.h sys/ioctl.h])
 AC_CHECK_HEADERS([cerrno cstdlib cstring exception string stdexcept stack iostream cstdio queue list algorithm functional typeinfo cassert cstdint])
@@ -121,6 +123,6 @@ AC_COMPILE_IFELSE(
 	AC_DEFINE([KEYPAD_RETURN_INT],[1],[Set to 1 if keypad has a return value])],
 	[AC_MSG_RESULT([no])])
 
-AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile include/Makefile])
+AC_CONFIG_HEADERS([config.h include/libyacurscfg.h])
+AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile include/Makefile po/Makefile.in])
 AC_OUTPUT

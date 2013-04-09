@@ -2,10 +2,6 @@
 #ifndef COLORPARSER_H
 #define COLORPARSER_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <vector>
 #include <map>
 

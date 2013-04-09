@@ -1,0 +1,184 @@
+# German translations for libyacurs package.
+# Copyright (C) 2013 Rafael Ostertag
+# This file is distributed under the same license as the libyacurs package.
+# Rafael Ostertag <rafi@guengel.ch>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libyacurs 0.1\n"
+"Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
+"POT-Creation-Date: 2013-04-09 19:23+0200\n"
+"PO-Revision-Date: 2013-04-09 10:58+0200\n"
+"Last-Translator: Rafael Ostertag <rafi@guengel.ch>\n"
+"Language-Team: German\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/checkbox.cc:135
+msgid "CheckBox: index "
+msgstr "CheckBox: Index "
+
+#: src/checkbox.cc:135
+msgid " out of range."
+msgstr " ausserhalb Bereich."
+
+#: src/checkbox.cc:148
+msgid "Item '"
+msgstr "Element '"
+
+#: src/checkbox.cc:148
+msgid "' not found in CheckBox"
+msgstr "' nicht gefunden in CheckBox"
+
+#: src/colorparser.cc:100
+msgid " does not contain ':'"
+msgstr " enthält kein ':'"
+
+#: src/colorparser.cc:106
+msgid "Color Object size invalid"
+msgstr "Farbobjekt Grösse ungültig"
+
+#: src/colorparser.cc:112
+msgid "Color size invalid"
+msgstr "Farbgrösse ungültig"
+
+#: src/colorparser.cc:118
+msgid " is not valid color object"
+msgstr " kein gültiges Farbobjekt"
+
+#: src/colorparser.cc:125 src/colorparser.cc:132
+msgid "not a valid color: "
+msgstr "keine gültige Farbe: "
+
+#: src/colorparser.cc:139
+msgid "not a valid attribute: "
+msgstr "kein gültiges Attribut: "
+
+#: src/curswin.cc:32
+msgid "argument 'win' must not be 0"
+msgstr "Argument 'win' darf nicht 0 sein"
+
+#: src/curswin.cc:58
+msgid "Area must not be zero"
+msgstr "Fläche darf nicht 0 sein"
+
+#: src/dialog.cc:98
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: src/dialog.cc:101
+msgid "OK"
+msgstr "Ok"
+
+#: src/dialog.cc:105
+msgid "No"
+msgstr "Nein"
+
+#: src/dialog.cc:108
+msgid "Yes"
+msgstr "Ja"
+
+#: src/fileloaddialog.cc:143 src/fileloaddialog.cc:286
+#: src/filesavedialog.cc:143 src/filesavedialog.cc:343
+msgid "Cannot change to "
+msgstr "Kann nicht wechseln zu "
+
+#: src/fileloaddialog.cc:144 src/fileloaddialog.cc:287
+#: src/filesavedialog.cc:144 src/filesavedialog.cc:344
+msgid "System Error"
+msgstr "System Fehler"
+
+#: src/fileloaddialog.cc:186
+msgid "Load File"
+msgstr "Datei laden"
+
+#: src/filesavedialog.cc:206
+msgid "Confirmation"
+msgstr "Bestätigung"
+
+#: src/filesavedialog.cc:208
+msgid "already exists. Do you want to overwrite?"
+msgstr "existiert bereits. Überschreiben?"
+
+#: src/filesavedialog.cc:217
+msgid "Error"
+msgstr "Fehler"
+
+#: src/filesavedialog.cc:243
+msgid "Save File"
+msgstr "Datei speichern"
+
+#: src/size.cc:41 src/size.cc:66
+msgid "Rows cannot be <0"
+msgstr "Zeilen können nicht kleiner 0 sein"
+
+#: src/size.cc:43 src/size.cc:59
+msgid "Columns cannot be <0"
+msgstr "Spalten können nicht kleiner 0 sein"
+
+#: src/unlockdiadefault.cc:34
+msgid "Unlock Screen"
+msgstr "Entsperren"
+
+#: src/unlockdiadefault.cc:41
+msgid "Please enter password in order to unlock screen"
+msgstr "Bitte Passwort zum Entsperren eingeben"
+
+#: src/yacursex.cc:29
+msgid "() failed"
+msgstr "() fehlgeschlagen"
+
+#: src/yacursex.cc:32
+msgid "unable to initialize curses"
+msgstr "kann Curses nicht initialisieren"
+
+#: src/yacursex.cc:35
+msgid "curses not initialized"
+msgstr "Curses ist nicht initialisiert"
+
+#: src/yacursex.cc:38
+msgid "curses has already been initialized"
+msgstr "Curses bereits initialisiert"
+
+#: src/yacursex.cc:41
+msgid "object already realized"
+msgstr "Objekt bereits realisiert"
+
+#: src/yacursex.cc:44
+msgid "object not realized"
+msgstr "Object nicht realisiert"
+
+#: src/yacursex.cc:54
+msgid "TIOCGWINSZ info invalid"
+msgstr "TIOCGWINSZ Information ungültig"
+
+#: src/yacursex.cc:57
+msgid "unable to get window size"
+msgstr "kann Fenstergrösse nicht ermitteln"
+
+#: src/yacursex.cc:60
+msgid "Cannot focus"
+msgstr "Kann nicht fokusieren"
+
+#: src/yacursex.cc:63
+msgid "Unexpected event received"
+msgstr "Unerwartetes Ereigniss eingetroffen"
+
+#: src/yacursex.cc:66
+msgid "Colors not initialized"
+msgstr "Farben nicht initialisiert"
+
+#: src/yacursex.cc:69
+msgid "An object exceeded space constraints"
+msgstr "Ein Objekt hat Grössenbeschränkung überschritten"
+
+#: src/yacursex.cc:72
+msgid "Operation not supported"
+msgstr "Operation nicht unterstützt"
+
+#: src/yacursex.cc:75
+msgid "Invalid dialog type"
+msgstr "Ungültiger Dialogtyp"

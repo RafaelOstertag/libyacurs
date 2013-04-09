@@ -4,6 +4,8 @@
 #include "config.h"
 #endif
 
+#include "gettext.h"
+
 #include <unistd.h>
 #include <signal.h>
 
@@ -87,6 +89,8 @@ Curses::init() {
 
     if (initscr() == 0)
 	throw UnableToInitialize();
+
+    bindtextdomain(PACKAGE, LOCALEDIR);
 
     YACURS::Colors::init_colors();
 

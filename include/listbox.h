@@ -5,10 +5,6 @@
 #ifndef LISTBOX_H
 #define LISTBOX_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <string>
 #include <list>
 #include <functional>

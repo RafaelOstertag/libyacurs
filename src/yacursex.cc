@@ -4,7 +4,15 @@
 #include "config.h"
 #endif
 
+#include "gettext.h"
+
 #include "yacursex.h"
+
+#ifdef ENABLE_NLS
+# define _(String) dgettext(PACKAGE, String)
+#else
+# define _(String) (String)
+#endif
 
 using namespace YACURS;
 
@@ -18,22 +26,22 @@ const char*
 BaseCurEx::what() const throw() { return msg.c_str(); }
 
 CursesException::CursesException(const char* cfct):
-    BaseCurEx(std::string(cfct) + std::string("() failed.")) {}
+    BaseCurEx(std::string(cfct) + std::string(_("() failed"))) {}
 
 UnableToInitialize::UnableToInitialize() :
-    BaseCurEx("unable to initialize curses") {}
+    BaseCurEx(_("unable to initialize curses")) {}
 
 NotInitialized::NotInitialized() :
-    BaseCurEx("curses not initialized") {}
+    BaseCurEx(_("curses not initialized")) {}
 
 AlreadyInitialized::AlreadyInitialized() :
-    BaseCurEx("curses has already been initialized") {}
+    BaseCurEx(_("curses has already been initialized")) {}
 
 AlreadyRealized::AlreadyRealized():
-    BaseCurEx("object already realized") {}
+    BaseCurEx(_("object already realized")) {}
 
 NotRealized::NotRealized():
-    BaseCurEx("object not realized") {}
+    BaseCurEx(_("object not realized")) {}
 
 SystemError::SystemError(int _errno):
     BaseCurEx(std::strerror(_errno)),
@@ -43,25 +51,25 @@ int
 SystemError::errorno() const { return __errno; }
 
 WinSizeInvalid::WinSizeInvalid():
-    BaseCurEx("TIOCGWINSZ info invalid") {}
+    BaseCurEx(_("TIOCGWINSZ info invalid")) {}
 
 UnableToGetWinSize::UnableToGetWinSize():
-    BaseCurEx("unable to get window size") {}
+    BaseCurEx(_("unable to get window size")) {}
 
 CannotFocus::CannotFocus():
-    BaseCurEx("Cannot focus") {}
+    BaseCurEx(_("Cannot focus")) {}
 
 UnexpectedEvent::UnexpectedEvent():
-    BaseCurEx("Unexpected event received") {}
+    BaseCurEx(_("Unexpected event received")) {}
 
 ColorsNotInitialized::ColorsNotInitialized():
-    BaseCurEx("Colors not initialized") {}
+    BaseCurEx(_("Colors not initialized")) {}
 
 AreaExceeded::AreaExceeded():
-    BaseCurEx("An object exceeded space constraints") {}
+    BaseCurEx(_("An object exceeded space constraints")) {}
 
 NotSupported::NotSupported():
-    BaseCurEx("Operation not supported") {}
+    BaseCurEx(_("Operation not supported")) {}
 
 InvalidDialogType::InvalidDialogType():
-    BaseCurEx("Invalid dialog type") {}
+    BaseCurEx(_("Invalid dialog type")) {}

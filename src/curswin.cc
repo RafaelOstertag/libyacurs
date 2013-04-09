@@ -1,7 +1,21 @@
+// $Id$
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "gettext.h"
+
 #include <stdexcept>
 
 #include "curswin.h"
 #include "yacursex.h"
+
+#ifdef ENABLE_NLS
+# define _(String) dgettext(PACKAGE, String)
+#else
+# define _(String) (String)
+#endif
 
 using namespace YACURS::INTERNAL;
 //
@@ -15,7 +29,7 @@ CursWin::CursWin(WINDOW* win, COLOROBJ dc): __window(win),
 					  __def_color(dc),
 					  __box(false) {
     if (win==0)
-	throw std::invalid_argument("argument 'win' must not be 0");
+	throw std::invalid_argument(_("argument 'win' must not be 0"));
 
     int x, y;
     getbegyx(__window, y, x);
@@ -41,7 +55,7 @@ CursWin::CursWin(const Area& _a, COLOROBJ c): __window(0),
 					    __subwin(false) {
 
     if (_a == Area::zero()) {
-	throw std::invalid_argument("Area must not be zero");
+	throw std::invalid_argument(_("Area must not be zero"));
     }
 
     __area=__client_area=_a;

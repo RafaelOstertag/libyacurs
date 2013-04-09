@@ -88,40 +88,58 @@ ColorParser::tokenize(const std::string& str) const {
 CursColor
 ColorParser::process_token(const std::string& tkn) {
     std::string::size_type pos = tkn.find(':');
-    if (pos==std::string::npos)
-	throw std::invalid_argument("'" + tkn + " does not contain ':'");
+    if (pos==std::string::npos) {
+	std::string tmp="'" + tkn + " does not contain ':'";
+	throw std::invalid_argument(tmp);
+    }
 
     std::string col_obj=tkn.substr(0,pos);
-    if (col_obj.length()!=3)
-	throw std::invalid_argument("Color Object size invalid");
+    if (col_obj.length()!=3) {
+	std::string tmp="Color Object size invalid";
+	throw std::invalid_argument(tmp);
+    }
 
-    std::string colors=tkn.substr(pos+1,tkn.length()-pos);
-    if (colors.length()!=3)
-	throw std::invalid_argument("Color size invalid");
+    std::string cols=tkn.substr(pos+1,tkn.length()-pos-1);
+    if (cols.length()!=3) {
+	std::string tmp="Color size invalid";
+	throw std::invalid_argument(tmp);
+    }
 
     CursColor retval;
-    if (color_name_map.find(col_obj)==color_name_map.end())
-        throw std::out_of_range(col_obj + " is not valid color object");
+    if (color_name_map.find(col_obj)==color_name_map.end()) {
+	col_obj+=" is not valid color object";
+        throw std::out_of_range(col_obj);
+    }
+
     retval.no=color_name_map[col_obj];
     
-    if (curs_colors_map.find(colors[0])==curs_colors_map.end())
-        throw std::out_of_range(colors[0] + " is not a valid color");
-    retval.fg=curs_colors_map[colors[0]];
+    if (curs_colors_map.find(cols[0])==curs_colors_map.end()) {
+	std::string tmp="not a valid color: ";
+	tmp+=cols[0];
+        throw std::out_of_range(tmp);
+    }
+    retval.fg=curs_colors_map[cols[0]];
     
-    if (curs_colors_map.find(colors[1])==curs_colors_map.end())
-        throw std::out_of_range(colors[1] + " is not a valid color");
-    retval.bg=curs_colors_map[colors[1]];
+    if (curs_colors_map.find(cols[1])==curs_colors_map.end()) {
+	std::string tmp="not a valid color: ";
+	tmp+=cols[1];
+        throw std::out_of_range(tmp);
+    }
+    retval.bg=curs_colors_map[cols[1]];
     
-    if (curs_attrs_map.find(colors[2])==curs_attrs_map.end())
-        throw std::out_of_range(colors[2] + " is not a valid attribute");
-    retval.attr=curs_attrs_map[colors[2]];
+    if (curs_attrs_map.find(cols[2])==curs_attrs_map.end()) {
+	std::string tmp="not a valid attribute: ";
+	tmp+=cols[2];
+        throw std::out_of_range(tmp);
+    }
+    retval.attr=curs_attrs_map[cols[2]];
 
     return retval;
 }
 
 std::vector<CursColor>
 ColorParser::get_default_scheme() {
-    std::vector<std::string> default_tokens(tokenize(default_colors()));
+    std::vector<std::string> default_tokens=tokenize(default_colors());
 
     std::vector<CursColor> retval(NUMBER_OF_COLOROBJ);
 
@@ -129,7 +147,7 @@ ColorParser::get_default_scheme() {
     while (it!=default_tokens.end()) {
 	// We don't catch exceptions, since there must be none. The
 	// default color scheme has to be flawless.
-	CursColor tmp(process_token(*it++));
+	CursColor tmp=process_token(*it++);
 	// The color numbers are off by +1 due to NCurses
 	retval.at(tmp.no-1)=tmp;
     }
@@ -198,21 +216,22 @@ ColorParser::operator=(const ColorParser& cp) {
 
 std::vector<CursColor>
 ColorParser::operator()(const std::string& colorstr) {
-    std::vector<CursColor> default_scheme(get_default_scheme());
+    std::vector<CursColor> default_scheme=get_default_scheme();
 
-    std::vector<std::string> tokens(tokenize(colorstr));
+    std::vector<std::string> tokens=tokenize(colorstr);
 
     std::vector<CursColor> retval(NUMBER_OF_COLOROBJ);
     if (tokens.size()>0) {
 	std::vector<std::string>::iterator it=tokens.begin();
 	while (it!=tokens.end()) {
 	    try {
-		CursColor tmp(process_token(*it++));
+		CursColor tmp=process_token(*it);
 		// Color number is off by +1 due to NCurses
 		retval.at(tmp.no-1)=tmp;
 	    } catch (std::out_of_range&) {
 		// ignore
 	    }
+	    it++;
 	}
 
 	// Merge with default colors, so unspecified colors will be

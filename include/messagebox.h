@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// $Id: dialog.h 4856 2013-02-15 12:29:33Z rafisol $
+// $Id$
 
 #ifndef MESSAGEBOX_H
 #define MESSAGEBOX_H

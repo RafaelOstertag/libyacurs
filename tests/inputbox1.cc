@@ -1,4 +1,4 @@
-// $Id: messagebox1.cc 4865 2013-02-18 18:43:42Z rafisol $
+// $Id$
 //
 #ifdef HAVE_CONFIG_H
 #include "config.h"

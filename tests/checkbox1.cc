@@ -1,4 +1,4 @@
-// $Id: listbox1.cc 4865 2013-02-18 18:43:42Z rafisol $
+// $Id$
 //
 // Test basic functionality of Curses class
 #ifdef HAVE_CONFIG_H

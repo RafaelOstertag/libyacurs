@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// $Id: input.h 4875 2013-02-23 13:25:34Z rafisol $
+// $Id$
 
 #ifndef RADIOBOX_H
 #define RADIOBOX_H

@@ -1,4 +1,4 @@
-// $Id: input.cc 4875 2013-02-23 13:25:34Z rafisol $
+// $Id$
 
 #include <cassert>
 #include <cstdlib>

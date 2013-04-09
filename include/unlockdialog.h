@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// $Id: dialog.h 4883 2013-02-24 10:40:05Z rafisol $
+// $Id$
 
 #ifndef UNLOCKDIALOG_H
 #define UNLOCKDIALOG_H

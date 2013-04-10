@@ -1,5 +1,7 @@
 // $Id$
 
+// THIS FILE MUST NOT BE INSTALLED!
+
 #ifndef GETTEXT_H
 #define GETTEXT_H
 

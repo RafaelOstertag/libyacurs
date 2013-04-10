@@ -62,6 +62,8 @@ int __test_data[]= {
     KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL,
     // Read only Input widget
     '\t',
+    // Hidden Input Widget
+    '\t',
     // ListBox Widget
     '\t',
     KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN,
@@ -151,9 +153,9 @@ int main() {
 
         YACURS::VPack* vpack=new YACURS::VPack;
         YACURS::HPack* hpack=new YACURS::HPack;
-        b1=new YACURS::Button("YACURS::Button1");
-        b2=new YACURS::Button("YACURS::Button2");
-        b3=new YACURS::Button("YACURS::Button3");
+        b1=new YACURS::Button("Button1");
+        b2=new YACURS::Button("Button2");
+        b3=new YACURS::Button("Button3");
         ifixed=new YACURS::Input<>(10);
         idyn=new YACURS::Input<>;
         listbox=new YACURS::ListBox<>;
@@ -161,10 +163,15 @@ int main() {
         YACURS::Input<>* ireadonly=new YACURS::Input<>;
         ireadonly->input("Read only");
         ireadonly->readonly(true);
+	YACURS::Input<>* ihidden=new YACURS::Input<>;
+	ihidden->input("Hidden Input");
+	ihidden->hide_input(true);
+	
 
         vpack->add_back(ifixed);
         vpack->add_back(idyn);
         vpack->add_back(ireadonly);
+        vpack->add_back(ihidden);
         vpack->add_back(listbox);
         vpack->hinting(false);
 
@@ -175,9 +182,9 @@ int main() {
 
         vpack->add_back(hpack);
 
-        assert(b1->label()=="YACURS::Button1");
-        assert(b2->label()=="YACURS::Button2");
-        assert(b3->label()=="YACURS::Button3");
+        assert(b1->label()=="Button1");
+        assert(b2->label()=="Button2");
+        assert(b3->label()=="Button3");
 
         YACURS::Curses::mainwindow()->widget(vpack);
 
@@ -189,6 +196,7 @@ int main() {
         delete idyn;
         delete ifixed;
         delete ireadonly;
+        delete ihidden;
         delete listbox;
         delete hpack;
         delete vpack;

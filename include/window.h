@@ -5,11 +5,13 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include <map>
 #include <string>
 
 #include "mycurses.h"
 #include "windowbase.h"
 #include "widgetbase.h"
+#include "hotkey.h"
 
 namespace YACURS {
     // Forward declaration because widgetbase.h already included window.h
@@ -53,6 +55,8 @@ namespace YACURS {
      */
     class Window: public WindowBase {
 	private:
+	    std::map<int,HotKey*> __hot_keys;
+
 	    WidgetBase* __widget;
 
 	    /**
@@ -67,6 +71,7 @@ namespace YACURS {
 	    Window(const Window&);
 	    Window& operator=(const Window&);
 	protected:
+	    virtual void key_event_handler(Event& _e);
 	    void unrealize();
 
 	public:
@@ -75,6 +80,9 @@ namespace YACURS {
 	
 	    void widget(WidgetBase* _w);
 	    WidgetBase* widget() const;
+
+	    void add_hotkey(const HotKey& hk);
+	    void remove_hotkey(const HotKey& hk);
 
 	    // Those are from Realizable
 	    void refresh(bool immediate);

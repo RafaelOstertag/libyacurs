@@ -55,22 +55,18 @@ extern "C" int __test_wgetch(void*) {
     return *ptr2++;
 }
 
+class HotKeyQuit : public YACURS::HotKey {
+    public:
+	HotKeyQuit(int k) : HotKey(k) {}
+	HotKeyQuit(const HotKeyQuit& hk): HotKey(hk) {}
 
-void key_handler(YACURS::Event& _e) {
-    assert(_e == YACURS::EVT_KEY);
+	void action() {
+	    YACURS::EventQueue::submit(YACURS::EVT_QUIT);
+	}
 
-    YACURS::EventEx<int>& _ek = dynamic_cast<YACURS::EventEx<int>&>(_e);
+	HotKey* clone() const { return new HotKeyQuit(*this); }
+};
 
-    switch (_ek.data()) {
-    case 'q':
-    case 'Q':
-        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
-        break;
-
-    default:
-        break;
-    }
-}
 
 int main() {
     std::list<std::string> items;
@@ -99,6 +95,8 @@ int main() {
 
         YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,1,0));
         w1->frame(true);
+	w1->add_hotkey(HotKeyQuit('q'));
+	w1->add_hotkey(HotKeyQuit('Q'));
 
         YACURS::ListBox<>* lb1 = new YACURS::ListBox<>;
         lb1->set(items);
@@ -110,8 +108,6 @@ int main() {
         sl->push_msg("Press Q to quit");
 
         YACURS::Curses::mainwindow(w1);
-
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_KEY,&key_handler));
 
         YACURS::Curses::run();
 

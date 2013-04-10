@@ -5,9 +5,7 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif // HAVE_UNISTD_H
 
 #ifdef HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>
@@ -29,30 +27,9 @@
 # endif // HAVE_SYS_TERMIOS_H
 #endif // HAVE_TERMIOS_H
 
-#ifdef HAVE_IOSTREAM
 #include <iostream>
-#endif // HAVE_IOSTREAM
 
 #include "yacurs.h"
-
-#ifdef INTERACTIVE
-void key_handler(YACURS::Event& _e) {
-    assert(_e == YACURS::EVT_KEY);
-
-    YACURS::EventEx<int>& _ek = dynamic_cast<YACURS::EventEx<int>&>(_e);
-
-    switch (_ek.data()) {
-    case 'q':
-    case 'Q':
-        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
-        break;
-
-    default:
-        break;
-    }
-}
-
-#else // INTERACTIVE
 
 void alrm(YACURS::Event& _e) {
     assert(_e == YACURS::EVT_SIGALRM);
@@ -91,7 +68,6 @@ void alrm(YACURS::Event& _e) {
     else
         alarm(1);
 }
-#endif // INTERACTIVE
 
 int main() {
 #if 0
@@ -99,14 +75,11 @@ int main() {
     sleep(15);
 #endif
 
-#ifndef INTERACTIVE
     winsize wsave;
 
     if (ioctl(STDIN_FILENO, TIOCGWINSZ, &wsave) == -1) {
         return 1;
     }
-
-#endif // INTERACTIVE
 
     try {
         YACURS::Curses::init();
@@ -140,13 +113,9 @@ int main() {
 
         YACURS::Curses::mainwindow(w1);
 
-#ifdef INTERACTIVE
-        sl->push_msg("Press Q to quit");
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_KEY,&key_handler));
-#else // INTERACTIVE
         YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
         alarm(2);
-#endif
+
         YACURS::Curses::run();
 
         delete title;
@@ -162,24 +131,18 @@ int main() {
         YACURS::Curses::end();
     } catch (std::exception& e) {
         YACURS::Curses::end();
-#ifndef INTERACTIVE
 
         if (ioctl(STDIN_FILENO, TIOCSWINSZ, &wsave) == -1) {
             return 1;
         }
 
-#endif // INTERACTIVE
         std::cerr << e.what() << std::endl;
         return 1;
     }
 
-#ifndef INTERACTIVE
-
     if (ioctl(STDIN_FILENO, TIOCSWINSZ, &wsave) == -1) {
         return 1;
     }
-
-#endif // INTERACTIVE
 
     return 0;
 }

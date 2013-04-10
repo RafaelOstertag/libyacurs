@@ -25,6 +25,7 @@
 #include "windowbase.h"
 #include "lineobject.h"
 #include "statusline.h"
+#include "hotkey.h"
 #include "window.h"
 #include "lockscreen.h"
 #include "unlockdialog.h"

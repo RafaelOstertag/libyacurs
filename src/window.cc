@@ -35,8 +35,30 @@ Window::operator=(const Window&) {
 // Protected
 //
 void
+Window::key_event_handler(Event& _e) {
+    assert(_e==EVT_KEY);
+
+    if (__fgid!=FocusManager::active_focus_group() ||
+	__hot_keys.empty() ) return;
+
+    EventEx<int>& event = dynamic_cast<EventEx<int>&>(_e);
+
+    std::map<int,HotKey*>::iterator it=__hot_keys.find(event.data());
+    if (it!=__hot_keys.end()) {
+	if (it->second!=0) {
+	    it->second->action();
+	    _e.stop(true);
+	}
+    }
+}
+
+
+void
 Window::unrealize() {
     UNREALIZE_ENTER;
+
+    EventQueue::disconnect_event(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_event_handler));
+
     if (__widget) __widget->unrealize();
     WindowBase::unrealize();
 
@@ -59,7 +81,21 @@ Window::Window(const Margin& m): WindowBase(m),
 }
 
 Window::~Window() {
+    EventQueue::disconnect_event(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_event_handler));
+
     FocusManager::destroy_focus_group(__fgid);
+
+    if (!__hot_keys.empty()) {
+	std::map<int,HotKey*>::iterator it=__hot_keys.begin();
+	while(it!=__hot_keys.end()) {
+	    if (it->second!=0)
+		delete it->second;
+	    it++;
+	}
+	__hot_keys.clear();
+    }
+
+
     __fgid = (fgid_t)-1;
 }
 
@@ -71,6 +107,25 @@ Window::widget(WidgetBase* _w) {
 WidgetBase*
 Window::widget() const {
     return __widget;
+}
+
+void
+Window::add_hotkey(const HotKey& hk) {
+    if (__hot_keys[hk.key()]!=0)
+	    delete __hot_keys[hk.key()];
+
+    __hot_keys[hk.key()]=hk.clone();
+}
+
+void
+Window::remove_hotkey(const HotKey& hk) {
+    std::map<int,HotKey*>::iterator it=__hot_keys.find(hk.key());
+    if (it!=__hot_keys.end()) {
+	assert(it->second!=0);
+	delete it->second;
+	__hot_keys.erase(it);
+    }
+    return;
 }
 
 void
@@ -97,6 +152,8 @@ Window::realize() {
     WindowBase::realize();
 
     FocusManager::focus_group_activate(__fgid);
+
+    EventQueue::connect_event(EventConnectorMethod1<Window>(EVT_KEY,this, &Window::key_event_handler));
 
     if (__widget) {
 	assert(__widget->realization()==UNREALIZED);

@@ -387,5 +387,4 @@ host_starchild() {
 
 HOST="`uname -n | sed 's/\..*//'`"
 
-cd /home/rafisol/libyacurs/trunk/
 host_$HOST

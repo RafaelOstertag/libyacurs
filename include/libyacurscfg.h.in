@@ -1,5 +1,8 @@
 // -*- mode: c++ -*-
 
+// Macros in here are required to make headers work without having
+// config.h installed.
+
 /* Define to 1 if you have ncurses.h */
 #undef HAVE_NCURSES_H
 

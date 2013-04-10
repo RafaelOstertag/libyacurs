@@ -397,6 +397,14 @@ namespace YACURS {
 
 		assert(widget_subwin()!=0);
 
+		// Set the box. This is only so that initial calls to
+		// addlinex() position the text inside the
+		// box. Without this call, the first refresh does not
+		// know about the border, thus the first character of
+		// each line will be overwritten by the border.
+		if (!widget_subwin()->has_box())
+		    widget_subwin()->box();
+
 		widget_subwin()->erase();
 
 		std::list<std::string>::iterator it=__list.begin();

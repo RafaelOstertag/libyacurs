@@ -27,7 +27,10 @@ namespace YACURS {
 
 		CurStr& operator=(const CurStr& cs);
 
+		void position(const Coordinates& co);
 		const Coordinates& position() const;
+
+		void color(COLOROBJ co);
 		COLOROBJ color() const;
 	};
     } // namespace INTERNAL

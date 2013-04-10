@@ -38,9 +38,19 @@ CurStr& CurStr::operator=(const CurStr& cs) {
     return *this;
 }
 
+void
+CurStr::position(const YACURS::Coordinates& co) {
+    __position=co;
+}
+
 const YACURS::Coordinates&
 CurStr::position() const {
     return __position;
+}
+
+void
+CurStr::color(YACURS::COLOROBJ co) {
+    __color=co;
 }
 
 YACURS::COLOROBJ

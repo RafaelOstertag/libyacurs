@@ -5,17 +5,9 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif // HAVE_UNISTD_H
-
-#ifdef HAVE_IOSTREAM
 #include <iostream>
-#endif // HAVE_IOSTREAM
-
-#ifdef HAVE_CSTDLIB
 #include <cstdlib>
-#endif // HAVE_CSTDLIB
 
 #include "yacurs.h"
 

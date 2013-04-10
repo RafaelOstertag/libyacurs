@@ -19,7 +19,7 @@ AM_DEFAULT_SOURCE_EXT = .cc
 AM_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\" -I$(top_srcdir)/include
 
 # LD_EXPORT_DYNAMIC is basically only used for interactive_tests
-AM_LDFLAGS = -L$(top_builddir)/src -lyacurs $(LD_EXPORT_DYNAMIC)
+AM_LDFLAGS = -L$(top_builddir)/src -lyacurs $(LD_EXPORT_DYNAMIC) $(LTLIBINTL)
 
 EXTRA_DIST = testpreload.cc
 

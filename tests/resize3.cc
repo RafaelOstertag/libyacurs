@@ -58,7 +58,7 @@ class MyWindow: public YACURS::Window {
             status_msg+=buff;
 
             YACURS::Curses::statusline()->push_msg(status_msg);
-        };
+        }
 
     public:
         MyWindow() : YACURS::Window() {

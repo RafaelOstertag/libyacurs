@@ -154,6 +154,11 @@ namespace YACURS {
 	     * Reset the focus on the active Focus Group.
 	     */
 	    static void reset();
+
+	    /**
+	     * @return Focus Group ID of Active Focus Group.
+	     */
+	    static fgid_t active_focus_group();
     };
 }
 

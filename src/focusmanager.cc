@@ -184,4 +184,8 @@ FocusManager::reset() {
     assert(__focus_groups[__active_focusgroup]!=0);
     __focus_groups[__active_focusgroup]->reset();
 }
-    
+
+fgid_t
+FocusManager::active_focus_group() {
+    return __active_focusgroup;
+}

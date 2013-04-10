@@ -18,12 +18,6 @@
 
 #include "filesavedialog.h"
 
-#ifdef ENABLE_NLS
-# define _(String) dgettext(PACKAGE, String)
-#else
-# define _(String) (String)
-#endif
-
 using namespace YACURS;
 
 //

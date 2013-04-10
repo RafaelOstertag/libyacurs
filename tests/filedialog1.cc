@@ -4,6 +4,9 @@
 #endif
 
 #include "gettext.h"
+#if ENABLE_NLS
+#include <locale.h>
+#endif
 
 #include <unistd.h>
 #include <cassert>

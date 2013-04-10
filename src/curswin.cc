@@ -11,12 +11,6 @@
 #include "curswin.h"
 #include "yacursex.h"
 
-#ifdef ENABLE_NLS
-# define _(String) dgettext(PACKAGE, String)
-#else
-# define _(String) (String)
-#endif
-
 using namespace YACURS::INTERNAL;
 //
 // Private

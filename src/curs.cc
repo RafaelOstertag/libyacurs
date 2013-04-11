@@ -90,7 +90,9 @@ Curses::init() {
     if (initscr() == 0)
 	throw UnableToInitialize();
 
+#if ENABLE_NLS
     bindtextdomain(PACKAGE, LOCALEDIR);
+#endif
 
     YACURS::Colors::init_colors();
 

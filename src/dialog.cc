@@ -12,6 +12,7 @@
 #include "dialog.h"
 #include "eventqueue.h"
 #include "yacursex.h"
+#include "hotkey.h"
 
 #ifdef ENABLE_NLS
 # define _(String) dgettext(PACKAGE, String)
@@ -19,7 +20,30 @@
 # define _(String) (String)
 #endif
 
+namespace YACURS {
+    class HotKeyEsc : public HotKey {
+	private:
+	    Dialog& __dialog;
+	    
+	public:
+	    HotKeyEsc(Dialog& d): HotKey(27),
+				  __dialog(d) {}
+	    HotKeyEsc(const HotKeyEsc& hk): HotKey(hk),
+					    __dialog(hk.__dialog) {}
+	    
+	    void action() {
+		__dialog.__dstate=Dialog::DIALOG_CANCEL;
+		__dialog.close();
+	    }
+		
+	    HotKey* clone() const {
+		return new HotKeyEsc(*this);
+	    }
+    };
+}
+
 using namespace YACURS;
+
 
 //
 // Private
@@ -181,6 +205,8 @@ Dialog::realize() {
 
     margin(_margin);
     Window::realize();
+
+    add_hotkey(HotKeyEsc(*this));
 
     REALIZE_LEAVE;
 }

@@ -13,6 +13,9 @@
 #include "button.h"
 
 namespace YACURS {
+
+    class HotKeyEsc;
+
     class Dialog: public Window {
 	public:
 	    enum STATE {
@@ -70,6 +73,8 @@ namespace YACURS {
 	    //void resize(const Area& _a);
 	    void realize();
 	    void unrealize();
+
+	    friend class HotKeyEsc;
     };
 }
 

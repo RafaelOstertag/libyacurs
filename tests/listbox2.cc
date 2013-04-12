@@ -761,11 +761,14 @@ class MainWindow: public YACURS::Window {
     private:
         YACURS::Button* badd;
         YACURS::Button* bdelete;
+	YACURS::Button* bsearch;
+	YACURS::Button* bpreload;
         YACURS::Button* bquit;
         YACURS::VPack* vpack1;
         YACURS::HPack* hpack1;
         YACURS::ListBox<>* listbox;
         YACURS::InputBox* inputdialog;
+	YACURS::InputBox* searchdialog;
 
     protected:
         void button_press_handler(YACURS::Event& _e) {
@@ -779,13 +782,32 @@ class MainWindow: public YACURS::Window {
             }
 
             if (badd==_ex.data()) {
+		assert(inputdialog==0);
                 inputdialog=new YACURS::InputBox("Add item", "String to add");
                 inputdialog->show();
                 return;
             }
 
+	    if (bsearch==_ex.data()) {
+		assert(searchdialog==0);
+		searchdialog=new YACURS::InputBox("Search Item", "Enter search term");
+		searchdialog->show();
+		return;
+	    }
+
             if (bdelete==_ex.data()) {
                 listbox->delete_selected();
+                return;
+            }
+
+            if (bpreload==_ex.data()) {
+		std::list<std::string> tmp;
+		for(int i=0; i<250; i++) {
+		    std::ostringstream val;
+		    val<<i;
+		    tmp.push_back("Item " + val.str());
+		}
+                listbox->set(tmp);
                 return;
             }
         }
@@ -809,19 +831,33 @@ class MainWindow: public YACURS::Window {
                 inputdialog=0;
                 return;
             }
+
+	    if (searchdialog==_ex.data()) {
+		if (searchdialog->dialog_state()==YACURS::Dialog::DIALOG_OK) {
+		    listbox->high_light(searchdialog->input());
+		}
+		delete searchdialog;
+		searchdialog=0;
+		return;
+	    }
         }
 
     public:
         MainWindow(const YACURS::Margin& _m): YACURS::Window(_m),
-            badd(0),
-            bdelete(0),
-            bquit(0),
-            vpack1(0),
-            hpack1(0),
-            listbox(0),
-            inputdialog(0) {
+					      badd(0),
+					      bdelete(0),
+					      bsearch(0),
+					      bpreload(0),
+					      bquit(0),
+					      vpack1(0),
+					      hpack1(0),
+					      listbox(0),
+					      inputdialog(0),
+					      searchdialog(0) {
             badd=new YACURS::Button("Add");
             bdelete=new YACURS::Button("Delete");
+            bsearch=new YACURS::Button("Search");
+	    bpreload=new YACURS::Button("Preload List");
             bquit=new YACURS::Button("Quit");
 
             vpack1=new YACURS::VPack;
@@ -831,6 +867,8 @@ class MainWindow: public YACURS::Window {
 
             vpack1->add_back(badd);
             vpack1->add_back(bdelete);
+	    vpack1->add_back(bsearch);
+	    vpack1->add_back(bpreload);
             vpack1->add_back(bquit);
 
             hpack1->add_back(listbox);
@@ -847,6 +885,8 @@ class MainWindow: public YACURS::Window {
             YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_WINDOW_CLOSE, this, &MainWindow::window_close_handler));
             delete badd;
             delete bdelete;
+	    delete bsearch;
+	    delete bpreload;
             delete bquit;
             delete vpack1;
             delete hpack1;

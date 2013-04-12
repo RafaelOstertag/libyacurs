@@ -65,6 +65,7 @@ Button::key_handler(Event& _e) {
     case KEY_ENTER:
     case KEY_RETURN:
     case KEY_RETURN2:
+	if (!__enabled) return;
 	EventQueue::submit(EventEx<Button*>(EVT_BUTTON_PRESS,this));
 	break;
     }
@@ -99,7 +100,7 @@ Button::unrealize() {
 // Public
 //
 
-Button::Button(const std::string& _b) {
+Button::Button(const std::string& _b): __enabled(true) {
     can_focus(true);
 
     // We want our label() to be called, so we don't use the Label()
@@ -114,12 +115,27 @@ Button::~Button() {
 void
 Button::label(const std::string& _l) {
     __tmp_label = _l;
-    Label::label("[ " + _l + " ]");
+    if (__enabled)
+	Label::label("[ " + _l + " ]");
+    else
+	Label::label("( " + _l + " )");
 }
 
 const std::string&
 Button::label() const {
     return __tmp_label;
+}
+
+void
+Button::enabled(bool _f) {
+    __enabled=_f;
+    // Re-set label
+    label(__tmp_label);
+}
+
+bool
+Button::enabled() const {
+    return __enabled;
 }
 
 void

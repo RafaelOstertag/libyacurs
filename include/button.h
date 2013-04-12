@@ -19,7 +19,7 @@
 //
 //
 // $Id$
-//
+
 #ifndef BUTTON_H
 #define BUTTON_H
 
@@ -37,6 +37,11 @@ namespace YACURS {
      */
     class Button: public Label {
 	private:
+	    /**
+	     * Flag whether or not button is enabled
+	     */
+	    bool __enabled;
+
 	    /**
 	     * Temporary string used when returning label.
 	     */
@@ -81,6 +86,9 @@ namespace YACURS {
 	     * @return label of Button.
 	     */
 	    const std::string& label() const;
+
+	    void enabled(bool _f);
+	    bool enabled() const;
 
 	    // From Realizeable
 	    void refresh(bool immediate);

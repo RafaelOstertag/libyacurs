@@ -101,6 +101,7 @@ YACURS::ListBox<>* listbox;
 YACURS::Button* b1;
 YACURS::Button* b2;
 YACURS::Button* b3;
+YACURS::Button* b4;
 
 void button_press_handler(YACURS::Event& _e) {
     assert(_e==YACURS::EVT_BUTTON_PRESS);
@@ -108,11 +109,13 @@ void button_press_handler(YACURS::Event& _e) {
     YACURS::EventEx<YACURS::Button*>& ev=dynamic_cast<YACURS::EventEx<YACURS::Button*>&>(_e);
 
     if (ev.data() == b1) {
+	b4->enabled(false);
         YACURS::Curses::statusline()->push_msg(ifixed->input());
         return;
     }
 
     if (ev.data() == b2) {
+	b4->enabled(true);
         YACURS::Curses::statusline()->push_msg(idyn->input());
         return;
     }
@@ -120,6 +123,10 @@ void button_press_handler(YACURS::Event& _e) {
     if (ev.data() == b3) {
         YACURS::EventQueue::submit(YACURS::EVT_QUIT);
         return;
+    }
+
+    if (ev.data() == b4) {
+	assert(b4->enabled());
     }
 
     return;
@@ -155,7 +162,9 @@ int main() {
         YACURS::HPack* hpack=new YACURS::HPack;
         b1=new YACURS::Button("Button1");
         b2=new YACURS::Button("Button2");
-        b3=new YACURS::Button("Button3");
+        b3=new YACURS::Button("Quit");
+	b4=new YACURS::Button("Disabled");
+	b4->enabled(false);
         ifixed=new YACURS::Input<>(10);
         idyn=new YACURS::Input<>;
         listbox=new YACURS::ListBox<>;
@@ -178,13 +187,15 @@ int main() {
         hpack->add_back(b1);
         hpack->add_back(b2);
         hpack->add_back(b3);
+	hpack->add_back(b4);
         hpack->hinting(false);
 
         vpack->add_back(hpack);
 
         assert(b1->label()=="Button1");
         assert(b2->label()=="Button2");
-        assert(b3->label()=="Button3");
+        assert(b3->label()=="Quit");
+        assert(b4->label()=="Disabled");
 
         YACURS::Curses::mainwindow()->widget(vpack);
 
@@ -193,6 +204,7 @@ int main() {
         delete b1;
         delete b2;
         delete b3;
+	delete b4;
         delete idyn;
         delete ifixed;
         delete ireadonly;

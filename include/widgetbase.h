@@ -339,10 +339,8 @@ namespace YACURS {
 	    virtual void reset_size() = 0;
 
 	    /**
-	     * Indicates whether or not the Widget is capable of focusing.
-	     *
-	     * Derived classes have to
-	     * implement is whether or not a widget can be focused.
+	     * Indicates whether or not the Widget is capable of
+	     * focusing.
 	     *
 	     * @return Widgets not capable of focusing return @c false,
 	     * otherwise @c true.

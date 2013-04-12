@@ -155,17 +155,17 @@ namespace YACURS {
 		    // Solaris' X/Open Curses and System Curses do not
 		    // support HOME key on PC keyboard, i.e. they tell me
 		    // it has code `27' which is ESC.
-	    case KEY_HOME:
-	    case KEY_CTRL_A:
-		__offset=__curs_pos=0;
-		break;
-		// Solaris' X/Open Curses and System Curses do not
-		// support END key on PC keyboard, i.e. they tell me
-		// it has code `27' which is ESC.
+		case KEY_HOME:
+		case KEY_CTRL_A:
+		    __offset=__curs_pos=0;
+		    break;
+		    // Solaris' X/Open Curses and System Curses do not
+		    // support END key on PC keyboard, i.e. they tell me
+		    // it has code `27' which is ESC.
 		case KEY_END:
 		case KEY_CTRL_E:
 		    if (__list.empty()) break;
-
+		    
 		    if (__list.size()<=__cast_lt(__size.rows())-2) {
 			__curs_pos=__list.size()-1;
 		    } else {
@@ -191,22 +191,6 @@ namespace YACURS {
 			__offset-=__size.rows()-2;
 		    else
 			__offset=0;
-		    break;
-		case 'o':
-		case 'O':
-		    // Change sort order
-		    switch (__sort_order) {
-		    case ASCENDING:
-			__sort_order=DESCENDING;
-			break;
-		    case DESCENDING:
-			__sort_order=ASCENDING;
-			break;
-		    case UNSORTED:
-			__sort_order=ASCENDING;
-			break;
-		    }
-		    sort();
 		    break;
 		}
 

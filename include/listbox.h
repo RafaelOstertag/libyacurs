@@ -578,7 +578,7 @@ namespace YACURS {
 	    it++, i++);
 
 	for(std::list<std::string>::size_type i=0;
-	    i<std::min<std::list<std::string>::size_type>(__size.rows()-2, __list.size());
+	    i<std::min<std::list<std::string>::size_type>(pagesize(), __list.size());
 	    it++, i++) {
 
 	    YACURS::INTERNAL::CurStr line(*it,
@@ -610,7 +610,7 @@ namespace YACURS {
 	    if (__offset>0)
 		widget_subwin()->mvaddch(Coordinates(__size.cols()-1, 1), '^');
 	    // can we scroll further down?
-	    if (__offset+__size.rows()-3<__list.size()-1)
+	    if (__offset+pagesize()<__list.size())
 		widget_subwin()->mvaddch(Coordinates(__size.cols()-1,__size.rows()-2), 'v');
 	}
 

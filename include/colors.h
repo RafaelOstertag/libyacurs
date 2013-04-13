@@ -30,9 +30,11 @@
 
 namespace YACURS {
     /**
-     * @brief The indices of the color array.
+     * Color Objects
      *
-     * This are the indices of the color array.
+     * Color Object Names.
+     *
+     * @internal Used as indices of the Color array.
      */
     enum COLOROBJ {
 	/**
@@ -102,17 +104,15 @@ namespace YACURS {
     };
 
     /**
-     * Struct holding the color.
-     *
-     * The purpose of this struct is to hold the color and the
-     * attribute for the given color. The attribute is used in case
-     * the terminal does not support colors.
+     * Struct holding all information associated with Color Object.
      */
     struct CursColor {
             /**
              * Number of the pair.
              *
-             * The number of the pair as used by (n)curses.
+             * The number of the pair as used by (N)Curses. For
+             * NCurses, it has to start with at 1. X/Open Curses
+             * allows it to start at zero.
              */
             short no;
             /**
@@ -146,32 +146,27 @@ namespace YACURS {
     };
 
     /**
-     * @brief Class for managing colors.
-     *
-     * This class is used for managing colors.
+     * Initalizing colors and preparing colors
      */
     class Colors {
 	private:
 	    /**
-	     * @brief Indicates whether or colors has been initialized
-	     *
-	     * Indicates whether or colors has been initialized by
-	     * calling \c initColors().
+	     * Flag, whether or not colors have been initialized.
 	     */
 	    static bool __initialized;
 	    
 	    /**
-	     * @brief Array holding the colors.
+	     * Array holding CursColor
 	     *
-	     * The color pairs for curses are access by using the
-	     * names defined in the \c COLOR enum.
+	     * @internal The color pairs for curses are access by using the
+	     * names defined in the @c COLOR enum.
 	     */
 	    static std::vector<CursColor> __colors;
 
 
 	public:
 	    /**
-	     * @brief Initializes the color pairs.
+	     * Initializes Colors
 	     *
 	     * Initializes the color pairs used by curses if the
 	     * terminal supports colors.

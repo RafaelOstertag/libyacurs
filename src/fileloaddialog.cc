@@ -44,7 +44,7 @@ using namespace YACURS;
 //
 FileLoadDialog&
 FileLoadDialog::operator=(const FileLoadDialog&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 
@@ -76,14 +76,14 @@ FileLoadDialog::read_dir() {
 	    if (errno==EACCES)
 		__path->label("/");
 	    else
-		throw SystemError(errno);
+		throw EXCEPTIONS::SystemError(errno);
 	}
 	__path->label(ptr);
     }
 
     DIR* dir=opendir(__path->label().c_str());
     if (dir==0)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 
     std::string _base(__path->label());
     assert(_base.length()>0);
@@ -120,11 +120,11 @@ FileLoadDialog::read_dir() {
     __files->set(_files);
 
     if (errno!=0)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 
 
     if (closedir(dir)!=0)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 }
 
 void
@@ -152,7 +152,7 @@ FileLoadDialog::listbox_enter_handler(Event& _e) {
 	}
 	try {
 	    read_dir();
-	} catch (SystemError& ex) {
+	} catch (EXCEPTIONS::SystemError& ex) {
 	    std::string _tmp(_("Cannot change to ") + __path->label() + ":");
 	    __msgbox=new MessageBox2(_("System Error"),
 				     _tmp,
@@ -295,7 +295,7 @@ FileLoadDialog::refresh(bool immediate) {
 
     try {
 	read_dir();
-    } catch (SystemError& ex) {
+    } catch (EXCEPTIONS::SystemError& ex) {
 	std::string _tmp(_("Cannot change to ") + __path->label() + ":");
 	__msgbox=new MessageBox2(_("System Error"),
 				_tmp,

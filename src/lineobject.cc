@@ -61,12 +61,12 @@ LineObject::compute_margin() {
 }
 
 LineObject::LineObject(const LineObject&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
 }
 
 LineObject&
 LineObject::operator=(const LineObject& lo) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 //

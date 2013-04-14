@@ -71,7 +71,7 @@ Curses::doupdate_handler(Event& e) {
     assert(e==EVT_DOUPDATE);
 
     if (doupdate() == ERR)
-	throw CursesException("doupdate");
+	throw EXCEPTIONS::CursesException("doupdate");
 
 }
 
@@ -91,10 +91,10 @@ Curses::termresetup_handler(Event& e) {
     resize_term(_tmp.rows(), _tmp.cols());
 
     if (wclear(stdscr) == ERR)
-	throw CursesException("wclear");
+	throw EXCEPTIONS::CursesException("wclear");
 
     if (wrefresh(stdscr) == ERR)
-	throw CursesException("wrefresh");
+	throw EXCEPTIONS::CursesException("wrefresh");
 #endif // HAVE_RESIZE_TERM
 }
 
@@ -104,10 +104,10 @@ Curses::termresetup_handler(Event& e) {
 void
 Curses::init() {
     if (Curses::initialized)
-	throw AlreadyInitialized();
+	throw EXCEPTIONS::AlreadyInitialized();
 
     if (initscr() == 0)
-	throw UnableToInitialize();
+	throw EXCEPTIONS::UnableToInitialize();
 
 #if ENABLE_NLS
     bindtextdomain(PACKAGE, LOCALEDIR);
@@ -119,22 +119,22 @@ Curses::init() {
     EventQueue::connect_event(EventConnectorFunction1(EVT_TERMRESETUP, Curses::termresetup_handler));
 
     if (nonl() == ERR)
-	throw CursesException("nonl");
+	throw EXCEPTIONS::CursesException("nonl");
 
     if (cbreak() == ERR)
-	throw CursesException("cbreak");
+	throw EXCEPTIONS::CursesException("cbreak");
 
     if (noecho() == ERR)
-	throw CursesException("noecho");
+	throw EXCEPTIONS::CursesException("noecho");
 
     if (keypad(stdscr, TRUE) == ERR)
-	throw CursesException("keypad");
+	throw EXCEPTIONS::CursesException("keypad");
 
     if (leaveok(stdscr, TRUE) == ERR)
-	throw CursesException("leaveok");
+	throw EXCEPTIONS::CursesException("leaveok");
 
     if (intrflush(stdscr, FALSE) == ERR)
-	throw CursesException("intrflush");
+	throw EXCEPTIONS::CursesException("intrflush");
 
     // We don't fail if that doesn't work, so no check on retval.
     curs_set(0);
@@ -143,24 +143,24 @@ Curses::init() {
     // produce undesired results, i.e. already created Curses Windows
     // may be overwritten. Therefore we refresh stdscr preventively.
     if (wrefresh(stdscr) == ERR)
-	throw CursesException("wrefresh");
+	throw EXCEPTIONS::CursesException("wrefresh");
 
     initialized = true;
 }
 
 void
 Curses::end() {
-    if (!initialized) throw NotInitialized();
+    if (!initialized) throw EXCEPTIONS::NotInitialized();
 
     // On FreeBSD, for instance, endwin() does not clear screen, so we
     // unconditionally issue calls to do so
     if (wclear(stdscr) == ERR)
-	throw CursesException("wclear");
+	throw EXCEPTIONS::CursesException("wclear");
     if (wrefresh(stdscr) == ERR)
-	throw CursesException("wfresh");
+	throw EXCEPTIONS::CursesException("wfresh");
 
     if (endwin() == ERR)
-	throw CursesException("endwin");
+	throw EXCEPTIONS::CursesException("endwin");
 
     // Widgets and Windows deleted after the EventQueue loop has
     // terminated will have put Event Connector Removal requests into
@@ -174,7 +174,7 @@ Curses::end() {
 
 void
 Curses::run() {
-    if (!initialized) throw NotInitialized();
+    if (!initialized) throw EXCEPTIONS::NotInitialized();
 
     FocusManager::init();
 
@@ -227,7 +227,7 @@ Curses::mainwindow() {
 
 Size
 Curses::inquiry_screensize() {
-    if (!initialized) throw NotInitialized();
+    if (!initialized) throw EXCEPTIONS::NotInitialized();
 
     // If we have resize term, we need to get the actual terminal
     // size, because we have the ability to easily resize, and thus
@@ -244,7 +244,7 @@ Curses::inquiry_screensize() {
 	    __scrdim.rows(ws.ws_row);
 	    __scrdim.cols(ws.ws_col);
 	} else {
-	    throw WinSizeInvalid();
+	    throw EXCEPTIONS::WinSizeInvalid();
 	}
     } else {
 	char* crows = std::getenv("LINES");
@@ -258,10 +258,10 @@ Curses::inquiry_screensize() {
 		__scrdim.rows(_rows);
 		__scrdim.cols(_cols);
 	    } else {
-		throw UnableToGetWinSize();
+		throw EXCEPTIONS::UnableToGetWinSize();
 	    }
 	} else {
-	    throw UnableToGetWinSize();
+	    throw EXCEPTIONS::UnableToGetWinSize();
 	}
     }
     

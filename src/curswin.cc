@@ -77,7 +77,7 @@ CursWin::CursWin(const Area& _a, COLOROBJ c): __window(0),
 			  __area.cols(),
 			  __area.y(),
 			  __area.x()))==0 )
-	throw CursesException("newwin");
+	throw EXCEPTIONS::CursesException("newwin");
 
     set_bg(__def_color);
     set_color(__def_color);
@@ -90,7 +90,7 @@ CursWin::CursWin(const CursWin& cw): __window(dupwin(cw.__window)),
 				     __area(cw.__area),
 				     __client_area(cw.__client_area) {
     if (__window==0)
-	throw CursesException("dupwin");
+	throw EXCEPTIONS::CursesException("dupwin");
 }
 
 CursWin& CursWin::operator=(const CursWin& cw) {
@@ -98,7 +98,7 @@ CursWin& CursWin::operator=(const CursWin& cw) {
 
     if (__window!=0) {
 	if (delwin(__window)==ERR)
-	    throw CursesException("delwin");
+	    throw EXCEPTIONS::CursesException("delwin");
 
 	__window=0;
     }
@@ -117,7 +117,7 @@ CursWin& CursWin::operator=(const CursWin& cw) {
 CursWin::~CursWin() {
     if (__window!=0)
 	if(delwin(__window)==ERR)
-	    throw CursesException("delwin");
+	    throw EXCEPTIONS::CursesException("delwin");
 }
 
 const YACURS::Area&
@@ -139,10 +139,10 @@ CursWin&
 CursWin::refresh(bool immediate) {
     if (immediate) {
 	if (wrefresh(__window)==ERR)
-	    throw CursesException("wrefresh");
+	    throw EXCEPTIONS::CursesException("wrefresh");
     } else {
 	if (wnoutrefresh(__window)==ERR)
-	    throw CursesException("wnoutrefresh");
+	    throw EXCEPTIONS::CursesException("wnoutrefresh");
     }
     return *this;
 }
@@ -160,7 +160,7 @@ CursWin::has_box() const {
 CursWin&
 CursWin::box(chtype verch, chtype horch) {
     if (::box(__window, verch, horch)==ERR)
-	throw CursesException("box");
+	throw EXCEPTIONS::CursesException("box");
 
     __box=true;
     __client_area=__area-Margin(1,1,1,1);
@@ -171,7 +171,7 @@ CursWin::box(chtype verch, chtype horch) {
 CursWin&
 CursWin::bkgd(chtype ch) {
     if (wbkgd(__window, ch)==ERR)
-	throw CursesException("wbkgd");
+	throw EXCEPTIONS::CursesException("wbkgd");
 
     return *this;
 }
@@ -182,7 +182,7 @@ CursWin::set_color(COLOROBJ c) {
     wattrset(__window, Colors::color_pair(c));
 #else
     if (wattrset(__window, Colors::color_pair(c))==ERR)
-	throw CursesException("wattrset");
+	throw EXCEPTIONS::CursesException("wattrset");
 #endif
     return *this;
 }
@@ -212,7 +212,7 @@ CursWin::get_cursor() const {
 CursWin&
 CursWin::move(const Coordinates& pos) {
     if (wmove(__window, pos.y(), pos.x())==ERR)
-	throw CursesException("wmove");
+	throw EXCEPTIONS::CursesException("wmove");
 
     return *this;
 }
@@ -220,7 +220,7 @@ CursWin::move(const Coordinates& pos) {
 CursWin&
 CursWin::clear() {
     if (wclear(__window)==ERR)
-	throw CursesException("wclear");
+	throw EXCEPTIONS::CursesException("wclear");
 
     return *this;
 }
@@ -228,7 +228,7 @@ CursWin::clear() {
 CursWin&
 CursWin::erase() {
     if (werase(__window)==ERR)
-	throw CursesException("werase");
+	throw EXCEPTIONS::CursesException("werase");
 
     return *this;
 }
@@ -236,7 +236,7 @@ CursWin::erase() {
 CursWin&
 CursWin::touch() {
     if (touchwin(__window)==ERR)
-	throw CursesException("touchwin");
+	throw EXCEPTIONS::CursesException("touchwin");
 
     return *this;
 }
@@ -244,7 +244,7 @@ CursWin::touch() {
 CursWin&
 CursWin::untouch() {
     if (untouchwin(__window)==ERR)
-	throw CursesException("untouchwin");
+	throw EXCEPTIONS::CursesException("untouchwin");
 
     return *this;
 }
@@ -262,7 +262,7 @@ CursWin::addstr(const CurStr& str) {
 		    str.position().y(),
 		    str.position().x(), str.c_str())==ERR &&
 	str.position().x()+static_cast<int16_t>(str.length())<__client_area.cols())
-	throw CursesException("mvwaddstr");
+	throw EXCEPTIONS::CursesException("mvwaddstr");
 
     set_color(__def_color);
     return *this;
@@ -274,7 +274,7 @@ CursWin::addstr(const std::string& str) {
 
     if (mywaddstr(__window, str.c_str())==ERR &&
 	coord.x()+static_cast<int16_t>(str.length())<__client_area.cols())
-	throw CursesException("waddstr");
+	throw EXCEPTIONS::CursesException("waddstr");
 
     return *this;
 }
@@ -347,7 +347,7 @@ CursWin::addnstr(const CurStr& str, int n) {
 		     str.position().x(),
 		     str.c_str(), n)==ERR &&
 	str.position().x()+n<__client_area.x())
-	throw CursesException("mvwaddnstr");
+	throw EXCEPTIONS::CursesException("mvwaddnstr");
 
     set_color(__def_color);
 
@@ -360,7 +360,7 @@ CursWin::addnstr(const std::string& str, int n) {
 
     if (mywaddnstr(__window, str.c_str(), n)==ERR &&
 	coord.x()+n<__client_area.x())
-	throw CursesException("waddnstr");
+	throw EXCEPTIONS::CursesException("waddnstr");
 
     return *this;
 }
@@ -374,7 +374,7 @@ CursWin::addch(const chtype ch) {
 	(void)waddch(__window, ch);
     } else {
 	if (waddch(__window, ch)==ERR)
-	    throw CursesException("waddch");
+	    throw EXCEPTIONS::CursesException("waddch");
     }
 
     return *this;
@@ -389,7 +389,7 @@ CursWin::mvaddch(const Coordinates& pos, const chtype ch) {
 	(void)mvwaddch(__window, pos.y(), pos.x(), ch);
     } else {
 	if (mvwaddch(__window, pos.y(), pos.x(), ch)==ERR)
-	    throw CursesException("mvwaddch");
+	    throw EXCEPTIONS::CursesException("mvwaddch");
     }
     return *this;
 }
@@ -397,7 +397,7 @@ CursWin::mvaddch(const Coordinates& pos, const chtype ch) {
 CursWin&
 CursWin::insch(const chtype ch) {
     if (winsch(__window,ch)==ERR)
-	throw CursesException("winsch");
+	throw EXCEPTIONS::CursesException("winsch");
 
     return *this;
 }
@@ -405,7 +405,7 @@ CursWin::insch(const chtype ch) {
 CursWin&
 CursWin::mvinsch(const Coordinates& pos, const chtype ch) {
     if (mvwinsch(__window, pos.y(), pos.x(), ch)==ERR)
-	throw CursesException("mvwinsch");
+	throw EXCEPTIONS::CursesException("mvwinsch");
     
     return *this;
 }
@@ -413,7 +413,7 @@ CursWin::mvinsch(const Coordinates& pos, const chtype ch) {
 CursWin&
 CursWin::mvdelch(const Coordinates& pos) {
     if (mvwdelch(__window, pos.y(), pos.x())==ERR)
-	throw CursesException("mvwdelch");
+	throw EXCEPTIONS::CursesException("mvwdelch");
     
     return *this;
 }
@@ -421,7 +421,7 @@ CursWin::mvdelch(const Coordinates& pos) {
 CursWin&
 CursWin::delch() {
     if (wdelch(__window)==ERR)
-	throw CursesException("wdelch");
+	throw EXCEPTIONS::CursesException("wdelch");
     
     return *this;
 }
@@ -429,7 +429,7 @@ CursWin::delch() {
 CursWin&
 CursWin::clearok(bool fl) {
     if (::clearok(__window, fl?TRUE:FALSE)==ERR)
-	throw CursesException("clearok");
+	throw EXCEPTIONS::CursesException("clearok");
 
     return *this;
 }
@@ -437,7 +437,7 @@ CursWin::clearok(bool fl) {
 CursWin&
 CursWin::scrollok(bool fl) {
     if (::scrollok(__window, fl?TRUE:FALSE)==ERR)
-	throw CursesException("scrollok");
+	throw EXCEPTIONS::CursesException("scrollok");
 
     return *this;
 }
@@ -445,7 +445,7 @@ CursWin::scrollok(bool fl) {
 CursWin&
 CursWin::leaveok(bool fl) {
     if (::leaveok(__window, fl?TRUE:FALSE)==ERR)
-	throw CursesException("leaveok");
+	throw EXCEPTIONS::CursesException("leaveok");
 
     return *this;
 }

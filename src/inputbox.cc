@@ -31,7 +31,7 @@ using namespace YACURS;
 //
 InputBox&
 InputBox::operator=(const InputBox&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 

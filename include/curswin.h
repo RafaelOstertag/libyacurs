@@ -31,6 +31,9 @@
 #include "mycurses.h"
 
 namespace YACURS {
+    /**
+     * Name space of internal facilities.
+     */
     namespace INTERNAL {
 	class CursWin {
 	    private:

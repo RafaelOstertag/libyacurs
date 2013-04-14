@@ -41,12 +41,12 @@ using namespace YACURS;
 // Private
 //
 Window::Window(const Window&){
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
 }
 
 Window&
 Window::operator=(const Window&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 

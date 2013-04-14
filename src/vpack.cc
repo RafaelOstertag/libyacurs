@@ -38,9 +38,16 @@ using namespace YACURS;
 //
 
 namespace YACURS {
+    /**
+     * @internal
+     *
+     * Name space reserved for functors.
+     */
     namespace FUNCTORS {
 	namespace VPACK {
 	    /**
+	     * @internal
+	     *
 	     * Realizes widgets.
 	     *
 	     * It checks for exceptions when realizing.
@@ -57,13 +64,15 @@ namespace YACURS {
 			// stacked.
 			try {
 			    _w->realize();
-			} catch (BaseCurEx&) {
+			} catch (EXCEPTIONS::BaseCurEx&) {
 
 			}
 		    }
 	    };
 
 	    /**
+	     * @internal
+	     *
 	     * Calculate the size hint.
 	     *
 	     * Functor for calculating the size hint by finding the
@@ -236,7 +245,7 @@ namespace YACURS {
 			__size.cols(std::max(__size.cols(),_w->size().cols()) );
 			if (__size.rows()>__size_available.rows() ||
 			    __size.cols()>__size_available.cols())
-			    throw AreaExceeded();
+			    throw EXCEPTIONS::AreaExceeded();
 			// Also set the size availabe for the
 			// widget. Dynamically sized widgets are
 			// handled when CalcNSetSize::finish() is
@@ -391,7 +400,7 @@ namespace YACURS {
 //
 VPack&
 VPack::operator=(const VPack&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 
@@ -450,7 +459,7 @@ VPack::realize() {
 
     try {
 	recalc_size();
-    } catch (AreaExceeded&) {
+    } catch (EXCEPTIONS::AreaExceeded&) {
 	// Back off
 	std::for_each(widget_list.begin(),
 		      widget_list.end(),

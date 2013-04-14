@@ -68,12 +68,12 @@ using namespace YACURS;
 // Private
 //
 Dialog::Dialog(const Dialog&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
 }
 
 Dialog&
 Dialog::operator=(const Dialog&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 
@@ -152,7 +152,7 @@ Dialog::Dialog(const std::string& _title,
 	__hpack->add_front(__bok);
 	break;
     default:
-	throw InvalidDialogType();
+	throw EXCEPTIONS::InvalidDialogType();
 	break;
     }
 

@@ -34,7 +34,7 @@ using namespace YACURS;
 
 Widget&
 Widget::operator=(const Widget&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 
@@ -73,7 +73,7 @@ Widget::unrealize() {
 	// This is also needed to remove artifacts on the screen
 	curses_window()->touch();
 	curses_window()->refresh();
-    } catch (CursesException&) {
+    } catch (EXCEPTIONS::CursesException&) {
 	if (__widget_subwin!=0)
 	    delete __widget_subwin;
 
@@ -164,7 +164,7 @@ Widget::realize() {
 	__widget_subwin = curses_window()->subwin(Area(pos,_size));
 	__widget_subwin->scrollok(false);
 	__widget_subwin->leaveok(true);
-    } catch (CursesException&) {
+    } catch (EXCEPTIONS::CursesException&) {
 	realization(UNREALIZED);
 	if (__widget_subwin!=0) {
 	    delete __widget_subwin;

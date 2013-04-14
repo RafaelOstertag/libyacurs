@@ -32,7 +32,7 @@ using namespace YACURS;
 //
 DynLabel&
 DynLabel::operator=(const DynLabel&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 

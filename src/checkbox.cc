@@ -68,7 +68,7 @@ namespace YACURS {
 
 CheckBox&
 CheckBox::operator=(const CheckBox&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 

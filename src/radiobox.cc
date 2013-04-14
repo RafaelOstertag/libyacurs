@@ -33,7 +33,7 @@ using namespace YACURS;
 
 RadioBox&
 RadioBox::operator=(const RadioBox&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 

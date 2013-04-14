@@ -38,12 +38,12 @@ using namespace YACURS;
 // Private
 //
 WindowBase::WindowBase(const WindowBase& wb) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
 }
 
 WindowBase&
 WindowBase::operator=(const WindowBase&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 
@@ -116,7 +116,7 @@ WindowBase::~WindowBase() {
 
 void
 WindowBase::margin(const Margin& _m) {
-    if (realization()==REALIZED) throw AlreadyRealized();
+    if (realization()==REALIZED) throw EXCEPTIONS::AlreadyRealized();
     __margin = _m;
 }
 
@@ -266,7 +266,7 @@ WindowBase::realize() {
 	if (__frame) {
 	    __curses_window->box();
 	}
-    } catch (CursesException&) {
+    } catch (EXCEPTIONS::CursesException&) {
 	if (__curses_window!=0) {
 	    delete __curses_window;
 	    __curses_window=0;

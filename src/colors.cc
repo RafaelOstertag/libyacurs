@@ -55,7 +55,7 @@ Colors::init_colors(const std::string& colorstr) {
     }
 
     if (start_color()==ERR)
-	throw CursesException("start_color");
+	throw EXCEPTIONS::CursesException("start_color");
 
     __initialized = true;
 
@@ -66,14 +66,14 @@ Colors::init_colors(const std::string& colorstr) {
 	if (init_pair (__colors.at(i).no,
 		       __colors.at(i).fg,
 		       __colors.at(i).bg)==ERR)
-	    throw CursesException("init_pair");
+	    throw EXCEPTIONS::CursesException("init_pair");
     }
 }
 
 int
 Colors::color_pair(COLOROBJ c) {
     if (!__initialized)
-	throw ColorsNotInitialized();
+	throw EXCEPTIONS::ColorsNotInitialized();
 
     if (has_colors() == TRUE && COLOR_PAIRS >= NUMBER_OF_COLOROBJ) {
         return COLOR_PAIR (__colors[c].no);

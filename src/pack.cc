@@ -74,7 +74,7 @@ Pack::take_over(WidgetBase* _w) {
 
 Pack&
 Pack::operator=(const Pack& _p) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 //
@@ -285,7 +285,7 @@ Pack::can_focus() const {
 
 void
 Pack::focus(bool) {
-    throw CannotFocus();
+    throw EXCEPTIONS::CannotFocus();
 }
 
 bool

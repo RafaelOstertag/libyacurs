@@ -41,7 +41,7 @@ StatusLine::put_top_msg() {
 
 StatusLine&
 StatusLine::operator=(const StatusLine&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 //

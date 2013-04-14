@@ -41,7 +41,7 @@ using namespace YACURS;
 
 LockScreen&
 LockScreen::operator=(const LockScreen&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 

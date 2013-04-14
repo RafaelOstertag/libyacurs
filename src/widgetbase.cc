@@ -37,12 +37,12 @@ using namespace YACURS;
 //
 
 WidgetBase::WidgetBase(const WidgetBase&){
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
 }
 
 WidgetBase&
 WidgetBase::operator=(const WidgetBase&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 
@@ -145,7 +145,7 @@ WidgetBase::can_focus() const {
 void
 WidgetBase::focus(bool _f) {
     if (!__can_focus)
-	throw CannotFocus();
+	throw EXCEPTIONS::CannotFocus();
 
     __focus=_f;
 }
@@ -153,7 +153,7 @@ WidgetBase::focus(bool _f) {
 bool
 WidgetBase::focus() const {
     if (!__can_focus)
-	throw CannotFocus();
+	throw EXCEPTIONS::CannotFocus();
 
     return __focus;
 }

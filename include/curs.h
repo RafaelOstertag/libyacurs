@@ -32,6 +32,9 @@
 #include "event.h"
 #include "mycurses.h"
 
+/**
+ * General name space of libyacurs.
+ */
 namespace YACURS {
 
     /**

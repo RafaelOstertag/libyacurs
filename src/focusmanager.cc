@@ -48,7 +48,7 @@ FocusManager::focus_change_handler(Event& _e) {
 	__focus_groups[__active_focusgroup]->focus_previous();
 	break;
     default:
-	throw UnexpectedEvent();
+	throw EXCEPTIONS::UnexpectedEvent();
     };
 }
 

@@ -44,7 +44,7 @@ using namespace YACURS;
 //
 FileSaveDialog&
 FileSaveDialog::operator=(const FileSaveDialog&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 
@@ -76,14 +76,14 @@ FileSaveDialog::read_dir() {
 	    if (errno==EACCES)
 		__path->label("/");
 	    else
-		throw SystemError(errno);
+		throw EXCEPTIONS::SystemError(errno);
 	}
 	__path->label(ptr);
     }
 
     DIR* dir=opendir(__path->label().c_str());
     if (dir==0)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 
     std::string _base(__path->label());
     assert(_base.length()>0);
@@ -120,11 +120,11 @@ FileSaveDialog::read_dir() {
     __files->set(_files);
 
     if (errno!=0)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 
 
     if (closedir(dir)!=0)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 }
 
 void
@@ -152,7 +152,7 @@ FileSaveDialog::listbox_enter_handler(Event& _e) {
 	}
 	try {
 	    read_dir();
-	} catch (SystemError& ex) {
+	} catch (EXCEPTIONS::SystemError& ex) {
 	    std::string _tmp(_("Cannot change to ") + __path->label() + ":");
 	    __errmsgbox=new MessageBox2(_("System Error"),
 				     _tmp,
@@ -229,7 +229,7 @@ FileSaveDialog::button_press_handler(Event& _e) {
 	    case EACCES:
 		__errmsgbox=new MessageBox2(_("Error"),
 					    filepath(),
-					    SystemError(s_errno).what(),
+					    EXCEPTIONS::SystemError(s_errno).what(),
 					    OK_ONLY);
 		__errmsgbox->show();
 		return;
@@ -239,7 +239,7 @@ FileSaveDialog::button_press_handler(Event& _e) {
 		// Dialog::button_press_handler
 		break; 
 	    default:
-		throw SystemError(s_errno);
+		throw EXCEPTIONS::SystemError(s_errno);
 		break;
 	    }
 	}
@@ -352,7 +352,7 @@ FileSaveDialog::refresh(bool immediate) {
 
     try {
 	read_dir();
-    } catch (SystemError& ex) {
+    } catch (EXCEPTIONS::SystemError& ex) {
 	std::string _tmp(_("Cannot change to ") + __path->label() + ":");
 	__errmsgbox=new MessageBox2(_("System Error"),
 				_tmp,

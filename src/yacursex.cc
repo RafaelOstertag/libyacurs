@@ -26,7 +26,7 @@
 #include "gettext.h"
 #include "yacursex.h"
 
-using namespace YACURS;
+using namespace YACURS::EXCEPTIONS;
 
 BaseCurEx::BaseCurEx(const char* m) : msg(m) {}
 

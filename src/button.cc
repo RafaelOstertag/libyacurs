@@ -36,7 +36,7 @@ using namespace YACURS;
 
 Button&
 Button::operator=(const Button&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 

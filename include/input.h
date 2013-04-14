@@ -260,7 +260,7 @@ namespace YACURS {
 
     template<class T> Input<T>&
     Input<T>::operator=(const Input<T>&) {
-	throw NotSupported();
+	throw EXCEPTIONS::NotSupported();
 	return *this;
     }
 

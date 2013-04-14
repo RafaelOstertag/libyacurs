@@ -292,7 +292,7 @@ EventQueue::setup_signal() {
 
     err = sigaction(SIGWINCH, &sigact, &old_winch_act);
     if (err)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 
     //
     // SIGALRM
@@ -305,7 +305,7 @@ EventQueue::setup_signal() {
 
     err = sigaction(SIGALRM, &sigact, &old_alrm_act);
     if (err)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 
     //
     // SIGUSR1
@@ -318,7 +318,7 @@ EventQueue::setup_signal() {
 
     err = sigaction(SIGUSR1, &sigact, &old_usr1_act);
     if (err)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 
     //
     // SIGUSR2
@@ -331,7 +331,7 @@ EventQueue::setup_signal() {
 
     err = sigaction(SIGUSR2, &sigact, &old_usr2_act);
     if (err)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 
     //
     // SIGINT
@@ -344,7 +344,7 @@ EventQueue::setup_signal() {
 
     err = sigaction(SIGINT, &sigact, &old_int_act);
     if (err)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 
     //
     // Connect to signals
@@ -360,7 +360,7 @@ EventQueue::setup_signal() {
 
     err = sigprocmask(SIG_UNBLOCK, &nset, &old_sigmask);
     if (err)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 }
 
 void
@@ -369,23 +369,23 @@ EventQueue::restore_signal() {
 
     err = sigaction(SIGWINCH, &old_winch_act, 0);
     if (err)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
     err = sigaction(SIGWINCH, &old_alrm_act, 0);
     if (err)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
     err = sigaction(SIGUSR1, &old_usr1_act, 0);
     if (err)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
     err = sigaction(SIGUSR2, &old_usr2_act, 0);
     if (err)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
     err = sigaction(SIGINT, &old_int_act, 0);
     if (err)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 
     err = sigprocmask(SIG_SETMASK, &old_sigmask, 0);
     if (err)
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 }
 
 void
@@ -426,7 +426,7 @@ EventQueue::blocksignal() {
     if (signal_blocked) return;
 
     if (sigprocmask(SIG_BLOCK, &block_sigmask, &tmp_old_sigmask))
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 
     signal_blocked = true;
 }
@@ -438,7 +438,7 @@ EventQueue::unblocksignal() {
     signal_blocked = false;
 
     if (sigprocmask(SIG_SETMASK, &tmp_old_sigmask, 0))
-	throw SystemError(errno);
+	throw EXCEPTIONS::SystemError(errno);
 }
 
 /////////////////

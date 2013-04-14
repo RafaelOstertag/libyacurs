@@ -35,7 +35,7 @@ using namespace YACURS;
 //
 UnlockDialog&
 UnlockDialog::operator=(const UnlockDialog&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 

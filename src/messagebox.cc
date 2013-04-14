@@ -32,7 +32,7 @@ using namespace YACURS;
 //
 MessageBox&
 MessageBox::operator=(const MessageBox&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 

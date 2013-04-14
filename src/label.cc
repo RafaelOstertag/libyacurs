@@ -32,7 +32,7 @@ using namespace YACURS;
 //
 Label&
 Label::operator=(const Label&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 

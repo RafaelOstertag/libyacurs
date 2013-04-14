@@ -99,7 +99,7 @@ namespace YACURS {
 
 	    // Not supported
 	    ListBox<_T>& operator=(const ListBox<_T>&) {
-		throw NotSupported();
+		throw EXCEPTIONS::NotSupported();
 		return *this;
 	    }
 

@@ -33,106 +33,111 @@
 
 namespace YACURS {
     /**
-     * Base class from which all libyacurs exceptions are derived.
+     * Name space for exceptions.
      */
-    class BaseCurEx: public std::exception {
-	private:
-	    /**
-	     * The message of the exception.
-	     */
-	    std::string msg;
+    namespace EXCEPTIONS {
+	/**
+	 * Base class from which all libyacurs exceptions are derived.
+	 */
+	class BaseCurEx: public std::exception {
+	    private:
+		/**
+		 * The message of the exception.
+		 */
+		std::string msg;
 
-	public:
-	    BaseCurEx(const char* m);
-	    BaseCurEx(const std::string& m);
-	    virtual ~BaseCurEx() throw();
+	    public:
+		BaseCurEx(const char* m);
+		BaseCurEx(const std::string& m);
+		virtual ~BaseCurEx() throw();
 
-	    /**
-	     * Show the error message.
-	     *
-	     * @return error message.
-	     */
-	    const char* what() const throw();
-    };
+		/**
+		 * Show the error message.
+		 *
+		 * @return error message.
+		 */
+		const char* what() const throw();
+	};
 
-    class CursesException: public BaseCurEx {
-	public:
-	    CursesException(const char* cfct);
-    };
+	class CursesException: public BaseCurEx {
+	    public:
+		CursesException(const char* cfct);
+	};
 
-    class UnableToInitialize: public BaseCurEx {
-	public:
-	    UnableToInitialize();
-    };
+	class UnableToInitialize: public BaseCurEx {
+	    public:
+		UnableToInitialize();
+	};
 
-    class NotInitialized: public BaseCurEx {
-	public:
-	    NotInitialized();
-    };
+	class NotInitialized: public BaseCurEx {
+	    public:
+		NotInitialized();
+	};
 
-    class AlreadyInitialized: public BaseCurEx {
-	public:
-	    AlreadyInitialized();
-    };
+	class AlreadyInitialized: public BaseCurEx {
+	    public:
+		AlreadyInitialized();
+	};
 
-    class AlreadyRealized: public BaseCurEx {
-	public:
-	    AlreadyRealized();
-    };
+	class AlreadyRealized: public BaseCurEx {
+	    public:
+		AlreadyRealized();
+	};
 
-    class NotRealized: public BaseCurEx {
-	public:
-	    NotRealized();
-    };
+	class NotRealized: public BaseCurEx {
+	    public:
+		NotRealized();
+	};
 
-    class SystemError: public BaseCurEx {
-	private:
-	    int __errno;
+	class SystemError: public BaseCurEx {
+	    private:
+		int __errno;
 
-	public:
-	    SystemError(int _errno);
-	    int errorno() const;
-    };
+	    public:
+		SystemError(int _errno);
+		int errorno() const;
+	};
 
-    class WinSizeInvalid: public BaseCurEx {
-	public:
-	    WinSizeInvalid();
-    };
+	class WinSizeInvalid: public BaseCurEx {
+	    public:
+		WinSizeInvalid();
+	};
 
-    class UnableToGetWinSize: public BaseCurEx {
-	public:
-	    UnableToGetWinSize();
-    };
+	class UnableToGetWinSize: public BaseCurEx {
+	    public:
+		UnableToGetWinSize();
+	};
 
-    class CannotFocus: public BaseCurEx {
-	public:
-	    CannotFocus();
-    };
+	class CannotFocus: public BaseCurEx {
+	    public:
+		CannotFocus();
+	};
 
-    class UnexpectedEvent: public BaseCurEx {
-	public:
-	    UnexpectedEvent();
-    };
+	class UnexpectedEvent: public BaseCurEx {
+	    public:
+		UnexpectedEvent();
+	};
 
-    class ColorsNotInitialized: public BaseCurEx {
-	public:
-	    ColorsNotInitialized();
-    };
+	class ColorsNotInitialized: public BaseCurEx {
+	    public:
+		ColorsNotInitialized();
+	};
 
-    class AreaExceeded: public BaseCurEx {
-	public:
-	    AreaExceeded();
-    };
+	class AreaExceeded: public BaseCurEx {
+	    public:
+		AreaExceeded();
+	};
 
-    class NotSupported: public BaseCurEx {
-	public:
-	    NotSupported();
-    };
+	class NotSupported: public BaseCurEx {
+	    public:
+		NotSupported();
+	};
 
-    class InvalidDialogType: public BaseCurEx {
-	public:
-	    InvalidDialogType();
-    };
-}
+	class InvalidDialogType: public BaseCurEx {
+	    public:
+		InvalidDialogType();
+	};
+    } // namespace EXCEPTION
+} // namespace YACURS
 
 #endif // CUREX_H

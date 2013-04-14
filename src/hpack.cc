@@ -57,7 +57,7 @@ namespace YACURS {
 			// stacked.
 			try {
 			    _w->realize();
-			} catch (BaseCurEx&) {
+			} catch (EXCEPTIONS::BaseCurEx&) {
 			} 
 		    }
 	    };
@@ -237,7 +237,7 @@ namespace YACURS {
 
 			if (__size.rows()>__size_available.rows() ||
 			    __size.cols()>__size_available.cols())
-			    throw AreaExceeded();
+			    throw EXCEPTIONS::AreaExceeded();
 
 			// Also set the size availabe for the
 			// widget. Dynamically sized widgets are
@@ -392,7 +392,7 @@ namespace YACURS {
 
 HPack&
 HPack::operator=(const HPack&) {
-    throw NotSupported();
+    throw EXCEPTIONS::NotSupported();
     return *this;
 }
 //
@@ -449,7 +449,7 @@ HPack::realize() {
 
     try {
 	recalc_size();
-    } catch (AreaExceeded&) {
+    } catch (EXCEPTIONS::AreaExceeded&) {
 	// Back off
 	std::for_each(widget_list.begin(),
 		  widget_list.end(),

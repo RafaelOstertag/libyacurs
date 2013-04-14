@@ -29,6 +29,51 @@
 #include "mycurses.h"
 
 namespace YACURS {
+    namespace INTERNAL {
+	/**
+	 * Struct holding all information associated with Color
+	 * Object.
+	 */
+	struct CursColor {
+		/**
+		 * Number of the pair.
+		 *
+		 * The number of the pair as used by (N)Curses. For
+		 * NCurses, it has to start with at 1. X/Open Curses
+		 * allows it to start at zero.
+		 */
+		short no;
+		/**
+		 * Foreground color.
+		 *
+		 * The foreground color of the color pair
+		 */
+		short fg;
+		/**
+		 * Background color.
+		 *
+		 * The background color of the pair.
+		 */
+		short bg;
+		/**
+		 * Attribute.
+		 *
+		 * The attribute used when no color is available.
+		 */
+		int attr;
+
+		/**
+		 * Initialize.
+		 *
+		 * Initialize all attributes to -1.
+		 */
+		CursColor(): no(-1),
+			     fg(-1),
+			     bg(-1),
+			     attr(-1) {}
+	};
+    } // namespace INTERNAL
+
     /**
      * Color Objects
      *
@@ -104,48 +149,6 @@ namespace YACURS {
     };
 
     /**
-     * Struct holding all information associated with Color Object.
-     */
-    struct CursColor {
-            /**
-             * Number of the pair.
-             *
-             * The number of the pair as used by (N)Curses. For
-             * NCurses, it has to start with at 1. X/Open Curses
-             * allows it to start at zero.
-             */
-            short no;
-            /**
-             * Foreground color.
-             *
-             * The foreground color of the color pair
-             */
-            short fg;
-            /**
-             * Background color.
-             *
-             * The background color of the pair.
-             */
-            short bg;
-            /**
-             * Attribute.
-             *
-             * The attribute used when no color is available.
-             */
-            int attr;
-
-	    /**
-	     * Initialize.
-	     *
-	     * Initialize all attributes to -1.
-	     */
-	    CursColor(): no(-1),
-			 fg(-1),
-			 bg(-1),
-			 attr(-1) {}
-    };
-
-    /**
      * Initalizing colors and preparing colors
      */
     class Colors {
@@ -161,7 +164,7 @@ namespace YACURS {
 	     * @internal The color pairs for curses are access by using the
 	     * names defined in the @c COLOR enum.
 	     */
-	    static std::vector<CursColor> __colors;
+	    static std::vector<INTERNAL::CursColor> __colors;
 
 
 	public:
@@ -175,6 +178,6 @@ namespace YACURS {
 
 	    static int color_pair(COLOROBJ c);
     };
-}
+} // namespace YACURS
 
 #endif // COLORS_H

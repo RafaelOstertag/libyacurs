@@ -86,7 +86,7 @@ LineObject::put_line() {
     if (static_cast<std::string::size_type>(area().cols())<=__linetext.length()) {
 	// Since we are here, the text is too big for the screen
 	// width, so we can't align anyway.
-	YACURS::INTERNAL::CurStr tmp(__linetext, Coordinates(0,0));
+	CurStr tmp(__linetext, Coordinates(0,0));
 	curses_window()->addstrx(tmp);
     } else {
 	int hpos=0;
@@ -105,7 +105,7 @@ LineObject::put_line() {
 	    break;
 	}
 
-	YACURS::INTERNAL::CurStr tmp(__linetext,Coordinates(hpos,0));
+	CurStr tmp(__linetext,Coordinates(hpos,0));
 	curses_window()->addstr(tmp);
     }
 }

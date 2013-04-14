@@ -21,7 +21,7 @@
 
 #include "curstr.h"
 
-using namespace YACURS::INTERNAL;
+using namespace YACURS;
 
 //
 // Private

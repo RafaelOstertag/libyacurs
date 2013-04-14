@@ -196,7 +196,7 @@ CheckBox::refresh(bool immediate) {
     std::string item;
     while (++pos,it!=__items.end()) {
 	item=__indicators[(*it).selected?1:0] + (*it).item;
-	widget_subwin()->addstr(YACURS::INTERNAL::CurStr(item,Coordinates(1,pos)));
+	widget_subwin()->addstr(CurStr(item,Coordinates(1,pos)));
 	it++;
     }
 
@@ -207,7 +207,7 @@ CheckBox::refresh(bool immediate) {
     }
 
     if (!__title.empty()) {
-	widget_subwin()->addstrx(YACURS::INTERNAL::CurStr(__title,Coordinates(1,0)));
+	widget_subwin()->addstrx(CurStr(__title,Coordinates(1,0)));
     }
 
     if (focus()) {

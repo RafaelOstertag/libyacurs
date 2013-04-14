@@ -29,8 +29,6 @@
 #include "colors.h"
 
 namespace YACURS {
-    namespace INTERNAL {
-
 	class CurStr : public std::string {
 	    private:
 		Coordinates __position;
@@ -53,7 +51,6 @@ namespace YACURS {
 		void color(COLOROBJ co);
 		COLOROBJ color() const;
 	};
-    } // namespace INTERNAL
 } // namespace YACURS
 
 

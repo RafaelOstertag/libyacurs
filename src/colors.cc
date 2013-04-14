@@ -34,13 +34,13 @@ using namespace YACURS;
 
 bool Colors::__initialized = false;
 
-std::vector<CursColor> Colors::__colors;
+std::vector<INTERNAL::CursColor> Colors::__colors;
 
 void
 Colors::init_colors(const std::string& colorstr) {
     if (__initialized) return;
 
-    ColorParser cp;
+    INTERNAL::ColorParser cp;
 
     if (colorstr.empty())
 	__colors=cp();

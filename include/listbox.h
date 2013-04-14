@@ -581,7 +581,7 @@ namespace YACURS {
 	    i<std::min<std::list<std::string>::size_type>(pagesize(), __list.size());
 	    it++, i++) {
 
-	    YACURS::INTERNAL::CurStr line(*it,
+	    CurStr line(*it,
 					  Coordinates(0,i+1),
 					  i==__curs_pos?YACURS::LISTBOX_HILITE:YACURS::LISTBOX);
 

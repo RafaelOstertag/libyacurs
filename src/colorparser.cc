@@ -30,11 +30,7 @@
 
 #include "colorparser.h"
 
-using namespace YACURS;
-
-
-
-*/
+using namespace YACURS::INTERNAL;
 
 //
 // Private

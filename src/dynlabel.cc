@@ -89,7 +89,7 @@ DynLabel::refresh(bool immediate) {
     // a call to label() case we're realized.
 
     widget_subwin()->erase();
-    YACURS::INTERNAL::CurStr tmp(__label,Coordinates());
+    CurStr tmp(__label,Coordinates());
     widget_subwin()->addstrx(tmp);
 
     Widget::refresh(immediate);

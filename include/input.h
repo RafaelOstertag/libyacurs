@@ -604,7 +604,7 @@ namespace YACURS {
 		output=&obscure_out;
 	    }
 
-	    YACURS::INTERNAL::CurStr
+	    CurStr
 		out(output->substr(__offset,
 				   __size.cols()-1).c_str(),
 		    Coordinates(),
@@ -612,7 +612,7 @@ namespace YACURS {
 	    
 	    if (__hide_input) {
 		// first, give the widget nice color
-		YACURS::INTERNAL::CurStr
+		CurStr
 		    filler("",
 			   Coordinates(),
 			   focus()?YACURS::INPUTWIDGET_FOCUS:YACURS::INPUTWIDGET_NOFOCUS);
@@ -630,7 +630,7 @@ namespace YACURS {
 	    if (__curs_pos>=static_cast<tsz_t>(__size.cols()) ) __curs_pos=__size.cols()-1;
 	} else {
 	    // Fill the widget with spaces to give it nice color
-	    YACURS::INTERNAL::CurStr out("",Coordinates(),focus()?YACURS::INPUTWIDGET_FOCUS:YACURS::INPUTWIDGET_NOFOCUS);
+	    CurStr out("",Coordinates(),focus()?YACURS::INPUTWIDGET_FOCUS:YACURS::INPUTWIDGET_NOFOCUS);
 	    widget_subwin()->addlinex(out);
 	    // since the buffer is empty, make sure the cursor position is
 	    // set to the biginning.

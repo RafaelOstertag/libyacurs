@@ -108,7 +108,7 @@ Label::refresh(bool immediate) {
     assert(widget_subwin()!=0);
 
     widget_subwin()->erase();
-    YACURS::INTERNAL::CurStr tmp(__label,Coordinates(), color());
+    CurStr tmp(__label,Coordinates(), color());
     widget_subwin()->addstr(tmp);
 
     Widget::refresh(immediate);

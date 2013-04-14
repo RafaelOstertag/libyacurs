@@ -27,7 +27,7 @@
 
 #include "evtqueuestats.h"
 
-using namespace YACURS;
+using namespace YACURS::INTERNAL;
 
 //
 // Private

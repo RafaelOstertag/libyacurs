@@ -58,7 +58,7 @@ using namespace YACURS;
 #define DEBUGOUT(x)
 #endif
 
-static EventQueueStats statistics;
+static INTERNAL::EventQueueStats statistics;
 static std::ofstream __statsfile;
 static std::ofstream __debugfile;
 

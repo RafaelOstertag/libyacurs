@@ -31,24 +31,30 @@ using namespace YACURS;
 // Functors
 //
 #ifndef NDEBUG
-/**
- * Class for debugging.
- *
- * Functor counting the number of widgets having focus in the Focus
- * Group.
- *
- * Usually, this should either be 1 or 0.
- */
-class CountFocus {
-    private:
-	int __count;
-    public:
-	CountFocus(): __count(0) {}
-	void operator()(const WidgetBase* _w) {
-	    if (_w->focus()) __count++;
-	}
-	int count() const { return __count; }
-};
+namespace YACURS {
+    namespace FUNCTORS {
+	namespace FOCUSGROUP {
+	    /**
+	     * Class for debugging.
+	     *
+	     * Functor counting the number of widgets having focus in
+	     * the Focus Group.
+	     *
+	     * Usually, this should either be 1 or 0.
+	     */
+	    class CountFocus {
+		private:
+		    int __count;
+		public:
+		    CountFocus(): __count(0) {}
+		    void operator()(const WidgetBase* _w) {
+			if (_w->focus()) __count++;
+		    }
+		    int count() const { return __count; }
+	    };
+	} // namespace CHECKBOX
+    } // namespace FUNCTORS
+} // namespace YACURS
 #endif
 
 //
@@ -106,9 +112,10 @@ FocusGroup::activate() {
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
-    CountFocus cf=std::for_each(__widgets.begin(),
-				__widgets.end(),
-				CountFocus());
+    FUNCTORS::FOCUSGROUP::CountFocus cf=
+	std::for_each(__widgets.begin(),
+		      __widgets.end(),
+		      FUNCTORS::FOCUSGROUP::CountFocus());
     assert(cf.count()<2);
 #endif // NDEBUG
 }
@@ -128,9 +135,10 @@ FocusGroup::deactivate() {
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
-    CountFocus cf=std::for_each(__widgets.begin(),
-				__widgets.end(),
-				CountFocus());
+    FUNCTORS::FOCUSGROUP::CountFocus cf=
+	std::for_each(__widgets.begin(),
+		      __widgets.end(),
+		      FUNCTORS::FOCUSGROUP::CountFocus());
     assert(cf.count()==0);
 #endif // NDEBUG
 }
@@ -157,9 +165,10 @@ FocusGroup::add(WidgetBase* _w) {
 #ifndef NDEBUG
 	// Solaris Studio 12.3 forced me to do it that way, i.e. with
 	// functor.
-	CountFocus cf=std::for_each(__widgets.begin(),
-				    __widgets.end(),
-				    CountFocus());
+	FUNCTORS::FOCUSGROUP::CountFocus cf=
+	    std::for_each(__widgets.begin(),
+			  __widgets.end(),
+			  FUNCTORS::FOCUSGROUP::CountFocus());
 	assert(cf.count()==1);
 #endif // NDEBUG
     } else {
@@ -198,9 +207,10 @@ FocusGroup::remove(WidgetBase* _w) {
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
-    CountFocus cf=std::for_each(__widgets.begin(),
-				__widgets.end(),
-				CountFocus());
+    FUNCTORS::FOCUSGROUP::CountFocus cf=
+	std::for_each(__widgets.begin(),
+		      __widgets.end(),
+		      FUNCTORS::FOCUSGROUP::CountFocus());
     assert(cf.count()<2);
 #endif // NDEBUG
 }
@@ -234,9 +244,10 @@ FocusGroup::focus_next() {
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
-    CountFocus cf=std::for_each(__widgets.begin(),
-				__widgets.end(),
-				CountFocus());
+    FUNCTORS::FOCUSGROUP::CountFocus cf=
+	std::for_each(__widgets.begin(),
+		      __widgets.end(),
+		      FUNCTORS::FOCUSGROUP::CountFocus());
     assert(cf.count()==1);
 #endif // NDEBUG
 }
@@ -272,9 +283,10 @@ FocusGroup::focus_previous() {
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
-    CountFocus cf=std::for_each(__widgets.begin(),
-				__widgets.end(),
-				CountFocus());
+    FUNCTORS::FOCUSGROUP::CountFocus cf=
+	std::for_each(__widgets.begin(),
+		      __widgets.end(),
+		      FUNCTORS::FOCUSGROUP::CountFocus());
     assert(cf.count()==1);
 #endif // NDEBUG
 }    

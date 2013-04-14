@@ -83,162 +83,179 @@ unsigned int EventQueue::__timeout = 0;
 // Functors
 //
 
-/**
- * Functor for comparing EventConnectors for equality.
- */
-class EventConnectorEqual {
-    private:
-	const EventConnectorBase& __eb;
-    public:
-	/**
-	 * @param _eb EventConnector which others are compared to.
-	 */
-	EventConnectorEqual(const EventConnectorBase& _eb) : __eb(_eb) {}
-	/**
-	 * @param eb pointer to EventConnector which is compared to __eb.
-	 *
-	 * @return @c true if __eb == *eb, @c false otherwise.
-	 */
-	bool operator()(EventConnectorBase* eb) {
-	    assert( eb != 0 );
-	    return *eb == __eb;
-	}
-};
+namespace YACURS {
+    namespace FUNCTORS {
+	namespace EVENTQUEUE {
+	    /**
+	     * Functor for comparing EventConnectors for equality.
+	     */
+	    class EventConnectorEqual {
+		private:
+		    const EventConnectorBase& __eb;
+		public:
+		    /**
+		     * @param _eb EventConnector which others are
+		     * compared to.
+		     */
+		    EventConnectorEqual(const EventConnectorBase& _eb) : __eb(_eb) {}
+		    /**
+		     * @param eb pointer to EventConnector which is
+		     * compared to __eb.
+		     *
+		     * @return @c true if __eb == *eb, @c false
+		     * otherwise.
+		     */
+		    bool operator()(EventConnectorBase* eb) {
+			assert( eb != 0 );
+			return *eb == __eb;
+		    }
+	    };
 
-/**
- * Functor setting the suspend state.
- *
- * Functor for setting the suspend state on the given EventConnector
- * if it matches the Event.
- */
-class EvtConnSetSuspend {
-    private:
-	EVENT_TYPE __evt;
-	bool __suspend;
+	    /**
+	     * Functor setting the suspend state.
+	     *
+	     * Functor for setting the suspend state on the given
+	     * EventConnector if it matches the Event.
+	     */
+	    class EvtConnSetSuspend {
+		private:
+		    EVENT_TYPE __evt;
+		    bool __suspend;
 
-    public:
-	/**
-	 * @param _e Event the EventConnector has to connect in order
-	 * to be suspended/unsuspended.
-	 *
-	 * @param _s suspend state to set: @c true to suspend the
-	 * EventConnector, @c false to unsuspend the EventConnector.
-	 */
-	EvtConnSetSuspend(EVENT_TYPE _e, bool _s):
-	    __evt(_e), __suspend(_s) {}
+		public:
+		    /**
+		     * @param _e Event the EventConnector has to
+		     * connect in order to be suspended/unsuspended.
+		     *
+		     * @param _s suspend state to set: @c true to
+		     * suspend the EventConnector, @c false to
+		     * unsuspend the EventConnector.
+		     */
+		    EvtConnSetSuspend(EVENT_TYPE _e, bool _s):
+			__evt(_e), __suspend(_s) {}
 
-	void operator()(EventConnectorBase* eb) {
-	    assert ( eb != 0 );
-	    if ( *eb == __evt) {
-		if (__suspend) {
-		    DEBUGOUT("Suspend: " << (void*)(eb->id()) << ": " << Event::evt2str(*eb));
-		    eb->suspended(true);
-		} else {
-		    DEBUGOUT("Unsuspend: " << (void*)(eb->id()) << ": " << Event::evt2str(*eb));
-		    eb->suspended(false);
-		}
-	    }
-	}
-};
+		    void operator()(EventConnectorBase* eb) {
+			assert ( eb != 0 );
+			if ( *eb == __evt) {
+			    if (__suspend) {
+				DEBUGOUT("Suspend: " << (void*)(eb->id()) << ": " << Event::evt2str(*eb));
+				eb->suspended(true);
+			    } else {
+				DEBUGOUT("Unsuspend: " << (void*)(eb->id()) << ": " << Event::evt2str(*eb));
+				eb->suspended(false);
+			    }
+			}
+		    }
+	    };
 
-/**
- * Functor for setting suspend state.
- *
- * Set the suspend/unsuspend state on EventConnectors except for a
- * particular EventConnector.
- */
-class EvtConnSetSuspendExcept {
-    private:
-	const EventConnectorBase& __evt;
-	bool __suspend;
+	    /**
+	     * Functor for setting suspend state.
+	     *
+	     * Set the suspend/unsuspend state on EventConnectors
+	     * except for a particular EventConnector.
+	     */
+	    class EvtConnSetSuspendExcept {
+		private:
+		    const EventConnectorBase& __evt;
+		    bool __suspend;
 
-    public:
-	/**
-	 * @param _e all EventConnectors having the same EVENT_TYPE as
-	 * this, will have set their suspend state. _e will not be
-	 * changed, though.
-	 *
-	 * @param _s suspend state to set: @c true to suspend the
-	 * EventConnector, @c false to unsuspend the EventConnector.
-	 */
-	EvtConnSetSuspendExcept(const EventConnectorBase& _e,
-				bool _s): __evt(_e),
-					  __suspend(_s){}
+		public:
+		    /**
+		     * @param _e all EventConnectors having the same
+		     * EVENT_TYPE as this, will have set their suspend
+		     * state. _e will not be changed, though.
+		     *
+		     * @param _s suspend state to set: @c true to
+		     * suspend the EventConnector, @c false to
+		     * unsuspend the EventConnector.
+		     */
+		    EvtConnSetSuspendExcept(const EventConnectorBase& _e,
+					    bool _s): __evt(_e),
+						      __suspend(_s){}
 
-	void operator()(EventConnectorBase* eb) {
-	    assert ( eb != 0 );
-	    if (*eb == __evt.type() &&
-		! (__evt == *eb) ) {
-		if (__suspend) {
-		    DEBUGOUT("Suspend Except: " << (void*)(eb->id()) << ": " << Event::evt2str(*eb));
-		    eb->suspended(true);
-		} else {
-		    DEBUGOUT("Unsuspend Except: " << (void*)(eb->id()) << ": " << Event::evt2str(*eb));
-		    eb->suspended(false);
-		}
-	    }
-	}
-};
+		    void operator()(EventConnectorBase* eb) {
+			assert ( eb != 0 );
+			if (*eb == __evt.type() &&
+			    ! (__evt == *eb) ) {
+			    if (__suspend) {
+				DEBUGOUT("Suspend Except: " << (void*)(eb->id()) << ": " << Event::evt2str(*eb));
+				eb->suspended(true);
+			    } else {
+				DEBUGOUT("Unsuspend Except: " << (void*)(eb->id()) << ": " << Event::evt2str(*eb));
+				eb->suspended(false);
+			    }
+			}
+		    }
+	    };
 
-/**
- * Deletes a given EventConnector.
- *
- * Functor for freeing memory used by an EventConnector.
- */
-class DestroyEventConnector {
-    public:
-	/**
-	 * Frees the memory of the given EventConnector.
-	 *
-	 * @param eb pointer to EventConnectorBase to be freed.
-	 */
-	void operator()(EventConnectorBase* eb) {
-	    assert( eb != 0 );
-	    delete eb;
-	}
-};
+	    /**
+	     * Deletes a given EventConnector.
+	     *
+	     * Functor for freeing memory used by an EventConnector.
+	     */
+	    class DestroyEventConnector {
+		public:
+		    /**
+		     * Frees the memory of the given EventConnector.
+		     *
+		     * @param eb pointer to EventConnectorBase to be
+		     * freed.
+		     */
+		    void operator()(EventConnectorBase* eb) {
+			assert( eb != 0 );
+			delete eb;
+		    }
+	    };
 
-/**
- * Functor for calling EventConnectors for a specific event.
- */
-class CallEventConnector {
-    private:
-	/**
-	 * Event which is used to determine the EventConnectors to be
-	 * called, and passed to them if called.
-	 */
-	Event& __eb;
+	    /**
+	     * Functor for calling EventConnectors for a specific
+	     * event.
+	     */
+	    class CallEventConnector {
+		private:
+		    /**
+		     * Event which is used to determine the
+		     * EventConnectors to be called, and passed to
+		     * them if called.
+		     */
+		    Event& __eb;
 
-    public:
-	/**
-	 * @param _eb Event for which EventConnectors are called.
-	 */
-	CallEventConnector(Event& _eb): __eb(_eb) {}
+		public:
+		    /**
+		     * @param _eb Event for which EventConnectors are
+		     * called.
+		     */
+		    CallEventConnector(Event& _eb): __eb(_eb) {}
 
-	/**
-	 * Calls the given EventConnector conditionally.
-	 *
-	 * Calls the given Eventconnector only if it connects to the
-	 * same EventType as __eb. __eb will be passed as argument to
-	 * the EventConnector call.
-	 *
-	 * @param _ec EventConnector which will be called
-	 * conditionally if it connects to the same EventType as __eb is.
-	 */
-	void operator()(EventConnectorBase* _ec) {
-	    assert(_ec != 0);
-	    if (_ec->type() == __eb.type() &&
-		__eb.stop() == false) {
-		statistics.update_ec_calls_by_type(_ec->type());
+		    /**
+		     * Calls the given EventConnector conditionally.
+		     *
+		     * Calls the given Eventconnector only if it
+		     * connects to the same EventType as __eb. __eb
+		     * will be passed as argument to the
+		     * EventConnector call.
+		     *
+		     * @param _ec EventConnector which will be called
+		     * conditionally if it connects to the same
+		     * EventType as __eb is.
+		     */
+		    void operator()(EventConnectorBase* _ec) {
+			assert(_ec != 0);
+			if (_ec->type() == __eb.type() &&
+			    __eb.stop() == false) {
+			    statistics.update_ec_calls_by_type(_ec->type());
 
-		DEBUGOUT("Call: " << 
-			 (void*)(_ec->id()) << ": " << Event::evt2str(*_ec));
-		clock_t t0=clock();
-		_ec->call(__eb);
-		statistics.update_ec_call_time(t0, clock());
-	    }
-	}
-};
+			    DEBUGOUT("Call: " << 
+				     (void*)(_ec->id()) << ": " << Event::evt2str(*_ec));
+			    clock_t t0=clock();
+			    _ec->call(__eb);
+			    statistics.update_ec_call_time(t0, clock());
+			}
+		    }
+	    };
+	} // namespace EVENTQUEUE
+    } // namespace FUNCTORS
+} // namespace YACURS
 
 //
 // Private
@@ -446,7 +463,7 @@ EventQueue::proc_rem_request() {
 	std::list<EventConnectorBase*>::iterator it =
 	    std::find_if(list.begin(),
 			 list.end(),
-			 EventConnectorEqual(*ecb));
+			 FUNCTORS::EVENTQUEUE::EventConnectorEqual(*ecb));
 
 	delete ecb;
 	it_erq++;
@@ -490,7 +507,7 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
     std::list<EventConnectorBase*>::iterator it =
 	std::find_if(list.begin(),
 		     list.end(),
-		     EventConnectorEqual(ec));
+		     FUNCTORS::EVENTQUEUE::EventConnectorEqual(ec));
     if ( it != list.end() ) {
 	assert(*it!=0);
 	// there is already a member function registered for the
@@ -524,7 +541,7 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
     std::list<EventConnectorBase*>::iterator it_erq =
 	std::find_if(evtconn_rem_request.begin(),
 		     evtconn_rem_request.end(),
-		     EventConnectorEqual(ec));
+		     FUNCTORS::EVENTQUEUE::EventConnectorEqual(ec));
 
     if (it_erq != evtconn_rem_request.end()) {
 	statistics.update_ec_rm_cancelled();
@@ -558,7 +575,7 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
     std::list<EventConnectorBase*>::iterator it =
 	std::find_if(list.begin(),
 		     list.end(),
-		     EventConnectorEqual(ec));
+		     FUNCTORS::EVENTQUEUE::EventConnectorEqual(ec));
     if ( it != list.end() ) {
 	assert(*it!=0);
 	(*it)->suspended(true);
@@ -572,7 +589,7 @@ EventQueue::suspend(const EventConnectorBase& ec) {
    std::list<EventConnectorBase*>::iterator it =
        std::find_if(list.begin(),
 		    list.end(),
-		    EventConnectorEqual(ec));
+		    FUNCTORS::EVENTQUEUE::EventConnectorEqual(ec));
 
    if ( it == list.end() ) return;
 
@@ -587,7 +604,7 @@ EventQueue::suspend_all(EVENT_TYPE _t) {
 
    std::for_each(list.begin(),
 		 list.end(),
-		 EvtConnSetSuspend(_t, true));
+		 FUNCTORS::EVENTQUEUE::EvtConnSetSuspend(_t, true));
 }
 
 void
@@ -596,7 +613,7 @@ EventQueue::suspend_except(const EventConnectorBase& ec) {
 
    std::for_each(list.begin(),
 		 list.end(),
-		 EvtConnSetSuspendExcept(ec, true));
+		 FUNCTORS::EVENTQUEUE::EvtConnSetSuspendExcept(ec, true));
 }
 
 void
@@ -606,7 +623,7 @@ EventQueue::unsuspend(const EventConnectorBase& ec) {
    std::list<EventConnectorBase*>::iterator it =
        std::find_if(list.begin(),
 		    list.end(),
-		    EventConnectorEqual(ec));
+		    FUNCTORS::EVENTQUEUE::EventConnectorEqual(ec));
 
    if ( it == list.end() ) return;
 
@@ -620,7 +637,7 @@ EventQueue::unsuspend_all(EVENT_TYPE _t) {
    std::list<EventConnectorBase*>& list = evtconn_map[_t];
    std::for_each(list.begin(),
 		 list.end(),
-		 EvtConnSetSuspend(_t, false));
+		 FUNCTORS::EVENTQUEUE::EvtConnSetSuspend(_t, false));
 }
 
 void
@@ -628,7 +645,7 @@ EventQueue::unsuspend_except(const EventConnectorBase& ec) {
    std::list<EventConnectorBase*>& list = evtconn_map[ec];
    std::for_each(list.begin(),
 		 list.end(),
-		 EvtConnSetSuspendExcept(ec, false));
+		 FUNCTORS::EVENTQUEUE::EvtConnSetSuspendExcept(ec, false));
 }
 
 void
@@ -721,7 +738,7 @@ EventQueue::run() {
 	    std::list<EventConnectorBase*>& list = evtconn_map[*evt];
 	    std::for_each(list.begin(),
 			  list.end(),
-			  CallEventConnector(*evt));
+			  FUNCTORS::EVENTQUEUE::CallEventConnector(*evt));
 
 	    statistics.update_evt_proc_time(evt_t0, clock());
 

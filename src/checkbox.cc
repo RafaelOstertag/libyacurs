@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -40,21 +40,27 @@
 
 using namespace YACURS;
 
-class MaxStrLen {
-    private:
-	std::string::size_type __max_len;
+namespace YACURS {
+    namespace FUNCTORS {
+	namespace CHECKBOX {
+	    class MaxStrLen {
+		private:
+		    std::string::size_type __max_len;
 
-    public:
-	MaxStrLen(): __max_len(0) {}
+		public:
+		    MaxStrLen(): __max_len(0) {}
 
-	std::string::size_type max_len() const {
-	    return __max_len;
-	}
+		    std::string::size_type max_len() const {
+			return __max_len;
+		    }
 
-	void operator()(const std::string& _s) {
-	    __max_len=std::max(_s.length(), __max_len);
-	}
-};
+		    void operator()(const std::string& _s) {
+			__max_len=std::max(_s.length(), __max_len);
+		    }
+	    };
+	} // namespace CHECKBOX
+    } // namespace FUNCTORS
+} // namespace YACURS
 
 //
 // Private
@@ -125,8 +131,11 @@ CheckBox::CheckBox(const std::string& _title,
     __indicators[0] = "[ ] ";
     __indicators[1] = "[x] ";
     can_focus(true);
-    
-    MaxStrLen len = std::for_each(_items.begin(), _items.end(), MaxStrLen());
+
+    FUNCTORS::CHECKBOX::MaxStrLen len =
+	std::for_each(_items.begin(),
+		      _items.end(),
+		      FUNCTORS::CHECKBOX::MaxStrLen());
 
     __items.resize(_items.size());
     std::copy(_items.begin(), _items.end(), __items.begin());
@@ -225,7 +234,7 @@ CheckBox::refresh(bool immediate) {
 void
 CheckBox::realize() {
     REALIZE_ENTER;
-	
+
     Widget::realize();
 
     EventQueue::connect_event(EventConnectorMethod1<CheckBox>(EVT_KEY,this, &CheckBox::key_handler));

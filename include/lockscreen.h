@@ -40,8 +40,8 @@ namespace YACURS {
 	    LockScreen& operator=(const LockScreen&);
 
 	protected:
-	    virtual void event_key_handler(Event& _e);
-	    virtual void event_window_close_handler(Event& _e);
+	    virtual void key_event_handler(Event& _e);
+	    virtual void window_close_event_handler(Event& _e);
 
 	public:
 	    LockScreen(UnlockDialog* _unlock, unsigned int timeout, unsigned int ulck_timeout);

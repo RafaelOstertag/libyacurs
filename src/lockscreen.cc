@@ -49,7 +49,7 @@ LockScreen::operator=(const LockScreen&) {
 // Protected
 //
 void
-LockScreen::event_key_handler(Event& _e) {
+LockScreen::key_event_handler(Event& _e) {
     assert(_e==EVT_KEY);
 
     if (!__unlock_dialog->shown() && __msgbox==0) {
@@ -66,7 +66,7 @@ LockScreen::event_key_handler(Event& _e) {
 }
 
 void
-LockScreen::event_window_close_handler(Event& _e) {
+LockScreen::window_close_event_handler(Event& _e) {
     assert(_e==EVT_WINDOW_CLOSE);
 
     EventEx<WindowBase*>& _evt = dynamic_cast<EventEx<WindowBase*>&>(_e);
@@ -142,8 +142,9 @@ void
 LockScreen::show() {
     Window::show();
 
-    EventQueue::connect_event(EventConnectorMethod1<LockScreen>(EVT_KEY, this, &LockScreen::event_key_handler));
-    EventQueue::connect_event(EventConnectorMethod1<LockScreen>(EVT_WINDOW_CLOSE, this, &LockScreen::event_window_close_handler));
+    // HotKey implementation does connect this event.
+    // EventQueue::connect_event(EventConnectorMethod1<LockScreen>(EVT_KEY, this, &LockScreen::event_key_handler));
+    EventQueue::connect_event(EventConnectorMethod1<LockScreen>(EVT_WINDOW_CLOSE, this, &LockScreen::window_close_event_handler));
 
     EventQueue::suspend_except(EventConnectorMethod1<LockScreen>(EVT_FORCEREFRESH,this, &WindowBase::force_refresh_handler));
     EventQueue::suspend_except(EventConnectorMethod1<LockScreen>(EVT_REFRESH,this, &WindowBase::refresh_handler));
@@ -157,8 +158,9 @@ LockScreen::show() {
 
 void
 LockScreen::close() {
-    EventQueue::disconnect_event(EventConnectorMethod1<LockScreen>(EVT_KEY, this, &LockScreen::event_key_handler));
-    EventQueue::disconnect_event(EventConnectorMethod1<LockScreen>(EVT_WINDOW_CLOSE, this, &LockScreen::event_window_close_handler));
+    // HotKey implementation disconnects this event.
+    // EventQueue::disconnect_event(EventConnectorMethod1<LockScreen>(EVT_KEY, this, &LockScreen::event_key_handler));
+    EventQueue::disconnect_event(EventConnectorMethod1<LockScreen>(EVT_WINDOW_CLOSE, this, &LockScreen::window_close_event_handler));
     EventQueue::unsuspend_all(EVT_FORCEREFRESH);
     EventQueue::unsuspend_all(EVT_REFRESH);
 

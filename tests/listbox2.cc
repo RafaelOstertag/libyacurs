@@ -742,7 +742,7 @@ int __test_data[]= {
 
 
     // Quit app
-    '\t', '\n', 0
+    '\t', '\t', '\t', '\n', 0
 };
 
 extern "C" int __test_wgetch(void*) {

@@ -5,7 +5,7 @@
 #include "colorparser.h"
 
 int main() {
-    YACURS::ColorParser cp;
+    YACURS::INTERNAL::ColorParser cp;
 
     cp();
     cp("trash");

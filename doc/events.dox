@@ -21,7 +21,7 @@
  *
  * All visible objects should connect @c EVT_REFRESH. @c EVT_REFRESH
  * advises the object to prepare for a Curses doupdate(), i.e. they
- * should call @c this->refresh(true).
+ * should call @c this->refresh(false).
  *
  * A Terminal Resize will always result in objects being first
  * unrealized() and then realized() again.

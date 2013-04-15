@@ -6,10 +6,11 @@
  * @section EventQueue Debug
  *
  * If libyacurs has been compiled with <tt>-DEVTQDEBUG</tt> the
- * environment variable @c LIBYACURS_EVT_DBGFN can be used to specify the
- * file where to store debug output.
+ * environment variable @c LIBYACURS_EVT_DBGFN can be used to specify
+ * the file where to store debug output.
  *
  * @section EventQueue Statistics
  * 
- * Setting @c LIBYACURS_EVT_STATS to a file path will print EventQueue statistics.
+ * Setting @c LIBYACURS_EVT_STATS to a file path will print EventQueue
+ * statistics.
  */

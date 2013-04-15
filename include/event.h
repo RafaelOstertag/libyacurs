@@ -58,6 +58,7 @@ namespace YACURS {
 	 * Terminates the EventQueue main loop
 	 */
 	EVT_QUIT,
+
 	/**
 	 * Notification of window size change.
 	 *
@@ -65,65 +66,80 @@ namespace YACURS {
 	 * Windows should not use it in order to resize.
 	 */
 	EVT_SIGWINCH,
+
 	/**
 	 * Notification of alarm signal
 	 */
 	EVT_SIGALRM,
+
 	/**
 	 * Key pressed
 	 */
 	EVT_KEY,
+
 	/**
-	 * A refresh is usually issued after an resize. The refresh must
-	 * not be immediate, i.e. no wrefresh(), but wnoutrefresh().
+	 * A refresh is usually issued after an resize. The refresh
+	 * must not be immediate, i.e. no wrefresh(), but
+	 * wnoutrefresh().
 	 */
 	EVT_REFRESH,
+
 	/**
 	 * Force curses window to refresh. This is used to completely
-	 * redraw the screen upon Ctrl-L. The handler can be implemented
-	 * as simple call to clearok().
+	 * redraw the screen upon Ctrl-L. The handler can be
+	 * implemented as simple call to clearok().
 	 */
 	EVT_FORCEREFRESH,
+
 	/**
 	 *
 	 * A doupdate is usually issued after a refresh. Only one
-	 * VT_DOUPDATE handler should exist, since curses takes care of
-	 * refreshing all windows.
+	 * EVT_DOUPDATE handler should exist, since curses takes care
+	 * of refreshing all windows.
 	 */
 	EVT_DOUPDATE,
+
 	/**
 	 * Re-setup terminal. Mainly used when resizing screen or
 	 * complete screen refresh. @sa EventQueue
 	 */
 	EVT_TERMRESETUP,
+
 	/// SIGUSR1
 	EVT_SIGUSR1,
 	/// SIGUSR2
 	EVT_SIGUSR2,
 	EVT_SIGINT,
+
 	/**
-	 * Advises Focus Manager to give focus to the next Widget in the
-	 * Current Focus Group.
+	 * Advises Focus Manager to give focus to the next Widget in
+	 * the Current Focus Group.
 	 */
 	EVT_FOCUS_NEXT,
+
 	/**
-	 * Advises Focus Manager to give focus to the next Widget in the
-	 * Current Focus Group.
+	 * Advises Focus Manager to give focus to the next Widget in
+	 * the Current Focus Group.
 	 */
 	EVT_FOCUS_PREVIOUS,
+
 	/**
-	 * Windows emit events of this type when shown by calling show().
+	 * Windows emit events of this type when shown by calling
+	 * show().
 	 */
 	EVT_WINDOW_SHOW,
+
 	/**
 	 * Windows emit events of this type when closed by calling
 	 * close().
 	 */
 	EVT_WINDOW_CLOSE,
+
 	/**
 	 * Will be emitted when Button is pressed.
 	 */
 	EVT_BUTTON_PRESS,
+
 	/**
 	 * Will be emitted when ENTER is pressed in ListBox.
 	 */
@@ -133,9 +149,10 @@ namespace YACURS {
     /**
      * @ingroup Event
      *
-     * An Event is generated (key stroke, signal) and submitted into the
-     * EventQueue. The event queue passes the Event to EventConnectors
-     * (i.e. calls the function or method connected to the event).
+     * An Event is generated (key stroke, signal) and submitted into
+     * the EventQueue. The event queue passes the Event to
+     * EventConnectors (i.e. calls the function or method connected to
+     * the event).
      */
     class Event {
 	private:
@@ -145,8 +162,8 @@ namespace YACURS {
 	    EVENT_TYPE event_type;
 
 	    /**
-	     * Indicate whether or not the Event should not be processed
-	     * further.
+	     * Indicate whether or not the Event should not be
+	     * processed further.
 	     */
 	    bool __stop;
 	

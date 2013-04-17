@@ -66,18 +66,20 @@ namespace YACURS {
      *
      * @sa FocusGroup
      *
-     * @internal Early implementations used to maintain a stack and did
-     * not employ Focus Group IDs. This works, as long as no screen resize
-     * occurs, which can cause Widgets in obscured Windows to unrealize()
-     * due to size constraints. Those Widgets would then remove themselves
-     * from the Current Focus Group which is not the proper one, since it
-     * belongs to the top most Window. So, the implementation now requires
-     * to activate the Focus Group on a Window refresh(), since the Window
-     * is refreshed before Widgets are, so we maintain activation of
-     * proper Focus Group.
+     * @internal
      *
-     * @internal the Focus Group ID is simply the index of the Focus Group
-     * in the vector. We don't remove items from the vector, but set them
+     * Early implementations used to maintain a stack and did not
+     * employ Focus Group IDs. This works, as long as no screen resize
+     * occurs, which can cause Widgets in obscured Windows to
+     * unrealize() due to size constraints. Those Widgets would then
+     * remove themselves from the Current Focus Group which is not the
+     * proper one, since it belongs to the top most Window. So, the
+     * implementation now requires to activate the Focus Group on a
+     * Window refresh(), since the Window is refreshed before Widgets
+     * are, so we maintain activation of proper Focus Group.
+     *
+     * The Focus Group ID is simply the index of the Focus Group in
+     * the vector. We don't remove items from the vector, but set them
      * to @c 0 upon destruction, so that we can identify empty slots.
      */
     class FocusManager {

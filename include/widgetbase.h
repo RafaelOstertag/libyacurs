@@ -91,14 +91,15 @@ namespace YACURS {
     class WidgetBase: public Realizeable {
 	private:
 	    /**
-	     * Pointer used for subwin() in order to create subwindows.
+	     * Pointer used for subwin() in order to create
+	     * subwindows.
 	     *
-	     * Curses window used to display the widget. Widgets like Pack
-	     * may not directly use this, but pass the pointer on to
-	     * associated Widgets. WidgetBase does not maintain the
-	     * window, i.e. it does not free the memory occupied. However,
-	     * the pointer has to be valid for the entire lifetime of the
-	     * object.
+	     * Curses window used to display the widget. Widgets like
+	     * Pack may not directly use this, but pass the pointer on
+	     * to associated Widgets. WidgetBase does not maintain the
+	     * window, i.e. it does not free the memory
+	     * occupied. However, the pointer has to be valid for the
+	     * entire lifetime of the object.
 	     */
 	    YACURS::INTERNAL::CursWin* __curses_window;
 
@@ -232,8 +233,9 @@ namespace YACURS {
 	     * @param _p pointer to curses window. The pointer has to be
 	     * valid for the entire lifetime of the widget.
 	     *
-	     * @internal it is virtual because Pack implements its own
-	     * version
+	     * @internal
+	     *
+	     * it is virtual because Pack implements its own version
 	     */
 	    virtual void curses_window(YACURS::INTERNAL::CursWin* _p);
 
@@ -242,8 +244,9 @@ namespace YACURS {
 	     *
 	     * @param _id Focus Group ID.
 	     *
-	     * @internal it is virtual because Pack implements its own
-	     * version.
+	     * @internal
+	     *
+	     * it is virtual because Pack implements its own version.
 	     */
 	    virtual void focusgroup_id(fgid_t _id);
 

@@ -43,7 +43,7 @@ RadioBox::operator=(const RadioBox&) {
 void
 RadioBox::set_selection(unsigned short _cursor) {
     assert(_cursor<__items.size());
-    for (std::vector<Selectable>::size_type i=0; i<__items.size(); i++)
+    for (std::vector<INTERNAL::Selectable>::size_type i=0; i<__items.size(); i++)
 	__items[i].selected=false;
 
     __items[_cursor].selected=true;

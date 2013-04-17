@@ -52,9 +52,11 @@ namespace YACURS {
 	     *
 	     * This will be set by calling size_available().
 	     *
-	     * @internal the only reason for maintaining that field is, so
-	     * that we can reset the size when reset_size() is called and
-	     * return Size::zero() on subsequent calls to
+	     * @internal
+	     *
+	     * the only reason for maintaining that field
+	     * is, so that we can reset the size when reset_size() is
+	     * called and return Size::zero() on subsequent calls to
 	     * Pack::size(). Pack::size() may even choose to use a
 	     * different size (@sa Pack::size()).
 	     */
@@ -105,16 +107,18 @@ namespace YACURS {
 	    /**
 	     * Calculate size required.
 	     *
-	     * Calculate the size required. Returns a Size not equal to
-	     * Size::zero() only if there are no dynamically sized Widgets
-	     * associated.
+	     * Calculate the size required. Returns a Size not equal
+	     * to Size::zero() only if there are no dynamically sized
+	     * Widgets associated.
 	     *
-	     * @internal the idea is to use this function in size(), so it
+	     * @internal
+	     *
+	     * the idea is to use this function in size(), so it
 	     * should return a Size != Size::zero() only if we can
 	     * determine the size of all Widgets definitely, without
 	     * calculating the size for dynamically sized Widgets. In
-	     * other words, the Pack appears non-dynamically only if there
-	     * are no dynamically sized Widgets associated.
+	     * other words, the Pack appears non-dynamically only if
+	     * there are no dynamically sized Widgets associated.
 	     */
 	    virtual Size calc_size_non_dynamic() const = 0;
 

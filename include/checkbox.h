@@ -29,30 +29,36 @@
 #include "widget.h"
 
 namespace YACURS {
-    struct Selectable {
-	    bool selected;
-	    std::string item;
+    namespace INTERNAL {
+	/**
+	 * Internal structure for CheckBox. Represents items to
+	 * select.
+	 */
+	struct Selectable {
+		bool selected;
+		std::string item;
 
-	    /**
-	     * Used when initializing vector.
-	     */
-	    Selectable():
-		selected(false) {}
+		/**
+		 * Used when initializing vector.
+		 */
+		Selectable():
+		    selected(false) {}
 
-	    Selectable(const std::string& _str):
-		selected(false),
-		item(_str) {}
+		Selectable(const std::string& _str):
+		    selected(false),
+		    item(_str) {}
 
-	    Selectable(const Selectable& _s):
-		selected(_s.selected),
-		item(_s.item) {}
+		Selectable(const Selectable& _s):
+		    selected(_s.selected),
+		    item(_s.item) {}
 
-	    Selectable& operator=(const Selectable& _s) {
-		selected=_s.selected;
-		item=_s.item;
-		return *this;
-	    }
-    };
+		Selectable& operator=(const Selectable& _s) {
+		    selected=_s.selected;
+		    item=_s.item;
+		    return *this;
+		}
+	};
+    }
 
 
     /**
@@ -75,7 +81,7 @@ namespace YACURS {
 	protected:
 	    std::string __indicators[2];
 
-	    std::vector<Selectable> __items;
+	    std::vector<INTERNAL::Selectable> __items;
 
 	    virtual void key_handler(Event& _e);
 	    virtual void set_selection(unsigned short _cursor);

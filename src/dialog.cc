@@ -40,26 +40,32 @@
 #endif
 
 namespace YACURS {
-    class HotKeyEsc : public HotKey {
-	private:
-	    Dialog& __dialog;
+    namespace INTERNAL {
+
+	/**
+	 * HotKey for cancelling Dialog.
+	 */
+	class HotKeyEsc : public HotKey {
+	    private:
+		Dialog& __dialog;
 	    
-	public:
-	    HotKeyEsc(Dialog& d): HotKey(27),
-				  __dialog(d) {}
-	    HotKeyEsc(const HotKeyEsc& hk): HotKey(hk),
-					    __dialog(hk.__dialog) {}
+	    public:
+		HotKeyEsc(Dialog& d): HotKey(27),
+				      __dialog(d) {}
+		HotKeyEsc(const HotKeyEsc& hk): HotKey(hk),
+						__dialog(hk.__dialog) {}
 	    
-	    void action() {
-		__dialog.__dstate=Dialog::DIALOG_CANCEL;
-		__dialog.close();
-	    }
+		void action() {
+		    __dialog.__dstate=Dialog::DIALOG_CANCEL;
+		    __dialog.close();
+		}
 		
-	    HotKey* clone() const {
-		return new HotKeyEsc(*this);
-	    }
-    };
-}
+		HotKey* clone() const {
+		    return new HotKeyEsc(*this);
+		}
+	};
+    } // namespace INTERNAL
+} // namespace YACURS
 
 using namespace YACURS;
 
@@ -225,7 +231,7 @@ Dialog::realize() {
     margin(_margin);
     Window::realize();
 
-    add_hotkey(HotKeyEsc(*this));
+    add_hotkey(INTERNAL::HotKeyEsc(*this));
 
     REALIZE_LEAVE;
 }

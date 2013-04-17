@@ -79,7 +79,9 @@ namespace YACURS {
      *
      * Color Object Names.
      *
-     * @internal Used as indices of the Color array.
+     * @internal
+     *
+     *  Used as indices of the Color array.
      */
     enum COLOROBJ {
 	/**
@@ -161,7 +163,9 @@ namespace YACURS {
 	    /**
 	     * Array holding CursColor
 	     *
-	     * @internal The color pairs for curses are access by using the
+	     * @internal
+	     *
+	     * The color pairs for curses are access by using the
 	     * names defined in the @c COLOR enum.
 	     */
 	    static std::vector<INTERNAL::CursColor> __colors;

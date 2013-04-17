@@ -32,6 +32,11 @@
 
 namespace YACURS {
 
+    /**
+     * Default unlock dialog.
+     *
+     * Convenience class providing simple unlock dialog.
+     */
     class UnlockDialogDefault: public UnlockDialog {
 	private:
 	    std::string __secret;

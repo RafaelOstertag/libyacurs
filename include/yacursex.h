@@ -188,16 +188,25 @@ namespace YACURS {
 		ColorsNotInitialized();
 	};
 
+	/**
+	 * A widget exceeds space constraints.
+	 */
 	class AreaExceeded: public BaseCurEx {
 	    public:
 		AreaExceeded();
 	};
 
+	/**
+	 * Operation not supported.
+	 */
 	class NotSupported: public BaseCurEx {
 	    public:
 		NotSupported();
 	};
 
+	/**
+	 * Dialog type not known.
+	 */
 	class InvalidDialogType: public BaseCurEx {
 	    public:
 		InvalidDialogType();

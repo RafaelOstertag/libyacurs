@@ -33,42 +33,70 @@
 
 namespace YACURS {
     namespace INTERNAL {
+	/**
+	 * Class maintaining EventQueue Statistics.
+	 */
 	class EventQueueStats {
 	    private:
-		// Max/min time used for processing one full event queue iteration
+		/// Max time used for one full Event queue Iteration
 		clock_t evq_max_proc_time;
+
+		/// Min time used for one full Event queue Iteration
 		clock_t evq_min_proc_time;
-		// Max/min time used for processing events
+
+		/// Max time used for processessing an Event
 		clock_t evt_max_proc_time;
+
+		/// Min time used for processessing an Event
 		clock_t evt_min_proc_time;
-		// max/min time spent in event connector
+
+		/// Max time spent in EventConnector call
 		clock_t ec_call_max_time;
+
+		/// Min time spent in EventConnector call
 		clock_t ec_call_min_time;
 
+		/// Number of Events submitted during run time of queue
 		uint32_t evt_submitted;
+
+		/// Number of Events submitted during run time of
+		/// queue by type
 		std::map<EVENT_TYPE, uint32_t> evt_submitted_by_type;
-		// Events that were pending during cleanup()
+
+		/// Events that were pending during cleanup()
 		uint32_t evt_pending_cleanup;
-		// Total events processed
+
+		/// Total events processed
 		uint32_t evt_proc_total;
+
+		/// Events processed by type
 		std::map<EVENT_TYPE, uint32_t> evt_proc_by_type;
 
-		// Event Connector
-		uint32_t ec_max; // Maximum events connected
-		uint32_t ec_min; // Minimum events connected
+		/// Max Events connected
+		uint32_t ec_max;
+		
+		/// Min Events connected
+		uint32_t ec_min;
+
+		/// Events connected by type
 		std::map<EVENT_TYPE, uint32_t> ec_max_by_type;
 
-		// Event Connectors calls
+		/// Total Event Connectors calls
 		uint32_t ec_calls_total;
+
+		/// Event connector calls by type
 		std::map<EVENT_TYPE, uint32_t> ec_call_by_type;
 
-		// EventConnector remove requests total processed
+		/// Total EventConnector remove requests processed
 		uint32_t ec_rm_total;
-		// Cancelled EventConnector removal requests
+
+		/// Number of Cancelled EventConnector removal requests
 		uint32_t ec_rm_cancelled;
-		// Max size of EventQueue
+
+		/// Max size of EventQueue
 		uint16_t evq_size_max;
-		// Max Size of EventConnector Removal Queue.
+
+		/// Max Size of EventConnector Removal Queue.
 		uint16_t ec_rmq_size_max;
 
 	    public:

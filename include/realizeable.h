@@ -125,10 +125,12 @@ namespace YACURS {
 	     * How the new Area is interpreted depends on the
 	     * implementation.
 	     *
-	     * @internal A resize must not refresh. It is usually a sequence of
-	     * unrealize(), realize().
-	     *
 	     * @param _a the new Area available to the object.
+	     *
+	     * @internal
+	     *
+	     * A resize must not refresh. It is usually a sequence of
+	     * unrealize(), realize().
 	     */
 	    virtual void resize(const Area& _a) = 0;
 

@@ -43,6 +43,9 @@ using namespace YACURS;
 namespace YACURS {
     namespace FUNCTORS {
 	namespace CHECKBOX {
+	    /**
+	     * Calculate the maximum length of strings
+	     */
 	    class MaxStrLen {
 		private:
 		    std::string::size_type __max_len;
@@ -162,7 +165,7 @@ CheckBox::selected(unsigned short _i) {
 
 bool
 CheckBox::selected(const std::string& _i) {
-    for(std::vector<Selectable>::size_type n=0;
+    for(std::vector<INTERNAL::Selectable>::size_type n=0;
 	n<__items.size(); n++)
 	if (__items[n].item == _i)
 	    return __items[n].selected;
@@ -200,8 +203,8 @@ CheckBox::refresh(bool immediate) {
     if (realization()!=REALIZED) return;
     assert(widget_subwin()!=0);
 
-    std::vector<Selectable>::iterator it = __items.begin();
-    std::vector<Selectable>::size_type pos=0;
+    std::vector<INTERNAL::Selectable>::iterator it = __items.begin();
+    std::vector<INTERNAL::Selectable>::size_type pos=0;
     std::string item;
     while (++pos,it!=__items.end()) {
 	item=__indicators[(*it).selected?1:0] + (*it).item;

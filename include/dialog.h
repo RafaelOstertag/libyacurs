@@ -32,7 +32,9 @@
 
 namespace YACURS {
 
-    class HotKeyEsc;
+    namespace INTERNAL {
+	class HotKeyEsc;
+    }
 
     class Dialog: public Window {
 	public:
@@ -92,7 +94,7 @@ namespace YACURS {
 	    void realize();
 	    void unrealize();
 
-	    friend class HotKeyEsc;
+	    friend class INTERNAL::HotKeyEsc;
     };
 }
 

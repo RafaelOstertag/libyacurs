@@ -98,8 +98,9 @@ namespace YACURS {
 	     *
 	     * Functor for setting available size on Widgets.
 	     *
-	     * @internal mainly used when compiling with Solaris
-	     * Studio.
+	     * @internal
+	     *
+	     * mainly used when compiling with Solaris Studio.
 	     */
 	    class HSetSizeAvail {
 		private:

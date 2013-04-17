@@ -39,16 +39,14 @@ using namespace YACURS;
 
 namespace YACURS {
     /**
-     * @internal
-     *
      * Name space reserved for functors.
      */
     namespace FUNCTORS {
 	namespace VPACK {
 	    /**
-	     * @internal
-	     *
 	     * Realizes widgets.
+	     *
+	     * @internal
 	     *
 	     * It checks for exceptions when realizing.
 	     */
@@ -71,9 +69,9 @@ namespace YACURS {
 	    };
 
 	    /**
-	     * @internal
-	     *
 	     * Calculate the size hint.
+	     *
+	     * @internal
 	     *
 	     * Functor for calculating the size hint by finding the
 	     * max columns size and summing up row size.
@@ -108,7 +106,9 @@ namespace YACURS {
 	     *
 	     * Functor for setting available size on Widgets.
 	     *
-	     * @internal mainly used when compiling with Solaris Studio.
+	     * @internal
+	     *
+	     * mainly used when compiling with Solaris Studio.
 	     */
 	    class VSetSizeAvail {
 		private:

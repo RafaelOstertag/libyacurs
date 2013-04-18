@@ -30,12 +30,6 @@
 #include "mycurses.h"
 
 namespace YACURS {
-
-    enum {
-	MIN_WINDOW_ROWS=1,
-	MIN_WINDOW_COLS=4
-    };
-
     /**
      * Base class for Windows.
      *

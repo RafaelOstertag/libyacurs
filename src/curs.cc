@@ -51,6 +51,7 @@
 #include "yacursex.h"
 #include "focusmanager.h"
 #include "colors.h"
+#include "yacursconst.h"
 
 using namespace YACURS;
 

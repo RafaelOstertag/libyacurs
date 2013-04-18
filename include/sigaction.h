@@ -25,6 +25,8 @@
 
 #include <signal.h>
 
+#include "yacurstypes.h"
+
 namespace YACURS {
     namespace INTERNAL {
 	/**
@@ -37,12 +39,6 @@ namespace YACURS {
 	 * the saved sigaction struct.
 	 */
 	class Sigaction {
-	    public:
-#ifdef SA_SIGINFO
-		typedef void (*sig_handler)(int, siginfo_t *, void *);
-#else
-		typedef void (*sig_handler)(int);
-#endif
 	    private:
 		/**
 		 * Saved sigaction.

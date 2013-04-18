@@ -23,9 +23,7 @@
 #ifndef YACURSTYPES_H
 #define YACURSTYPES_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+#include <signal.h>
 
 #include <vector>
 
@@ -33,6 +31,7 @@ namespace YACURS {
 
     // Forward declaration because we want to be independent.
     class FocusGroup;
+    class Event;
 
     /**
      * @defgroup Focus Focus Management
@@ -40,10 +39,23 @@ namespace YACURS {
      * Focus Groups and Focus Manager.
      *
      * Focus Management is comprised of Focus Groups and the Focus
-     * Manager. Focus Groups are organized in a list by the Focus Manager,
-     * where only one Focus Group can be active, aka the Current Focus Group.
+     * Manager. Focus Groups are organized in a list by the Focus
+     * Manager, where only one Focus Group can be active, aka the
+     * Current Focus Group.
      */
     typedef std::vector<FocusGroup*>::size_type fgid_t;
+
+    /// Type of the function pointer that will be called upon an
+    /// event.
+    typedef void (*fptr_t)(Event&);
+
+    namespace INTERNAL {
+#ifdef SA_SIGINFO
+	typedef void (*sig_handler)(int, siginfo_t *, void *);
+#else
+	typedef void (*sig_handler)(int);
+#endif
+    }
 }
 
 #endif // YACURSTYPES_H

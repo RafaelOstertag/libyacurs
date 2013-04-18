@@ -26,6 +26,7 @@
 #include "yacursex.h"
 #include "lineobject.h"
 #include "colors.h"
+#include "yacursconst.h"
 
 using namespace YACURS;
 

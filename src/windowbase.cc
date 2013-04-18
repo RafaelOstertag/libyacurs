@@ -31,6 +31,7 @@
 #include "yacursex.h"
 #include "windowbase.h"
 #include "eventqueue.h"
+#include "yacursconst.h"
 
 using namespace YACURS;
 

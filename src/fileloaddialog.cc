@@ -33,9 +33,11 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <limits.h>
 #include <dirent.h>
 
 #include "fileloaddialog.h"
+#include "yacursconst.h"
 
 using namespace YACURS;
 
@@ -71,14 +73,14 @@ FileLoadDialog::read_dir() {
     std::list<std::string> _files;
 
     if (__path->label().empty()) {
-	char *ptr=getcwd(0, 2048);
-	if (!ptr) {
+	char buff[CWDBUFSZ];
+	if (!getcwd(buff, CWDBUFSZ)) {
 	    if (errno==EACCES)
 		__path->label("/");
 	    else
 		throw EXCEPTIONS::SystemError(errno);
 	}
-	__path->label(ptr);
+	__path->label(buff);
     }
 
     DIR* dir=opendir(__path->label().c_str());

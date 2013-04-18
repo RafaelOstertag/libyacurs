@@ -27,6 +27,7 @@
 #include "curswin.h"
 #include "curstr.h"
 #include "yacurstypes.h"
+#include "yacursconst.h"
 #include "realizeable.h"
 #include "coordinates.h"
 #include "margin.h"

@@ -31,6 +31,7 @@
 #include <functional>
 #include <typeinfo>
 
+#include "yacurstypes.h"
 #include "event.h"
 
 namespace YACURS {
@@ -303,11 +304,6 @@ namespace YACURS {
      *  <code>static int Class::handler(Event&)</code>
      */
     class EventConnectorFunction1: public EventConnectorBase {
-	public:
-	    /// Type of the function pointer that will be called upon an
-	    /// event.
-	    typedef void (*fptr_t)(Event&);
-
 	private:
 	    /// Holds the pointer to the function to be called.
 	    fptr_t __func;

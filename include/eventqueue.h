@@ -28,6 +28,7 @@
 #include <map>
 #include <queue>
 
+#include "sigaction.h"
 #include "event.h"
 #include "eventconnector.h"
 #include "area.h"
@@ -94,11 +95,12 @@ namespace YACURS {
 	    /// Used by setup_signal()/restore_signal()
 	    static sigset_t old_sigmask;
 
-	    static struct sigaction old_winch_act;
-	    static struct sigaction old_alrm_act;
-	    static struct sigaction old_usr1_act;
-	    static struct sigaction old_usr2_act;
-	    static struct sigaction old_int_act;
+	    static INTERNAL::Sigaction* sigwinch;
+	    static INTERNAL::Sigaction* sigalrm;
+	    static INTERNAL::Sigaction* sigusr1;
+	    static INTERNAL::Sigaction* sigusr2;
+	    static INTERNAL::Sigaction* sigint;
+	    static INTERNAL::Sigaction* sigterm;
 
 	    static bool signal_blocked;
 	    static std::queue<Event*> evt_queue;

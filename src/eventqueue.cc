@@ -65,11 +65,14 @@ static std::ofstream __debugfile;
 sigset_t EventQueue::block_sigmask;
 sigset_t EventQueue::tmp_old_sigmask;
 sigset_t EventQueue::old_sigmask;
-struct sigaction EventQueue::old_winch_act;
-struct sigaction EventQueue::old_alrm_act;
-struct sigaction EventQueue::old_usr1_act;
-struct sigaction EventQueue::old_usr2_act;
-struct sigaction EventQueue::old_int_act;
+
+INTERNAL::Sigaction* EventQueue::sigwinch;
+INTERNAL::Sigaction* EventQueue::sigalrm;
+INTERNAL::Sigaction* EventQueue::sigusr1;
+INTERNAL::Sigaction* EventQueue::sigusr2;
+INTERNAL::Sigaction* EventQueue::sigint;
+INTERNAL::Sigaction* EventQueue::sigterm;
+
 bool EventQueue::signal_blocked = false;
 
 std::queue<Event*> EventQueue::evt_queue;
@@ -267,15 +270,7 @@ namespace YACURS {
 
 void
 EventQueue::setup_signal() {
-    int err;
-
-    struct sigaction sigact;
-    sigact.sa_sigaction = signal_handler;
-#ifdef SA_SIGINFO
-    sigact.sa_flags = SA_SIGINFO;
-#else // SA_SIGINFO
-    sigact.sa_flags = 0;
-#endif // SA_SIGINFO
+    sigset_t mask;
 
     //
     // SIGWINCH
@@ -284,107 +279,106 @@ EventQueue::setup_signal() {
     // This handler is always installed, whether or not resize_term()
     // is available. However, depending on availability of
     // resize_term(), the application will be actually resized.
-    sigemptyset(&sigact.sa_mask);
-    sigaddset(&sigact.sa_mask, SIGALRM);
-    sigaddset(&sigact.sa_mask, SIGUSR1);
-    sigaddset(&sigact.sa_mask, SIGUSR2);
-    sigaddset(&sigact.sa_mask, SIGINT);
-
-    err = sigaction(SIGWINCH, &sigact, &old_winch_act);
-    if (err)
-	throw EXCEPTIONS::SystemError(errno);
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGALRM);
+    sigaddset(&mask, SIGUSR1);
+    sigaddset(&mask, SIGUSR2);
+    sigaddset(&mask, SIGINT);
+    sigaddset(&mask, SIGTERM);
+    sigwinch = new INTERNAL::Sigaction(SIGWINCH, signal_handler, mask);
 
     //
     // SIGALRM
     //
-    sigemptyset(&sigact.sa_mask);
-    sigaddset(&sigact.sa_mask, SIGWINCH);
-    sigaddset(&sigact.sa_mask, SIGUSR1);
-    sigaddset(&sigact.sa_mask, SIGUSR2);
-    sigaddset(&sigact.sa_mask, SIGINT);
-
-    err = sigaction(SIGALRM, &sigact, &old_alrm_act);
-    if (err)
-	throw EXCEPTIONS::SystemError(errno);
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGWINCH);
+    sigaddset(&mask, SIGUSR1);
+    sigaddset(&mask, SIGUSR2);
+    sigaddset(&mask, SIGINT);
+    sigaddset(&mask, SIGTERM);
+    sigalrm = new INTERNAL::Sigaction(SIGALRM, signal_handler, mask);
 
     //
     // SIGUSR1
     //
-    sigemptyset(&sigact.sa_mask);
-    sigaddset(&sigact.sa_mask, SIGWINCH);
-    sigaddset(&sigact.sa_mask, SIGALRM);
-    sigaddset(&sigact.sa_mask, SIGUSR2);
-    sigaddset(&sigact.sa_mask, SIGINT);
-
-    err = sigaction(SIGUSR1, &sigact, &old_usr1_act);
-    if (err)
-	throw EXCEPTIONS::SystemError(errno);
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGWINCH);
+    sigaddset(&mask, SIGALRM);
+    sigaddset(&mask, SIGUSR2);
+    sigaddset(&mask, SIGINT);
+    sigaddset(&mask, SIGTERM);
+    sigusr1 = new INTERNAL::Sigaction(SIGUSR1, signal_handler, mask);
 
     //
     // SIGUSR2
     //
-    sigemptyset(&sigact.sa_mask);
-    sigaddset(&sigact.sa_mask, SIGWINCH);
-    sigaddset(&sigact.sa_mask, SIGALRM);
-    sigaddset(&sigact.sa_mask, SIGUSR1);
-    sigaddset(&sigact.sa_mask, SIGINT);
-
-    err = sigaction(SIGUSR2, &sigact, &old_usr2_act);
-    if (err)
-	throw EXCEPTIONS::SystemError(errno);
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGWINCH);
+    sigaddset(&mask, SIGALRM);
+    sigaddset(&mask, SIGUSR1);
+    sigaddset(&mask, SIGINT);
+    sigaddset(&mask, SIGTERM);
+    sigusr2 = new INTERNAL::Sigaction(SIGUSR2, signal_handler, mask);
 
     //
     // SIGINT
     //
-    sigemptyset(&sigact.sa_mask);
-    sigaddset(&sigact.sa_mask, SIGWINCH);
-    sigaddset(&sigact.sa_mask, SIGALRM);
-    sigaddset(&sigact.sa_mask, SIGUSR1);
-    sigaddset(&sigact.sa_mask, SIGUSR2);
-
-    err = sigaction(SIGINT, &sigact, &old_int_act);
-    if (err)
-	throw EXCEPTIONS::SystemError(errno);
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGWINCH);
+    sigaddset(&mask, SIGALRM);
+    sigaddset(&mask, SIGUSR1);
+    sigaddset(&mask, SIGUSR2);
+    sigaddset(&mask, SIGTERM);
+    sigint = new INTERNAL::Sigaction(SIGINT, signal_handler, mask);
 
     //
-    // Connect to signals
+    // SIGINT
     //
-    sigset_t nset;
-    sigemptyset(&nset);
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGWINCH);
+    sigaddset(&mask, SIGALRM);
+    sigaddset(&mask, SIGUSR1);
+    sigaddset(&mask, SIGUSR2);
+    sigaddset(&mask, SIGINT);
+    sigterm = new INTERNAL::Sigaction(SIGTERM, signal_handler, mask);
 
-    sigaddset(&nset, SIGWINCH);
-    sigaddset(&nset, SIGALRM);
-    sigaddset(&nset, SIGUSR1);
-    sigaddset(&nset, SIGUSR2);
-    sigaddset(&nset, SIGINT);
+    //
+    // Unblock signals
+    //
+    sigemptyset(&mask);
 
-    err = sigprocmask(SIG_UNBLOCK, &nset, &old_sigmask);
-    if (err)
+    sigaddset(&mask, SIGWINCH);
+    sigaddset(&mask, SIGALRM);
+    sigaddset(&mask, SIGUSR1);
+    sigaddset(&mask, SIGUSR2);
+    sigaddset(&mask, SIGINT);
+    sigaddset(&mask, SIGTERM);
+
+    if (sigprocmask(SIG_UNBLOCK, &mask, &old_sigmask)!=0)
 	throw EXCEPTIONS::SystemError(errno);
 }
 
 void
 EventQueue::restore_signal() {
-    int err;
+    if (sigwinch)
+	delete sigwinch;
 
-    err = sigaction(SIGWINCH, &old_winch_act, 0);
-    if (err)
-	throw EXCEPTIONS::SystemError(errno);
-    err = sigaction(SIGWINCH, &old_alrm_act, 0);
-    if (err)
-	throw EXCEPTIONS::SystemError(errno);
-    err = sigaction(SIGUSR1, &old_usr1_act, 0);
-    if (err)
-	throw EXCEPTIONS::SystemError(errno);
-    err = sigaction(SIGUSR2, &old_usr2_act, 0);
-    if (err)
-	throw EXCEPTIONS::SystemError(errno);
-    err = sigaction(SIGINT, &old_int_act, 0);
-    if (err)
-	throw EXCEPTIONS::SystemError(errno);
+    if (sigalrm)
+	delete sigalrm;
 
-    err = sigprocmask(SIG_SETMASK, &old_sigmask, 0);
-    if (err)
+    if (sigusr1)
+	delete sigusr1;
+
+    if (sigusr2)
+	delete sigusr2;
+
+    if (sigint)
+	delete sigint;
+
+    if (sigint)
+	delete sigterm;
+
+    if (sigprocmask(SIG_SETMASK, &old_sigmask, 0)!=0)
 	throw EXCEPTIONS::SystemError(errno);
 }
 
@@ -415,6 +409,9 @@ EventQueue::signal_handler(int signo)
 	break;
     case SIGINT:
 	submit(EVT_SIGINT);
+	break;
+    case SIGTERM:
+	submit(EVT_SIGTERM);
 	break;
     }
 
@@ -679,6 +676,7 @@ EventQueue::run() {
     sigaddset(&block_sigmask, SIGUSR1);
     sigaddset(&block_sigmask, SIGUSR2);
     sigaddset(&block_sigmask, SIGINT);
+    sigaddset(&block_sigmask, SIGTERM);
 
     setup_signal();
 

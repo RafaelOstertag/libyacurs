@@ -3,7 +3,7 @@
 lib_LTLIBRARIES = libyacurs.la
 libyacurs_la_LDFLAGS = -version-info 0 $(LTLIBINTL)
 libyacurs_la_CPPFLAGS = -DPACKAGE=\"$(PACKAGE)\" -DLOCALEDIR=\"$(localedir)\" -I$(top_srcdir)/include
-libyacurs_la_SOURCES = coordinates.cc size.cc margin.cc area.cc		\
+libyacurs_la_SOURCES = sigaction.cc coordinates.cc size.cc margin.cc area.cc		\
     curstr.cc curswin.cc event.cc eventconnector.cc eventqueue.cc	\
     evtqueuestats.cc curs.cc realizeable.cc statusline.cc		\
     windowbase.cc hotkey.cc window.cc lockscreen.cc lineobject.cc	\

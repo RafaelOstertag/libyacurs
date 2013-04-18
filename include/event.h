@@ -110,6 +110,7 @@ namespace YACURS {
 	/// SIGUSR2
 	EVT_SIGUSR2,
 	EVT_SIGINT,
+	EVT_SIGTERM,
 
 	/**
 	 * Advises Focus Manager to give focus to the next Widget in

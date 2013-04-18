@@ -183,6 +183,7 @@ class ListBoxWin: public YACURS::Window {
             delete listbox;
             delete bclear;
             delete bclose;
+	    delete badd;
             delete vpack1;
             delete hpack1;
 
@@ -333,6 +334,7 @@ class MainWindow: public YACURS::Window {
             delete button1;
             delete button2;
             delete button3;
+	    delete button4;
             delete hpack1;
 
             YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
@@ -353,15 +355,17 @@ int main() {
                                      "App 1"));
         YACURS::Curses::statusline(new YACURS::StatusLine);
 
-        MainWindow* mainwindow=new MainWindow;
-        YACURS::Curses::mainwindow(mainwindow);
+        YACURS::Curses::mainwindow(new MainWindow);
         YACURS::Curses::mainwindow()->frame(true);
 
         YACURS::Curses::run();
 
-        delete mainwindow;
+        delete YACURS::Curses::mainwindow();
+	delete YACURS::Curses::title();
+	delete YACURS::Curses::statusline();
 
         YACURS::Curses::end();
+
     } catch (std::exception& e) {
         YACURS::Curses::end();
         std::cerr << e.what() << std::endl;

@@ -176,6 +176,7 @@ class MainWindow: public YACURS::Window {
             delete button8;
             delete button9;
             delete bquit;
+            delete bagain;
             delete hpack1;
             delete hpack2;
             delete hpack3;
@@ -198,13 +199,14 @@ int main() {
                                      "Packremove"));
         YACURS::Curses::statusline(new YACURS::StatusLine);
 
-        MainWindow* mainwindow=new MainWindow;
-        YACURS::Curses::mainwindow(mainwindow);
+        YACURS::Curses::mainwindow(new MainWindow);
         YACURS::Curses::mainwindow()->frame(true);
 
         YACURS::Curses::run();
 
-        delete mainwindow;
+        delete YACURS::Curses::mainwindow();
+	delete YACURS::Curses::title();
+	delete YACURS::Curses::statusline();
 
         YACURS::Curses::end();
     } catch (std::exception& e) {

@@ -23,22 +23,22 @@ void alrm(YACURS::Event& _e) {
     switch (i++) {
     case 0:
         label1->label("Big New Label1");
-        alarm(1);
+        alarm(2);
         break;
 
     case 1:
         label1->label("Small label1");
-        alarm(1);
+        alarm(2);
         break;
 
     case 2:
         label1->label("This should resize");
-        alarm(1);
+        alarm(2);
         break;
 
     case 3:
         label3->label("Huge Big Label 3");
-        alarm(1);
+        alarm(2);
         break;
 
     default:
@@ -93,7 +93,7 @@ int main() {
 
         YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
 
-        alarm(1);
+        alarm(2);
         YACURS::Curses::run();
 
         delete title;

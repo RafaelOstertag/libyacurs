@@ -57,7 +57,7 @@ int main() {
 
         YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
 
-        alarm(1);
+        alarm(3);
         YACURS::Curses::run();
 
         delete title;

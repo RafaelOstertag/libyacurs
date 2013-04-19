@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -39,13 +39,13 @@ Label::operator=(const Label&) {
 //
 // Protected
 //
-    
+
 //
 // Public
 //
-Label::Label(const std::string& _l): __color(DEFAULT),
-				     __label(_l),
-				     __size(Size(1, _l.length())) {
+Label::Label(const std::string& _l) : __color(DEFAULT),
+    __label(_l),
+    __size(Size(1, _l.length() ) ) {
 }
 
 Label::~Label() {
@@ -57,20 +57,20 @@ Label::label(const std::string& _l) {
 
     Size oldsize = __size;
 
-    __size = Size(1, __label.length());
+    __size = Size(1, __label.length() );
 
     // If parent is 0, we have nobody to inform about a possible
     // size change. If old size is the same as the new size, we simply
     // have to refresh immediately.
     //
     // In any case, we can leave the function.
-    if (parent()==0 || oldsize.cols() >= __size.cols()) {
-	if (realization()==REALIZED) refresh(true);
-	return;
+    if (parent() == 0 || oldsize.cols() >= __size.cols() ) {
+        if (realization() == REALIZED) refresh(true);
+        return;
     }
-    
+
     // The size has changed notify parent of size change
-    parent()->size_change(); 
+    parent()->size_change();
 }
 
 const std::string&
@@ -103,12 +103,12 @@ Label::reset_size() {
 
 void
 Label::refresh(bool immediate) {
-    if (realization()!=REALIZED && realization()!=REALIZING) return;
+    if (realization() != REALIZED && realization() != REALIZING) return;
 
-    assert(widget_subwin()!=0);
+    assert(widget_subwin() != 0);
 
     widget_subwin()->erase();
-    CurStr tmp(__label,Coordinates(), color());
+    CurStr tmp(__label, Coordinates(), color() );
     widget_subwin()->addstr(tmp);
 
     Widget::refresh(immediate);
@@ -125,7 +125,7 @@ WidgetBase::unrealize() {
 
 void
 Label::color(COLOROBJ c) {
-    __color=c;
+    __color = c;
 }
 
 COLOROBJ

@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -31,28 +31,28 @@
 #include "input.h"
 
 namespace YACURS {
-
     /**
      * Default unlock dialog.
      *
      * Convenience class providing simple unlock dialog.
      */
-    class UnlockDialogDefault: public UnlockDialog {
-	private:
-	    std::string __secret;
-	    VPack* __vpack;
-	    Label* __text;
-	    Input<>* __secret_input;
+    class UnlockDialogDefault : public UnlockDialog {
+        private:
+            std::string __secret;
+            VPack* __vpack;
+            Label* __text;
+            Input<>* __secret_input;
 
-	    UnlockDialogDefault& operator=(const UnlockDialogDefault&);
+            UnlockDialogDefault& operator=(const UnlockDialogDefault&);
 
-	public:
-	    UnlockDialogDefault(const std::string& _secret);
+        public:
+            UnlockDialogDefault(const std::string& _secret);
 
-	    ~UnlockDialogDefault();
+            ~UnlockDialogDefault();
 
-	    bool unlock();
-	    void clear();
+            bool unlock();
+
+            void clear();
     };
 }
 

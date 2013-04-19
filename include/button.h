@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -35,64 +35,67 @@ namespace YACURS {
      * different buttons by comparing EventEx<Button*>::data() to the
      * address of the Button they're interested in.
      */
-    class Button: public Label {
-	private:
-	    /**
-	     * Flag whether or not button is enabled
-	     */
-	    bool __enabled;
+    class Button : public Label {
+        private:
+            /**
+             * Flag whether or not button is enabled
+             */
+            bool __enabled;
 
-	    /**
-	     * Temporary string used when returning label.
-	     */
-	    std::string __tmp_label;
+            /**
+             * Temporary string used when returning label.
+             */
+            std::string __tmp_label;
 
-	    // Not supported
-	    Button& operator=(const Button&);
+            // Not supported
+            Button& operator=(const Button&);
 
-	protected:
-	    /**
-	     * Key Handler.
-	     *
-	     * Handles @c EVT_KEY events.
-	     *
-	     * @param _e EventEx<int>.
-	     */
-	    virtual void key_handler(Event& _e);
+        protected:
+            /**
+             * Key Handler.
+             *
+             * Handles @c EVT_KEY events.
+             *
+             * @param _e EventEx<int>.
+             */
+            virtual void key_handler(Event& _e);
 
-	    // From Realizeable
-	    virtual void realize();
-	    virtual void unrealize();
-	public:
-	    /**
-	     * Constructor.
-	     *
-	     * @param _b label
-	     */
-	    Button(const std::string& _b);
+            // From Realizeable
+            virtual void realize();
 
-	    virtual ~Button();
+            virtual void unrealize();
 
-	    /**
-	     * Set label.
-	     *
-	     * @param _l label
-	     */
-	    void label(const std::string& _l);
+        public:
+            /**
+             * Constructor.
+             *
+             * @param _b label
+             */
+            Button(const std::string& _b);
 
-	    /**
-	     * Get label.
-	     *
-	     * @return label of Button.
-	     */
-	    const std::string& label() const;
+            virtual ~Button();
 
-	    void enabled(bool _f);
-	    bool enabled() const;
+            /**
+             * Set label.
+             *
+             * @param _l label
+             */
+            void label(const std::string& _l);
 
-	    // From Realizeable
-	    void refresh(bool immediate);
-   };
+            /**
+             * Get label.
+             *
+             * @return label of Button.
+             */
+            const std::string& label() const;
+
+            void enabled(bool _f);
+
+            bool enabled() const;
+
+            // From Realizeable
+            void refresh(bool immediate);
+    };
 }
 
 #endif // BUTTON_H

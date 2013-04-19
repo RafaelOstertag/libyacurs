@@ -15,8 +15,9 @@
 YACURS::Label* label1;
 YACURS::Label* label3;
 
-void alrm(YACURS::Event& _e) {
-    static int i=0;
+void
+alrm(YACURS::Event& _e) {
+    static int i = 0;
 
     assert(_e == YACURS::EVT_SIGALRM);
 
@@ -42,12 +43,13 @@ void alrm(YACURS::Event& _e) {
         break;
 
     default:
-        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT) );
         break;
     }
 }
 
-int main() {
+int
+main() {
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
@@ -56,11 +58,12 @@ int main() {
     try {
         YACURS::Curses::init();
 
-        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
-                                           "Pack 7: Always dynamic, only vertical hinting");
+        YACURS::LineObject* title = new YACURS::LineObject(
+            YACURS::LineObject::POS_TOP,
+            "Pack 7: Always dynamic, only vertical hinting");
         YACURS::Curses::title(title);
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,0,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0) );
         w1->frame(true);
 
         YACURS::VPack* vpack = new YACURS::VPack;
@@ -76,18 +79,18 @@ int main() {
         YACURS::Label* label2 = new YACURS::Label("Test label2");
         label3 = new YACURS::Label("Test label3");
         YACURS::Label* label4 = new YACURS::Label("Test label4");
-        YACURS::Label* label5=new YACURS::Label("Label 5");
-        YACURS::Label* label6=new YACURS::Label("Label 6");
-        YACURS::Label* label7=new YACURS::Label("Label 7");
-        YACURS::Label* label8=new YACURS::Label("Label 8");
-        YACURS::Label* label9=new YACURS::Label("Label 9");
-        YACURS::Label* label10=new YACURS::Label("Label 10");
-        YACURS::Label* label11=new YACURS::Label("Label 11");
-        YACURS::Label* label12=new YACURS::Label("Label 12");
-        YACURS::Label* label13=new YACURS::Label("Label 13");
-        YACURS::Label* label14=new YACURS::Label("Label 14");
-        YACURS::Label* label15=new YACURS::Label("Label 15");
-        YACURS::Label* label16=new YACURS::Label("Label 16");
+        YACURS::Label* label5 = new YACURS::Label("Label 5");
+        YACURS::Label* label6 = new YACURS::Label("Label 6");
+        YACURS::Label* label7 = new YACURS::Label("Label 7");
+        YACURS::Label* label8 = new YACURS::Label("Label 8");
+        YACURS::Label* label9 = new YACURS::Label("Label 9");
+        YACURS::Label* label10 = new YACURS::Label("Label 10");
+        YACURS::Label* label11 = new YACURS::Label("Label 11");
+        YACURS::Label* label12 = new YACURS::Label("Label 12");
+        YACURS::Label* label13 = new YACURS::Label("Label 13");
+        YACURS::Label* label14 = new YACURS::Label("Label 14");
+        YACURS::Label* label15 = new YACURS::Label("Label 15");
+        YACURS::Label* label16 = new YACURS::Label("Label 16");
 
         vpack->add_front(hpack);
         vpack->add_front(hpack1);
@@ -143,7 +146,8 @@ int main() {
 
         YACURS::Curses::mainwindow(w1);
 
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(
+                                              YACURS::EVT_SIGALRM, &alrm) );
 
         alarm(5);
         YACURS::Curses::run();

@@ -33,60 +33,73 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-extern "C" int __test_wgetch(void*) {
+extern "C" int
+__test_wgetch(void*) {
     return 'q';
 }
 
-class MyWindow: public YACURS::Window {
+class MyWindow : public YACURS::Window {
     protected:
         void resize_handler(YACURS::Event& _e) {
             YACURS::Window::resize_handler(_e);
 
-            YACURS::EventEx<YACURS::Size>& winch = dynamic_cast<YACURS::EventEx<YACURS::Size>&>(_e);
+            YACURS::EventEx<YACURS::Size>& winch =
+                dynamic_cast<YACURS::EventEx<YACURS::Size>&>(_e);
             std::string status_msg("YACURS::Size: rows=");
 
             char buff[32];
-            snprintf(buff,32,"%d",winch.data().rows());
-            status_msg+=buff;
 
-            status_msg+=" cols=";
+            snprintf(buff, 32, "%d", winch.data().rows() );
+            status_msg += buff;
 
-            snprintf(buff,32,"%d",winch.data().cols());
-            status_msg+=buff;
+            status_msg += " cols=";
+
+            snprintf(buff, 32, "%d", winch.data().cols() );
+            status_msg += buff;
 
             YACURS::Curses::statusline()->push_msg(status_msg);
         }
 
     public:
         MyWindow(const YACURS::Margin& m) : YACURS::Window(m) {
-            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<MyWindow>(YACURS::EVT_SIGWINCH,this, &MyWindow::resize_handler));
+            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
+                                                  MyWindow>(YACURS::
+                                                            EVT_SIGWINCH,
+                                                            this,
+        &MyWindow::resize_handler) );
         }
 };
 
 class HotKeyQuit : public YACURS::HotKey {
     public:
-	HotKeyQuit(int k) : HotKey(k) {}
-	HotKeyQuit(const HotKeyQuit& hk): HotKey(hk) {}
+        HotKeyQuit(int k) : HotKey(k) {
+        }
 
-	void action() {
-	    YACURS::EventQueue::submit(YACURS::EVT_QUIT);
-	}
+        HotKeyQuit(const HotKeyQuit& hk) : HotKey(hk) {
+        }
 
-	HotKey* clone() const { return new HotKeyQuit(*this); }
+        void action() {
+            YACURS::EventQueue::submit(YACURS::EVT_QUIT);
+        }
+
+        HotKey* clone() const {
+            return new HotKeyQuit(*this);
+        }
 };
 
-int main() {
+int
+main() {
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
 #endif
 
     try {
-
         YACURS::Curses::init();
 
-        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
-                                           "Resize 4");
+        YACURS::LineObject* title = new YACURS::LineObject(
+            YACURS::LineObject::POS_TOP,
+            "Resize 4");
         YACURS::Curses::title(title);
 
         // NOTE:
@@ -98,10 +111,10 @@ int main() {
         // last YACURS::EventConnector connected first, StatusLine has to be
         // created AFTER MyWindow.
 
-        MyWindow* w1 = new MyWindow(YACURS::Margin(1,0,1,0));
+        MyWindow* w1 = new MyWindow(YACURS::Margin(1, 0, 1, 0) );
         w1->frame(true);
-	w1->add_hotkey(HotKeyQuit('q'));
-	w1->add_hotkey(HotKeyQuit('Q'));
+        w1->add_hotkey(HotKeyQuit('q') );
+        w1->add_hotkey(HotKeyQuit('Q') );
 
         YACURS::StatusLine* sl = new YACURS::StatusLine();
         sl->push_msg("Press Q to quit");
@@ -112,7 +125,6 @@ int main() {
         YACURS::Label* hl2 = new YACURS::Label("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         YACURS::Label* hl3 = new YACURS::Label("0123456789");
 
-
         hpack->add_front(hl1);
         hpack->add_front(hl2);
         hpack->add_back(hl3);
@@ -120,10 +132,10 @@ int main() {
         YACURS::VPack* vpack = new YACURS::VPack;
         YACURS::Label* vls[20];
 
-        for(int i=0; i<20; i++) {
+        for (int i = 0; i < 20; i++) {
             std::ostringstream _i;
-            _i<<i;
-            vls[i]=new YACURS::Label("VYACURS::Label " + _i.str());
+            _i << i;
+            vls[i] = new YACURS::Label("VYACURS::Label " + _i.str() );
             vpack->add_back(vls[i]);
         }
 
@@ -137,7 +149,7 @@ int main() {
 
         delete vpack;
 
-        for(int i=0; i<20; i++) {
+        for (int i = 0; i < 20; i++) {
             delete vls[i];
         }
 
@@ -149,7 +161,6 @@ int main() {
         delete w1;
         delete sl;
         YACURS::Curses::end();
-
     } catch (std::exception& e) {
         YACURS::Curses::end();
         std::cerr << e.what() << std::endl;

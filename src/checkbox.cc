@@ -42,26 +42,27 @@ using namespace YACURS;
 
 namespace YACURS {
     namespace FUNCTORS {
-	namespace CHECKBOX {
-	    /**
-	     * Calculate the maximum length of strings
-	     */
-	    class MaxStrLen {
-		private:
-		    std::string::size_type __max_len;
+        namespace CHECKBOX {
+            /**
+             * Calculate the maximum length of strings
+             */
+            class MaxStrLen {
+                private:
+                    std::string::size_type __max_len;
 
-		public:
-		    MaxStrLen(): __max_len(0) {}
+                public:
+                    MaxStrLen() : __max_len(0) {
+                    }
 
-		    std::string::size_type max_len() const {
-			return __max_len;
-		    }
+                    std::string::size_type max_len() const {
+                        return __max_len;
+                    }
 
-		    void operator()(const std::string& _s) {
-			__max_len=std::max(_s.length(), __max_len);
-		    }
-	    };
-	} // namespace CHECKBOX
+                    void operator()(const std::string& _s) {
+                        __max_len = std::max(_s.length(), __max_len);
+                    }
+            };
+        } // namespace CHECKBOX
     } // namespace FUNCTORS
 } // namespace YACURS
 
@@ -80,37 +81,41 @@ CheckBox::operator=(const CheckBox&) {
 //
 void
 CheckBox::key_handler(Event& _e) {
-    assert(_e.type()==EVT_KEY);
+    assert(_e.type() == EVT_KEY);
 
-    if (!focus()) return;
+    if (!focus() ) return;
 
-    EventEx<int>& ekey=dynamic_cast<EventEx<int>&>(_e);
+    EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(_e);
 
-    switch (ekey.data()) {
+    switch (ekey.data() ) {
     case KEY_TAB:
-	EventQueue::submit(EVT_FOCUS_NEXT);
-	break;
+        EventQueue::submit(EVT_FOCUS_NEXT);
+        break;
+
     case KEY_ENTER:
     case KEY_RETURN:
     case KEY_RETURN2:
     case ' ':
-	set_selection(__cursor);
-	break;
+        set_selection(__cursor);
+        break;
+
     case KEY_DOWN:
-	if (__cursor < __items.size()-1)
-	    __cursor++;
-	else
-	    __cursor=0;
-	break;
+        if (__cursor < __items.size() - 1)
+            __cursor++;
+        else
+            __cursor = 0;
+        break;
+
     case KEY_UP:
-	if (__cursor > 0)
-	    __cursor--;
-	else
-	    __cursor=__items.size()-1;
-	break;
+        if (__cursor > 0)
+            __cursor--;
+        else
+            __cursor = __items.size() - 1;
+        break;
+
     case KEY_BTAB:
-	EventQueue::submit(EVT_FOCUS_PREVIOUS);
-	break;
+        EventQueue::submit(EVT_FOCUS_PREVIOUS);
+        break;
     }
 
     refresh(true);
@@ -118,8 +123,8 @@ CheckBox::key_handler(Event& _e) {
 
 void
 CheckBox::set_selection(unsigned short _cursor) {
-    assert(_cursor<__items.size());
-    __items[_cursor].selected=!__items[_cursor].selected;
+    assert(_cursor < __items.size() );
+    __items[_cursor].selected = !__items[_cursor].selected;
 }
 
 //
@@ -127,8 +132,8 @@ CheckBox::set_selection(unsigned short _cursor) {
 //
 
 CheckBox::CheckBox(const std::string& _title,
-		   const std::vector<std::string>& _items):
-    __size(Size::zero()),
+                   const std::vector<std::string>& _items) :
+    __size(Size::zero() ),
     __cursor(0),
     __title(_title) {
     __indicators[0] = "[ ] ";
@@ -136,28 +141,32 @@ CheckBox::CheckBox(const std::string& _title,
     can_focus(true);
 
     FUNCTORS::CHECKBOX::MaxStrLen len =
-	std::for_each(_items.begin(),
-		      _items.end(),
-		      FUNCTORS::CHECKBOX::MaxStrLen());
+        std::for_each(_items.begin(),
+                      _items.end(),
+                      FUNCTORS::CHECKBOX::MaxStrLen() );
 
-    __items.resize(_items.size());
-    std::copy(_items.begin(), _items.end(), __items.begin());
+    __items.resize(_items.size() );
+    std::copy(_items.begin(), _items.end(), __items.begin() );
 
     // +2 because we have a border. +6 because we add the check box
     // indicators and the border.
-    __size=Size(__items.size()+2, len.max_len()+6);
+    __size = Size(__items.size() + 2, len.max_len() + 6);
 }
 
 CheckBox::~CheckBox() {
-    EventQueue::disconnect_event(EventConnectorMethod1<CheckBox>(EVT_KEY,this, &CheckBox::key_handler));
+    EventQueue::disconnect_event(EventConnectorMethod1<CheckBox>(EVT_KEY,
+                                                                 this,
+                                                                 &CheckBox::
+                                                                 key_handler) );
 }
 
 bool
 CheckBox::selected(unsigned short _i) {
-    if (__items.size()<_i) {
-	std::ostringstream _ind;
-	_ind << _i;
-	throw std::out_of_range(_("CheckBox: index ") + _ind.str() + _(" out of range."));
+    if (__items.size() < _i) {
+        std::ostringstream _ind;
+        _ind << _i;
+        throw std::out_of_range(_("CheckBox: index ") + _ind.str() +
+                                _(" out of range.") );
     }
 
     return __items[_i].selected;
@@ -165,12 +174,12 @@ CheckBox::selected(unsigned short _i) {
 
 bool
 CheckBox::selected(const std::string& _i) {
-    for(std::vector<INTERNAL::Selectable>::size_type n=0;
-	n<__items.size(); n++)
-	if (__items[n].item == _i)
-	    return __items[n].selected;
+    for (std::vector<INTERNAL::Selectable>::size_type n = 0;
+         n < __items.size(); n++)
+        if (__items[n].item == _i)
+            return __items[n].selected;
 
-    throw std::out_of_range(_("Item '") + _i + _("' not found in CheckBox"));
+    throw std::out_of_range(_("Item '") + _i + _("' not found in CheckBox") );
 }
 
 void
@@ -200,35 +209,35 @@ CheckBox::reset_size() {
 
 void
 CheckBox::refresh(bool immediate) {
-    if (realization()!=REALIZED) return;
-    assert(widget_subwin()!=0);
+    if (realization() != REALIZED) return;
+    assert(widget_subwin() != 0);
 
     std::vector<INTERNAL::Selectable>::iterator it = __items.begin();
-    std::vector<INTERNAL::Selectable>::size_type pos=0;
+    std::vector<INTERNAL::Selectable>::size_type pos = 0;
     std::string item;
-    while (++pos,it!=__items.end()) {
-	item=__indicators[(*it).selected?1:0] + (*it).item;
-	widget_subwin()->addstr(CurStr(item,Coordinates(1,pos)));
-	it++;
+    while (++pos, it != __items.end() ) {
+        item = __indicators[(*it).selected ? 1 : 0] + (*it).item;
+        widget_subwin()->addstr(CurStr(item, Coordinates(1, pos) ) );
+        it++;
     }
 
-    if (focus()) {
-	widget_subwin()->box(0,0);
+    if (focus() ) {
+        widget_subwin()->box(0, 0);
     } else {
-	widget_subwin()->box('|', '-');
+        widget_subwin()->box('|', '-');
     }
 
-    if (!__title.empty()) {
-	widget_subwin()->addstrx(CurStr(__title,Coordinates(1,0)));
+    if (!__title.empty() ) {
+        widget_subwin()->addstrx(CurStr(__title, Coordinates(1, 0) ) );
     }
 
-    if (focus()) {
-	curs_set(1);
-	widget_subwin()->leaveok(false);
-	widget_subwin()->move(Coordinates(2,__cursor+1));
+    if (focus() ) {
+        curs_set(1);
+        widget_subwin()->leaveok(false);
+        widget_subwin()->move(Coordinates(2, __cursor + 1) );
     } else {
-	curs_set(0);
-	widget_subwin()->leaveok(true);
+        curs_set(0);
+        widget_subwin()->leaveok(true);
     }
 
     Widget::refresh(immediate);
@@ -240,9 +249,11 @@ CheckBox::realize() {
 
     Widget::realize();
 
-    EventQueue::connect_event(EventConnectorMethod1<CheckBox>(EVT_KEY,this, &CheckBox::key_handler));
+    EventQueue::connect_event(EventConnectorMethod1<CheckBox>(EVT_KEY, this,
+                                                              &CheckBox::
+                                                              key_handler) );
 
-    assert(focusgroup_id()!=(fgid_t)-1);
+    assert(focusgroup_id() != (fgid_t)-1);
 
     REALIZE_LEAVE;
 }
@@ -250,9 +261,12 @@ CheckBox::realize() {
 void
 CheckBox::unrealize() {
     UNREALIZE_ENTER;
-    EventQueue::disconnect_event(EventConnectorMethod1<CheckBox>(EVT_KEY,this, &CheckBox::key_handler));
+    EventQueue::disconnect_event(EventConnectorMethod1<CheckBox>(EVT_KEY,
+                                                                 this,
+                                                                 &CheckBox::
+                                                                 key_handler) );
 
-    assert(focusgroup_id()!=(fgid_t)-1);
+    assert(focusgroup_id() != (fgid_t)-1);
 
     Widget::unrealize();
     UNREALIZE_LEAVE;

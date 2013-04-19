@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -29,7 +29,7 @@ using namespace YACURS;
 // Protected
 //
 
-void 
+void
 Realizeable::realization(REALIZATION_STATE _r) {
     __realization_state = _r;
 }
@@ -37,9 +37,11 @@ Realizeable::realization(REALIZATION_STATE _r) {
 //
 // Public
 //
-Realizeable::Realizeable() : __realization_state(UNREALIZED) {}
+Realizeable::Realizeable() : __realization_state(UNREALIZED) {
+}
 
-Realizeable::~Realizeable() {}
+Realizeable::~Realizeable() {
+}
 
 REALIZATION_STATE
 Realizeable::realization() const {

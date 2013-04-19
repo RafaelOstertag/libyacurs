@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -30,31 +30,36 @@
 #include "messagebox.h"
 
 namespace YACURS {
-    class LockScreen: public Window {
-	private:
-	    unsigned int __timeout;
-	    unsigned int __unlock_diag_timeout;
-	    UnlockDialog* __unlock_dialog;
-	    MessageBox* __msgbox;
-	    // Not supported
-	    LockScreen& operator=(const LockScreen&);
+    class LockScreen : public Window {
+        private:
+            unsigned int __timeout;
+            unsigned int __unlock_diag_timeout;
+            UnlockDialog* __unlock_dialog;
+            MessageBox* __msgbox;
+            // Not supported
+            LockScreen& operator=(const LockScreen&);
 
-	protected:
-	    virtual void key_event_handler(Event& _e);
-	    virtual void window_close_event_handler(Event& _e);
+        protected:
+            virtual void key_event_handler(Event& _e);
 
-	public:
-	    LockScreen(UnlockDialog* _unlock, unsigned int timeout, unsigned int ulck_timeout);
-	    virtual ~LockScreen();
+            virtual void window_close_event_handler(Event& _e);
 
-	    unsigned int timeout() const;
-	    unsigned int unlock_dialog_timeout() const;
+        public:
+            LockScreen(UnlockDialog* _unlock,
+                       unsigned int timeout,
+                       unsigned int ulck_timeout);
+            virtual ~LockScreen();
 
-	    virtual void close_unlock_dialog();
+            unsigned int timeout() const;
 
-	    // From WindowBase
-	    void show();
-	    void close();
+            unsigned int unlock_dialog_timeout() const;
+
+            virtual void close_unlock_dialog();
+
+            // From WindowBase
+            void show();
+
+            void close();
     };
 }
 

@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -36,181 +36,182 @@ namespace YACURS {
      * Name space for exceptions.
      */
     namespace EXCEPTIONS {
-	/**
-	 * Base class from which all libyacurs exceptions are derived.
-	 */
-	class BaseCurEx: public std::exception {
-	    private:
-		/**
-		 * The message of the exception.
-		 */
-		std::string msg;
+        /**
+         * Base class from which all libyacurs exceptions are derived.
+         */
+        class BaseCurEx : public std::exception {
+            private:
+                /**
+                 * The message of the exception.
+                 */
+                std::string msg;
 
-	    public:
-		/**
-		 * Constructor.
-		 *
-		 * @param m message
-		 */
-		BaseCurEx(const char* m);
-		/**
-		 * Copy Constructor.
-		 */
-		BaseCurEx(const std::string& m);
-		virtual ~BaseCurEx() throw();
+            public:
+                /**
+                 * Constructor.
+                 *
+                 * @param m message
+                 */
+                BaseCurEx(const char* m);
 
-		/**
-		 * Show the error message.
-		 *
-		 * @return error message.
-		 */
-		const char* what() const throw();
-	};
+                /**
+                 * Copy Constructor.
+                 */
+                BaseCurEx(const std::string& m);
+                virtual ~BaseCurEx() throw();
 
-	/**
-	 * Curses Exception.
-	 *
-	 * Error in Curses function encountered.
-	 */
-	class CursesException: public BaseCurEx {
-	    public:
-		/**
-		 * @param cfct name of the Curses function, e.g. @c
-		 * waddch, or @c wmvwaddstr, etc.
-		 */
-		CursesException(const char* cfct);
-	};
+                /**
+                 * Show the error message.
+                 *
+                 * @return error message.
+                 */
+                const char* what() const throw();
+        };
 
-	/**
-	 * Initialization failed.
-	 */
-	class UnableToInitialize: public BaseCurEx {
-	    public:
-		UnableToInitialize();
-	};
+        /**
+         * Curses Exception.
+         *
+         * Error in Curses function encountered.
+         */
+        class CursesException : public BaseCurEx {
+            public:
+                /**
+                 * @param cfct name of the Curses function, e.g. @c
+                 * waddch, or @c wmvwaddstr, etc.
+                 */
+                CursesException(const char* cfct);
+        };
 
-	/**
-	 * Function called on uninitialized object.
-	 */
-	class NotInitialized: public BaseCurEx {
-	    public:
-		NotInitialized();
-	};
+        /**
+         * Initialization failed.
+         */
+        class UnableToInitialize : public BaseCurEx {
+            public:
+                UnableToInitialize();
+        };
 
-	/**
-	 * Initialization function called on already initialized object.
-	 */
-	class AlreadyInitialized: public BaseCurEx {
-	    public:
-		AlreadyInitialized();
-	};
+        /**
+         * Function called on uninitialized object.
+         */
+        class NotInitialized : public BaseCurEx {
+            public:
+                NotInitialized();
+        };
 
-	/**
-	 * Object is already initialized.
-	 */
-	class AlreadyRealized: public BaseCurEx {
-	    public:
-		AlreadyRealized();
-	};
+        /**
+         * Initialization function called on already initialized object.
+         */
+        class AlreadyInitialized : public BaseCurEx {
+            public:
+                AlreadyInitialized();
+        };
 
-	/**
-	 * Object is not realized.
-	 *
-	 * The object has not been realized.
-	 */
-	class NotRealized: public BaseCurEx {
-	    public:
-		NotRealized();
-	};
+        /**
+         * Object is already initialized.
+         */
+        class AlreadyRealized : public BaseCurEx {
+            public:
+                AlreadyRealized();
+        };
 
-	/**
-	 * System Error
-	 */
-	class SystemError: public BaseCurEx {
-	    private:
-		/**
-		 * Error number
-		 */
-		int __errno;
+        /**
+         * Object is not realized.
+         *
+         * The object has not been realized.
+         */
+        class NotRealized : public BaseCurEx {
+            public:
+                NotRealized();
+        };
 
-	    public:
-		/**
-		 * @param _errno error number
-		 */
-		SystemError(int _errno);
+        /**
+         * System Error
+         */
+        class SystemError : public BaseCurEx {
+            private:
+                /**
+                 * Error number
+                 */
+                int __errno;
 
-		/**
-		 * @return error number of the System Error.
-		 */
-		int errorno() const;
-	};
+            public:
+                /**
+                 * @param _errno error number
+                 */
+                SystemError(int _errno);
 
-	/**
-	 * TIOCGWINSZ returned by ioctl() is invalid.
-	 */
-	class WinSizeInvalid: public BaseCurEx {
-	    public:
-		WinSizeInvalid();
-	};
+                /**
+                 * @return error number of the System Error.
+                 */
+                int errorno() const;
+        };
 
-	/**
-	 * Unable to determine the window size.
-	 */
-	class UnableToGetWinSize: public BaseCurEx {
-	    public:
-		UnableToGetWinSize();
-	};
+        /**
+         * TIOCGWINSZ returned by ioctl() is invalid.
+         */
+        class WinSizeInvalid : public BaseCurEx {
+            public:
+                WinSizeInvalid();
+        };
 
-	/**
-	 * Object cannot be focused.
-	 */
-	class CannotFocus: public BaseCurEx {
-	    public:
-		CannotFocus();
-	};
+        /**
+         * Unable to determine the window size.
+         */
+        class UnableToGetWinSize : public BaseCurEx {
+            public:
+                UnableToGetWinSize();
+        };
 
-	/**
-	 * Event not expected.
-	 *
-	 * Event received is not expected.
-	 */
-	class UnexpectedEvent: public BaseCurEx {
-	    public:
-		UnexpectedEvent();
-	};
+        /**
+         * Object cannot be focused.
+         */
+        class CannotFocus : public BaseCurEx {
+            public:
+                CannotFocus();
+        };
 
-	/**
-	 * Color function called requiring Colors object to be
-	 * initialized.
-	 */
-	class ColorsNotInitialized: public BaseCurEx {
-	    public:
-		ColorsNotInitialized();
-	};
+        /**
+         * Event not expected.
+         *
+         * Event received is not expected.
+         */
+        class UnexpectedEvent : public BaseCurEx {
+            public:
+                UnexpectedEvent();
+        };
 
-	/**
-	 * A widget exceeds space constraints.
-	 */
-	class AreaExceeded: public BaseCurEx {
-	    public:
-		AreaExceeded();
-	};
+        /**
+         * Color function called requiring Colors object to be
+         * initialized.
+         */
+        class ColorsNotInitialized : public BaseCurEx {
+            public:
+                ColorsNotInitialized();
+        };
 
-	/**
-	 * Operation not supported.
-	 */
-	class NotSupported: public BaseCurEx {
-	    public:
-		NotSupported();
-	};
+        /**
+         * A widget exceeds space constraints.
+         */
+        class AreaExceeded : public BaseCurEx {
+            public:
+                AreaExceeded();
+        };
 
-	/**
-	 * Dialog type not known.
-	 */
-	class InvalidDialogType: public BaseCurEx {
-	    public:
-		InvalidDialogType();
-	};
+        /**
+         * Operation not supported.
+         */
+        class NotSupported : public BaseCurEx {
+            public:
+                NotSupported();
+        };
+
+        /**
+         * Dialog type not known.
+         */
+        class InvalidDialogType : public BaseCurEx {
+            public:
+                InvalidDialogType();
+        };
     } // namespace EXCEPTION
 } // namespace YACURS
 

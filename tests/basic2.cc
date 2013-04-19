@@ -19,8 +19,10 @@
 
 #include "yacurs.h"
 
-void alrm(YACURS::Event& _e) {
+void
+alrm(YACURS::Event& _e) {
     static int calls = 0;
+
     assert(_e == YACURS::EVT_SIGALRM);
 
     switch (calls) {
@@ -42,20 +44,22 @@ void alrm(YACURS::Event& _e) {
     }
 
     if (calls++ > 3)
-        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT) );
     else
         alarm(1);
 }
 
-int main() {
+int
+main() {
     try {
         YACURS::Curses::init();
 
-        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
-                                           "Basic 2");
+        YACURS::LineObject* title = new YACURS::LineObject(
+            YACURS::LineObject::POS_TOP,
+            "Basic 2");
         YACURS::Curses::title(title);
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,1,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 1, 0) );
         w1->frame(true);
 
         YACURS::Curses::mainwindow(w1);
@@ -63,7 +67,8 @@ int main() {
         YACURS::StatusLine* sl = new YACURS::StatusLine();
         YACURS::Curses::statusline(sl);
 
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(
+                                              YACURS::EVT_SIGALRM, &alrm) );
 
         alarm(1);
         YACURS::Curses::run();

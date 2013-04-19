@@ -23,18 +23,21 @@ YACURS::Label* label2;
 YACURS::Input<>* input1;
 YACURS::Input<>* input2;
 
-void alrm(YACURS::Event& _e) {
-    static int i=0;
+void
+alrm(YACURS::Event& _e) {
+    static int i = 0;
 
     assert(_e == YACURS::EVT_SIGALRM);
 
     switch (i++) {
     case 0:
-        input1->input("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+        input1->input(
+            "abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
         break;
 
     case 1:
-        input2->input("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+        input2->input(
+            "abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
         break;
 
     case 2:
@@ -46,22 +49,25 @@ void alrm(YACURS::Event& _e) {
         break;
 
     case 4:
-        label1->label("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+        label1->label(
+            "abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
         break;
 
     case 5:
-        label2->label("abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+        label2->label(
+            "abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
         break;
 
     default:
-        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT) );
         break;
     }
 
     alarm(1);
 }
 
-int main() {
+int
+main() {
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
@@ -70,11 +76,12 @@ int main() {
     try {
         YACURS::Curses::init();
 
-        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
-                                           "Widget 2: setting text in realized YACURS::Input/YACURS::Label");
+        YACURS::LineObject* title = new YACURS::LineObject(
+            YACURS::LineObject::POS_TOP,
+            "Widget 2: setting text in realized YACURS::Input/YACURS::Label");
         YACURS::Curses::title(title);
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,0,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0) );
         w1->frame(true);
 
         hpack = new YACURS::HPack;
@@ -100,7 +107,8 @@ int main() {
 
         YACURS::Curses::mainwindow(w1);
 
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(
+                                              YACURS::EVT_SIGALRM, &alrm) );
 
         alarm(5);
         YACURS::Curses::run();

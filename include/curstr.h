@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -29,31 +29,30 @@
 #include "colors.h"
 
 namespace YACURS {
-	class CurStr : public std::string {
-	    private:
-		Coordinates __position;
-		COLOROBJ __color;
+    class CurStr : public std::string {
+        private:
+            Coordinates __position;
+            COLOROBJ __color;
 
-	    public:
-		CurStr(const std::string& str,
-		       const Coordinates& pos=Coordinates::zero(),
-		       COLOROBJ c=DEFAULT);
+        public:
+            CurStr(const std::string& str,
+                   const Coordinates& pos=Coordinates::zero(),
+                   COLOROBJ c=DEFAULT);
 
-		CurStr(const std::string& str, int y, int x, COLOROBJ c=DEFAULT);
+            CurStr(const std::string& str, int y, int x, COLOROBJ c=DEFAULT);
 
-		CurStr(const CurStr& cs);
+            CurStr(const CurStr& cs);
 
-		CurStr& operator=(const CurStr& cs);
+            CurStr& operator=(const CurStr& cs);
 
-		void position(const Coordinates& co);
-		const Coordinates& position() const;
+            void position(const Coordinates& co);
 
-		void color(COLOROBJ co);
-		COLOROBJ color() const;
-	};
+            const Coordinates& position() const;
+
+            void color(COLOROBJ co);
+
+            COLOROBJ color() const;
+    };
 } // namespace YACURS
 
-
-
 #endif // CURSTR_H
-

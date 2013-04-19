@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -47,7 +47,7 @@ UnlockDialog::operator=(const UnlockDialog&) {
 // Public
 //
 
-UnlockDialog::UnlockDialog(const std::string& _title): 
+UnlockDialog::UnlockDialog(const std::string& _title) :
     Dialog(_title, OKCANCEL, AUTOMATIC) {
 }
 

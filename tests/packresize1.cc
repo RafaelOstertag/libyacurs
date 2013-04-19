@@ -35,21 +35,22 @@
 
 #include "yacurs.h"
 
-void alrm(YACURS::Event& _e) {
+void
+alrm(YACURS::Event& _e) {
     assert(_e == YACURS::EVT_SIGALRM);
 
     std::string status_msg("Size: rows=");
 
-    YACURS::Size _scrdim(YACURS::Curses::inquiry_screensize());
+    YACURS::Size _scrdim(YACURS::Curses::inquiry_screensize() );
 
     char buff[32];
-    snprintf(buff,32,"%d",_scrdim.rows());
-    status_msg+=buff;
+    snprintf(buff, 32, "%d", _scrdim.rows() );
+    status_msg += buff;
 
-    status_msg+=" cols=";
+    status_msg += " cols=";
 
-    snprintf(buff,32,"%d",_scrdim.cols());
-    status_msg+=buff;
+    snprintf(buff, 32, "%d", _scrdim.cols() );
+    status_msg += buff;
 
     YACURS::Curses::statusline()->push_msg(status_msg);
 
@@ -60,20 +61,21 @@ void alrm(YACURS::Event& _e) {
     }
 
     ws.ws_row--;
-    ws.ws_col-=4;
+    ws.ws_col -= 4;
 
     if (ioctl(STDIN_FILENO, TIOCSWINSZ, &ws) == -1) {
         return;
     }
 
-    if (ws.ws_row<=YACURS::MIN_ROWS ||
-	ws.ws_col<=YACURS::MIN_COLS)
-        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
+    if (ws.ws_row <= YACURS::MIN_ROWS ||
+        ws.ws_col <= YACURS::MIN_COLS)
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT) );
     else
         alarm(1);
 }
 
-int main() {
+int
+main() {
     winsize wsave;
 
     if (ioctl(STDIN_FILENO, TIOCGWINSZ, &wsave) == -1) {
@@ -83,14 +85,15 @@ int main() {
     try {
         YACURS::Curses::init();
 
-        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
-                                           "Widget Resize 1");
+        YACURS::LineObject* title = new YACURS::LineObject(
+            YACURS::LineObject::POS_TOP,
+            "Widget Resize 1");
         YACURS::Curses::title(title);
 
         YACURS::StatusLine* sl = new YACURS::StatusLine();
         YACURS::Curses::statusline(sl);
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,1,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 1, 0) );
         w1->frame(true);
 
         YACURS::VPack* vpack = new YACURS::VPack;
@@ -106,18 +109,18 @@ int main() {
         YACURS::Label* label2 = new YACURS::Label("Test label2");
         YACURS::Label* label3 = new YACURS::Label("Test label3");
         YACURS::Label* label4 = new YACURS::Label("Test label4");
-        YACURS::Label* label5=new YACURS::Label("Label 5");
-        YACURS::Label* label6=new YACURS::Label("Label 6");
-        YACURS::Label* label7=new YACURS::Label("Label 7");
-        YACURS::Label* label8=new YACURS::Label("Label 8");
-        YACURS::Label* label9=new YACURS::Label("Label 9");
-        YACURS::Label* label10=new YACURS::Label("Label 10");
-        YACURS::Label* label11=new YACURS::Label("Label 11");
-        YACURS::Label* label12=new YACURS::Label("Label 12");
-        YACURS::Label* label13=new YACURS::Label("Label 13");
-        YACURS::Label* label14=new YACURS::Label("Label 14");
-        YACURS::Label* label15=new YACURS::Label("Label 15");
-        YACURS::Label* label16=new YACURS::Label("Label 16");
+        YACURS::Label* label5 = new YACURS::Label("Label 5");
+        YACURS::Label* label6 = new YACURS::Label("Label 6");
+        YACURS::Label* label7 = new YACURS::Label("Label 7");
+        YACURS::Label* label8 = new YACURS::Label("Label 8");
+        YACURS::Label* label9 = new YACURS::Label("Label 9");
+        YACURS::Label* label10 = new YACURS::Label("Label 10");
+        YACURS::Label* label11 = new YACURS::Label("Label 11");
+        YACURS::Label* label12 = new YACURS::Label("Label 12");
+        YACURS::Label* label13 = new YACURS::Label("Label 13");
+        YACURS::Label* label14 = new YACURS::Label("Label 14");
+        YACURS::Label* label15 = new YACURS::Label("Label 15");
+        YACURS::Label* label16 = new YACURS::Label("Label 16");
 
         vpack->add_front(hpack);
         vpack->add_front(hpack1);
@@ -173,7 +176,8 @@ int main() {
 
         YACURS::Curses::mainwindow(w1);
 
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(
+                                              YACURS::EVT_SIGALRM, &alrm) );
 
         alarm(3);
         YACURS::Curses::run();

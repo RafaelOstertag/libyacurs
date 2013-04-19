@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -30,25 +30,25 @@
 #include "input.h"
 
 namespace YACURS {
+    class InputBox : public Dialog {
+        private:
+            Label* __message;
+            Input<>* __input;
+            VPack* __vpack;
 
-    class InputBox: public Dialog {
-	private:
-	    Label* __message;
-	    Input<>* __input;
-	    VPack* __vpack;
+            // Not supported
+            InputBox& operator=(const InputBox&);
 
-	    // Not supported
-	    InputBox& operator=(const InputBox&);
-	public:
-	    InputBox(const std::string& _title,
-		     const std::string& _message,
-		     DIALOG_TYPE _dt=OKCANCEL);
+        public:
+            InputBox(const std::string& _title,
+                     const std::string& _message,
+                     DIALOG_TYPE _dt=OKCANCEL);
 
-	    virtual ~InputBox();
+            virtual ~InputBox();
 
-	    const std::string& input() const;
+            const std::string& input() const;
 
-	    void clear();
+            void clear();
     };
 }
 

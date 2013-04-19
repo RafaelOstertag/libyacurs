@@ -24,76 +24,118 @@ class Handler {
         YACURS::EVENT_TYPE expected_evt;
         int calls;
     public:
-        Handler(YACURS::EVENT_TYPE evt):
-            expected_evt(evt), calls(0) {}
+        Handler(YACURS::EVENT_TYPE evt) :
+            expected_evt(evt), calls(0) {
+        }
+
         Handler(const Handler& _h) {
             expected_evt = _h.expected_evt;
             calls = _h.calls;
         }
-        virtual ~Handler() {}
+
+        virtual ~Handler() {
+        }
+
         virtual void handler(YACURS::Event& e) {
             if (e.type() != expected_evt) std::abort();
 
             calls++;
         }
+
         int getCalls() {
             return calls;
         }
 };
 
-class AlrmHandler: public Handler {
+class AlrmHandler : public Handler {
     public:
-        AlrmHandler(): Handler(YACURS::EVT_SIGALRM) {}
+        AlrmHandler() : Handler(YACURS::EVT_SIGALRM) {
+        }
+
         void handler(YACURS::Event& e) {
             std::cout << "AlrmHandler::handler()\r" << std::endl;
-            YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
+            YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT) );
             Handler::handler(e);
         }
 };
 
-class AlrmHandler2: public AlrmHandler {
+class AlrmHandler2 : public AlrmHandler {
     private:
         int calls_handler2;
         int calls_handler3;
     public:
-        AlrmHandler2(): AlrmHandler(), calls_handler2(0), calls_handler3(0) {}
+        AlrmHandler2() : AlrmHandler(), calls_handler2(0), calls_handler3(0) {
+        }
+
         void handler(YACURS::Event& e) {
             std::cout << "AlrmHandler2::handler()\r" << std::endl;
             Handler::handler(e);
         }
+
         void handler2(YACURS::Event& e) {
             std::cout << "AlrmHandler2::handler2()\r" << std::endl;
+
             calls_handler2++;
         }
+
         void handler3(YACURS::Event& e) {
             std::cout << "AlrmHandler2::handler3()\r" << std::endl;
+
             calls_handler3++;
         }
+
         int getCalls2() const {
             return calls_handler2;
         }
+
         int getCalls3() const {
             return calls_handler3;
         }
 };
 
-int main() {
-
+int
+main() {
     try {
         AlrmHandler ahandler;
         AlrmHandler2 ahandler2;
 
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler>(YACURS::EVT_SIGALRM, &ahandler, &AlrmHandler::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
+                                              AlrmHandler>(YACURS::EVT_SIGALRM,
+                                                           &ahandler,
+                                                           &AlrmHandler::
+        handler) );
         // Should be overriden by next call
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler2>(YACURS::EVT_SIGALRM, &ahandler2, &AlrmHandler2::handler2) );
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler2>(YACURS::EVT_SIGALRM, &ahandler2, &AlrmHandler2::handler) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
+                                              AlrmHandler2>(YACURS::
+                                                            EVT_SIGALRM,
+                                                            &ahandler2,
+                                                            &AlrmHandler2::
+                                                            handler2) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
+                                              AlrmHandler2>(YACURS::
+                                                            EVT_SIGALRM,
+                                                            &ahandler2,
+                                                            &AlrmHandler2::
+                                                            handler) );
         // AlrmHandler2::handler should not be called now
-        YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<AlrmHandler2>(YACURS::EVT_SIGALRM, &ahandler2, &AlrmHandler2::handler) );
+        YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<
+                                                 AlrmHandler2>(YACURS::
+                                                               EVT_SIGALRM,
+                                                               &ahandler2,
+                                                               &AlrmHandler2::
+                                                               handler) );
 
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<AlrmHandler2>(YACURS::EVT_SIGWINCH, &ahandler2, &AlrmHandler2::handler3) );
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
+                                              AlrmHandler2>(YACURS::
+                                                            EVT_SIGWINCH,
+                                                            &ahandler2,
+                                                            &AlrmHandler2::
+                                                            handler3) );
 
         YACURS::Curses::init();
-        YACURS::EventQueue::submit(YACURS::EventEx<YACURS::Size>(YACURS::EVT_SIGWINCH, YACURS::Area() ));
+        YACURS::EventQueue::submit(YACURS::EventEx<YACURS::Size>(YACURS::
+                                                                 EVT_SIGWINCH,
+                                                                 YACURS::Area() ) );
         alarm(4);
         YACURS::EventQueue::run();
 

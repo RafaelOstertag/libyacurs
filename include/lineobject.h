@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -33,63 +33,68 @@ namespace YACURS {
      * @todo provide options for centering and right aligning so that
      * title can be centered if it is used as title for the application.
      */
-    class LineObject: public WindowBase {
-	public:
-	    /**
-	     * Vertical position.
-	     *
-	     * Specifies the vertical position of the LineObject.
-	     */
-	    enum POSITION {
-		/**
-		 * At the top of the screen.
-		 */
-		POS_TOP,
-		/**
-		 * At the bottom of the screen.
-		 */
-		POS_BOTTOM
-	    };
+    class LineObject : public WindowBase {
+        public:
+            /**
+             * Vertical position.
+             *
+             * Specifies the vertical position of the LineObject.
+             */
+            enum POSITION {
+                /**
+                 * At the top of the screen.
+                 */
+                POS_TOP,
 
-	    /**
-	     * Alignment of text.
-	     */
-	    enum ALIGNMENT {
-		CENTER,
-		LEFT,
-		RIGHT
-	    };
+                /**
+                 * At the bottom of the screen.
+                 */
+                POS_BOTTOM
+            };
 
-	private:
-	    std::string __linetext;
-	    POSITION __position;
-	    ALIGNMENT __alignment;
+            /**
+             * Alignment of text.
+             */
+            enum ALIGNMENT {
+                CENTER,
+                LEFT,
+                RIGHT
+            };
 
-	    /**
-	     * Compute and sets the margin of WindowBase to achieve the
-	     * position of the line object according to @c pos.
-	     */
-	    void compute_margin();
+        private:
+            std::string __linetext;
+            POSITION __position;
+            ALIGNMENT __alignment;
 
-	    // Not supported
-	    LineObject(const LineObject&);
-	    LineObject& operator=(const LineObject&);
-	protected:
-	    void put_line();
+            /**
+             * Compute and sets the margin of WindowBase to achieve the
+             * position of the line object according to @c pos.
+             */
+            void compute_margin();
 
-	public:
-	    LineObject(POSITION _pos, const std::string& _t = std::string());
-	    virtual ~LineObject();
+            // Not supported
+            LineObject(const LineObject&);
+            LineObject& operator=(const LineObject&);
 
-	    void alignment(ALIGNMENT _a);
-	    ALIGNMENT alignment() const;
+        protected:
+            void put_line();
 
-	    void line(const std::string& _str);
-	    std::string line() const;
+        public:
+            LineObject(POSITION _pos, const std::string& _t=std::string() );
+            virtual ~LineObject();
 
-	    // from Realizeable
-	    void realize();
-	    void refresh(bool immediate);
+            void alignment(ALIGNMENT _a);
+
+            ALIGNMENT alignment() const;
+
+            void line(const std::string& _str);
+
+            std::string line() const;
+
+            // from Realizeable
+            void realize();
+
+            void refresh(bool immediate);
     };
 }
 

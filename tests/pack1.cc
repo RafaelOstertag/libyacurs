@@ -11,12 +11,14 @@
 
 #include "yacurs.h"
 
-void alrm(YACURS::Event& _e) {
+void
+alrm(YACURS::Event& _e) {
     assert(_e == YACURS::EVT_SIGALRM);
-    YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
+    YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT) );
 }
 
-int main() {
+int
+main() {
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
@@ -25,11 +27,12 @@ int main() {
     try {
         YACURS::Curses::init();
 
-        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
-                                           "Pack 1");
+        YACURS::LineObject* title = new YACURS::LineObject(
+            YACURS::LineObject::POS_TOP,
+            "Pack 1");
         YACURS::Curses::title(title);
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,0,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0) );
         w1->frame(true);
 
         YACURS::VPack* vpack = new YACURS::VPack;
@@ -43,7 +46,8 @@ int main() {
 
         YACURS::Curses::mainwindow(w1);
 
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(
+                                              YACURS::EVT_SIGALRM, &alrm) );
 
         alarm(3);
         YACURS::Curses::run();

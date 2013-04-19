@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -40,15 +40,17 @@ using namespace YACURS;
 //
 // Public
 //
-EventConnectorBase::EventConnectorBase(EVENT_TYPE _e, bool _s):
-    evt(_e), __suspended(_s) {}
+EventConnectorBase::EventConnectorBase(EVENT_TYPE _e, bool _s) :
+    evt(_e), __suspended(_s) {
+}
 
-EventConnectorBase::~EventConnectorBase() {}
+EventConnectorBase::~EventConnectorBase() {
+}
 
 bool
 EventConnectorBase::operator==(const EventConnectorBase& _ec) const {
-    return (evt == _ec.evt) && 
-	(id() == _ec.id());
+    return (evt == _ec.evt) &&
+           (id() == _ec.id() );
 }
 
 bool
@@ -112,7 +114,8 @@ EventConnectorFunction1::id() const {
 //
 // Public
 //
-EventConnectorFunction1::EventConnectorFunction1(EVENT_TYPE _e, fptr_t _func):
+EventConnectorFunction1::EventConnectorFunction1(EVENT_TYPE _e,
+                                                 fptr_t _func) :
     EventConnectorBase(_e), __func(_func) {
     assert(__func != 0);
 }
@@ -121,7 +124,7 @@ void
 EventConnectorFunction1::call(Event& _e) const {
     assert(__func != 0);
 
-    if (suspended()) return;
+    if (suspended() ) return;
 
     __func(_e);
 }

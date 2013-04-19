@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -36,100 +36,100 @@ namespace YACURS {
      *
      */
     class Size {
-	private:
-	    /**
-	     * Object representing zero.
-	     */
-	    static Size __zero;
-	    int16_t __rows, __cols;
+        private:
+            /**
+             * Object representing zero.
+             */
+            static Size __zero;
+            int16_t __rows, __cols;
 
-	public:
-	    /**
-	     * Constructor.
-	     *
-	     * When no arguments are provided, it initializes the object
-	     * to zero, i.e. rows=, lines=0.
-	     *
-	     * @param _rows amount of rows
-	     * @param _cols amount of columns.
-	     */
-	    Size(int16_t _rows=0, int16_t _cols=0);
+        public:
+            /**
+             * Constructor.
+             *
+             * When no arguments are provided, it initializes the object
+             * to zero, i.e. rows=, lines=0.
+             *
+             * @param _rows amount of rows
+             * @param _cols amount of columns.
+             */
+            Size(int16_t _rows=0, int16_t _cols=0);
 
-	    /**
-	     * Get the colums.
-	     *
-	     * @return the number of columns.
-	     */
-	    int16_t cols() const;
+            /**
+             * Get the colums.
+             *
+             * @return the number of columns.
+             */
+            int16_t cols() const;
 
-	    /**
-	     * Get the rows.
-	     *
-	     * @return the number of rows.
-	     */
-	    int16_t rows() const;
+            /**
+             * Get the rows.
+             *
+             * @return the number of rows.
+             */
+            int16_t rows() const;
 
-	    /**
-	     * Set the number of columns.
-	     *
-	     * If number of columns is tried to set to a negative value, an
-	     * out_of_range exception is thrown.
-	     *
-	     * @param _cols number of columns
-	     */
-	    void cols(int16_t _cols);
+            /**
+             * Set the number of columns.
+             *
+             * If number of columns is tried to set to a negative value, an
+             * out_of_range exception is thrown.
+             *
+             * @param _cols number of columns
+             */
+            void cols(int16_t _cols);
 
-	    /**
-	     * Set the number of rows.
-	     *
-	     * If number of rows is tried to set to a negative value, an
-	     * out_of_range exception is thrown.
-	     *
-	     * @param _rows number of rows
-	     */
-	    void rows(int16_t _rows);
+            /**
+             * Set the number of rows.
+             *
+             * If number of rows is tried to set to a negative value, an
+             * out_of_range exception is thrown.
+             *
+             * @param _rows number of rows
+             */
+            void rows(int16_t _rows);
 
-	    /**
-	     * Add Size to this object.
-	     *
-	     * Addition will be performed component wise, i.e. rows +
-	     * rows, columns + columns.
-	     *
-	     * @param rhs Size to add.
-	     *
-	     * @returns reference to this.
-	     */
-	    const Size& operator+=(const Size& rhs);
+            /**
+             * Add Size to this object.
+             *
+             * Addition will be performed component wise, i.e. rows +
+             * rows, columns + columns.
+             *
+             * @param rhs Size to add.
+             *
+             * @returns reference to this.
+             */
+            const Size& operator+=(const Size& rhs);
 
-	    /**
-	     * Subtract Size from this object.
-	     *
-	     * Subtraction will be performed component wise, i.e. rows -
-	     * rows, columns - columns. If either resulting component
-	     * would be less than 0, it will be silently set to 0.
-	     *
-	     * @param rhs Size to subtract.
-	     *
-	     * @returns reference to this.
-	     */
-	    const Size& operator-=(const Size& rhs);
+            /**
+             * Subtract Size from this object.
+             *
+             * Subtraction will be performed component wise, i.e. rows -
+             * rows, columns - columns. If either resulting component
+             * would be less than 0, it will be silently set to 0.
+             *
+             * @param rhs Size to subtract.
+             *
+             * @returns reference to this.
+             */
+            const Size& operator-=(const Size& rhs);
 
-	    /**
-	     * Test two Size objects for equality.
-	     *
-	     * @param rhs right hand side
-	     *
-	     * @return @c true if lines and rows are equal, @c false
-	     * otherwise.
-	     */
-	    bool operator==(const Size& rhs) const;
+            /**
+             * Test two Size objects for equality.
+             *
+             * @param rhs right hand side
+             *
+             * @return @c true if lines and rows are equal, @c false
+             * otherwise.
+             */
+            bool operator==(const Size& rhs) const;
 
-	    /**
-	     * Return the object representing zero.
-	     *
-	     * @return Size object representing zero.
-	     */
-	    static const Size& zero();
+            /**
+             * Return the object representing zero.
+             *
+             * @return Size object representing zero.
+             */
+            static const Size& zero();
     };
 
     /**

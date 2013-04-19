@@ -35,11 +35,12 @@
 
 #include "yacurs.h"
 
-int main() {
+int
+main() {
     try {
         YACURS::Curses::init();
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,1,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 1, 0) );
         w1->frame(true);
 
         w1->realize();
@@ -47,14 +48,14 @@ int main() {
 
         sleep(1);
 
-        YACURS::Size scrsz(YACURS::Curses::inquiry_screensize());
-        YACURS::Area newsz(0, 0, scrsz.rows()-1, scrsz.cols()-1);
+        YACURS::Size scrsz(YACURS::Curses::inquiry_screensize() );
+        YACURS::Area newsz(0, 0, scrsz.rows() - 1, scrsz.cols() - 1);
         w1->resize(newsz);
         w1->refresh(true);
 
         sleep(1);
 
-        newsz=YACURS::Area(0,0,scrsz.rows()-2, scrsz.cols()-2);
+        newsz = YACURS::Area(0, 0, scrsz.rows() - 2, scrsz.cols() - 2);
         w1->resize(newsz);
         w1->refresh(true);
 

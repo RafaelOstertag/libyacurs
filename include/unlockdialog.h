@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -28,23 +28,24 @@
 #include "dialog.h"
 
 namespace YACURS {
-    class UnlockDialog: public Dialog {
-	private:
-	    UnlockDialog& operator=(const UnlockDialog&);
-	public:
-	    UnlockDialog(const std::string& _title);
-	    virtual ~UnlockDialog();
+    class UnlockDialog : public Dialog {
+        private:
+            UnlockDialog& operator=(const UnlockDialog&);
 
-	    // From Dialog
-	    void realize();
-	
-	    /**
-	     * @return @c true if unlock should happen, @c false
-	     * otherwise.
-	     */
-	    virtual bool unlock() = 0;
+        public:
+            UnlockDialog(const std::string& _title);
+            virtual ~UnlockDialog();
 
-	    virtual void clear() = 0;
+            // From Dialog
+            void realize();
+
+            /**
+             * @return @c true if unlock should happen, @c false
+             * otherwise.
+             */
+            virtual bool unlock() = 0;
+
+            virtual void clear() = 0;
     };
 }
 

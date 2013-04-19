@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -24,22 +24,22 @@
 #define HOTKEY_H
 
 namespace YACURS {
-
     class HotKey {
-	private:
-	    int __key;
+        private:
+            int __key;
 
-	public:
-	    HotKey(int _k);
-	    HotKey(const HotKey& hk);
-	    HotKey& operator=(const HotKey& hk);
-	    virtual ~HotKey();
+        public:
+            HotKey(int _k);
+            HotKey(const HotKey& hk);
+            HotKey& operator=(const HotKey& hk);
 
-	    int key() const;
+            virtual ~HotKey();
 
-	    virtual void action() = 0;
+            int key() const;
 
-	    virtual HotKey* clone() const = 0;
+            virtual void action() = 0;
+
+            virtual HotKey* clone() const = 0;
     };
 }
 

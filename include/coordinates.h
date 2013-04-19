@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -31,101 +31,103 @@ namespace YACURS {
      * Coordinates as used throughout Curses.
      */
     class Coordinates {
-	private:
-	    /**
-	     * Object representing zero.
-	     */
-	    static Coordinates __zero;
-	    /**
-	     * y component.
-	     */
-	    int16_t __y;
-	    /**
-	     * x component
-	     */
-	    int16_t __x;
+        private:
+            /**
+             * Object representing zero.
+             */
+            static Coordinates __zero;
 
-	public:
-	    /**
-	     * Constructor.
-	     *
-	     * When no arguments are provided, it initializes the object
-	     * to zero, i.e. x=0, y=0.
-	     *
-	     * @param _x x-component
-	     * @param _y y-component
-	     */
-	    Coordinates(int16_t _x=0, int16_t _y=0);
+            /**
+             * y component.
+             */
+            int16_t __y;
 
-	    /**
-	     * Get x component.
-	     *
-	     * @return x component
-	     */
-	    int16_t x() const;
+            /**
+             * x component
+             */
+            int16_t __x;
 
-	    /**
-	     * Get y component
-	     *
-	     * @return y component
-	     */
-	    int16_t y() const;
+        public:
+            /**
+             * Constructor.
+             *
+             * When no arguments are provided, it initializes the object
+             * to zero, i.e. x=0, y=0.
+             *
+             * @param _x x-component
+             * @param _y y-component
+             */
+            Coordinates(int16_t _x=0, int16_t _y=0);
 
-	    /**
-	     * Set x component.
-	     *
-	     * @param _x value of x
-	     */
-	    void x(int16_t _x);
+            /**
+             * Get x component.
+             *
+             * @return x component
+             */
+            int16_t x() const;
 
-	    /**
-	     * Set y component.
-	     *
-	     * @param _y value of y
-	     */
-	    void y(int16_t _y);
+            /**
+             * Get y component
+             *
+             * @return y component
+             */
+            int16_t y() const;
 
-	    /**
-	     * Add and assign another Coordinates object.
-	     *
-	     * Component wise add and assign another Coordinates object.
-	     *
-	     * @param rhs right hand side to add
-	     *
-	     * @return reference to @c this.
-	     */
-	    Coordinates& operator+=(const Coordinates& rhs);
+            /**
+             * Set x component.
+             *
+             * @param _x value of x
+             */
+            void x(int16_t _x);
 
-	    /**
-	     * Subtract and assign another Coordinates object.
-	     *
-	     * Component wise subtract and assign another Coordinates
-	     * object.
-	     *
-	     * @param rhs right hand side to subtract.
-	     *
-	     * @return reference to @c this.
-	     */
-	    Coordinates& operator-=(const Coordinates& rhs);
+            /**
+             * Set y component.
+             *
+             * @param _y value of y
+             */
+            void y(int16_t _y);
 
-	    /**
-	     * Test two Coordinates objects for equality.
-	     *
-	     * Test two Coordinates object component wise for equality.
-	     *
-	     * @param rhs right hand side to test for equality.
-	     *
-	     * @return @c true if both Coordinates objects are component
-	     * wise equal, @c false otherwise.
-	     */
-	    bool operator==(const Coordinates& rhs) const;
+            /**
+             * Add and assign another Coordinates object.
+             *
+             * Component wise add and assign another Coordinates object.
+             *
+             * @param rhs right hand side to add
+             *
+             * @return reference to @c this.
+             */
+            Coordinates& operator+=(const Coordinates& rhs);
 
-	    /**
-	     * Return the object representing zero.
-	     *
-	     * @return Coordinates object representing zero.
-	     */
-	    static const Coordinates& zero();
+            /**
+             * Subtract and assign another Coordinates object.
+             *
+             * Component wise subtract and assign another Coordinates
+             * object.
+             *
+             * @param rhs right hand side to subtract.
+             *
+             * @return reference to @c this.
+             */
+            Coordinates& operator-=(const Coordinates& rhs);
+
+            /**
+             * Test two Coordinates objects for equality.
+             *
+             * Test two Coordinates object component wise for equality.
+             *
+             * @param rhs right hand side to test for equality.
+             *
+             * @return @c true if both Coordinates objects are component
+             * wise equal, @c false otherwise.
+             */
+            bool operator==(const Coordinates& rhs) const;
+
+            /**
+             * Return the object representing zero.
+             *
+             * @return Coordinates object representing zero.
+             */
+            static const Coordinates& zero();
     };
 
     /**

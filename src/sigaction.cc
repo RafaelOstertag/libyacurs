@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -48,8 +48,10 @@ Sigaction::operator=(const Sigaction&) {
 // Public
 //
 
-Sigaction::Sigaction(int signo, sig_handler hndlr, sigset_t& mask): __signo(signo) {
+Sigaction::Sigaction(int signo, sig_handler hndlr, sigset_t& mask) : __signo(
+        signo) {
     struct sigaction action;
+
 #ifdef SA_SIGINFO
     action.sa_sigaction = hndlr;
     action.sa_flags = SA_SIGINFO;
@@ -58,13 +60,13 @@ Sigaction::Sigaction(int signo, sig_handler hndlr, sigset_t& mask): __signo(sign
     action.sa_flags = 0;
 #endif
 
-    memcpy(&action.sa_mask, &mask, sizeof(sigset_t));
+    memcpy(&action.sa_mask, &mask, sizeof (sigset_t) );
 
-    if (sigaction(__signo, &action, &__saved_action)!=0)
-	throw EXCEPTIONS::SystemError(errno);
+    if (sigaction(__signo, &action, &__saved_action) != 0)
+        throw EXCEPTIONS::SystemError(errno);
 }
 
 Sigaction::~Sigaction() {
-    if (sigaction(__signo, &__saved_action, 0)!=0)
-	throw EXCEPTIONS::SystemError(errno);
+    if (sigaction(__signo, &__saved_action, 0) != 0)
+        throw EXCEPTIONS::SystemError(errno);
 }

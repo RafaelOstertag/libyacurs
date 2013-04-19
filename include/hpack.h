@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -33,22 +33,22 @@ namespace YACURS {
      * calculation of and for the associated Widgets and to implement
      * realize().
      */
-    class HPack: public Pack {
-	private:
-	    // Not supported
-	    HPack& operator=(const HPack&);
+    class HPack : public Pack {
+        private:
+            // Not supported
+            HPack& operator=(const HPack&);
 
-	protected:
-	    void recalc_size();
-	    Size calc_size_non_dynamic() const;
+        protected:
+            void recalc_size();
 
-	public:
-	    virtual ~HPack();
+            Size calc_size_non_dynamic() const;
 
+        public:
+            virtual ~HPack();
 
-	    Size size_hint() const;
+            Size size_hint() const;
 
-	    void realize();
+            void realize();
     };
 }
 

@@ -38,14 +38,16 @@ YACURS::Label* label14;
 YACURS::Label* label15;
 YACURS::Label* label16;
 
-void alrm(YACURS::Event& _e) {
-    static int i=0;
+void
+alrm(YACURS::Event& _e) {
+    static int i = 0;
 
     assert(_e == YACURS::EVT_SIGALRM);
 
     switch (i++) {
     case 0:
-        YACURS::Curses::title()->line("Pack 9: always_dynamic=false, hinting=false");
+        YACURS::Curses::title()->line(
+            "Pack 9: always_dynamic=false, hinting=false");
         hpack->always_dynamic(false);
         hpack->hinting(false);
         hpack1->always_dynamic(false);
@@ -64,7 +66,8 @@ void alrm(YACURS::Event& _e) {
         break;
 
     case 1:
-        YACURS::Curses::title()->line("Pack 9: always_dynamic=true, hinting=false");
+        YACURS::Curses::title()->line(
+            "Pack 9: always_dynamic=true, hinting=false");
         hpack->always_dynamic(true);
         hpack->hinting(false);
         hpack1->always_dynamic(true);
@@ -83,7 +86,8 @@ void alrm(YACURS::Event& _e) {
         break;
 
     case 2:
-        YACURS::Curses::title()->line("Pack 9: always_dynamic=false, hinting=true");
+        YACURS::Curses::title()->line(
+            "Pack 9: always_dynamic=false, hinting=true");
         hpack->always_dynamic(false);
         hpack->hinting(true);
         hpack1->always_dynamic(false);
@@ -102,7 +106,8 @@ void alrm(YACURS::Event& _e) {
         break;
 
     case 3:
-        YACURS::Curses::title()->line("Pack 9: always_dynamic=true, hinting=true");
+        YACURS::Curses::title()->line(
+            "Pack 9: always_dynamic=true, hinting=true");
         hpack->always_dynamic(true);
         hpack->hinting(true);
         hpack1->always_dynamic(true);
@@ -121,12 +126,13 @@ void alrm(YACURS::Event& _e) {
         break;
 
     default:
-        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT) );
         break;
     }
 }
 
-int main() {
+int
+main() {
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
@@ -135,11 +141,12 @@ int main() {
     try {
         YACURS::Curses::init();
 
-        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
-                                           "Pack 9:");
+        YACURS::LineObject* title = new YACURS::LineObject(
+            YACURS::LineObject::POS_TOP,
+            "Pack 9:");
         YACURS::Curses::title(title);
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,0,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0) );
         w1->frame(true);
 
         vpack = new YACURS::VPack;
@@ -222,7 +229,8 @@ int main() {
 
         YACURS::Curses::mainwindow(w1);
 
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM,&alrm));
+        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(
+                                              YACURS::EVT_SIGALRM, &alrm) );
 
         alarm(5);
         YACURS::Curses::run();

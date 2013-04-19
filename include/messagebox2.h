@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -29,21 +29,22 @@
 #include "label.h"
 
 namespace YACURS {
-    class MessageBox2: public Dialog {
-	private:
-	    VPack* __vpack;
-	    Label* __message1;
-	    Label* __message2;
+    class MessageBox2 : public Dialog {
+        private:
+            VPack* __vpack;
+            Label* __message1;
+            Label* __message2;
 
-	    // Not supported
-	    MessageBox2& operator=(const MessageBox2&);
-	public:
-	    MessageBox2(const std::string& _title,
-			const std::string& _message1,
-			const std::string& _message2,
-			DIALOG_TYPE _dt=OKCANCEL);
+            // Not supported
+            MessageBox2& operator=(const MessageBox2&);
 
-	    virtual ~MessageBox2();
+        public:
+            MessageBox2(const std::string& _title,
+                        const std::string& _message1,
+                        const std::string& _message2,
+                        DIALOG_TYPE _dt=OKCANCEL);
+
+            virtual ~MessageBox2();
     };
 }
 

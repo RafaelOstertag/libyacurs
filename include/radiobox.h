@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -26,17 +26,18 @@
 #include "checkbox.h"
 
 namespace YACURS {
-    class RadioBox: public CheckBox {
-	private:
-	    RadioBox& operator=(const RadioBox& _i);
-	protected:
-	    virtual void set_selection(unsigned short _cursor);
+    class RadioBox : public CheckBox {
+        private:
+            RadioBox& operator=(const RadioBox& _i);
 
-	public:
-	    RadioBox(const std::string& _title,
-		     const std::vector<std::string>& _items);
+        protected:
+            virtual void set_selection(unsigned short _cursor);
 
-	    virtual ~RadioBox();
+        public:
+            RadioBox(const std::string& _title,
+                     const std::vector<std::string>& _items);
+
+            virtual ~RadioBox();
     };
 }
 

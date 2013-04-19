@@ -15,11 +15,12 @@
 
 #include "yacurs.h"
 
-int main() {
+int
+main() {
     try {
-	YACURS::Curses::init();
+        YACURS::Curses::init();
         YACURS::Curses::end();
-    } catch (std::exception &e) {
+    } catch (std::exception&e) {
         std::cerr << e.what() << std::endl;
         return 1;
     }

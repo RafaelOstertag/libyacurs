@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -43,42 +43,43 @@ namespace YACURS {
      *
      * Content in Curses Window should only be drawn upon refresh().
      */
-    class Widget: public WidgetBase {
-	private:
-	    /**
-	     * curses subwin used by widgets
-	     */
-	    YACURS::INTERNAL::CursWin* __widget_subwin;
+    class Widget : public WidgetBase {
+        private:
+            /**
+             * curses subwin used by widgets
+             */
+            YACURS::INTERNAL::CursWin* __widget_subwin;
 
-	    // Not supported
-	    Widget& operator=(const Widget&);
-	protected:
-	    void force_refresh_handler(Event& _e);
+            // Not supported
+            Widget& operator=(const Widget&);
 
-	    void unrealize();
+        protected:
+            void force_refresh_handler(Event& _e);
 
-	    YACURS::INTERNAL::CursWin* widget_subwin() const;
+            void unrealize();
 
-	public:
-	    Widget();
+            YACURS::INTERNAL::CursWin* widget_subwin() const;
 
-	    virtual ~Widget();
+        public:
+            Widget();
 
+            virtual ~Widget();
 
-	    // Must be overriden in derived classes
-	    //bool size_change();
+            // Must be overriden in derived classes
+            //bool size_change();
 
-	    // Inherited from Realizeable
-	    void refresh(bool immediate);
-	    void resize(const Area& _a);
+            // Inherited from Realizeable
+            void refresh(bool immediate);
 
-	    /**
-	     * Realize the widget.
-	     *
-	     * realizes the widget by setting up a curses subwindow, which
-	     * can be used by derived classes.
-	     */
-	    void realize();
+            void resize(const Area& _a);
+
+            /**
+             * Realize the widget.
+             *
+             * realizes the widget by setting up a curses subwindow, which
+             * can be used by derived classes.
+             */
+            void realize();
     };
 }
 #endif // WIDGET_H

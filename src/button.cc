@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -45,29 +45,31 @@ Button::operator=(const Button&) {
 //
 void
 Button::key_handler(Event& _e) {
-    assert(_e.type()==EVT_KEY);
+    assert(_e.type() == EVT_KEY);
 
-    if (!focus()) return;
+    if (!focus() ) return;
 
-    EventEx<int>& ekey=dynamic_cast<EventEx<int>&>(_e);
+    EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(_e);
 
-    switch (ekey.data()) {
+    switch (ekey.data() ) {
     case KEY_DOWN:
     case KEY_RIGHT:
     case KEY_TAB:
-	EventQueue::submit(EVT_FOCUS_NEXT);
-	break;
+        EventQueue::submit(EVT_FOCUS_NEXT);
+        break;
+
     case KEY_UP:
     case KEY_LEFT:
     case KEY_BTAB:
-	EventQueue::submit(EVT_FOCUS_PREVIOUS);
-	break;
+        EventQueue::submit(EVT_FOCUS_PREVIOUS);
+        break;
+
     case KEY_ENTER:
     case KEY_RETURN:
     case KEY_RETURN2:
-	if (!__enabled) return;
-	EventQueue::submit(EventEx<Button*>(EVT_BUTTON_PRESS,this));
-	break;
+        if (!__enabled) return;
+        EventQueue::submit(EventEx<Button*>(EVT_BUTTON_PRESS, this) );
+        break;
     }
 }
 
@@ -77,9 +79,11 @@ Button::realize() {
 
     Label::realize();
 
-    EventQueue::connect_event(EventConnectorMethod1<Button>(EVT_KEY,this, &Button::key_handler));
+    EventQueue::connect_event(EventConnectorMethod1<Button>(EVT_KEY, this,
+                                                            &Button::
+                                                            key_handler) );
 
-    assert(focusgroup_id()!=(fgid_t)-1);
+    assert(focusgroup_id() != (fgid_t)-1);
 
     REALIZE_LEAVE;
 }
@@ -88,19 +92,22 @@ void
 Button::unrealize() {
     UNREALIZE_ENTER;
 
-    EventQueue::disconnect_event(EventConnectorMethod1<Button>(EVT_KEY,this, &Button::key_handler));
+    EventQueue::disconnect_event(EventConnectorMethod1<Button>(EVT_KEY, this,
+                                                               &Button::
+                                                               key_handler) );
 
-    assert(focusgroup_id()!=(fgid_t)-1);
+    assert(focusgroup_id() != (fgid_t)-1);
 
     Label::unrealize();
 
     UNREALIZE_LEAVE;
 }
+
 //
 // Public
 //
 
-Button::Button(const std::string& _b): __enabled(true) {
+Button::Button(const std::string& _b) : __enabled(true) {
     can_focus(true);
 
     // We want our label() to be called, so we don't use the Label()
@@ -109,16 +116,18 @@ Button::Button(const std::string& _b): __enabled(true) {
 }
 
 Button::~Button() {
-    EventQueue::disconnect_event(EventConnectorMethod1<Button>(EVT_KEY,this, &Button::key_handler));
+    EventQueue::disconnect_event(EventConnectorMethod1<Button>(EVT_KEY, this,
+                                                               &Button::
+                                                               key_handler) );
 }
 
 void
 Button::label(const std::string& _l) {
     __tmp_label = _l;
     if (__enabled)
-	Label::label("[ " + _l + " ]");
+        Label::label("[ " + _l + " ]");
     else
-	Label::label("( " + _l + " )");
+        Label::label("( " + _l + " )");
 }
 
 const std::string&
@@ -128,7 +137,7 @@ Button::label() const {
 
 void
 Button::enabled(bool _f) {
-    __enabled=_f;
+    __enabled = _f;
     // Re-set label
     label(__tmp_label);
 }
@@ -140,16 +149,16 @@ Button::enabled() const {
 
 void
 Button::refresh(bool immediate) {
-    if (realization()!=REALIZED) return;
+    if (realization() != REALIZED) return;
 
-    assert(widget_subwin()!=0);
+    assert(widget_subwin() != 0);
 
-    if (focus()) {
-	color(YACURS::BUTTON_FOCUS);
-	widget_subwin()->leaveok(false);
+    if (focus() ) {
+        color(YACURS::BUTTON_FOCUS);
+        widget_subwin()->leaveok(false);
     } else {
-	color(YACURS::BUTTON_NOFOCUS);
-	widget_subwin()->leaveok(true);
+        color(YACURS::BUTTON_NOFOCUS);
+        widget_subwin()->leaveok(true);
     }
 
     Label::refresh(immediate);

@@ -12,7 +12,7 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-int __test_data[]= {
+int __test_data[] = {
     // Remove buttons by removing them
     '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n',
     // Select AGAIN
@@ -23,29 +23,30 @@ int __test_data2[] = {
     '\n', 0
 };
 
-extern "C" int __test_wgetch(void*) {
+extern "C" int
+__test_wgetch(void*) {
     static int round = 0;
-    static int* ptr2=__test_data;
+    static int* ptr2 = __test_data;
 
-    if (*ptr2==0 && round < 500) {
-        ptr2=__test_data;
+    if (*ptr2 == 0 && round < 500) {
+        ptr2 = __test_data;
         round++;
     }
 
-    if (round >= 500 && *ptr2==0) {
-        ptr2=__test_data2;
+    if (round >= 500 && *ptr2 == 0) {
+        ptr2 = __test_data2;
     }
 
     usleep(100);
 
-    if (*ptr2==0) {
+    if (*ptr2 == 0) {
         abort();
     }
 
     return *ptr2++;
 }
 
-class MainWindow: public YACURS::Window {
+class MainWindow : public YACURS::Window {
     private:
         YACURS::VPack* vpack1;
         YACURS::HPack* hpack1;
@@ -77,81 +78,80 @@ class MainWindow: public YACURS::Window {
 
     protected:
         void button_press_handler(YACURS::Event& _e) {
-            assert(_e==YACURS::EVT_BUTTON_PRESS);
-            YACURS::EventEx<YACURS::Button*>& e=dynamic_cast<YACURS::EventEx<YACURS::Button*>&>(_e);
+            assert(_e == YACURS::EVT_BUTTON_PRESS);
+            YACURS::EventEx<YACURS::Button*>& e =
+                dynamic_cast<YACURS::EventEx<YACURS::Button*>&>(_e);
 
-            if (e.data()==button1) {
+            if (e.data() == button1) {
                 hpack1->remove(button1);
             }
 
-            if (e.data()==button2) {
+            if (e.data() == button2) {
                 hpack1->remove(button2);
             }
 
-            if (e.data()==button3) {
+            if (e.data() == button3) {
                 hpack1->remove(button3);
             }
 
-            if (e.data()==button4) {
+            if (e.data() == button4) {
                 hpack1->remove(button4);
             }
 
-            if (e.data()==button5) {
+            if (e.data() == button5) {
                 hpack1->remove(button5);
             }
 
-            if (e.data()==button6) {
+            if (e.data() == button6) {
                 hpack2->remove(button6);
             }
 
-            if (e.data()==button7) {
+            if (e.data() == button7) {
                 hpack2->remove(button7);
             }
 
-            if (e.data()==button8) {
+            if (e.data() == button8) {
                 hpack2->remove(button8);
             }
 
-            if (e.data()==button9) {
+            if (e.data() == button9) {
                 hpack2->remove(button9);
             }
 
-            if (e.data()==bagain) {
+            if (e.data() == bagain) {
                 add_buttons();
                 hpack3->remove(bagain);
                 return;
             }
 
-
             if (hpack2->widgets() == 0 &&
-                    hpack1->widgets() == 0 )
+                hpack1->widgets() == 0)
                 hpack3->add_front(bagain);
 
-
-            if (e.data()==bquit) {
+            if (e.data() == bquit) {
                 YACURS::EventQueue::submit(YACURS::EVT_QUIT);
                 return;
             }
         }
 
     public:
-        MainWindow(): YACURS::Window(YACURS::Margin(1,0,1,0)) {
-            button1=new YACURS::Button("Button1");
-            button2=new YACURS::Button("Button2");
-            button3=new YACURS::Button("Button3");
-            button4=new YACURS::Button("Button4");
-            button5=new YACURS::Button("Button5");
-            button6=new YACURS::Button("Button6");
-            button7=new YACURS::Button("Button7");
-            button8=new YACURS::Button("Button8");
-            button9=new YACURS::Button("Button9");
+        MainWindow() : YACURS::Window(YACURS::Margin(1, 0, 1, 0) ) {
+            button1 = new YACURS::Button("Button1");
+            button2 = new YACURS::Button("Button2");
+            button3 = new YACURS::Button("Button3");
+            button4 = new YACURS::Button("Button4");
+            button5 = new YACURS::Button("Button5");
+            button6 = new YACURS::Button("Button6");
+            button7 = new YACURS::Button("Button7");
+            button8 = new YACURS::Button("Button8");
+            button9 = new YACURS::Button("Button9");
 
-            bagain=new YACURS::Button("AGAIN");
-            bquit=new YACURS::Button("Quit");
-            vpack1=new YACURS::VPack();
-            hpack1=new YACURS::HPack();
-            hpack2=new YACURS::HPack();
-            hpack3=new YACURS::HPack();
+            bagain = new YACURS::Button("AGAIN");
+            bquit = new YACURS::Button("Quit");
+            vpack1 = new YACURS::VPack();
+            hpack1 = new YACURS::HPack();
+            hpack2 = new YACURS::HPack();
+            hpack3 = new YACURS::HPack();
 
             add_buttons();
 
@@ -162,7 +162,12 @@ class MainWindow: public YACURS::Window {
 
             widget(vpack1);
 
-            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
+            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
+                                                  MainWindow>(YACURS::
+                                                              EVT_BUTTON_PRESS,
+                                                              this,
+                                                              &MainWindow::
+                                                              button_press_handler) );
         }
 
         ~MainWindow() {
@@ -182,11 +187,17 @@ class MainWindow: public YACURS::Window {
             delete hpack3;
             delete vpack1;
 
-            YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<MainWindow>(YACURS::EVT_BUTTON_PRESS, this, &MainWindow::button_press_handler));
+            YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<
+                                                     MainWindow>(
+                                                     YACURS::EVT_BUTTON_PRESS,
+                                                     this,
+                                                     &MainWindow::
+                                                     button_press_handler) );
         }
 };
 
-int main() {
+int
+main() {
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
@@ -195,8 +206,9 @@ int main() {
     try {
         YACURS::Curses::init();
 
-        YACURS::Curses::title(new YACURS::LineObject(YACURS::LineObject::POS_TOP,
-                                     "Packremove"));
+        YACURS::Curses::title(new YACURS::LineObject(YACURS::LineObject::
+                                                     POS_TOP,
+                                                     "Packremove") );
         YACURS::Curses::statusline(new YACURS::StatusLine);
 
         YACURS::Curses::mainwindow(new MainWindow);
@@ -205,8 +217,8 @@ int main() {
         YACURS::Curses::run();
 
         delete YACURS::Curses::mainwindow();
-	delete YACURS::Curses::title();
-	delete YACURS::Curses::statusline();
+        delete YACURS::Curses::title();
+        delete YACURS::Curses::statusline();
 
         YACURS::Curses::end();
     } catch (std::exception& e) {

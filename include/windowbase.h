@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -62,97 +62,103 @@ namespace YACURS {
      * resize() which can be implemented by derived classes.
      */
     class WindowBase : public Realizeable {
-	private:
-	    /**
-	     * The dimension of the screen. Used as cache to avoid calls
-	     * to Curses::inquiry_screensize().
-	     */
-	    Area __area;
+        private:
+            /**
+             * The dimension of the screen. Used as cache to avoid calls
+             * to Curses::inquiry_screensize().
+             */
+            Area __area;
 
-	    /**
-	     * margin of the screen object.
-	     */
-	    Margin __margin;
+            /**
+             * margin of the screen object.
+             */
+            Margin __margin;
 
-	    /**
-	     * Curses window
-	     */
-	    YACURS::INTERNAL::CursWin* __curses_window;
+            /**
+             * Curses window
+             */
+            YACURS::INTERNAL::CursWin* __curses_window;
 
-	    /**
-	     * Whether or not the window has a border
-	     */
-	    bool __frame;
+            /**
+             * Whether or not the window has a border
+             */
+            bool __frame;
 
-	    /**
-	     * Flag whether or not Window is shown.
-	     */
-	    bool __shown;
+            /**
+             * Flag whether or not Window is shown.
+             */
+            bool __shown;
 
-	    // No supported
-	    WindowBase(const WindowBase&);
-	    WindowBase& operator=(const WindowBase&);
-	protected:
-	    YACURS::INTERNAL::CursWin* curses_window() const;
+            // No supported
+            WindowBase(const WindowBase&);
+            WindowBase& operator=(const WindowBase&);
 
-	    const Area& area() const;
-	    /**
-	     * Gets the area that can be used by widgets
-	     *
-	     * @return the area in with absolute coordinates that can be
-	     * used by widgets.
-	     */
-	    Area widget_area() const;
+        protected:
+            YACURS::INTERNAL::CursWin* curses_window() const;
 
-	    void unrealize();
+            const Area& area() const;
 
-	public:
-	    /**
-	     * @param _m margin to be used.
-	     */
-	    WindowBase(const Margin& _m = Margin());
-	    virtual ~WindowBase();
+            /**
+             * Gets the area that can be used by widgets
+             *
+             * @return the area in with absolute coordinates that can be
+             * used by widgets.
+             */
+            Area widget_area() const;
 
+            void unrealize();
 
-	    /**
-	     * @todo when setting margin and window is realized, resize
-	     * it.
-	     */
-	    void margin(const Margin& _m);
-	    const Margin& margin() const;
+        public:
+            /**
+             * @param _m margin to be used.
+             */
+            WindowBase(const Margin& _m=Margin() );
+            virtual ~WindowBase();
 
-	    bool frame() const;
+            /**
+             * @todo when setting margin and window is realized, resize
+             * it.
+             */
+            void margin(const Margin& _m);
 
-	    /**
-	     * @todo make setting/removing frame take effect immediately,
-	     * if window is realized.
-	     */
-	    void frame(bool b);
+            const Margin& margin() const;
 
-	    /**
-	     * Show the window.
-	     *
-	     * This is supposed to be called by the user.
-	     */
-	    virtual void show();
+            bool frame() const;
 
-	    /**
-	     * Hide the window.
-	     *
-	     * This is supposed to be called by the user.
-	     */
-	    virtual void close();
+            /**
+             * @todo make setting/removing frame take effect immediately,
+             * if window is realized.
+             */
+            void frame(bool b);
 
-	    bool shown() const;
+            /**
+             * Show the window.
+             *
+             * This is supposed to be called by the user.
+             */
+            virtual void show();
 
-	    virtual void force_refresh_handler(Event& _e);
-	    virtual void refresh_handler(Event& _e);
-	    virtual void resize_handler(Event& _e);
+            /**
+             * Hide the window.
+             *
+             * This is supposed to be called by the user.
+             */
+            virtual void close();
 
-	    // Those are from Realizable
-	    void refresh(bool immediate);
-	    void resize(const Area& _a);
-	    void realize();
+            bool shown() const;
+
+            virtual void force_refresh_handler(Event& _e);
+
+            virtual void refresh_handler(Event& _e);
+
+            virtual void resize_handler(Event& _e);
+
+            // Those are from Realizable
+            void refresh(bool immediate);
+
+            void resize(const Area& _a);
+
+            void realize();
     };
 }
 

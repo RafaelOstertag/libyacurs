@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -30,48 +30,52 @@
 
 namespace YACURS {
     namespace INTERNAL {
-	/**
-	 * Struct holding all information associated with Color
-	 * Object.
-	 */
-	struct CursColor {
-		/**
-		 * Number of the pair.
-		 *
-		 * The number of the pair as used by (N)Curses. For
-		 * NCurses, it has to start with at 1. X/Open Curses
-		 * allows it to start at zero.
-		 */
-		short no;
-		/**
-		 * Foreground color.
-		 *
-		 * The foreground color of the color pair
-		 */
-		short fg;
-		/**
-		 * Background color.
-		 *
-		 * The background color of the pair.
-		 */
-		short bg;
-		/**
-		 * Attribute.
-		 *
-		 * The attribute used when no color is available.
-		 */
-		int attr;
+        /**
+         * Struct holding all information associated with Color
+         * Object.
+         */
+        struct CursColor {
+            /**
+             * Number of the pair.
+             *
+             * The number of the pair as used by (N)Curses. For
+             * NCurses, it has to start with at 1. X/Open Curses
+             * allows it to start at zero.
+             */
+            short no;
 
-		/**
-		 * Initialize.
-		 *
-		 * Initialize all attributes to -1.
-		 */
-		CursColor(): no(-1),
-			     fg(-1),
-			     bg(-1),
-			     attr(-1) {}
-	};
+            /**
+             * Foreground color.
+             *
+             * The foreground color of the color pair
+             */
+            short fg;
+
+            /**
+             * Background color.
+             *
+             * The background color of the pair.
+             */
+            short bg;
+
+            /**
+             * Attribute.
+             *
+             * The attribute used when no color is available.
+             */
+            int attr;
+
+            /**
+             * Initialize.
+             *
+             * Initialize all attributes to -1.
+             */
+            CursColor() : no(-1),
+                fg(-1),
+                bg(-1),
+                attr(-1) {
+            }
+        };
     } // namespace INTERNAL
 
     /**
@@ -84,103 +88,103 @@ namespace YACURS {
      *  Used as indices of the Color array.
      */
     enum COLOROBJ {
-	/**
-	 * The default color.
-	 */
-	DEFAULT = 0,
+        /**
+         * The default color.
+         */
+        DEFAULT = 0,
 
-	/**
-	 * The color used for the title of a message box.
-	 */
-	MESSAGEBOX_TITLE,
+        /**
+         * The color used for the title of a message box.
+         */
+        MESSAGEBOX_TITLE,
 
-	/**
-	 * The color of the message box
-	 */
-	MESSAGEBOX,
+        /**
+         * The color of the message box
+         */
+        MESSAGEBOX,
 
-	/**
-	 * The color for an input widget without focus.
-	 */
-	INPUTWIDGET_NOFOCUS,
+        /**
+         * The color for an input widget without focus.
+         */
+        INPUTWIDGET_NOFOCUS,
 
-	/**
-	 * Color for an input widget with focus.
-	 */
-	INPUTWIDGET_FOCUS,
+        /**
+         * Color for an input widget with focus.
+         */
+        INPUTWIDGET_FOCUS,
 
-	/**
-	 * Color for hidden text in input widget.
-	 */
-	INPUTWIDGET_HIDDEN,
+        /**
+         * Color for hidden text in input widget.
+         */
+        INPUTWIDGET_HIDDEN,
 
-	/**
-	 * Color of buttons without focus.
-	 */
-	BUTTON_NOFOCUS,
+        /**
+         * Color of buttons without focus.
+         */
+        BUTTON_NOFOCUS,
 
-	/**
-	 * Color of buttons with focus.
-	 */
-	BUTTON_FOCUS,
+        /**
+         * Color of buttons with focus.
+         */
+        BUTTON_FOCUS,
 
-	/**
-	 * Color of ListBox
-	 */
-	LISTBOX,
+        /**
+         * Color of ListBox
+         */
+        LISTBOX,
 
-	/**
-	 * Color of ListBox with Focus
-	 */
-	LISTBOX_HILITE,
+        /**
+         * Color of ListBox with Focus
+         */
+        LISTBOX_HILITE,
 
-	/**
-	 * Color of Check Box Groups
-	 */
-	CHECKBOXGROUP,
+        /**
+         * Color of Check Box Groups
+         */
+        CHECKBOXGROUP,
 
-	/**
-	 * Color of the Check Box Group Title
-	 */
-	CHECKBOXGROUP_TITLE,
+        /**
+         * Color of the Check Box Group Title
+         */
+        CHECKBOXGROUP_TITLE,
 
-	/**
-	 * Number of Colors
-	 */
-	NUMBER_OF_COLOROBJ
+        /**
+         * Number of Colors
+         */
+        NUMBER_OF_COLOROBJ
     };
 
     /**
      * Initalizing colors and preparing colors
      */
     class Colors {
-	private:
-	    /**
-	     * Flag, whether or not colors have been initialized.
-	     */
-	    static bool __initialized;
-	    
-	    /**
-	     * Array holding CursColor
-	     *
-	     * @internal
-	     *
-	     * The color pairs for curses are access by using the
-	     * names defined in the @c COLOR enum.
-	     */
-	    static std::vector<INTERNAL::CursColor> __colors;
+        private:
+            /**
+             * Flag, whether or not colors have been initialized.
+             */
+            static bool __initialized;
 
+            /**
+             * Array holding CursColor
+             *
+             * @internal
+             *
+             * The color pairs for curses are access by using the
+             * names defined in the @c COLOR enum.
+             */
+            static std::vector<INTERNAL::CursColor> __colors;
 
-	public:
-	    /**
-	     * Initializes Colors
-	     *
-	     * Initializes the color pairs used by curses if the
-	     * terminal supports colors.
-	     */
-	    static void init_colors(const std::string& colorstr=std::string());
+        public:
+            /**
+             * Initializes Colors
+             *
+             * Initializes the color pairs used by curses if the
+             * terminal supports colors.
+             */
+            static void init_colors(const std::string& colorstr=
+                                        std::string() );
 
-	    static int color_pair(COLOROBJ c);
+            static int color_pair(COLOROBJ c);
     };
 } // namespace YACURS
 

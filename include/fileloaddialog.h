@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -34,35 +34,40 @@
 #include "messagebox2.h"
 
 namespace YACURS {
-    class FileLoadDialog: public Dialog {
-	private:
-	    MessageBox2* __msgbox;
-	    DynLabel* __path;
-	    ListBox<>* __directories;
-	    ListBox<>* __files;
-	    Input<>* __filename;
-	    HPack* __hpack;
-	    VPack* __vpack;
+    class FileLoadDialog : public Dialog {
+        private:
+            MessageBox2* __msgbox;
+            DynLabel* __path;
+            ListBox<>* __directories;
+            ListBox<>* __files;
+            Input<>* __filename;
+            HPack* __hpack;
+            VPack* __vpack;
 
-	    // Not supported
-	    FileLoadDialog& operator=(const FileLoadDialog&);
+            // Not supported
+            FileLoadDialog& operator=(const FileLoadDialog&);
 
-	    std::string dir_up(const std::string& dir);
-	    void read_dir();
+            std::string dir_up(const std::string& dir);
 
-	    void listbox_enter_handler(Event& _e);
-	    void window_close_handler(Event& _e);
-	public:
-	    FileLoadDialog(std::string _path=std::string(),
-		       DIALOG_TYPE _dt=OKCANCEL);
+            void read_dir();
 
-	    virtual ~FileLoadDialog();
+            void listbox_enter_handler(Event& _e);
 
-	    std::string filepath() const;
-	    const std::string& directory() const;
-	    const std::string& filename() const;
+            void window_close_handler(Event& _e);
 
-	    void refresh(bool immediate);
+        public:
+            FileLoadDialog(std::string _path=std::string(),
+                           DIALOG_TYPE _dt=OKCANCEL);
+
+            virtual ~FileLoadDialog();
+
+            std::string filepath() const;
+
+            const std::string& directory() const;
+
+            const std::string& filename() const;
+
+            void refresh(bool immediate);
     };
 }
 

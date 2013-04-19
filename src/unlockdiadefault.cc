@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -34,7 +34,7 @@ using namespace YACURS;
 //
 // Private
 //
-UnlockDialogDefault& 
+UnlockDialogDefault&
 UnlockDialogDefault::operator=(const UnlockDialogDefault&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
@@ -43,27 +43,27 @@ UnlockDialogDefault::operator=(const UnlockDialogDefault&) {
 //
 // Protected
 //
-UnlockDialogDefault::UnlockDialogDefault(const std::string& _secret):
-    UnlockDialog(_("Unlock Screen")),
+UnlockDialogDefault::UnlockDialogDefault(const std::string& _secret) :
+    UnlockDialog(_("Unlock Screen") ),
     __secret(_secret),
     __vpack(0),
     __text(0),
     __secret_input(0) {
-    __vpack=new VPack;
+    __vpack = new VPack;
     __vpack->always_dynamic(true);
-    __text=new Label(_("Please enter password in order to unlock screen"));
-    __secret_input=new Input<>;
+    __text = new Label(_("Please enter password in order to unlock screen") );
+    __secret_input = new Input<>;
     __secret_input->obscure_input(true);
-    
+
     __vpack->add_back(__text);
     __vpack->add_back(__secret_input);
     widget(__vpack);
 }
 
 UnlockDialogDefault::~UnlockDialogDefault() {
-    assert(__vpack!=0);
-    assert(__text!=0);
-    assert(__secret_input!=0);
+    assert(__vpack != 0);
+    assert(__text != 0);
+    assert(__secret_input != 0);
 
     delete __vpack;
     delete __text;
@@ -73,13 +73,13 @@ UnlockDialogDefault::~UnlockDialogDefault() {
 bool
 UnlockDialogDefault::unlock() {
     if (dialog_state() == DIALOG_OK &&
-	__secret_input->input() == __secret)
-	return true;
-    
+        __secret_input->input() == __secret)
+        return true;
+
     return false;
 }
 
-void 
+void
 UnlockDialogDefault::clear() {
     __secret_input->clear();
 }

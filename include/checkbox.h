@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -30,108 +30,115 @@
 
 namespace YACURS {
     namespace INTERNAL {
-	/**
-	 * Internal structure for CheckBox. Represents items to
-	 * select.
-	 */
-	struct Selectable {
-		bool selected;
-		std::string item;
+        /**
+         * Internal structure for CheckBox. Represents items to
+         * select.
+         */
+        struct Selectable {
+            bool selected;
+            std::string item;
 
-		/**
-		 * Used when initializing vector.
-		 */
-		Selectable():
-		    selected(false) {}
+            /**
+             * Used when initializing vector.
+             */
+            Selectable() :
+                selected(false) {
+            }
 
-		Selectable(const std::string& _str):
-		    selected(false),
-		    item(_str) {}
+            Selectable(const std::string& _str) :
+                selected(false),
+                item(_str) {
+            }
 
-		Selectable(const Selectable& _s):
-		    selected(_s.selected),
-		    item(_s.item) {}
+            Selectable(const Selectable& _s) :
+                selected(_s.selected),
+                item(_s.item) {
+            }
 
-		Selectable& operator=(const Selectable& _s) {
-		    selected=_s.selected;
-		    item=_s.item;
-		    return *this;
-		}
-	};
+            Selectable& operator=(const Selectable& _s) {
+                selected = _s.selected;
+                item = _s.item;
+                return *this;
+            }
+        };
     }
-
 
     /**
      */
-    class CheckBox: public Widget {
-	private:
-	    /**
-	     * The size of the CheckBox
-	     */
-	    Size __size;
+    class CheckBox : public Widget {
+        private:
+            /**
+             * The size of the CheckBox
+             */
+            Size __size;
 
-	    /**
-	     *
-	     */
-	    unsigned short __cursor;
+            /**
+             *
+             */
+            unsigned short __cursor;
 
-	    std::string __title;
+            std::string __title;
 
-	    CheckBox& operator=(const CheckBox& _i);
-	protected:
-	    std::string __indicators[2];
+            CheckBox& operator=(const CheckBox& _i);
 
-	    std::vector<INTERNAL::Selectable> __items;
+        protected:
+            std::string __indicators[2];
 
-	    virtual void key_handler(Event& _e);
-	    virtual void set_selection(unsigned short _cursor);
+            std::vector<INTERNAL::Selectable> __items;
 
-	public:
-	    CheckBox(const std::string& _title,
-		     const std::vector<std::string>& _items);
+            virtual void key_handler(Event& _e);
 
-	    virtual ~CheckBox();
+            virtual void set_selection(unsigned short _cursor);
 
-	    bool selected(unsigned short _i);
-	    bool selected(const std::string& _i);
+        public:
+            CheckBox(const std::string& _title,
+                     const std::vector<std::string>& _items);
 
-	    // From WidgetBase
-	    void size_available(const Size& _s);
+            virtual ~CheckBox();
 
-	    /**
-	     */
-	    Size size() const;
+            bool selected(unsigned short _i);
 
-	    Size size_hint() const;
+            bool selected(const std::string& _i);
 
-	    /**
-	     * Dummy. Does nothing.
-	     *
-	     * CheckBox is not a container Widget, hence it may not
-	     * notified of size changes().
-	     *
-	     * @return always @false
-	     */
-	    bool size_change();
+            // From WidgetBase
+            void size_available(const Size& _s);
 
-	    /**
-	     * Reset size.
-	     *
-	     * Does nothing.
-	     */
-	    void reset_size();
+            /**
+             */
+            Size size() const;
 
-	    // From Realizeable
-	    /**
-	     * Refresh the Input.
-	     *
-	     * @param immediate not directly used by Label::refresh() but
-	     * passed to Widget::refresh().
-	     */
-	    void refresh(bool immediate);
+            Size size_hint() const;
 
-	    void realize();
-	    void unrealize();
+            /**
+             * Dummy. Does nothing.
+             *
+             * CheckBox is not a container Widget, hence it may not
+             * notified of size changes().
+             *
+             * @return always @false
+             */
+            bool size_change();
+
+            /**
+             * Reset size.
+             *
+             * Does nothing.
+             */
+            void reset_size();
+
+            // From Realizeable
+
+            /**
+             * Refresh the Input.
+             *
+             * @param immediate not directly used by Label::refresh() but
+             * passed to Widget::refresh().
+             */
+            void refresh(bool immediate);
+
+            void realize();
+
+            void unrealize();
     };
 }
 

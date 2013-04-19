@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -33,10 +33,10 @@ using namespace YACURS;
 
 void
 StatusLine::put_top_msg() {
-    if (__messages.empty())
-	line(std::string());
+    if (__messages.empty() )
+        line(std::string() );
     else
-	line(__messages.top());
+        line(__messages.top() );
 }
 
 StatusLine&
@@ -44,6 +44,7 @@ StatusLine::operator=(const StatusLine&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
+
 //
 // Protected
 //
@@ -52,12 +53,12 @@ StatusLine::operator=(const StatusLine&) {
 // Public
 //
 
-StatusLine::StatusLine():
-    LineObject(POS_BOTTOM) {}
+StatusLine::StatusLine() :
+    LineObject(POS_BOTTOM) {
+}
 
-
-
-StatusLine::~StatusLine() {}
+StatusLine::~StatusLine() {
+}
 
 void
 StatusLine::push_msg(const std::string& m) {
@@ -67,7 +68,7 @@ StatusLine::push_msg(const std::string& m) {
 
 void
 StatusLine::pop_msg() {
-    if (__messages.empty()) return;
+    if (__messages.empty() ) return;
     __messages.pop();
     put_top_msg();
 }

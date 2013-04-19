@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -34,18 +34,20 @@ namespace YACURS {
      * Maintains a stack of messages, where the top most message will
      * be displayed.
      */
-    class StatusLine: public LineObject {
-	private:
-	    std::stack<std::string> __messages;
-	
-	    void put_top_msg();
+    class StatusLine : public LineObject {
+        private:
+            std::stack<std::string> __messages;
 
-	    StatusLine& operator=(const StatusLine&);
-	public:
-	    StatusLine();
-	    virtual ~StatusLine();
-	    void push_msg(const std::string& m);
-	    void pop_msg();
+            void put_top_msg();
+
+            StatusLine& operator=(const StatusLine&);
+
+        public:
+            StatusLine();
+            virtual ~StatusLine();
+            void push_msg(const std::string& m);
+
+            void pop_msg();
     };
 }
 

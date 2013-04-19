@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -87,118 +87,134 @@ namespace YACURS {
      *
      */
     class EventQueue {
-	private:
-	    /// Used by blocksignal()/unblocksignal()
-	    static sigset_t block_sigmask;
-	    /// Used by blocksignal()/unblocksignal()
-	    static sigset_t tmp_old_sigmask;
-	    /// Used by setup_signal()/restore_signal()
-	    static sigset_t old_sigmask;
+        private:
+            /// Used by blocksignal()/unblocksignal()
+            static sigset_t block_sigmask;
+            /// Used by blocksignal()/unblocksignal()
+            static sigset_t tmp_old_sigmask;
+            /// Used by setup_signal()/restore_signal()
+            static sigset_t old_sigmask;
 
-	    static INTERNAL::Sigaction* sigwinch;
-	    static INTERNAL::Sigaction* sigalrm;
-	    static INTERNAL::Sigaction* sigusr1;
-	    static INTERNAL::Sigaction* sigusr2;
-	    static INTERNAL::Sigaction* sigint;
-	    static INTERNAL::Sigaction* sigterm;
+            static INTERNAL::Sigaction* sigwinch;
+            static INTERNAL::Sigaction* sigalrm;
+            static INTERNAL::Sigaction* sigusr1;
+            static INTERNAL::Sigaction* sigusr2;
+            static INTERNAL::Sigaction* sigint;
+            static INTERNAL::Sigaction* sigterm;
 
-	    static bool signal_blocked;
-	    static std::queue<Event*> evt_queue;
-	    /**
-	     * EventConnectors are not removed immediately, instead remove
-	     * requests are queue up for processing later.
-	     */
-	    static std::list<EventConnectorBase*> evtconn_rem_request;
-	    static std::map<EVENT_TYPE,std::list<EventConnectorBase*> > evtconn_map;
+            static bool signal_blocked;
+            static std::queue<Event*> evt_queue;
 
-	    /**
-	     * LockScreen used on timeout
-	     */
-	    static LockScreen* __lockscreen;
+            /**
+             * EventConnectors are not removed immediately, instead remove
+             * requests are queue up for processing later.
+             */
+            static std::list<EventConnectorBase*> evtconn_rem_request;
+            static std::map<EVENT_TYPE,
+                            std::list<EventConnectorBase*> > evtconn_map;
 
-	    /**
-	     * Timeout for keyboard input.
-	     *
-	     * If for __timeout seconds no key (event) is pressed
-	     * (received), the lock screen kicks in, if any.
-	     */
-	    static unsigned int __timeout;
+            /**
+             * LockScreen used on timeout
+             */
+            static LockScreen* __lockscreen;
 
-	    static void setup_signal();
-	    static void restore_signal();
+            /**
+             * Timeout for keyboard input.
+             *
+             * If for __timeout seconds no key (event) is pressed
+             * (received), the lock screen kicks in, if any.
+             */
+            static unsigned int __timeout;
+
+            static void setup_signal();
+
+            static void restore_signal();
 
 #ifdef SA_SIGINFO
-	    static void signal_handler(int signo, siginfo_t* info, void *d);
+            static void signal_handler(int signo, siginfo_t* info, void* d);
+
 #else
-	    static void signal_handler(int signo);
+            static void signal_handler(int signo);
+
 #endif // SA_SIGINFO
 
-	    static void blocksignal();
-	    static void unblocksignal();
-	    static void proc_rem_request();
+            static void blocksignal();
 
-	    static void timeout_handler(Event& _e);
+            static void unblocksignal();
 
-	public:
-	    /**
-	     * Connect an event connector.
-	     *
-	     * Connect a (member) function to an Event. Please note, that
-	     * only one function per object and Event can be connected. If
-	     * two or more member functions of the same object will be
-	     * connected to a single Event, each call to connect
-	     * overwrites previous connections.
-	     *
-	     * @note the last event connector registered will be called
-	     * first.
-	     *
-	     * @note any pending disconnect will be cancelled and the
-	     * connector unsuspended.
-	     *
-	     * @param ec event connector to register.
-	     */
-	    static void connect_event(const EventConnectorBase& ec);
+            static void proc_rem_request();
 
-	    /**
-	     * Disconnect an event connector.
-	     *
-	     * Disconnect the specified event connector.
-	     *
-	     * @note disconnecting does not immediately remove the
-	     * connector. Instead it will be queued up for later
-	     * removal. Until it is finally removed, it will be suspended.
-	     * @note any pending removal will be cancelled by a
-	     * (re-)connect and the connector will be unsuspended.
-	     *
-	     * @param ec event connector to disconnect.
-	     */
-	    static void disconnect_event(const EventConnectorBase& ec);
+            static void timeout_handler(Event& _e);
 
-	    /// Suspend event
-	    static void suspend(const EventConnectorBase& ec);
-	    /// Suspend all events equal to a given event
-	    static void suspend_all(EVENT_TYPE _t);
-	    /// Suspend all events except the one given
-	    static void suspend_except(const EventConnectorBase& ec);
-	    /// Unsuspend event
-	    static void unsuspend(const EventConnectorBase& ec);
-	    /// Unsuspend all events equal to a given event
-	    static void unsuspend_all(EVENT_TYPE _t);
-	    /// Unsuspend all events except the one given
-	    static void unsuspend_except(const EventConnectorBase& ec);
+        public:
+            /**
+             * Connect an event connector.
+             *
+             * Connect a (member) function to an Event. Please note, that
+             * only one function per object and Event can be connected. If
+             * two or more member functions of the same object will be
+             * connected to a single Event, each call to connect
+             * overwrites previous connections.
+             *
+             * @note the last event connector registered will be called
+             * first.
+             *
+             * @note any pending disconnect will be cancelled and the
+             * connector unsuspended.
+             *
+             * @param ec event connector to register.
+             */
+            static void connect_event(const EventConnectorBase& ec);
 
-	    /// Add an event to the qeue
-	    static void submit(EVENT_TYPE _et);
-	    static void submit(const Event& ev);
+            /**
+             * Disconnect an event connector.
+             *
+             * Disconnect the specified event connector.
+             *
+             * @note disconnecting does not immediately remove the
+             * connector. Instead it will be queued up for later
+             * removal. Until it is finally removed, it will be suspended.
+             * @note any pending removal will be cancelled by a
+             * (re-)connect and the connector will be unsuspended.
+             *
+             * @param ec event connector to disconnect.
+             */
+            static void disconnect_event(const EventConnectorBase& ec);
 
-	    static void run();
-	    static void cleanup();
+            /// Suspend event
+            static void suspend(const EventConnectorBase& ec);
 
-	    static void lock_screen(LockScreen* _ls);
-	    static LockScreen* lock_screen();
+            /// Suspend all events equal to a given event
+            static void suspend_all(EVENT_TYPE _t);
 
-	    static void timeout(unsigned int _t);
-	    static unsigned int timeout();
+            /// Suspend all events except the one given
+            static void suspend_except(const EventConnectorBase& ec);
+
+            /// Unsuspend event
+            static void unsuspend(const EventConnectorBase& ec);
+
+            /// Unsuspend all events equal to a given event
+            static void unsuspend_all(EVENT_TYPE _t);
+
+            /// Unsuspend all events except the one given
+            static void unsuspend_except(const EventConnectorBase& ec);
+
+            /// Add an event to the qeue
+            static void submit(EVENT_TYPE _et);
+
+            static void submit(const Event& ev);
+
+            static void run();
+
+            static void cleanup();
+
+            static void lock_screen(LockScreen* _ls);
+
+            static LockScreen* lock_screen();
+
+            static void timeout(unsigned int _t);
+
+            static unsigned int timeout();
     };
 }
 

@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -42,41 +42,41 @@ Colors::init_colors(const std::string& colorstr) {
 
     INTERNAL::ColorParser cp;
 
-    if (colorstr.empty())
-	__colors=cp();
+    if (colorstr.empty() )
+        __colors = cp();
     else
-	__colors=cp(colorstr);
+        __colors = cp(colorstr);
 
     // If colors are not supported, we're done, since we rely on
     // attributes solely.
     if (has_colors() == FALSE) {
-	__initialized = true;
-	return;
+        __initialized = true;
+        return;
     }
 
-    if (start_color()==ERR)
-	throw EXCEPTIONS::CursesException("start_color");
+    if (start_color() == ERR)
+        throw EXCEPTIONS::CursesException("start_color");
 
     __initialized = true;
 
     if (COLOR_PAIRS < NUMBER_OF_COLOROBJ)
-	return;
+        return;
 
-    for (int i = 0; i < NUMBER_OF_COLOROBJ ; i++) {
-	if (init_pair (__colors.at(i).no,
-		       __colors.at(i).fg,
-		       __colors.at(i).bg)==ERR)
-	    throw EXCEPTIONS::CursesException("init_pair");
+    for (int i = 0; i < NUMBER_OF_COLOROBJ; i++) {
+        if (init_pair(__colors.at(i).no,
+                      __colors.at(i).fg,
+                      __colors.at(i).bg) == ERR)
+            throw EXCEPTIONS::CursesException("init_pair");
     }
 }
 
 int
 Colors::color_pair(COLOROBJ c) {
     if (!__initialized)
-	throw EXCEPTIONS::ColorsNotInitialized();
+        throw EXCEPTIONS::ColorsNotInitialized();
 
     if (has_colors() == TRUE && COLOR_PAIRS >= NUMBER_OF_COLOROBJ) {
-        return COLOR_PAIR (__colors[c].no);
+        return COLOR_PAIR(__colors[c].no);
     } else {
         return __colors[c].attr;
     }

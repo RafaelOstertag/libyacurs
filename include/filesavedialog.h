@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -34,40 +34,44 @@
 #include "messagebox2.h"
 
 namespace YACURS {
-    class FileSaveDialog: public Dialog {
-	private:
-	    MessageBox2* __errmsgbox;
-	    MessageBox2* __confirmdia;
-	    DynLabel* __path;
-	    ListBox<>* __directories;
-	    ListBox<>* __files;
-	    Input<>* __filename;
-	    HPack* __hpack;
-	    VPack* __vpack;
+    class FileSaveDialog : public Dialog {
+        private:
+            MessageBox2* __errmsgbox;
+            MessageBox2* __confirmdia;
+            DynLabel* __path;
+            ListBox<>* __directories;
+            ListBox<>* __files;
+            Input<>* __filename;
+            HPack* __hpack;
+            VPack* __vpack;
 
-	    // Not supported
-	    FileSaveDialog& operator=(const FileSaveDialog&);
+            // Not supported
+            FileSaveDialog& operator=(const FileSaveDialog&);
 
-	    std::string dir_up(const std::string& dir);
-	    void read_dir();
+            std::string dir_up(const std::string& dir);
 
-	    void listbox_enter_handler(Event& _e);
-	    void window_close_handler(Event& _e);
+            void read_dir();
 
-	protected:
-	    virtual void button_press_handler(Event& _e);
+            void listbox_enter_handler(Event& _e);
 
-	public:
-	    FileSaveDialog(std::string _path=std::string(),
-		       DIALOG_TYPE _dt=OKCANCEL);
+            void window_close_handler(Event& _e);
 
-	    virtual ~FileSaveDialog();
+        protected:
+            virtual void button_press_handler(Event& _e);
 
-	    std::string filepath() const;
-	    const std::string& directory() const;
-	    const std::string& filename() const;
+        public:
+            FileSaveDialog(std::string _path=std::string(),
+                           DIALOG_TYPE _dt=OKCANCEL);
 
-	    void refresh(bool immediate);
+            virtual ~FileSaveDialog();
+
+            std::string filepath() const;
+
+            const std::string& directory() const;
+
+            const std::string& filename() const;
+
+            void refresh(bool immediate);
     };
 }
 

@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -38,17 +38,20 @@ using namespace YACURS;
 //
 // Public
 //
-HotKey::HotKey(int _k): __key(_k) {}
+HotKey::HotKey(int _k) : __key(_k) {
+}
 
-HotKey::HotKey(const HotKey& hk): __key(hk.__key) {}
+HotKey::HotKey(const HotKey& hk) : __key(hk.__key) {
+}
 
 HotKey&
 HotKey::operator=(const HotKey& hk) {
-    __key=hk.__key;
+    __key = hk.__key;
     return *this;
 }
 
-HotKey::~HotKey() {}
+HotKey::~HotKey() {
+}
 
 int
 HotKey::key() const {

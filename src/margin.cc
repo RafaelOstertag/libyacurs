@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -28,7 +28,7 @@ using namespace YACURS;
 //
 // Static
 //
-Margin Margin::__zero(0,0,0,0);
+Margin Margin::__zero(0, 0, 0, 0);
 
 //
 // Private
@@ -45,7 +45,8 @@ Margin::Margin(int _top, int _left, int _bottom, int _right) :
     __top(_top),
     __bottom(_bottom),
     __left(_left),
-    __right(_right) {}
+    __right(_right) {
+}
 
 Margin::Margin(const Margin& m) :
     __top(m.__top),
@@ -54,7 +55,8 @@ Margin::Margin(const Margin& m) :
     __right(m.__right) {
 }
 
-Margin::~Margin() {}
+Margin::~Margin() {
+}
 
 void
 Margin::top(int i) {
@@ -134,14 +136,14 @@ Margin::operator==(const Margin& m) const {
     if (this == &m) return true;
 
     return __top == m.__top &&
-	__bottom == m.__bottom &&
-	__left == m.__left &&
-	__right == m.__right;
+           __bottom == m.__bottom &&
+           __left == m.__left &&
+           __right == m.__right;
 }
 
 bool
 Margin::operator!=(const Margin& m) const {
-    return ! operator==(m);
+    return !operator==(m);
 }
 
 const Margin&

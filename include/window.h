@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -71,42 +71,47 @@ namespace YACURS {
      * unrealize(), refresh(), and realize(), which will be called by
      * Event Handlers of WindowBase.
      */
-    class Window: public WindowBase {
-	private:
-	    std::map<int,HotKey*> __hot_keys;
+    class Window : public WindowBase {
+        private:
+            std::map<int, HotKey*> __hot_keys;
 
-	    WidgetBase* __widget;
+            WidgetBase* __widget;
 
-	    /**
-	     * ID of the Focus Group.
-	     *
-	     * The ID of the Focus Group belonging to this
-	     * Window. Supposed to be passed along Widget(s).
-	     */
-	    fgid_t __fgid;
+            /**
+             * ID of the Focus Group.
+             *
+             * The ID of the Focus Group belonging to this
+             * Window. Supposed to be passed along Widget(s).
+             */
+            fgid_t __fgid;
 
-	    // Not supported
-	    Window(const Window&);
-	    Window& operator=(const Window&);
-	protected:
-	    virtual void key_event_handler(Event& _e);
-	    void unrealize();
+            // Not supported
+            Window(const Window&);
+            Window& operator=(const Window&);
 
-	public:
-	    Window(const Margin& m=Margin());
-	    virtual ~Window();
-	
-	    void widget(WidgetBase* _w);
-	    WidgetBase* widget() const;
+        protected:
+            virtual void key_event_handler(Event& _e);
 
-	    void add_hotkey(const HotKey& hk);
-	    void remove_hotkey(const HotKey& hk);
+            void unrealize();
 
-	    // Those are from Realizable
-	    void refresh(bool immediate);
-	    // Does nothing, everything handled in parent.
-	    //void resize(const Area& _a);
-	    void realize();
+        public:
+            Window(const Margin& m=Margin() );
+            virtual ~Window();
+
+            void widget(WidgetBase* _w);
+
+            WidgetBase* widget() const;
+
+            void add_hotkey(const HotKey& hk);
+
+            void remove_hotkey(const HotKey& hk);
+
+            // Those are from Realizable
+            void refresh(bool immediate);
+
+            // Does nothing, everything handled in parent.
+            //void resize(const Area& _a);
+            void realize();
     };
 }
 

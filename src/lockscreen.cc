@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -50,65 +50,65 @@ LockScreen::operator=(const LockScreen&) {
 //
 void
 LockScreen::key_event_handler(Event& _e) {
-    assert(_e==EVT_KEY);
+    assert(_e == EVT_KEY);
 
-    if (!__unlock_dialog->shown() && __msgbox==0) {
-	__unlock_dialog->clear();
-	__unlock_dialog->show();
-	// Set the timeout for the unlock dialog
-	EventQueue::timeout(__unlock_diag_timeout);
+    if (!__unlock_dialog->shown() && __msgbox == 0) {
+        __unlock_dialog->clear();
+        __unlock_dialog->show();
+        // Set the timeout for the unlock dialog
+        EventQueue::timeout(__unlock_diag_timeout);
 
-	// The event should not be processed any further, else the key
-	// might be passed on to the Unlock Dialog. Further key
-	// presses must come thru, tough.
-	_e.stop(true);
+        // The event should not be processed any further, else the key
+        // might be passed on to the Unlock Dialog. Further key
+        // presses must come thru, tough.
+        _e.stop(true);
     }
 }
 
 void
 LockScreen::window_close_event_handler(Event& _e) {
-    assert(_e==EVT_WINDOW_CLOSE);
+    assert(_e == EVT_WINDOW_CLOSE);
 
     EventEx<WindowBase*>& _evt = dynamic_cast<EventEx<WindowBase*>&>(_e);
 
     if (_evt.data() == __unlock_dialog) {
-	if (__unlock_dialog->unlock()) {
-	    close();
-	} else {
-	    if (__unlock_dialog->dialog_state() == Dialog::DIALOG_OK) {
-		assert(__msgbox==0);
-		__msgbox=new MessageBox(_("Unlock Failed"),
-					_("Wrong Password"),
-					Dialog::OK_ONLY);
-		__msgbox->show();
-	    }
-	}
-	// Set the timeout back to the timeout until lock screen kicks
-	// in
-	EventQueue::timeout(__timeout);
-	return;
+        if (__unlock_dialog->unlock() ) {
+            close();
+        } else {
+            if (__unlock_dialog->dialog_state() == Dialog::DIALOG_OK) {
+                assert(__msgbox == 0);
+                __msgbox = new MessageBox(_("Unlock Failed"),
+                                          _("Wrong Password"),
+                                          Dialog::OK_ONLY);
+                __msgbox->show();
+            }
+        }
+        // Set the timeout back to the timeout until lock screen kicks
+        // in
+        EventQueue::timeout(__timeout);
+        return;
     }
 
     if (_evt.data() == __msgbox) {
-	delete __msgbox;
-	__msgbox=0;
+        delete __msgbox;
+        __msgbox = 0;
     }
 }
-
-
 
 //
 // Public
 //
 
 LockScreen::LockScreen(UnlockDialog* _unlock,
-		       unsigned int timeout,
-		       unsigned int ulck_timeout): Window(Margin::zero()),
-						   __timeout(timeout),
-						   __unlock_diag_timeout(ulck_timeout),
-						   __unlock_dialog(_unlock),
-								     __msgbox(0) {
-    if (!__unlock_dialog) throw std::invalid_argument(_("InputDialog may not be 0"));
+                       unsigned int timeout,
+                       unsigned int ulck_timeout) : Window(Margin::zero() ),
+    __timeout(timeout),
+    __unlock_diag_timeout(ulck_timeout),
+    __unlock_dialog(_unlock),
+    __msgbox(0) {
+    if (!__unlock_dialog) throw std::invalid_argument(_(
+                                                          "InputDialog may not be 0") );
+
 }
 
 LockScreen::~LockScreen() {
@@ -126,16 +126,16 @@ LockScreen::unlock_dialog_timeout() const {
 
 void
 LockScreen::close_unlock_dialog() {
-    if (__unlock_dialog->shown())
-	// We clear here, since the user might have entered the
-	// password but not yet closed the dialog. If we simply would
-	// close without reset, the Window Close handler would kick
-	// in, ask the dialog if the password is OK (which we assume
-	// it is) and unlock the screen.
-	__unlock_dialog->clear();
-	__unlock_dialog->close();
-    if (__msgbox!=0 && __msgbox->shown())
-	__msgbox->close();
+    if (__unlock_dialog->shown() )
+        // We clear here, since the user might have entered the
+        // password but not yet closed the dialog. If we simply would
+        // close without reset, the Window Close handler would kick
+        // in, ask the dialog if the password is OK (which we assume
+        // it is) and unlock the screen.
+        __unlock_dialog->clear();
+    __unlock_dialog->close();
+    if (__msgbox != 0 && __msgbox->shown() )
+        __msgbox->close();
 }
 
 void
@@ -144,10 +144,17 @@ LockScreen::show() {
 
     // HotKey implementation does connect this event.
     // EventQueue::connect_event(EventConnectorMethod1<LockScreen>(EVT_KEY, this, &LockScreen::event_key_handler));
-    EventQueue::connect_event(EventConnectorMethod1<LockScreen>(EVT_WINDOW_CLOSE, this, &LockScreen::window_close_event_handler));
+    EventQueue::connect_event(EventConnectorMethod1<LockScreen>(
+                                  EVT_WINDOW_CLOSE, this,
+                                  &LockScreen::window_close_event_handler) );
 
-    EventQueue::suspend_except(EventConnectorMethod1<LockScreen>(EVT_FORCEREFRESH,this, &WindowBase::force_refresh_handler));
-    EventQueue::suspend_except(EventConnectorMethod1<LockScreen>(EVT_REFRESH,this, &WindowBase::refresh_handler));
+    EventQueue::suspend_except(EventConnectorMethod1<LockScreen>(
+                                   EVT_FORCEREFRESH, this,
+                                   &WindowBase::force_refresh_handler) );
+    EventQueue::suspend_except(EventConnectorMethod1<LockScreen>(EVT_REFRESH,
+                                                                 this,
+                                                                 &WindowBase::
+                                                                 refresh_handler) );
     // We don't suspend this handler, since the resize should be
     // handled by windows, but not displayed. Else we would have to
     // keep track of resizes and call resize handlers upon close() of
@@ -160,7 +167,9 @@ void
 LockScreen::close() {
     // HotKey implementation disconnects this event.
     // EventQueue::disconnect_event(EventConnectorMethod1<LockScreen>(EVT_KEY, this, &LockScreen::event_key_handler));
-    EventQueue::disconnect_event(EventConnectorMethod1<LockScreen>(EVT_WINDOW_CLOSE, this, &LockScreen::window_close_event_handler));
+    EventQueue::disconnect_event(EventConnectorMethod1<LockScreen>(
+                                     EVT_WINDOW_CLOSE, this,
+                                     &LockScreen::window_close_event_handler) );
     EventQueue::unsuspend_all(EVT_FORCEREFRESH);
     EventQueue::unsuspend_all(EVT_REFRESH);
 

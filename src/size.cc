@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -35,7 +35,7 @@ using namespace YACURS;
 //
 // Static
 //
-Size Size::__zero(0,0);
+Size Size::__zero(0, 0);
 
 //
 // Private
@@ -51,9 +51,9 @@ Size Size::__zero(0,0);
 
 Size::Size(int16_t _rows, int16_t _cols) : __rows(_rows), __cols(_cols) {
     if (__rows < 0)
-	throw std::out_of_range(_("Rows cannot be <0"));
+        throw std::out_of_range(_("Rows cannot be <0") );
     if (__cols < 0)
-	throw std::out_of_range(_("Columns cannot be <0"));
+        throw std::out_of_range(_("Columns cannot be <0") );
 }
 
 int16_t
@@ -69,21 +69,21 @@ Size::rows() const {
 void
 Size::cols(int16_t _cols) {
     if (_cols < 0)
-	throw std::out_of_range(_("Columns cannot be <0"));
-     __cols = _cols;
+        throw std::out_of_range(_("Columns cannot be <0") );
+    __cols = _cols;
 }
 
 void
 Size::rows(int16_t _rows) {
     if (_rows < 0)
-	throw std::out_of_range(_("Rows cannot be <0"));
+        throw std::out_of_range(_("Rows cannot be <0") );
     __rows = _rows;
 }
 
 const Size&
 Size::operator+=(const Size& rhs) {
-    assert(rhs.__cols>=0);
-    assert(rhs.__rows>=0);
+    assert(rhs.__cols >= 0);
+    assert(rhs.__rows >= 0);
     __cols += rhs.__cols;
     __rows += rhs.__rows;
     return *this;
@@ -92,10 +92,10 @@ Size::operator+=(const Size& rhs) {
 const Size&
 Size::operator-=(const Size& rhs) {
     __cols -= rhs.__cols;
-    if (__cols<0) __cols=0;
+    if (__cols < 0) __cols = 0;
 
     __rows -= rhs.__rows;
-    if (__rows<0) __rows=0;
+    if (__rows < 0) __rows = 0;
     return *this;
 }
 
@@ -112,16 +112,18 @@ Size::zero() {
 Size
 YACURS::operator+(const Size& lhs, const Size& rhs) {
     Size tmp = lhs;
-    return tmp+=rhs;
+
+    return tmp += rhs;
 }
 
 Size
 YACURS::operator-(const Size& lhs, const Size& rhs) {
     Size tmp = lhs;
-    return tmp-=rhs;
+
+    return tmp -= rhs;
 }
 
 bool
 YACURS::operator!=(const Size& lhs, const Size& rhs) {
-    return !(lhs==rhs);
+    return !(lhs == rhs);
 }

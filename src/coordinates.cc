@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -26,7 +26,7 @@ using namespace YACURS;
 //
 // Static
 //
-Coordinates Coordinates::__zero(0,0);
+Coordinates Coordinates::__zero(0, 0);
 
 //
 // Private
@@ -39,7 +39,7 @@ Coordinates Coordinates::__zero(0,0);
 //
 // Public
 //
-Coordinates::Coordinates(int16_t _x, int16_t _y): __y(_y), __x(_x){
+Coordinates::Coordinates(int16_t _x, int16_t _y) : __y(_y), __x(_x) {
 }
 
 int16_t
@@ -54,7 +54,7 @@ Coordinates::y() const {
 
 void
 Coordinates::x(int16_t _x) {
-     __x = _x;
+    __x = _x;
 }
 
 void
@@ -89,16 +89,18 @@ Coordinates::zero() {
 Coordinates
 YACURS::operator+(const Coordinates& lhs, const Coordinates& rhs) {
     Coordinates tmp = lhs;
-    return tmp+=rhs;
+
+    return tmp += rhs;
 }
 
 Coordinates
 YACURS::operator-(const Coordinates& lhs, const Coordinates& rhs) {
     Coordinates tmp = lhs;
-    return tmp-=rhs;
+
+    return tmp -= rhs;
 }
 
 bool
 YACURS::operator!=(const Coordinates& lhs, const Coordinates& rhs) {
-    return !(lhs==rhs);
+    return !(lhs == rhs);
 }

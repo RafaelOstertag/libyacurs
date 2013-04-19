@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -53,9 +53,11 @@ const char* Event::__str_table[] = {
 //
 ////////////////////////////////////////////////////////
 
-Event::Event(EVENT_TYPE _et): event_type(_et), __stop(false) {}
+Event::Event(EVENT_TYPE _et) : event_type(_et), __stop(false) {
+}
 
-Event::~Event() {}
+Event::~Event() {
+}
 
 bool
 Event::operator==(const Event& _e) const {

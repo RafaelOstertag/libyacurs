@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -28,15 +28,14 @@
 #include "area.h"
 
 namespace YACURS {
-
     /**
      * Realization states that can be assumed by an object.
      */
     enum REALIZATION_STATE {
-	REALIZING,
-	REALIZED,
-	UNREALIZING,
-	UNREALIZED
+        REALIZING,
+        REALIZED,
+        UNREALIZING,
+        UNREALIZED
     };
 
     /**
@@ -82,79 +81,79 @@ namespace YACURS {
      *
      */
     class Realizeable {
-	private:
-	    /**
-	     * The realization state of the object.
-	     */
-	    REALIZATION_STATE __realization_state;
+        private:
+            /**
+             * The realization state of the object.
+             */
+            REALIZATION_STATE __realization_state;
 
-	protected:
-	    /**
-	     * Set realization state.
-	     *
-	     * @param _s state of the object.
-	     */
-	    virtual void realization(REALIZATION_STATE _s);
+        protected:
+            /**
+             * Set realization state.
+             *
+             * @param _s state of the object.
+             */
+            virtual void realization(REALIZATION_STATE _s);
 
-	public:
-	    Realizeable();
+        public:
+            Realizeable();
 
-	    virtual ~Realizeable();
+            virtual ~Realizeable();
 
-	    /**
-	     * Refresh the object. Derrived classes have to implement two
-	     * modes:
-	     *
-	     * - immediate refresh makes changes immediately visible using
-	     *   Curses wrefresh().
-	     * - non-immediate refresh has to prepare for a Curses
-	     *   doupdate()
-	     *
-	     * A refresh is supposed make changes to the screen. Adding
-	     * text to a curses window, for instance, would be implemented
-	     * in a refresh.
-	     *
-	     * @param immediate @c true indicating an immediate refresh,
-	     * @c false indicating non-immediate refresh.
-	     */
-	    virtual void refresh(bool immediate) = 0;
+            /**
+             * Refresh the object. Derrived classes have to implement two
+             * modes:
+             *
+             * - immediate refresh makes changes immediately visible using
+             *   Curses wrefresh().
+             * - non-immediate refresh has to prepare for a Curses
+             *   doupdate()
+             *
+             * A refresh is supposed make changes to the screen. Adding
+             * text to a curses window, for instance, would be implemented
+             * in a refresh.
+             *
+             * @param immediate @c true indicating an immediate refresh,
+             * @c false indicating non-immediate refresh.
+             */
+            virtual void refresh(bool immediate) = 0;
 
-	    /**
-	     * Resizes the object.
-	     *
-	     * How the new Area is interpreted depends on the
-	     * implementation.
-	     *
-	     * @param _a the new Area available to the object.
-	     *
-	     * @internal
-	     *
-	     * A resize must not refresh. It is usually a sequence of
-	     * unrealize(), realize().
-	     */
-	    virtual void resize(const Area& _a) = 0;
+            /**
+             * Resizes the object.
+             *
+             * How the new Area is interpreted depends on the
+             * implementation.
+             *
+             * @param _a the new Area available to the object.
+             *
+             * @internal
+             *
+             * A resize must not refresh. It is usually a sequence of
+             * unrealize(), realize().
+             */
+            virtual void resize(const Area& _a) = 0;
 
-	    /**
-	     * Realize the object by calling Curses functions and prepare
-	     * the object for a refresh.
-	     *
-	     * Realize is supposed to create curses window. It should not
-	     * be used for adding text for instance. Adding text and
-	     * related operations would be implemented in refresh().
-	     */
-	    virtual void realize() = 0;
+            /**
+             * Realize the object by calling Curses functions and prepare
+             * the object for a refresh.
+             *
+             * Realize is supposed to create curses window. It should not
+             * be used for adding text for instance. Adding text and
+             * related operations would be implemented in refresh().
+             */
+            virtual void realize() = 0;
 
-	    /**
-	     * Unrealize the object again.
-	     */
-	    virtual void unrealize() = 0;
+            /**
+             * Unrealize the object again.
+             */
+            virtual void unrealize() = 0;
 
-	    /**
-	     * Get the realization state of the object.
-	     *
-	     * @return the realization state.
-	     */
-	    REALIZATION_STATE realization() const;
+            /**
+             * Get the realization state of the object.
+             *
+             * @return the realization state.
+             */
+            REALIZATION_STATE realization() const;
     };
 }
 
@@ -191,20 +190,20 @@ namespace YACURS {
  *    REALIZE_LEAVE;
  * </pre>
  */
-#define REALIZE_ENTER bool __was_realizing_on_enter__=false;	\
-    switch (realization()) {					\
-    case REALIZED:						\
-    case UNREALIZING:						\
-	return;							\
-    case UNREALIZED:						\
-	realization(REALIZING);					\
-	break;							\
-    case REALIZING:						\
-	__was_realizing_on_enter__=true;			\
-	break;							\
-    default:							\
-	assert(0);						\
-	break;							\
+#define REALIZE_ENTER bool __was_realizing_on_enter__ = false;    \
+    switch (realization() ) {                                    \
+    case REALIZED:                                              \
+    case UNREALIZING:                                           \
+        return;                                                 \
+    case UNREALIZED:                                            \
+        realization(REALIZING);                                 \
+        break;                                                  \
+    case REALIZING:                                             \
+        __was_realizing_on_enter__ = true;                        \
+        break;                                                  \
+    default:                                                    \
+        assert(0);                                              \
+        break;                                                  \
     }
 
 /**
@@ -220,28 +219,28 @@ namespace YACURS {
  * realization state (which, in that case, is most likely @c
  * UNREALIZED).
  */
-#define REALIZE_LEAVE if(!__was_realizing_on_enter__)	\
-	realization(REALIZED);
+#define REALIZE_LEAVE if (!__was_realizing_on_enter__)   \
+        realization(REALIZED);
 
 /**
  * @relates Realizeable
  *
  * The same purpose as REALIZE_ENTER.
  */
-#define UNREALIZE_ENTER bool __was_unrealizing_on_enter__=false;	\
-    switch (realization()) {						\
-    case REALIZED:							\
-	realization(UNREALIZING);					\
-	break;								\
-    case UNREALIZING:							\
-	__was_unrealizing_on_enter__=true;				\
-	break;								\
-    case UNREALIZED:							\
-    case REALIZING:							\
-	return;								\
-    default:								\
-	assert(0);							\
-	break;								\
+#define UNREALIZE_ENTER bool __was_unrealizing_on_enter__ = false;        \
+    switch (realization() ) {                                            \
+    case REALIZED:                                                      \
+        realization(UNREALIZING);                                       \
+        break;                                                          \
+    case UNREALIZING:                                                   \
+        __was_unrealizing_on_enter__ = true;                              \
+        break;                                                          \
+    case UNREALIZED:                                                    \
+    case REALIZING:                                                     \
+        return;                                                         \
+    default:                                                            \
+        assert(0);                                                      \
+        break;                                                          \
     }
 
 /**
@@ -249,7 +248,7 @@ namespace YACURS {
  *
  * The same purpose as REALIZE_LEAVE.
  */
-#define UNREALIZE_LEAVE if(!__was_unrealizing_on_enter__)	\
-	realization(UNREALIZED);
+#define UNREALIZE_LEAVE if (!__was_unrealizing_on_enter__)       \
+        realization(UNREALIZED);
 
 #endif // REALIZEABLE_H

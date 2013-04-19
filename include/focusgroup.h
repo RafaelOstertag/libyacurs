@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -48,117 +48,117 @@ namespace YACURS {
      * @sa FocusManager
      */
     class FocusGroup {
-	private:
-	    /**
-	     * Indicates the state of the Focus Group.
-	     *
-	     * @c true means the Focus Group is active, @c false it is
-	     * inactive.
-	     */
-	    bool __active;
+        private:
+            /**
+             * Indicates the state of the Focus Group.
+             *
+             * @c true means the Focus Group is active, @c false it is
+             * inactive.
+             */
+            bool __active;
 
-	    /**
-	     * All the widgets belonging to the Focus Group.
-	     */
-	    std::list<WidgetBase*> __widgets;
+            /**
+             * All the widgets belonging to the Focus Group.
+             */
+            std::list<WidgetBase*> __widgets;
 
-	    /**
-	     * The Widget having the focus in the group if active.
-	     */
-	    std::list<WidgetBase*>::iterator __focus;
+            /**
+             * The Widget having the focus in the group if active.
+             */
+            std::list<WidgetBase*>::iterator __focus;
 
-	public:
-	    /**
-	     * Constructor.
-	     *
-	     * Upon construction, FocusGroup is not active. In order to
-	     * activate the FocusGroup, call FocusGroup::activate.
-	     */
-	    FocusGroup();
-	
-	    /**
-	     * Copy Constructor.
-	     *
-	     * @parma _f reference to FocusGroup.
-	     */
-	    FocusGroup(const FocusGroup& _f);
-	    ~FocusGroup();
-	    FocusGroup& operator=(const FocusGroup& _f);
+        public:
+            /**
+             * Constructor.
+             *
+             * Upon construction, FocusGroup is not active. In order to
+             * activate the FocusGroup, call FocusGroup::activate.
+             */
+            FocusGroup();
 
-	    /**
-	     * Activate Focus Group
-	     *
-	     * When activating a FocusGroup, Widgets won't be focused by
-	     * calling focus(). An explicit call to FocusGroup::refocus()
-	     * is necessary. This is in order to prevent refresh issues
-	     * with overlapping Windows during a screen resize.
-	     */
-	    void activate();
+            /**
+             * Copy Constructor.
+             *
+             * @parma _f reference to FocusGroup.
+             */
+            FocusGroup(const FocusGroup& _f);
+            ~FocusGroup();
+            FocusGroup& operator=(const FocusGroup& _f);
 
-	    /**
-	     * Deactivate Focus Group.
-	     *
-	     * The Widget having the Focus will loose it, and any calls to
-	     * focus_next() or focus_previous() will be ignored.
-	     */
-	    void deactivate();
+            /**
+             * Activate Focus Group
+             *
+             * When activating a FocusGroup, Widgets won't be focused by
+             * calling focus(). An explicit call to FocusGroup::refocus()
+             * is necessary. This is in order to prevent refresh issues
+             * with overlapping Windows during a screen resize.
+             */
+            void activate();
 
-	    /**
-	     * Query whether or not the Focus Group is active.
-	     *
-	     * @return @c true if the Focus Group is active, @c false
-	     * otherwise.
-	     */
-	    bool active() const;
-	    /**
-	     * Add Widget to Focus Group.
-	     *
-	     * Add Widget to Focus Group. The pointer to the Widget
-	     * has to be valid for the entire life time of the Focus
-	     * Group.
-	     *
-	     * @param _w pointer to the Widget.
-	     */
-	    void add(WidgetBase* _w);
+            /**
+             * Deactivate Focus Group.
+             *
+             * The Widget having the Focus will loose it, and any calls to
+             * focus_next() or focus_previous() will be ignored.
+             */
+            void deactivate();
 
-	    /**
-	     * Remove Widget from Focus Group.
-	     *
-	     * Remove Widget from Focus Group.
-	     *
-	     * @param _w pointer to Widget to be removed.
-	     */
-	    void remove(WidgetBase* _w);
+            /**
+             * Query whether or not the Focus Group is active.
+             *
+             * @return @c true if the Focus Group is active, @c false
+             * otherwise.
+             */
+            bool active() const;
 
-	    /**
-	     * Focus next Widget.
-	     *
-	     * Focus next Widget in the list and refreshes both, the
-	     * Widget having had the focus and the newly focused Widget.
-	     */
-	    void focus_next();
+            /**
+             * Add Widget to Focus Group.
+             *
+             * Add Widget to Focus Group. The pointer to the Widget
+             * has to be valid for the entire life time of the Focus
+             * Group.
+             *
+             * @param _w pointer to the Widget.
+             */
+            void add(WidgetBase* _w);
 
-	    /**
-	     * Focus previous Widget.
-	     *
-	     * Focus previous Widget in the list and refreshes both, the
-	     * Widget having had the focus and the newly focused Widget.
-	     */
-	    void focus_previous();
+            /**
+             * Remove Widget from Focus Group.
+             *
+             * Remove Widget from Focus Group.
+             *
+             * @param _w pointer to Widget to be removed.
+             */
+            void remove(WidgetBase* _w);
 
-	    /**
-	     * Re-focus the Widget having the focus.
-	     */
-	    void refocus() const;
+            /**
+             * Focus next Widget.
+             *
+             * Focus next Widget in the list and refreshes both, the
+             * Widget having had the focus and the newly focused Widget.
+             */
+            void focus_next();
 
-	    /**
-	     * Reset the focus.
-	     *
-	     * Resetting focus will result in first widget in the focus
-	     * list receiving focus.
-	     */
-	    void reset();
+            /**
+             * Focus previous Widget.
+             *
+             * Focus previous Widget in the list and refreshes both, the
+             * Widget having had the focus and the newly focused Widget.
+             */
+            void focus_previous();
 
+            /**
+             * Re-focus the Widget having the focus.
+             */
+            void refocus() const;
+
+            /**
+             * Reset the focus.
+             *
+             * Resetting focus will result in first widget in the focus
+             * list receiving focus.
+             */
+            void reset();
     };
 }
 

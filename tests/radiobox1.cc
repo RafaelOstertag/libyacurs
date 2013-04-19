@@ -33,7 +33,7 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-int __test_data[]= {
+int __test_data[] = {
     ' ', KEY_DOWN,
     ' ', KEY_DOWN,
     ' ', KEY_DOWN,
@@ -438,12 +438,13 @@ int __test_data[]= {
     0
 };
 
-extern "C" int __test_wgetch(void*) {
-    static int* ptr2=__test_data;
+extern "C" int
+__test_wgetch(void*) {
+    static int* ptr2 = __test_data;
 
     usleep(10000);
 
-    if (*ptr2==0) {
+    if (*ptr2 == 0) {
         abort();
     }
 
@@ -452,30 +453,37 @@ extern "C" int __test_wgetch(void*) {
 
 class HotKeyQuit : public YACURS::HotKey {
     public:
-	HotKeyQuit(int k) : HotKey(k) {}
-	HotKeyQuit(const HotKeyQuit& hk): HotKey(hk) {}
+        HotKeyQuit(int k) : HotKey(k) {
+        }
 
-	void action() {
-	    YACURS::EventQueue::submit(YACURS::EVT_QUIT);
-	}
+        HotKeyQuit(const HotKeyQuit& hk) : HotKey(hk) {
+        }
 
-	HotKey* clone() const { return new HotKeyQuit(*this); }
+        void action() {
+            YACURS::EventQueue::submit(YACURS::EVT_QUIT);
+        }
+
+        HotKey* clone() const {
+            return new HotKeyQuit(*this);
+        }
 };
 
-int main() {
+int
+main() {
     std::list<std::string> items;
 
-    for (int i=0; i<24; i++) {
+    for (int i = 0; i < 24; i++) {
         std::ostringstream n;
-        n<<i;
-        items.push_back("Long Name ListBox Item Number " + n.str());
+        n << i;
+        items.push_back("Long Name ListBox Item Number " + n.str() );
     }
 
     try {
         YACURS::Curses::init();
 
-        YACURS::LineObject* title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
-                                           "ListBox 1");
+        YACURS::LineObject* title = new YACURS::LineObject(
+            YACURS::LineObject::POS_TOP,
+            "ListBox 1");
         YACURS::Curses::title(title);
 
         // NOTE:
@@ -487,10 +495,10 @@ int main() {
         // last YACURS::EventConnector connected first, StatusLine has to be
         // created AFTER MyWindow.
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1,0,1,0));
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 1, 0) );
         w1->frame(true);
-	w1->add_hotkey(HotKeyQuit('q'));
-	w1->add_hotkey(HotKeyQuit('Q'));
+        w1->add_hotkey(HotKeyQuit('q') );
+        w1->add_hotkey(HotKeyQuit('Q') );
 
         std::vector<std::string> items;
         items.push_back("Item 1");

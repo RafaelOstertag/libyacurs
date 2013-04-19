@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -28,41 +28,41 @@ namespace YACURS {
      * Resizing stops when any of those are underrun.
      */
     enum {
-	/**
-	 * Minimum columns. When actual screen size underruns MIN_COLS,
-	 * no resize is performed.
-	 */
-	MIN_COLS=15,
+        /**
+         * Minimum columns. When actual screen size underruns MIN_COLS,
+         * no resize is performed.
+         */
+        MIN_COLS = 15,
 
-	/**
-	 * Minimum rows. When actual screen size underruns MIN_ROWS,
-	 * no resize is performed.
-	 */
-	MIN_ROWS=15
+        /**
+         * Minimum rows. When actual screen size underruns MIN_ROWS,
+         * no resize is performed.
+         */
+        MIN_ROWS = 15
     };
 
     /**
      * WindowBase will not realize when any those are underrun.
      */
     enum {
-	/**
-	 * Minimum columns. When WindowBase size underruns
-	 * MIN_WINDOW_COLS, WindowBase will not realize.
-	 */
-	MIN_WINDOW_COLS=4,
+        /**
+         * Minimum columns. When WindowBase size underruns
+         * MIN_WINDOW_COLS, WindowBase will not realize.
+         */
+        MIN_WINDOW_COLS = 4,
 
-	/**
-	 * Minimum rows. When WindowBase size underruns
-	 * MIN_WINDOW_ROWS, WindowBase will not realize.
-	 */
-	MIN_WINDOW_ROWS=1
+        /**
+         * Minimum rows. When WindowBase size underruns
+         * MIN_WINDOW_ROWS, WindowBase will not realize.
+         */
+        MIN_WINDOW_ROWS = 1
     };
 
     enum {
-	/**
-	 * Buffer size used for getcwd().
-	 */
-	CWDBUFSZ = 1024
+        /**
+         * Buffer size used for getcwd().
+         */
+        CWDBUFSZ = 1024
     };
 }
 

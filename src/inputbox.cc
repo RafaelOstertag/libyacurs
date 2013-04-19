@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -44,14 +44,14 @@ InputBox::operator=(const InputBox&) {
 //
 
 InputBox::InputBox(const std::string& _title,
-		   const std::string& _message,
-		   DIALOG_TYPE _dt): Dialog(_title, _dt),
-				     __message(0),
-				     __input(0),
-				     __vpack(0) {
-    __message=new Label(_message);
-    __input=new Input<>;
-    __vpack=new VPack;
+                   const std::string& _message,
+                   DIALOG_TYPE _dt) : Dialog(_title, _dt),
+    __message(0),
+    __input(0),
+    __vpack(0) {
+    __message = new Label(_message);
+    __input = new Input<>;
+    __vpack = new VPack;
 
     __vpack->add_back(__message);
     __vpack->add_back(__input);
@@ -62,9 +62,9 @@ InputBox::InputBox(const std::string& _title,
 }
 
 InputBox::~InputBox() {
-    assert(__message!=0);
-    assert(__input!=0);
-    assert(__vpack!=0);
+    assert(__message != 0);
+    assert(__input != 0);
+    assert(__vpack != 0);
 
     delete __input;
     delete __message;
@@ -73,13 +73,13 @@ InputBox::~InputBox() {
 
 const std::string&
 InputBox::input() const {
-    assert(__input!=0);
+    assert(__input != 0);
 
     return __input->input();
 }
 
 void
 InputBox::clear() {
-    assert(__input!=0);
+    assert(__input != 0);
     __input->clear();
 }

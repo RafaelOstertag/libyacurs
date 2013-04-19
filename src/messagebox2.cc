@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -45,16 +45,16 @@ MessageBox2::operator=(const MessageBox2&) {
 //
 
 MessageBox2::MessageBox2(const std::string& _title,
-			 const std::string& _message1,
-			 const std::string& _message2,
-			 DIALOG_TYPE _dt): Dialog(_title, _dt),
-					   __vpack(0),
-					   __message1(0),
-					   __message2(0) {
-    __message1=new Label(_message1);
-    __message2=new Label(_message2);
+                         const std::string& _message1,
+                         const std::string& _message2,
+                         DIALOG_TYPE _dt) : Dialog(_title, _dt),
+    __vpack(0),
+    __message1(0),
+    __message2(0) {
+    __message1 = new Label(_message1);
+    __message2 = new Label(_message2);
 
-    __vpack=new VPack;
+    __vpack = new VPack;
 
     __vpack->add_back(__message1);
     __vpack->add_back(__message2);
@@ -63,12 +63,11 @@ MessageBox2::MessageBox2(const std::string& _title,
 }
 
 MessageBox2::~MessageBox2() {
-    assert(__vpack!=0);
-    assert(__message1!=0);
-    assert(__message2!=0);
+    assert(__vpack != 0);
+    assert(__message1 != 0);
+    assert(__message2 != 0);
 
     delete __vpack;
     delete __message1;
     delete __message2;
 }
-

@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -42,22 +42,23 @@ LineObject::compute_margin() {
     switch (__position) {
     case POS_TOP:
 #ifdef NDEBUG
-	margin(Margin(0, 0, area().rows()-1,0));
+        margin(Margin(0, 0, area().rows() - 1, 0) );
 #else // NDEBUG
-	__m_debug = Margin(0, 0, area().rows()-1,0);
-	assert(__m_debug.bottom()>=0);
-	margin(__m_debug);
+        __m_debug = Margin(0, 0, area().rows() - 1, 0);
+        assert(__m_debug.bottom() >= 0);
+        margin(__m_debug);
 #endif //NDEBUG
-	break;
+        break;
+
     case POS_BOTTOM:
 #ifdef NDEBUG
-	margin(Margin(area().rows()-1, 0, 0, 0));
+        margin(Margin(area().rows() - 1, 0, 0, 0) );
 #else // NDEBUG
-	__m_debug = Margin(area().rows()-1, 0, 0, 0);
-	assert(__m_debug.top()>=0);
-	margin(__m_debug);
+        __m_debug = Margin(area().rows() - 1, 0, 0, 0);
+        assert(__m_debug.top() >= 0);
+        margin(__m_debug);
 #endif
-	break;
+        break;
     }
 }
 
@@ -70,51 +71,59 @@ LineObject::operator=(const LineObject& lo) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
+
 //
 // Protected
 //
 
 void
 LineObject::put_line() {
-    if (!(realization()==REALIZED ||
-	  realization()==REALIZING)) return;
+    if (!(realization() == REALIZED ||
+          realization() == REALIZING) ) return;
 
     curses_window()->erase();
 
-    if (__linetext.length()<1) return;
+    if (__linetext.length() < 1) return;
 
-    assert(area().cols()>=MIN_COLS);
-    if (static_cast<std::string::size_type>(area().cols())<=__linetext.length()) {
-	// Since we are here, the text is too big for the screen
-	// width, so we can't align anyway.
-	CurStr tmp(__linetext, Coordinates(0,0));
-	curses_window()->addstrx(tmp);
+    assert(area().cols() >= MIN_COLS);
+    if (static_cast<std::string::size_type>(area().cols() ) <=
+        __linetext.length() ) {
+        // Since we are here, the text is too big for the screen
+        // width, so we can't align anyway.
+        CurStr tmp(__linetext, Coordinates(0, 0) );
+        curses_window()->addstrx(tmp);
     } else {
-	int hpos=0;
-	switch (__alignment) {
-	case LEFT:
-	    // Nothing to do, since hpos is == 0
-	    assert(hpos==0);
-	    break;
-	case CENTER:
-	    assert(static_cast<std::string::size_type>(area().cols())>=__linetext.length());
-	    hpos=(area().cols()-__linetext.length())/2;
-	    break;
-	case RIGHT:
-	    assert(static_cast<std::string::size_type>(area().cols())>=__linetext.length());
-	    hpos=area().cols()-__linetext.length();
-	    break;
-	}
+        int hpos = 0;
+        switch (__alignment) {
+        case LEFT:
+            // Nothing to do, since hpos is == 0
+            assert(hpos == 0);
+            break;
 
-	CurStr tmp(__linetext,Coordinates(hpos,0));
-	curses_window()->addstr(tmp);
+        case CENTER:
+            assert(
+                static_cast<std::string::size_type>(area().cols() ) >=
+                __linetext.length() );
+            hpos = (area().cols() - __linetext.length() ) / 2;
+            break;
+
+        case RIGHT:
+            assert(
+                static_cast<std::string::size_type>(area().cols() ) >=
+                __linetext.length() );
+            hpos = area().cols() - __linetext.length();
+            break;
+        }
+
+        CurStr tmp(__linetext, Coordinates(hpos, 0) );
+        curses_window()->addstr(tmp);
     }
 }
 
 //
 // Public
 //
-LineObject::LineObject(POSITION _pos, const std::string& _t):
+LineObject::LineObject(POSITION _pos, const std::string& _t) :
     __linetext(_t), __position(_pos), __alignment(LEFT) {
 }
 
@@ -132,10 +141,10 @@ LineObject::line(const std::string& _str) {
 
 void
 LineObject::alignment(ALIGNMENT _a) {
-    __alignment=_a;
+    __alignment = _a;
 
-    if (realization()==REALIZED)
-	refresh(true);
+    if (realization() == REALIZED)
+        refresh(true);
 }
 
 LineObject::ALIGNMENT
@@ -158,11 +167,10 @@ LineObject::realize() {
 
 void
 LineObject::refresh(bool immediate) {
-    if (realization()!=REALIZED) return;
+    if (realization() != REALIZED) return;
     put_line();
 
     curses_window()->set_color(YACURS::DEFAULT);
 
     WindowBase::refresh(immediate);
-
 }

@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -28,7 +28,6 @@
 #include <vector>
 
 namespace YACURS {
-
     // Forward declaration because we want to be independent.
     class FocusGroup;
     class Event;
@@ -47,13 +46,15 @@ namespace YACURS {
 
     /// Type of the function pointer that will be called upon an
     /// event.
-    typedef void (*fptr_t)(Event&);
+    typedef void (* fptr_t)(Event&);
 
     namespace INTERNAL {
 #ifdef SA_SIGINFO
-	typedef void (*sig_handler)(int, siginfo_t *, void *);
+
+        typedef void (* sig_handler)(int, siginfo_t*, void*);
 #else
-	typedef void (*sig_handler)(int);
+
+        typedef void (* sig_handler)(int);
 #endif
     }
 }

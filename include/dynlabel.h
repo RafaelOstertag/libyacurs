@@ -1,6 +1,6 @@
 // -*- mode: c++ -*-
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -36,37 +36,39 @@ namespace YACURS {
      * As opposed to Label, DynLabel is dynamic, and dynamically adjust to
      * available space by truncating label text.
      */
-    class DynLabel: public Label {
-	private:
-	    // Not supported
-	    DynLabel& operator=(const DynLabel&);
+    class DynLabel : public Label {
+        private:
+            // Not supported
+            DynLabel& operator=(const DynLabel&);
 
-	public:
-	    DynLabel(const std::string& _l=std::string());
-	    virtual ~DynLabel();
+        public:
+            DynLabel(const std::string& _l=std::string() );
+            virtual ~DynLabel();
 
-	    // From Label
-	    void label(const std::string& _l);
-	    const std::string& label() const;
+            // From Label
+            void label(const std::string& _l);
 
-	    // From WidgetBase
+            const std::string& label() const;
 
-	    void size_available(const Size& _s);
+            // From WidgetBase
 
-	    Size size_hint() const;
+            void size_available(const Size& _s);
 
-	    void reset_size();
+            Size size_hint() const;
 
-	    // From Realizeable
-	    /**
-	     * Refresh the label.
-	     *
-	     * Adds the Label text to the subwin.
-	     *
-	     * @param immediate not directly used by Label::refresh() but
-	     * passed to Widget::refresh().
-	     */
-	    void refresh(bool immediate);
+            void reset_size();
+
+            // From Realizeable
+
+            /**
+             * Refresh the label.
+             *
+             * Adds the Label text to the subwin.
+             *
+             * @param immediate not directly used by Label::refresh() but
+             * passed to Widget::refresh().
+             */
+            void refresh(bool immediate);
     };
 }
 

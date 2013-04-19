@@ -1,5 +1,5 @@
 //
-// This file is part of libyacurs, 
+// This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
 //
 // This program is free software: you can redistribute it and/or
@@ -35,33 +35,36 @@ using namespace YACURS;
 // Public
 //
 
-CurStr::CurStr(const std::string& str, const Coordinates& pos, COLOROBJ c): 
+CurStr::CurStr(const std::string& str, const Coordinates& pos, COLOROBJ c) :
     std::string(str),
     __position(pos),
-    __color(c) {}
+    __color(c) {
+}
 
-CurStr::CurStr(const std::string& str, int y, int x, COLOROBJ c):
+CurStr::CurStr(const std::string& str, int y, int x, COLOROBJ c) :
     std::string(str),
-    __position(Coordinates(x, y)),
-    __color(c) {}
-						      
-CurStr::CurStr(const CurStr& cs): std::string(cs),
-				  __position(cs.__position),
-				  __color(cs.__color) {}
+    __position(Coordinates(x, y) ),
+    __color(c) {
+}
 
-CurStr& CurStr::operator=(const CurStr& cs) {
-    if (this==&cs) return *this;
+CurStr::CurStr(const CurStr& cs) : std::string(cs),
+    __position(cs.__position),
+    __color(cs.__color) {
+}
 
-    std::string::operator=(cs);
-    __position=cs.__position;
-    __color=cs.__color;
+CurStr&
+CurStr::operator=(const CurStr& cs) {
+    if (this == &cs) return *this; std::string::operator=(cs);
+
+    __position = cs.__position;
+    __color = cs.__color;
 
     return *this;
 }
 
 void
 CurStr::position(const YACURS::Coordinates& co) {
-    __position=co;
+    __position = co;
 }
 
 const YACURS::Coordinates&
@@ -71,7 +74,7 @@ CurStr::position() const {
 
 void
 CurStr::color(YACURS::COLOROBJ co) {
-    __color=co;
+    __color = co;
 }
 
 YACURS::COLOROBJ

@@ -993,7 +993,7 @@ nl_for_brace                             = remove   # ignore/add/remove/force
 nl_catch_brace                           = remove   # ignore/add/remove/force
 
 # Add or remove newline between '}' and 'catch'
-nl_brace_catch                           = add   # ignore/add/remove/force
+nl_brace_catch                           = remove   # ignore/add/remove/force
 
 # Add or remove newline between 'while' and '{'
 nl_while_brace                           = remove   # ignore/add/remove/force

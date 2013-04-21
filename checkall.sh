@@ -246,7 +246,7 @@ host_freebsd32() {
 	for curs in system ncurses
 	do
 	    gmake distclean
-	    ./configure CXX="`eval echo \\$FREEBSD32_CXX_$c`" \
+	    ./configure --disable-nls CXX="`eval echo \\$FREEBSD32_CXX_$c`" \
 		CC="`eval echo \\$FREEBSD32_CC_$c`" \
 		CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" \
 		CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" \

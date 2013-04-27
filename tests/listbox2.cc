@@ -948,8 +948,8 @@ main() {
     try {
         YACURS::Curses::init();
 
-        YACURS::LineObject* title = new YACURS::LineObject(
-            YACURS::LineObject::POS_TOP,
+        YACURS::TitleBar* title = new YACURS::TitleBar(
+            YACURS::TitleBar::POS_TOP,
             "ListBox 2");
         YACURS::Curses::title(title);
 

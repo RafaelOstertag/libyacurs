@@ -26,7 +26,7 @@
 #include <string>
 
 #include "area.h"
-#include "lineobject.h"
+#include "titlebar.h"
 #include "statusline.h"
 #include "window.h"
 #include "event.h"
@@ -58,7 +58,7 @@ namespace YACURS {
              *
              * Curses will not free the memory associated with LineObject.
              */
-            static LineObject* __title;
+            static TitleBar* __title;
 
             /**
              * Pointer to the main window.
@@ -102,9 +102,9 @@ namespace YACURS {
              */
             static void run();
 
-            static void title(LineObject* _title);
+            static void title(TitleBar* _title);
 
-            static LineObject* title();
+            static TitleBar* title();
 
             static void statusline(StatusLine* _sl);
 

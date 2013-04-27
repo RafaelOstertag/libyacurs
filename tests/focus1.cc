@@ -296,7 +296,7 @@ main() {
                                               YACURS::EVT_BUTTON_PRESS,
                                               button_press_handler) );
 
-        YACURS::Curses::title(new YACURS::LineObject(YACURS::LineObject::
+        YACURS::Curses::title(new YACURS::TitleBar(YACURS::TitleBar::
                                                      POS_TOP,
                                                      "Focus 1") );
         YACURS::Curses::statusline(new YACURS::StatusLine);

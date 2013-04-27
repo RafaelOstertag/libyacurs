@@ -115,7 +115,7 @@ LineObject::put_line() {
             break;
         }
 
-        CurStr tmp(__linetext, Coordinates(hpos, 0) );
+        CurStr tmp(__linetext, Coordinates(hpos, 0), color() );
         curses_window()->addstr(tmp);
     }
 }
@@ -123,8 +123,9 @@ LineObject::put_line() {
 //
 // Public
 //
-LineObject::LineObject(POSITION _pos, const std::string& _t) :
+LineObject::LineObject(POSITION _pos, const std::string& _t, COLOROBJ _color) :
     __linetext(_t), __position(_pos), __alignment(LEFT) {
+    color(_color);
 }
 
 LineObject::~LineObject() {

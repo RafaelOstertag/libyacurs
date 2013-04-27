@@ -462,7 +462,7 @@ main() {
 
         YACURS::EventQueue::lock_screen(lckscr);
 
-        YACURS::Curses::title(new YACURS::LineObject(YACURS::LineObject::
+        YACURS::Curses::title(new YACURS::TitleBar(YACURS::TitleBar::
                                                      POS_TOP,
                                                      "LockScreen 1") );
         YACURS::Curses::statusline(new YACURS::StatusLine);

@@ -55,8 +55,8 @@
 
 using namespace YACURS;
 
+TitleBar* Curses::__title = 0;
 StatusLine* Curses::__statusline = 0;
-LineObject* Curses::__title = 0;
 Window* Curses::__mainwindow = 0;
 bool Curses::initialized = false;
 
@@ -199,11 +199,11 @@ Curses::run() {
 }
 
 void
-Curses::title(LineObject* _title) {
+Curses::title(TitleBar* _title) {
     __title = _title;
 }
 
-LineObject*
+TitleBar*
 Curses::title() {
     return __title;
 }

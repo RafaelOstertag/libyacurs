@@ -19,7 +19,7 @@
 
 #include "yacurs.h"
 
-YACURS::LineObject* title = 0;
+YACURS::TitleBar* title = 0;
 
 void
 alrm(YACURS::Event& _e) {
@@ -31,19 +31,19 @@ alrm(YACURS::Event& _e) {
     switch (counter) {
     case 0:
         counter++;
-        title->alignment(YACURS::LineObject::RIGHT);
+        title->alignment(YACURS::TitleBar::RIGHT);
         alarm(1);
         break;
 
     case 1:
         counter++;
-        title->alignment(YACURS::LineObject::CENTER);
+        title->alignment(YACURS::TitleBar::CENTER);
         alarm(1);
         break;
 
     case 2:
         counter++;
-        title->alignment(YACURS::LineObject::LEFT);
+        title->alignment(YACURS::TitleBar::LEFT);
         alarm(1);
         break;
 
@@ -63,7 +63,7 @@ main() {
     try {
         YACURS::Curses::init();
 
-        title = new YACURS::LineObject(YACURS::LineObject::POS_TOP,
+        title = new YACURS::TitleBar(YACURS::TitleBar::POS_TOP,
                                        "Basic 1");
         YACURS::Curses::title(title);
 

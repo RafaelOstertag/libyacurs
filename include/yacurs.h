@@ -43,6 +43,7 @@
 #include "colorparser.h"
 #include "windowbase.h"
 #include "lineobject.h"
+#include "titlebar.h"
 #include "statusline.h"
 #include "hotkey.h"
 #include "window.h"

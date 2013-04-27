@@ -145,7 +145,7 @@ main() {
     try {
         YACURS::Curses::init();
 
-        YACURS::Curses::title(new YACURS::LineObject(YACURS::LineObject::
+        YACURS::Curses::title(new YACURS::TitleBar(YACURS::TitleBar::
                                                      POS_TOP,
                                                      "Dialog 1") );
         YACURS::Curses::statusline(new YACURS::StatusLine);

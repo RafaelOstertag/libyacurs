@@ -1,3 +1,4 @@
+// -*- mode: c++ -*-
 //
 // This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
@@ -19,56 +20,19 @@
 //
 // $Id$
 
-#include <cstdlib>
+#ifndef TITLEBAR_H
+#define TITLEBAR_H
 
-#include "curs.h"
-#include "yacursex.h"
-#include "statusline.h"
+#include "lineobject.h"
 
-using namespace YACURS;
+namespace YACURS {
+    class TitleBar: public LineObject {
+	private:
+	    TitleBar& TitleBar::operator=(const TitleBar&);
 
-//
-// Private
-//
-
-void
-StatusLine::put_top_msg() {
-    if (__messages.empty() )
-        line(std::string() );
-    else
-        line(__messages.top() );
+	public:
+	    TitleBar(POSITION _pos, const std::string& _t);
+    };
 }
 
-StatusLine&
-StatusLine::operator=(const StatusLine&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
-
-//
-// Protected
-//
-
-//
-// Public
-//
-
-StatusLine::StatusLine() :
-    LineObject(POS_BOTTOM, std::string(), STATUSBAR) {
-}
-
-StatusLine::~StatusLine() {
-}
-
-void
-StatusLine::push_msg(const std::string& m) {
-    __messages.push(m);
-    put_top_msg();
-}
-
-void
-StatusLine::pop_msg() {
-    if (__messages.empty() ) return;
-    __messages.pop();
-    put_top_msg();
-}
+#endif

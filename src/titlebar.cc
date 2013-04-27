@@ -21,9 +21,8 @@
 
 #include <cstdlib>
 
-#include "curs.h"
 #include "yacursex.h"
-#include "statusline.h"
+#include "titlebar.h"
 
 using namespace YACURS;
 
@@ -31,16 +30,9 @@ using namespace YACURS;
 // Private
 //
 
-void
-StatusLine::put_top_msg() {
-    if (__messages.empty() )
-        line(std::string() );
-    else
-        line(__messages.top() );
-}
 
-StatusLine&
-StatusLine::operator=(const StatusLine&) {
+TitleBar&
+TitleBar::operator=(const TitleBar&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -53,22 +45,6 @@ StatusLine::operator=(const StatusLine&) {
 // Public
 //
 
-StatusLine::StatusLine() :
-    LineObject(POS_BOTTOM, std::string(), STATUSBAR) {
-}
-
-StatusLine::~StatusLine() {
-}
-
-void
-StatusLine::push_msg(const std::string& m) {
-    __messages.push(m);
-    put_top_msg();
-}
-
-void
-StatusLine::pop_msg() {
-    if (__messages.empty() ) return;
-    __messages.pop();
-    put_top_msg();
+TitleBar::TitleBar(POSITION _pos, const std::string& _t) :
+		LineObject(_pos,_t,TITLEBAR) {
 }

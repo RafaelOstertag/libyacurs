@@ -156,11 +156,11 @@ void
 Window::refresh(bool immediate) {
     if (realization() != REALIZED) return;
 
-    curses_window()->set_color(YACURS::DEFAULT);
+    curses_window()->set_color(color());
 
     // Setting background also helps getting rid of artifacts of
     // overlapped windows.
-    curses_window()->set_bg(YACURS::DEFAULT);
+    curses_window()->set_bg(color());
 
     WindowBase::refresh(immediate);
 

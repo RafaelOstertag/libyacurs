@@ -89,42 +89,34 @@ namespace YACURS {
      */
     enum COLOROBJ {
         /**
-         * The default color.
+         * Default color.
          */
         DEFAULT = 0,
 
-        /**
-         * The color used for the title of a message box.
-         */
-        MESSAGEBOX_TITLE,
+	DIALOG,
 
         /**
-         * The color of the message box
-         */
-        MESSAGEBOX,
-
-        /**
-         * The color for an input widget without focus.
+         * Color of Input Widget without focus.
          */
         INPUTWIDGET_NOFOCUS,
 
         /**
-         * Color for an input widget with focus.
+         * Color of Input Widget with focus.
          */
         INPUTWIDGET_FOCUS,
 
         /**
-         * Color for hidden text in input widget.
+         * Color of hidden text in Input Widget.
          */
         INPUTWIDGET_HIDDEN,
 
         /**
-         * Color of buttons without focus.
+         * Color of Button without focus.
          */
         BUTTON_NOFOCUS,
 
         /**
-         * Color of buttons with focus.
+         * Color of Button with focus.
          */
         BUTTON_FOCUS,
 
@@ -143,13 +135,22 @@ namespace YACURS {
          */
         CHECKBOXGROUP,
 
-        /**
-         * Color of the Check Box Group Title
-         */
-        CHECKBOXGROUP_TITLE,
+	/**
+	 * Color of Title Bar
+	 */
+	TITLEBAR,
+
+	/**
+	 * Color of Status Bar
+	 */
+	STATUSBAR,
 
         /**
-         * Number of Colors
+         * Number of Colors.
+	 *
+	 * @internal
+	 * 
+	 * Used by Colors to initialize color pairs as sentinel.
          */
         NUMBER_OF_COLOROBJ
     };

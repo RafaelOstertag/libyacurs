@@ -29,9 +29,6 @@
 namespace YACURS {
     /**
      * A line object occupies one entire line of the screen.
-     *
-     * @todo provide options for centering and right aligning so that
-     * title can be centered if it is used as title for the application.
      */
     class LineObject : public WindowBase {
         public:

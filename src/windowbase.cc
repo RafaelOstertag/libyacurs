@@ -97,7 +97,8 @@ WindowBase::WindowBase(const Margin& _m) :
     __margin(_m),
     __curses_window(0),
     __frame(false),
-    __shown(false) {
+    __shown(false),
+    __color(DEFAULT) {
     // We always want to receive this event. Therefore it was moved
     // from show() to ctor.
     EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,
@@ -144,6 +145,16 @@ WindowBase::frame() const {
 void
 WindowBase::frame(bool b) {
     __frame = b;
+}
+
+void
+WindowBase::color(COLOROBJ c) {
+    __color=c;
+}
+
+COLOROBJ
+WindowBase::color() const {
+    return __color;
 }
 
 void
@@ -280,7 +291,7 @@ WindowBase::realize() {
 
     assert(__curses_window == 0);
     try {
-        __curses_window = new YACURS::INTERNAL::CursWin(_tmp);
+        __curses_window = new YACURS::INTERNAL::CursWin(_tmp, __color);
         __curses_window->scrollok(false);
         __curses_window->leaveok(true);
 

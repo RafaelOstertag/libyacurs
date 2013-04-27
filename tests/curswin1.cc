@@ -99,7 +99,7 @@ void
 test5() {
     for (int anic = 0; anic < 5; anic++) {
         YACURS::INTERNAL::CursWin win1(YACURS::Area(0, 0, 10, 10) );
-        win1.set_color(YACURS::MESSAGEBOX_TITLE);
+        win1.set_color(YACURS::DIALOG);
 
         for (int i = 0; i < 10; i++) {
             YACURS::CurStr str("abcdefghiklmnopqrstuvwxyz",
@@ -202,10 +202,10 @@ void
 test8() {
     YACURS::CurStr str1("abcdefghik",
                         YACURS::Coordinates(0, 0),
-                        YACURS::MESSAGEBOX_TITLE);
+                        YACURS::DIALOG);
     YACURS::CurStr str2("abcde",
                         YACURS::Coordinates(0, 1),
-                        YACURS::MESSAGEBOX);
+                        YACURS::DEFAULT);
     YACURS::CurStr str21("fghik",
                          YACURS::Coordinates(5, 1),
                          YACURS::INPUTWIDGET_FOCUS);

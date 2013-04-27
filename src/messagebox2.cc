@@ -52,7 +52,9 @@ MessageBox2::MessageBox2(const std::string& _title,
     __message1(0),
     __message2(0) {
     __message1 = new Label(_message1);
+    __message1->color(DIALOG);
     __message2 = new Label(_message2);
+    __message2->color(DIALOG);
 
     __vpack = new VPack;
 

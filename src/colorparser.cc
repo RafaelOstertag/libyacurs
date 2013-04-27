@@ -36,7 +36,7 @@ using namespace YACURS::INTERNAL;
 // Private
 //
 const std::string ColorParser::__default_colors(
-    "DEF:wk0;MBT:cy0;MBX:yc0;IWN:kw3;IWF:kg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;LBH:kg3;CBG:yc0;CBT:cy0");
+    "DEF:wk0;DIA:cb0;IWN:kw3;IWF:kg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;LBH:kg3;CBG:yc0;TLB:yc0;STB:yg0");
 
 std::vector<std::string>
 ColorParser::tokenize(const std::string& str) const {
@@ -141,8 +141,7 @@ ColorParser::ColorParser() {
     // because NCurses expects the color pair numbering to start with
     // 1. X/Open Curses allows the numbering to start with 0, though.
     color_name_map["DEF"] = DEFAULT + 1;
-    color_name_map["MBT"] = MESSAGEBOX_TITLE + 1;
-    color_name_map["MBX"] = MESSAGEBOX + 1;
+    color_name_map["DIA"] = DIALOG + 1;
     color_name_map["IWN"] = INPUTWIDGET_NOFOCUS + 1;
     color_name_map["IWF"] = INPUTWIDGET_FOCUS + 1;
     color_name_map["IWH"] = INPUTWIDGET_HIDDEN + 1;
@@ -151,7 +150,8 @@ ColorParser::ColorParser() {
     color_name_map["LBX"] = LISTBOX + 1;
     color_name_map["LBH"] = LISTBOX_HILITE + 1;
     color_name_map["CBG"] = CHECKBOXGROUP + 1;
-    color_name_map["CBT"] = CHECKBOXGROUP_TITLE + 1;
+    color_name_map["TLB"] = TITLEBAR + 1;
+    color_name_map["STB"] = STATUSBAR + 1;
 
     curs_colors_map['k'] = COLOR_BLACK;
     curs_colors_map['r'] = COLOR_RED;

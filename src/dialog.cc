@@ -170,6 +170,7 @@ Dialog::Dialog(const std::string& _title,
     // from Window
     Window::widget(__vpack);
     frame(true);
+    color(DIALOG);
 }
 
 Dialog::~Dialog() {

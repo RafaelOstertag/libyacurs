@@ -130,11 +130,6 @@ CursWin::client_area() const {
     return __client_area;
 }
 
-bool
-CursWin::created() const {
-    return __window != 0;
-}
-
 CursWin&
 CursWin::refresh(bool immediate) {
     if (immediate) {

@@ -61,8 +61,7 @@ namespace YACURS {
          * Objects            | Abbrev
          * -------------------|-------
          * DEFAULT            | DEF
-         * MESSAGEBOX_TITLE   | MBT
-         * MESSAGEBOX         | MBX
+         * DIALOG             | DIA
          * INPUTWIDGET_NOFOCUS| IWN
          * INPUTWIDGET_FOCUS  | IWF
          * INPUTWIDGET_HIDDEN | IWH
@@ -71,12 +70,13 @@ namespace YACURS {
          * LISTBOX            | LBX
          * LISTBOX_HILITE     | LBH
          * CHECKBOXGROUP      | CBG
-         * CHECKBOXGROUP_TITLE| CBT
+	 * TITLEBAR           | TLB
+	 * STATUSBAR          | STB
          *
          * Default String
          * --------------
          *
-         * @c "DEF:wk0;MBT:cy0;MBX:yc0;IWN:yw3;IWF:yg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;LBH:kg3;CBG:yc0;CBT:cy0"
+	 * @c "DEF:wk0;DIA:cb0;IWN:kw3;IWF:kg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;LBH:kg3;CBG:yc0;TLB:yc0;STB:yg0"
          */
         class ColorParser {
             private:

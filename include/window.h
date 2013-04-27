@@ -40,10 +40,11 @@ namespace YACURS {
      *
      * @subsection Widget
      *
-     * Window is responsible for realizing/unrealizing/refresh the
+     * Window is responsible for realizing/unrealizing/refreshing the
      * Widget.
      *
-     * A screen resize will result in Window calling resize() of the Widget.
+     * A screen resize will result in Window calling resize() of the
+     * Widget.
      *
      * Several Widgets can be displayed by the use of Packs.
      *
@@ -67,9 +68,10 @@ namespace YACURS {
      *
      * @subsection Events
      *
-     * Window does not connect any Events explicitely. It implements
-     * unrealize(), refresh(), and realize(), which will be called by
-     * Event Handlers of WindowBase.
+     * It implements unrealize(), refresh(), and realize(), which will
+     * be called by Event Handlers of WindowBase.
+     *
+     * In order to implement Hot Keys, it connects to EVT_KEY.
      */
     class Window : public WindowBase {
         private:

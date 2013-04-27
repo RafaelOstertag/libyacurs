@@ -67,13 +67,38 @@ namespace YACURS {
                  */
                 Area __client_area;
             protected:
+		/**
+		 * Initialize CursWin from WINDOW.
+		 *
+		 * @param win pointer to Curses WINDOW.
+		 *
+		 * @param dc default color.
+		 */
                 CursWin(WINDOW* win, COLOROBJ dc);
 
             public:
+		/**
+		 * Constructor.
+		 *
+		 * @param _a area the occupied on screen
+		 *
+		 * @param dc default color
+		 */
                 CursWin(const Area& _a, COLOROBJ dc=DEFAULT);
+		
+		/**
+		 * Copy Constructor.
+		 */
                 CursWin(const CursWin& cw);
+
+		/**
+		 * Assignment operator.
+		 */
                 CursWin& operator=(const CursWin& cw);
 
+		/**
+		 * Destructor.
+		 */
                 ~CursWin();
 
                 /**
@@ -93,32 +118,71 @@ namespace YACURS {
                 const Area& client_area() const;
 
                 /**
-                 * Query whether or not Curses Window has been
-                 * created.
-                 */
-                bool created() const;
-
-                /**
-                 * Destroy Curses Window.
-                 */
-                void destroy();
-
-                /**
                  * Refresh Curses Window.
                  *
-                 * @param immediate if @c true, call wrefresh() on the Curses
-                 * Window, @c false make it call wnoutrefresh().
+                 * @param immediate if @c true, call wrefresh() on the
+                 * Curses Window, @c false make it call
+                 * wnoutrefresh().
+		 *
+		 * @return reference to *this.
                  */
                 CursWin& refresh(bool immediate=true);
 
+		/**
+		 * Get sub window flag.
+		 *
+		 * @return @c true if CursWin is a sub window, @c
+		 * false otherwise.
+		 */
                 bool issubwin() const;
 
+		/**
+		 * Get box flag.
+		 *
+		 * @return @c true if CursWin has box, @c false
+		 * otherwise.
+		 */
                 bool has_box() const;
 
+		/**
+		 * Create box.
+		 *
+		 * Draw a box around the edges of a window
+		 *
+		 * @param verch vertical character. If zero, default
+		 * value is used.
+		 *
+		 * @param horch horizontal character. If zero, default
+		 * value is used.
+		 *
+		 * @return reference to *this.
+		 *
+		 * @internal wrapper for box().
+		 */
                 CursWin& box(chtype verch=0, chtype horch=0);
 
+		/**
+		 * Set background property.
+		 *
+		 * Set the background property of the current or
+		 * specified window and then apply this setting to
+		 * every character position in that window
+		 *
+		 * @param ch rendition.
+		 *
+		 * @return reference to *this.
+		 *
+		 * @internal wrapper for bgkd().
+		 */
                 CursWin& bkgd(chtype ch);
 
+		/**
+		 * Set Color.
+		 *
+		 * @param c color.
+		 *
+		 * @sa COLOROBJ
+		 */
                 CursWin& set_color(COLOROBJ c);
 
                 CursWin& set_bg(COLOROBJ c);

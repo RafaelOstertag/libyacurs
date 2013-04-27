@@ -6,9 +6,9 @@ non_interactive_tests = cursinit coordinates margin area colorparser \
     basic2 resize1 resize2 pack1 pack2 pack3 pack4 pack5 pack6 pack7 \
     pack8 pack9 packresize1 dynlabel1 widget1 widget2 widget3
 
-interactive_tests = eventqueue9 resize3 resize4 resize5 focus1 app1 \
-   app2 listbox1 listbox2 dialog1 messagebox1 inputbox1 filedialog1 \
-   checkbox1 radiobox1 packremove lockscreen1
+interactive_tests = eventqueue9 resize3 resize4 resize5 focus1 app1	\
+    listbox1 listbox2 dialog1 messagebox1 inputbox1 filedialog1		\
+    checkbox1 radiobox1 packremove lockscreen1
 
 check_PROGRAMS =  $(non_interactive_tests) $(interactive_tests)
 # interactive tests must not be listed here

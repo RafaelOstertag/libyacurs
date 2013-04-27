@@ -27,7 +27,7 @@
 
 #include "area.h"
 #include "titlebar.h"
-#include "statusline.h"
+#include "statusbar.h"
 #include "window.h"
 #include "event.h"
 #include "mycurses.h"
@@ -47,11 +47,11 @@ namespace YACURS {
     class Curses {
         private:
             /**
-             * Pointer to StatusLine.
+             * Pointer to StatusBar.
              *
              * Curses will not free the memory associated with StatuLine.
              */
-            static StatusLine* __statusline;
+            static StatusBar* __statusbar;
 
             /**
              * Pointer to a title LineObject.
@@ -106,9 +106,9 @@ namespace YACURS {
 
             static TitleBar* title();
 
-            static void statusline(StatusLine* _sl);
+            static void statusbar(StatusBar* _sl);
 
-            static StatusLine* statusline();
+            static StatusBar* statusbar();
 
             static void mainwindow(Window* _w);
 

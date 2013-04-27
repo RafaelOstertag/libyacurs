@@ -123,7 +123,8 @@ LineObject::put_line() {
 //
 // Public
 //
-LineObject::LineObject(POSITION _pos, const std::string& _t, COLOROBJ _color) :
+LineObject::LineObject(POSITION _pos, const std::string& _t,
+                       COLOROBJ _color) :
     __linetext(_t), __position(_pos), __alignment(LEFT) {
     color(_color);
 }

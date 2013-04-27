@@ -207,7 +207,6 @@ namespace YACURS {
     template<class T /* Type of object called */> class EventConnectorMethod1
         : public EventConnectorBase {
         public:
-
             typedef void (T::* __mem_fun_t)(Event&);
             typedef T* _obj_ptr_t;
         private:

@@ -252,13 +252,13 @@ button_press_handler(YACURS::Event& _e) {
 
     if (ev.data() == b1) {
         b4->enabled(false);
-        YACURS::Curses::statusline()->push_msg(ifixed->input() );
+        YACURS::Curses::statusbar()->push_msg(ifixed->input() );
         return;
     }
 
     if (ev.data() == b2) {
         b4->enabled(true);
-        YACURS::Curses::statusline()->push_msg(idyn->input() );
+        YACURS::Curses::statusbar()->push_msg(idyn->input() );
         return;
     }
 
@@ -297,9 +297,9 @@ main() {
                                               button_press_handler) );
 
         YACURS::Curses::title(new YACURS::TitleBar(YACURS::TitleBar::
-                                                     POS_TOP,
-                                                     "Focus 1") );
-        YACURS::Curses::statusline(new YACURS::StatusLine);
+                                                   POS_TOP,
+                                                   "Focus 1") );
+        YACURS::Curses::statusbar(new YACURS::StatusBar);
 
         YACURS::Curses::mainwindow(new YACURS::Window(YACURS::Margin(1, 0, 1,
                                                                      0) ) );
@@ -360,7 +360,7 @@ main() {
         delete vpack;
         delete YACURS::Curses::mainwindow();
         delete YACURS::Curses::title();
-        delete YACURS::Curses::statusline();
+        delete YACURS::Curses::statusbar();
         YACURS::Curses::end();
     } catch (std::exception& e) {
         YACURS::Curses::end();

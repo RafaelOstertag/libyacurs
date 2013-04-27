@@ -56,7 +56,7 @@
 using namespace YACURS;
 
 TitleBar* Curses::__title = 0;
-StatusLine* Curses::__statusline = 0;
+StatusBar* Curses::__statusbar = 0;
 Window* Curses::__mainwindow = 0;
 bool Curses::initialized = false;
 
@@ -183,7 +183,7 @@ Curses::run() {
 
     if (__title) __title->show();
 
-    if (__statusline) __statusline->show();
+    if (__statusbar) __statusbar->show();
 
     if (__mainwindow) __mainwindow->show();
 
@@ -191,7 +191,7 @@ Curses::run() {
 
     if (__mainwindow) __mainwindow->close();
 
-    if (__statusline) __statusline->close();
+    if (__statusbar) __statusbar->close();
 
     if (__title) __title->close();
 
@@ -209,13 +209,13 @@ Curses::title() {
 }
 
 void
-Curses::statusline(StatusLine* _sl) {
-    __statusline = _sl;
+Curses::statusbar(StatusBar* _sl) {
+    __statusbar = _sl;
 }
 
-StatusLine*
-Curses::statusline() {
-    return __statusline;
+StatusBar*
+Curses::statusbar() {
+    return __statusbar;
 }
 
 void

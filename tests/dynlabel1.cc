@@ -48,7 +48,7 @@ alrm(YACURS::Event& _e) {
     snprintf(buff, 32, "%d", _scrdim.cols() );
     status_msg += buff;
 
-    YACURS::Curses::statusline()->push_msg(status_msg);
+    YACURS::Curses::statusbar()->push_msg(status_msg);
 
     winsize ws;
 
@@ -94,8 +94,8 @@ main() {
         YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 1, 0) );
         w1->frame(true);
 
-        YACURS::StatusLine* sl = new YACURS::StatusLine();
-        YACURS::Curses::statusline(sl);
+        YACURS::StatusBar* sl = new YACURS::StatusBar();
+        YACURS::Curses::statusbar(sl);
 
         YACURS::VPack* vpack = new YACURS::VPack;
 

@@ -842,11 +842,11 @@ class MainWindow : public YACURS::Window {
                 if (inputdialog->dialog_state() ==
                     YACURS::Dialog::DIALOG_OK) {
                     listbox->add(inputdialog->input() );
-                    YACURS::Curses::statusline()->pop_msg();
-                    YACURS::Curses::statusline()->push_msg("Dialog OK");
+                    YACURS::Curses::statusbar()->pop_msg();
+                    YACURS::Curses::statusbar()->push_msg("Dialog OK");
                 } else {
-                    YACURS::Curses::statusline()->pop_msg();
-                    YACURS::Curses::statusline()->push_msg("Dialog Cancelled");
+                    YACURS::Curses::statusbar()->pop_msg();
+                    YACURS::Curses::statusbar()->push_msg("Dialog Cancelled");
                 }
 
                 delete inputdialog;
@@ -956,8 +956,8 @@ main() {
         MainWindow* w1 = new MainWindow(YACURS::Margin(1, 0, 1, 0) );
         w1->frame(true);
 
-        YACURS::StatusLine* sl = new YACURS::StatusLine();
-        YACURS::Curses::statusline(sl);
+        YACURS::StatusBar* sl = new YACURS::StatusBar();
+        YACURS::Curses::statusbar(sl);
 
         YACURS::Curses::mainwindow(w1);
 

@@ -103,7 +103,7 @@ main() {
                                               AlrmHandler>(YACURS::EVT_SIGALRM,
                                                            &ahandler,
                                                            &AlrmHandler::
-        handler) );
+                                                           handler) );
         // Should be overriden by next call
         YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
                                               AlrmHandler2>(YACURS::

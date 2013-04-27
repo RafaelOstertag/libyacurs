@@ -207,9 +207,9 @@ main() {
         YACURS::Curses::init();
 
         YACURS::Curses::title(new YACURS::TitleBar(YACURS::TitleBar::
-                                                     POS_TOP,
-                                                     "Packremove") );
-        YACURS::Curses::statusline(new YACURS::StatusLine);
+                                                   POS_TOP,
+                                                   "Packremove") );
+        YACURS::Curses::statusbar(new YACURS::StatusBar);
 
         YACURS::Curses::mainwindow(new MainWindow);
         YACURS::Curses::mainwindow()->frame(true);
@@ -218,7 +218,7 @@ main() {
 
         delete YACURS::Curses::mainwindow();
         delete YACURS::Curses::title();
-        delete YACURS::Curses::statusline();
+        delete YACURS::Curses::statusbar();
 
         YACURS::Curses::end();
     } catch (std::exception& e) {

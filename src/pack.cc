@@ -49,7 +49,7 @@ Pack::set_all_curses_window() {
                                             YACURS::INTERNAL::CursWin*>(&
                                                                         WidgetBase
                                                                         ::
-    curses_window),
+                                                                        curses_window),
                                WidgetBase::curses_window() ) );
 }
 

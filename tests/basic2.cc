@@ -27,19 +27,19 @@ alrm(YACURS::Event& _e) {
 
     switch (calls) {
     case 0:
-        YACURS::Curses::statusline()->push_msg("Status 1");
+        YACURS::Curses::statusbar()->push_msg("Status 1");
         break;
 
     case 1:
-        YACURS::Curses::statusline()->push_msg("Status 2");
+        YACURS::Curses::statusbar()->push_msg("Status 2");
         break;
 
     case 2:
-        YACURS::Curses::statusline()->pop_msg();
+        YACURS::Curses::statusbar()->pop_msg();
         break;
 
     case 3:
-        YACURS::Curses::statusline()->pop_msg();
+        YACURS::Curses::statusbar()->pop_msg();
         break;
     }
 
@@ -64,8 +64,8 @@ main() {
 
         YACURS::Curses::mainwindow(w1);
 
-        YACURS::StatusLine* sl = new YACURS::StatusLine();
-        YACURS::Curses::statusline(sl);
+        YACURS::StatusBar* sl = new YACURS::StatusBar();
+        YACURS::Curses::statusbar(sl);
 
         YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(
                                               YACURS::EVT_SIGALRM, &alrm) );

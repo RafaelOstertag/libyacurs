@@ -80,7 +80,7 @@ main() {
                                               AlrmHandler>(YACURS::EVT_SIGALRM,
                                                            &ahandler,
                                                            &AlrmHandler::
-        handler) );
+                                                           handler) );
 
         YACURS::EventQueue::submit(YACURS::EventEx<YACURS::Size>(YACURS::
                                                                  EVT_SIGWINCH,

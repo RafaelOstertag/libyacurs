@@ -192,13 +192,13 @@ namespace YACURS {
                             !(__evt == *eb) ) {
                             if (__suspend) {
                                 DEBUGOUT("Suspend Except: " <<
-                                    (void*)(eb->id() ) << ": " <<
-                                    Event::evt2str(*eb) );
+                                         (void*)(eb->id() ) << ": " <<
+                                         Event::evt2str(*eb) );
                                 eb->suspended(true);
                             } else {
                                 DEBUGOUT("Unsuspend Except: " <<
-                                    (void*)(eb->id() ) << ": " <<
-                                    Event::evt2str(*eb) );
+                                         (void*)(eb->id() ) << ": " <<
+                                         Event::evt2str(*eb) );
                                 eb->suspended(false);
                             }
                         }
@@ -265,7 +265,7 @@ namespace YACURS {
 
                             DEBUGOUT("Call: " <<
                                      (void*)(_ec->id() ) << ": " <<
-                                Event::evt2str(*_ec) );
+                                     Event::evt2str(*_ec) );
                             clock_t t0 = clock();
                             _ec->call(__eb);
                             statistics.update_ec_call_time(t0, clock() );
@@ -548,7 +548,7 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
         list.push_back(__tmp);
 
         DEBUGOUT("Connect: " << (void*)__tmp->id() << ": " <<
-            Event::evt2str(ec) );
+                 Event::evt2str(ec) );
     }
 
     //

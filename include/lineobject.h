@@ -77,7 +77,9 @@ namespace YACURS {
             void put_line();
 
         public:
-            LineObject(POSITION _pos, const std::string& _t=std::string(), COLOROBJ _color=DEFAULT );
+            LineObject(POSITION _pos,
+                       const std::string& _t=std::string(), COLOROBJ _color=
+                           DEFAULT);
             virtual ~LineObject();
 
             void alignment(ALIGNMENT _a);

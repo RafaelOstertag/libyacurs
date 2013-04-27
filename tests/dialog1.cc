@@ -51,7 +51,7 @@ class MainWindow : public YACURS::Window {
                 dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
             if (dialog1 != 0 && evt.data() == dialog1) {
-                YACURS::Curses::statusline()->push_msg("Dialog 1 closed");
+                YACURS::Curses::statusbar()->push_msg("Dialog 1 closed");
 
                 if (dialog1->dialog_state() == YACURS::Dialog::DIALOG_OK)
                     label1->label("DIALOG_OK");
@@ -146,9 +146,9 @@ main() {
         YACURS::Curses::init();
 
         YACURS::Curses::title(new YACURS::TitleBar(YACURS::TitleBar::
-                                                     POS_TOP,
-                                                     "Dialog 1") );
-        YACURS::Curses::statusline(new YACURS::StatusLine);
+                                                   POS_TOP,
+                                                   "Dialog 1") );
+        YACURS::Curses::statusbar(new YACURS::StatusBar);
 
         YACURS::Curses::mainwindow(new MainWindow);
         YACURS::Curses::mainwindow()->frame(true);
@@ -157,7 +157,7 @@ main() {
 
         delete YACURS::Curses::mainwindow();
         delete YACURS::Curses::title();
-        delete YACURS::Curses::statusline();
+        delete YACURS::Curses::statusbar();
 
         YACURS::Curses::end();
     } catch (std::exception& e) {

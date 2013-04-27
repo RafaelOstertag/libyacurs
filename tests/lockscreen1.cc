@@ -172,7 +172,8 @@ class Win1 : public YACURS::Window {
                                                   Win1>(YACURS::
                                                         EVT_BUTTON_PRESS,
                                                         this,
-        &Win1::button_press_handler) );
+                                                        &Win1::
+                                                        button_press_handler) );
         }
 
         ~Win1() {
@@ -335,7 +336,7 @@ class MainWindow : public YACURS::Window {
                 dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
             if (win1 != 0 && evt.data() == win1) {
-                YACURS::Curses::statusline()->push_msg("Window 1 closed");
+                YACURS::Curses::statusbar()->push_msg("Window 1 closed");
                 delete win1;
                 win1 = 0;
                 return;
@@ -463,9 +464,9 @@ main() {
         YACURS::EventQueue::lock_screen(lckscr);
 
         YACURS::Curses::title(new YACURS::TitleBar(YACURS::TitleBar::
-                                                     POS_TOP,
-                                                     "LockScreen 1") );
-        YACURS::Curses::statusline(new YACURS::StatusLine);
+                                                   POS_TOP,
+                                                   "LockScreen 1") );
+        YACURS::Curses::statusbar(new YACURS::StatusBar);
 
         MainWindow* mainwindow = new MainWindow;
         YACURS::Curses::mainwindow(mainwindow);
@@ -476,7 +477,7 @@ main() {
         delete mainwindow;
         delete ulckdia;
         delete lckscr;
-        delete YACURS::Curses::statusline();
+        delete YACURS::Curses::statusbar();
         delete YACURS::Curses::title();
 
         YACURS::Curses::end();

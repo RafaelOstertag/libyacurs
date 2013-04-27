@@ -127,7 +127,7 @@ main() {
                                               AlrmHandler>(YACURS::EVT_SIGALRM,
                                                            &ahandler,
                                                            &AlrmHandler::
-        handler) );
+                                                           handler) );
         YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
                                               Usr1Handler>(YACURS::EVT_SIGUSR1,
                                                            &u1handler,
@@ -178,7 +178,7 @@ main() {
                                               AlrmHandler>(YACURS::EVT_SIGALRM,
                                                            &ahandler,
                                                            &AlrmHandler::
-        handler) );
+                                                           handler) );
         YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
                                               Usr1Handler>(YACURS::EVT_SIGUSR1,
                                                            &u1handler,
@@ -235,7 +235,7 @@ main() {
                                               AlrmHandler>(YACURS::EVT_SIGALRM,
                                                            &ahandler,
                                                            &AlrmHandler::
-        handler) );
+                                                           handler) );
         YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
                                               Usr1Handler>(YACURS::EVT_SIGUSR1,
                                                            &u1handler,
@@ -291,7 +291,7 @@ main() {
                                               AlrmHandler>(YACURS::EVT_SIGALRM,
                                                            &ahandler,
                                                            &AlrmHandler::
-        handler) );
+                                                           handler) );
         YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
                                               Usr1Handler>(YACURS::EVT_SIGUSR1,
                                                            &u1handler,
@@ -352,7 +352,7 @@ main() {
                                               AlrmHandler>(YACURS::EVT_SIGALRM,
                                                            &ahandler,
                                                            &AlrmHandler::
-        handler) );
+                                                           handler) );
         YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
                                               Usr1Handler>(YACURS::EVT_SIGUSR1,
                                                            &u1handler,
@@ -413,7 +413,7 @@ main() {
                                               AlrmHandler>(YACURS::EVT_SIGALRM,
                                                            &ahandler,
                                                            &AlrmHandler::
-        handler) );
+                                                           handler) );
         YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
                                               Usr1Handler>(YACURS::EVT_SIGUSR1,
                                                            &u1handler,

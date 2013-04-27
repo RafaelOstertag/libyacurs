@@ -44,7 +44,7 @@
 #include "windowbase.h"
 #include "lineobject.h"
 #include "titlebar.h"
-#include "statusline.h"
+#include "statusbar.h"
 #include "hotkey.h"
 #include "window.h"
 #include "lockscreen.h"

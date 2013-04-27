@@ -488,11 +488,11 @@ main() {
 
         // NOTE:
         //
-        // The order the objects are created (MyWindow, StatusLine) is
+        // The order the objects are created (MyWindow, StatusBar) is
         // important here. Because MyWindow calls
-        // StatusLine::put_msg() on resize we have to make sure
-        // StatusLine is resized first. Since YACURS::EventQueue calls the
-        // last YACURS::EventConnector connected first, StatusLine has to be
+        // StatusBar::put_msg() on resize we have to make sure
+        // StatusBar is resized first. Since YACURS::EventQueue calls the
+        // last YACURS::EventConnector connected first, StatusBar has to be
         // created AFTER MyWindow.
 
         YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 1, 0) );
@@ -514,8 +514,8 @@ main() {
 
         w1->widget(rabx1);
 
-        YACURS::StatusLine* sl = new YACURS::StatusLine();
-        YACURS::Curses::statusline(sl);
+        YACURS::StatusBar* sl = new YACURS::StatusBar();
+        YACURS::Curses::statusbar(sl);
         sl->push_msg("Press Q to quit");
 
         YACURS::Curses::mainwindow(w1);

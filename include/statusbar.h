@@ -1,3 +1,4 @@
+// -*- mode: c++ -*-
 //
 // This file is part of libyacurs,
 // Copyright (C) 2013  Rafael Ostertag
@@ -19,56 +20,35 @@
 //
 // $Id$
 
-#include <cstdlib>
+#ifndef STATUSBAR_H
+#define STATUSBAR_H
 
-#include "curs.h"
-#include "yacursex.h"
-#include "statusline.h"
+#include <stack>
 
-using namespace YACURS;
+#include "lineobject.h"
 
-//
-// Private
-//
+namespace YACURS {
+    /**
+     * Status Line.
+     *
+     * Maintains a stack of messages, where the top most message will
+     * be displayed.
+     */
+    class StatusBar : public LineObject {
+        private:
+            std::stack<std::string> __messages;
 
-void
-StatusLine::put_top_msg() {
-    if (__messages.empty() )
-        line(std::string() );
-    else
-        line(__messages.top() );
+            void put_top_msg();
+
+            StatusBar& operator=(const StatusBar&);
+
+        public:
+            StatusBar();
+            virtual ~StatusBar();
+            void push_msg(const std::string& m);
+
+            void pop_msg();
+    };
 }
 
-StatusLine&
-StatusLine::operator=(const StatusLine&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
-
-//
-// Protected
-//
-
-//
-// Public
-//
-
-StatusLine::StatusLine() :
-    LineObject(POS_BOTTOM, std::string(), STATUSBAR) {
-}
-
-StatusLine::~StatusLine() {
-}
-
-void
-StatusLine::push_msg(const std::string& m) {
-    __messages.push(m);
-    put_top_msg();
-}
-
-void
-StatusLine::pop_msg() {
-    if (__messages.empty() ) return;
-    __messages.pop();
-    put_top_msg();
-}
+#endif

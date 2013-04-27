@@ -93,7 +93,7 @@ namespace YACURS {
          */
         DEFAULT = 0,
 
-	DIALOG,
+        DIALOG,
 
         /**
          * Color of Input Widget without focus.
@@ -135,22 +135,22 @@ namespace YACURS {
          */
         CHECKBOXGROUP,
 
-	/**
-	 * Color of Title Bar
-	 */
-	TITLEBAR,
+        /**
+         * Color of Title Bar
+         */
+        TITLEBAR,
 
-	/**
-	 * Color of Status Bar
-	 */
-	STATUSBAR,
+        /**
+         * Color of Status Bar
+         */
+        STATUSBAR,
 
         /**
          * Number of Colors.
-	 *
-	 * @internal
-	 * 
-	 * Used by Colors to initialize color pairs as sentinel.
+         *
+         * @internal
+         *
+         * Used by Colors to initialize color pairs as sentinel.
          */
         NUMBER_OF_COLOROBJ
     };

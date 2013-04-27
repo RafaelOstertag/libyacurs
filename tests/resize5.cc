@@ -97,11 +97,11 @@ main() {
 
         // NOTE:
         //
-        // The order the objects are created (MyWindow, StatusLine) is
+        // The order the objects are created (MyWindow, StatusBar) is
         // important here. Because MyWindow calls
-        // StatusLine::put_msg() on resize we have to make sure
-        // StatusLine is resized first. Since YACURS::EventQueue calls the
-        // last YACURS::EventConnector connected first, StatusLine has to be
+        // StatusBar::put_msg() on resize we have to make sure
+        // StatusBar is resized first. Since YACURS::EventQueue calls the
+        // last YACURS::EventConnector connected first, StatusBar has to be
         // created AFTER MyWindow.
 
         MyWindow* w1 = new MyWindow(YACURS::Margin(1, 0, 1, 0) );
@@ -109,9 +109,9 @@ main() {
         w1->add_hotkey(HotKeyQuit('q') );
         w1->add_hotkey(HotKeyQuit('Q') );
 
-        YACURS::StatusLine* sl = new YACURS::StatusLine();
+        YACURS::StatusBar* sl = new YACURS::StatusBar();
         sl->push_msg("Press Q to quit");
-        YACURS::Curses::statusline(sl);
+        YACURS::Curses::statusbar(sl);
 
         YACURS::HPack* hpack = new YACURS::HPack;
         YACURS::Label* hl1 = new YACURS::Label("abcdefghijklmnopqrstuvwxyz");

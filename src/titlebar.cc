@@ -30,7 +30,6 @@ using namespace YACURS;
 // Private
 //
 
-
 TitleBar&
 TitleBar::operator=(const TitleBar&) {
     throw EXCEPTIONS::NotSupported();
@@ -46,5 +45,5 @@ TitleBar::operator=(const TitleBar&) {
 //
 
 TitleBar::TitleBar(POSITION _pos, const std::string& _t) :
-		LineObject(_pos,_t,TITLEBAR) {
+    LineObject(_pos, _t, TITLEBAR) {
 }

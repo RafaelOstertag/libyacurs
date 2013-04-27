@@ -111,11 +111,12 @@ WindowBase::~WindowBase() {
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
                                      EVT_FORCEREFRESH, this,
                                      &WindowBase::force_refresh_handler) );
-    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,
-                                                                   this,
-                                                                   &WindowBase
-                                                                   ::
-    refresh_handler) );
+    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
+                                     EVT_REFRESH,
+                                     this,
+                                     &WindowBase
+                                     ::
+                                     refresh_handler) );
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
                                      EVT_SIGWINCH, this,
                                      &WindowBase::resize_handler) );
@@ -149,7 +150,7 @@ WindowBase::frame(bool b) {
 
 void
 WindowBase::color(COLOROBJ c) {
-    __color=c;
+    __color = c;
 }
 
 COLOROBJ
@@ -185,11 +186,12 @@ WindowBase::close() {
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
                                      EVT_FORCEREFRESH, this,
                                      &WindowBase::force_refresh_handler) );
-    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,
-                                                                   this,
-                                                                   &WindowBase
-                                                                   ::
-    refresh_handler) );
+    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
+                                     EVT_REFRESH,
+                                     this,
+                                     &WindowBase
+                                     ::
+                                     refresh_handler) );
 
     // We might have obstructed another window, so make sure it
     // receives a refresh.

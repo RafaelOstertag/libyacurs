@@ -67,7 +67,6 @@ namespace YACURS {
      */
     template<class T = std::string> class Input : public Widget {
         public:
-
             typedef typename T::size_type tsz_t;
         private:
             /**

@@ -26,12 +26,12 @@
 #include "lineobject.h"
 
 namespace YACURS {
-    class TitleBar: public LineObject {
-	private:
-	    TitleBar& TitleBar::operator=(const TitleBar&);
+    class TitleBar : public LineObject {
+        private:
+            TitleBar& TitleBar::operator=(const TitleBar&);
 
-	public:
-	    TitleBar(POSITION _pos, const std::string& _t);
+        public:
+            TitleBar(POSITION _pos, const std::string& _t);
     };
 }
 

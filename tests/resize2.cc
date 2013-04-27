@@ -54,7 +54,7 @@ alrm(YACURS::Event& _e) {
     snprintf(buff, 32, "%d", _scrdim.cols() );
     status_msg += buff;
 
-    YACURS::Curses::statusline()->push_msg(status_msg);
+    YACURS::Curses::statusbar()->push_msg(status_msg);
 
     winsize ws;
 
@@ -96,8 +96,8 @@ main() {
 
         YACURS::Curses::mainwindow(w1);
 
-        YACURS::StatusLine* sl = new YACURS::StatusLine();
-        YACURS::Curses::statusline(sl);
+        YACURS::StatusBar* sl = new YACURS::StatusBar();
+        YACURS::Curses::statusbar(sl);
 
         YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(
                                               YACURS::EVT_SIGALRM, &alrm) );

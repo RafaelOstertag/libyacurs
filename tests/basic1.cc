@@ -64,7 +64,7 @@ main() {
         YACURS::Curses::init();
 
         title = new YACURS::TitleBar(YACURS::TitleBar::POS_TOP,
-                                       "Basic 1");
+                                     "Basic 1");
         YACURS::Curses::title(title);
 
         YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0) );

@@ -89,10 +89,10 @@ namespace YACURS {
              */
             bool __shown;
 
-	    /**
-	     * Default color of window.
-	     */
-	    COLOROBJ __color;
+            /**
+             * Default color of window.
+             */
+            COLOROBJ __color;
 
             // No supported
             WindowBase(const WindowBase&);
@@ -130,9 +130,9 @@ namespace YACURS {
 
             bool frame() const;
 
-	    void color(COLOROBJ c);
-	    
-	    COLOROBJ color() const;
+            void color(COLOROBJ c);
+
+            COLOROBJ color() const;
 
             /**
              * @todo make setting/removing frame take effect immediately,

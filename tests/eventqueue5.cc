@@ -94,7 +94,7 @@ main() {
                                               AlrmHandler>(YACURS::EVT_SIGALRM,
                                                            &ahandler,
                                                            &AlrmHandler::
-        handler) );
+                                                           handler) );
         YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
                                               AlrmHandler2>(YACURS::
                                                             EVT_SIGALRM,

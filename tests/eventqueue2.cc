@@ -58,7 +58,8 @@ class SelfRegister : public Handler {
                                                   SelfRegister>(YACURS::
                                                                 EVT_SIGALRM,
                                                                 this,
-        &SelfRegister::handler) );
+                                                                &SelfRegister
+                                                                ::handler) );
         }
 
         void handler(YACURS::Event& e) {
@@ -74,7 +75,9 @@ class SelfRegister2 : public SelfRegister {
                                                   SelfRegister2>(YACURS::
                                                                  EVT_SIGALRM,
                                                                  this,
-        &SelfRegister2::handler) );
+                                                                 &
+                                                                 SelfRegister2
+                                                                 ::handler) );
         }
 
         void handler(YACURS::Event& e) {
@@ -93,7 +96,7 @@ main() {
                                               AlrmHandler>(YACURS::EVT_SIGALRM,
                                                            &ahandler,
                                                            &AlrmHandler::
-        handler) );
+                                                           handler) );
 
         YACURS::Curses::init();
         alarm(2);

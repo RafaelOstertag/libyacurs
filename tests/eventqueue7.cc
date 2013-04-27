@@ -113,7 +113,7 @@ main() {
                                               AlrmHandler>(YACURS::EVT_SIGALRM,
                                                            &ahandler,
                                                            &AlrmHandler::
-        handler) );
+                                                           handler) );
         // This event connector should be replaced by the next call,
         // hence the handler must only be called once
         YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<

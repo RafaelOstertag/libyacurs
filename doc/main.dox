@@ -1,0 +1,47 @@
+// -*- mode: c++ -*-
+/**
+ *
+ * @mainpage
+ *
+ * Libyacurs is toolkit library based on Curses, initially written for
+ * YAPET.
+ *
+ * @section Overview
+ *
+ * Libyacurs provides following main components:
+ *
+ *  * Event Queue
+ *  * Windows
+ *  * Widgets
+ *
+ * @subsection Event Queue
+ *
+ * The Event Queue queues key strokes and certain Unix signals,
+ * collectively referred to as Events. Events entering the queue will
+ * be broadcast to Event Connectors registered with the queue.
+ *
+ *
+ * @subsection Windows
+ *
+ * A Window holds one Widget, features HotKeys and resize if screen
+ * size change (if supported by the underlying Curses implementation).
+ *
+ * Multiple Widgets can be added to a Window by means of Packs, which
+ * act as container and align Widgets.
+ *
+ * List of Windows:
+ *
+ *  * @ref YACURS::Window "Window"
+ *  * @ref YACURS::Dialog "Dialog"
+ *  * FileLoadDialog
+ *  * FileSaveDialog
+ *  * InputBox
+ *  * MessageBox
+ *  * MessageBox2
+ *
+ *
+ * @subsection Widgets
+ *
+ * A Widget is an object associated with a Window. Most Widgets are
+ * visible, such as Buttons and Labels.
+ */

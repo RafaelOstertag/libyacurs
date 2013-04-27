@@ -1,16 +1,35 @@
 // -*- c++ -*-
 
 /**
- * @page page1 Debug Facilities
+ * @page debugfacilities Debug Facilities
  *
  * @section EventQueue Debug
  *
  * If libyacurs has been compiled with <tt>-DEVTQDEBUG</tt> the
  * environment variable @c LIBYACURS_EVT_DBGFN can be used to specify
- * the file where to store debug output.
+ * the file where to store debug output. E.g., in a bash shell, you
+ * would use
+ *
+ * <code>
+ * export LIBYACURS_EVT_DBGFN=/tmp/evtdebug.out
+ * </code>
+ *
+ * or, in csh shell
+ *
+ * <code>
+ * setenv LIBYACURS_EVT_DBGFN /tmp/evtdebug.out
+ * </code>
+ *
+ * and then launch the executable linked against libyacurs.
  *
  * @section EventQueue Statistics
  * 
  * Setting @c LIBYACURS_EVT_STATS to a file path will print EventQueue
- * statistics.
+ * statistics. E.g.,
+ *
+ * <code>
+ * export LIBYACURS_EVT_STATS=/tmp/evtstats.out
+ * </code>
+ *
+ * and then launch the executable linked against libyacurs.
  */

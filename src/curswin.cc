@@ -184,7 +184,7 @@ CursWin::set_color(COLOROBJ c) {
 
 CursWin&
 CursWin::set_bg(COLOROBJ c) {
-    wbkgd(__window, ' ' | Colors::color_pair(c) );
+    bkgd(' ' | Colors::color_pair(c) );
     return *this;
 }
 

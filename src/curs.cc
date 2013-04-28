@@ -142,6 +142,15 @@ Curses::init() {
     // We don't fail if that doesn't work, so no check on retval.
     curs_set(0);
 
+    wbkgd(stdscr, ' ' | Colors::color_pair(DEFAULT));
+
+#if NCURSES_VERSION_PATCH < 20100313
+    wattrset(stdscr, Colors::color_pair(DEFAULT) );
+#else
+    if (wattrset(stdscr, Colors::color_pair(DEFAULT) ) == ERR)
+        throw EXCEPTIONS::CursesException("wattrset");
+#endif
+
     // Curses clears stdscr upon first call to getch, which may
     // produce undesired results, i.e. already created Curses Windows
     // may be overwritten. Therefore we refresh stdscr preventively.

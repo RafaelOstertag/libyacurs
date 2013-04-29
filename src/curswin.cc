@@ -162,7 +162,7 @@ CursWin::box(chtype verch, chtype horch) {
     if (::box(__window, verch, horch) == ERR)
         throw EXCEPTIONS::CursesException("box");
 #else
-    if (wborder(verch==0? '|' : verch, 
+    if (wborder(__window, verch==0? '|' : verch, 
 		verch==0? '|' : verch,
 		horch==0? '-' : horch,
 		horch==0? '-' : horch,

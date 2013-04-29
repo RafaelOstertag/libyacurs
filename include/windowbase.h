@@ -156,6 +156,9 @@ namespace YACURS {
 
             bool shown() const;
 
+	    // Those handlers must be public, so that LockScreen can
+	    // suspend them.
+
             virtual void force_refresh_handler(Event& _e);
 
             virtual void refresh_handler(Event& _e);

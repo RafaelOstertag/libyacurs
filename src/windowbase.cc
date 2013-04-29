@@ -195,6 +195,13 @@ WindowBase::close() {
 
     // We might have obstructed another window, so make sure it
     // receives a refresh.
+    //
+    // Solaris' Curses does not properly redraw windows when they have
+    // been obscured by other windows. Ctrl-L helps, so we emulate
+    // this key stroke sequence.
+    //
+    // See also Window::refresh().
+    EventQueue::submit(EVT_FORCEREFRESH); 
     EventQueue::submit(EVT_REFRESH);
     EventQueue::submit(EVT_DOUPDATE);
 
@@ -212,6 +219,7 @@ bool
 WindowBase::shown() const {
     return __shown;
 }
+
 
 void
 WindowBase::force_refresh_handler(Event& _e) {

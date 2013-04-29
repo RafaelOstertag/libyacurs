@@ -154,8 +154,21 @@ CursWin::has_box() const {
 
 CursWin&
 CursWin::box(chtype verch, chtype horch) {
+    // X/Open has trouble with colors and ACS_* characters, as used
+    // with borders. Therefore, we fall back to non ACS_*
+    // characters. Beware, NCurses also defines _XOPEN_CURSES,
+    // though.
+#if !defined(_XOPEN_CURSES) || defined(NCURSES_VERSION)
     if (::box(__window, verch, horch) == ERR)
         throw EXCEPTIONS::CursesException("box");
+#else
+    if (wborder(verch==0? '|' : verch, 
+		verch==0? '|' : verch,
+		horch==0? '-' : horch,
+		horch==0? '-' : horch,
+		'+', '+', '+', '+')==ERR)
+        throw EXCEPTIONS::CursesException("wborder");
+#endif
 
     __box = true;
     __client_area = __area - Margin(1, 1, 1, 1);

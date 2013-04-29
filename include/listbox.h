@@ -602,10 +602,16 @@ namespace YACURS {
         // artifcats on the right side of the box, when it is
         // placed in front of the above code block.
         //
-        if (focus() )
+        if (focus() ) {
             widget_subwin()->box();
-        else
+	} else {
+	// See CursWin::box() about #ifdef
+#if !defined(_XOPEN_CURSES) || defined(NCURSES_VERSION) 
             widget_subwin()->box('|', '-');
+#else
+	    widget_subwin()->box('.', '.');
+#endif
+	}
 
         // set scroll markers
         if (__list.size() > pagesize() ) {

@@ -271,6 +271,7 @@ FileSaveDialog::FileSaveDialog(std::string _path,
     __hpack = new HPack;
 
     __path = new DynLabel(_path);
+    __path->color(DIALOG);
 
     __directories = new ListBox<>;
     __directories->sort_order(ListBox<>::ASCENDING);

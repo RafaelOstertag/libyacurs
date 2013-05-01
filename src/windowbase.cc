@@ -201,7 +201,7 @@ WindowBase::close() {
     // this key stroke sequence.
     //
     // See also Window::refresh().
-    EventQueue::submit(EVT_FORCEREFRESH); 
+    EventQueue::submit(EVT_FORCEREFRESH);
     EventQueue::submit(EVT_REFRESH);
     EventQueue::submit(EVT_DOUPDATE);
 
@@ -219,7 +219,6 @@ bool
 WindowBase::shown() const {
     return __shown;
 }
-
 
 void
 WindowBase::force_refresh_handler(Event& _e) {

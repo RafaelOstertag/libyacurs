@@ -557,6 +557,8 @@ namespace YACURS {
         if (!widget_subwin()->has_box() )
             widget_subwin()->box();
 
+        widget_subwin()->set_bg(LISTBOX);
+
         widget_subwin()->erase();
 
         std::list<std::string>::iterator it = __list.begin();
@@ -604,14 +606,14 @@ namespace YACURS {
         //
         if (focus() ) {
             widget_subwin()->box();
-	} else {
-	// See CursWin::box() about #ifdef
-#if !defined(_XOPEN_CURSES) || defined(NCURSES_VERSION) 
+        } else {
+            // See CursWin::box() about #ifdef
+#if !defined(_XOPEN_CURSES) || defined(NCURSES_VERSION)
             widget_subwin()->box('|', '-');
 #else
-	    widget_subwin()->box('.', '.');
+            widget_subwin()->box('.', '.');
 #endif
-	}
+        }
 
         // set scroll markers
         if (__list.size() > pagesize() ) {

@@ -36,7 +36,7 @@ using namespace YACURS::INTERNAL;
 // Private
 //
 const std::string ColorParser::__default_colors(
-    "DEF:wk0;DIA:cb0;IWN:kw3;IWF:kg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;LBH:kg3;CBG:yc0;TLB:by0;STB:bg0");
+    "DEF:wk0;DIA:cb0;IWN:kw3;IWF:kg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;LBH:kg3;CBG:yc0;TLB:bw0;STB:bw0");
 
 std::vector<std::string>
 ColorParser::tokenize(const std::string& str) const {

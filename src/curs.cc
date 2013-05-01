@@ -142,7 +142,7 @@ Curses::init() {
     // We don't fail if that doesn't work, so no check on retval.
     curs_set(0);
 
-    wbkgd(stdscr, ' ' | Colors::color_pair(DEFAULT));
+    wbkgd(stdscr, ' ' | Colors::color_pair(DEFAULT) );
 
 #if NCURSES_VERSION_PATCH < 20100313
     wattrset(stdscr, Colors::color_pair(DEFAULT) );

@@ -195,6 +195,8 @@ namespace YACURS {
 
                 CursWin& clear();
 
+                CursWin& clrtobot();
+
                 CursWin& erase();
 
                 CursWin& touch();

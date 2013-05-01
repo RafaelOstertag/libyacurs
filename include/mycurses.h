@@ -324,6 +324,15 @@ bkgd(chtype ch) {
 
 #endif
 
+#ifdef clrtobot
+#undef clrtobot
+inline int
+clrtobot() {
+    return wclrtobot(stdscr);
+}
+
+#endif
+
 #ifdef wclear
 #undef wclear
 #endif

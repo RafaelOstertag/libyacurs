@@ -162,11 +162,11 @@ CursWin::box(chtype verch, chtype horch) {
     if (::box(__window, verch, horch) == ERR)
         throw EXCEPTIONS::CursesException("box");
 #else
-    if (wborder(__window, verch==0? '|' : verch, 
-		verch==0? '|' : verch,
-		horch==0? '-' : horch,
-		horch==0? '-' : horch,
-		'+', '+', '+', '+')==ERR)
+    if (wborder(__window, verch == 0 ? '|' : verch,
+                verch == 0 ? '|' : verch,
+                horch == 0 ? '-' : horch,
+                horch == 0 ? '-' : horch,
+                '+', '+', '+', '+') == ERR)
         throw EXCEPTIONS::CursesException("wborder");
 #endif
 
@@ -230,6 +230,14 @@ CursWin&
 CursWin::clear() {
     if (wclear(__window) == ERR)
         throw EXCEPTIONS::CursesException("wclear");
+
+    return *this;
+}
+
+CursWin&
+CursWin::clrtobot() {
+    if (wclrtobot(__window) == ERR)
+        throw EXCEPTIONS::CursesException("wclrtobot");
 
     return *this;
 }

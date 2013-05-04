@@ -265,6 +265,36 @@ host_freebsd32() {
     done
 }
 
+host_abraxas() {
+    gmake distclean
+    ./configure \
+	CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
+	CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
+    had_error $? "Error on abraxas"
+
+    gmake clean
+    gmake -j2
+    had_error $? "Error on abraxas"
+
+    gmake check
+    had_error $? "Error on abraxas"
+}
+
+host_netbsd32() {
+    gmake distclean
+    ./configure \
+	CFLAGS="-O3 -Wall -Werror -pedantic" \
+	CXXFLAGS="-O3 -Wall -Werror -pedantic"
+    had_error $? "Error on netbsd32"
+
+    gmake clean
+    gmake -j2
+    had_error $? "Error on netbsd32"
+
+    gmake check
+    had_error $? "Error on netbsd32"
+}
+
 host_fish() {
     gmake distclean
     ./configure \

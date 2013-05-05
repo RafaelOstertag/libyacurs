@@ -74,6 +74,11 @@ namespace YACURS {
              */
             static bool initialized;
 
+	    /**
+	     * Flag indicating whether or not program has been suspended.
+	     */
+	    static bool __suspended;
+
         protected:
             /**
              * Handler for EVT_DOUPDATE event.
@@ -83,6 +88,10 @@ namespace YACURS {
             static void doupdate_handler(Event& e);
 
             static void termresetup_handler(Event& e);
+
+	    static void sigtstp_handler(Event& e);
+
+	    static void sigcont_handler(Event& e);
 
         public:
             static void init();

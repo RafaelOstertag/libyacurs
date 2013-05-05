@@ -59,6 +59,7 @@ TitleBar* Curses::__title = 0;
 StatusBar* Curses::__statusbar = 0;
 Window* Curses::__mainwindow = 0;
 bool Curses::initialized = false;
+bool Curses::__suspended = false;
 
 //
 // Private
@@ -98,6 +99,38 @@ Curses::termresetup_handler(Event& e) {
 #endif // HAVE_RESIZE_TERM
 }
 
+void
+Curses::sigtstp_handler(Event& e) {
+    assert(e == EVT_SIGTSTP);
+
+    if (__suspended) return;
+
+    if (savetty() == ERR)
+	EXCEPTIONS::CursesException("savetty");
+
+#warning "Do proper"
+    endwin();
+
+    __suspended = true;
+
+}
+
+void
+Curses::sigcont_handler(Event& e) {
+    assert(e == EVT_SIGCONT);
+
+    if (!__suspended) return;
+
+    if (resetty() == ERR)
+	EXCEPTIONS::CursesException("resetty");
+
+    EventQueue::submit(Event(EVT_FORCEREFRESH) );
+    EventQueue::submit(Event(EVT_REFRESH) );
+    EventQueue::submit(Event(EVT_DOUPDATE) );
+
+    __suspended = false;
+}
+
 //
 // Public
 //
@@ -120,6 +153,14 @@ Curses::init() {
     EventQueue::connect_event(EventConnectorFunction1(EVT_TERMRESETUP,
                                                       Curses::
                                                       termresetup_handler) );
+
+    EventQueue::connect_event(EventConnectorFunction1(EVT_SIGTSTP,
+                                                      Curses::
+                                                      sigtstp_handler) );
+
+    EventQueue::connect_event(EventConnectorFunction1(EVT_SIGCONT,
+                                                      Curses::
+                                                      sigcont_handler) );
 
     if (nonl() == ERR)
         throw EXCEPTIONS::CursesException("nonl");

@@ -790,6 +790,9 @@ EventQueue::run() {
     sigaddset(&block_sigmask, SIGUSR2);
     sigaddset(&block_sigmask, SIGINT);
     sigaddset(&block_sigmask, SIGTERM);
+    sigaddset(&block_sigmask, SIGQUIT);
+    sigaddset(&block_sigmask, SIGTSTP);
+    sigaddset(&block_sigmask, SIGCONT);
 
     setup_signal();
 

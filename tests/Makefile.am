@@ -10,11 +10,7 @@ interactive_tests = eventqueue9 resize3 resize4 resize5 focus1 app1	\
     listbox1 listbox2 dialog1 messagebox1 inputbox1 filedialog1		\
     checkbox1 radiobox1 packremove lockscreen1
 
-check_PROGRAMS  =  $(non_interactive_tests)
-
-if NOTCYGWIN
-check_PROGRAMS += $(interactive_tests)
-endif
+check_PROGRAMS  =  $(non_interactive_tests) $(interactive_tests)
 
 # interactive tests must not be listed here
 TESTS = $(non_interactive_tests)

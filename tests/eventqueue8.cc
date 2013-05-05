@@ -48,7 +48,7 @@ class Handler {
 
         void reset() {
             calls = 0;
-        };
+        }
 };
 
 class AlrmHandler : public Handler {

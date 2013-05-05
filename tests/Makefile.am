@@ -10,7 +10,12 @@ interactive_tests = eventqueue9 resize3 resize4 resize5 focus1 app1	\
     listbox1 listbox2 dialog1 messagebox1 inputbox1 filedialog1		\
     checkbox1 radiobox1 packremove lockscreen1
 
-check_PROGRAMS =  $(non_interactive_tests) $(interactive_tests)
+check_PROGRAMS  =  $(non_interactive_tests)
+
+if NOTCYGWIN
+check_PROGRAMS += $(interactive_tests)
+endif
+
 # interactive tests must not be listed here
 TESTS = $(non_interactive_tests)
 
@@ -18,11 +23,17 @@ AM_DEFAULT_SOURCE_EXT = .cc
 
 AM_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\" -I$(top_srcdir)/include
 
-# LD_EXPORT_DYNAMIC is basically only used for interactive_tests
-AM_LDFLAGS = -L$(top_builddir)/src -lyacurs $(LD_EXPORT_DYNAMIC) $(LTLIBINTL)
+AM_LDFLAGS  = -L$(top_builddir)/src -lyacurs  $(LTLIBINTL)
+if NOTCYGWIN
+# LD_EXPORT_DYNAMIC is basically only used for interactive_tests and
+# only works on non-cygwin systems
+AM_LDFLAGS += $(LD_EXPORT_DYNAMIC)
+endif
+
 
 EXTRA_DIST = testpreload.cc
 
+if NOTCYGWIN
 all-local: libtestpreload.la
 clean-local:
 	rm -f libtestpreload.la
@@ -38,3 +49,4 @@ check-local: $(interactive_tests)
 		$(LIBTOOL) --mode=execute env LD_PRELOAD="$(builddir)/.libs/libtestpreload.so" $$f ; \
 		test "x$$?" = "x0" || { echo "*** $$f failed" ; exit 1 ; } ; \
 	done
+endif

@@ -13,7 +13,26 @@ AC_PROG_CXX
 AM_PROG_AR
 AM_PROG_LIBTOOL
 LT_INIT
+
+# Conditional compiling on Cygwin: tests using LD_PRELOAD don't just
+# work on Cygwin, so we only run them if not built on a cygwin box.
+AC_MSG_CHECKING([checking whether we are on Cygwin])
+case $host in
+     *cygwin*)
+	my_cygwin=true
+	AC_MSG_RESULT([yes, disabling some tests])
+	;;
+     *)
+        my_cygwin=false
+	AC_MSG_RESULT([no])
+	;;
+esac
+AM_CONDITIONAL([NOTCYGWIN],[test x$my_cygwin = xfalse])
+
+
 AX_CHECK_LINK_FLAG([-Wl,--export-dynamic],[AC_SUBST([LD_EXPORT_DYNAMIC],[-Wl,--export-dynamic])])
+
+
 
 AC_LANG([C++])
 AM_GNU_GETTEXT([external])

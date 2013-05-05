@@ -164,7 +164,7 @@ AURORA_CURSES_LDFLAGS_ncurses='-L/usr/local/lib'
 host_aurora() {
     for c in default clang 34 42 44 46 47 48
     do
-	for curs in system ncurses
+	for curs in system
 	do
 	    gmake distclean
 	    ./configure CXX="`eval echo \\$AURORA_CXX_$c`" \
@@ -243,7 +243,7 @@ FREEBSD32_CURSES_LDFLAGS_ncurses='-L/usr/local/lib'
 host_freebsd32() {
     for c in default clang 34 42 44 46 47 48
     do
-	for curs in system ncurses
+	for curs in system
 	do
 	    gmake distclean
 	    ./configure --disable-nls CXX="`eval echo \\$FREEBSD32_CXX_$c`" \

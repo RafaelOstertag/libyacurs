@@ -158,7 +158,7 @@ namespace YACURS {
 }
 
 /**
- * @relates Realizeable
+ * @relates YACURS::Realizeable
  *
  * This macro should be used when implementing realize(). It has to be
  * called first. It will ensure that the REALIZATION_STATE is set
@@ -207,7 +207,7 @@ namespace YACURS {
     }
 
 /**
- * @relates Realizeable
+ * @relates YACURS::Realizeable
  *
  * Helper macro to be used in realize()
  *
@@ -223,7 +223,7 @@ namespace YACURS {
         realization(REALIZED);
 
 /**
- * @relates Realizeable
+ * @relates YACURS::Realizeable
  *
  * The same purpose as REALIZE_ENTER.
  */
@@ -244,7 +244,7 @@ namespace YACURS {
     }
 
 /**
- * @relates Realizeable
+ * @relates YACURS::Realizeable
  *
  * The same purpose as REALIZE_LEAVE.
  */

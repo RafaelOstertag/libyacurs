@@ -73,6 +73,9 @@ INTERNAL::Sigaction* EventQueue::sigusr1;
 INTERNAL::Sigaction* EventQueue::sigusr2;
 INTERNAL::Sigaction* EventQueue::sigint;
 INTERNAL::Sigaction* EventQueue::sigterm;
+INTERNAL::Sigaction* EventQueue::sigquit;
+INTERNAL::Sigaction* EventQueue::sigtstp;
+INTERNAL::Sigaction* EventQueue::sigcont;
 
 bool EventQueue::signal_blocked = false;
 
@@ -301,7 +304,24 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGUSR2);
     sigaddset(&mask, SIGINT);
     sigaddset(&mask, SIGTERM);
+    sigaddset(&mask, SIGQUIT);
+    sigaddset(&mask, SIGCONT);
+    sigaddset(&mask, SIGTSTP);
     sigwinch = new INTERNAL::Sigaction(SIGWINCH, signal_handler, mask);
+
+    //
+    // SIGQUIT
+    //
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGALRM);
+    sigaddset(&mask, SIGUSR1);
+    sigaddset(&mask, SIGUSR2);
+    sigaddset(&mask, SIGINT);
+    sigaddset(&mask, SIGTERM);
+    sigaddset(&mask, SIGWINCH);
+    sigaddset(&mask, SIGCONT);
+    sigaddset(&mask, SIGTSTP);
+    sigquit = new INTERNAL::Sigaction(SIGQUIT, signal_handler, mask);
 
     //
     // SIGALRM
@@ -312,6 +332,9 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGUSR2);
     sigaddset(&mask, SIGINT);
     sigaddset(&mask, SIGTERM);
+    sigaddset(&mask, SIGQUIT);
+    sigaddset(&mask, SIGCONT);
+    sigaddset(&mask, SIGTSTP);
     sigalrm = new INTERNAL::Sigaction(SIGALRM, signal_handler, mask);
 
     //
@@ -323,6 +346,9 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGUSR2);
     sigaddset(&mask, SIGINT);
     sigaddset(&mask, SIGTERM);
+    sigaddset(&mask, SIGQUIT);
+    sigaddset(&mask, SIGCONT);
+    sigaddset(&mask, SIGTSTP);
     sigusr1 = new INTERNAL::Sigaction(SIGUSR1, signal_handler, mask);
 
     //
@@ -334,6 +360,9 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGUSR1);
     sigaddset(&mask, SIGINT);
     sigaddset(&mask, SIGTERM);
+    sigaddset(&mask, SIGQUIT);
+    sigaddset(&mask, SIGCONT);
+    sigaddset(&mask, SIGTSTP);
     sigusr2 = new INTERNAL::Sigaction(SIGUSR2, signal_handler, mask);
 
     //
@@ -345,10 +374,13 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGUSR1);
     sigaddset(&mask, SIGUSR2);
     sigaddset(&mask, SIGTERM);
+    sigaddset(&mask, SIGQUIT);
+    sigaddset(&mask, SIGCONT);
+    sigaddset(&mask, SIGTSTP);
     sigint = new INTERNAL::Sigaction(SIGINT, signal_handler, mask);
 
     //
-    // SIGINT
+    // SIGTERM
     //
     sigemptyset(&mask);
     sigaddset(&mask, SIGWINCH);
@@ -356,7 +388,38 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGUSR1);
     sigaddset(&mask, SIGUSR2);
     sigaddset(&mask, SIGINT);
+    sigaddset(&mask, SIGQUIT);
+    sigaddset(&mask, SIGCONT);
+    sigaddset(&mask, SIGTSTP);
     sigterm = new INTERNAL::Sigaction(SIGTERM, signal_handler, mask);
+
+    //
+    // SIGCONT
+    //
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGWINCH);
+    sigaddset(&mask, SIGALRM);
+    sigaddset(&mask, SIGUSR1);
+    sigaddset(&mask, SIGUSR2);
+    sigaddset(&mask, SIGINT);
+    sigaddset(&mask, SIGQUIT);
+    sigaddset(&mask, SIGTERM);
+    sigaddset(&mask, SIGTSTP);
+    sigcont = new INTERNAL::Sigaction(SIGCONT, signal_handler, mask);
+
+    //
+    // SIGTSTP
+    //
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGWINCH);
+    sigaddset(&mask, SIGALRM);
+    sigaddset(&mask, SIGUSR1);
+    sigaddset(&mask, SIGUSR2);
+    sigaddset(&mask, SIGINT);
+    sigaddset(&mask, SIGQUIT);
+    sigaddset(&mask, SIGTERM);
+    sigaddset(&mask, SIGCONT);
+    sigtstp = new INTERNAL::Sigaction(SIGTSTP, signal_handler, mask);
 
     //
     // Unblock signals
@@ -369,6 +432,9 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGUSR2);
     sigaddset(&mask, SIGINT);
     sigaddset(&mask, SIGTERM);
+    sigaddset(&mask, SIGCONT);
+    sigaddset(&mask, SIGTSTP);
+    sigaddset(&mask, SIGQUIT);
 
     if (sigprocmask(SIG_UNBLOCK, &mask, &old_sigmask) != 0)
         throw EXCEPTIONS::SystemError(errno);
@@ -391,8 +457,17 @@ EventQueue::restore_signal() {
     if (sigint)
         delete sigint;
 
-    if (sigint)
+    if (sigterm)
         delete sigterm;
+
+    if (sigquit)
+        delete sigquit;
+
+    if (sigtstp)
+        delete sigtstp;
+
+    if (sigcont)
+        delete sigcont;
 
     if (sigprocmask(SIG_SETMASK, &old_sigmask, 0) != 0)
         throw EXCEPTIONS::SystemError(errno);
@@ -433,6 +508,18 @@ EventQueue::signal_handler(int signo)
 
     case SIGTERM:
         submit(EVT_SIGTERM);
+        break;
+
+    case SIGQUIT:
+        submit(EVT_SIGQUIT);
+        break;
+
+    case SIGTSTP:
+        submit(EVT_SIGTSTP);
+        break;
+
+    case SIGCONT:
+        submit(EVT_SIGCONT);
         break;
     }
 

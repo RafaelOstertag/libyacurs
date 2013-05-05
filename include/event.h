@@ -104,12 +104,13 @@ namespace YACURS {
          */
         EVT_TERMRESETUP,
 
-        /// SIGUSR1
         EVT_SIGUSR1,
-        /// SIGUSR2
         EVT_SIGUSR2,
         EVT_SIGINT,
         EVT_SIGTERM,
+        EVT_SIGQUIT,
+        EVT_SIGCONT,
+        EVT_SIGTSTP,
 
         /**
          * Advises Focus Manager to give focus to the next Widget in

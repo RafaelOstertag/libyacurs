@@ -101,6 +101,9 @@ namespace YACURS {
             static INTERNAL::Sigaction* sigusr2;
             static INTERNAL::Sigaction* sigint;
             static INTERNAL::Sigaction* sigterm;
+            static INTERNAL::Sigaction* sigquit;
+            static INTERNAL::Sigaction* sigtstp;
+            static INTERNAL::Sigaction* sigcont;
 
             static bool signal_blocked;
             static std::queue<Event*> evt_queue;

@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libyacurs 0.1\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
-"POT-Creation-Date: 2013-04-09 19:23+0200\n"
+"POT-Creation-Date: 2013-05-05 10:31+0200\n"
 "PO-Revision-Date: 2013-04-09 19:23+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -42,168 +42,168 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/checkbox.cc:135
+#: src/checkbox.cc:168
 msgid "CheckBox: index "
 msgstr ""
 
-#: src/checkbox.cc:135
+#: src/checkbox.cc:169
 msgid " out of range."
 msgstr ""
 
-#: src/checkbox.cc:148
+#: src/checkbox.cc:182
 msgid "Item '"
 msgstr ""
 
-#: src/checkbox.cc:148
+#: src/checkbox.cc:182
 msgid "' not found in CheckBox"
 msgstr ""
 
-#: src/colorparser.cc:100
+#: src/colorparser.cc:65
 msgid " does not contain ':'"
 msgstr ""
 
-#: src/colorparser.cc:106
+#: src/colorparser.cc:71
 msgid "Color Object size invalid"
 msgstr ""
 
-#: src/colorparser.cc:112
+#: src/colorparser.cc:77
 msgid "Color size invalid"
 msgstr ""
 
-#: src/colorparser.cc:118
+#: src/colorparser.cc:83
 msgid " is not valid color object"
 msgstr ""
 
-#: src/colorparser.cc:125 src/colorparser.cc:132
+#: src/colorparser.cc:90 src/colorparser.cc:97
 msgid "not a valid color: "
 msgstr ""
 
-#: src/colorparser.cc:139
+#: src/colorparser.cc:104
 msgid "not a valid attribute: "
 msgstr ""
 
-#: src/curswin.cc:32
+#: src/curswin.cc:45
 msgid "argument 'win' must not be 0"
 msgstr ""
 
-#: src/curswin.cc:58
+#: src/curswin.cc:70
 msgid "Area must not be zero"
 msgstr ""
 
-#: src/dialog.cc:98
+#: src/dialog.cc:148
 msgid "Cancel"
 msgstr ""
 
-#: src/dialog.cc:101
+#: src/dialog.cc:152
 msgid "OK"
 msgstr ""
 
-#: src/dialog.cc:105
+#: src/dialog.cc:157
 msgid "No"
 msgstr ""
 
-#: src/dialog.cc:108
+#: src/dialog.cc:161
 msgid "Yes"
 msgstr ""
 
-#: src/fileloaddialog.cc:143 src/fileloaddialog.cc:286
-#: src/filesavedialog.cc:143 src/filesavedialog.cc:343
+#: src/fileloaddialog.cc:155 src/fileloaddialog.cc:309
+#: src/filesavedialog.cc:155 src/filesavedialog.cc:370
 msgid "Cannot change to "
 msgstr ""
 
-#: src/fileloaddialog.cc:144 src/fileloaddialog.cc:287
-#: src/filesavedialog.cc:144 src/filesavedialog.cc:344
+#: src/fileloaddialog.cc:156 src/fileloaddialog.cc:310
+#: src/filesavedialog.cc:156 src/filesavedialog.cc:371
 msgid "System Error"
 msgstr ""
 
-#: src/fileloaddialog.cc:186
+#: src/fileloaddialog.cc:199
 msgid "Load File"
 msgstr ""
 
-#: src/filesavedialog.cc:206
+#: src/filesavedialog.cc:218
 msgid "Confirmation"
 msgstr ""
 
-#: src/filesavedialog.cc:208
+#: src/filesavedialog.cc:221
 msgid "already exists. Do you want to overwrite?"
 msgstr ""
 
-#: src/filesavedialog.cc:217
+#: src/filesavedialog.cc:230
 msgid "Error"
 msgstr ""
 
-#: src/filesavedialog.cc:243
+#: src/filesavedialog.cc:260
 msgid "Save File"
 msgstr ""
 
-#: src/size.cc:41 src/size.cc:66
+#: src/size.cc:54 src/size.cc:79
 msgid "Rows cannot be <0"
 msgstr ""
 
-#: src/size.cc:43 src/size.cc:59
+#: src/size.cc:56 src/size.cc:72
 msgid "Columns cannot be <0"
 msgstr ""
 
-#: src/unlockdiadefault.cc:34
+#: src/unlockdiadefault.cc:47
 msgid "Unlock Screen"
 msgstr ""
 
-#: src/unlockdiadefault.cc:41
+#: src/unlockdiadefault.cc:54
 msgid "Please enter password in order to unlock screen"
 msgstr ""
 
-#: src/yacursex.cc:29
+#: src/yacursex.cc:46
 msgid "() failed"
 msgstr ""
 
-#: src/yacursex.cc:32
+#: src/yacursex.cc:50
 msgid "unable to initialize curses"
 msgstr ""
 
-#: src/yacursex.cc:35
+#: src/yacursex.cc:54
 msgid "curses not initialized"
 msgstr ""
 
-#: src/yacursex.cc:38
+#: src/yacursex.cc:58
 msgid "curses has already been initialized"
 msgstr ""
 
-#: src/yacursex.cc:41
+#: src/yacursex.cc:62
 msgid "object already realized"
 msgstr ""
 
-#: src/yacursex.cc:44
+#: src/yacursex.cc:66
 msgid "object not realized"
 msgstr ""
 
-#: src/yacursex.cc:54
+#: src/yacursex.cc:80
 msgid "TIOCGWINSZ info invalid"
 msgstr ""
 
-#: src/yacursex.cc:57
+#: src/yacursex.cc:84
 msgid "unable to get window size"
 msgstr ""
 
-#: src/yacursex.cc:60
+#: src/yacursex.cc:88
 msgid "Cannot focus"
 msgstr ""
 
-#: src/yacursex.cc:63
+#: src/yacursex.cc:92
 msgid "Unexpected event received"
 msgstr ""
 
-#: src/yacursex.cc:66
+#: src/yacursex.cc:96
 msgid "Colors not initialized"
 msgstr ""
 
-#: src/yacursex.cc:69
+#: src/yacursex.cc:100
 msgid "An object exceeded space constraints"
 msgstr ""
 
-#: src/yacursex.cc:72
+#: src/yacursex.cc:104
 msgid "Operation not supported"
 msgstr ""
 
-#: src/yacursex.cc:75
+#: src/yacursex.cc:108
 msgid "Invalid dialog type"
 msgstr ""

@@ -97,7 +97,7 @@ test4() {
 
 void
 test5() {
-    for (int anic = 0; anic < 5; anic++) {
+    for (int anic = 0; anic < 2; anic++) {
         YACURS::INTERNAL::CursWin win1(YACURS::Area(0, 0, 10, 10) );
         win1.set_color(YACURS::DIALOG);
 
@@ -252,6 +252,21 @@ test8() {
     win.refresh();
 }
 
+void test9() {
+    YACURS::INTERNAL::CursWin win1(YACURS::Area(0, 10, 10, 20), YACURS::DIALOG);
+    win1.box();
+    win1.addstrx(YACURS::CurStr("abcdefghiklmnopqrstuvwxyz",YACURS::Coordinates(1,1),YACURS::INPUTWIDGET_FOCUS));
+
+
+    YACURS::INTERNAL::CursWin win2(YACURS::Area(5,5,10,20), YACURS::TITLEBAR);
+    win2.addstrx(YACURS::CurStr("abcdefghiklmnopqrstuvwxyz", YACURS::Coordinates(1,1),YACURS::INPUTWIDGET_FOCUS));
+    win2.box();
+
+
+    win1.refresh(true);
+    win2.refresh(true);
+}
+
 int
 main() {
 #if 0
@@ -294,6 +309,9 @@ main() {
     wrefresh(stdscr);
 
     test8();
+    sleep(1);
+
+    test9();
     sleep(1);
 
     YACURS::Curses::end();

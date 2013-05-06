@@ -44,6 +44,7 @@
 #endif // HAVE_SYS_TERMIOS_H
 #endif // HAVE_TERMIOS_H
 
+#include <cerrno>
 #include <cstdlib>
 
 #include "curs.h"
@@ -59,7 +60,7 @@ TitleBar* Curses::__title = 0;
 StatusBar* Curses::__statusbar = 0;
 Window* Curses::__mainwindow = 0;
 bool Curses::initialized = false;
-bool Curses::__suspended = false;
+volatile bool Curses::__suspended = false;
 
 //
 // Private
@@ -105,14 +106,31 @@ Curses::sigtstp_handler(Event& e) {
 
     if (__suspended) return;
 
+    int old_errno = errno;
+
     if (savetty() == ERR)
 	EXCEPTIONS::CursesException("savetty");
 
-#warning "Do proper"
+    // Block SIGWINCH and SIGALRM
+    sigset_t mymask, oldmask;
+    (void)sigemptyset(&mymask);
+    (void)sigaddset(&mymask, SIGALRM);
+    (void)sigaddset(&mymask, SIGWINCH);
+    (void)sigprocmask(SIG_BLOCK, &mymask, &oldmask);
+
     endwin();
 
     __suspended = true;
+    
+    // Put to sleep
+    kill(getpid(), SIGSTOP);
 
+    // wait for SIGCONT
+
+    // wakey, wakey, rise and shine...
+    (void)sigprocmask(SIG_SETMASK, &oldmask, 0);
+
+    errno = old_errno;
 }
 
 void
@@ -120,6 +138,8 @@ Curses::sigcont_handler(Event& e) {
     assert(e == EVT_SIGCONT);
 
     if (!__suspended) return;
+
+    int old_errno = errno;
 
     if (resetty() == ERR)
 	EXCEPTIONS::CursesException("resetty");
@@ -129,6 +149,8 @@ Curses::sigcont_handler(Event& e) {
     EventQueue::submit(Event(EVT_DOUPDATE) );
 
     __suspended = false;
+
+    errno = old_errno;
 }
 
 //

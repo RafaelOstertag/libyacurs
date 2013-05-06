@@ -77,7 +77,7 @@ namespace YACURS {
 	    /**
 	     * Flag indicating whether or not program has been suspended.
 	     */
-	    static bool __suspended;
+	    static volatile bool __suspended;
 
         protected:
             /**

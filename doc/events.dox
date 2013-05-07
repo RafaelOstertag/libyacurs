@@ -2,7 +2,22 @@
 /**
  * @page events Events
  *
- * @section Terminal Resize
+ * @section uxsignal Unix Signals
+ *
+ * Following a tbale of Unix Signals and their corresponding events:
+ *
+ * Unix Signal | Event
+ * ------------|------
+ * SIGWINCH    | see @ref termresize "Terminal Resize"
+ * @c SIGALARM | @c EVT_SIGALRM
+ * @c SIGUSR1  | @c EVT_SIGUSR1
+ * @c SIGUSR2  | @c EVT_SIGUSR2
+ * @c SIGINT   | @c EVT_SIGINT
+ * @c SIGTERM  | @c EVT_SIGTERM
+ * @c SIGQUIT  | @c EVT_SIGQUIT
+ * @c SIGCONT  | @c EVT_SIGTSTP
+ *
+ * @section termresize Terminal Resize
  *
  * If supported by the underlying Curses implementation, a Terminal
  * Resize emits following events:
@@ -25,4 +40,12 @@
  *
  * A Terminal Resize will always result in objects being first
  * unrealized() and then realized() again.
+ *
+ * @section Window Events
+ *
+ * Upon showing a window by calling @c WindowBase->show(), @c
+ * EVT_WINDOW_SHOW will be emitted. When a window is closed by a call
+ * to @c WindowBase->close(), @c EVT_WINDOW_CLOSE will be emitted.
+ * Both events are of type @c EventEx<WindowBase*>, and provide the
+ * memory address of the originating window as event data.
  */

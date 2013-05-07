@@ -33,11 +33,11 @@
  *
  *  * @ref YACURS::Window "Window"
  *  * @ref YACURS::Dialog "Dialog"
- *  * FileLoadDialog
- *  * FileSaveDialog
- *  * InputBox
- *  * MessageBox
- *  * MessageBox2
+ *  * @ref YACURS::FileLoadDialog "FileLoadDialog"
+ *  * @ref YACURS::FileSaveDialog "FileSaveDialog"
+ *  * @ref YACURS::InputBox "InputBox"
+ *  * @ref YACURS::MessageBox "MessageBox"
+ *  * @ref YACURS::MessageBox2 "MessageBox2"
  *
  *
  * @subsection Widgets

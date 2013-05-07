@@ -5,6 +5,5 @@ src/curswin.cc
 src/dialog.cc
 src/fileloaddialog.cc
 src/filesavedialog.cc
-src/size.cc
 src/unlockdiadefault.cc
 src/yacursex.cc

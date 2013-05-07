@@ -59,19 +59,6 @@ namespace YACURS {
         EVT_QUIT,
 
         /**
-         * Notification of window size change.
-         *
-         * Only Curses is supposed to handle this Event. Widgets and
-         * Windows should not use it in order to resize.
-         */
-        EVT_SIGWINCH,
-
-        /**
-         * Notification of alarm signal
-         */
-        EVT_SIGALRM,
-
-        /**
          * Key pressed
          */
         EVT_KEY,
@@ -103,6 +90,19 @@ namespace YACURS {
          * complete screen refresh. @sa EventQueue
          */
         EVT_TERMRESETUP,
+
+        /**
+         * Notification of window size change.
+         *
+         * Only Curses is supposed to handle this Event. Widgets and
+         * Windows should not use it in order to resize.
+         */
+        EVT_SIGWINCH,
+
+        /**
+         * Notification of alarm signal
+         */
+        EVT_SIGALRM,
 
         EVT_SIGUSR1,
         EVT_SIGUSR2,

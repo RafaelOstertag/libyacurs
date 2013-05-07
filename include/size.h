@@ -25,6 +25,8 @@
 
 #include <stdint.h>
 #include <string>
+#include <cassert>
+#include <stdexcept>
 
 namespace YACURS {
     /**
@@ -166,6 +168,89 @@ namespace YACURS {
      * otherwise.
      */
     bool operator!=(const Size& lhs, const Size& rhs);
+
+    inline
+    Size::Size(int16_t _rows, int16_t _cols) : __rows(_rows), __cols(_cols) {
+        // Please note: The two strings below will not be translated,
+        // since that would require including "gettext.h" which is not
+        // supposed to be installed.
+        if (__rows < 0)
+            throw std::out_of_range("Rows cannot be <0");
+        if (__cols < 0)
+            throw std::out_of_range("Columns cannot be <0");
+    }
+
+    inline int16_t
+    Size::cols() const {
+        return __cols;
+    }
+
+    inline int16_t
+    Size::rows() const {
+        return __rows;
+    }
+
+    inline void
+    Size::cols(int16_t _cols) {
+        if (_cols < 0)
+            throw std::out_of_range("Columns cannot be <0");
+        __cols = _cols;
+    }
+
+    inline void
+    Size::rows(int16_t _rows) {
+        if (_rows < 0)
+            throw std::out_of_range("Rows cannot be <0");
+        __rows = _rows;
+    }
+
+    inline const Size&
+    Size::operator+=(const Size& rhs) {
+        assert(rhs.__cols >= 0);
+        assert(rhs.__rows >= 0);
+        __cols += rhs.__cols;
+        __rows += rhs.__rows;
+        return *this;
+    }
+
+    inline const Size&
+    Size::operator-=(const Size& rhs) {
+        __cols -= rhs.__cols;
+        if (__cols < 0) __cols = 0;
+
+        __rows -= rhs.__rows;
+        if (__rows < 0) __rows = 0;
+        return *this;
+    }
+
+    inline bool
+    Size::operator==(const Size& rhs) const {
+        return __cols == rhs.__cols && __rows == rhs.__rows;
+    }
+
+    inline const Size&
+    Size::zero() {
+        return __zero;
+    }
+
+    inline Size
+    operator+(const Size& lhs, const Size& rhs) {
+        Size tmp = lhs;
+
+        return tmp += rhs;
+    }
+
+    inline Size
+    operator-(const Size& lhs, const Size& rhs) {
+        Size tmp = lhs;
+
+        return tmp -= rhs;
+    }
+
+    inline bool
+    operator!=(const Size& lhs, const Size& rhs) {
+        return !(lhs == rhs);
+    }
 }
 
 #endif // SIZE_H

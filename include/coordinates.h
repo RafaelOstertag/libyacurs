@@ -165,6 +165,73 @@ namespace YACURS {
      * false otherwise.
      */
     bool operator!=(const Coordinates& lhs, const Coordinates& rhs);
+
+    inline
+    Coordinates::Coordinates(int16_t _x, int16_t _y) : __y(_y), __x(_x) {
+    }
+
+    inline int16_t
+    Coordinates::x() const {
+        return __x;
+    }
+
+    inline int16_t
+    Coordinates::y() const {
+        return __y;
+    }
+
+    inline void
+    Coordinates::x(int16_t _x) {
+        __x = _x;
+    }
+
+    inline void
+    Coordinates::y(int16_t _y) {
+        __y = _y;
+    }
+
+    inline Coordinates&
+    Coordinates::operator+=(const Coordinates& rhs) {
+        __x += rhs.__x;
+        __y += rhs.__y;
+        return *this;
+    }
+
+    inline Coordinates&
+    Coordinates::operator-=(const Coordinates& rhs) {
+        __x -= rhs.__x;
+        __y -= rhs.__y;
+        return *this;
+    }
+
+    inline bool
+    Coordinates::operator==(const Coordinates& rhs) const {
+        return __x == rhs.__x && __y == rhs.__y;
+    }
+
+    inline const Coordinates&
+    Coordinates::zero() {
+        return __zero;
+    }
+
+    inline Coordinates
+    operator+(const Coordinates& lhs, const Coordinates& rhs) {
+        Coordinates tmp = lhs;
+
+        return tmp += rhs;
+    }
+
+    inline Coordinates
+    operator-(const Coordinates& lhs, const Coordinates& rhs) {
+        Coordinates tmp = lhs;
+
+        return tmp -= rhs;
+    }
+
+    inline bool
+    operator!=(const Coordinates& lhs, const Coordinates& rhs) {
+        return !(lhs == rhs);
+    }
 }
 
 #endif // COORDINATES_H

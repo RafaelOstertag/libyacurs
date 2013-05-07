@@ -166,6 +166,101 @@ namespace YACURS {
      * Test whether coordinates lie within area.
      */
     bool operator<(const Coordinates& lhs, const Area& rhs);
+
+    inline
+    Area::Area(int _y, int _x, int _rows, int _cols) :
+        Coordinates(_x, _y), Size(_rows, _cols) {
+    }
+
+    inline
+    Area::Area(const Coordinates& _c, const Size& _s) :
+        Coordinates(_c), Size(_s) {
+    }
+
+    inline
+    Area::Area(const Area& _a) : Coordinates(_a), Size(_a) {
+    }
+
+    inline Area&
+    Area::operator=(const Area& _a) {
+        Coordinates::operator=(_a);
+        Size::operator=(_a);
+
+        return *this;
+    }
+
+    inline Area&
+    Area::operator=(const Size& _s) {
+        Size::operator=(_s);
+
+        return *this;
+    }
+
+    inline Area&
+    Area::operator=(const Coordinates& _c) {
+        Coordinates::operator=(_c);
+
+        return *this;
+    }
+
+    inline bool
+    Area::operator==(const Area& _a) const {
+        return Coordinates::operator==(_a) &&
+               Size::operator==(_a);
+    }
+
+    inline bool
+    Area::operator==(const Size& _s) const {
+        return Size::operator==(_s);
+    }
+
+    inline bool
+    Area::operator==(const Coordinates& _c) const {
+        return Coordinates::operator==(_c);
+    }
+
+    inline Area&
+    Area::operator-=(const Margin& rhs) {
+        y(y() + rhs.top() );
+        x(x() + rhs.left() );
+        rows(rows() - rhs.bottom() - rhs.top() );
+        cols(cols() - rhs.right() - rhs.left() );
+
+        return *this;
+    }
+
+    inline Coordinates
+    Area::end() const {
+        return Coordinates(x() + cols(), y() + rows() );
+    }
+
+    inline bool
+    operator!=(const Area& lhs, const Area& _a) {
+        return !(lhs == _a);
+    }
+
+    inline Area
+    operator-(const Area& lhs, const Margin& rhs) {
+        Area tmp = lhs;
+
+        return tmp -= rhs;
+    }
+
+    inline bool
+    operator>(const Area& lhs, const Coordinates& rhs) {
+        return lhs.x() <= rhs.x() && lhs.cols() + lhs.x() >= rhs.x() &&
+               lhs.y() <= rhs.y() && lhs.rows() + lhs.y() >= rhs.y();
+    }
+
+    inline bool
+    operator<(const Coordinates& lhs, const Area& rhs) {
+        return rhs > lhs;
+    }
+
+    inline const Area&
+    Area::zero() {
+        return Area::__zero;
+    }
 }
 
 #endif

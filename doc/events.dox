@@ -8,14 +8,26 @@
  *
  * Unix Signal | Event
  * ------------|------
- * SIGWINCH    | see @ref termresize "Terminal Resize"
- * @c SIGALARM | @c EVT_SIGALRM
+ * @c SIGWINCH | see @ref termresize "Terminal Resize"
+ * @c SIGALRM  | @c EVT_SIGALRM
  * @c SIGUSR1  | @c EVT_SIGUSR1
  * @c SIGUSR2  | @c EVT_SIGUSR2
  * @c SIGINT   | @c EVT_SIGINT
  * @c SIGTERM  | @c EVT_SIGTERM
  * @c SIGQUIT  | @c EVT_SIGQUIT
- * @c SIGCONT  | @c EVT_SIGTSTP
+ * @c SIGCONT  | @c EVT_SIGCONT
+ * @c SIGTSTP  | @c EVT_SIGTSTP
+ *
+ *
+ * @section refreshevt Refresh Events
+ *
+ * @c EVT_REFRESH is usually emitted after a resize. The refresh must
+ * not be immediate.
+ *
+ * @c EVT_FORCEREFRESH instruct Windows and Widgets to force their
+ * refresh
+ *
+ *  
  *
  * @section termresize Terminal Resize
  *

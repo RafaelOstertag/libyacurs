@@ -158,13 +158,6 @@ Window::refresh(bool immediate) {
 
     curses_window()->set_color(color() );
 
-    // Setting background also helps getting rid of artifacts of
-    // overlapped windows.
-    //
-    // This is especially true for NCurses and X/Open Curses. Solaris'
-    // Curses does not show any effect.
-    curses_window()->set_bg(color() );
-
     WindowBase::refresh(immediate);
 
     assert(__fgid != (fgid_t)-1);

@@ -196,10 +196,6 @@ WindowBase::close() {
     // We might have obstructed another window, so make sure it
     // receives a refresh.
     //
-    // Solaris' Curses does not properly redraw windows when they have
-    // been obscured by other windows. Ctrl-L helps, so we emulate
-    // this key stroke sequence.
-    //
     // See also Window::refresh().
     EventQueue::submit(EVT_FORCEREFRESH);
     EventQueue::submit(EVT_REFRESH);
@@ -227,7 +223,12 @@ WindowBase::force_refresh_handler(Event& _e) {
     assert(_e == EVT_FORCEREFRESH);
     assert(__curses_window != 0);
 
-    __curses_window->clearok(true);
+#warning "Not decided"
+    // there is some testing needed whether or not touchwin() is
+    // better suited than clearok();
+    //
+    //    __curses_window->clearok(true);
+    __curses_window->touch();
 }
 
 void

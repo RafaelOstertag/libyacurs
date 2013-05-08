@@ -208,7 +208,7 @@ Dialog::refresh(bool immediate) {
     if (realization() != REALIZED &&
         realization() != REALIZING) return;
 
-    CurStr tmp(__title, Coordinates(1, 0), DIALOG);
+    CurStr tmp(__title, Coordinates(1, 0), DIALOG_TITLE);
     curses_window()->addstrx(tmp);
 
     Window::refresh(immediate);

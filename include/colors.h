@@ -95,6 +95,8 @@ namespace YACURS {
 
         DIALOG,
 
+	DIALOG_TITLE,
+
         /**
          * Color of Input Widget without focus.
          */

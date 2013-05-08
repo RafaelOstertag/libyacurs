@@ -36,7 +36,7 @@ using namespace YACURS::INTERNAL;
 // Private
 //
 const std::string ColorParser::__default_colors(
-    "DEF:wk0;DIA:cb0;IWN:kw3;IWF:kg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;LBH:kg3;CBG:yc0;TLB:bw0;STB:bw0");
+    "DEF:wk0;DIA:cb0;DIT:bc0;IWN:kw3;IWF:kg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;LBH:kg3;CBG:yc0;TLB:bw0;STB:bw0");
 
 std::vector<std::string>
 ColorParser::tokenize(const std::string& str) const {
@@ -142,6 +142,7 @@ ColorParser::ColorParser() {
     // 1. X/Open Curses allows the numbering to start with 0, though.
     color_name_map["DEF"] = DEFAULT + 1;
     color_name_map["DIA"] = DIALOG + 1;
+    color_name_map["DIT"] = DIALOG_TITLE + 1;
     color_name_map["IWN"] = INPUTWIDGET_NOFOCUS + 1;
     color_name_map["IWF"] = INPUTWIDGET_FOCUS + 1;
     color_name_map["IWH"] = INPUTWIDGET_HIDDEN + 1;

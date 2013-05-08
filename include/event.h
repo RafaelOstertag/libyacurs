@@ -51,6 +51,11 @@ namespace YACURS {
      *
      * @see EventConnectorBase
      * @see EventQueue
+     *
+     * @internal
+     *
+     * @warning Don't forget to update Event::__str_table if
+     * rearranging, adding, or removing events.
      */
     enum EVENT_TYPE {
         /**
@@ -64,7 +69,7 @@ namespace YACURS {
         EVT_KEY,
 
         /**
-         * A refresh is usually issued after an resize. The refresh
+         * A refresh is usually issued after a resize. The refresh
          * must not be immediate, i.e. no wrefresh(), but
          * wnoutrefresh().
          */
@@ -73,7 +78,7 @@ namespace YACURS {
         /**
          * Force curses window to refresh. This is used to completely
          * redraw the screen upon Ctrl-L. The handler can be
-         * implemented as simple call to clearok().
+         * implemented as simple call to touchwin().
          */
         EVT_FORCEREFRESH,
 

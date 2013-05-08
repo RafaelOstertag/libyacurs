@@ -27,18 +27,26 @@
 
 using namespace YACURS;
 
+// This array will be used to translate EVENT_TYPE to event names. The
+// enums will be used as indices, i.e. __str_table[EVT_QUIT].
+//
+// Keep this in sync with EVENT_TYPE all the time.
 const char* Event::__str_table[] = {
     "EVT_QUIT",
-    "EVT_SIGWINCH",
-    "EVT_SIGALRM",
     "EVT_KEY",
     "EVT_REFRESH",
     "EVT_FORCEREFRESH",
     "EVT_DOUPDATE",
     "EVT_TERMRESETUP",
+    "EVT_SIGWINCH",
+    "EVT_SIGALRM",
     "EVT_SIGUSR1",
     "EVT_SIGUSR2",
     "EVT_SIGINT",
+    "EVT_SIGTERM",
+    "EVT_SIGQUIT",
+    "EVT_SIGCONT",
+    "EVT_SIGTSTP",
     "EVT_FOCUS_NEXT",
     "EVT_FOCUS_PREVIOUS",
     "EVT_WINDOW_SHOW",

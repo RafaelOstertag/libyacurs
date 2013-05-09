@@ -223,11 +223,6 @@ WindowBase::force_refresh_handler(Event& _e) {
     assert(_e == EVT_FORCEREFRESH);
     assert(__curses_window != 0);
 
-#warning "Not decided"
-    // there is some testing needed whether or not touchwin() is
-    // better suited than clearok();
-    //
-    //    __curses_window->clearok(true);
     __curses_window->touch();
 }
 

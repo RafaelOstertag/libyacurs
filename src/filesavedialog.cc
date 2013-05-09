@@ -95,9 +95,8 @@ FileSaveDialog::read_dir() {
     if (_base.length() > 1)
         _base += "/";
 
-    dirent* dent = 0;
-    errno = 0;
-    while ( (dent = readdir(dir) ) ) {
+    dirent* dent;
+    while (errno = 0, dent = readdir(dir) ) {
         std::string _tmp(_base + dent->d_name);
 
         struct stat _stat;
@@ -117,11 +116,17 @@ FileSaveDialog::read_dir() {
         }
     }
 
+    // On Fedora 18, somewhere in __directories->set(_dirs), errno
+    // will be updated, so we save it here, before proceeding
+    int errno_save = errno;
+
     __directories->set(_dirs);
     __files->set(_files);
 
-    if (errno != 0)
+    if (errno_save != 0) {
+        (void)closedir(dir);
         throw EXCEPTIONS::SystemError(errno);
+    }
 
     if (closedir(dir) != 0)
         throw EXCEPTIONS::SystemError(errno);

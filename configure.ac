@@ -69,7 +69,8 @@ AS_IF([test "x$have_ncurses_h" = xyes],
 	    )],
       [AC_MSG_ERROR([neither ncurses nor curses library available])])
 
-AC_CHECK_FUNCS([resize_term])
+# resize_term() is NCurses, resizeterm() is NetBSD curses
+AC_CHECK_FUNCS([resize_term resizeterm])
 
 # Some custom tests
 AC_MSG_CHECKING([whether waddstr() use const char*])

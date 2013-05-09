@@ -80,7 +80,7 @@ Curses::doupdate_handler(Event& e) {
 void
 Curses::termresetup_handler(Event& e) {
     assert(e == EVT_TERMRESETUP);
-#ifdef HAVE_RESIZE_TERM
+#if defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
     // We only support resizing for Curses implementation having
     // resize_term.
 
@@ -90,14 +90,20 @@ Curses::termresetup_handler(Event& e) {
     if (_tmp.rows() < MIN_ROWS || _tmp.cols() < MIN_COLS)
         return;
 
+#ifdef HAVE_RESIZE_TERM
     resize_term(_tmp.rows(), _tmp.cols() );
+#else // HAVE_RESIZE_TERM
+# ifdef HAVE_RESIZETERM
+    resizeterm(_tmp.rows(), _tmp.cols());
+# endif // HAVE_RESIZETERM
+#endif // HAVE_RESIZE_TERM
 
     if (wclear(stdscr) == ERR)
         throw EXCEPTIONS::CursesException("wclear");
 
     if (wrefresh(stdscr) == ERR)
         throw EXCEPTIONS::CursesException("wrefresh");
-#endif // HAVE_RESIZE_TERM
+#endif // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
 }
 
 void
@@ -312,7 +318,7 @@ Curses::inquiry_screensize() {
     // resizing is not support then
 
     Size __scrdim;
-#ifdef HAVE_RESIZE_TERM
+#if defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
     winsize ws;
     if (ioctl(STDIN_FILENO, TIOCGWINSZ, &ws) != -1) {
         if (ws.ws_row > 0 && ws.ws_col > 0) {
@@ -346,13 +352,13 @@ Curses::inquiry_screensize() {
         __scrdim.rows(MIN_ROWS);
     if (__scrdim.cols() < MIN_COLS)
         __scrdim.cols(MIN_COLS);
-#else // HAVE_RESIZE_TERM
+#else // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
     int nrows, ncols;
     getmaxyx(stdscr, nrows, ncols);
 
     __scrdim.rows(nrows);
     __scrdim.cols(ncols);
-#endif // HAVE_RESIZE_TERM
+#endif // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
 
     return __scrdim;
 }

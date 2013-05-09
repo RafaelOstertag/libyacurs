@@ -2,6 +2,8 @@
 
 // Macros in here are required to make headers work without having
 // config.h installed.
+//
+// Definitions in here only reflect a subset of config.h.
 
 /* Define to 1 if you have ncurses.h */
 #undef HAVE_NCURSES_H
@@ -23,6 +25,9 @@
 
 /* Set to 1 if keypad has a return value */
 #undef KEYPAD_RETURN_INT
+
+/* Define to 1 if you have the `resizeterm' function. */
+#undef HAVE_RESIZETERM
 
 /* Define to 1 if you have the `resize_term' function. */
 #undef HAVE_RESIZE_TERM

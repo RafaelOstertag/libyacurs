@@ -1,11 +1,10 @@
 # $Id$
-AC_INIT([libyacurs],[0.1], [rafi@guengel.ch])
+AC_INIT([libyacurs], [0.1], [http://bugs.guengel.ch])
 AC_CONFIG_SRCDIR([src/curs.cc])
 AM_INIT_AUTOMAKE
 AC_REVISION([$Revision: 4613 $])
 
 AC_CONFIG_MACRO_DIR([m4])
-
 
 AC_USE_SYSTEM_EXTENSIONS
 AC_PROG_CC
@@ -32,13 +31,15 @@ AM_CONDITIONAL([NOTCYGWIN],[test x$my_cygwin = xfalse])
 
 AX_CHECK_LINK_FLAG([-Wl,--export-dynamic],[AC_SUBST([LD_EXPORT_DYNAMIC],[-Wl,--export-dynamic])])
 
-
-
 AC_LANG([C++])
 AM_GNU_GETTEXT([external])
 
 AC_CHECK_HEADERS([stropts.h signal.h sys/termios.h termios.h unistd.h stdint.h sys/types.h sys/ioctl.h])
-AC_CHECK_HEADERS([cerrno cstdlib cstring exception string stdexcept stack iostream cstdio queue list algorithm functional typeinfo cassert cstdint])
+
+AX_CXX_HEADER_STDCXX_98
+AS_IF([test x$ax_cv_cxx_stdcxx_98 = xno],
+	    [AC_MSG_ERROR([ISO C++ 98 not supported])])
+
 
 AC_CHECK_HEADER([ncurses.h],
 	[

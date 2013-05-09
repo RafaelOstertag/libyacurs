@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libyacurs 0.1\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
-"POT-Creation-Date: 2013-05-05 10:31+0200\n"
+"POT-Creation-Date: 2013-05-07 19:34+0200\n"
 "PO-Revision-Date: 2013-04-09 10:33+0200\n"
 "Last-Translator: Rafael Ostertag <rafi@guengel.ch>\n"
 "Language-Team: English\n"
@@ -111,14 +111,6 @@ msgstr "Error"
 msgid "Save File"
 msgstr "Save File"
 
-#: src/size.cc:54 src/size.cc:79
-msgid "Rows cannot be <0"
-msgstr "Rows cannot be <0"
-
-#: src/size.cc:56 src/size.cc:72
-msgid "Columns cannot be <0"
-msgstr "Columns cannot be <0"
-
 #: src/unlockdiadefault.cc:47
 msgid "Unlock Screen"
 msgstr "Unlock Screen"
@@ -182,3 +174,9 @@ msgstr "Operation not supported"
 #: src/yacursex.cc:108
 msgid "Invalid dialog type"
 msgstr "Invalid dialog type"
+
+#~ msgid "Rows cannot be <0"
+#~ msgstr "Rows cannot be <0"
+
+#~ msgid "Columns cannot be <0"
+#~ msgstr "Columns cannot be <0"

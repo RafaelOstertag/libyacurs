@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libyacurs 0.1\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
-"POT-Creation-Date: 2013-05-05 10:31+0200\n"
+"POT-Creation-Date: 2013-05-07 19:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,14 +109,6 @@ msgstr ""
 
 #: src/filesavedialog.cc:260
 msgid "Save File"
-msgstr ""
-
-#: src/size.cc:54 src/size.cc:79
-msgid "Rows cannot be <0"
-msgstr ""
-
-#: src/size.cc:56 src/size.cc:72
-msgid "Columns cannot be <0"
 msgstr ""
 
 #: src/unlockdiadefault.cc:47

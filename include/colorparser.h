@@ -77,7 +77,7 @@ namespace YACURS {
          * Default String
          * --------------
          *
-         * @c "DEF:wk0;DIA:wb0;DIT:bc0;IWN:kw3;IWF:kg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;LBH:kg3;CBG:yc0;TLB:yc0;STB:yg0"
+         * @c "DEF:wk0;DIA:wb0;DIT:bw0;IWN:kw3;IWF:kg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;LBH:kg3;CBG:yc0;TLB:bw0;STB:bw0"
          */
         class ColorParser {
             private:

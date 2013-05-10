@@ -162,13 +162,13 @@ namespace YACURS {
                 UnableToGetWinSize();
         };
 
-	/**
-	 * Size is invalid.
-	 */
-	class InvalidSize : public BaseCurEx {
-	    public:
-		InvalidSize();
-	};
+        /**
+         * Size is invalid.
+         */
+        class InvalidSize : public BaseCurEx {
+            public:
+                InvalidSize();
+        };
 
         /**
          * Object cannot be focused.

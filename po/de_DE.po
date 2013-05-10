@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: libyacurs 0.1\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
 "POT-Creation-Date: 2013-05-10 12:58+0200\n"
-"PO-Revision-Date: 2013-04-09 10:58+0200\n"
+"PO-Revision-Date: 2013-05-10 13:05+0200\n"
 "Last-Translator: Rafael Ostertag <rafi@guengel.ch>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -156,9 +156,8 @@ msgid "Cannot focus"
 msgstr "Kann nicht fokusieren"
 
 #: src/yacursex.cc:92
-#, fuzzy
 msgid "Size is invalid"
-msgstr "Farbgrösse ungültig"
+msgstr "Grösse ist ungültig"
 
 #: src/yacursex.cc:96
 msgid "Unexpected event received"

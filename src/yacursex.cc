@@ -88,6 +88,10 @@ CannotFocus::CannotFocus() :
     BaseCurEx(_("Cannot focus") ) {
 }
 
+InvalidSize::InvalidSize() :
+    BaseCurEx(_("Size is invalid")) {
+}
+
 UnexpectedEvent::UnexpectedEvent() :
     BaseCurEx(_("Unexpected event received") ) {
 }

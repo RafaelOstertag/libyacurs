@@ -20,8 +20,8 @@
 //
 // $Id$
 
-#ifndef CUREX_H
-#define CUREX_H
+#ifndef YACURSEX_H
+#define YACURSEX_H
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,6 +162,14 @@ namespace YACURS {
                 UnableToGetWinSize();
         };
 
+	/**
+	 * Size is invalid.
+	 */
+	class InvalidSize : public BaseCurEx {
+	    public:
+		InvalidSize();
+	};
+
         /**
          * Object cannot be focused.
          */
@@ -215,4 +223,4 @@ namespace YACURS {
     } // namespace EXCEPTION
 } // namespace YACURS
 
-#endif // CUREX_H
+#endif // YACURSEX_H

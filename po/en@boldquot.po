@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libyacurs 0.1\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
-"POT-Creation-Date: 2013-05-07 19:34+0200\n"
+"POT-Creation-Date: 2013-05-10 12:58+0200\n"
 "PO-Revision-Date: 2013-04-09 19:23+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -106,33 +106,33 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: src/fileloaddialog.cc:155 src/fileloaddialog.cc:309
-#: src/filesavedialog.cc:155 src/filesavedialog.cc:370
+#: src/fileloaddialog.cc:160 src/fileloaddialog.cc:314
+#: src/filesavedialog.cc:160 src/filesavedialog.cc:375
 msgid "Cannot change to "
 msgstr ""
 
-#: src/fileloaddialog.cc:156 src/fileloaddialog.cc:310
-#: src/filesavedialog.cc:156 src/filesavedialog.cc:371
+#: src/fileloaddialog.cc:161 src/fileloaddialog.cc:315
+#: src/filesavedialog.cc:161 src/filesavedialog.cc:376
 msgid "System Error"
 msgstr ""
 
-#: src/fileloaddialog.cc:199
+#: src/fileloaddialog.cc:204
 msgid "Load File"
 msgstr ""
 
-#: src/filesavedialog.cc:218
+#: src/filesavedialog.cc:223
 msgid "Confirmation"
 msgstr ""
 
-#: src/filesavedialog.cc:221
+#: src/filesavedialog.cc:226
 msgid "already exists. Do you want to overwrite?"
 msgstr ""
 
-#: src/filesavedialog.cc:230
+#: src/filesavedialog.cc:235
 msgid "Error"
 msgstr ""
 
-#: src/filesavedialog.cc:260
+#: src/filesavedialog.cc:265
 msgid "Save File"
 msgstr ""
 
@@ -181,21 +181,25 @@ msgid "Cannot focus"
 msgstr ""
 
 #: src/yacursex.cc:92
-msgid "Unexpected event received"
+msgid "Size is invalid"
 msgstr ""
 
 #: src/yacursex.cc:96
-msgid "Colors not initialized"
+msgid "Unexpected event received"
 msgstr ""
 
 #: src/yacursex.cc:100
-msgid "An object exceeded space constraints"
+msgid "Colors not initialized"
 msgstr ""
 
 #: src/yacursex.cc:104
-msgid "Operation not supported"
+msgid "An object exceeded space constraints"
 msgstr ""
 
 #: src/yacursex.cc:108
+msgid "Operation not supported"
+msgstr ""
+
+#: src/yacursex.cc:112
 msgid "Invalid dialog type"
 msgstr ""

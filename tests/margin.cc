@@ -5,9 +5,7 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_IOSTREAM
 #include <iostream>
-#endif // HAVE_IOSTREAM
 
 #include "margin.h"
 

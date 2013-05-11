@@ -9,9 +9,7 @@
 #include <unistd.h>
 #endif // HAVE_UNISTD_H
 
-#ifdef HAVE_IOSTREAM
 #include <iostream>
-#endif // HAVE_IOSTREAM
 
 #include "yacurs.h"
 

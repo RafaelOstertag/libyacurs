@@ -58,6 +58,7 @@ namespace YACURS {
                         try {
                             _w->realize();
                         } catch (EXCEPTIONS::BaseCurEx&) {
+                            _w->focusgroup_id(FocusManager::nfgid);
                         }
                     }
             };
@@ -296,7 +297,8 @@ namespace YACURS {
                         // horizontally stack widgets and the
                         // dynamically sized widgets get the amount of
                         // __size.rows()
-                        assert(remaining_size.cols() > 0);
+                        if (remaining_size.cols() < 1)
+                            throw EXCEPTIONS::InvalidSize();
 
                         // This gives the size for each dynamically
                         // sized Widget. The remaining size will be

@@ -53,7 +53,7 @@ host_dash() {
 	had_error $? "Error in CXX=`eval echo \\$DASH_CXX_$c` CC=`eval echo \\$DASH_CC_$c` CFLAGS=`eval echo \\$DASH_CFLAGS_$c` CXXFLAGS=`eval echo \\$DASH_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DASH_LDFLAGS_$c`"
 
 	make clean
-	make -j
+	make
 	had_error $? "Error in CXX=`eval echo \\$DASH_CXX_$c` CC=`eval echo \\$DASH_CC_$c` CFLAGS=`eval echo \\$DASH_CFLAGS_$c` CXXFLAGS=`eval echo \\$DASH_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DASH_LDFLAGS_$c`"
 
 	make check
@@ -99,7 +99,7 @@ host_debian32() {
 	had_error $? "Error in CXX=`eval echo \\$DEBIAN32_CXX_$c` CC=`eval echo \\$DEBIAN32_CC_$c` CFLAGS=`eval echo \\$DEBIAN32_CFLAGS_$c` CXXFLAGS=`eval echo \\$DEBIAN32_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DEBIAN32_LDFLAGS_$c`"
 
 	make clean
-	make -j
+	make
 	had_error $? "Error in CXX=`eval echo \\$DEBIAN32_CXX_$c` CC=`eval echo \\$DEBIAN32_CC_$c` CFLAGS=`eval echo \\$DEBIAN32_CFLAGS_$c` CXXFLAGS=`eval echo \\$DEBIAN32_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DEBIAN32_LDFLAGS_$c`"
 
 	make check
@@ -177,7 +177,7 @@ host_aurora() {
 	    had_error $? "Error in CXX="`eval echo \\$AURORA_CXX_$c`" CC="`eval echo \\$AURORA_CC_$c`" CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`""
 
 	    gmake clean
-	    gmake -j
+	    gmake
 	    had_error $? "Error in CXX="`eval echo \\$AURORA_CXX_$c`" CC="`eval echo \\$AURORA_CC_$c`" CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`""
 	    
 	    gmake check
@@ -256,7 +256,7 @@ host_freebsd32() {
 	    had_error $? "Error in CXX="`eval echo \\$FREEBSD32_CXX_$c`" CC="`eval echo \\$FREEBSD32_CC_$c`" CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`""
 
 	    gmake clean
-	    gmake -j
+	    gmake
 	    had_error $? "Error in CXX="`eval echo \\$FREEBSD32_CXX_$c`" CC="`eval echo \\$FREEBSD32_CC_$c`" CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`""
 	    
 	    gmake check
@@ -273,7 +273,7 @@ host_abraxas() {
     had_error $? "Error on abraxas"
 
     gmake clean
-    gmake -j2
+    gmake
     had_error $? "Error on abraxas"
 
     gmake check
@@ -288,7 +288,7 @@ host_netbsd32() {
     had_error $? "Error on netbsd32"
 
     gmake clean
-    gmake -j2
+    gmake
     had_error $? "Error on netbsd32"
 
     gmake check
@@ -303,7 +303,7 @@ host_fish() {
     had_error $? "Error on fish"
 
     gmake clean
-    gmake -j2
+    gmake
     had_error $? "Error on fish"
 
     gmake check
@@ -315,14 +315,14 @@ host_openbsd32() {
     ./configure \
 	CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
 	CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
-    had_error $? "Error in $arch"
+    had_error $? "Error in OpenBSD32"
 
     gmake clean
-    gmake -j
-    had_error $? "Error in $arch"
+    gmake
+    had_error $? "Error in OpenBSD32"
 
     gmake check
-    had_error $? "Error in $arch"
+    had_error $? "Error in OpenBSD32"
 }
 
 host_odin() {
@@ -354,7 +354,7 @@ host_odin() {
 		had_error $? "Error in ${c}:$arch:$flags"
 
 		gmake clean
-		gmake -j
+		gmake
 		had_error $? "Error in ${c}:$arch:$flags"
 
 		gmake check
@@ -403,7 +403,7 @@ host_starchild() {
 		had_error $? "Error in ${c}:$arch:$flags"
 
 		gmake clean
-		gmake -j
+		gmake
 		had_error $? "Error in ${c}:$arch:$flags"
 
 		gmake check

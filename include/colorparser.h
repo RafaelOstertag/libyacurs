@@ -62,7 +62,7 @@ namespace YACURS {
          * -------------------|-------
          * DEFAULT            | DEF
          * DIALOG             | DIA
-	 * DIALOG_TITLE       | DIT
+         * DIALOG_TITLE       | DIT
          * INPUTWIDGET_NOFOCUS| IWN
          * INPUTWIDGET_FOCUS  | IWF
          * INPUTWIDGET_HIDDEN | IWH

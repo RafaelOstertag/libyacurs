@@ -115,7 +115,7 @@ Widget::refresh(bool immediate) {
           realization() == REALIZING) ) return;
 
     assert(__widget_subwin != 0);
-    assert(focusgroup_id() != (fgid_t)-1);
+    assert(focusgroup_id() != FocusManager::nfgid);
 
     __widget_subwin->refresh(immediate);
 }
@@ -145,7 +145,7 @@ Widget::realize() {
     const Size& _size = size();
     const Size& size_a = size_available();
 
-    assert(focusgroup_id() != (fgid_t)-1);
+    assert(focusgroup_id() != FocusManager::nfgid);
 
     EventQueue::connect_event(EventConnectorMethod1<Widget>(EVT_FORCEREFRESH,
                                                             this,

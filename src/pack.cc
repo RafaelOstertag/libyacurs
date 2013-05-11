@@ -58,7 +58,9 @@ Pack::set_all_focusgroup_id() {
     std::for_each(widget_list.begin(),
                   widget_list.end(),
                   std::bind2nd(std::mem_fun<void, WidgetBase,
-                                            fgid_t>(&WidgetBase::focusgroup_id),
+                                            FocusManager::fgid_t>(&WidgetBase
+                                                                  ::
+                                                                  focusgroup_id),
                                WidgetBase::focusgroup_id() ) );
 }
 
@@ -168,7 +170,7 @@ Pack::remove(WidgetBase* _w) {
     if (_w->realization() != UNREALIZED)
         _w->unrealize();
 
-    _w->focusgroup_id( (fgid_t)-1);
+    _w->focusgroup_id(FocusManager::nfgid);
 
     if (realization() == REALIZED)
         size_change();
@@ -184,7 +186,7 @@ Pack::curses_window(YACURS::INTERNAL::CursWin* _p) {
 }
 
 void
-Pack::focusgroup_id(fgid_t _id) {
+Pack::focusgroup_id(FocusManager::fgid_t _id) {
     WidgetBase::focusgroup_id(_id);
 
     // We have to make sure that the associated widgets have the same
@@ -260,7 +262,7 @@ Pack::size_change() {
     //resize(Area(position(),
     //		WidgetBase::size_available()) );
 
-    fgid_t save_id = WidgetBase::focusgroup_id();
+    FocusManager::fgid_t save_id = WidgetBase::focusgroup_id();
     Area _save_area = Area(position(), WidgetBase::size_available() );
 
     unrealize();

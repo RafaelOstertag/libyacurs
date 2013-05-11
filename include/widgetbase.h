@@ -25,6 +25,7 @@
 
 #include <string>
 
+#include "focusmanager.h"
 #include "curswin.h"
 #include "yacurstypes.h"
 #include "realizeable.h"
@@ -107,9 +108,10 @@ namespace YACURS {
              *
              * Focus Group where this Widget has to register.
              *
-             * @note It should be set to (fgid_t)-1 when unrealize()'d.
+             * @note It should be set to @c FocusManager::nfgid when
+             * unrealize()'d.
              */
-            fgid_t __fgid;
+            FocusManager::fgid_t __fgid;
 
             /**
              * Flag indicating whether or not the Widget can be focused.
@@ -187,7 +189,7 @@ namespace YACURS {
              *
              * @return Focus Group ID.
              */
-            fgid_t focusgroup_id() const;
+            FocusManager::fgid_t focusgroup_id() const;
 
             /**
              * Set whether or not Widget can be focused
@@ -248,7 +250,7 @@ namespace YACURS {
              *
              * it is virtual because Pack implements its own version.
              */
-            virtual void focusgroup_id(fgid_t _id);
+            virtual void focusgroup_id(FocusManager::fgid_t _id);
 
             /**
              * Set the position, where the widget will be displayed.

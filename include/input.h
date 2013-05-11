@@ -431,7 +431,7 @@ namespace YACURS {
                                                                &Input::
                                                                key_handler) );
 
-        assert(focusgroup_id() != (fgid_t)-1);
+        assert(focusgroup_id() != FocusManager::nfgid);
 
         REALIZE_LEAVE;
     }
@@ -444,7 +444,7 @@ namespace YACURS {
                                                                   &Input::
                                                                   key_handler) );
 
-        assert(focusgroup_id() != (fgid_t)-1);
+        assert(focusgroup_id() != FocusManager::nfgid);
 
         Widget::unrealize();
         UNREALIZE_LEAVE;

@@ -85,7 +85,7 @@ namespace YACURS {
              * The ID of the Focus Group belonging to this
              * Window. Supposed to be passed along Widget(s).
              */
-            fgid_t __fgid;
+            FocusManager::fgid_t __fgid;
 
             // Not supported
             Window(const Window&);

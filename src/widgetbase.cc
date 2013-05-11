@@ -54,7 +54,7 @@ WidgetBase::curses_window() const {
     return __curses_window;
 }
 
-fgid_t
+FocusManager::fgid_t
 WidgetBase::focusgroup_id() const {
     return __fgid;
 }
@@ -74,14 +74,14 @@ WidgetBase::can_focus(bool _can_focus) {
 //
 
 WidgetBase::WidgetBase() : __curses_window(0),
-    __fgid( (fgid_t)-1),
+    __fgid(FocusManager::nfgid),
     __can_focus(false),
     __focus(false),
     __parent(0) {
 }
 
 WidgetBase::~WidgetBase() {
-    if (__can_focus && __fgid != (fgid_t)-1)
+    if (__can_focus && __fgid != FocusManager::nfgid)
         FocusManager::focus_group_remove(__fgid, this);
 }
 
@@ -96,18 +96,18 @@ WidgetBase::curses_window(YACURS::INTERNAL::CursWin* _p) {
 }
 
 void
-WidgetBase::focusgroup_id(fgid_t _id) {
+WidgetBase::focusgroup_id(FocusManager::fgid_t _id) {
     // Only make changes to the Focus Group if Focus Group ID differs.
     //
     // This ensures that the currently focused Widget does not loose
     // the focus when resizing.
     if (__can_focus && __fgid != _id) {
         // Remove the widget from the current focus group, if possible
-        if (__fgid != (fgid_t)-1)
+        if (__fgid != FocusManager::nfgid)
             FocusManager::focus_group_remove(__fgid, this);
 
         // Add the widget to the new focus group if possible
-        if (_id != (fgid_t)-1)
+        if (_id != FocusManager::nfgid)
             FocusManager::focus_group_add(_id, this);
     }
     __fgid = _id;

@@ -95,7 +95,7 @@ Window::unrealize() {
 
 Window::Window(const Margin& m) : WindowBase(m),
     __widget(0),
-    __fgid( (fgid_t)-1) {
+    __fgid(FocusManager::nfgid) {
     // It is imperative that a new Focus Group is created before the
     // Widget is realized()!
     __fgid = FocusManager::new_focus_group();
@@ -119,7 +119,7 @@ Window::~Window() {
         __hot_keys.clear();
     }
 
-    __fgid = (fgid_t)-1;
+    __fgid = FocusManager::nfgid;
 }
 
 void
@@ -160,7 +160,7 @@ Window::refresh(bool immediate) {
 
     WindowBase::refresh(immediate);
 
-    assert(__fgid != (fgid_t)-1);
+    assert(__fgid != FocusManager::nfgid);
     FocusManager::focus_group_activate(__fgid);
 
     if (__widget) __widget->refresh(immediate);

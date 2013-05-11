@@ -94,7 +94,7 @@ Curses::termresetup_handler(Event& e) {
     resize_term(_tmp.rows(), _tmp.cols() );
 #else // HAVE_RESIZE_TERM
 # ifdef HAVE_RESIZETERM
-    resizeterm(_tmp.rows(), _tmp.cols());
+    resizeterm(_tmp.rows(), _tmp.cols() );
 # endif // HAVE_RESIZETERM
 #endif // HAVE_RESIZE_TERM
 
@@ -115,7 +115,7 @@ Curses::sigtstp_handler(Event& e) {
     int old_errno = errno;
 
     if (savetty() == ERR)
-	EXCEPTIONS::CursesException("savetty");
+        EXCEPTIONS::CursesException("savetty");
 
     // Block SIGWINCH and SIGALRM
     sigset_t mymask, oldmask;
@@ -127,7 +127,7 @@ Curses::sigtstp_handler(Event& e) {
     endwin();
 
     __suspended = true;
-    
+
     // Put to sleep
     kill(getpid(), SIGSTOP);
 
@@ -148,7 +148,7 @@ Curses::sigcont_handler(Event& e) {
     int old_errno = errno;
 
     if (resetty() == ERR)
-	EXCEPTIONS::CursesException("resetty");
+        EXCEPTIONS::CursesException("resetty");
 
     EventQueue::submit(Event(EVT_FORCEREFRESH) );
     EventQueue::submit(Event(EVT_REFRESH) );

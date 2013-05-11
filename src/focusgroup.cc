@@ -24,6 +24,7 @@
 #include <functional>
 
 #include "focusgroup.h"
+#include "widgetbase.h"
 
 using namespace YACURS;
 

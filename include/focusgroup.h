@@ -25,9 +25,9 @@
 
 #include <list>
 
-#include "widgetbase.h"
-
 namespace YACURS {
+    class WidgetBase;
+
     /**
      * @ingroup Focus
      *

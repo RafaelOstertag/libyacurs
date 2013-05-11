@@ -83,7 +83,7 @@ Button::realize() {
                                                             &Button::
                                                             key_handler) );
 
-    assert(focusgroup_id() != (fgid_t)-1);
+    assert(focusgroup_id() != FocusManager::nfgid);
 
     REALIZE_LEAVE;
 }
@@ -96,7 +96,7 @@ Button::unrealize() {
                                                                &Button::
                                                                key_handler) );
 
-    assert(focusgroup_id() != (fgid_t)-1);
+    assert(focusgroup_id() != FocusManager::nfgid);
 
     Label::unrealize();
 

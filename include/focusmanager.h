@@ -27,9 +27,21 @@
 
 #include "yacurstypes.h"
 #include "focusgroup.h"
-#include "widgetbase.h"
 
 namespace YACURS {
+    class WidgetBase;
+
+    /**
+     * @defgroup Focus Focus Management
+     *
+     * Focus Groups and Focus Manager.
+     *
+     * Focus Management is comprised of Focus Groups and the
+     * Focus Manager. Focus Groups are organized in a list by
+     * the Focus Manager, where only one Focus Group can be
+     * active, aka the Current Focus Group.
+     */
+
     /**
      * @ingroup Focus
      *
@@ -83,6 +95,8 @@ namespace YACURS {
      * to @c 0 upon destruction, so that we can identify empty slots.
      */
     class FocusManager {
+        public:
+            typedef std::vector<FocusGroup*>::size_type fgid_t;
         private:
             /**
              * Holds the Focus Group ID of the Active Focus Group. It is
@@ -179,6 +193,11 @@ namespace YACURS {
              * @return Focus Group ID of Active Focus Group.
              */
             static fgid_t active_focus_group();
+
+            /**
+             * No focus group id
+             */
+            static const fgid_t nfgid;
     };
 }
 

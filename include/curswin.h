@@ -35,22 +35,22 @@ namespace YACURS {
      * Name space of internal facilities.
      */
     namespace INTERNAL {
-	/**
-	 * Wrapper class for WINDOW.
-	 *
-	 * CursWin provides wrapper for Curses WINDOW and
-	 * corresponding member functions to modfiy WINDOW.
-	 *
-	 * Member functions are named like their Curses counterparts,
-	 * except for the @c w prefix, e.g. @c wclear() becomes @c
-	 * clear().
-	 *
-	 * Member functions writing character strings in CursWin come
-	 * in two flavors: the ones taking @c std::string as argument,
-	 * and the other taking @c YACURS::CursStr.
-	 *
-	 * CursWin features a default color, which
-	 */
+        /**
+         * Wrapper class for WINDOW.
+         *
+         * CursWin provides wrapper for Curses WINDOW and
+         * corresponding member functions to modfiy WINDOW.
+         *
+         * Member functions are named like their Curses counterparts,
+         * except for the @c w prefix, e.g. @c wclear() becomes @c
+         * clear().
+         *
+         * Member functions writing character strings in CursWin come
+         * in two flavors: the ones taking @c std::string as argument,
+         * and the other taking @c YACURS::CursStr.
+         *
+         * CursWin features a default color, which
+         */
         class CursWin {
             private:
                 /**

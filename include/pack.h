@@ -201,7 +201,7 @@ namespace YACURS {
              *
              * @param _id Focus Group ID.
              */
-            void focusgroup_id(fgid_t _id);
+            void focusgroup_id(FocusManager::fgid_t _id);
 
             /**
              * Set the available size.

@@ -29,20 +29,7 @@
 
 namespace YACURS {
     // Forward declaration because we want to be independent.
-    class FocusGroup;
     class Event;
-
-    /**
-     * @defgroup Focus Focus Management
-     *
-     * Focus Groups and Focus Manager.
-     *
-     * Focus Management is comprised of Focus Groups and the Focus
-     * Manager. Focus Groups are organized in a list by the Focus
-     * Manager, where only one Focus Group can be active, aka the
-     * Current Focus Group.
-     */
-    typedef std::vector<FocusGroup*>::size_type fgid_t;
 
     /// Type of the function pointer that will be called upon an
     /// event.

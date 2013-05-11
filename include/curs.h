@@ -74,10 +74,10 @@ namespace YACURS {
              */
             static bool initialized;
 
-	    /**
-	     * Flag indicating whether or not program has been suspended.
-	     */
-	    static volatile bool __suspended;
+            /**
+             * Flag indicating whether or not program has been suspended.
+             */
+            static volatile bool __suspended;
 
         protected:
             /**
@@ -89,9 +89,9 @@ namespace YACURS {
 
             static void termresetup_handler(Event& e);
 
-	    static void sigtstp_handler(Event& e);
+            static void sigtstp_handler(Event& e);
 
-	    static void sigcont_handler(Event& e);
+            static void sigcont_handler(Event& e);
 
         public:
             static void init();

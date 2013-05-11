@@ -27,7 +27,8 @@
 
 using namespace YACURS;
 
-fgid_t FocusManager::__active_focusgroup = (fgid_t)-1;
+const FocusManager::fgid_t FocusManager::nfgid = (FocusManager::fgid_t)-1;
+FocusManager::fgid_t FocusManager::__active_focusgroup = FocusManager::nfgid;
 std::vector<FocusGroup*> FocusManager::__focus_groups;
 
 //
@@ -89,9 +90,9 @@ FocusManager::uninit() {
         }
 }
 
-fgid_t
+FocusManager::fgid_t
 FocusManager::new_focus_group() {
-    fgid_t _id = (fgid_t)-1;
+    fgid_t _id = FocusManager::nfgid;
 
     if (__focus_groups.empty() ) {
         _id = __focus_groups.size(); // == 0
@@ -108,14 +109,14 @@ FocusManager::new_focus_group() {
         }
 
         // Check if we have found a free slot, i.e. _id has been set
-        if (_id == (fgid_t)-1) {
+        if (_id == FocusManager::nfgid) {
             // No, no free slot, so create new slot.
             _id = __focus_groups.size();
             __focus_groups.push_back(new FocusGroup);
         }
     }
 
-    assert(_id != (fgid_t)-1);
+    assert(_id != FocusManager::nfgid);
     assert(_id < __focus_groups.size() );
     return _id;
 }
@@ -140,7 +141,7 @@ FocusManager::destroy_focus_group(fgid_t _id) {
     __focus_groups[_id] = 0;
 
     if (__active_focusgroup == _id)
-        __active_focusgroup = (fgid_t)-1;
+        __active_focusgroup = FocusManager::nfgid;
 }
 
 void
@@ -156,7 +157,7 @@ FocusManager::focus_group_add(fgid_t _id, WidgetBase* _w) {
 void
 FocusManager::focus_group_remove(fgid_t _id, WidgetBase* _w) {
     assert(_w != 0);
-    assert(_id != (fgid_t)-1);
+    assert(_id != FocusManager::nfgid);
 
     // check if the FocusGroup still exists.
     //
@@ -183,7 +184,7 @@ FocusManager::focus_group_activate(fgid_t _id) {
     //assert(__active_focusgroup<__focus_groups.size());
 
     // Deactivate the current Active Focus Group, if any.
-    if (__active_focusgroup != (fgid_t)-1 && // not initialized yet
+    if (__active_focusgroup != FocusManager::nfgid && // not initialized yet
         __focus_groups[__active_focusgroup] !=
         0 /* Focus Group destroyed */) {
         assert(__active_focusgroup < __focus_groups.size() );
@@ -198,7 +199,7 @@ void
 FocusManager::refocus() {
     if (__focus_groups.empty() ) return;
 
-    assert(__active_focusgroup != (fgid_t)-1);
+    assert(__active_focusgroup != FocusManager::nfgid);
     assert(__focus_groups[__active_focusgroup] != 0);
     // This would make many tests fail. Also, it should be no problem
     // if we don't assert.
@@ -211,12 +212,12 @@ FocusManager::refocus() {
 void
 FocusManager::reset() {
     if (__focus_groups.empty() ) return;
-    assert(__active_focusgroup != (fgid_t)-1);
+    assert(__active_focusgroup != FocusManager::nfgid);
     assert(__focus_groups[__active_focusgroup] != 0);
     __focus_groups[__active_focusgroup]->reset();
 }
 
-fgid_t
+FocusManager::fgid_t
 FocusManager::active_focus_group() {
     return __active_focusgroup;
 }

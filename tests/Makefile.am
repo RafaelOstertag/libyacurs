@@ -1,5 +1,7 @@
 # $Id$
 
+AUTOMAKE_OPTIONS = serial-tests
+
 non_interactive_tests = cursinit coordinates margin area colorparser \
     eventconnector1 eventqueue1 eventqueue2 eventqueue3 eventqueue4  \
     eventqueue5 eventqueue6 eventqueue7 eventqueue8 curswin1 basic1  \

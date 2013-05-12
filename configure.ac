@@ -2,6 +2,7 @@
 AC_INIT([libyacurs], [0.1], [http://bugs.guengel.ch])
 AC_CONFIG_SRCDIR([src/curs.cc])
 AM_INIT_AUTOMAKE
+AM_SILENT_RULES([yes])
 AC_REVISION([$Revision: 4613 $])
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -10,8 +11,8 @@ AC_USE_SYSTEM_EXTENSIONS
 AC_PROG_CC
 AC_PROG_CXX
 AM_PROG_AR
-AM_PROG_LIBTOOL
-LT_INIT
+LT_INIT([disable-static])
+LT_LANG([C++])
 
 # Conditional compiling on Cygwin: tests using LD_PRELOAD don't just
 # work on Cygwin, so we only run them if not built on a cygwin box.
@@ -28,8 +29,30 @@ case $host in
 esac
 AM_CONDITIONAL([NOTCYGWIN],[test x$my_cygwin = xfalse])
 
-
+#
+# Needed on BSD/Linux for libtestpreload.so which is linking back into
+# executable.
+#
 AX_CHECK_LINK_FLAG([-Wl,--export-dynamic],[AC_SUBST([LD_EXPORT_DYNAMIC],[-Wl,--export-dynamic])])
+
+#
+# Configure options
+#
+AC_ARG_ENABLE([debug],
+		[AS_HELP_STRING([--enable-debug],
+				[enable debug mode])],
+		[AS_IF([test x$enableval = xyes],
+		       [AC_SUBST([ENABLEDEBUG], [-DDEBUG])],
+		       [AC_SUBST([ENABLEDEBUG], [-DNDEBUG])])],
+		[AC_SUBST([ENABLEDEBUG],[-DNDEBUG])])
+
+AC_ARG_ENABLE([eventqueue-debug],
+		[AS_HELP_STRING([--enable-eventqueue-debug],
+				[enable event queue debug mode])],
+		[AS_IF([test x$enableval = xyes],
+		       [AC_SUBST([EVTQDEBUG], [-DEVTQDEBUG])],
+		       [AC_SUBST([EVTQDEBUG], [-DNEVTQDEBUG])])],
+		[AC_SUBST([EVTQDEBUG],[-DNEVTQDEBUG])])
 
 AC_LANG([C++])
 AM_GNU_GETTEXT([external])
@@ -143,7 +166,18 @@ AC_COMPILE_IFELSE(
 	[AC_MSG_RESULT([yes])
 	AC_DEFINE([KEYPAD_RETURN_INT],[1],[Set to 1 if keypad has a return value])],
 	[AC_MSG_RESULT([no])])
-
 AC_CONFIG_HEADERS([config.h include/libyacurscfg.h])
 AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile include/Makefile po/Makefile.in])
 AC_OUTPUT
+
+echo " "
+echo " "
+echo "  host              $host"
+echo "  prefix            $prefix"
+echo "  Use NLS           $USE_NLS"
+echo "  Use ncurses.h     $have_ncurses_h"
+echo "  Use curses.h      $have_curses_h"
+echo "  Debug mode        $ENABLEDEBUG"
+echo "  Event Queue Debug $EVTQDEBUG"
+echo ""
+echo ""

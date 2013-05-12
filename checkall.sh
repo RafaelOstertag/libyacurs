@@ -61,6 +61,57 @@ host_dash() {
     done
 }
 
+WHEEZY_CXXFLAGS_44='-march=native -mtune=native -O3 -pedantic -Wall -Werror'
+WHEEZY_CFLAGS_44="$WHEEZY_CXXFLAGS_44"
+WHEEZY_CC_44=gcc-4.4
+WHEEZY_CXX_44=g++-4.4
+WHEEZY_LDFLAGS_44="-L/usr/lib"
+
+WHEEZY_CXXFLAGS_46="$WHEEZY_CXXFLAGS_44"
+WHEEZY_CFLAGS_46="$WHEEZY_CXXFLAGS_44"
+WHEEZY_CC_46=gcc-4.6
+WHEEZY_CXX_46=g++-4.6
+WHEEZY_LDFLAGS_46="-L/usr/lib"
+
+WHEEZY_CXXFLAGS_47="$WHEEZY_CXXFLAGS_44"
+WHEEZY_CFLAGS_47="$WHEEZY_CXXFLAGS_44"
+WHEEZY_CC_47=gcc-4.7
+WHEEZY_CXX_47=g++-4.7
+WHEEZY_LDFLAGS_47="-L/usr/lib"
+
+WHEEZY_CXXFLAGS_default="$WHEEZY_CXXFLAGS_44"
+WHEEZY_CFLAGS_default="$WHEEZY_CXXFLAGS_44"
+WHEEZY_CC_default=gcc
+WHEEZY_CXX_default=g++
+WHEEZY_LDFLAGS_default="-L/usr/lib"
+
+WHEEZY_CXXFLAGS_clang="$WHEEZY_CXXFLAGS_44"
+WHEEZY_CFLAGS_clang="$WHEEZY_CXXFLAGS_44"
+WHEEZY_CC_clang=clang
+WHEEZY_CXX_clang=clang++
+WHEEZY_LDFLAGS_clang="-L/usr/lib"
+
+host_wheezy() {
+    for c in default clang 44 46 47
+    do
+	make distclean
+	./configure CXX="`eval echo \\$WHEEZY_CXX_$c`" \
+	    CC="`eval echo \\$WHEEZY_CC_$c`" \
+	    CFLAGS="`eval echo \\$WHEEZY_CFLAGS_$c`" \
+	    CXXFLAGS="`eval echo \\$WHEEZY_CXXFLAGS_$c`" \
+	    LDFLAGS="`eval echo \\$WHEEZY_LDFLAGS_$c`"
+
+	had_error $? "Error in CXX=`eval echo \\$WHEEZY_CXX_$c` CC=`eval echo \\$WHEEZY_CC_$c` CFLAGS=`eval echo \\$WHEEZY_CFLAGS_$c` CXXFLAGS=`eval echo \\$WHEEZY_CXXFLAGS_$c` LDFLAGS=`eval echo \\$WHEEZY_LDFLAGS_$c`"
+
+	make clean
+	make
+	had_error $? "Error in CXX=`eval echo \\$WHEEZY_CXX_$c` CC=`eval echo \\$WHEEZY_CC_$c` CFLAGS=`eval echo \\$WHEEZY_CFLAGS_$c` CXXFLAGS=`eval echo \\$WHEEZY_CXXFLAGS_$c` LDFLAGS=`eval echo \\$WHEEZY_LDFLAGS_$c`"
+
+	make check
+	had_error $? "Error in CXX=`eval echo \\$WHEEZY_CXX_$c` CC=`eval echo \\$WHEEZY_CC_$c` CFLAGS=`eval echo \\$WHEEZY_CFLAGS_$c` CXXFLAGS=`eval echo \\$WHEEZY_CXXFLAGS_$c` LDFLAGS=`eval echo \\$WHEEZY_LDFLAGS_$c`"
+    done
+}
+
 DEBIAN32_CXXFLAGS_43='-march=native -mtune=native -O3 -pedantic -Wall -Werror'
 DEBIAN32_CFLAGS_43="$DEBIAN32_CXXFLAGS_43"
 DEBIAN32_CC_43=gcc-4.3

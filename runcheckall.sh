@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for h in fish dash debian32 freebsd32 openbsd32 netbsd32 abraxas aurora starchild odin
+for h in fish dash debian32 freebsd32 openbsd32 netbsd32 abraxas aurora starchild odin wheezy
 do
     TESTDIR="${HOME}/libyacurs-test"
     TESTDIRHOST="${TESTDIR}/${h}"

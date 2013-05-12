@@ -770,13 +770,16 @@ EventQueue::submit(const Event& ev) {
         DEBUGOUT("Submitted: " << Event::evt2str(ev) );
         evt_queue.push(ev.clone() );
         statistics.update_evt_submitted_by_type(ev);
-    } catch (std::exception& e) {
-        // Intentionally empty
 #ifndef NDEBUG
+    } catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
         std::abort();
-#endif
     }
+#else
+    } catch (std::exception&) {
+	// Intentionally empty
+    }
+#endif
     unblocksignal();
 }
 

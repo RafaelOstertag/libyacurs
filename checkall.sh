@@ -403,7 +403,7 @@ host_starchild() {
 		had_error $? "Error in ${c}:$arch:$flags"
 
 		gmake clean
-		gmake
+		gmake -j4
 		had_error $? "Error in ${c}:$arch:$flags"
 
 		gmake check

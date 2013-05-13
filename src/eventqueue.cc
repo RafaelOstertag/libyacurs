@@ -278,17 +278,6 @@ namespace YACURS {
         } // namespace EVENTQUEUE
     } // namespace FUNCTORS
 } // namespace YACURS
-    sigemptyset(&block_sigmask);
-    sigaddset(&block_sigmask, SIGWINCH);
-    sigaddset(&block_sigmask, SIGALRM);
-    sigaddset(&block_sigmask, SIGUSR1);
-    sigaddset(&block_sigmask, SIGUSR2);
-    sigaddset(&block_sigmask, SIGINT);
-    sigaddset(&block_sigmask, SIGTERM);
-    sigaddset(&block_sigmask, SIGQUIT);
-    sigaddset(&block_sigmask, SIGTSTP);
-    sigaddset(&block_sigmask, SIGCONT);
-
 
 //
 // Private

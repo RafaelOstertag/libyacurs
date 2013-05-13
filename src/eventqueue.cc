@@ -278,6 +278,17 @@ namespace YACURS {
         } // namespace EVENTQUEUE
     } // namespace FUNCTORS
 } // namespace YACURS
+    sigemptyset(&block_sigmask);
+    sigaddset(&block_sigmask, SIGWINCH);
+    sigaddset(&block_sigmask, SIGALRM);
+    sigaddset(&block_sigmask, SIGUSR1);
+    sigaddset(&block_sigmask, SIGUSR2);
+    sigaddset(&block_sigmask, SIGINT);
+    sigaddset(&block_sigmask, SIGTERM);
+    sigaddset(&block_sigmask, SIGQUIT);
+    sigaddset(&block_sigmask, SIGTSTP);
+    sigaddset(&block_sigmask, SIGCONT);
+
 
 //
 // Private
@@ -424,19 +435,18 @@ EventQueue::setup_signal() {
     //
     // Unblock signals
     //
-    sigemptyset(&mask);
+    sigemptyset(&block_sigmask);
+    sigaddset(&block_sigmask, SIGWINCH);
+    sigaddset(&block_sigmask, SIGALRM);
+    sigaddset(&block_sigmask, SIGUSR1);
+    sigaddset(&block_sigmask, SIGUSR2);
+    sigaddset(&block_sigmask, SIGINT);
+    sigaddset(&block_sigmask, SIGTERM);
+    sigaddset(&block_sigmask, SIGQUIT);
+    sigaddset(&block_sigmask, SIGTSTP);
+    sigaddset(&block_sigmask, SIGCONT);
 
-    sigaddset(&mask, SIGWINCH);
-    sigaddset(&mask, SIGALRM);
-    sigaddset(&mask, SIGUSR1);
-    sigaddset(&mask, SIGUSR2);
-    sigaddset(&mask, SIGINT);
-    sigaddset(&mask, SIGTERM);
-    sigaddset(&mask, SIGCONT);
-    sigaddset(&mask, SIGTSTP);
-    sigaddset(&mask, SIGQUIT);
-
-    if (sigprocmask(SIG_UNBLOCK, &mask, &old_sigmask) != 0)
+    if (sigprocmask(SIG_UNBLOCK, &block_sigmask, &old_sigmask) != 0)
         throw EXCEPTIONS::SystemError(errno);
 }
 
@@ -786,16 +796,6 @@ EventQueue::submit(const Event& ev) {
 void
 EventQueue::run() {
     DEBUGOUT("EventQueue::run(): --- enter");
-    sigemptyset(&block_sigmask);
-    sigaddset(&block_sigmask, SIGWINCH);
-    sigaddset(&block_sigmask, SIGALRM);
-    sigaddset(&block_sigmask, SIGUSR1);
-    sigaddset(&block_sigmask, SIGUSR2);
-    sigaddset(&block_sigmask, SIGINT);
-    sigaddset(&block_sigmask, SIGTERM);
-    sigaddset(&block_sigmask, SIGQUIT);
-    sigaddset(&block_sigmask, SIGTSTP);
-    sigaddset(&block_sigmask, SIGCONT);
 
     setup_signal();
 

@@ -141,6 +141,10 @@ Curses::sigtstp_handler(Event& e) {
 
 void
 Curses::sigcont_handler(Event& e) {
+    /// @bug
+    ///
+    /// If screen is resized while suspended, old screen size is still
+    /// used and Curses calls may fail.
     assert(e == EVT_SIGCONT);
 
     if (!__suspended) return;

@@ -44,4 +44,15 @@
  *
  * A Widget is an object associated with a Window. Most Widgets are
  * visible, such as Buttons and Labels.
+ *
+ * @section Supported Platforms
+ *
+ * Libyacurs is known to work on:
+ *
+ * * FreeBSD
+ * * NetBSD
+ * * OpenBSD
+ * * Solaris 10/11 (Solaris Studio Compiler)
+ * * Cygwin
+ * * Linux
  */

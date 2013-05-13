@@ -2,9 +2,52 @@
 /**
  * @page events Events
  *
+ *
+ * @section evtoverview Overview
+ *
+ *
+ * @subsection userevents User Events
+ *
+ * Following a list of events that are intended to be connected by
+ * users of libyacurs:
+ *
+ *  * @c EVT_QUIT
+ *  * @c EVT_WINDOW_SHOW
+ *  * @c EVT_WINDOW_CLOSE
+ *  * @c EVT_BUTTON_PRESS
+ *  * @c EVT_LISTBOX_ENTER
+ *
+ *
+ * @subsection develevents Developer Events
+ *
+ * In addition to User Events, following a list of events that are
+ * intended to be connected when developing for libyacurs
+ *
+ * * @c EVT_KEY
+ * * @c EVT_REFRESH
+ * * @c EVT_FORCEREFRESH
+ * * @c EVT_FOCUS_NEXT
+ * * @c EVT_FOCUS_PREVIOUS
+ *
+ *
+ * @subsection internalevents Internal Events
+ *
+ * Following events are not intended to be connected by users or
+ * developers, since they are connected internally.
+ *
+ * Event              |     Connected in
+ * -------------------|-----------------
+ * @c EVT_DOUPDATE    |  @c YACURS::Curses::init
+ * @c EVT_TERMRESETUP |  @c YACURS::Curses::init
+ * @c EVT_SIGWINCH    |  @c YACURS::WindowBase::WindowBase
+ * @c EVT_SIGALRM     |  @c YACURS::EventQueue::lock_screen
+ * @c EVT_SIGTSTP     |  @c YACURS::Curses::init
+ * @c EVT_SIGCONT     |  @c YACURS::Curses::init
+ *
+ *
  * @section uxsignal Unix Signals
  *
- * Following a tbale of Unix Signals and their corresponding events:
+ * Following a table of Unix Signals and their corresponding events:
  *
  * Unix Signal | Event
  * ------------|------
@@ -25,9 +68,10 @@
  * not be immediate.
  *
  * @c EVT_FORCEREFRESH instruct Windows and Widgets to force their
- * refresh
+ * refresh. Usually a call to @c touchwin().
  *
- *  
+ * @c EVT_DOUPDATE instructs libyacurs to perform a @c doupdate().
+ *
  *
  * @section termresize Terminal Resize
  *
@@ -39,12 +83,12 @@
  * 3. @c EVT_REFRESH
  * 4. @c EVT_DOUPDATE
  *
- * @c EVT_TERMRESETUP is connected and handled by Curses.
+ * @c EVT_TERMRESETUP is connected and handled by YACURS::Curses.
  *
- * @c EVT_SIGWINCH should only be connected by derived classes of
- * WindowBase. Classes derived from WidgetBase must not connect to
- * that Event in order to resize, but rely on the parent Window
- * calling resize().
+ * @c EVT_SIGWINCH should only be connected by
+ * YACURS::WindowBase. Classes derived from WidgetBase must not
+ * connect to that Event in order to resize, but rely on the parent
+ * Window calling resize().
  *
  * All visible objects should connect @c EVT_REFRESH. @c EVT_REFRESH
  * advises the object to prepare for a Curses doupdate(), i.e. they
@@ -52,6 +96,7 @@
  *
  * A Terminal Resize will always result in objects being first
  * unrealized() and then realized() again.
+ *
  *
  * @section Window Events
  *

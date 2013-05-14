@@ -56,6 +56,7 @@
 
 using namespace YACURS;
 
+Size Curses::suspend_scrsz;
 TitleBar* Curses::__title = 0;
 StatusBar* Curses::__statusbar = 0;
 Window* Curses::__mainwindow = 0;
@@ -124,6 +125,8 @@ Curses::sigtstp_handler(Event& e) {
     (void)sigaddset(&mymask, SIGWINCH);
     (void)sigprocmask(SIG_BLOCK, &mymask, &oldmask);
 
+    suspend_scrsz = current_screensize();
+
     endwin();
 
     __suspended = true;
@@ -154,9 +157,23 @@ Curses::sigcont_handler(Event& e) {
     if (resetty() == ERR)
         EXCEPTIONS::CursesException("resetty");
 
+#if defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
+    if (suspend_scrsz != inquiry_screensize() ) {
+        EventQueue::submit(EVT_TERMRESETUP);
+        EventQueue::submit(EventEx<Size>(EVT_SIGWINCH,
+                                         Curses::inquiry_screensize() ) );
+        EventQueue::submit(EVT_REFRESH);
+        EventQueue::submit(EVT_DOUPDATE);
+    } else {
+        EventQueue::submit(Event(EVT_FORCEREFRESH) );
+        EventQueue::submit(Event(EVT_REFRESH) );
+        EventQueue::submit(Event(EVT_DOUPDATE) );
+    }
+#else // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
     EventQueue::submit(Event(EVT_FORCEREFRESH) );
     EventQueue::submit(Event(EVT_REFRESH) );
     EventQueue::submit(Event(EVT_DOUPDATE) );
+#endif // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
 
     __suspended = false;
 
@@ -357,12 +374,17 @@ Curses::inquiry_screensize() {
     if (__scrdim.cols() < MIN_COLS)
         __scrdim.cols(MIN_COLS);
 #else // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
-    int nrows, ncols;
-    getmaxyx(stdscr, nrows, ncols);
-
-    __scrdim.rows(nrows);
-    __scrdim.cols(ncols);
+    __scrdim = current_screensize();
 #endif // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
 
     return __scrdim;
+}
+
+Size
+Curses::current_screensize() {
+    int nrows, ncols;
+
+    getmaxyx(stdscr, nrows, ncols);
+
+    return Size(nrows, ncols);
 }

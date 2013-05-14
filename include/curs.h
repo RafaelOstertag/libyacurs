@@ -47,6 +47,16 @@ namespace YACURS {
     class Curses {
         private:
             /**
+             * Screen size before suspending.
+             *
+             * Before suspending on SIGTSTP, the current screen size
+             * will be saved. When resumed by SIGCONT, the current
+             * screen size will be compared to this, and a resize
+             * performed if they differ.
+             */
+            static Size suspend_scrsz;
+
+            /**
              * Pointer to StatusBar.
              *
              * Curses will not free the memory associated with StatuLine.
@@ -122,6 +132,8 @@ namespace YACURS {
             static void mainwindow(Window* _w);
 
             static Window* mainwindow();
+
+            static Size current_screensize();
 
             static Size inquiry_screensize();
     };

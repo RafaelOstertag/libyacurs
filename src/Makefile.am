@@ -2,7 +2,7 @@
 
 lib_LTLIBRARIES = libyacurs.la
 
-libyacurs_la_LDFLAGS = -version-info 0 $(LTLIBINTL)
+libyacurs_la_LDFLAGS = -version-info 0 $(CURSES_LIB) $(LTLIBINTL)
 
 libyacurs_la_CPPFLAGS = -DPACKAGE=\"$(PACKAGE)\"			\
 -DLOCALEDIR=\"$(localedir)\" -I$(top_srcdir)/include $(ENABLEDEBUG)	\

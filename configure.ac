@@ -63,38 +63,19 @@ AX_CXX_HEADER_STDCXX_98
 AS_IF([test x$ax_cv_cxx_stdcxx_98 = xno],
 	    [AC_MSG_ERROR([ISO C++ 98 not supported])])
 
+AX_WITH_CURSES
+AS_IF([test x$ax_cv_curses != xyes],
+	    [AC_MSG_ERROR([no curses library found])])
 
-AC_CHECK_HEADER([ncurses.h],
-	[
-		have_ncurses_h=yes
-		AC_DEFINE([HAVE_NCURSES_H],[1],
-			[Define to 1 if you have ncurses.h])
-	],[
-		have_ncurses_h=no
-	]
-)
-AC_CHECK_HEADER([curses.h],
-	[
-		have_curses_h=yes
-		AC_DEFINE([HAVE_CURSES_H],[1],[Define to 1 if you have curses.h])
-	],[
-		have_curses_h=no
-	]
-)
-
-AS_IF([test "x$have_ncurses_h" = xyes],
-	    [AC_CHECK_LIB([ncurses],[initscr],[],
-		[AC_CHECK_LIB([curses],[initscr],[],
-			[AC_MSG_ERROR([curses/ncurses library required])])]
-		)],
-      [test "x$have_curses_h" = xyes],
-      	    [AC_CHECK_LIB([curses],[initscr],[],
-		[AC_MSG_ERROR([curses library required])]
-	    )],
-      [AC_MSG_ERROR([neither ncurses nor curses library available])])
 
 # resize_term() is NCurses, resizeterm() is NetBSD curses
-AC_CHECK_FUNCS([resize_term resizeterm])
+my_saved_LIBS="$LIBS"
+LIBS="$my_save_LIBS $CURSES_LIB"
+AC_CHECK_FUNC([resize_term],
+	[AC_DEFINE([HAVE_RESIZE_TERM],[1],[Define to 1 if you have the `resize_term' function.])],
+	[AC_CHECK_FUNC([resizeterm],
+		[AC_DEFINE([HAVE_RESIZETERM],[1],[Define to 1 if you have the `resizeterm' function.])])])
+LIBS="$my_saved_LIBS"
 
 # Some custom tests
 AC_MSG_CHECKING([whether waddstr() use const char*])
@@ -170,14 +151,10 @@ AC_CONFIG_HEADERS([config.h include/libyacurscfg.h])
 AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile include/Makefile po/Makefile.in])
 AC_OUTPUT
 
-echo " "
-echo " "
-echo "  host              $host"
-echo "  prefix            $prefix"
-echo "  Use NLS           $USE_NLS"
-echo "  Use ncurses.h     $have_ncurses_h"
-echo "  Use curses.h      $have_curses_h"
-echo "  Debug mode        $ENABLEDEBUG"
-echo "  Event Queue Debug $EVTQDEBUG"
-echo ""
-echo ""
+AC_MSG_NOTICE([])
+AC_MSG_NOTICE([  host              $host])
+AC_MSG_NOTICE([  prefix            $prefix])
+AC_MSG_NOTICE([  Use NLS           $USE_NLS])
+AC_MSG_NOTICE([  Curses library    $CURSES_LIB])
+AC_MSG_NOTICE([  Debug mode        $ENABLEDEBUG])
+AC_MSG_NOTICE([  Event Queue Debug $EVTQDEBUG])

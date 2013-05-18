@@ -224,7 +224,6 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
                         @%:@define _XOPEN_SOURCE_EXTENDED 1
                         @%:@include <ncursesw/curses.h>
-                    ]], [[
 		    	chtype* use_chtype(chtype* p) {
 				return p;
 			}
@@ -233,7 +232,7 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 			     return p;
 			}
 
-			cchar_t* use_cchart_t(cchar_t* p) {
+			cchar_t* use_cchar_t(cchar_t* p) {
 				 return p;
 			}
 
@@ -245,6 +244,7 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 			       	return p;
 			}
 
+                    ]], [[
                         chtype a = A_BOLD;
 			(void)use_chtype(&a);
 
@@ -291,7 +291,6 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
                         @%:@define _XOPEN_SOURCE_EXTENDED 1
                         @%:@include <ncursesw.h>
-                    ]], [[
 		    	chtype* use_chtype(chtype* p) {
 				return p;
 			}
@@ -300,7 +299,7 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 			     return p;
 			}
 
-			cchar_t* use_cchart_t(cchar_t* p) {
+			cchar_t* use_cchar_t(cchar_t* p) {
 				 return p;
 			}
 
@@ -312,6 +311,7 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 			       	return p;
 			}
 
+                    ]], [[
                         chtype a = A_BOLD;
 			(void)use_chtype(&a);
 
@@ -358,7 +358,6 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
                         @%:@define _XOPEN_SOURCE_EXTENDED 1
                         @%:@include <ncurses.h>
-                    ]], [[
 		    	chtype* use_chtype(chtype* p) {
 				return p;
 			}
@@ -367,7 +366,7 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 			     return p;
 			}
 
-			cchar_t* use_cchart_t(cchar_t* p) {
+			cchar_t* use_cchar_t(cchar_t* p) {
 				 return p;
 			}
 
@@ -379,6 +378,7 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 			       	return p;
 			}
 
+                    ]], [[
                         chtype a = A_BOLD;
 			(void)use_chtype(&a);
 
@@ -450,7 +450,6 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
             AC_CACHE_CHECK([for working ncurses/curses.h], [ax_cv_header_ncurses_curses_h], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
                         @%:@include <ncurses/curses.h>
-                    ]], [[
 		    	chtype* use_chtype(chtype* p) {
 				return p;
 			}
@@ -458,19 +457,7 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 			int* use_int(int* p) {
 			     return p;
 			}
-
-			cchar_t* use_cchart_t(cchar_t* p) {
-				 return p;
-			}
-
-			attr_t* use_attr_t(attr_t* p) {
-				return p;
-			}
-
-			wint_t* use_wint_t(wint_t* p) {
-			       	return p;
-			}
-
+                    ]], [[
                         chtype a = A_BOLD;
 			(void)use_chtype(&a);
 
@@ -503,7 +490,6 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
             AC_CACHE_CHECK([for working ncurses.h], [ax_cv_header_ncurses_h], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
                         @%:@include <ncurses.h>
-                    ]], [[
 		    	chtype* use_chtype(chtype* p) {
 				return p;
 			}
@@ -511,19 +497,7 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 			int* use_int(int* p) {
 			     return p;
 			}
-
-			cchar_t* use_cchart_t(cchar_t* p) {
-				 return p;
-			}
-
-			attr_t* use_attr_t(attr_t* p) {
-				return p;
-			}
-
-			wint_t* use_wint_t(wint_t* p) {
-			       	return p;
-			}
-
+                    ]], [[
                         chtype a = A_BOLD;
 			(void)use_chtype(&a);
 
@@ -586,7 +560,6 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
             AC_CACHE_CHECK([for working curses.h], [ax_cv_header_curses_h], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
                         @%:@include <curses.h>
-                    ]], [[
                         chtype* use_chtype(chtype* p) {
 				return p;
 			}
@@ -595,6 +568,7 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 			     return p;
 			}
 
+                    ]], [[
                         chtype a = A_BOLD;
 			(void)use_chtype(&a);
 
@@ -619,7 +593,6 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
                             @%:@error "this Curses library is not enhanced"
                             "this Curses library is not enhanced"
                             @%:@endif
-                        ]], [[
 		    	chtype* use_chtype(chtype* p) {
 				return p;
 			}
@@ -628,7 +601,7 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 			     return p;
 			}
 
-			cchar_t* use_cchart_t(cchar_t* p) {
+			cchar_t* use_cchar_t(cchar_t* p) {
 				 return p;
 			}
 
@@ -640,6 +613,7 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 			       	return p;
 			}
 
+                        ]], [[
                             chtype a = A_BOLD;
 			    (void)use_chtype(&a);
 
@@ -679,7 +653,6 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
                     AC_LINK_IFELSE([AC_LANG_PROGRAM([[
                         @%:@define _XOPEN_SOURCE_EXTENDED 1
                         @%:@include <curses.h>
-                        ]], [[
 		    	chtype* use_chtype(chtype* p) {
 				return p;
 			}
@@ -687,19 +660,7 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 			int* use_int(int* p) {
 			     return p;
 			}
-
-			cchar_t* use_cchart_t(cchar_t* p) {
-				 return p;
-			}
-
-			attr_t* use_attr_t(attr_t* p) {
-				return p;
-			}
-
-			wint_t* use_wint_t(wint_t* p) {
-			       	return p;
-			}
-
+                        ]], [[
                             chtype a = A_BOLD;
 			    (void)use_chtype(&a);
 
@@ -725,7 +686,6 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
                 AC_CACHE_CHECK([for obsolete Curses functions], [ax_cv_plaincurses_obsolete], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
                         @%:@include <curses.h>
-                    ]], [[
 		    	chtype* use_chtype(chtype* p) {
 				return p;
 			}
@@ -733,19 +693,7 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 			int* use_int(int* p) {
 			     return p;
 			}
-
-			cchar_t* use_cchart_t(cchar_t* p) {
-				 return p;
-			}
-
-			attr_t* use_attr_t(attr_t* p) {
-				return p;
-			}
-
-			wint_t* use_wint_t(wint_t* p) {
-			       	return p;
-			}
-
+                    ]], [[
                         chtype a = A_BOLD;
 			(void)use_chtype(&a);
 

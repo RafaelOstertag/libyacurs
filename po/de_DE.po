@@ -8,12 +8,12 @@ msgstr ""
 "Project-Id-Version: libyacurs 0.1\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
 "POT-Creation-Date: 2013-05-10 12:58+0200\n"
-"PO-Revision-Date: 2013-05-10 13:05+0200\n"
+"PO-Revision-Date: 2013-05-18 10:38+0200\n"
 "Last-Translator: Rafael Ostertag <rafi@guengel.ch>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -27,43 +27,43 @@ msgstr " ausserhalb Bereich."
 
 #: src/checkbox.cc:182
 msgid "Item '"
-msgstr "Element '"
+msgstr "Element Â»"
 
 #: src/checkbox.cc:182
 msgid "' not found in CheckBox"
-msgstr "' nicht gefunden in CheckBox"
+msgstr "Â« nicht gefunden in CheckBox"
 
 #: src/colorparser.cc:65
 msgid " does not contain ':'"
-msgstr " enthält kein ':'"
+msgstr " enthÃ¤lt kein Â»:Â«"
 
 #: src/colorparser.cc:71
 msgid "Color Object size invalid"
-msgstr "Farbobjekt Grösse ungültig"
+msgstr "Farbobjekt GrÃ¶sse ungÃ¼ltig"
 
 #: src/colorparser.cc:77
 msgid "Color size invalid"
-msgstr "Farbgrösse ungültig"
+msgstr "FarbgrÃ¶sse ungÃ¼ltig"
 
 #: src/colorparser.cc:83
 msgid " is not valid color object"
-msgstr " kein gültiges Farbobjekt"
+msgstr " kein gÃ¼ltiges Farbobjekt"
 
 #: src/colorparser.cc:90 src/colorparser.cc:97
 msgid "not a valid color: "
-msgstr "keine gültige Farbe: "
+msgstr "keine gÃ¼ltige Farbe: "
 
 #: src/colorparser.cc:104
 msgid "not a valid attribute: "
-msgstr "kein gültiges Attribut: "
+msgstr "kein gÃ¼ltiges Attribut: "
 
 #: src/curswin.cc:45
 msgid "argument 'win' must not be 0"
-msgstr "Argument 'win' darf nicht 0 sein"
+msgstr "Argument Â»winÂ« darf nicht 0 sein"
 
 #: src/curswin.cc:70
 msgid "Area must not be zero"
-msgstr "Fläche darf nicht 0 sein"
+msgstr "FlÃ¤che darf nicht 0 sein"
 
 #: src/dialog.cc:148
 msgid "Cancel"
@@ -97,11 +97,11 @@ msgstr "Datei laden"
 
 #: src/filesavedialog.cc:223
 msgid "Confirmation"
-msgstr "Bestätigung"
+msgstr "BestÃ¤tigung"
 
 #: src/filesavedialog.cc:226
 msgid "already exists. Do you want to overwrite?"
-msgstr "existiert bereits. Überschreiben?"
+msgstr "existiert bereits. Ãœberschreiben?"
 
 #: src/filesavedialog.cc:235
 msgid "Error"
@@ -145,11 +145,11 @@ msgstr "Object nicht realisiert"
 
 #: src/yacursex.cc:80
 msgid "TIOCGWINSZ info invalid"
-msgstr "TIOCGWINSZ Information ungültig"
+msgstr "TIOCGWINSZ Information ungÃ¼ltig"
 
 #: src/yacursex.cc:84
 msgid "unable to get window size"
-msgstr "kann Fenstergrösse nicht ermitteln"
+msgstr "kann FenstergrÃ¶sse nicht ermitteln"
 
 #: src/yacursex.cc:88
 msgid "Cannot focus"
@@ -157,7 +157,7 @@ msgstr "Kann nicht fokusieren"
 
 #: src/yacursex.cc:92
 msgid "Size is invalid"
-msgstr "Grösse ist ungültig"
+msgstr "GrÃ¶sse ist ungÃ¼ltig"
 
 #: src/yacursex.cc:96
 msgid "Unexpected event received"
@@ -169,18 +169,18 @@ msgstr "Farben nicht initialisiert"
 
 #: src/yacursex.cc:104
 msgid "An object exceeded space constraints"
-msgstr "Ein Objekt hat Grössenbeschränkung überschritten"
+msgstr "Ein Objekt hat GrÃ¶ssenbeschrÃ¤nkung Ã¼berschritten"
 
 #: src/yacursex.cc:108
 msgid "Operation not supported"
-msgstr "Operation nicht unterstützt"
+msgstr "Operation nicht unterstÃ¼tzt"
 
 #: src/yacursex.cc:112
 msgid "Invalid dialog type"
-msgstr "Ungültiger Dialogtyp"
+msgstr "UngÃ¼ltiger Dialogtyp"
 
 #~ msgid "Rows cannot be <0"
-#~ msgstr "Zeilen können nicht kleiner 0 sein"
+#~ msgstr "Zeilen kÃ¶nnen nicht kleiner 0 sein"
 
 #~ msgid "Columns cannot be <0"
-#~ msgstr "Spalten können nicht kleiner 0 sein"
+#~ msgstr "Spalten kÃ¶nnen nicht kleiner 0 sein"

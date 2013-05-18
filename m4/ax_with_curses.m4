@@ -184,8 +184,8 @@
 
 #serial 13
 
-AU_ALIAS([MP_WITH_CURSES], [AX_WITH_CURSES])
-AC_DEFUN([AX_WITH_CURSES], [
+AU_ALIAS([MP_WITH_CURSES], [AX_MY_WITH_CURSES])
+AC_DEFUN([AX_MY_WITH_CURSES], [
     AC_ARG_VAR([CURSES_LIB], [linker library for Curses, e.g. -lcurses])
     AC_ARG_WITH([ncurses], [AS_HELP_STRING([--with-ncurses],
         [force the use of Ncurses or NcursesW])],
@@ -225,14 +225,50 @@ AC_DEFUN([AX_WITH_CURSES], [
                         @%:@define _XOPEN_SOURCE_EXTENDED 1
                         @%:@include <ncursesw/curses.h>
                     ]], [[
+		    	chtype* use_chtype(chtype* p) {
+				return p;
+			}
+
+			int* use_int(int* p) {
+			     return p;
+			}
+
+			cchar_t* use_cchart_t(cchar_t* p) {
+				 return p;
+			}
+
+			attr_t* use_attr_t(attr_t* p) {
+				return p;
+			}
+
+			wint_t* use_wint_t(wint_t* p) {
+			       	return p;
+			}
+
                         chtype a = A_BOLD;
+			(void)use_chtype(&a);
+
                         int b = KEY_LEFT;
+			(void)use_int(&b);
+
                         chtype c = COLOR_PAIR(1) & A_COLOR;
+			(void)use_chtype(&c);
+
                         attr_t d = WA_NORMAL;
+			(void)use_attr_t(&d);
+
                         cchar_t e;
+			(void)use_cchar_t(&e);
+
                         wint_t f;
+			(void)use_wint_t(&f);
+
                         int g = getattrs(stdscr);
+			(void)use_int(&g);
+
                         int h = getcurx(stdscr) + getmaxx(stdscr);
+			(void)use_int(&h);
+
                         initscr();
                         init_pair(1, COLOR_WHITE, COLOR_RED);
                         wattr_set(stdscr, d, 0, NULL);
@@ -256,14 +292,50 @@ AC_DEFUN([AX_WITH_CURSES], [
                         @%:@define _XOPEN_SOURCE_EXTENDED 1
                         @%:@include <ncursesw.h>
                     ]], [[
+		    	chtype* use_chtype(chtype* p) {
+				return p;
+			}
+
+			int* use_int(int* p) {
+			     return p;
+			}
+
+			cchar_t* use_cchart_t(cchar_t* p) {
+				 return p;
+			}
+
+			attr_t* use_attr_t(attr_t* p) {
+				return p;
+			}
+
+			wint_t* use_wint_t(wint_t* p) {
+			       	return p;
+			}
+
                         chtype a = A_BOLD;
+			(void)use_chtype(&a);
+
                         int b = KEY_LEFT;
+			(void)use_int(&b);
+
                         chtype c = COLOR_PAIR(1) & A_COLOR;
+			(void)use_chtype(&c);
+
                         attr_t d = WA_NORMAL;
+			(void)use_attr_t(&d);
+
                         cchar_t e;
+			(void)use_cchar_t(&e);
+
                         wint_t f;
+			(void)use_wint_t(&f);
+
                         int g = getattrs(stdscr);
+			(void)use_int(&g);
+
                         int h = getcurx(stdscr) + getmaxx(stdscr);
+			(void)use_int(&h);
+
                         initscr();
                         init_pair(1, COLOR_WHITE, COLOR_RED);
                         wattr_set(stdscr, d, 0, NULL);
@@ -287,14 +359,50 @@ AC_DEFUN([AX_WITH_CURSES], [
                         @%:@define _XOPEN_SOURCE_EXTENDED 1
                         @%:@include <ncurses.h>
                     ]], [[
+		    	chtype* use_chtype(chtype* p) {
+				return p;
+			}
+
+			int* use_int(int* p) {
+			     return p;
+			}
+
+			cchar_t* use_cchart_t(cchar_t* p) {
+				 return p;
+			}
+
+			attr_t* use_attr_t(attr_t* p) {
+				return p;
+			}
+
+			wint_t* use_wint_t(wint_t* p) {
+			       	return p;
+			}
+
                         chtype a = A_BOLD;
+			(void)use_chtype(&a);
+
                         int b = KEY_LEFT;
+			(void)use_int(&b);
+
                         chtype c = COLOR_PAIR(1) & A_COLOR;
+			(void)use_chtype(&c);
+
                         attr_t d = WA_NORMAL;
+			(void)use_attr_t(&d);
+
                         cchar_t e;
+			(void)use_cchar_t(&e);
+
                         wint_t f;
+			(void)use_wint_t(&f);
+
                         int g = getattrs(stdscr);
+			(void)use_int(&g);
+
                         int h = getcurx(stdscr) + getmaxx(stdscr);
+			(void)use_int(&h);
+
                         initscr();
                         init_pair(1, COLOR_WHITE, COLOR_RED);
                         wattr_set(stdscr, d, 0, NULL);
@@ -343,11 +451,41 @@ AC_DEFUN([AX_WITH_CURSES], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
                         @%:@include <ncurses/curses.h>
                     ]], [[
+		    	chtype* use_chtype(chtype* p) {
+				return p;
+			}
+
+			int* use_int(int* p) {
+			     return p;
+			}
+
+			cchar_t* use_cchart_t(cchar_t* p) {
+				 return p;
+			}
+
+			attr_t* use_attr_t(attr_t* p) {
+				return p;
+			}
+
+			wint_t* use_wint_t(wint_t* p) {
+			       	return p;
+			}
+
                         chtype a = A_BOLD;
+			(void)use_chtype(&a);
+
                         int b = KEY_LEFT;
+			(void)use_int(&b);
+
                         chtype c = COLOR_PAIR(1) & A_COLOR;
+			(void)use_chtype(&c);
+
                         int g = getattrs(stdscr);
+			(void)use_int(&g);
+
                         int h = getcurx(stdscr) + getmaxx(stdscr);
+			(void)use_int(&h);
+
                         initscr();
                         init_pair(1, COLOR_WHITE, COLOR_RED);
                     ]])],
@@ -366,11 +504,41 @@ AC_DEFUN([AX_WITH_CURSES], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
                         @%:@include <ncurses.h>
                     ]], [[
+		    	chtype* use_chtype(chtype* p) {
+				return p;
+			}
+
+			int* use_int(int* p) {
+			     return p;
+			}
+
+			cchar_t* use_cchart_t(cchar_t* p) {
+				 return p;
+			}
+
+			attr_t* use_attr_t(attr_t* p) {
+				return p;
+			}
+
+			wint_t* use_wint_t(wint_t* p) {
+			       	return p;
+			}
+
                         chtype a = A_BOLD;
+			(void)use_chtype(&a);
+
                         int b = KEY_LEFT;
+			(void)use_int(&b);
+
                         chtype c = COLOR_PAIR(1) & A_COLOR;
+			(void)use_chtype(&c);
+
                         int g = getattrs(stdscr);
+			(void)use_int(&g);
+
                         int h = getcurx(stdscr) + getmaxx(stdscr);
+			(void)use_int(&h);
+
                         initscr();
                         init_pair(1, COLOR_WHITE, COLOR_RED);
                     ]])],
@@ -419,8 +587,20 @@ AC_DEFUN([AX_WITH_CURSES], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
                         @%:@include <curses.h>
                     ]], [[
+                        chtype* use_chtype(chtype* p) {
+				return p;
+			}
+
+			int* use_int(int* p) {
+			     return p;
+			}
+
                         chtype a = A_BOLD;
+			(void)use_chtype(&a);
+
                         int b = KEY_LEFT;
+			(void)use_int(&b);
+
                         initscr();
                     ]])],
                     [ax_cv_header_curses_h=yes],
@@ -440,12 +620,44 @@ AC_DEFUN([AX_WITH_CURSES], [
                             "this Curses library is not enhanced"
                             @%:@endif
                         ]], [[
+		    	chtype* use_chtype(chtype* p) {
+				return p;
+			}
+
+			int* use_int(int* p) {
+			     return p;
+			}
+
+			cchar_t* use_cchart_t(cchar_t* p) {
+				 return p;
+			}
+
+			attr_t* use_attr_t(attr_t* p) {
+				return p;
+			}
+
+			wint_t* use_wint_t(wint_t* p) {
+			       	return p;
+			}
+
                             chtype a = A_BOLD;
+			    (void)use_chtype(&a);
+
                             int b = KEY_LEFT;
+			    (void)use_int(&b);
+
                             chtype c = COLOR_PAIR(1) & A_COLOR;
+			    (void)use_chtype(&c);
+
                             attr_t d = WA_NORMAL;
+			    (void)use_attr_t(&d);
+
                             cchar_t e;
+			    (void)use_cchar_t(&e);
+
                             wint_t f;
+			    (void)use_wint_t(&f);
+
                             initscr();
                             init_pair(1, COLOR_WHITE, COLOR_RED);
                             wattr_set(stdscr, d, 0, NULL);
@@ -468,9 +680,35 @@ AC_DEFUN([AX_WITH_CURSES], [
                         @%:@define _XOPEN_SOURCE_EXTENDED 1
                         @%:@include <curses.h>
                         ]], [[
+		    	chtype* use_chtype(chtype* p) {
+				return p;
+			}
+
+			int* use_int(int* p) {
+			     return p;
+			}
+
+			cchar_t* use_cchart_t(cchar_t* p) {
+				 return p;
+			}
+
+			attr_t* use_attr_t(attr_t* p) {
+				return p;
+			}
+
+			wint_t* use_wint_t(wint_t* p) {
+			       	return p;
+			}
+
                             chtype a = A_BOLD;
+			    (void)use_chtype(&a);
+
                             int b = KEY_LEFT;
+			    (void)use_int(&b);
+
                             chtype c = COLOR_PAIR(1) & A_COLOR;
+			    (void)use_chtype(&c);
+
                             initscr();
                             init_pair(1, COLOR_WHITE, COLOR_RED);
                         ]])],
@@ -488,10 +726,38 @@ AC_DEFUN([AX_WITH_CURSES], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
                         @%:@include <curses.h>
                     ]], [[
+		    	chtype* use_chtype(chtype* p) {
+				return p;
+			}
+
+			int* use_int(int* p) {
+			     return p;
+			}
+
+			cchar_t* use_cchart_t(cchar_t* p) {
+				 return p;
+			}
+
+			attr_t* use_attr_t(attr_t* p) {
+				return p;
+			}
+
+			wint_t* use_wint_t(wint_t* p) {
+			       	return p;
+			}
+
                         chtype a = A_BOLD;
+			(void)use_chtype(&a);
+
                         int b = KEY_LEFT;
+			(void)use_int(&b);
+
                         int g = getattrs(stdscr);
+			(void)use_int(&g);
+
                         int h = getcurx(stdscr) + getmaxx(stdscr);
+			(void)use_int(&h);
+
                         initscr();
                     ]])],
                     [ax_cv_plaincurses_obsolete=yes],

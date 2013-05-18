@@ -63,7 +63,7 @@ AX_CXX_HEADER_STDCXX_98
 AS_IF([test x$ax_cv_cxx_stdcxx_98 = xno],
 	    [AC_MSG_ERROR([ISO C++ 98 not supported])])
 
-AX_WITH_CURSES
+AX_MY_WITH_CURSES
 AS_IF([test x$ax_cv_curses != xyes],
 	    [AC_MSG_ERROR([no curses library found])])
 

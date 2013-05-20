@@ -288,14 +288,7 @@ CursWin::addstr(const CurStr& str) {
 
 CursWin&
 CursWin::addstr(const std::string& str) {
-    Coordinates coord(get_cursor() );
-
-    if (mywaddstr(__window, str.c_str() ) == ERR &&
-        coord.x() + static_cast<int16_t>(str.length() ) <
-        __client_area.cols() )
-        throw EXCEPTIONS::CursesException("waddstr");
-
-    return *this;
+    return addstr(CurStr(str, get_cursor()));
 }
 
 CursWin&
@@ -379,13 +372,7 @@ CursWin::addnstr(const CurStr& str, int n) {
 
 CursWin&
 CursWin::addnstr(const std::string& str, int n) {
-    Coordinates coord(get_cursor() );
-
-    if (mywaddnstr(__window, str.c_str(), n) == ERR &&
-        coord.x() + n < __client_area.x() )
-        throw EXCEPTIONS::CursesException("waddnstr");
-
-    return *this;
+    return addnstr(CurStr(str,get_cursor()), n);
 }
 
 CursWin&

@@ -26,6 +26,7 @@
 #include "gettext.h"
 
 #include <stdexcept>
+#include <cstdlib>
 #include <cerrno>
 
 #include "curswin.h"

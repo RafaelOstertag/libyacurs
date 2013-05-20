@@ -222,6 +222,10 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 
             AC_CACHE_CHECK([for working ncursesw/curses.h], [ax_cv_header_ncursesw_curses_h], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+			// When compiling X/Open Curses on Solaris using g++
+			@%:@ifndef _BOOL
+			@%:@define _BOOL
+			@%:@endif
                         @%:@define _XOPEN_SOURCE_EXTENDED 1
                         @%:@include <ncursesw/curses.h>
 		    	chtype* use_chtype(chtype* p) {
@@ -289,6 +293,10 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 
             AC_CACHE_CHECK([for working ncursesw.h], [ax_cv_header_ncursesw_h], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+			// When compiling X/Open Curses on Solaris using g++
+			@%:@ifndef _BOOL
+			@%:@define _BOOL
+			@%:@endif
                         @%:@define _XOPEN_SOURCE_EXTENDED 1
                         @%:@include <ncursesw.h>
 		    	chtype* use_chtype(chtype* p) {
@@ -356,6 +364,10 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 
             AC_CACHE_CHECK([for working ncurses.h], [ax_cv_header_ncurses_h_with_ncursesw], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+			// When compiling X/Open Curses on Solaris using g++
+			@%:@ifndef _BOOL
+			@%:@define _BOOL
+			@%:@endif
                         @%:@define _XOPEN_SOURCE_EXTENDED 1
                         @%:@include <ncurses.h>
 		    	chtype* use_chtype(chtype* p) {
@@ -449,6 +461,10 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 
             AC_CACHE_CHECK([for working ncurses/curses.h], [ax_cv_header_ncurses_curses_h], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+			// When compiling X/Open Curses on Solaris using g++
+			@%:@ifndef _BOOL
+			@%:@define _BOOL
+			@%:@endif
                         @%:@include <ncurses/curses.h>
 		    	chtype* use_chtype(chtype* p) {
 				return p;
@@ -489,6 +505,10 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 
             AC_CACHE_CHECK([for working ncurses.h], [ax_cv_header_ncurses_h], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+			// When compiling X/Open Curses on Solaris using g++
+			@%:@ifndef _BOOL
+			@%:@define _BOOL
+			@%:@endif
                         @%:@include <ncurses.h>
 		    	chtype* use_chtype(chtype* p) {
 				return p;
@@ -559,6 +579,10 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 
             AC_CACHE_CHECK([for working curses.h], [ax_cv_header_curses_h], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+			// When compiling X/Open Curses on Solaris using g++
+			@%:@ifndef _BOOL
+			@%:@define _BOOL
+			@%:@endif
                         @%:@include <curses.h>
                         chtype* use_chtype(chtype* p) {
 				return p;
@@ -587,6 +611,10 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 
                 AC_CACHE_CHECK([for X/Open Enhanced Curses conformance], [ax_cv_plaincurses_enhanced], [
                     AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+			    // When compiling X/Open Curses on Solaris using g++
+			    @%:@ifndef _BOOL
+			    @%:@define _BOOL
+			    @%:@endif
                             @%:@define _XOPEN_SOURCE_EXTENDED 1
                             @%:@include <curses.h>
                             @%:@ifndef _XOPEN_CURSES
@@ -651,6 +679,10 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 
                 AC_CACHE_CHECK([for Curses color functions], [ax_cv_plaincurses_color], [
                     AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+			// When compiling X/Open Curses on Solaris using g++
+			@%:@ifndef _BOOL
+			@%:@define _BOOL
+			@%:@endif
                         @%:@define _XOPEN_SOURCE_EXTENDED 1
                         @%:@include <curses.h>
 		    	chtype* use_chtype(chtype* p) {
@@ -685,6 +717,10 @@ AC_DEFUN([AX_MY_WITH_CURSES], [
 
                 AC_CACHE_CHECK([for obsolete Curses functions], [ax_cv_plaincurses_obsolete], [
                 AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+			// When compiling X/Open Curses on Solaris using g++
+			@%:@ifndef _BOOL
+			@%:@define _BOOL
+			@%:@endif
                         @%:@include <curses.h>
 		    	chtype* use_chtype(chtype* p) {
 				return p;

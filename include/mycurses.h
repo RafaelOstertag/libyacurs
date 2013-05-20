@@ -25,11 +25,9 @@
 
 #include "libyacurscfg.h"
 
-#if 0 // Is this really necessary
-// In case it is compiled with g++
+// When compiling X/Open Curses on Solaris using g++
 #ifndef _BOOL
 #define _BOOL
-#endif
 #endif
 
 #if defined HAVE_NCURSESW_CURSES_H

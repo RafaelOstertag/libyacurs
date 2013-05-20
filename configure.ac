@@ -68,23 +68,31 @@ AS_IF([test x$ax_cv_curses != xyes],
 	    [AC_MSG_ERROR([no curses library found])])
 
 
-# resize_term() is NCurses, resizeterm() is NetBSD curses
 my_saved_LIBS="$LIBS"
 LIBS="$my_save_LIBS $CURSES_LIB"
+
+# resize_term() is NCurses, resizeterm() is NetBSD curses
 AC_CHECK_FUNC([resize_term],
 	[AC_DEFINE([HAVE_RESIZE_TERM],[1],[Define to 1 if you have the `resize_term' function.])],
 	[AC_CHECK_FUNC([resizeterm],
 		[AC_DEFINE([HAVE_RESIZETERM],[1],[Define to 1 if you have the `resizeterm' function.])])])
-LIBS="$my_saved_LIBS"
 
 # Some custom tests
 AC_MSG_CHECKING([whether waddstr() use const char*])
 AC_COMPILE_IFELSE(
 	[AC_LANG_PROGRAM([[
-	#ifdef HAVE_NCURSES_H
-	#include <ncurses.h>
+	#if defined HAVE_NCURSESW_CURSES_H
+	#	 include <ncursesw/curses.h>
+	#elif defined HAVE_NCURSESW_H
+	#	 include <ncursesw.h>
+	#elif defined HAVE_NCURSES_CURSES_H
+	#	 include <ncurses/curses.h>
+	#elif defined HAVE_NCURSES_H
+	#	 include <ncurses.h>
+	#elif defined HAVE_CURSES_H
+	#	 include <curses.h>
 	#else
-	#include <curses.h>
+	#	 error "SysV or X/Open-compatible Curses header file required"
 	#endif
 	const char teststr[] = "Const string";]],
 				  [[initscr(); waddstr(stdscr, teststr); endwin();]])],
@@ -95,10 +103,18 @@ AC_COMPILE_IFELSE(
 AC_MSG_CHECKING([whether waddnstr() use const char*])
 AC_COMPILE_IFELSE(
 	[AC_LANG_PROGRAM([[
-	#ifdef HAVE_NCURSES_H
-	#include <ncurses.h>
+	#if defined HAVE_NCURSESW_CURSES_H
+	#	 include <ncursesw/curses.h>
+	#elif defined HAVE_NCURSESW_H
+	#	 include <ncursesw.h>
+	#elif defined HAVE_NCURSES_CURSES_H
+	#	 include <ncurses/curses.h>
+	#elif defined HAVE_NCURSES_H
+	#	 include <ncurses.h>
+	#elif defined HAVE_CURSES_H
+	#	 include <curses.h>
 	#else
-	#include <curses.h>
+	#	 error "SysV or X/Open-compatible Curses header file required"
 	#endif
 	const char teststr[] = "Const string";]],
 				  [[initscr(); waddnstr(stdscr, teststr, 4); endwin();]])],
@@ -109,10 +125,18 @@ AC_COMPILE_IFELSE(
 AC_MSG_CHECKING([whether mvwaddstr() use const char*])
 AC_COMPILE_IFELSE(
 	[AC_LANG_PROGRAM([[
-	#ifdef HAVE_NCURSES_H
-	#include <ncurses.h>
+	#if defined HAVE_NCURSESW_CURSES_H
+	#	 include <ncursesw/curses.h>
+	#elif defined HAVE_NCURSESW_H
+	#	 include <ncursesw.h>
+	#elif defined HAVE_NCURSES_CURSES_H
+	#	 include <ncurses/curses.h>
+	#elif defined HAVE_NCURSES_H
+	#	 include <ncurses.h>
+	#elif defined HAVE_CURSES_H
+	#	 include <curses.h>
 	#else
-	#include <curses.h>
+	#	 error "SysV or X/Open-compatible Curses header file required"
 	#endif
 	const char teststr[] = "Const string";]],
 				  [[initscr(); mvwaddstr(stdscr, 2, 1, teststr); endwin();]])],
@@ -123,10 +147,18 @@ AC_COMPILE_IFELSE(
 AC_MSG_CHECKING([whether mvwaddnstr() use const char*])
 AC_COMPILE_IFELSE(
 	[AC_LANG_PROGRAM([[
-	#ifdef HAVE_NCURSES_H
-	#include <ncurses.h>
+	#if defined HAVE_NCURSESW_CURSES_H
+	#	 include <ncursesw/curses.h>
+	#elif defined HAVE_NCURSESW_H
+	#	 include <ncursesw.h>
+	#elif defined HAVE_NCURSES_CURSES_H
+	#	 include <ncurses/curses.h>
+	#elif defined HAVE_NCURSES_H
+	#	 include <ncurses.h>
+	#elif defined HAVE_CURSES_H
+	#	 include <curses.h>
 	#else
-	#include <curses.h>
+	#	 error "SysV or X/Open-compatible Curses header file required"
 	#endif
 	const char teststr[] = "Const string";]],
 				  [[initscr(); mvwaddnstr(stdscr, 2, 1, teststr, 4); endwin();]])],
@@ -137,16 +169,27 @@ AC_COMPILE_IFELSE(
 AC_MSG_CHECKING([whether keypad() return int])
 AC_COMPILE_IFELSE(
 	[AC_LANG_PROGRAM([[
-	#ifdef HAVE_NCURSES_H
-	#include <ncurses.h>
+	#if defined HAVE_NCURSESW_CURSES_H
+	#	 include <ncursesw/curses.h>
+	#elif defined HAVE_NCURSESW_H
+	#	 include <ncursesw.h>
+	#elif defined HAVE_NCURSES_CURSES_H
+	#	 include <ncurses/curses.h>
+	#elif defined HAVE_NCURSES_H
+	#	 include <ncurses.h>
+	#elif defined HAVE_CURSES_H
+	#	 include <curses.h>
 	#else
-	#include <curses.h>
+	#	 error "SysV or X/Open-compatible Curses header file required"
 	#endif
 	int retval=100;]],
 				  [[initscr(); retval = keypad(stdscr, TRUE); endwin();]])],
 	[AC_MSG_RESULT([yes])
 	AC_DEFINE([KEYPAD_RETURN_INT],[1],[Set to 1 if keypad has a return value])],
 	[AC_MSG_RESULT([no])])
+
+LIBS="$my_saved_LIBS"
+
 AC_CONFIG_HEADERS([config.h include/libyacurscfg.h])
 AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile include/Makefile po/Makefile.in])
 AC_OUTPUT

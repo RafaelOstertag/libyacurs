@@ -2,11 +2,11 @@
 
 AUTOMAKE_OPTIONS = serial-tests
 
-non_interactive_tests = cursinit coordinates margin area colorparser \
-    eventconnector1 eventqueue1 eventqueue2 eventqueue3 eventqueue4  \
-    eventqueue5 eventqueue6 eventqueue7 eventqueue8 curswin1 basic1  \
-    basic2 resize1 resize2 pack1 pack2 pack3 pack4 pack5 pack6 pack7 \
-    pack8 pack9 packresize1 dynlabel1 widget1 widget2 widget3
+non_interactive_tests = cursinit coordinates margin area colorparser	\
+    eventconnector1 eventqueue1 eventqueue2 eventqueue3 eventqueue4	\
+    eventqueue5 eventqueue6 eventqueue7 eventqueue8 curswin1 curswin2	\
+    basic1 basic2 resize1 resize2 pack1 pack2 pack3 pack4 pack5 pack6	\
+    pack7 pack8 pack9 packresize1 dynlabel1 widget1 widget2 widget3
 
 interactive_tests = eventqueue9 resize3 resize4 resize5 focus1 app1	\
     listbox1 listbox2 dialog1 messagebox1 inputbox1 filedialog1		\

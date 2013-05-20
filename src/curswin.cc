@@ -26,6 +26,7 @@
 #include "gettext.h"
 
 #include <stdexcept>
+#include <cerrno>
 
 #include "curswin.h"
 #include "yacursex.h"
@@ -275,12 +276,37 @@ CursWin&
 CursWin::addstr(const CurStr& str) {
     set_color(str.color() );
 
+#ifdef ENABLE_NLS
+    wchar_t* wbuffer=new wchar_t[str.length()+1];
+    if (wbuffer==0)
+	throw EXCEPTIONS::SystemError(ENOMEM);
+
+    size_t retval = mbstowcs(wbuffer, str.c_str(), str.length());
+    if (retval == (size_t)-1) {
+	delete[] wbuffer;
+	throw EXCEPTIONS::SystemError(errno);
+    }
+    wbuffer[retval] = 0;
+
+    if (mvwaddwstr(__window,
+		   str.position().y(),
+		   str.position().x(),
+		   wbuffer) == ERR &&
+	str.position().x() + static_cast<int16_t>(wcslen(wbuffer)) < __client_area.cols() ) {	
+	delete[] wbuffer;
+        throw EXCEPTIONS::CursesException("mvwaddwstr");
+    }
+
+    delete[] wbuffer;
+#else // ENABLE_NLS
     if (mymvwaddstr(__window,
                     str.position().y(),
                     str.position().x(), str.c_str() ) == ERR &&
         str.position().x() + static_cast<int16_t>(str.length() ) <
-        __client_area.cols() )
-        throw EXCEPTIONS::CursesException("mvwaddstr");
+        __client_area.cols() ){
+	throw EXCEPTIONS::CursesException("mvwaddstr");
+    }
+#endif // ENABLE_NLS
 
     set_color(__def_color);
     return *this;

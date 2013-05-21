@@ -5,6 +5,10 @@
 //
 // Definitions in here only reflect a subset of config.h.
 
+/* Define to 1 if translation of program messages to the user's native
+   language is requested. */
+#undef ENABLE_NLS
+
 /* Define to 1 if a SysV or X/Open compatible Curses library is present */
 #undef HAVE_CURSES
 

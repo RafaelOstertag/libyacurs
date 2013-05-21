@@ -8,6 +8,10 @@
 
 #include <iostream>
 
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include "unistd.h"
 
 #include "yacurs.h"
@@ -273,6 +277,11 @@ main() {
     std::cout << getpid() << std::endl;
     sleep(15);
 #endif
+
+#ifdef ENABLE_NLS
+    setlocale(LC_ALL,"");
+#endif    
+
     YACURS::Curses::init();
 
     test1();

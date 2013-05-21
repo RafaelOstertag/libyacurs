@@ -275,42 +275,7 @@ CursWin::is_touched() const {
 
 CursWin&
 CursWin::addstr(const CurStr& str) {
-    set_color(str.color() );
-
-#ifdef ENABLE_NLS
-    wchar_t* wbuffer=new wchar_t[str.length()+1];
-    if (wbuffer==0)
-	throw EXCEPTIONS::SystemError(ENOMEM);
-
-    size_t retval = mbstowcs(wbuffer, str.c_str(), str.length());
-    if (retval == (size_t)-1) {
-	delete[] wbuffer;
-	throw EXCEPTIONS::SystemError(errno);
-    }
-    wbuffer[retval] = 0;
-
-    if (mvwaddwstr(__window,
-		   str.position().y(),
-		   str.position().x(),
-		   wbuffer) == ERR &&
-	str.position().x() + static_cast<int16_t>(wcslen(wbuffer)) < __client_area.cols() ) {	
-	delete[] wbuffer;
-        throw EXCEPTIONS::CursesException("mvwaddwstr");
-    }
-
-    delete[] wbuffer;
-#else // ENABLE_NLS
-    if (mymvwaddstr(__window,
-                    str.position().y(),
-                    str.position().x(), str.c_str() ) == ERR &&
-        str.position().x() + static_cast<int16_t>(str.length() ) <
-        __client_area.cols() ){
-	throw EXCEPTIONS::CursesException("mvwaddstr");
-    }
-#endif // ENABLE_NLS
-
-    set_color(__def_color);
-    return *this;
+    return addnstr(str, -1);
 }
 
 CursWin&
@@ -347,11 +312,22 @@ CursWin::addstrx(const CurStr& str) {
     }
 
     set_color(str.color() );
+#ifdef ENABLE_NLS
+    // addnstr() will convert to wide char, we're only interested in
+    // length here.
+    size_t _mbslen = mbstowcs((wchar_t*)0, str.c_str(), str.length()*sizeof(wchar_t));
+    if (space < static_cast<int16_t>(_mbslen) ) {
+	addnstr(str, space - 1).addch('>');
+    } else {
+        addstr(str);
+    }
+#else
     if (space < static_cast<int16_t>(str.length() ) ) {
         addnstr(str, space - 1).addch('>');
     } else {
         addstr(str);
     }
+#endif
     set_color(__def_color);
 
     return *this;
@@ -367,9 +343,16 @@ CursWin::addlinex(const CurStr& str) {
     CurStr tmp(str, Coordinates(__box ? 1 : 0,
                                 str.position().y() ), str.color() );
 
-    if (static_cast<int16_t>(tmp.length() + (__box ? 1 : 0) ) <=
+    size_t mylen;
+#ifdef ENABLE_NLS
+    mylen = mbstowcs((wchar_t*)0, str.c_str(), str.length());
+#else
+    mylen = tmp.length();
+#endif
+    
+    if (static_cast<int16_t>(mylen + (__box ? 1 : 0) ) <=
         __client_area.cols() ) {
-        tmp.append(__client_area.cols() - str.length(), ' ');
+        tmp.append(__client_area.cols() - mylen, ' ');
         return addstrx(tmp);
     }
 
@@ -385,12 +368,37 @@ CursWin&
 CursWin::addnstr(const CurStr& str, int n) {
     set_color(str.color() );
 
+#ifdef ENABLE_NLS
+    wchar_t* wbuffer=new wchar_t[str.length()+1];
+    if (wbuffer==0)
+	throw EXCEPTIONS::SystemError(ENOMEM);
+
+    size_t retval = mbstowcs(wbuffer, str.c_str(), str.length());
+    assert(retval < str.length() );
+    if (retval == (size_t)-1) {
+	delete[] wbuffer;
+	throw EXCEPTIONS::SystemError(errno);
+    }
+    wbuffer[retval] = 0;
+
+    if (mvwaddnwstr(__window,
+		   str.position().y(),
+		   str.position().x(),
+		    wbuffer, n) == ERR &&
+	str.position().x() + static_cast<int16_t>(wcslen(wbuffer)) < __client_area.cols() ) {	
+	delete[] wbuffer;
+        throw EXCEPTIONS::CursesException("mvwaddnwstr");
+    }
+
+    delete[] wbuffer;
+#else
     if (mymvwaddnstr(__window,
                      str.position().y(),
                      str.position().x(),
                      str.c_str(), n) == ERR &&
         str.position().x() + n < __client_area.x() )
         throw EXCEPTIONS::CursesException("mvwaddnstr");
+#endif
 
     set_color(__def_color);
 

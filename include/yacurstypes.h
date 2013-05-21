@@ -25,8 +25,6 @@
 
 #include <signal.h>
 
-#include <vector>
-
 namespace YACURS {
     // Forward declaration because we want to be independent.
     class Event;

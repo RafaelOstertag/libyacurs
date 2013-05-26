@@ -13,7 +13,7 @@
 #endif
 
 #ifdef ENABLE_NLS
-#include <wchar.h>
+#include <cwchar>
 #endif
 
 #ifdef __cplusplus

@@ -26,6 +26,7 @@
 #include <string>
 #include <cassert>
 #include <cstdlib>
+#include <cerrno>
 
 #include "input.h"
 #include "eventqueue.h"
@@ -128,6 +129,21 @@ namespace YACURS {
 
             // Not supported
             Input<T>& operator=(const Input<T>& _i);
+
+	    size_t buffer_length() const;
+
+	    //
+	    // Cursor motion and buffer manipulation
+	    //
+	    void clear_buffer();
+	    void clear_eol();
+	    void backspace();
+	    void delete_char();
+	    void home();
+	    void end();
+	    void back_step();
+	    void forward_step();
+	    void insert(T str);
 
         protected:
             virtual void key_handler(Event& _e);
@@ -267,6 +283,138 @@ namespace YACURS {
         return *this;
     }
 
+    template<class T> size_t
+    Input<T>::buffer_length() const {
+#ifdef ENABLE_NLS
+	size_t retval=mbstowcs(NULL, __buffer.c_str(),
+			       __buffer.length());
+	if (retval == (size_t)-1)
+	    throw EXCEPTIONS::SystemError(errno);
+	return retval;
+#else
+	return __buffer.length();
+#endif
+    }
+
+    template<class T> void
+    Input<T>::clear_buffer() {
+	if (__read_only) return;
+	__buffer.clear();
+	__curs_pos = 0;
+	__offset = 0;
+    }
+
+    template<class T> void
+    Input<T>::clear_eol() {
+	if (__read_only) return;
+	__buffer = __buffer.erase(__offset + __curs_pos,
+				  buffer_length() -
+				  (__offset + __curs_pos) );
+    }
+
+    template<class T> void
+    Input<T>::backspace() {
+	if (__read_only) return;
+	if (__offset == 0 && __curs_pos == 0) return;
+	
+	if (__offset > 0) {
+	    __offset--;
+	} else {
+	    if (__curs_pos > 0)
+		__curs_pos--;
+	}
+	if (!__buffer.empty() )
+	    __buffer = __buffer.erase(__offset + __curs_pos, 1);
+    }
+
+    template<class T> void
+    Input<T>::delete_char() {
+	if (__read_only) return;
+	if (__offset + __curs_pos >= buffer_length() ||
+	    __buffer.empty() ) return;
+	__buffer = __buffer.erase(__offset + __curs_pos, 1);
+    }
+
+    template<class T> void
+    Input<T>::home() {
+	__curs_pos = 0;
+	__offset = 0;
+    }
+
+    template<class T> void
+    Input<T>::end() {
+	if (buffer_length() >= static_cast<tsz_t>(__size.cols() ) ) {
+	    __offset = buffer_length() - __size.cols() + 1;
+	    __curs_pos = __size.cols();
+	} else {
+	    __offset = 0;
+	    __curs_pos = buffer_length();
+	}
+    }
+
+    template<class T> void
+    Input<T>::back_step() {
+	if (__curs_pos > 0) {
+	    __curs_pos--;
+	} else {
+	    if (__offset > 0) {
+		__offset--;
+	    } else {
+		if (__curs_pos > 0)
+		    __curs_pos--;
+	    }
+	}
+    }
+
+    template<class T> void
+    Input<T>::forward_step() {
+	if (__curs_pos + __offset >= buffer_length() ) return;
+	
+	if (__curs_pos + 1 == static_cast<tsz_t>(__size.cols() ) ) {
+                __offset++;
+	} else {
+	    // we're somewhere in the widget, but not the end, advance
+	    // the cursor position
+	    __curs_pos++;
+	}
+    }
+
+    template<class T> void
+    Input<T>::insert(T str) {
+	if (__read_only) return;
+
+	// do not overrun the max size
+	if (buffer_length() >= __max_size) return;
+
+	// Add (insert) the string to the buffer. No cursor motion, this
+	// is done in the next block.
+	if (__offset + __curs_pos > buffer_length() ) {
+	    // we would exceed the buffer, so we push it back at the end
+	    assert(__offset + __curs_pos == buffer_length() + 1);
+	    __buffer+=str;
+	} else {
+	    // we're somewhere in the middle of the buffer, insert the
+	    // char there.
+	    __buffer.insert(__offset + __curs_pos, str );
+	}
+
+	// Make sure the __curs_pos does not overshoot the
+	// border of the window
+	assert(__curs_pos < static_cast<tsz_t>(__size.cols() ) );
+
+	// Advance the cursor position. If __curs_pos+1 hits
+	// the border, advance the offset. This way we always have a
+	// space at the end of the string (on the screen only, not in
+	// the __buffer of course).
+	if (__curs_pos + 1 == static_cast<tsz_t>(__size.cols() ) ) {
+	    __offset++;
+	} else {
+	    // we're somewhere in the widget, but not the end, advance
+	    // the cursor position
+	    __curs_pos++;
+	}
+    }
+
     //
     // Protected
     //
@@ -276,9 +424,13 @@ namespace YACURS {
 
         if (!focus() ) return;
 
+#ifdef ENABLE_NLS
+	EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(_e);
+#else
         EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(_e);
+#endif
 
-        assert(__offset + __curs_pos <= __buffer.length() );
+        assert(__offset + __curs_pos <= buffer_length() );
 
         switch (ekey.data() ) {
         case KEY_DOWN:
@@ -296,125 +448,55 @@ namespace YACURS {
 
         case KEY_DL:
         case KEY_CTRL_U:
-            if (__read_only) break;
-            __buffer.clear();
-            __curs_pos = 0;
-            __offset = 0;
+	    clear_buffer();
             break;
 
         case KEY_EOL:
         case KEY_CTRL_K:
-            if (__read_only) break;
-            __buffer = __buffer.erase(__offset + __curs_pos,
-                                      __buffer.length() -
-                                      (__offset + __curs_pos) );
+	    clear_eol();
             break;
 
         case KEY_BKSPC_SOL:
         case KEY_BACKSPACE:
-            if (__read_only) break;
-            if (__offset == 0 && __curs_pos == 0) break;
-
-            if (__offset > 0) {
-                __offset--;
-            } else {
-                if (__curs_pos > 0)
-                    __curs_pos--;
-            }
-            if (!__buffer.empty() )
-                __buffer = __buffer.erase(__offset + __curs_pos, 1);
+	    backspace();
             break;
 
         case KEY_CTRL_D:
         case KEY_DC: // Delete
-            if (__read_only) break;
-            if (__offset + __curs_pos >= __buffer.length() ||
-                __buffer.empty() ) break;
-            __buffer = __buffer.erase(__offset + __curs_pos, 1);
+	    delete_char();
             break;
 
         case KEY_HOME:
         case KEY_CTRL_A:
-            __curs_pos = 0;
-            __offset = 0;
+	    home();
             break;
 
         case KEY_CTRL_E:
-            if (__buffer.length() >= static_cast<tsz_t>(__size.cols() ) ) {
-                __offset = __buffer.length() - __size.cols() + 1;
-                __curs_pos = __size.cols();
-            } else {
-                __offset = 0;
-                __curs_pos = __buffer.length();
-            }
+	    end();
             break;
 
         case KEY_LEFT:
         case KEY_CTRL_B:
-            if (__curs_pos > 0) {
-                __curs_pos--;
-            } else {
-                if (__offset > 0) {
-                    __offset--;
-                } else {
-                    if (__curs_pos > 0)
-                        __curs_pos--;
-                }
-            }
+	    back_step();
             break;
 
         case KEY_RIGHT:
         case KEY_CTRL_F:
-            if (__curs_pos + __offset >= __buffer.length() ) break;
-
-            if (__curs_pos + 1 == static_cast<tsz_t>(__size.cols() ) ) {
-                __offset++;
-            } else {
-                // we're somewhere in the widget, but not the end, advance
-                // the cursor position
-                __curs_pos++;
-            }
+	    forward_step();
             break;
 
         default: // regular key presses
-            if (__read_only) break;
+	    mbstate_t ps;
+	    memset(&ps, 0, sizeof(ps));
 
-            // do not overrun the max size
-            if (__buffer.length() >= __max_size) break;
+	    char* mbrbuff = new char[MB_CUR_MAX];
+	    if(wcrtomb(mbrbuff, ekey.data(), &ps)==(size_t)-1) {
+		delete[] mbrbuff;
+		throw EXCEPTIONS::SystemError(errno);
+	    }
 
-            // Add the char to the curses window
-            //
-            // (void) used to silence clang w/ -Wall -pedantic
-            widget_subwin()->mvaddch(Coordinates(__curs_pos,
-                                                 0), ekey.data() );
-
-            // Add (insert) the char to the buffer. No cursor motion, this
-            // is done in the next block.
-            if (__offset + __curs_pos > __buffer.length() ) {
-                // we would exceed the buffer, so we push it back at the end
-                assert(__offset + __curs_pos == __buffer.length() + 1);
-                __buffer.push_back(ekey.data() );
-            } else {
-                // we're somewhere in the middle of the buffer, insert the
-                // char there.
-                __buffer.insert(__offset + __curs_pos, 1, ekey.data() );
-            }
-
-            // Make sure the __curs_pos does not overshoot the
-            // border of the window
-            assert(__curs_pos < static_cast<tsz_t>(__size.cols() ) );
-
-            // Advance the cursor position. If __curs_pos+1 hits
-            // the border, advance the offset. This way we always have a
-            // space at the end of the string (on the screen only, not in
-            // the __buffer of course).
-            if (__curs_pos + 1 == static_cast<tsz_t>(__size.cols() ) ) {
-                __offset++;
-            } else {
-                // we're somewhere in the widget, but not the end, advance
-                // the cursor position
-                __curs_pos++;
-            }
+	    insert(mbrbuff);
+	    delete[] mbrbuff;
             break;
         }
 
@@ -573,7 +655,7 @@ namespace YACURS {
         // size_hint() in widgetbase.h.
         if (__length != 0) return __size;
 
-        return Size(1, __buffer.length() );
+        return Size(1, buffer_length() );
     }
 
     template<class T> bool
@@ -608,7 +690,7 @@ namespace YACURS {
 
         widget_subwin()->erase();
 
-        assert(__offset <= __buffer.length() );
+        assert(__offset <= buffer_length() );
         // if (mymvwaddstr(widget_subwin(), 0, 0,
         //                  __label.c_str()) == ERR)
         //      throw AddStrFailed();
@@ -616,7 +698,7 @@ namespace YACURS {
         // We ignore the error returned, since the cursor cannot be
         // advanced past the end, and thus the string is
         // truncated. However, the truncation has no effect on the input.
-        if (__buffer.length() > 0) {
+        if (buffer_length() > 0) {
             std::string* output = &__buffer;
             std::string obscure_out; //only used when obscuring output
 

@@ -163,7 +163,7 @@ namespace YACURS {
              * @param _t text to display initially. Default empty.
              */
             Input(int _length=0, tsz_t _max_size=255,
-                  const T& _t=std::string() );
+                  const T& _t=T() );
             virtual ~Input();
 
             /**
@@ -298,7 +298,6 @@ namespace YACURS {
 
     template<class T> void
     Input<T>::clear_buffer() {
-	if (__read_only) return;
 	__buffer.clear();
 	__curs_pos = 0;
 	__offset = 0;
@@ -306,7 +305,6 @@ namespace YACURS {
 
     template<class T> void
     Input<T>::clear_eol() {
-	if (__read_only) return;
 	__buffer = __buffer.erase(__offset + __curs_pos,
 				  buffer_length() -
 				  (__offset + __curs_pos) );
@@ -314,7 +312,6 @@ namespace YACURS {
 
     template<class T> void
     Input<T>::backspace() {
-	if (__read_only) return;
 	if (__offset == 0 && __curs_pos == 0) return;
 	
 	if (__offset > 0) {
@@ -329,7 +326,6 @@ namespace YACURS {
 
     template<class T> void
     Input<T>::delete_char() {
-	if (__read_only) return;
 	if (__offset + __curs_pos >= buffer_length() ||
 	    __buffer.empty() ) return;
 	__buffer = __buffer.erase(__offset + __curs_pos, 1);
@@ -381,8 +377,6 @@ namespace YACURS {
 
     template<class T> void
     Input<T>::insert(T str) {
-	if (__read_only) return;
-
 	// do not overrun the max size
 	if (buffer_length() >= __max_size) return;
 
@@ -448,21 +442,25 @@ namespace YACURS {
 
         case KEY_DL:
         case KEY_CTRL_U:
+	    if (__read_only) return;
 	    clear_buffer();
             break;
 
         case KEY_EOL:
         case KEY_CTRL_K:
+	    if (__read_only) return;
 	    clear_eol();
             break;
 
         case KEY_BKSPC_SOL:
         case KEY_BACKSPACE:
+	    if (__read_only) return;
 	    backspace();
             break;
 
         case KEY_CTRL_D:
         case KEY_DC: // Delete
+	    if (__read_only) return;
 	    delete_char();
             break;
 
@@ -486,6 +484,8 @@ namespace YACURS {
             break;
 
         default: // regular key presses
+	    if (__read_only) return;
+
 	    mbstate_t ps;
 	    memset(&ps, 0, sizeof(ps));
 

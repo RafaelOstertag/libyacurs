@@ -26,6 +26,7 @@
 #include "libyacurscfg.h"
 #include "curswin.h"
 #include "curstr.h"
+#include "cursorbuf.h"
 #include "yacurstypes.h"
 #include "yacursconst.h"
 #include "realizeable.h"

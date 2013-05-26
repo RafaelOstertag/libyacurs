@@ -9,7 +9,7 @@ libyacurs_la_CPPFLAGS = -DPACKAGE=\"$(PACKAGE)\"			\
 $(EVTQDEBUG)
 
 libyacurs_la_SOURCES = sigaction.cc coordinates.cc size.cc margin.cc	\
- area.cc curstr.cc curswin.cc event.cc eventconnector.cc		\
+ area.cc curstr.cc curswin.cc cursorbuf.cc event.cc eventconnector.cc	\
  eventqueue.cc evtqueuestats.cc curs.cc realizeable.cc titlebar.cc	\
  statusbar.cc windowbase.cc hotkey.cc window.cc lockscreen.cc		\
  lineobject.cc widgetbase.cc pack.cc vpack.cc hpack.cc widget.cc	\

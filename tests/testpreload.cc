@@ -21,10 +21,10 @@ extern "C" {
 #endif
 
 #ifdef ENABLE_NLS
-    int __test_wget_wch(void*, wint_t* i);
+    int __test_wget_wch(void*, std::wint_t* i);
 
     int
-    wget_wch(void* wdc, wint_t* i) {
+    wget_wch(void* wdc, std::wint_t* i) {
 	return __test_wget_wch(wdc, i);
     }
 #else

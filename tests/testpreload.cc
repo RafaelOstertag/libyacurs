@@ -8,15 +8,34 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef ENABLE_NLS
+#include <wchar.h>
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-int __test_wgetch(void*);
 
-int
-wgetch(void* wdc) {
-    return __test_wgetch(wdc);
-}
+#ifdef ENABLE_NLS
+    int __test_wget_wch(void*, wint_t* i);
+
+    int
+    wget_wch(void* wdc, wint_t* i) {
+	return __test_wget_wch(wdc, i);
+    }
+#else
+    // Forward declaration. Define those functions in your executable.
+    int __test_wgetch(void*);
+
+    int
+    wgetch(void* wdc) {
+	return __test_wgetch(wdc);
+    }
+#endif
 
 #ifdef __cplusplus
 }

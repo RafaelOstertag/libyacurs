@@ -804,12 +804,21 @@ EventQueue::run() {
         // the status line. It's sorta hack, but it works...
         FocusManager::refocus();
 
+#ifdef ENABLE_NLS
+	wint_t c;
+	int retval = wget_wch(stdscr, &c);
+#else
         int c = wgetch(stdscr);
+#endif
         clock_t t0 = clock();
 
         blocksignal();
 
+#ifdef ENABLE_NLS
+	if (retval != ERR) {
+#else
         if (c != ERR) {
+#endif
             switch (c) {
             case KEY_REFRESH:
             case KEY_CTRL_L:
@@ -819,7 +828,11 @@ EventQueue::run() {
                 break;
 
             default:
+#ifdef ENABLE_NLS
+		submit(EventEx<wint_t>(EVT_KEY, c) );
+#else
                 submit(EventEx<int>(EVT_KEY, c) );
+#endif
             }
         }
 

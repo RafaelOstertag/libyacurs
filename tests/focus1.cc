@@ -5,6 +5,10 @@
 #include "config.h"
 #endif
 
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -14,7 +18,12 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-int __test_data[] = {
+#ifdef ENABLE_NLS
+wint_t
+#else
+int 
+#endif
+__test_data[] = {
     // First Input Widget
     'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', 'o', 'l',
     'o', 'r', ' ', 's', 'i', 't', ' ', 'a', 'm', 'e', 't', ',', ' ', 'c', 'o',
@@ -221,6 +230,21 @@ int __test_data[] = {
     '\n', 0
 };
 
+#ifdef ENABLE_NLS
+extern "C" int
+__test_wget_wch(void*, wint_t* i) {
+    static wint_t* ptr2 = __test_data;
+
+    usleep(40000);
+
+    if (*ptr2 == 0) {
+        abort();
+    }
+
+    i=ptr2++;
+    return OK;
+}
+#else
 extern "C" int
 __test_wgetch(void*) {
     static int* ptr2 = __test_data;
@@ -233,6 +257,7 @@ __test_wgetch(void*) {
 
     return *ptr2++;
 }
+#endif
 
 // Event handler requires access
 YACURS::Input<>* ifixed;
@@ -276,6 +301,9 @@ button_press_handler(YACURS::Event& _e) {
 
 int
 main() {
+#ifdef ENABLE_NLS
+    setlocale(LC_ALL,"");
+#endif
     std::list<std::string> items;
 
     for (int i = 0; i < 120; i++) {
@@ -284,7 +312,7 @@ main() {
         items.push_back("Long Name ListBox Item Number " + n.str() );
     }
 
-#if 0
+#if 1
     std::cout << getpid() << std::endl;
     sleep(15);
 #endif

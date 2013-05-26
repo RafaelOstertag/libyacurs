@@ -41,7 +41,7 @@ libtestpreload.la: testpreload.lo
 	$(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -shared -rpath /usr/local/lib -o $@ $<
 
 testpreload.lo: testpreload.cc
-	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -shared -c -o $@ $<
+	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -shared -c -o $@ $<
 
 check-local: $(interactive_tests)
 	for f in $(interactive_tests) ; do \

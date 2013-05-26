@@ -49,7 +49,11 @@ Button::key_handler(Event& _e) {
 
     if (!focus() ) return;
 
+#ifdef ENABLE_NLS
+    EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(_e);
+#else
     EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(_e);
+#endif
 
     switch (ekey.data() ) {
     case KEY_DOWN:

@@ -60,7 +60,11 @@ Window::key_event_handler(Event& _e) {
     if (__fgid != FocusManager::active_focus_group() ||
         __hot_keys.empty() ) return;
 
+#ifdef ENABLE_NLS
+    EventEx<wint_t>& event = dynamic_cast<EventEx<wint_t>&>(_e);
+#else
     EventEx<int>& event = dynamic_cast<EventEx<int>&>(_e);
+#endif
 
     std::map<int, HotKey*>::iterator it = __hot_keys.find(event.data() );
     if (it != __hot_keys.end() ) {

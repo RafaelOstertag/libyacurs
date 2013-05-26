@@ -374,7 +374,7 @@ CursWin::addnstr(const CurStr& str, int n) {
 	throw EXCEPTIONS::SystemError(ENOMEM);
 
     size_t retval = mbstowcs(wbuffer, str.c_str(), str.length());
-    assert(retval < str.length() );
+    assert(retval <= str.length() );
     if (retval == (size_t)-1) {
 	delete[] wbuffer;
 	throw EXCEPTIONS::SystemError(errno);

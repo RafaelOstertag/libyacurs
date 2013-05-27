@@ -23,7 +23,10 @@
 #ifndef CURSORBUF_H
 #define CURSORBUF_H
 
+#include <stdint.h>
+
 #include <string>
+#include <cstdlib>
 
 namespace YACURS {
 
@@ -43,7 +46,7 @@ namespace YACURS {
 		/**
 		 * Cursor position.
 		 */
-		tsz_t __curs_pos;
+		tsz_t __vcurs_pos;
 
 		/**
 		 * Maximum size of of buffer.
@@ -62,17 +65,18 @@ namespace YACURS {
 		 *
 		 * @param _buffer initial values of the buffer.
 		 */
-		CursorBuf(std::wstring _buffer=std::wstring(), tsz_t _max_size=255);
+		CursorBuf(const std::wstring& _buffer=std::wstring(), tsz_t _max_size=255);
 
-		CursorBuf(std::string _buffer=std::string(), tsz_t _max_size=255);
+		CursorBuf(const std::string& _buffer=std::string(), tsz_t _max_size=255);
 
 		CursorBuf(const CursorBuf& _cb);
 		CursorBuf& operator=(const CursorBuf& _cb);
 
-		void buffer(std::wstring& _b);
-		void buffer(std::string& _b);
+		void buffer(const std::wstring& _b);
+		void buffer(const std::string& _b);
+
 		const std::wstring& buffer_wstring() const;
-		const std::string buffer_string() const;
+		std::string buffer_string() const;
 
 		void reset_cursor();
 

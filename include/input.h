@@ -34,6 +34,7 @@
 #include "yacursex.h"
 #include "colors.h"
 #include "widget.h"
+#include "cursorbuf.h"
 
 namespace YACURS {
     /**
@@ -70,17 +71,7 @@ namespace YACURS {
         public:
             typedef typename T::size_type tsz_t;
         private:
-            /**
-             * Offset into the buffer. Used when not the entire buffer can
-             * be displayed in the Input Widget, i.e. scrolling.
-             */
-            tsz_t __offset;
-
-            /**
-             * Cursor position relative to offset, absolute to Widget.
-             */
-            tsz_t __curs_pos;
-
+	    INTERNAL::CursorBuffer __buffer;
             /**
              * Maximum size of input.
              *
@@ -116,11 +107,6 @@ namespace YACURS {
             char __obscure_char;
 
             /**
-             * The input
-             */
-            T __buffer;
-
-            /**
              * The size of the Input Widget.
              *
              * May be Size::zero() when dynamically sized, else the
@@ -129,21 +115,6 @@ namespace YACURS {
 
             // Not supported
             Input<T>& operator=(const Input<T>& _i);
-
-	    size_t buffer_length() const;
-
-	    //
-	    // Cursor motion and buffer manipulation
-	    //
-	    void clear_buffer();
-	    void clear_eol();
-	    void backspace();
-	    void delete_char();
-	    void home();
-	    void end();
-	    void back_step();
-	    void forward_step();
-	    void insert(T str);
 
         protected:
             virtual void key_handler(Event& _e);
@@ -283,132 +254,6 @@ namespace YACURS {
         return *this;
     }
 
-    template<class T> size_t
-    Input<T>::buffer_length() const {
-#ifdef ENABLE_NLS
-	size_t retval=mbstowcs(NULL, __buffer.c_str(),
-			       __buffer.length());
-	if (retval == (size_t)-1)
-	    throw EXCEPTIONS::SystemError(errno);
-	return retval;
-#else
-	return __buffer.length();
-#endif
-    }
-
-    template<class T> void
-    Input<T>::clear_buffer() {
-	__buffer.clear();
-	__curs_pos = 0;
-	__offset = 0;
-    }
-
-    template<class T> void
-    Input<T>::clear_eol() {
-	__buffer = __buffer.erase(__offset + __curs_pos,
-				  buffer_length() -
-				  (__offset + __curs_pos) );
-    }
-
-    template<class T> void
-    Input<T>::backspace() {
-	if (__offset == 0 && __curs_pos == 0) return;
-	
-	if (__offset > 0) {
-	    __offset--;
-	} else {
-	    if (__curs_pos > 0)
-		__curs_pos--;
-	}
-	if (!__buffer.empty() )
-	    __buffer = __buffer.erase(__offset + __curs_pos, 1);
-    }
-
-    template<class T> void
-    Input<T>::delete_char() {
-	if (__offset + __curs_pos >= buffer_length() ||
-	    __buffer.empty() ) return;
-	__buffer = __buffer.erase(__offset + __curs_pos, 1);
-    }
-
-    template<class T> void
-    Input<T>::home() {
-	__curs_pos = 0;
-	__offset = 0;
-    }
-
-    template<class T> void
-    Input<T>::end() {
-	if (buffer_length() >= static_cast<tsz_t>(__size.cols() ) ) {
-	    __offset = buffer_length() - __size.cols() + 1;
-	    __curs_pos = __size.cols();
-	} else {
-	    __offset = 0;
-	    __curs_pos = buffer_length();
-	}
-    }
-
-    template<class T> void
-    Input<T>::back_step() {
-	if (__curs_pos > 0) {
-	    __curs_pos--;
-	} else {
-	    if (__offset > 0) {
-		__offset--;
-	    } else {
-		if (__curs_pos > 0)
-		    __curs_pos--;
-	    }
-	}
-    }
-
-    template<class T> void
-    Input<T>::forward_step() {
-	if (__curs_pos + __offset >= buffer_length() ) return;
-	
-	if (__curs_pos + 1 == static_cast<tsz_t>(__size.cols() ) ) {
-                __offset++;
-	} else {
-	    // we're somewhere in the widget, but not the end, advance
-	    // the cursor position
-	    __curs_pos++;
-	}
-    }
-
-    template<class T> void
-    Input<T>::insert(T str) {
-	// do not overrun the max size
-	if (buffer_length() >= __max_size) return;
-
-	// Add (insert) the string to the buffer. No cursor motion, this
-	// is done in the next block.
-	if (__offset + __curs_pos > buffer_length() ) {
-	    // we would exceed the buffer, so we push it back at the end
-	    assert(__offset + __curs_pos == buffer_length() + 1);
-	    __buffer+=str;
-	} else {
-	    // we're somewhere in the middle of the buffer, insert the
-	    // char there.
-	    __buffer.insert(__offset + __curs_pos, str );
-	}
-
-	// Make sure the __curs_pos does not overshoot the
-	// border of the window
-	assert(__curs_pos < static_cast<tsz_t>(__size.cols() ) );
-
-	// Advance the cursor position. If __curs_pos+1 hits
-	// the border, advance the offset. This way we always have a
-	// space at the end of the string (on the screen only, not in
-	// the __buffer of course).
-	if (__curs_pos + 1 == static_cast<tsz_t>(__size.cols() ) ) {
-	    __offset++;
-	} else {
-	    // we're somewhere in the widget, but not the end, advance
-	    // the cursor position
-	    __curs_pos++;
-	}
-    }
-
     //
     // Protected
     //
@@ -423,8 +268,6 @@ namespace YACURS {
 #else
         EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(_e);
 #endif
-
-        assert(__offset + __curs_pos <= buffer_length() );
 
         switch (ekey.data() ) {
         case KEY_DOWN:
@@ -443,60 +286,49 @@ namespace YACURS {
         case KEY_DL:
         case KEY_CTRL_U:
 	    if (__read_only) return;
-	    clear_buffer();
+	    __buffer.clear();
             break;
 
         case KEY_EOL:
         case KEY_CTRL_K:
 	    if (__read_only) return;
-	    clear_eol();
+	    __buffer.clear_eol();
             break;
 
         case KEY_BKSPC_SOL:
         case KEY_BACKSPACE:
 	    if (__read_only) return;
-	    backspace();
+	    __buffer.backspace();
             break;
 
         case KEY_CTRL_D:
         case KEY_DC: // Delete
 	    if (__read_only) return;
-	    delete_char();
+	    __buffer.del();
             break;
 
         case KEY_HOME:
         case KEY_CTRL_A:
-	    home();
+	    __buffer.home();
             break;
 
         case KEY_CTRL_E:
-	    end();
+	    __buffer.end();
             break;
 
         case KEY_LEFT:
         case KEY_CTRL_B:
-	    back_step();
+	    __buffer.back_step();
             break;
 
         case KEY_RIGHT:
         case KEY_CTRL_F:
-	    forward_step();
+	    __buffer.forward_step();
             break;
 
         default: // regular key presses
 	    if (__read_only) return;
-
-	    mbstate_t ps;
-	    memset(&ps, 0, sizeof(ps));
-
-	    char* mbrbuff = new char[MB_CUR_MAX];
-	    if(wcrtomb(mbrbuff, ekey.data(), &ps)==(size_t)-1) {
-		delete[] mbrbuff;
-		throw EXCEPTIONS::SystemError(errno);
-	    }
-
-	    insert(mbrbuff);
-	    delete[] mbrbuff;
+	    __buffer.insert(ekey.data());
             break;
         }
 
@@ -539,15 +371,13 @@ namespace YACURS {
                                       tsz_t _max_size,
                                       const T& _t) :
         Widget(),
-        __offset(0),
-        __curs_pos(0),
+	__buffer(_t, _max_size),
         __max_size(_max_size),
         __length(_length),
         __read_only(false),
         __obscure_input(false),
         __hide_input(false),
         __obscure_char('*'),
-        __buffer(_t.length() > __max_size ? _t.substr(0, __max_size) : _t),
         __size(__length > 0 ? Size(1, __length) : Size::zero() ) {
         can_focus(true);
     }
@@ -561,28 +391,19 @@ namespace YACURS {
 
     template<class T> void
     Input<T>::input(const T& i) {
-        if (i.length() > __max_size)
-            __buffer = i.substr(0, __max_size);
-        else
-            __buffer = i;
-
-        // Reset cursor position
-        __offset = 0;
-        __curs_pos = 0;
+	__buffer.set(i);
 
         refresh(true);
     }
 
     template<class T> const T&
     Input<T>::input() const {
-        return __buffer;
+        return __buffer.string();
     }
 
     template<class T> void
     Input<T>::clear() {
-        __buffer.clear();
-        __curs_pos = 0;
-        __offset = 0;
+	__buffer.clear();
     }
 
     template<class T> void
@@ -655,7 +476,7 @@ namespace YACURS {
         // size_hint() in widgetbase.h.
         if (__length != 0) return __size;
 
-        return Size(1, buffer_length() );
+        return Size(1, __buffer.length() );
     }
 
     template<class T> bool
@@ -688,8 +509,9 @@ namespace YACURS {
             widget_subwin()->leaveok(true);
         }
 
+#if 0
         widget_subwin()->erase();
-
+	
         assert(__offset <= buffer_length() );
         // if (mymvwaddstr(widget_subwin(), 0, 0,
         //                  __label.c_str()) == ERR)
@@ -699,12 +521,12 @@ namespace YACURS {
         // advanced past the end, and thus the string is
         // truncated. However, the truncation has no effect on the input.
         if (buffer_length() > 0) {
-            std::string* output = &__buffer;
+	std::string* output = &__buffer;
             std::string obscure_out; //only used when obscuring output
 
             if (__obscure_input) {
-                tsz_t outlen =
-                    __buffer.substr(__offset, __size.cols() - 1).length();
+	tsz_t outlen =
+	    __buffer.substr(__offset, __size.cols() - 1).length();
                 obscure_out.assign(outlen, __obscure_char);
                 output = &obscure_out;
             }
@@ -744,10 +566,30 @@ namespace YACURS {
             // since the buffer is empty, make sure the cursor position is
             // set to the biginning.
             assert(__curs_pos == 0);
-        }
-        widget_subwin()->move(Coordinates(__curs_pos, 0) );
+    }
+#endif
+	int16_t curs_pos;
+	
+	CurStr
+	    out(__buffer.string(__size.cols(),&curs_pos),
+		Coordinates(),
+		focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
+	if (__hide_input) {
+	    // first, give the widget nice color
+	    CurStr
+		filler("",
+		       Coordinates(),
+		       focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
+	    widget_subwin()->addlinex(filler);
+	    // Now, put the string with hidden attributes
+	    out.color(YACURS::INPUTWIDGET_HIDDEN);
+	    widget_subwin()->addstr(out);
+	} else {
+	    widget_subwin()->addlinex(out);
+	}
+        widget_subwin()->move(Coordinates(curs_pos, 0) );
 
-        Widget::refresh(immediate);
+	Widget::refresh(immediate);
     }
 }
 

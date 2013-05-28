@@ -1,6 +1,6 @@
 // $Id$
 //
-// Test functionality of CursorBuf
+// Test functionality of CursorBuffer
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,132 +16,298 @@
 
 #include "yacurs.h"
 
-void test(uint16_t w) {
-    YACURS::INTERNAL::CursWin win(YACURS::Area(0, 0, 10, w+2) );
+void
+test1(uint16_t w) {
+    YACURS::INTERNAL::CursWin win(YACURS::Area(0, 0, 10, w + 2) );
+
     win.box();
 
-    YACURS::INTERNAL::CursorBuf buff("abcdefghijklmnopqrstuvwxyz");
+    YACURS::INTERNAL::CursorBuffer buff("abcdefghijklmnopqrstuvwxyz");
 
     curs_set(1);
-    for (int i=0; i<28; i++) {
-	int16_t curs_pos;
-	
-	YACURS::CurStr str(buff.get_string(w,&curs_pos), YACURS::Coordinates(1,1));
-	win.addlinex(str);
-	win.move(YACURS::Coordinates(1+curs_pos,1));
+    for (int i = 0; i < 28; i++) {
+        int16_t curs_pos;
 
-	win.refresh();
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
 
-	usleep(50000);
+        win.refresh();
 
-	buff.forward_step();
+        usleep(50000);
+
+        buff.forward_step();
     }
 
-    for (int i=0; i<28; i++) {
-	int16_t curs_pos;
-	
-	YACURS::CurStr str(buff.get_string(w,&curs_pos), YACURS::Coordinates(1,1));
-	win.addlinex(str);
-	win.move(YACURS::Coordinates(1+curs_pos,1));
+    for (int i = 0; i < 28; i++) {
+        int16_t curs_pos;
 
-	win.refresh();
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
 
-	usleep(50000);
+        win.refresh();
 
-	buff.back_step();
+        usleep(50000);
+
+        buff.back_step();
     }
 
-    for (int i=0; i<10; i++) {
-	int16_t curs_pos;
-	
-	buff.end();
-	YACURS::CurStr str(buff.get_string(w,&curs_pos), YACURS::Coordinates(1,1));
-	win.addlinex(str);
-	win.move(YACURS::Coordinates(1+curs_pos,1));
-	win.refresh();
+    for (int i = 0; i < 10; i++) {
+        int16_t curs_pos;
 
-	usleep(50000);
+        buff.end();
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
+        win.refresh();
 
-	buff.home();
-	str=YACURS::CurStr(buff.get_string(w,&curs_pos), YACURS::Coordinates(1,1));
-	win.addlinex(str);
-	win.move(YACURS::Coordinates(1+curs_pos,1));
-	win.refresh();
+        usleep(50000);
 
-	usleep(50000);
+        buff.home();
+        str = YACURS::CurStr(buff.string(w,
+                                             &curs_pos),
+                             YACURS::Coordinates(1, 1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
+        win.refresh();
+
+        usleep(50000);
     }
 
     buff.end();
-    for (int i=0; i<30; i++) {
-	int16_t curs_pos;
-	
-	YACURS::CurStr str(buff.get_string(w,&curs_pos), YACURS::Coordinates(1,1));
-	win.addlinex(str);
-	win.move(YACURS::Coordinates(1+curs_pos,1));
+    for (int i = 0; i < 30; i++) {
+        int16_t curs_pos;
 
-	win.refresh();
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
 
-	usleep(50000);
+        win.refresh();
 
-	buff.backspace();
+        usleep(50000);
+
+        buff.backspace();
     }
 
-    assert(buff.buffer_string().empty());
-    assert(buff.buffer_wstring().empty());
+    assert(buff.string().empty() );
+    assert(buff.wstring().empty() );
 
     buff.buffer(L"abcdefghijklmnopqrstuvwxyz");
-    for (int i=0; i<30; i++) {
-	int16_t curs_pos;
-	
-	YACURS::CurStr str(buff.get_string(w,&curs_pos), YACURS::Coordinates(1,1));
-	win.addlinex(str);
-	win.move(YACURS::Coordinates(1+curs_pos,1));
+    for (int i = 0; i < 30; i++) {
+        int16_t curs_pos;
 
-	win.refresh();
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
 
-	usleep(50000);
+        win.refresh();
 
-	buff.delete_char();
+        usleep(50000);
+
+        buff.delete();
     }
 
-    assert(buff.buffer_string().empty());
-    assert(buff.buffer_wstring().empty());
+    assert(buff.string().empty() );
+    assert(buff.wstring().empty() );
 
     wchar_t ins_str[] = L"abcdefghijklmnopqrstuvwxyz";
-    wchar_t* wptr=ins_str;
+    wchar_t* wptr = ins_str;
 
     do {
-	buff.insert(*wptr++);
+        buff.insert(*wptr++);
 
-	int16_t curs_pos;
-	
-	YACURS::CurStr str(buff.get_string(w,&curs_pos), YACURS::Coordinates(1,1));
-	win.addlinex(str);
-	win.move(YACURS::Coordinates(1+curs_pos,1));
+        int16_t curs_pos;
 
-	win.refresh();
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
 
-	usleep(50000);
-    }	while (*wptr!=L'\0');
+        win.refresh();
 
-    assert(buff.buffer_wstring() == L"abcdefghijklmnopqrstuvwxyz");
-    assert(buff.buffer_string() == "abcdefghijklmnopqrstuvwxyz");
+        usleep(50000);
+    }   while (*wptr != L'\0');
+
+    assert(buff.wstring() == L"abcdefghijklmnopqrstuvwxyz");
+    assert(buff.string() == "abcdefghijklmnopqrstuvwxyz");
 
     buff.home();
-    wptr=ins_str;
+    wptr = ins_str;
     do {
-	buff.insert(*wptr++);
+        buff.insert(*wptr++);
 
-	int16_t curs_pos;
-	
-	YACURS::CurStr str(buff.get_string(w,&curs_pos), YACURS::Coordinates(1,1));
-	win.addlinex(str);
-	win.move(YACURS::Coordinates(1+curs_pos,1));
+        int16_t curs_pos;
 
-	win.refresh();
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
 
-	usleep(50000);
-    }	while (*wptr!=L'\0');
+        win.refresh();
+
+        usleep(50000);
+    }   while (*wptr != L'\0');
+
+    curs_set(0);
+}
+
+void
+test2(uint16_t w) {
+    YACURS::INTERNAL::CursWin win(YACURS::Area(0, 0, 10, w + 2) );
+
+    win.box();
+
+    YACURS::INTERNAL::CursorBuffer buff("äbÄcdëËfghijklmnöpqrstüvwxÿŸzàéè€¼½");
+
+    curs_set(1);
+    for (int i = 0; i < 34; i++) {
+        int16_t curs_pos;
+
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
+
+        win.refresh();
+
+        usleep(50000);
+
+        buff.forward_step();
+    }
+
+    for (int i = 0; i < 34; i++) {
+        int16_t curs_pos;
+
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
+
+        win.refresh();
+
+        usleep(50000);
+
+        buff.back_step();
+    }
+
+    for (int i = 0; i < 10; i++) {
+        int16_t curs_pos;
+
+        buff.end();
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
+        win.refresh();
+
+        usleep(50000);
+
+        buff.home();
+        str = YACURS::CurStr(buff.string(w,
+                                             &curs_pos),
+                             YACURS::Coordinates(1, 1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
+        win.refresh();
+
+        usleep(50000);
+    }
+
+    buff.end();
+    for (int i = 0; i < 35; i++) {
+        int16_t curs_pos;
+
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
+
+        win.refresh();
+
+        usleep(50000);
+
+        buff.backspace();
+    }
+
+    assert(buff.string().empty() );
+    assert(buff.wstring().empty() );
+
+    buff.buffer(L"äbÄcdëËfghijklmnöpqrstüvwxÿŸzàéè€¼½");
+    for (int i = 0; i < 35; i++) {
+        int16_t curs_pos;
+
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
+
+        win.refresh();
+
+        usleep(50000);
+
+        buff.delete();
+    }
+
+    assert(buff.string().empty() );
+    assert(buff.wstring().empty() );
+
+    wchar_t ins_str[] = L"äbÄcdëËfghijklmnöpqrstüvwxÿŸzàéè€¼½";
+    wchar_t* wptr = ins_str;
+
+    do {
+        buff.insert(*wptr++);
+
+        int16_t curs_pos;
+
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
+
+        win.refresh();
+
+        usleep(50000);
+    }   while (*wptr != L'\0');
+
+    assert(buff.wstring() == L"äbÄcdëËfghijklmnöpqrstüvwxÿŸzàéè€¼½");
+    assert(buff.string() == "äbÄcdëËfghijklmnöpqrstüvwxÿŸzàéè€¼½");
+
+    buff.home();
+    wptr = ins_str;
+    do {
+        buff.insert(*wptr++);
+
+        int16_t curs_pos;
+
+        YACURS::CurStr str(buff.string(w, &curs_pos), YACURS::Coordinates(
+                               1,
+                               1) );
+        win.addlinex(str);
+        win.move(YACURS::Coordinates(1 + curs_pos, 1) );
+
+        win.refresh();
+
+        usleep(50000);
+    }   while (*wptr != L'\0');
 
     curs_set(0);
 }
@@ -157,13 +323,22 @@ main() {
 #endif
 
     YACURS::Curses::init();
-    
-    for (int i=8; i<30; i++) {
-	test(i);
-	sleep(1);
-	wclear(stdscr);
+
+    for (int i = 8; i < 30; i = i + 5) {
+        test1(i);
+        sleep(1);
+        wclear(stdscr);
+        wrefresh(stdscr);
+    }
+
+#ifdef ENABLE_NLS
+    for (int i = 8; i < 30; i = i + 5) {
+        test2(i);
+        sleep(1);
+        wclear(stdscr);
 	wrefresh(stdscr);
     }
+#endif
 
     YACURS::Curses::end();
 

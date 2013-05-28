@@ -40,189 +40,234 @@ using namespace YACURS::INTERNAL;
 //
 // Public
 //
-CursorBuf::CursorBuf(const std::wstring& _buffer, tsz_t _max_size):
+CursorBuffer::CursorBuffer(const std::wstring& _buffer, tsz_t _max_size) :
     __buffer(_buffer),
-    __vcurs_pos(0),
-    __max_size(_max_size) {}
-
-CursorBuf::CursorBuf(const std::string& _buffer, tsz_t _max_size):
+    __mbs_cache(),
+    __mbs_cache_valid(false),
     __vcurs_pos(0),
     __max_size(_max_size) {
+}
 
-    wchar_t* tmpbuf = new wchar_t[_buffer.length()+1];
+CursorBuffer::CursorBuffer(const std::string& _buffer, tsz_t _max_size) :
+    __mbs_cache(),
+    __mbs_cache_valid(false),
+    __vcurs_pos(0),
+    __max_size(_max_size) {
+    wchar_t* tmpbuf = new wchar_t[_buffer.length() + 1];
 
-    size_t retval = mbstowcs(tmpbuf, _buffer.c_str(), _buffer.length()+1);
-    if (retval == _buffer.length()+1)
-	tmpbuf[_buffer.length()]=L'\0';
+    size_t retval = mbstowcs(tmpbuf, _buffer.c_str(), _buffer.length() + 1);
 
-    if (retval==(size_t)-1) {
-	delete[] tmpbuf;
-	throw EXCEPTIONS::SystemError(errno);
+    if (retval == _buffer.length() + 1)
+        tmpbuf[_buffer.length()] = L'\0';
+
+    if (retval == (size_t)-1) {
+        delete[] tmpbuf;
+        throw EXCEPTIONS::SystemError(errno);
     }
 
-    __buffer=tmpbuf;
+    __buffer = tmpbuf;
 
     delete[] tmpbuf;
 }
-	
-CursorBuf::CursorBuf(const CursorBuf& _cb):
+
+CursorBuffer::CursorBuffer(const CursorBuffer& _cb) :
     __buffer(_cb.__buffer),
+    __mbs_cache(_cb.__mbs_cache),
+    __mbs_cache_valid(_cb.__mbs_cache_valid), 
     __vcurs_pos(_cb.__vcurs_pos),
-    __max_size(_cb.__max_size) {}
+    __max_size(_cb.__max_size) {
+}
 
-
-CursorBuf&
-CursorBuf::operator=(const CursorBuf& _cb) {
+CursorBuffer&
+CursorBuffer::operator=(const CursorBuffer& _cb) {
     if (&_cb == this) return *this;
 
-    __buffer=_cb.__buffer;
-    __vcurs_pos=_cb.__vcurs_pos;
-    __max_size=_cb.__max_size;
+    __buffer = _cb.__buffer;
+    __mbs_cache = _cb.__mbs_cache;
+    __mbs_cache_valid = _cb.__mbs_cache_valid;
+    __vcurs_pos = _cb.__vcurs_pos;
+    __max_size = _cb.__max_size;
 
     return *this;
 }
 
 void
-CursorBuf::buffer(const std::wstring& _b) {
-    __vcurs_pos=0;
-    __buffer = _b;
+CursorBuffer::set(const std::wstring& _b) {
+    __vcurs_pos = 0;
+    if (_b.length()>__max_size)
+	__buffer = _b.substr(0, __max_size-1);
+    else
+	__buffer = _b;
+
+    __mbs_cache_valid=false;
 }
 
 void
-CursorBuf::buffer(const std::string& _b) {
-   wchar_t* tmpbuf = new wchar_t[_b.length()+1];
+CursorBuffer::set(const std::string& _b) {
+    wchar_t* tmpbuf = new wchar_t[_b.length() + 1];
 
-   size_t retval = mbstowcs(tmpbuf, _b.c_str(), _b.length()+1);
-   if (retval == _b.length()+1)
-       tmpbuf[_b.length()]=L'\0';
+    size_t retval = mbstowcs(tmpbuf, _b.c_str(), _b.length() + 1);
 
-   if (retval==(size_t)-1) {
-       delete[] tmpbuf;
-       throw EXCEPTIONS::SystemError(errno);
-   }
+    if (retval == _b.length() + 1)
+        tmpbuf[_b.length()] = L'\0';
 
-   buffer(tmpbuf);
-
-   delete[] tmpbuf;
-}
-
-const std::wstring&
-CursorBuf::buffer_wstring() const {
-    return __buffer;
-}
-
-std::string
-CursorBuf::buffer_string() const {
-    size_t mbr_len = wcstombs(0, __buffer.c_str(), 0);
-    char* tmp_mb_buff = new char[mbr_len+1];
-
-    if (wcstombs(tmp_mb_buff, __buffer.c_str(), mbr_len+1)==(size_t)-1) {
-	delete[] tmp_mb_buff;
-	throw EXCEPTIONS::SystemError(errno);
+    if (retval == (size_t)-1) {
+        delete[] tmpbuf;
+        throw EXCEPTIONS::SystemError(errno);
     }
 
-    std::string retval(tmp_mb_buff);
-    delete[] tmp_mb_buff;
+    set(tmpbuf);
 
-    return retval;
+    delete[] tmpbuf;
+}
+
+CursorBuffer::tsz_t
+CursorBuffer::length() const {
+    return __buffer.length();
 }
 
 void
-CursorBuf::clear_buffer() {
+CursorBuffer::reset_cursor() {
+    __vcurs_pos = 0;
+}
+
+CursorBuffer::tsz_t
+CursorBuffer::get_cursor() const {
+    return __vcurs_pos;
+}
+
+void
+CursorBuffer::clear() {
     __buffer.clear();
+    __vcurs_pos = 0;
+    __mbs_cache_valid=false;
+}
+
+void
+CursorBuffer::clear_eol() {
+    if (__buffer.empty() ) return;
+
+    __buffer = __buffer.erase(__vcurs_pos,
+                              __buffer.length() - __vcurs_pos);
+
+    __mbs_cache_valid=false;
+}
+
+void
+CursorBuffer::backspace() {
+    if (__vcurs_pos == 0 || __buffer.empty() ) return;
+
+    __vcurs_pos--;
+
+    __buffer = __buffer.erase(__vcurs_pos, 1);
+
+    __mbs_cache_valid=false;
+}
+
+void
+CursorBuffer::del() {
+    if (__vcurs_pos >= __buffer.length() ||
+        __buffer.empty() ) return;
+
+    __buffer = __buffer.erase(__vcurs_pos, 1);
+
+    __mbs_cache_valid=false;
+}
+
+void
+CursorBuffer::home() {
     __vcurs_pos = 0;
 }
 
 void
-CursorBuf::clear_eol() {
-    if (__buffer.empty()) return;
+CursorBuffer::end() {
+    if (__buffer.empty() ) return;
 
-    __buffer = __buffer.erase(__vcurs_pos,
-			      __buffer.length() - __vcurs_pos );
+    __vcurs_pos = __buffer.length();
 }
 
 void
-CursorBuf::backspace() {
-    if (__vcurs_pos == 0 || __buffer.empty()) return;
-
-    __vcurs_pos--;
-
-    __buffer = __buffer.erase(__vcurs_pos, 1);
-}
-
-void
-CursorBuf::delete_char() {
-    if (__vcurs_pos >= __buffer.length() ||
-	__buffer.empty() ) return;
-	    
-    __buffer = __buffer.erase(__vcurs_pos, 1);
-}
-
-void
-CursorBuf::home() {
-    __vcurs_pos=0;
-}
-
-void
-CursorBuf::end() {
-    if (__buffer.empty()) return;
-
-    __vcurs_pos=__buffer.length();
-}
-
-void
-CursorBuf::back_step() {
-    if (__vcurs_pos==0 || __buffer.empty()) return;
+CursorBuffer::back_step() {
+    if (__vcurs_pos == 0 || __buffer.empty() ) return;
 
     __vcurs_pos--;
 }
 
 void
-CursorBuf::forward_step() {
-    if (__buffer.empty() || __vcurs_pos>=__buffer.length()) return;
+CursorBuffer::forward_step() {
+    if (__buffer.empty() || __vcurs_pos >= __buffer.length() ) return;
 
     __vcurs_pos++;
 }
 
 void
-CursorBuf::insert(std::wstring::value_type c) {
+CursorBuffer::insert(std::wstring::value_type c) {
     // do not overrun the max size
     if (__buffer.length() >= __max_size) return;
 
-    if (__vcurs_pos == __buffer.length())
-	__buffer.push_back(c);
+    __mbs_cache_valid=false;
+
+    if (__vcurs_pos == __buffer.length() )
+        __buffer.push_back(c);
     else
-	__buffer.insert(__vcurs_pos, c, 1);
+        __buffer.insert(__vcurs_pos, 1, c);
 
     __vcurs_pos++;
 }
 
 std::wstring
-CursorBuf::get_wstring(int16_t _size, int16_t* curs_pos) {
+CursorBuffer::wstring(int16_t _size, int16_t* curs_pos) const {
+    tsz_t offset = (__vcurs_pos / _size) * _size;
 
-    tsz_t offset= (__vcurs_pos / _size) * _size;
-    if (offset>1)
-    	(*curs_pos)=static_cast<uint16_t>(__vcurs_pos - offset);
+    if (offset > 1)
+        (*curs_pos) = static_cast<uint16_t>(__vcurs_pos - offset);
     else
-    	(*curs_pos)=static_cast<uint16_t>(__vcurs_pos);
+        (*curs_pos) = static_cast<uint16_t>(__vcurs_pos);
 
-    return __buffer.substr(offset, (offset + _size>__buffer.length()-1)? __buffer.length()-offset : _size);
+    return __buffer.substr(offset,
+                           (offset + _size > __buffer.length() -
+         1) ? __buffer.length() - offset : _size);
 }
 
 std::string
-CursorBuf::get_string(int16_t _size, int16_t* curs_pos) {
-    std::wstring tmp_wbuf=get_wstring(_size, curs_pos);
+CursorBuffer::string(int16_t _size, int16_t* curs_pos) const {
+    std::wstring tmp_wbuf = wstring(_size, curs_pos);
 
     size_t mbr_len = wcstombs(0, tmp_wbuf.c_str(), 0);
-    char* tmp_mb_buff = new char[mbr_len+1];
+    char* tmp_mb_buff = new char[mbr_len + 1];
 
-    if (wcstombs(tmp_mb_buff, tmp_wbuf.c_str(), mbr_len+1)==(size_t)-1) {
-	delete[] tmp_mb_buff;
-	throw EXCEPTIONS::SystemError(errno);
+    if (wcstombs(tmp_mb_buff, tmp_wbuf.c_str(), mbr_len + 1) == (size_t)-1) {
+        delete[] tmp_mb_buff;
+        throw EXCEPTIONS::SystemError(errno);
     }
 
     std::string retval(tmp_mb_buff);
     delete[] tmp_mb_buff;
 
     return retval;
+}
+
+const std::wstring&
+CursorBuffer::wstring() const {
+    return __buffer;
+}
+
+const std::string&
+CursorBuffer::string() const {
+    if (__mbs_cache_valid) return __mbs_cache;
+
+    size_t mbr_len = wcstombs(0, __buffer.c_str(), 0);
+    char* tmp_mb_buff = new char[mbr_len + 1];
+
+    if (wcstombs(tmp_mb_buff, __buffer.c_str(), mbr_len + 1) == (size_t)-1) {
+        delete[] tmp_mb_buff;
+        throw EXCEPTIONS::SystemError(errno);
+    }
+
+    __mbs_cache = tmp_mb_buff;
+    __mbs_cache_valid=true;
+
+    delete[] tmp_mb_buff;
+
+    return __mbs_cache;
 }

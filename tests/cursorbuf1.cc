@@ -72,7 +72,7 @@ test1(uint16_t w) {
 
         buff.home();
         str = YACURS::CurStr(buff.string(w,
-                                             &curs_pos),
+                                         &curs_pos),
                              YACURS::Coordinates(1, 1) );
         win.addlinex(str);
         win.move(YACURS::Coordinates(1 + curs_pos, 1) );
@@ -115,7 +115,7 @@ test1(uint16_t w) {
 
         usleep(50000);
 
-        buff.delete();
+        buff.delete ();
     }
 
     assert(buff.string().empty() );
@@ -220,7 +220,7 @@ test2(uint16_t w) {
 
         buff.home();
         str = YACURS::CurStr(buff.string(w,
-                                             &curs_pos),
+                                         &curs_pos),
                              YACURS::Coordinates(1, 1) );
         win.addlinex(str);
         win.move(YACURS::Coordinates(1 + curs_pos, 1) );
@@ -263,7 +263,7 @@ test2(uint16_t w) {
 
         usleep(50000);
 
-        buff.delete();
+        buff.delete ();
     }
 
     assert(buff.string().empty() );
@@ -336,7 +336,7 @@ main() {
         test2(i);
         sleep(1);
         wclear(stdscr);
-	wrefresh(stdscr);
+        wrefresh(stdscr);
     }
 #endif
 

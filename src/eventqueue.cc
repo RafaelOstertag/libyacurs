@@ -776,7 +776,7 @@ EventQueue::submit(const Event& ev) {
     }
 #else
     } catch (std::exception&) {
-	// Intentionally empty
+        // Intentionally empty
     }
 #endif
     unblocksignal();
@@ -805,8 +805,8 @@ EventQueue::run() {
         FocusManager::refocus();
 
 #ifdef ENABLE_NLS
-	wint_t c;
-	int retval = wget_wch(stdscr, &c);
+        wint_t c;
+        int retval = wget_wch(stdscr, &c);
 #else
         int c = wgetch(stdscr);
 #endif
@@ -815,7 +815,7 @@ EventQueue::run() {
         blocksignal();
 
 #ifdef ENABLE_NLS
-	if (retval != ERR) {
+        if (retval != ERR) {
 #else
         if (c != ERR) {
 #endif
@@ -829,7 +829,7 @@ EventQueue::run() {
 
             default:
 #ifdef ENABLE_NLS
-		submit(EventEx<wint_t>(EVT_KEY, c) );
+                submit(EventEx<wint_t>(EVT_KEY, c) );
 #else
                 submit(EventEx<int>(EVT_KEY, c) );
 #endif

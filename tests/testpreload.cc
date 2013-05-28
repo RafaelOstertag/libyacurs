@@ -21,20 +21,22 @@ extern "C" {
 #endif
 
 #ifdef ENABLE_NLS
-    int __test_wget_wch(void*, std::wint_t* i);
+int __test_wget_wch(void*, std::wint_t* i);
 
-    int
-    wget_wch(void* wdc, std::wint_t* i) {
-	return __test_wget_wch(wdc, i);
-    }
+int
+wget_wch(void* wdc, std::wint_t* i) {
+    return __test_wget_wch(wdc, i);
+}
+
 #else
-    // Forward declaration. Define those functions in your executable.
-    int __test_wgetch(void*);
+// Forward declaration. Define those functions in your executable.
+int __test_wgetch(void*);
 
-    int
-    wgetch(void* wdc) {
-	return __test_wgetch(wdc);
-    }
+int
+wgetch(void* wdc) {
+    return __test_wgetch(wdc);
+}
+
 #endif
 
 #ifdef __cplusplus

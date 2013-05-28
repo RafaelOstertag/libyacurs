@@ -21,7 +21,7 @@
 #ifdef ENABLE_NLS
 wint_t
 #else
-int 
+int
 #endif
 __test_data[] = {
     // First Input Widget
@@ -241,9 +241,10 @@ __test_wget_wch(void*, wint_t* i) {
         abort();
     }
 
-    i=ptr2++;
+    i = ptr2++;
     return OK;
 }
+
 #else
 extern "C" int
 __test_wgetch(void*) {
@@ -257,6 +258,7 @@ __test_wgetch(void*) {
 
     return *ptr2++;
 }
+
 #endif
 
 // Event handler requires access
@@ -302,7 +304,7 @@ button_press_handler(YACURS::Event& _e) {
 int
 main() {
 #ifdef ENABLE_NLS
-    setlocale(LC_ALL,"");
+    setlocale(LC_ALL, "");
 #endif
     std::list<std::string> items;
 

@@ -71,7 +71,8 @@ namespace YACURS {
         public:
             typedef typename T::size_type tsz_t;
         private:
-	    INTERNAL::CursorBuffer __buffer;
+            INTERNAL::CursorBuffer __buffer;
+
             /**
              * Maximum size of input.
              *
@@ -90,6 +91,8 @@ namespace YACURS {
              * Mode, whether or not editing is allowed.
              */
             bool __read_only;
+
+#warning "Obscuring not implemented yet"
 
             /**
              * Mode, whether or not input is obscurred.
@@ -264,7 +267,7 @@ namespace YACURS {
         if (!focus() ) return;
 
 #ifdef ENABLE_NLS
-	EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(_e);
+        EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(_e);
 #else
         EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(_e);
 #endif
@@ -285,50 +288,50 @@ namespace YACURS {
 
         case KEY_DL:
         case KEY_CTRL_U:
-	    if (__read_only) return;
-	    __buffer.clear();
+            if (__read_only) return;
+            __buffer.clear();
             break;
 
         case KEY_EOL:
         case KEY_CTRL_K:
-	    if (__read_only) return;
-	    __buffer.clear_eol();
+            if (__read_only) return;
+            __buffer.clear_eol();
             break;
 
         case KEY_BKSPC_SOL:
         case KEY_BACKSPACE:
-	    if (__read_only) return;
-	    __buffer.backspace();
+            if (__read_only) return;
+            __buffer.backspace();
             break;
 
         case KEY_CTRL_D:
         case KEY_DC: // Delete
-	    if (__read_only) return;
-	    __buffer.del();
+            if (__read_only) return;
+            __buffer.del();
             break;
 
         case KEY_HOME:
         case KEY_CTRL_A:
-	    __buffer.home();
+            __buffer.home();
             break;
 
         case KEY_CTRL_E:
-	    __buffer.end();
+            __buffer.end();
             break;
 
         case KEY_LEFT:
         case KEY_CTRL_B:
-	    __buffer.back_step();
+            __buffer.back_step();
             break;
 
         case KEY_RIGHT:
         case KEY_CTRL_F:
-	    __buffer.forward_step();
+            __buffer.forward_step();
             break;
 
         default: // regular key presses
-	    if (__read_only) return;
-	    __buffer.insert(ekey.data());
+            if (__read_only) return;
+            __buffer.insert(ekey.data() );
             break;
         }
 
@@ -371,7 +374,7 @@ namespace YACURS {
                                       tsz_t _max_size,
                                       const T& _t) :
         Widget(),
-	__buffer(_t, _max_size),
+        __buffer(_t, _max_size),
         __max_size(_max_size),
         __length(_length),
         __read_only(false),
@@ -391,7 +394,7 @@ namespace YACURS {
 
     template<class T> void
     Input<T>::input(const T& i) {
-	__buffer.set(i);
+        __buffer.set(i);
 
         refresh(true);
     }
@@ -403,7 +406,7 @@ namespace YACURS {
 
     template<class T> void
     Input<T>::clear() {
-	__buffer.clear();
+        __buffer.clear();
     }
 
     template<class T> void
@@ -511,7 +514,7 @@ namespace YACURS {
 
 #if 0
         widget_subwin()->erase();
-	
+
         assert(__offset <= buffer_length() );
         // if (mymvwaddstr(widget_subwin(), 0, 0,
         //                  __label.c_str()) == ERR)
@@ -521,12 +524,12 @@ namespace YACURS {
         // advanced past the end, and thus the string is
         // truncated. However, the truncation has no effect on the input.
         if (buffer_length() > 0) {
-	std::string* output = &__buffer;
+            std::string* output = &__buffer;
             std::string obscure_out; //only used when obscuring output
 
             if (__obscure_input) {
-	tsz_t outlen =
-	    __buffer.substr(__offset, __size.cols() - 1).length();
+                tsz_t outlen =
+                    __buffer.substr(__offset, __size.cols() - 1).length();
                 obscure_out.assign(outlen, __obscure_char);
                 output = &obscure_out;
             }
@@ -566,30 +569,30 @@ namespace YACURS {
             // since the buffer is empty, make sure the cursor position is
             // set to the biginning.
             assert(__curs_pos == 0);
-    }
+        }
 #endif
-	int16_t curs_pos;
-	
-	CurStr
-	    out(__buffer.string(__size.cols(),&curs_pos),
-		Coordinates(),
-		focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
-	if (__hide_input) {
-	    // first, give the widget nice color
-	    CurStr
-		filler("",
-		       Coordinates(),
-		       focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
-	    widget_subwin()->addlinex(filler);
-	    // Now, put the string with hidden attributes
-	    out.color(YACURS::INPUTWIDGET_HIDDEN);
-	    widget_subwin()->addstr(out);
-	} else {
-	    widget_subwin()->addlinex(out);
-	}
+        int16_t curs_pos;
+
+        CurStr
+            out(__buffer.string(__size.cols(), &curs_pos),
+                Coordinates(),
+                focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
+        if (__hide_input) {
+            // first, give the widget nice color
+            CurStr
+                filler("",
+                       Coordinates(),
+                       focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
+            widget_subwin()->addlinex(filler);
+            // Now, put the string with hidden attributes
+            out.color(YACURS::INPUTWIDGET_HIDDEN);
+            widget_subwin()->addstr(out);
+        } else {
+            widget_subwin()->addlinex(out);
+        }
         widget_subwin()->move(Coordinates(curs_pos, 0) );
 
-	Widget::refresh(immediate);
+        Widget::refresh(immediate);
     }
 }
 

@@ -280,7 +280,7 @@ CursWin::addstr(const CurStr& str) {
 
 CursWin&
 CursWin::addstr(const std::string& str) {
-    return addstr(CurStr(str, get_cursor()));
+    return addstr(CurStr(str, get_cursor() ) );
 }
 
 CursWin&
@@ -315,9 +315,10 @@ CursWin::addstrx(const CurStr& str) {
 #ifdef ENABLE_NLS
     // addnstr() will convert to wide char, we're only interested in
     // length here.
-    size_t _mbslen = mbstowcs((wchar_t*)0, str.c_str(), str.length()*sizeof(wchar_t));
+    size_t _mbslen = mbstowcs( (wchar_t*)0, str.c_str(),
+                               str.length() * sizeof (wchar_t) );
     if (space < static_cast<int16_t>(_mbslen) ) {
-	addnstr(str, space - 1).addch('>');
+        addnstr(str, space - 1).addch('>');
     } else {
         addstr(str);
     }
@@ -344,12 +345,13 @@ CursWin::addlinex(const CurStr& str) {
                                 str.position().y() ), str.color() );
 
     size_t mylen;
+
 #ifdef ENABLE_NLS
-    mylen = mbstowcs((wchar_t*)0, str.c_str(), str.length());
+    mylen = mbstowcs( (wchar_t*)0, str.c_str(), str.length() );
 #else
     mylen = tmp.length();
 #endif
-    
+
     if (static_cast<int16_t>(mylen + (__box ? 1 : 0) ) <=
         __client_area.cols() ) {
         tmp.append(__client_area.cols() - mylen, ' ');
@@ -369,24 +371,25 @@ CursWin::addnstr(const CurStr& str, int n) {
     set_color(str.color() );
 
 #ifdef ENABLE_NLS
-    wchar_t* wbuffer=new wchar_t[str.length()+1];
-    if (wbuffer==0)
-	throw EXCEPTIONS::SystemError(ENOMEM);
+    wchar_t* wbuffer = new wchar_t[str.length() + 1];
+    if (wbuffer == 0)
+        throw EXCEPTIONS::SystemError(ENOMEM);
 
-    size_t retval = mbstowcs(wbuffer, str.c_str(), str.length());
+    size_t retval = mbstowcs(wbuffer, str.c_str(), str.length() );
     assert(retval <= str.length() );
     if (retval == (size_t)-1) {
-	delete[] wbuffer;
-	throw EXCEPTIONS::SystemError(errno);
+        delete[] wbuffer;
+        throw EXCEPTIONS::SystemError(errno);
     }
     wbuffer[retval] = 0;
 
     if (mvwaddnwstr(__window,
-		   str.position().y(),
-		   str.position().x(),
-		    wbuffer, n) == ERR &&
-	str.position().x() + static_cast<int16_t>(wcslen(wbuffer)) < __client_area.cols() ) {	
-	delete[] wbuffer;
+                    str.position().y(),
+                    str.position().x(),
+                    wbuffer, n) == ERR &&
+        str.position().x() + static_cast<int16_t>(wcslen(wbuffer) ) <
+        __client_area.cols() ) {
+        delete[] wbuffer;
         throw EXCEPTIONS::CursesException("mvwaddnwstr");
     }
 
@@ -407,7 +410,7 @@ CursWin::addnstr(const CurStr& str, int n) {
 
 CursWin&
 CursWin::addnstr(const std::string& str, int n) {
-    return addnstr(CurStr(str,get_cursor()), n);
+    return addnstr(CurStr(str, get_cursor() ), n);
 }
 
 CursWin&

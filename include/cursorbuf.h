@@ -42,21 +42,21 @@ namespace YACURS {
                  */
                 std::wstring __buffer;
 
-		/**
-		 * Cache
-		 *
-		 * Holds __buffer converted to multibyte
-		 * string. Reference returned by string().
-		 */
-		mutable std::string __mbs_cache;
+                /**
+                 * Cache
+                 *
+                 * Holds __buffer converted to multibyte
+                 * string. Reference returned by string().
+                 */
+                mutable std::string __mbs_cache;
 
-		/**
-		 * Cache Valid Flag
-		 *
-		 * Flag indicating whether or not __mbs_cache is
-		 * valid, or has to be re-calculated.
-		 */
-		mutable bool __mbs_cache_valid;
+                /**
+                 * Cache Valid Flag
+                 *
+                 * Flag indicating whether or not __mbs_cache is
+                 * valid, or has to be re-calculated.
+                 */
+                mutable bool __mbs_cache_valid;
 
                 /**
                  * Cursor position.
@@ -91,86 +91,86 @@ namespace YACURS {
                 CursorBuffer(const CursorBuffer& _cb);
                 CursorBuffer& operator=(const CursorBuffer& _cb);
 
-		/**
-		 * Set new buffer content.
-		 */
+                /**
+                 * Set new buffer content.
+                 */
                 void set(const std::wstring& _b);
 
-		/**
-		 * Set new buffer content.
-		 */
+                /**
+                 * Set new buffer content.
+                 */
                 void set(const std::string& _b);
 
-		/**
-		 * Get length of buffer.
-		 */
-		tsz_t length() const;
+                /**
+                 * Get length of buffer.
+                 */
+                tsz_t length() const;
 
-		/**
-		 * Reset the virtual cursor position
-		 */
+                /**
+                 * Reset the virtual cursor position
+                 */
                 void reset_cursor();
 
-		/**
-		 * Get the current cursor position
-		 */
-		tsz_t get_cursor() const;
+                /**
+                 * Get the current cursor position
+                 */
+                tsz_t get_cursor() const;
 
-		/**
-		 * Clear the content of the buffer
-		 */
+                /**
+                 * Clear the content of the buffer
+                 */
                 void clear();
 
-		/**
-		 * Clear buffer starting from the current cursor
-		 * position to the end.
-		 */
+                /**
+                 * Clear buffer starting from the current cursor
+                 * position to the end.
+                 */
                 void clear_eol();
 
-		/**
-		 * Backspace from the current cursor position.
-		 */
+                /**
+                 * Backspace from the current cursor position.
+                 */
                 void backspace();
 
-		/**
-		 * Delete character at current cursor position.
-		 */
+                /**
+                 * Delete character at current cursor position.
+                 */
                 void del();
 
-		/**
-		 * Move cursor to beginning of buffer.
-		 */
+                /**
+                 * Move cursor to beginning of buffer.
+                 */
                 void home();
 
-		/**
-		 * Move cursor to end of buffer.
-		 */
+                /**
+                 * Move cursor to end of buffer.
+                 */
                 void end();
 
-		/**
-		 * Move cursor one character towards the beginning of
-		 * the buffer.
-		 */
+                /**
+                 * Move cursor one character towards the beginning of
+                 * the buffer.
+                 */
                 void back_step();
 
-		/**
-		 * Move cursor one character towards the end of the
-		 * buffer.
-		 */
+                /**
+                 * Move cursor one character towards the end of the
+                 * buffer.
+                 */
                 void forward_step();
 
-		/**
-		 * Insert one character at the current cursor
-		 * position.
-		 */
+                /**
+                 * Insert one character at the current cursor
+                 * position.
+                 */
                 void insert(std::wstring::value_type c);
 
-		std::wstring wstring(int16_t _size, int16_t* curs_pos) const;
+                std::wstring wstring(int16_t _size, int16_t* curs_pos) const;
 
                 std::string  string(int16_t _size, int16_t* curs_pos) const;
 
-		const std::wstring& wstring() const;
-		
+                const std::wstring& wstring() const;
+
                 const std::string& string() const;
         };
     } // namespace INTERNAL

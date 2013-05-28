@@ -256,16 +256,26 @@ test8() {
     win.refresh();
 }
 
-void test9() {
-    YACURS::INTERNAL::CursWin win1(YACURS::Area(0, 10, 10, 20), YACURS::DIALOG);
+void
+test9() {
+    YACURS::INTERNAL::CursWin win1(YACURS::Area(0, 10, 10,
+                                                20), YACURS::DIALOG);
+
     win1.box();
-    win1.addstrx(YACURS::CurStr("abcdefghiklmnopqrstuvwxyz",YACURS::Coordinates(1,1),YACURS::INPUTWIDGET_FOCUS));
+    win1.addstrx(YACURS::CurStr("abcdefghiklmnopqrstuvwxyz",
+                                YACURS::Coordinates(1,
+                                                    1),
+                                YACURS::INPUTWIDGET_FOCUS) );
 
-
-    YACURS::INTERNAL::CursWin win2(YACURS::Area(5,5,10,20), YACURS::TITLEBAR);
-    win2.addstrx(YACURS::CurStr("abcdefghiklmnopqrstuvwxyz", YACURS::Coordinates(1,1),YACURS::INPUTWIDGET_FOCUS));
+    YACURS::INTERNAL::CursWin win2(YACURS::Area(5,
+                                                5,
+                                                10,
+                                                20), YACURS::TITLEBAR);
+    win2.addstrx(YACURS::CurStr("abcdefghiklmnopqrstuvwxyz",
+                                YACURS::Coordinates(1,
+                                                    1),
+                                YACURS::INPUTWIDGET_FOCUS) );
     win2.box();
-
 
     win1.refresh(true);
     win2.refresh(true);
@@ -279,8 +289,8 @@ main() {
 #endif
 
 #ifdef ENABLE_NLS
-    setlocale(LC_ALL,"");
-#endif    
+    setlocale(LC_ALL, "");
+#endif
 
     YACURS::Curses::init();
 

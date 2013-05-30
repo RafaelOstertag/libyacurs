@@ -4,6 +4,10 @@
 #include "config.h"
 #endif
 
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -12,14 +16,24 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-int __test_data[] = {
+#ifdef ENABLE_NLS
+wint_t
+#else
+int
+#endif
+__test_data[] = {
     // Remove buttons by removing them
     '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n',
     // Select AGAIN
     '\t', '\n', 0
 };
 
-int __test_data2[] = {
+#ifdef ENABLE_NLS
+wint_t
+#else
+int
+#endif
+__test_data2[] = {
     '\n', 0
 };
 
@@ -201,6 +215,10 @@ main() {
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
+#endif
+
+#ifdef ENABLE_NLS
+    setlocale(LC_ALL, "");
 #endif
 
     try {

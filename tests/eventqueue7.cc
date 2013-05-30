@@ -5,9 +5,11 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_UNISTD_H
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include <unistd.h>
-#endif // HAVE_UNISTD_H
 
 #include <iostream>
 #include <cstdlib>

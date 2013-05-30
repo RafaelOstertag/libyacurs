@@ -5,6 +5,10 @@
 #include "config.h"
 #endif
 
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include <unistd.h>
 #include <iostream>
 #include <cstdlib>

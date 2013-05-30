@@ -311,7 +311,11 @@ main() {
     for (int i = 0; i < 120; i++) {
         std::ostringstream n;
         n << i;
-        items.push_back("Long Name ListBox Item Number " + n.str() );
+#ifdef
+	items.push_back("Long Name ListBox Item Number " + n.str() );
+#else
+        items.push_back("(€Ääü¼½) Item Number " + n.str() );
+#endif
     }
 
 #if 0

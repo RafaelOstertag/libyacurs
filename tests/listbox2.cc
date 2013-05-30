@@ -27,13 +27,22 @@
 # endif // HAVE_SYS_TERMIOS_H
 #endif // HAVE_TERMIOS_H
 
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include <iostream>
 #include <sstream>
 
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-int __test_data[] = {
+#ifdef ENABLE_NLS
+wint_t
+#else
+int
+#endif
+ __test_data[] = {
     // Select Add button
     '\t',
     // Press Add button
@@ -780,6 +789,7 @@ class MainWindow : public YACURS::Window {
         YACURS::Button* bdelete;
         YACURS::Button* bsearch;
         YACURS::Button* bpreload;
+	YACURS::Button* bsort;
         YACURS::Button* bquit;
         YACURS::VPack* vpack1;
         YACURS::HPack* hpack1;
@@ -814,6 +824,13 @@ class MainWindow : public YACURS::Window {
                 searchdialog->show();
                 return;
             }
+
+	    if (bsort == _ex.data() ) {
+		if (listbox->sort_order() == YACURS::ASCENDING)
+		    listbox->sort_order(YACURS::DESCENDING);
+		else
+		    listbox->sort_order(YACURS::ASCENDING);
+	    }
 
             if (bdelete == _ex.data() ) {
                 listbox->delete_selected();
@@ -871,6 +888,7 @@ class MainWindow : public YACURS::Window {
             bdelete(0),
             bsearch(0),
             bpreload(0),
+					       bsort(0),
             bquit(0),
             vpack1(0),
             hpack1(0),
@@ -881,6 +899,7 @@ class MainWindow : public YACURS::Window {
             bdelete = new YACURS::Button("Delete");
             bsearch = new YACURS::Button("Search");
             bpreload = new YACURS::Button("Preload List");
+            bsort = new YACURS::Button("Sort Order");
             bquit = new YACURS::Button("Quit");
 
             vpack1 = new YACURS::VPack;
@@ -891,6 +910,7 @@ class MainWindow : public YACURS::Window {
             vpack1->add_back(badd);
             vpack1->add_back(bdelete);
             vpack1->add_back(bsearch);
+	    vpack1->add_back(bsort);
             vpack1->add_back(bpreload);
             vpack1->add_back(bquit);
 
@@ -931,6 +951,7 @@ class MainWindow : public YACURS::Window {
             delete bdelete;
             delete bsearch;
             delete bpreload;
+	    delete bsort;
             delete bquit;
             delete vpack1;
             delete hpack1;
@@ -943,6 +964,10 @@ main() {
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
+#endif
+
+#ifdef ENABLE_NLS
+    setlocale(LC_ALL, "");
 #endif
 
     try {

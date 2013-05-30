@@ -5,6 +5,10 @@
 #include "config.h"
 #endif
 
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include <iostream>
 
 #include "margin.h"

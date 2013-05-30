@@ -5,9 +5,11 @@
 #include "config.h"
 #endif
 
-#ifdef HAVE_UNISTD_H
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include <unistd.h>
-#endif // HAVE_UNISTD_H
 
 #ifdef HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>
@@ -35,6 +37,10 @@
 
 int
 main() {
+#ifdef ENABLE_NLS
+    setlocale(LC_ALL, "");
+#endif
+
     try {
         YACURS::Curses::init();
 

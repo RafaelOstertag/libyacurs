@@ -5,6 +5,10 @@
 #include "config.h"
 #endif
 
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -13,7 +17,12 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-int __test_data[] = {
+#ifdef ENABLE_NLS
+wint_t
+#else
+int
+#endif
+__test_data[] = {
     // Open dialog, and cancel
     '\n', '\t', '\n',
     // Open Dialog, and Ok

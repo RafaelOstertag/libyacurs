@@ -6,13 +6,13 @@
 #include "config.h"
 #endif
 
-#include <iostream>
-
-#include "unistd.h"
-
 #ifdef ENABLE_NLS
 #include <locale.h>
 #endif
+
+#include "unistd.h"
+
+#include <iostream>
 
 #include "yacurs.h"
 

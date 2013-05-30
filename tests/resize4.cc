@@ -5,6 +5,10 @@
 #include "config.h"
 #endif
 
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include <unistd.h>
 
 #ifdef HAVE_SYS_IOCTL_H
@@ -93,6 +97,10 @@ main() {
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
+#endif
+
+#ifdef ENABLE_NLS
+    setlocale(LC_ALL, "");
 #endif
 
     try {

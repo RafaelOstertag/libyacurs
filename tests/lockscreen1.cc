@@ -5,6 +5,10 @@
 #include "config.h"
 #endif
 
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -15,7 +19,12 @@
 #define KEY_SLEEP -1978
 
 // Used when preloading libtestpreload.so
-int __test_data[] = {
+#ifdef ENABLE_NLS
+wint_t
+#else
+int
+#endif
+ __test_data[] = {
     // Press first button
     '\n',
     // enter text

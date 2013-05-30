@@ -27,6 +27,10 @@
 # endif // HAVE_SYS_TERMIOS_H
 #endif // HAVE_TERMIOS_H
 
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include <iostream>
 #include <sstream>
 
@@ -94,6 +98,10 @@ class HotKeyQuit : public YACURS::HotKey {
 
 int
 main() {
+#ifdef ENABLE_NLS
+    setlocale(LC_ALL, "");
+#endif
+
     std::list<std::string> items;
 
     for (int i = 0; i < 24; i++) {

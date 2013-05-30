@@ -6,13 +6,13 @@
 #include "config.h"
 #endif
 
-#include <iostream>
-
-#include "unistd.h"
-
 #ifdef ENABLE_NLS
 #include <locale.h>
 #endif
+
+#include "unistd.h"
+
+#include <iostream>
 
 #include "yacurs.h"
 
@@ -101,7 +101,7 @@ test1(uint16_t w) {
     assert(buff.string().empty() );
     assert(buff.wstring().empty() );
 
-    buff.buffer(L"abcdefghijklmnopqrstuvwxyz");
+    buff.set(L"abcdefghijklmnopqrstuvwxyz");
     for (int i = 0; i < 30; i++) {
         int16_t curs_pos;
 
@@ -115,7 +115,7 @@ test1(uint16_t w) {
 
         usleep(50000);
 
-        buff.delete ();
+        buff.del ();
     }
 
     assert(buff.string().empty() );
@@ -249,7 +249,7 @@ test2(uint16_t w) {
     assert(buff.string().empty() );
     assert(buff.wstring().empty() );
 
-    buff.buffer(L"äbÄcdëËfghijklmnöpqrstüvwxÿŸzàéè€¼½");
+    buff.set(L"äbÄcdëËfghijklmnöpqrstüvwxÿŸzàéè€¼½");
     for (int i = 0; i < 35; i++) {
         int16_t curs_pos;
 
@@ -263,7 +263,7 @@ test2(uint16_t w) {
 
         usleep(50000);
 
-        buff.delete ();
+        buff.del ();
     }
 
     assert(buff.string().empty() );

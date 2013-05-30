@@ -5,6 +5,10 @@
 #include "config.h"
 #endif
 
+#ifdef ENABLE_NLS
+#include <locale.h>
+#endif
+
 #include <unistd.h>
 
 #ifdef HAVE_SYS_IOCTL_H
@@ -470,6 +474,10 @@ class HotKeyQuit : public YACURS::HotKey {
 
 int
 main() {
+#ifdef ENABLE_NLS
+    setlocale(LC_ALL, "");
+#endif
+
     std::list<std::string> items;
 
     for (int i = 0; i < 24; i++) {

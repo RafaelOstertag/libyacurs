@@ -38,12 +38,6 @@
 namespace YACURS {
     template<class _T = std::string> class ListBox : public Widget {
         public:
-            enum SORT_ORDER {
-                ASCENDING,
-                DESCENDING,
-                UNSORTED
-            };
-
             static bool cmp_asc(const _T& a,
                                 const _T& b) {
                 return a < b;
@@ -139,7 +133,16 @@ namespace YACURS {
 
             void delete_selected();
 
+	    /**
+	     * High light item.
+	     *
+	     * high light first item exactly matching @c _i.
+	     *
+	     * @param _i item to hight light.
+	     */
             void high_light(const _T& _i);
+
+	    void high_light(lsz_t pos);
 
             // From WidgetBase
 
@@ -384,7 +387,7 @@ namespace YACURS {
             refresh(true);
     }
 
-    template<class _T> typename ListBox<_T>::SORT_ORDER
+    template<class _T> SORT_ORDER
     ListBox<_T>::sort_order() const {
         return __sort_order;
     }
@@ -462,6 +465,35 @@ namespace YACURS {
         if (realization() == REALIZED)
             refresh(true);
     }
+
+    template<class _T> void
+    ListBox<_T>::high_light(lsz_t pos) {
+	if (pos >= __list.length() )
+	    throw std::out_of_range("ListBox<>::high_light() position out of range");
+
+        typename std::list<_T>::iterator it = __list.begin();
+	lsz_t i;
+        for (i = 0;
+             it != __list.end();
+             it++, i++) ;
+
+        if (it == __list.end() ) return;
+
+        if (__list.size() > pagesize() &&
+            i > (__list.size() - pagesize() ) ) {
+            __offset = __list.size() - pagesize();
+            __curs_pos = i - __offset;
+        } else {
+            __offset = (i / pagesize() ) * pagesize();
+            __curs_pos = i - __offset;
+        }
+
+        assert(__offset + __curs_pos < __list.size() );
+
+        if (realization() == REALIZED)
+            refresh(true);
+    }
+    
 
     // From WidgetBase
     template<class _T> void

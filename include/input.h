@@ -92,8 +92,6 @@ namespace YACURS {
              */
             bool __read_only;
 
-#warning "Obscuring not implemented yet"
-
             /**
              * Mode, whether or not input is obscurred.
              */
@@ -512,84 +510,40 @@ namespace YACURS {
             widget_subwin()->leaveok(true);
         }
 
-#if 0
-        widget_subwin()->erase();
-
-        assert(__offset <= buffer_length() );
-        // if (mymvwaddstr(widget_subwin(), 0, 0,
-        //                  __label.c_str()) == ERR)
-        //      throw AddStrFailed();
-        //
-        // We ignore the error returned, since the cursor cannot be
-        // advanced past the end, and thus the string is
-        // truncated. However, the truncation has no effect on the input.
-        if (buffer_length() > 0) {
-            std::string* output = &__buffer;
-            std::string obscure_out; //only used when obscuring output
-
-            if (__obscure_input) {
-                tsz_t outlen =
-                    __buffer.substr(__offset, __size.cols() - 1).length();
-                obscure_out.assign(outlen, __obscure_char);
-                output = &obscure_out;
-            }
-
-            CurStr
-                out(output->substr(__offset,
-                                   __size.cols() - 1).c_str(),
-                    Coordinates(),
-                    focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
-
-            if (__hide_input) {
-                // first, give the widget nice color
-                CurStr
-                    filler("",
-                           Coordinates(),
-                           focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
-                widget_subwin()->addlinex(filler);
-                // Now, put the string with hidden attributes
-                out.color(YACURS::INPUTWIDGET_HIDDEN);
-                widget_subwin()->addstr(out);
-            } else {
-                widget_subwin()->addlinex(out);
-            }
-
-            // Sanitize the cursor position if necessary, for example due
-            // to a shrink of the screen, the cursor position might
-            // overshoot the available subwin size.
-            if (__curs_pos >=
-                static_cast<tsz_t>(__size.cols() ) ) __curs_pos =
-                    __size.cols() -
-                    1;
-        } else {
-            // Fill the widget with spaces to give it nice color
-            CurStr out("", Coordinates(),
-                       focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
-            widget_subwin()->addlinex(out);
-            // since the buffer is empty, make sure the cursor position is
-            // set to the biginning.
-            assert(__curs_pos == 0);
-        }
-#endif
         int16_t curs_pos;
 
-        CurStr
-            out(__buffer.string(__size.cols(), &curs_pos),
-                Coordinates(),
-                focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
-        if (__hide_input) {
-            // first, give the widget nice color
-            CurStr
-                filler("",
-                       Coordinates(),
-                       focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
-            widget_subwin()->addlinex(filler);
-            // Now, put the string with hidden attributes
-            out.color(YACURS::INPUTWIDGET_HIDDEN);
-            widget_subwin()->addstr(out);
-        } else {
-            widget_subwin()->addlinex(out);
-        }
+	// Make sure that in the following if/else block curs_pos is
+	// set in any case.
+
+	if (__obscure_input) {
+	    int16_t len;
+
+	    __buffer.info(__size.cols(), &len, &curs_pos);
+	    CurStr obs_out("",Coordinates(), focus() ?
+			   YACURS::INPUTWIDGET_FOCUS :
+			   YACURS::INPUTWIDGET_NOFOCUS);
+	    obs_out.assign(len, __obscure_char);
+	    widget_subwin()->addlinex(obs_out);
+	} else {
+	    CurStr
+		out(__buffer.string(__size.cols(), &curs_pos),
+		    Coordinates(),
+		    focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
+	    if (__hide_input) {
+		// first, give the widget nice color
+		CurStr
+		    filler("",
+			   Coordinates(),
+			   focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
+		widget_subwin()->addlinex(filler);
+		// Now, put the string with hidden attributes
+		out.color(YACURS::INPUTWIDGET_HIDDEN);
+		widget_subwin()->addstr(out);
+	    } else {
+		widget_subwin()->addlinex(out);
+	    }
+	}
+
         widget_subwin()->move(Coordinates(curs_pos, 0) );
 
         Widget::refresh(immediate);

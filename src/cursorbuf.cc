@@ -154,6 +154,17 @@ CursorBuffer::clear_eol() {
 }
 
 void
+CursorBuffer::clear_sol() {
+    if (__buffer.empty() || __vcurs_pos==0) return;
+
+    __buffer = __buffer.erase(0, __vcurs_pos);
+
+    __vcurs_pos=0;
+
+    __mbs_cache_valid = false;
+}
+
+void
 CursorBuffer::backspace() {
     if (__vcurs_pos == 0 || __buffer.empty() ) return;
 

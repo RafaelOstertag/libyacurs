@@ -127,6 +127,12 @@ namespace YACURS {
                  */
                 void clear_eol();
 
+		/**
+		 * Clear buffer starting from the current cursor
+		 * position to the start.
+		 */
+		void clear_sol();
+
                 /**
                  * Backspace from the current cursor position.
                  */

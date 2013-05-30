@@ -279,10 +279,10 @@ FileSaveDialog::FileSaveDialog(std::string _path,
     __path->color(DIALOG);
 
     __directories = new ListBox<>;
-    __directories->sort_order(ListBox<>::ASCENDING);
+    __directories->sort_order(ASCENDING);
 
     __files = new ListBox<>;
-    __files->sort_order(ListBox<>::ASCENDING);
+    __files->sort_order(ASCENDING);
 
     __hpack->add_back(__directories);
     __hpack->add_back(__files);

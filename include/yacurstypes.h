@@ -33,6 +33,12 @@ namespace YACURS {
     /// event.
     typedef void (* fptr_t)(Event&);
 
+    enum SORT_ORDER {
+	ASCENDING,
+	DESCENDING,
+	UNSORTED
+    };
+
     namespace INTERNAL {
 #ifdef SA_SIGINFO
 

@@ -285,10 +285,14 @@ namespace YACURS {
             break;
 
         case KEY_DL:
-        case KEY_CTRL_U:
             if (__read_only) return;
             __buffer.clear();
             break;
+
+        case KEY_CTRL_U:
+	    if (__read_only) return;
+	    __buffer.clear_sol();
+	    break;
 
         case KEY_EOL:
         case KEY_CTRL_K:

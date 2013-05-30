@@ -165,6 +165,15 @@ namespace YACURS {
                  */
                 void insert(std::wstring::value_type c);
 
+		/**
+		 * Get length and cursor position of string that would
+		 * be returned.
+		 *
+		 * @internal
+		 * this function is mostly used for obfuscated output.
+		 */
+		void info(int16_t _size, int16_t* len, int16_t* curs_pos) const;
+
                 std::wstring wstring(int16_t _size, int16_t* curs_pos) const;
 
                 std::string  string(int16_t _size, int16_t* curs_pos) const;

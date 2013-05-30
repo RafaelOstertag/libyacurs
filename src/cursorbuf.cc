@@ -215,18 +215,40 @@ CursorBuffer::insert(std::wstring::value_type c) {
     __vcurs_pos++;
 }
 
+void
+CursorBuffer::info(int16_t _size, int16_t* len, int16_t* curs_pos) const {
+    tsz_t offset = (__vcurs_pos / _size) * _size;
+
+    if (curs_pos) {
+	if (offset > 1)
+	    (*curs_pos) = static_cast<uint16_t>(__vcurs_pos - offset);
+	else
+	    (*curs_pos) = static_cast<uint16_t>(__vcurs_pos);
+    }
+
+    if (len) {
+	if (__buffer.length()>0) {
+	    *len=(offset + _size > __buffer.length() -
+		  1) ? __buffer.length() - offset : _size;
+	} else {
+	    *len=0;
+	}
+    }
+}
+
 std::wstring
 CursorBuffer::wstring(int16_t _size, int16_t* curs_pos) const {
     tsz_t offset = (__vcurs_pos / _size) * _size;
 
-    if (offset > 1)
-        (*curs_pos) = static_cast<uint16_t>(__vcurs_pos - offset);
-    else
-        (*curs_pos) = static_cast<uint16_t>(__vcurs_pos);
+    if (curs_pos) {
+	if (offset > 1)
+	    (*curs_pos) = static_cast<uint16_t>(__vcurs_pos - offset);
+	else
+	    (*curs_pos) = static_cast<uint16_t>(__vcurs_pos);
+    }
 
-    return __buffer.substr(offset,
-                           (offset + _size > __buffer.length() -
-                            1) ? __buffer.length() - offset : _size);
+    return __buffer.substr(offset,(offset + _size > __buffer.length() -
+	      1) ? __buffer.length() - offset : _size );
 }
 
 std::string

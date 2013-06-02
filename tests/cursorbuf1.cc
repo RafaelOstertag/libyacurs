@@ -327,7 +327,7 @@ main() {
         wrefresh(stdscr);
     }
 
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     for (int i = 8; i < 30; i = i + 5) {
         test2(i);
         sleep(1);

@@ -44,6 +44,15 @@
 #        error "SysV or X/Open-compatible Curses header file required"
 #endif
 
+#if defined(HAVE_CURSES_ENHANCED) && \
+    defined(HAVE_LOCALE_H) && \
+    defined(HAVE_CWCHAR)
+# define USE_WCHAR 1
+# include <locale.h>
+#else
+# undef USE_WCHAR
+#endif
+
 // My Keys.
 
 enum {

@@ -33,12 +33,6 @@
 #include "yacursex.h"
 #include "hotkey.h"
 
-#ifdef ENABLE_NLS
-# define _(String) dgettext(PACKAGE, String)
-#else
-# define _(String) (String)
-#endif
-
 namespace YACURS {
     namespace INTERNAL {
         /**

@@ -804,7 +804,7 @@ EventQueue::run() {
         // the status line. It's sorta hack, but it works...
         FocusManager::refocus();
 
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
         wint_t c;
         int retval = wget_wch(stdscr, &c);
 #else
@@ -814,7 +814,7 @@ EventQueue::run() {
 
         blocksignal();
 
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
         if (retval != ERR) {
 #else
         if (c != ERR) {
@@ -828,7 +828,7 @@ EventQueue::run() {
                 break;
 
             default:
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
                 submit(EventEx<wint_t>(EVT_KEY, c) );
 #else
                 submit(EventEx<int>(EVT_KEY, c) );

@@ -42,6 +42,12 @@
 /* Define to 1 if <ncurses.h> is present */
 #undef HAVE_NCURSES_H
 
+/* Define to 1 if you have the <cwchar> header file. */
+#undef HAVE_CWCHAR
+
+/* Define to 1 if you have the <locale.h> header file. */
+#undef HAVE_LOCALE_H
+
 /* Set to 1 if waddnstr() doesn't use const char* */
 #undef WADDNSTR_USE_CHAR
 

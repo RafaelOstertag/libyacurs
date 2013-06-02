@@ -191,7 +191,7 @@ Curses::init() {
     if (initscr() == 0)
         throw EXCEPTIONS::UnableToInitialize();
 
-#if ENABLE_NLS
+#ifdef ENABLE_NLS
     bindtextdomain(PACKAGE, LOCALEDIR);
 #endif
 

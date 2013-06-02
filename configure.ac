@@ -57,7 +57,9 @@ AC_ARG_ENABLE([eventqueue-debug],
 AC_LANG([C++])
 AM_GNU_GETTEXT([external])
 
-AC_CHECK_HEADERS([stropts.h signal.h sys/termios.h termios.h unistd.h stdint.h sys/types.h sys/ioctl.h])
+AC_CHECK_HEADERS([locale.h stropts.h signal.h sys/termios.h termios.h unistd.h stdint.h sys/types.h sys/ioctl.h])
+
+AC_CHECK_HEADERS([cwchar])
 
 AX_CXX_HEADER_STDCXX_98
 AS_IF([test x$ax_cv_cxx_stdcxx_98 = xno],
@@ -66,7 +68,6 @@ AS_IF([test x$ax_cv_cxx_stdcxx_98 = xno],
 AX_MY_WITH_CURSES
 AS_IF([test x$ax_cv_curses != xyes],
 	    [AC_MSG_ERROR([no curses library found])])
-
 
 my_saved_LIBS="$LIBS"
 LIBS="$my_save_LIBS $CURSES_LIB"

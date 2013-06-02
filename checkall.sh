@@ -377,39 +377,40 @@ host_openbsd32() {
 }
 
 host_odin() {
-    for c in /opt/solarisstudio12.3/bin /opt/solstudio12.2/bin
+    for t in xterm xterm-color
     do
-	for arch in -m64 -m32
+	export TERM=$t
+	for c in /opt/solarisstudio12.3/bin /opt/solstudio12.2/bin /opt/sunstudio12.1/bin
 	do
-	    for flags in xpg4 solaris ncurses
+	    for arch in -m64 -m32
 	    do
-		unset LDFLAGS CPPFLAGS
-		case $flags in
-		    xpg4)
-			LDFLAGS="-L/usr/xpg4/lib/${arch#-m} -R/usr/xpg4/lib/${arch#-m}"
-			CPPFLAGS="-I/usr/xpg4/include"
-			;;
-		    solaris)
-			:
-			;;
-		    ncurses)
-			CPPFLAGS="-I/usr/include/ncurses"
-			;;
-		esac
+		for flags in xpg4 solaris ncurses
+		do
+		    case $flags in
+			xpg4)
+			    LDFLAGS="-L/usr/xpg4/lib/${arch#-m} -R/usr/xpg4/lib/${arch#-m}"
+			    CPPFLAGS="-I/usr/xpg4/include"
+			    CONFIGARGS="--without-ncurses"
+			    ;;
+			solaris)
+			    CONFIGARGS="--without-ncurses"
+			    ;;
+			ncurses)
+			    CPPFLAGS="-I/usr/include/ncurses"
+			    CONFIGARGS="--with-ncurses"
+			    ;;
+		    esac
 
-		export LDFLAGS
-		export CPPFLAGS
+		    gmake distclean
+		    ./configure CXX=${c}/CC CC=${c}/cc LDFLAGS="$LDFLAGS" CPPFLAGS="$CPPFLAGS" CFLAGS="-fast $arch" CXXFLAGS="-fast $arch" $CONFIGARGS
+		    had_error $? "Error in ${c}:$arch:$flags"
 
-		gmake distclean
-		./configure CXX=${c}/CC CC=${c}/cc CFLAGS="-fast $arch" CXXFLAGS="-fast $arch"
-		had_error $? "Error in ${c}:$arch:$flags"
+		    gmake -j 10
+		    had_error $? "Error in ${c}:$arch:$flags"
 
-		gmake clean
-		gmake
-		had_error $? "Error in ${c}:$arch:$flags"
-
-		gmake check
-		had_error $? "Error in ${c}:$arch:$flags"
+		    gmake check
+		    had_error $? "Error in ${c}:$arch:$flags"
+		done
 	    done
 	done
     done
@@ -418,47 +419,50 @@ host_odin() {
 host_starchild() {
     PATH=/usr/ccs/bin:/usr/sfw/bin:$PATH
     export PATH
-    for c in /opt/solarisstudio12.3/bin /opt/solstudio12.2/bin /opt/sunstudio12.1/bin
+    for t in xterm xtermc
     do
-	for arch in -m64 -m32
+	export TERM=$t
+	for c in /opt/solarisstudio12.3/bin /opt/solstudio12.2/bin /opt/sunstudio12.1/bin
 	do
-	    for flags in xpg4 solaris
+	    for arch in -m64 -m32
 	    do
-		unset LDFLAGS CPPFLAGS
-		case $flags in
-		    xpg4)
-			case $arch in
-			    -m64)
-				LDFLAGS="-L/usr/xpg4/lib/${arch#-m} -R/usr/xpg4/lib/${arch#-m}"
-				CPPFLAGS="-I/usr/xpg4/include"
-				;;
-			    -m32)
-				LDFLAGS="-L/usr/xpg4/lib -R/usr/xpg4/lib"
-				CPPFLAGS="-I/usr/xpg4/include"
-				;;
-			esac
-			;;
-		    solaris)
-			:
-			;;
-		    ncurses)
-			CPPFLAGS="-I/usr/include/ncurses"
-			;;
-		esac
+		for flags in xpg4 solaris
+		do
+		    unset LDFLAGS CPPFLAGS
+		    case $flags in
+			xpg4)
+			    case $arch in
+				-m64)
+				    LDFLAGS="-L/usr/xpg4/lib/${arch#-m} -R/usr/xpg4/lib/${arch#-m}"
+				    CPPFLAGS="-I/usr/xpg4/include"
+				    ;;
+				-m32)
+				    LDFLAGS="-L/usr/xpg4/lib -R/usr/xpg4/lib"
+				    CPPFLAGS="-I/usr/xpg4/include"
+				    ;;
+			    esac
+			    ;;
+			solaris)
+			    :
+			    ;;
+			ncurses)
+			    CPPFLAGS="-I/usr/include/ncurses"
+			    ;;
+		    esac
 
-		export LDFLAGS
-		export CPPFLAGS
+		    export LDFLAGS
+		    export CPPFLAGS
 
-		gmake distclean
-		./configure CXX=${c}/CC CC=${c}/cc CFLAGS="-fast $arch" CXXFLAGS="-fast $arch"
-		had_error $? "Error in ${c}:$arch:$flags"
+		    gmake distclean
+		    ./configure CXX=${c}/CC CC=${c}/cc CFLAGS="-fast $arch" CXXFLAGS="-fast $arch"
+		    had_error $? "Error in ${c}:$arch:$flags"
 
-		gmake clean
-		gmake -j4
-		had_error $? "Error in ${c}:$arch:$flags"
+		    gmake -j4
+		    had_error $? "Error in ${c}:$arch:$flags"
 
-		gmake check
-		had_error $? "Error in ${c}:$arch:$flags"
+		    gmake check
+		    had_error $? "Error in ${c}:$arch:$flags"
+		done
 	    done
 	done
     done

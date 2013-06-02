@@ -312,7 +312,7 @@ CursWin::addstrx(const CurStr& str) {
     }
 
     set_color(str.color() );
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     // addnstr() will convert to wide char, we're only interested in
     // length here.
     size_t _mbslen = mbstowcs( (wchar_t*)0, str.c_str(),
@@ -346,7 +346,7 @@ CursWin::addlinex(const CurStr& str) {
 
     size_t mylen;
 
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     mylen = mbstowcs( (wchar_t*)0, str.c_str(), str.length() );
 #else
     mylen = tmp.length();
@@ -370,7 +370,7 @@ CursWin&
 CursWin::addnstr(const CurStr& str, int n) {
     set_color(str.color() );
 
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     wchar_t* wbuffer = new wchar_t[str.length() + 1];
     if (wbuffer == 0)
         throw EXCEPTIONS::SystemError(ENOMEM);
@@ -387,7 +387,8 @@ CursWin::addnstr(const CurStr& str, int n) {
                     str.position().y(),
                     str.position().x(),
                     wbuffer, n) == ERR &&
-        str.position().x() + static_cast<int16_t>(wcslen(wbuffer) ) <
+        (str.position().x() +
+         (n == -1 ? static_cast<int16_t>(wcslen(wbuffer) ) : n)  ) <
         __client_area.cols() ) {
         delete[] wbuffer;
         throw EXCEPTIONS::CursesException("mvwaddnwstr");
@@ -399,7 +400,8 @@ CursWin::addnstr(const CurStr& str, int n) {
                      str.position().y(),
                      str.position().x(),
                      str.c_str(), n) == ERR &&
-        str.position().x() + n < __client_area.x() )
+        (str.position().x() +
+         (n == -1 ? str.length() : n) ) < __client_area.cols() )
         throw EXCEPTIONS::CursesException("mvwaddnstr");
 #endif
 

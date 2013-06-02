@@ -12,15 +12,21 @@
 #include "config.h"
 #endif
 
-#ifdef ENABLE_NLS
-#include <cwchar>
+#if defined(HAVE_CURSES_ENHANCED) && \
+    defined(HAVE_LOCALE_H) && \
+    defined(HAVE_CWCHAR)
+# define USE_WCHAR 1
+# include <locale.h>
+# include <cwchar>
+#else
+# undef USE_WCHAR
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
 int __test_wget_wch(void*, std::wint_t* i);
 
 int

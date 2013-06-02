@@ -5,10 +5,6 @@
 #include "config.h"
 #endif
 
-#ifdef ENABLE_NLS
-#include <locale.h>
-#endif
-
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -47,7 +43,7 @@ alrm(YACURS::Event& _e) {
 
 int
 main() {
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     setlocale(LC_ALL, "");
 #endif
     try {

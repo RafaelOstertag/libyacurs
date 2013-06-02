@@ -5,10 +5,6 @@
 #include "config.h"
 #endif
 
-#ifdef ENABLE_NLS
-#include <locale.h>
-#endif
-
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -19,7 +15,7 @@
 #define KEY_SLEEP -1978
 
 // Used when preloading libtestpreload.so
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
 wint_t
 #else
 int
@@ -107,7 +103,12 @@ int
     '\t', '\n', 0
 };
 
-int __unlock_screen[] = {
+#ifdef USE_WCHAR
+wint_t
+#else
+int
+#endif
+__unlock_screen[] = {
     // Press any key to activate unlock dialog
     'a',
     // Enter Secret
@@ -116,10 +117,42 @@ int __unlock_screen[] = {
     0
 };
 
-int __quit_data[] = {
+#ifdef USE_WCHAR
+wint_t
+#else
+int
+#endif
+__quit_data[] = {
     KEY_LEFT, '\n', 0
 };
 
+#ifdef USE_WCHAR
+extern "C" int
+__test_wget_wch(void*, wint_t* i) {
+    static wint_t* ptr2 = __test_data;
+    static int rounds = 0;
+
+    usleep(100);
+
+    if (*ptr2 == 0) {
+        ptr2 = __test_data;
+    }
+
+    if (*ptr2 == KEY_SLEEP) {
+        if (rounds > 10) {
+            ptr2 = __quit_data;
+        } else {
+            sleep(7);
+            ptr2 = __unlock_screen;
+            rounds++;
+            return ERR;
+        }
+    }
+
+    *i=*ptr2++;
+    return OK;
+}
+#else
 extern "C" int
 __test_wgetch(void*) {
     static int* ptr2 = __test_data;
@@ -144,6 +177,7 @@ __test_wgetch(void*) {
 
     return *ptr2++;
 }
+#endif
 
 class Win1 : public YACURS::Window {
     private:

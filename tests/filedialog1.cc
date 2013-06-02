@@ -4,9 +4,6 @@
 #endif
 
 #include "gettext.h"
-#if ENABLE_NLS
-#include <locale.h>
-#endif
 
 #include <unistd.h>
 #include <cassert>
@@ -18,7 +15,12 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-int __test_data_1[] = {
+#ifdef USE_WCHAR
+wint_t
+#else
+int
+#endif
+__test_data_1[] = {
     // Open dialog
     '\n',
 
@@ -61,7 +63,12 @@ int __test_data_1[] = {
     0
 };
 
-int __dir_up_data[] = {
+#ifdef USE_WCHAR
+wint_t
+#else
+int
+#endif
+__dir_up_data[] = {
     KEY_DOWN, '\n',
     KEY_DOWN, '\n',
     KEY_DOWN, '\n',
@@ -75,12 +82,22 @@ int __dir_up_data[] = {
 };
 
 // Quit dialog
-int __test_data_end_dialog[] = {
+#ifdef USE_WCHAR
+wint_t
+#else
+int
+#endif
+__test_data_end_dialog[] = {
     '\t', '\t', '\t', '\t', '\n', 0
 };
 
 // Quit app
-int __test_data_end_app[] = {
+#ifdef USE_WCHAR
+wint_t
+#else
+int
+#endif
+__test_data_end_app[] = {
     '\t', '\t', '\n', 0
 };
 
@@ -95,6 +112,50 @@ select_item() {
     return tmp;
 }
 
+#ifdef USE_WCHAR
+extern "C" int
+__test_wget_wch(void*, wint_t* i) {
+    static wint_t* ptr1 = __test_data_1;
+    static wint_t* ptr_end_dialog = __test_data_end_dialog;
+    static wint_t* ptr_end_app = __test_data_end_app;
+    static int selection_index = 0;
+    static int selection_index2 = 0;
+
+    usleep(70000);
+
+    // Open dialog
+    if (*ptr1 != 0) {
+	*i=*ptr1++;
+	return OK;
+    }
+
+    if (selection1[selection_index] != 0) {
+        if (selection1[selection_index][selection_index2] != 0) {
+	    *i=selection1[selection_index][selection_index2++];
+            return OK;
+        } else {
+            if (selection1[selection_index + 1] != 0) {
+		*i = selection1[++selection_index][selection_index2 = 0];
+                return OK;
+	    }
+        }
+    }
+
+    if (*ptr_end_dialog != 0) {
+	*i = *ptr_end_dialog++;
+        return OK;
+    }
+
+    if (*ptr_end_app != 0) {
+	*i = *ptr_end_app++;
+        return OK;
+    }
+
+    abort();
+
+    return ERR;
+}
+#else
 extern "C" int
 __test_wgetch(void*) {
     static int* ptr1 = __test_data_1;
@@ -128,6 +189,7 @@ __test_wgetch(void*) {
 
     return 0;
 }
+#endif
 
 class MainWindow : public YACURS::Window {
     private:
@@ -334,8 +396,10 @@ main() {
     sleep(15);
 #endif
 
-#if ENABLE_NLS
+#ifdef USE_WCHAR
     setlocale(LC_ALL, "");
+#endif
+#ifdef ENABLE_NLS
     bindtextdomain("filedialog1", LOCALEDIR);
     textdomain("filedialog1");
 #endif

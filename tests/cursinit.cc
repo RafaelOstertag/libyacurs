@@ -5,10 +5,6 @@
 #include "config.h"
 #endif
 
-#ifdef ENABLE_NLS
-#include <locale.h>
-#endif
-
 #include <unistd.h>
 #include <iostream>
 
@@ -16,7 +12,7 @@
 
 int
 main() {
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     setlocale(LC_ALL, "");
 #endif
 

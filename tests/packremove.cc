@@ -4,10 +4,6 @@
 #include "config.h"
 #endif
 
-#ifdef ENABLE_NLS
-#include <locale.h>
-#endif
-
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -16,7 +12,7 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
 wint_t
 #else
 int
@@ -28,7 +24,7 @@ __test_data[] = {
     '\t', '\n', 0
 };
 
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
 wint_t
 #else
 int
@@ -39,8 +35,13 @@ __test_data2[] = {
 
 extern "C" int
 __test_wgetch(void*) {
+#ifdef USE_WCHAR
+    static wint_t round = 0;
+    static wint_t* ptr2 = __test_data;
+#else
     static int round = 0;
     static int* ptr2 = __test_data;
+#endif
 
     if (*ptr2 == 0 && round < 500) {
         ptr2 = __test_data;
@@ -217,7 +218,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     setlocale(LC_ALL, "");
 #endif
 

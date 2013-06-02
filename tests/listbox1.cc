@@ -27,17 +27,18 @@
 # endif // HAVE_SYS_TERMIOS_H
 #endif // HAVE_TERMIOS_H
 
-#ifdef ENABLE_NLS
-#include <locale.h>
-#endif
-
 #include <iostream>
 #include <sstream>
 
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-int __test_data[] = {
+#ifdef USE_WCHAR
+wint_t
+#else
+int
+#endif
+__test_data[] = {
     KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN,
     KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN,
     KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN, KEY_DOWN,
@@ -66,6 +67,22 @@ int __test_data[] = {
     'q', 0
 };
 
+#ifdef USE_WCHAR
+extern "C" int
+__test_wget_wch(void*, wint_t* i) {
+    static wint_t* ptr2 = __test_data;
+
+    usleep(70000);
+
+    if (*ptr2 == 0) {
+        abort();
+    }
+
+    *i=*ptr2++;
+
+    return OK;
+}
+#else
 extern "C" int
 __test_wgetch(void*) {
     static int* ptr2 = __test_data;
@@ -78,6 +95,7 @@ __test_wgetch(void*) {
 
     return *ptr2++;
 }
+#endif
 
 class HotKeyQuit : public YACURS::HotKey {
     public:
@@ -98,7 +116,7 @@ class HotKeyQuit : public YACURS::HotKey {
 
 int
 main() {
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     setlocale(LC_ALL, "");
 #endif
 
@@ -107,7 +125,11 @@ main() {
     for (int i = 0; i < 24; i++) {
         std::ostringstream n;
         n << i;
-        items.push_back("Long Name ListBox Item Number " + n.str() );
+#ifdef USE_WCHAR
+	items.push_back("Lôñg Nàm€ LïstBóx Ïtëm Nümbèr " + n.str() );
+#else
+	items.push_back("Long Name ListBox Item Number " + n.str() );
+#endif
     }
 
     try {

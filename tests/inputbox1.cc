@@ -4,10 +4,6 @@
 #include "config.h"
 #endif
 
-#ifdef ENABLE_NLS
-#include <locale.h>
-#endif
-
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -16,36 +12,84 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-int __test_data[] = {
+#ifdef USE_WCHAR
+#define C_L L'ł'
+#define C_O L'ø'
+#define C_R L'®'
+#define C_E L'€'
+#define C_M L'µ'
+#define C_I L'ı'
+#define C_P L'Þ'
+#define C_S L'ß'
+#define C_U L'↓'
+wint_t
+#else
+#define C_L 'l'
+#define C_O 'o'
+#define C_R 'r'
+#define C_E 'e'
+#define C_M 'm'
+#define C_I 'i'
+#define C_P 'p'
+#define C_S 's'
+#define C_U 'u'
+int
+#endif
+__test_data[] = {
     // Open dialog
     '\n',
     // enter text
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', 'o', 'l',
-    'o', 'r', ' ', 's', 'i', 't', ' ', 'a', 'm', 'e', 't', ',', ' ', 'c', 'o',
-    'n', 's', 'e', 'c', 't', 'e', 't', 'u', 'r', ' ', 'a', 'd', 'i', 'p', 'i',
-    's', 'c', 'i', 'n', 'g', ' ', 'e', 'l', 'i', 't', '.', ' ', 'P', 'h', 'a',
-    's', 'e', 'l', 'l', 'u', 's', ' ', 'v', 'e', 'n', 'e', 'n', 'a', 't', 'i',
-    's', '.',
+    C_L, C_O, C_R, C_E, C_M, ' ', C_I, C_P, C_S, C_U, C_M, ' ', 'd', C_O, C_L,
+    C_O, C_R, ' ', C_S, C_I, 't', ' ', 'a', C_M, C_E, 't', ',', ' ', 'c', C_O,
+    'n', C_S, C_E, 'c', 't', C_E, 't', C_U, C_R, ' ', 'a', 'd', C_I, C_P, C_I,
+    C_S, 'c', C_I, 'n', 'g', ' ', C_E, C_L, C_I, 't', '.', ' ', 'P', 'h', 'a',
+    C_S, C_E, C_L, C_L, C_U, C_S, ' ', 'v', C_E, 'n', C_E, 'n', 'a', 't', C_I,
+    C_S, '.',
     // Ok, dialog
     '\t', '\n',
     // Open Dialog
     '\n',
     // enter text
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', 'o', 'l',
-    'o', 'r', ' ', 's', 'i', 't', ' ', 'a', 'm', 'e', 't', ',', ' ', 'c', 'o',
-    'n', 's', 'e', 'c', 't', 'e', 't', 'u', 'r', ' ', 'a', 'd', 'i', 'p', 'i',
-    's', 'c', 'i', 'n', 'g', ' ', 'e', 'l', 'i', 't', '.', ' ', 'P', 'h', 'a',
-    's', 'e', 'l', 'l', 'u', 's', ' ', 'v', 'e', 'n', 'e', 'n', 'a', 't', 'i',
-    's', '.',
+    C_L, C_O, C_R, C_E, C_M, ' ', C_I, C_P, C_S, C_U, C_M, ' ', 'd', C_O, C_L,
+    C_O, C_R, ' ', C_S, C_I, 't', ' ', 'a', C_M, C_E, 't', ',', ' ', 'c', C_O,
+    'n', C_S, C_E, 'c', 't', C_E, 't', C_U, C_R, ' ', 'a', 'd', C_I, C_P, C_I,
+    C_S, 'c', C_I, 'n', 'g', ' ', C_E, C_L, C_I, 't', '.', ' ', 'P', 'h', 'a',
+    C_S, C_E, C_L, C_L, C_U, C_S, ' ', 'v', C_E, 'n', C_E, 'n', 'a', 't', C_I,
+    C_S, '.',
     // cancel dialog
     '\t', '\t', '\n',
     // Quit app
     '\t', '\n', 0
 };
+#undef C_L
+#undef C_O
+#undef C_R
+#undef C_E
+#undef C_M
+#undef C_I
+#undef C_P
+#undef C_S
+#undef C_U
 
+#ifdef USE_WCHAR
+extern "C" int
+__test_wget_wch(void*, wint_t* i) {
+    static wint_t* ptr2 = __test_data;
+
+    usleep(20000);
+
+    if (*ptr2 == 0) {
+        abort();
+    }
+
+    *i=*ptr2++;
+
+    return OK;
+}
+#else
 extern "C" int
 __test_wgetch(void*) {
-    static int* ptr2 = __test_data;
+     static int* ptr2 = __test_data;
 
     usleep(70000);
 
@@ -55,6 +99,7 @@ __test_wgetch(void*) {
 
     return *ptr2++;
 }
+#endif
 
 class MainWindow : public YACURS::Window {
     private:
@@ -163,7 +208,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     setlocale(LC_ALL, "");
 #endif
 

@@ -5,10 +5,6 @@
 #include "config.h"
 #endif
 
-#ifdef ENABLE_NLS
-#include <locale.h>
-#endif
-
 #include <unistd.h>
 #include <iostream>
 #include <cstdlib>
@@ -16,13 +12,29 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
+
+#ifdef USE_WCHAR
+wint_t __test_str[] = { 
+    L'H', L'e', L'l', L'l', L'o', L',', L' ', L'W', L'o', L'r', L'l', L'd', L'!', L'\0'
+};
+
+extern "C" int
+__test_wget_wch(void*, wint_t* i) {
+    static wint_t* ptr = __test_str;
+
+    *i=*ptr++;
+    return OK;
+}
+#else
 char __test_str[] = "Hello, World!";
+
 extern "C" int
 __test_wgetch(void*) {
     static char* ptr = __test_str;
 
     return *ptr++;
 }
+#endif
 
 class Handler {
     private:
@@ -70,12 +82,31 @@ class MyHandler : public Handler {
         void handler(YACURS::Event& e) {
             Handler::handler(e);
 
-            if (typeid (e) != typeid (YACURS::EventEx<int>) ) std::abort();
+#ifdef USE_WCHAR
+	    if (typeid (e) != typeid (YACURS::EventEx<wint_t>) ) std::abort();
+	    YACURS::EventEx<wint_t>& tmp =
+		dynamic_cast<YACURS::EventEx<wint_t>&>(e);
 
+	    char *tmp_str = new char[MB_CUR_MAX];
+	    int retval=wctomb(tmp_str, tmp.data());
+	    if (retval==-1) {
+		delete[] tmp_str;
+		std::cerr << "Unable to convert wchar to MB char" << std::endl;
+		abort();
+	    }
+	    tmp_str[retval]='\0';
+
+	    _str+=tmp_str;
+
+	    delete[] tmp_str;
+#else
+            if (typeid (e) != typeid (YACURS::EventEx<int>) ) std::abort();
             YACURS::EventEx<int>& tmp =
                 dynamic_cast<YACURS::EventEx<int>&>(e);
+
             char c = static_cast<char>(tmp.data() );
             _str.push_back(c);
+#endif
 
             if (_str == "Hello, World!")
                 YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT) );
@@ -84,6 +115,10 @@ class MyHandler : public Handler {
 
 int
 main() {
+#ifdef USE_WCHAR
+    setlocale(LC_ALL, "");
+#endif
+
     try {
         MyHandler h;
         YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<

@@ -6,10 +6,6 @@
 #include "config.h"
 #endif
 
-#ifdef ENABLE_NLS
-#include <locale.h>
-#endif
-
 #include "unistd.h"
 
 #include <iostream>
@@ -318,7 +314,7 @@ main() {
     std::cout << getpid() << std::endl;
     sleep(15);
 #endif
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     setlocale(LC_ALL, "");
 #endif
 

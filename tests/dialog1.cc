@@ -5,10 +5,6 @@
 #include "config.h"
 #endif
 
-#ifdef ENABLE_NLS
-#include <locale.h>
-#endif
-
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -17,7 +13,12 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-int __test_data[] = {
+#ifdef USE_WCHAR
+wint_t
+#else
+int
+#endif
+__test_data[] = {
     // Open dialog, and cancel
     '\n', '\n',
     // Open Dialog, and Ok
@@ -26,6 +27,22 @@ int __test_data[] = {
     '\t', '\n', 0
 };
 
+#ifdef USE_WCHAR
+extern "C" int
+__test_wget_wch(void*, wint_t* i) {
+    static wint_t* ptr2 = __test_data;
+
+    usleep(70000);
+
+    if (*ptr2 == 0) {
+        abort();
+    }
+
+    *i=*ptr2++;
+
+    return OK;
+}
+#else
 extern "C" int
 __test_wgetch(void*) {
     static int* ptr2 = __test_data;
@@ -38,6 +55,7 @@ __test_wgetch(void*) {
 
     return *ptr2++;
 }
+#endif
 
 class MainWindow : public YACURS::Window {
     private:
@@ -55,7 +73,11 @@ class MainWindow : public YACURS::Window {
                 dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
             if (dialog1 != 0 && evt.data() == dialog1) {
+#ifdef USE_WCHAR
+		YACURS::Curses::statusbar()->push_msg("Dialog 1 clösed");
+#else
                 YACURS::Curses::statusbar()->push_msg("Dialog 1 closed");
+#endif
 
                 if (dialog1->dialog_state() == YACURS::Dialog::DIALOG_OK)
                     label1->label("DIALOG_OK");
@@ -146,7 +168,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     setlocale(LC_ALL, "");
 #endif
 

@@ -27,19 +27,17 @@
 # endif // HAVE_SYS_TERMIOS_H
 #endif // HAVE_TERMIOS_H
 
-#ifdef ENABLE_NLS
-#include <locale.h>
-#endif
-
 #include <iostream>
 #include <sstream>
 
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
+#define C_E L'€'
 wint_t
 #else
+#define C_E 'e'
 int
 #endif
  __test_data[] = {
@@ -47,157 +45,157 @@ int
     '\t',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '4',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '4',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '5',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '5',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '6',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '6',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '7',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '7',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '8',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '8',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '9',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '9',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '0',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '0',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '1',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '2',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '2',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '3',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '3',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '4',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '4',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '5',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '5',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '6',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '6',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '7',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '7',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '8',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '8',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '9',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '9',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '0',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '0',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '1',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '2',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '2',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '3',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '3',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '4',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '4',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '5',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '5',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '6',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '6',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '7',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '7',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '8',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '8',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '9',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '9',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '0',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '0',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '1',
     // Ok dialog
     '\t', '\n',
 
@@ -225,157 +223,157 @@ int
 
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '4',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '4',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '5',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '5',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '6',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '6',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '7',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '7',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '8',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '8',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '9',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '9',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '0',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '0',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '1',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '2',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '2',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '3',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '3',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '4',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '4',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '5',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '5',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '6',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '6',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '7',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '7',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '8',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '8',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '9',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '9',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '0',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '0',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '1',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '2',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '2',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '3',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '3',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '4',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '4',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '5',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '5',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '6',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '6',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '7',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '7',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '8',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '8',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '9',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '9',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '0',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '0',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '1',
     // Ok dialog
     '\t', '\n',
 
@@ -404,157 +402,157 @@ int
 
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '4',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '4',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '5',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '5',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '6',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '6',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '7',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '7',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '8',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '8',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '9',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '9',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '0',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '0',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '1',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '2',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '2',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '3',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '3',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '4',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '4',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '5',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '5',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '6',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '6',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '7',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '7',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '8',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '8',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '9',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '9',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '0',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '0',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '1',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '2',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '2',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '3',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '3',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '4',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '4',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '5',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '5',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '6',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '6',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '7',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '7',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '8',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '8',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '9',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '9',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '0',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '0',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '1',
     // Ok dialog
     '\t', '\n',
 
@@ -586,157 +584,157 @@ int
 
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '4',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '4',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '5',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '5',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '6',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '6',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '7',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '7',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '8',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '8',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '9',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '9',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '0',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '0',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '1',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '2',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '2',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '3',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '3',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '4',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '4',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '5',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '5',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '6',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '6',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '7',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '7',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '8',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '8',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '9',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '1', '9',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '0',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '0',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '1',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '2',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '2',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '3',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '3',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '4',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '4',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '5',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '5',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '6',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '6',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '7',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '7',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '8',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '8',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '9',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '2', '9',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '0',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '0',
     // Ok dialog
     '\t', '\n',
     // Press Add button
     '\n',
-    'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '1',
+    'L', 'o', 'r', C_E, 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', '3', '1',
     // Ok dialog
     '\t', '\n',
 
@@ -765,13 +763,37 @@ int
     '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n',
     '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n',
     '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n',
+    
+    // Select preload list
+    '\t', '\t', '\t', '\n',
+
+    // Select sort order
+    KEY_UP, '\n', '\n', '\n', '\n', 
 
     // Quit app
-    '\t', '\t', '\t', '\n', 0
+    '\t', '\t', '\n', 0
 };
+#undef C_E
 
+#ifdef USE_WCHAR
+extern "C" int
+__test_wget_wch(void*, wint_t* i) {
+    static wint_t* ptr2 = __test_data;
+
+    usleep(10000);
+
+    if (*ptr2 == L'\0') {
+        abort();
+    }
+
+    *i=*ptr2++;
+
+    return OK;
+}
+#else
 extern "C" int
 __test_wgetch(void*) {
+
     static int* ptr2 = __test_data;
 
     usleep(10000);
@@ -782,6 +804,7 @@ __test_wgetch(void*) {
 
     return *ptr2++;
 }
+#endif
 
 class MainWindow : public YACURS::Window {
     private:
@@ -966,7 +989,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     setlocale(LC_ALL, "");
 #endif
 

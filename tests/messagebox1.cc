@@ -5,10 +5,6 @@
 #include "config.h"
 #endif
 
-#ifdef ENABLE_NLS
-#include <locale.h>
-#endif
-
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -17,7 +13,7 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
 wint_t
 #else
 int
@@ -31,6 +27,22 @@ __test_data[] = {
     '\t', '\n', 0
 };
 
+#ifdef USE_WCHAR
+extern "C" int
+__test_wget_wch(void*, wint_t* i) {
+    static wint_t* ptr2 = __test_data;
+
+    usleep(70000);
+
+    if (*ptr2 == 0) {
+        abort();
+    }
+
+    *i=*ptr2++;
+
+    return OK;
+}
+#else
 extern "C" int
 __test_wgetch(void*) {
     static int* ptr2 = __test_data;
@@ -43,6 +55,7 @@ __test_wgetch(void*) {
 
     return *ptr2++;
 }
+#endif
 
 class MainWindow : public YACURS::Window {
     private:
@@ -80,8 +93,13 @@ class MainWindow : public YACURS::Window {
             if (e.data() == button1) {
                 assert(messagebox1 == 0);
 
+#ifdef USE_WCHAR
+                messagebox1 = new YACURS::MessageBox("«Test Dialog»",
+                                                     "“This is the message”");
+#else
                 messagebox1 = new YACURS::MessageBox("Test Dialog",
                                                      "This is the message");
+#endif
                 messagebox1->show();
                 return;
             }
@@ -95,8 +113,13 @@ class MainWindow : public YACURS::Window {
     public:
         MainWindow() : YACURS::Window(YACURS::Margin(1, 0, 1,
                                                      0) ), messagebox1(0) {
+#ifdef USE_WCHAR
+            button1 = new YACURS::Button("«New Window»");
+            button2 = new YACURS::Button("«Quit»");
+#else
             button1 = new YACURS::Button("New Window");
             button2 = new YACURS::Button("Quit");
+#endif
             vpack1 = new YACURS::VPack;
             hpack1 = new YACURS::HPack;
             label1 = new YACURS::Label("dialog state");
@@ -150,6 +173,10 @@ main() {
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);
+#endif
+
+#ifdef USE_WCHAR
+    setlocale(LC_ALL,"");
 #endif
 
     try {

@@ -5,10 +5,6 @@
 #include "config.h"
 #endif
 
-#ifdef ENABLE_NLS
-#include <locale.h>
-#endif
-
 #include <unistd.h>
 #include <cassert>
 #include <iostream>
@@ -17,11 +13,20 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-int __test_data[] = {
+#ifdef USE_WCHAR
+wint_t
+#else
+int
+#endif
+__test_data[] = {
     // Press first button
     '\n',
     // enter text
+#ifdef USE_WCHAR
+    'L', 'o', 'r', L'€', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', L'ô', 'l',
+#else
     'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', 'o', 'l',
+#endif
     'o', 'r', ' ', 's', 'i', 't', ' ', 'a', 'm', 'e', 't', ',', ' ', 'c', 'o',
     'n', 's', 'e', 'c', 't', 'e', 't', 'u', 'r', ' ', 'a', 'd', 'i', 'p', 'i',
     's', 'c', 'i', 'n', 'g', ' ', 'e', 'l', 'i', 't', '.', ' ', 'P', 'h', 'a',
@@ -93,6 +98,22 @@ int __test_data[] = {
     '\t', '\n', 0
 };
 
+#ifdef USE_WCHAR
+extern "C" int
+__test_wget_wch(void*, wint_t* i) {
+    static wint_t* ptr2 = __test_data;
+
+    usleep(20000);
+
+    if (*ptr2 == 0) {
+        abort();
+    }
+
+    *i=*ptr2++;
+
+    return OK;
+}
+#else
 extern "C" int
 __test_wgetch(void*) {
     static int* ptr2 = __test_data;
@@ -105,6 +126,7 @@ __test_wgetch(void*) {
 
     return *ptr2++;
 }
+#endif
 
 class Win1 : public YACURS::Window {
     private:
@@ -422,7 +444,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     setlocale(LC_ALL, "");
 #endif
 

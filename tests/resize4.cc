@@ -5,10 +5,6 @@
 #include "config.h"
 #endif
 
-#ifdef ENABLE_NLS
-#include <locale.h>
-#endif
-
 #include <unistd.h>
 
 #ifdef HAVE_SYS_IOCTL_H
@@ -37,10 +33,18 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
+#ifdef USE_WCHAR
+extern "C" int
+__test_wget_wch(void*, wint_t* i) {
+    *i='q';
+    return OK;
+}
+#else
 extern "C" int
 __test_wgetch(void*) {
     return 'q';
 }
+#endif
 
 class MyWindow : public YACURS::Window {
     protected:
@@ -99,7 +103,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef ENABLE_NLS
+#ifdef USE_WCHAR
     setlocale(LC_ALL, "");
 #endif
 

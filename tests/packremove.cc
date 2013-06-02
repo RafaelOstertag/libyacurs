@@ -33,15 +33,35 @@ __test_data2[] = {
     '\n', 0
 };
 
+#ifdef USE_WCHAR
+extern "C" int
+__test_wget_wch(void*, wint_t* i) {
+    static int round = 0;
+    static wint_t* ptr2 = __test_data;
+
+    if (*ptr2 == 0 && round < 500) {
+        ptr2 = __test_data;
+        round++;
+    }
+
+    if (round >= 500 && *ptr2 == 0) {
+        ptr2 = __test_data2;
+    }
+
+    usleep(100);
+
+    if (*ptr2 == 0) {
+        abort();
+    }
+
+    *i=*ptr2++;
+    return OK;
+}
+#else
 extern "C" int
 __test_wgetch(void*) {
-#ifdef USE_WCHAR
-    static wint_t round = 0;
-    static wint_t* ptr2 = __test_data;
-#else
     static int round = 0;
     static int* ptr2 = __test_data;
-#endif
 
     if (*ptr2 == 0 && round < 500) {
         ptr2 = __test_data;
@@ -60,6 +80,7 @@ __test_wgetch(void*) {
 
     return *ptr2++;
 }
+#endif
 
 class MainWindow : public YACURS::Window {
     private:

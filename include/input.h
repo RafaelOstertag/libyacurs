@@ -27,6 +27,9 @@
 #include <cassert>
 #include <cstdlib>
 #include <cerrno>
+#ifdef USE_WCHAR
+#include <cwctype>
+#endif
 
 #include "input.h"
 #include "eventqueue.h"
@@ -333,6 +336,11 @@ namespace YACURS {
 
         default: // regular key presses
             if (__read_only) return;
+#ifdef USE_WCHAR
+	    if (!iswprint(ekey.data())) return;
+#else
+	    if (!isprint(ekey.data())) return;
+#endif
             __buffer.insert(ekey.data() );
             break;
         }

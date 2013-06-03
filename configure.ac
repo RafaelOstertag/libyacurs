@@ -59,7 +59,7 @@ AM_GNU_GETTEXT([external])
 
 AC_CHECK_HEADERS([locale.h stropts.h signal.h sys/termios.h termios.h unistd.h stdint.h sys/types.h sys/ioctl.h])
 
-AC_CHECK_HEADERS([cwchar])
+AC_CHECK_HEADERS([cwchar cwctype])
 
 AX_CXX_HEADER_STDCXX_98
 AS_IF([test x$ax_cv_cxx_stdcxx_98 = xno],

@@ -45,6 +45,9 @@
 /* Define to 1 if you have the <cwchar> header file. */
 #undef HAVE_CWCHAR
 
+/* Define to 1 if you have the <cwctype> header file. */
+#undef HAVE_CWCTYPE
+
 /* Define to 1 if you have the <locale.h> header file. */
 #undef HAVE_LOCALE_H
 

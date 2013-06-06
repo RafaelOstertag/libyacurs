@@ -12,7 +12,9 @@
 
 #include "yacurs.h"
 
-#define KEY_SLEEP -1978
+enum {
+    KEY_SLEEP=1978
+};
 
 // Used when preloading libtestpreload.so
 #ifdef USE_WCHAR

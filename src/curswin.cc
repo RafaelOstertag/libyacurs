@@ -401,7 +401,7 @@ CursWin::addnstr(const CurStr& str, int n) {
                      str.position().x(),
                      str.c_str(), n) == ERR &&
         (str.position().x() +
-         (n == -1 ? str.length() : n) ) < __client_area.cols() )
+         (n == -1 ? static_cast<int16_t>(str.length()) : n) ) < __client_area.cols() )
         throw EXCEPTIONS::CursesException("mvwaddnstr");
 #endif
 

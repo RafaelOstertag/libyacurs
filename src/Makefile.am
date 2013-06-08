@@ -4,9 +4,9 @@ lib_LTLIBRARIES = libyacurs.la
 
 libyacurs_la_LDFLAGS = -version-info 0 $(CURSES_LIB) $(LTLIBINTL)
 
-libyacurs_la_CPPFLAGS = -DPACKAGE=\"$(PACKAGE)\"			\
--DLOCALEDIR=\"$(localedir)\" -I$(top_srcdir)/include $(ENABLEDEBUG)	\
-$(EVTQDEBUG)
+libyacurs_la_CPPFLAGS = -D_XOPEN_SOURCE_EXTENDED=1	\
+-DPACKAGE=\"$(PACKAGE)\" -DLOCALEDIR=\"$(localedir)\"	\
+-I$(top_srcdir)/include $(ENABLEDEBUG) $(EVTQDEBUG)
 
 libyacurs_la_SOURCES = sigaction.cc coordinates.cc size.cc margin.cc	\
  area.cc curstr.cc curswin.cc cursorbuf.cc event.cc eventconnector.cc	\

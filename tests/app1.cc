@@ -207,7 +207,11 @@ class ListBoxWin : public YACURS::Window {
                 for (int i = 0; i < 120; i++) {
                     std::ostringstream n;
                     n << i;
+#ifdef USE_WCHAR
+		    listbox->add("Loñg Nam€ Listßox Item Number " + n.str() );
+#else
                     listbox->add("Long Name ListBox Item Number " + n.str() );
+#endif
                 }
 
                 return;
@@ -280,7 +284,11 @@ class BoxDialog : public YACURS::Dialog {
             for (int i = 0; i < 10; i++) {
                 std::ostringstream _i;
                 _i << i;
+#ifdef USE_WCHAR
+                items.push_back("Ch€ck Box İtem " + _i.str() );
+#else
                 items.push_back("Check Box Item " + _i.str() );
+#endif
             }
 
             checkbox = new YACURS::CheckBox("", items);
@@ -290,7 +298,11 @@ class BoxDialog : public YACURS::Dialog {
             for (int i = 0; i < 10; i++) {
                 std::ostringstream _i;
                 _i << i;
-                items.push_back("Radio Box Item " + _i.str() );
+#ifdef USE_WCHAR
+                items.push_back("Rádio Box It€m " + _i.str() );
+#else
+		items.push_back("Radio Box Item " + _i.str() );
+#endif
             }
 
             radiobox = new YACURS::RadioBox("", items);
@@ -384,10 +396,17 @@ class MainWindow : public YACURS::Window {
         MainWindow() : YACURS::Window(YACURS::Margin(1, 0, 1,
                                                      0) ), win1(0), lbwin(0),
             boxdialog(0) {
+#ifdef USE_WCHAR
+            button1 = new YACURS::Button("«New Window»");
+            button2 = new YACURS::Button("«Quit»");
+            button3 = new YACURS::Button("«List Box Win»");
+            button4 = new YACURS::Button("«Box Dialog»");
+#else
             button1 = new YACURS::Button("New Window");
             button2 = new YACURS::Button("Quit");
             button3 = new YACURS::Button("List Box Win");
             button4 = new YACURS::Button("Box Dialog");
+#endif
             hpack1 = new YACURS::HPack();
             hpack1->add_back(button1);
             hpack1->add_back(button3);
@@ -445,7 +464,7 @@ main() {
 #endif
 
 #ifdef USE_WCHAR
-    setlocale(LC_ALL, "");
+    if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
     try {

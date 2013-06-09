@@ -101,7 +101,7 @@ class HotKeyQuit : public YACURS::HotKey {
 int
 main() {
 #ifdef USE_WCHAR
-    setlocale(LC_ALL, "");
+    if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
     try {

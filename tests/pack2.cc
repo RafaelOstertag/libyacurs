@@ -25,7 +25,7 @@ main() {
 #endif
 
 #ifdef USE_WCHAR
-    setlocale(LC_ALL, "");
+    if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
     try {
@@ -42,18 +42,32 @@ main() {
         YACURS::HPack* hpack = new YACURS::HPack;
 
         YACURS::VPack* vpack1 = new YACURS::VPack;
-        YACURS::VPack* vpack2 = new YACURS::VPack;
+	YACURS::VPack* vpack2 = new YACURS::VPack;
 
         hpack->add_back(vpack1);
         hpack->add_back(vpack2);
 
+#ifdef USE_WCHAR
+        YACURS::Label* label1 = new YACURS::Label("¡Test label¿");
+#else
         YACURS::Label* label1 = new YACURS::Label("Test label");
+#endif
         vpack1->add_front(label1);
+
+#ifdef USE_WCHAR
+        YACURS::Label* label2 = new YACURS::Label("Test label²");
+#else
         YACURS::Label* label2 = new YACURS::Label("Test label2");
+#endif
         vpack1->add_back(label2);
 
+#ifdef USE_WCHAR
+        YACURS::Label* label3 = new YACURS::Label("Test label³");
+        YACURS::Label* label4 = new YACURS::Label("Test label⁴");
+#else
         YACURS::Label* label3 = new YACURS::Label("Test label3");
         YACURS::Label* label4 = new YACURS::Label("Test label4");
+#endif
         vpack2->add_back(label3);
         vpack2->add_back(label4);
 

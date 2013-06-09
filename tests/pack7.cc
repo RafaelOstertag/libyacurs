@@ -23,23 +23,39 @@ alrm(YACURS::Event& _e) {
 
     switch (i++) {
     case 0:
-        label1->label("Big New Label1");
-        alarm(1);
+#ifdef USE_WCHAR
+        label1->label("B ï g   N € w    L a b € l ¹");
+#else
+        label1->label("B i g   N e w    L a b e l 1");
+#endif
+        alarm(2);
         break;
 
     case 1:
+#ifdef USE_WCHAR
+        label1->label("Small lab€l¹");
+#else
         label1->label("Small label1");
-        alarm(1);
+#endif
+        alarm(2);
         break;
 
     case 2:
-        label1->label("This should resize");
-        alarm(1);
+#ifdef USE_WCHAR
+        label1->label("T h i s   s h o u l d   r € s i z €");
+#else
+        label1->label("T h i s   s h o u l d   r e s i z e");
+#endif
+        alarm(2);
         break;
 
     case 3:
-        label3->label("Huge Big Label 3");
-        alarm(1);
+#ifdef USE_WCHAR
+        label3->label("H  u  g  €   B  i  g   L  a  b  €  l  ³");
+#else
+        label3->label("H  u  g  e   B  i  g   L  a  b  e  l   3");
+#endif
+        alarm(2);
         break;
 
     default:
@@ -56,7 +72,7 @@ main() {
 #endif
 
 #ifdef USE_WCHAR
-    setlocale(LC_ALL, "");
+    if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
     try {
@@ -79,6 +95,24 @@ main() {
         YACURS::VPack* vpack2_1 = new YACURS::VPack();
         YACURS::VPack* vpack2_2 = new YACURS::VPack();
 
+#ifdef USE_WCHAR
+        label1 = new YACURS::Label("T€st lab€l");
+        YACURS::Label* label2 = new YACURS::Label("T€st lab€l²");
+        label3 = new YACURS::Label("T€st lab€l³");
+        YACURS::Label* label4 = new YACURS::Label("T€st lab€l⁴");
+        YACURS::Label* label5 = new YACURS::Label("Lab€l ⁵");
+        YACURS::Label* label6 = new YACURS::Label("Lab€l ⁶");
+        YACURS::Label* label7 = new YACURS::Label("Lab€l ⁷");
+        YACURS::Label* label8 = new YACURS::Label("Lab€l ⁸");
+        YACURS::Label* label9 = new YACURS::Label("Lab€l ⁹");
+        YACURS::Label* label10 = new YACURS::Label("Lab€l ¹⁰");
+        YACURS::Label* label11 = new YACURS::Label("Lab€l ¹¹");
+        YACURS::Label* label12 = new YACURS::Label("Lab€l ¹²");
+        YACURS::Label* label13 = new YACURS::Label("Lab€l ¹³");
+        YACURS::Label* label14 = new YACURS::Label("Lab€l ¹⁴");
+        YACURS::Label* label15 = new YACURS::Label("Lab€l ¹⁵");
+        YACURS::Label* label16 = new YACURS::Label("Lab€l ¹⁶");
+#else
         label1 = new YACURS::Label("Test label");
         YACURS::Label* label2 = new YACURS::Label("Test label2");
         label3 = new YACURS::Label("Test label3");
@@ -95,6 +129,7 @@ main() {
         YACURS::Label* label14 = new YACURS::Label("Label 14");
         YACURS::Label* label15 = new YACURS::Label("Label 15");
         YACURS::Label* label16 = new YACURS::Label("Label 16");
+#endif
 
         vpack->add_front(hpack);
         vpack->add_front(hpack1);
@@ -141,10 +176,17 @@ main() {
         hpack2->add_back(label15);
         hpack2->add_back(label16);
 
+#ifdef USE_WCHAR
+        label1->label("N€w T€st Lab€l");
+        label2->label("N€w T€st Lab€l²");
+        label3->label("N€w T€st Lab€l³");
+        label4->label("N€w T€st Lab€l⁴");
+#else
         label1->label("New Test Label");
         label2->label("New Test Label2");
         label3->label("New Test Label3");
         label4->label("New Test Label4");
+#endif
 
         w1->widget(vpack);
 

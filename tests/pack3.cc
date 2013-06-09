@@ -23,22 +23,38 @@ alrm(YACURS::Event& _e) {
 
     switch (i++) {
     case 0:
-        label1->label("Big New Label1");
+#ifdef USE_WCHAR
+        label1->label("B ï g   N € w    L a b € l ¹");
+#else
+        label1->label("B i g   N e w    L a b e l 1");
+#endif
         alarm(2);
         break;
 
     case 1:
+#ifdef USE_WCHAR
+        label1->label("Small lab€l¹");
+#else
         label1->label("Small label1");
+#endif
         alarm(2);
         break;
 
     case 2:
-        label1->label("This should resize");
+#ifdef USE_WCHAR
+        label1->label("T h i s   s h o u l d   r € s i z €");
+#else
+        label1->label("T h i s   s h o u l d   r e s i z e");
+#endif
         alarm(2);
         break;
 
     case 3:
-        label3->label("Huge Big Label 3");
+#ifdef USE_WCHAR
+        label3->label("H  u  g  €    B  i  g    L  a  b  €  l  ³");
+#else
+        label3->label("H  u  g  e     B  i  g     L  a  b  e  l   3");
+#endif
         alarm(2);
         break;
 
@@ -56,7 +72,7 @@ main() {
 #endif
 
 #ifdef USE_WCHAR
-    setlocale(LC_ALL, "");
+    if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
     try {
@@ -78,20 +94,42 @@ main() {
         hpack->add_back(vpack1);
         hpack->add_back(vpack2);
 
+#ifdef USE_WCHAR
+        label1 = new YACURS::Label("T€st lab€ļ");
+#else
         label1 = new YACURS::Label("Test label");
+#endif
+
         vpack1->add_front(label1);
+
+#ifdef USE_WCHAR
+        YACURS::Label* label2 = new YACURS::Label("T€st lab€ļ²");
+#else
         YACURS::Label* label2 = new YACURS::Label("Test label2");
+#endif
         vpack1->add_back(label2);
 
+#ifdef USE_WCHAR
+        label3 = new YACURS::Label("T€st lab€ļ³");
+        YACURS::Label* label4 = new YACURS::Label("T€st lab€ļ⁴");
+#else
         label3 = new YACURS::Label("Test label3");
         YACURS::Label* label4 = new YACURS::Label("Test label4");
+#endif
         vpack2->add_back(label3);
         vpack2->add_back(label4);
 
+#ifdef USE_WCHAR
+        label1->label("N€w T€st Lab€l");
+        label2->label("N€w T€st Lab€l²");
+        label3->label("N€w T€st Lab€l³");
+        label4->label("N€w T€st Lab€l⁴");
+#else
         label1->label("New Test Label");
         label2->label("New Test Label2");
         label3->label("New Test Label3");
         label4->label("New Test Label4");
+#endif
 
         w1->widget(hpack);
 

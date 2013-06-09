@@ -53,14 +53,19 @@ main() {
 #endif
 
 #ifdef USE_WCHAR
-    setlocale(LC_ALL, "");
+    if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
     try {
         YACURS::Curses::init();
 
+#ifdef USE_WCHAR
+	title = new YACURS::TitleBar(YACURS::TitleBar::POS_TOP,
+				     "Basıc ¹");
+#else
         title = new YACURS::TitleBar(YACURS::TitleBar::POS_TOP,
                                      "Basic 1");
+#endif
         YACURS::Curses::title(title);
 
         YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0) );

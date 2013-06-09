@@ -19,11 +19,19 @@ alrm(YACURS::Event& _e) {
 
     switch (calls) {
     case 0:
+#ifdef USE_WCHAR
+	YACURS::Curses::statusbar()->push_msg("Status ¹");
+#else
         YACURS::Curses::statusbar()->push_msg("Status 1");
+#endif
         break;
 
     case 1:
+#ifdef USE_WCHAR
+	YACURS::Curses::statusbar()->push_msg("Status ²");
+#else
         YACURS::Curses::statusbar()->push_msg("Status 2");
+#endif
         break;
 
     case 2:
@@ -44,14 +52,20 @@ alrm(YACURS::Event& _e) {
 int
 main() {
 #ifdef USE_WCHAR
-    setlocale(LC_ALL, "");
+    if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
     try {
         YACURS::Curses::init();
 
+#ifdef USE_WCHAR
+        YACURS::TitleBar* title = new YACURS::TitleBar(
+            YACURS::TitleBar::POS_TOP,
+            "Basic ²");
+#else
         YACURS::TitleBar* title = new YACURS::TitleBar(
             YACURS::TitleBar::POS_TOP,
             "Basic 2");
+#endif
         YACURS::Curses::title(title);
 
         YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 1, 0) );

@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef EVENTCONNECTOR_H
-#define EVENTCONNECTOR_H
+#define EVENTCONNECTOR_H 1
 
 #include <stdint.h>
 

@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef YACURS_H
-#define YACURS_H
+#define YACURS_H 1
 
 #include "libyacurscfg.h"
 #include "curswin.h"

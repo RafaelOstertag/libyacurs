@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef STATUSBAR_H
-#define STATUSBAR_H
+#define STATUSBAR_H 1
 
 #include <stack>
 

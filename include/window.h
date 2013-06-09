@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef WINDOW_H
-#define WINDOW_H
+#define WINDOW_H 1
 
 #include <map>
 #include <string>

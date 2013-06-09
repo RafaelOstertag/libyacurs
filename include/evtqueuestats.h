@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef EVTQUEUESTATS_H
-#define EVTQUEUESTATS_H
+#define EVTQUEUESTATS_H 1
 
 #include <stdint.h>
 

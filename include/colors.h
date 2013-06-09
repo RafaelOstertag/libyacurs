@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef COLORS_H
-#define COLORS_H
+#define COLORS_H 1
 
 #include <vector>
 #include <string>

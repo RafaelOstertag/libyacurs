@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef WIDGETBASE_H
-#define WIDGETBASE_H
+#define WIDGETBASE_H 1
 
 #include <string>
 

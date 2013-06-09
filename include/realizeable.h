@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef REALIZEABLE_H
-#define REALIZEABLE_H
+#define REALIZEABLE_H 1
 
 #include <string>
 

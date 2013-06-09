@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef WIDGET_H
-#define WIDGET_H
+#define WIDGET_H 1
 
 #include <cstdlib>
 #include <string>

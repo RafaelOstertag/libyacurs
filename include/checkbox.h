@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef CHECKBOX_H
-#define CHECKBOX_H
+#define CHECKBOX_H 1
 
 #include <string>
 #include <vector>

@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef EVENTQUEUE_H
-#define EVENTQUEUE_H
+#define EVENTQUEUE_H 1
 
 #include <signal.h>
 #include <list>

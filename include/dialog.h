@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef DIALOG_H
-#define DIALOG_H
+#define DIALOG_H 1
 
 #include <string>
 

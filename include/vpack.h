@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef VPACK_H
-#define VPACK_H
+#define VPACK_H 1
 
 #include "pack.h"
 

@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef PACK_H
-#define PACK_H
+#define PACK_H 1
 
 #include <list>
 

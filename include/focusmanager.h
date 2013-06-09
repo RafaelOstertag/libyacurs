@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef FOCUSMANAGER_H
-#define FOCUSMANAGER_H
+#define FOCUSMANAGER_H 1
 
 #include <vector>
 

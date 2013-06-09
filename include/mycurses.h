@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef MYCURSES_H
-#define MYCURSES_H
+#define MYCURSES_H 1
 
 #include "libyacurscfg.h"
 

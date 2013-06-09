@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef FOCUSGROUP_H
-#define FOCUSGROUP_H
+#define FOCUSGROUP_H 1
 
 #include <list>
 

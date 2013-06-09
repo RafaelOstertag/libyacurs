@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef AREA_H
-#define AREA_H
+#define AREA_H 1
 
 #include <string>
 

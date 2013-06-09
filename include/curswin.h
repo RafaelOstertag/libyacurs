@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef CURSWIN_H
-#define CURSWIN_H
+#define CURSWIN_H 1
 
 #include <list>
 

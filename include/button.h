@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef BUTTON_H
-#define BUTTON_H
+#define BUTTON_H 1
 
 #include "label.h"
 #include "event.h"

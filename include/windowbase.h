@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef WINDOWBASE_H
-#define WINDOWBASE_H
+#define WINDOWBASE_H 1
 
 #include "curswin.h"
 #include "realizeable.h"

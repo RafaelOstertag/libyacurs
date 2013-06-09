@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef RADIOBOX_H
-#define RADIOBOX_H
+#define RADIOBOX_H 1
 
 #include "checkbox.h"
 

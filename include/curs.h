@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef CURS_H
-#define CURS_H
+#define CURS_H 1
 
 #include <string>
 

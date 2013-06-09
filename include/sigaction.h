@@ -21,7 +21,7 @@
 // $Id: area.h 5021 2013-04-12 07:17:47Z rafisol $
 
 #ifndef SIGACTION_H
-#define SIGACTION_H
+#define SIGACTION_H 1
 
 #include <signal.h>
 

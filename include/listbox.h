@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef LISTBOX_H
-#define LISTBOX_H
+#define LISTBOX_H 1
 
 #include <string>
 #include <list>

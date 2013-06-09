@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef COLORPARSER_H
-#define COLORPARSER_H
+#define COLORPARSER_H 1
 
 #include <vector>
 #include <map>

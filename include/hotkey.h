@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef HOTKEY_H
-#define HOTKEY_H
+#define HOTKEY_H 1
 
 namespace YACURS {
     class HotKey {

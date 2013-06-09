@@ -21,7 +21,7 @@
 // $Id: yacurstypes.h 5021 2013-04-12 07:17:47Z rafisol $
 
 #ifndef YACURSCONST_H
-#define YACURSCONST_H
+#define YACURSCONST_H 1
 
 namespace YACURS {
     /**

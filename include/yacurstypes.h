@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef YACURSTYPES_H
-#define YACURSTYPES_H
+#define YACURSTYPES_H 1
 
 #include <signal.h>
 

@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef MARGIN_H
-#define MARGIN_H
+#define MARGIN_H 1
 
 namespace YACURS {
     class Margin {

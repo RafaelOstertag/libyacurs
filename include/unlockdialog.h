@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef UNLOCKDIALOG_H
-#define UNLOCKDIALOG_H
+#define UNLOCKDIALOG_H 1
 
 #include <string>
 

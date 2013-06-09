@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef MESSAGEBOX_H
-#define MESSAGEBOX_H
+#define MESSAGEBOX_H 1
 
 #include <string>
 

@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef DYNLABEL_H
-#define DYNLABEL_H
+#define DYNLABEL_H 1
 
 #include <string>
 

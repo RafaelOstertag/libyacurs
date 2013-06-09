@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef INPUTBOX_H
-#define INPUTBOX_H
+#define INPUTBOX_H 1
 
 #include <string>
 

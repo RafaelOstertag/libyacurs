@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef CURSTR_H
-#define CURSTR_H
+#define CURSTR_H 1
 
 #include <string>
 

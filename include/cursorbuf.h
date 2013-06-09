@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef CURSORBUF_H
-#define CURSORBUF_H
+#define CURSORBUF_H 1
 
 #include <stdint.h>
 

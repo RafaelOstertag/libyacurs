@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef UNLOCKDIADEFAULT_H
-#define UNLOCKDIADEFAULT_H
+#define UNLOCKDIADEFAULT_H 1
 
 #include <string>
 

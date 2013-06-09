@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef LABEL_H
-#define LABEL_H
+#define LABEL_H 1
 
 #include <string>
 

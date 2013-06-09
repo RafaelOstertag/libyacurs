@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef FILESAVEDIALOG_H
-#define FILESAVEDIALOG_H
+#define FILESAVEDIALOG_H 1
 
 #include <string>
 

@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef LINEOBJECT_H
-#define LINEOBJECT_H
+#define LINEOBJECT_H 1
 
 #include <string>
 #include "windowbase.h"

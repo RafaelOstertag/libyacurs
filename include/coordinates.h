@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef COORDINATES_H
-#define COORDINATES_H
+#define COORDINATES_H 1
 
 #include <stdint.h>
 #include <string>

@@ -23,7 +23,7 @@
 // THIS FILE MUST NOT BE INSTALLED!
 
 #ifndef GETTEXT_H
-#define GETTEXT_H
+#define GETTEXT_H 1
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

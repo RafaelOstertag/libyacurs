@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef SIZE_H
-#define SIZE_H
+#define SIZE_H 1
 
 #include <stdint.h>
 #include <string>

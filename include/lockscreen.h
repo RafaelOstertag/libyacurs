@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef LOCKSCREEN_H
-#define LOCKSCREEN_H
+#define LOCKSCREEN_H 1
 
 #include <string>
 

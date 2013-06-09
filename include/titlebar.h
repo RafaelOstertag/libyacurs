@@ -21,7 +21,7 @@
 // $Id$
 
 #ifndef TITLEBAR_H
-#define TITLEBAR_H
+#define TITLEBAR_H 1
 
 #include "lineobject.h"
 

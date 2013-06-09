@@ -19,6 +19,7 @@
 //
 // $Id$
 
+#include <cerrno>
 #include <cstdlib>
 
 #include "curs.h"
@@ -72,6 +73,19 @@ LineObject::operator=(const LineObject& lo) {
     return *this;
 }
 
+size_t
+LineObject::text_length() const {
+#ifdef USE_WCHAR
+    size_t mbslen=mbstowcs(NULL, __linetext.c_str(), 0);
+    if (mbslen==(size_t)-1)
+	throw EXCEPTIONS::SystemError(errno);
+
+    return mbslen;
+#else
+    return __linetext.length();
+#endif
+}
+
 //
 // Protected
 //
@@ -83,11 +97,11 @@ LineObject::put_line() {
 
     curses_window()->erase();
 
-    if (__linetext.length() < 1) return;
+    if (text_length() < 1) return;
 
     assert(area().cols() >= MIN_COLS);
     if (static_cast<std::string::size_type>(area().cols() ) <=
-        __linetext.length() ) {
+        text_length() ) {
         // Since we are here, the text is too big for the screen
         // width, so we can't align anyway.
         CurStr tmp(__linetext, Coordinates(0, 0) );
@@ -103,15 +117,15 @@ LineObject::put_line() {
         case CENTER:
             assert(
                 static_cast<std::string::size_type>(area().cols() ) >=
-                __linetext.length() );
-            hpos = (area().cols() - __linetext.length() ) / 2;
+                text_length() );
+            hpos = (area().cols() - text_length() ) / 2;
             break;
 
         case RIGHT:
             assert(
                 static_cast<std::string::size_type>(area().cols() ) >=
-                __linetext.length() );
-            hpos = area().cols() - __linetext.length();
+                text_length() );
+            hpos = area().cols() - text_length();
             break;
         }
 

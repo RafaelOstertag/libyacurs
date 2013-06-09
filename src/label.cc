@@ -20,6 +20,7 @@
 // $Id$
 
 #include <cassert>
+#include <cerrno>
 #include <cstdlib>
 
 #include "label.h"
@@ -36,6 +37,19 @@ Label::operator=(const Label&) {
     return *this;
 }
 
+size_t
+Label::label_length() const {
+#ifdef USE_WCHAR
+    size_t mbslen=mbstowcs(NULL, __label.c_str(), 0);
+    if (mbslen==(size_t)-1)
+	throw EXCEPTIONS::SystemError(errno);
+
+    return mbslen;
+#else
+    return __label.length();
+#endif
+}
+
 //
 // Protected
 //
@@ -45,7 +59,7 @@ Label::operator=(const Label&) {
 //
 Label::Label(const std::string& _l) : __color(DEFAULT),
     __label(_l),
-    __size(Size(1, _l.length() ) ) {
+    __size(Size(1,label_length()) ) {
 }
 
 Label::~Label() {
@@ -57,7 +71,7 @@ Label::label(const std::string& _l) {
 
     Size oldsize = __size;
 
-    __size = Size(1, __label.length() );
+    __size = Size(1, label_length() );
 
     // If parent is 0, we have nobody to inform about a possible
     // size change. If old size is the same as the new size, we simply

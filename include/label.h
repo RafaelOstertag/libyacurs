@@ -43,6 +43,14 @@ namespace YACURS {
 
             COLOROBJ __color;
 
+	    /**
+	     * Length of label.
+	     *
+	     * @returns length of label, if compiled with USE_WCHAR
+	     * defined, takes MB characters into account.
+	     */
+	    size_t label_length() const;
+
         protected:
             /**
              * The text to be displayed.

@@ -316,7 +316,10 @@ CursWin::addstrx(const CurStr& str) {
     // addnstr() will convert to wide char, we're only interested in
     // length here.
     size_t _mbslen = mbstowcs( (wchar_t*)0, str.c_str(),
-                               str.length() * sizeof (wchar_t) );
+                               1 );
+    if (_mbslen==(size_t)-1)
+	throw EXCEPTIONS::SystemError(errno);
+
     if (space < static_cast<int16_t>(_mbslen) ) {
         addnstr(str, space - 1).addch('>');
     } else {
@@ -347,7 +350,9 @@ CursWin::addlinex(const CurStr& str) {
     size_t mylen;
 
 #ifdef USE_WCHAR
-    mylen = mbstowcs( (wchar_t*)0, str.c_str(), str.length() );
+    mylen = mbstowcs( (wchar_t*)0, str.c_str(), 1 );
+    if (mylen==(size_t)-1)
+	throw EXCEPTIONS::SystemError(errno);
 #else
     mylen = tmp.length();
 #endif
@@ -371,12 +376,16 @@ CursWin::addnstr(const CurStr& str, int n) {
     set_color(str.color() );
 
 #ifdef USE_WCHAR
-    wchar_t* wbuffer = new wchar_t[str.length() + 1];
+    size_t buflen=mbstowcs((wchar_t*)0, str.c_str(), 0 );
+    if (buflen == (size_t)-1)
+        throw EXCEPTIONS::SystemError(errno);
+
+    wchar_t* wbuffer = new wchar_t[buflen + 1];
     if (wbuffer == 0)
         throw EXCEPTIONS::SystemError(ENOMEM);
 
-    size_t retval = mbstowcs(wbuffer, str.c_str(), str.length() );
-    assert(retval <= str.length() );
+    size_t retval = mbstowcs(wbuffer, str.c_str(), buflen );
+    assert(buflen == retval);
     if (retval == (size_t)-1) {
         delete[] wbuffer;
         throw EXCEPTIONS::SystemError(errno);

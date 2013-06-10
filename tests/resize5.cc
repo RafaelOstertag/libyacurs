@@ -126,8 +126,13 @@ main() {
         YACURS::Curses::statusbar(sl);
 
         YACURS::HPack* hpack = new YACURS::HPack;
+#ifdef USE_WCHAR
+        YACURS::Label* hl1 = new YACURS::Label("åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+        YACURS::Label* hl2 = new YACURS::Label("ÅßČĐĚḞĠḢİJĶŁṀŅØṖQṘṠṪǓVẆẊ¥Ƶ");
+#else
         YACURS::Label* hl1 = new YACURS::Label("abcdefghijklmnopqrstuvwxyz");
         YACURS::Label* hl2 = new YACURS::Label("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+#endif
         YACURS::Label* hl3 = new YACURS::Label("0123456789");
 
         hpack->add_front(hl1);

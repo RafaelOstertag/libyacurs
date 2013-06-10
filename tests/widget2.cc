@@ -31,31 +31,59 @@ alrm(YACURS::Event& _e) {
 
     switch (i++) {
     case 0:
+#ifdef USE_WCHAR
+	input1->input(
+            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#else
         input1->input(
-            "abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+            "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+#endif
         break;
 
     case 1:
+#ifdef USE_WCHAR
         input2->input(
-            "abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#else
+        input2->input(
+            "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+#endif
         break;
 
     case 2:
-        label1->label("abcdefghiklmnopqrstuvwxyz");
+#ifdef USE_WCHAR
+        label1->label("åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#else
+        label1->label("abcdefghijklmnopqrstuvwxyz");
+#endif
         break;
 
     case 3:
-        label2->label("abcdefghiklmnopqrstuvwxyz");
+#ifdef USE_WCHAR
+        label2->label("åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#else
+        label2->label("abcdefghijklmnopqrstuvwxyz");
+#endif
         break;
 
     case 4:
+#ifdef USE_WCHAR
         label1->label(
-            "abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#else
+        label1->label(
+            "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+#endif
         break;
 
     case 5:
+#ifdef USE_WCHAR
         label2->label(
-            "abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#else
+        label2->label(
+            "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+#endif
         break;
 
     default:

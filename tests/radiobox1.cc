@@ -496,14 +496,6 @@ main() {
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
-    std::list<std::string> items;
-
-    for (int i = 0; i < 24; i++) {
-        std::ostringstream n;
-        n << i;
-        items.push_back("Long Name ListBox Item Number " + n.str() );
-    }
-
     try {
         YACURS::Curses::init();
 
@@ -527,6 +519,18 @@ main() {
         w1->add_hotkey(HotKeyQuit('Q') );
 
         std::vector<std::string> items;
+#ifdef USE_WCHAR
+        items.push_back("It€m 1");
+        items.push_back("It€m 2");
+        items.push_back("It€m 3");
+        items.push_back("It€m 5");
+        items.push_back("It€m 6");
+        items.push_back("It€m 7");
+        items.push_back("It€m 8");
+        items.push_back("It€m 9");
+        items.push_back("It€m 10");
+        YACURS::RadioBox* rabx1 = new YACURS::RadioBox("It€ms¹²³⁴⁵", items);
+#else
         items.push_back("Item 1");
         items.push_back("Item 2");
         items.push_back("Item 3");
@@ -537,6 +541,7 @@ main() {
         items.push_back("Item 9");
         items.push_back("Item 10");
         YACURS::RadioBox* rabx1 = new YACURS::RadioBox("Items12345", items);
+#endif
 
         w1->widget(rabx1);
 

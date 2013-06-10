@@ -496,14 +496,6 @@ main() {
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
-    std::list<std::string> items;
-
-    for (int i = 0; i < 24; i++) {
-        std::ostringstream n;
-        n << i;
-        items.push_back("Long Name ListBox Item Number " + n.str() );
-    }
-
     try {
         YACURS::Curses::init();
 
@@ -537,7 +529,7 @@ main() {
         items.push_back("It€m 8");
         items.push_back("It€m 9");
         items.push_back("It€m 10");
-        YACURS::CheckBox* ckbx1 = new YACURS::CheckBox("It€ms¹²³4", items);
+        YACURS::CheckBox* ckbx1 = new YACURS::CheckBox("It€ms¹²³⁴⁵", items);
 #else
         items.push_back("Item 1");
         items.push_back("Item 2");

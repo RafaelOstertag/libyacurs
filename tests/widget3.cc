@@ -29,23 +29,43 @@ alrm(YACURS::Event& _e) {
 
     switch (i++) {
     case 0:
+#ifdef USE_WCHAR
         input1->input(
-            "abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#else
+        input1->input(
+            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#endif
         break;
 
     case 1:
+#ifdef USE_WCHAR
         input2->input(
-            "abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#else
+        input2->input(
+            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#endif
         break;
 
     case 2:
+#ifdef USE_WCHAR
         label1->label(
-            "abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#else
+        label1->label(
+            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#endif
         break;
 
     case 3:
+#ifdef USE_WCHAR
         label2->label(
-            "abcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyzabcdefghiklmnopqrstuvwxyz");
+            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#else
+        label2->label(
+            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+#endif
         break;
 
     default:

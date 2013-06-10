@@ -350,7 +350,7 @@ CursWin::addlinex(const CurStr& str) {
     size_t mylen;
 
 #ifdef USE_WCHAR
-    mylen = mbstowcs( (wchar_t*)0, str.c_str(), 1 );
+    mylen = mbstowcs( (wchar_t*)0, str.c_str(), 0 );
     if (mylen==(size_t)-1)
 	throw EXCEPTIONS::SystemError(errno);
 #else
@@ -384,20 +384,20 @@ CursWin::addnstr(const CurStr& str, int n) {
     if (wbuffer == 0)
         throw EXCEPTIONS::SystemError(ENOMEM);
 
-    size_t retval = mbstowcs(wbuffer, str.c_str(), buflen );
+    size_t retval = mbstowcs(wbuffer, str.c_str(), buflen + 1 );
     assert(buflen == retval);
     if (retval == (size_t)-1) {
         delete[] wbuffer;
         throw EXCEPTIONS::SystemError(errno);
     }
-    wbuffer[retval] = 0;
+    wbuffer[retval] = L'\0';
 
     if (mvwaddnwstr(__window,
                     str.position().y(),
                     str.position().x(),
                     wbuffer, n) == ERR &&
         (str.position().x() +
-         (n == -1 ? static_cast<int16_t>(wcslen(wbuffer) ) : n)  ) <
+         (n == -1 ? static_cast<int16_t>(retval) : n)  ) <
         __client_area.cols() ) {
         delete[] wbuffer;
         throw EXCEPTIONS::CursesException("mvwaddnwstr");

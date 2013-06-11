@@ -529,7 +529,7 @@ main() {
         items.push_back("It€m 8");
         items.push_back("It€m 9");
         items.push_back("It€m 10");
-        YACURS::RadioBox* rabx1 = new YACURS::RadioBox("It€ms¹²³⁴⁵", items);
+        YACURS::RadioBox* rabx1 = new YACURS::RadioBox("It€ms¹2³4⁵", items);
 #else
         items.push_back("Item 1");
         items.push_back("Item 2");

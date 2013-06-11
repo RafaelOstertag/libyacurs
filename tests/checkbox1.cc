@@ -529,7 +529,7 @@ main() {
         items.push_back("It€m 8");
         items.push_back("It€m 9");
         items.push_back("It€m 10");
-        YACURS::CheckBox* ckbx1 = new YACURS::CheckBox("It€ms¹²³⁴⁵", items);
+        YACURS::CheckBox* ckbx1 = new YACURS::CheckBox("It€ms¹²³45", items);
 #else
         items.push_back("Item 1");
         items.push_back("Item 2");

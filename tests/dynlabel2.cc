@@ -106,16 +106,16 @@ main() {
         YACURS::VPack* vpack = new YACURS::VPack;
 
         YACURS::DynLabel* dlabel1 = new YACURS::DynLabel(
-            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+            "åƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
         vpack->add_back(dlabel1);
 
         YACURS::HPack* hpack = new YACURS::HPack;
         vpack->add_back(hpack);
 
         YACURS::DynLabel* dlabel2 = new YACURS::DynLabel(
-            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+            "åƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
         YACURS::DynLabel* dlabel3 = new YACURS::DynLabel(
-            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+            "åƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
         hpack->add_back(dlabel2);
         hpack->add_back(dlabel3);
         hpack->hinting(false);

@@ -47,7 +47,8 @@
 #if defined(HAVE_CURSES_ENHANCED) && \
     defined(HAVE_LOCALE_H) && \
     defined(HAVE_CWCHAR) && \
-    defined(HAVE_CWCTYPE)
+    defined(HAVE_CWCTYPE) && \
+    !defined(DISABLE_WCHAR)
 # define USE_WCHAR 1
 # include <locale.h>
 #else

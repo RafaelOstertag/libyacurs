@@ -53,6 +53,13 @@ AC_ARG_ENABLE([eventqueue-debug],
 		       [AC_SUBST([EVTQDEBUG], [-DEVTQDEBUG])],
 		       [AC_SUBST([EVTQDEBUG], [-DNEVTQDEBUG])])],
 		[AC_SUBST([EVTQDEBUG],[-DNEVTQDEBUG])])
+AC_ARG_ENABLE([wchar],
+		[AS_HELP_STRING([--disable-wchar],
+				[disable wide character support])],
+		[AS_IF([test x$enableval = xno],
+		       [AC_DEFINE([DISABLE_WCHAR],[1],[Define to 1 if you want to disable wchar support.])
+                        DISABLE_WCHAR=yes],
+                       [DISABLE_WCHAR=no])])
 
 AC_LANG([C++])
 AM_GNU_GETTEXT([external])
@@ -202,3 +209,4 @@ AC_MSG_NOTICE([  Use NLS           $USE_NLS])
 AC_MSG_NOTICE([  Curses library    $CURSES_LIB])
 AC_MSG_NOTICE([  Debug mode        $ENABLEDEBUG])
 AC_MSG_NOTICE([  Event Queue Debug $EVTQDEBUG])
+AC_MSG_NOTICE([  Disable wchar     $DISABLE_WCHAR])

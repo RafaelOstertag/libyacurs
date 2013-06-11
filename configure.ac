@@ -59,7 +59,8 @@ AC_ARG_ENABLE([wchar],
 		[AS_IF([test x$enableval = xno],
 		       [AC_DEFINE([DISABLE_WCHAR],[1],[Define to 1 if you want to disable wchar support.])
                         DISABLE_WCHAR=yes],
-                       [DISABLE_WCHAR=no])])
+                       [DISABLE_WCHAR=no])],
+		[DISABLE_WCHAR=no])
 
 AC_LANG([C++])
 AM_GNU_GETTEXT([external])

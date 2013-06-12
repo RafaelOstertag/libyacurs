@@ -45,7 +45,7 @@ main() {
 #ifdef USE_WCHAR
         YACURS::Label* label1 = new YACURS::Label("«T€st·lab€l»");
 #else
-        YACURS::Label* label1 = new YACURS::Label("Test lab€l");
+        YACURS::Label* label1 = new YACURS::Label("Test label");
 #endif
         vpack->add_front(label1);
 

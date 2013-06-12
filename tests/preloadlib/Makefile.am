@@ -7,7 +7,7 @@ AM_CPPFLAGS = -D_XOPEN_SOURCE_EXTENDED=1 -DLOCALEDIR=\"$(localedir)\" \
 
 AM_LDFLAGS  = -L$(top_builddir)/src -lyacurs  $(LTLIBINTL)
 
-CXXLD = @CXXLD@
+CXXLD = $(CXX)
 
 if NOTCYGWIN
 all-local: libtestpreload.la

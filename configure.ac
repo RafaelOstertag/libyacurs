@@ -200,7 +200,7 @@ AC_COMPILE_IFELSE(
 LIBS="$my_saved_LIBS"
 
 AC_CONFIG_HEADERS([config.h include/libyacurscfg.h])
-AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile include/Makefile po/Makefile.in])
+AC_CONFIG_FILES([Makefile src/Makefile tests/Makefile include/Makefile po/Makefile.in tests/basic/Makefile tests/ui-interactive/Makefile tests/ui-non-interactive/Makefile tests/preloadlib/Makefile])
 AC_OUTPUT
 
 AC_MSG_NOTICE([])

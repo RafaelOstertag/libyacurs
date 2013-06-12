@@ -34,7 +34,7 @@ config.rpath:
 nls.m4 po.m4:
 	gettextize -f
 
-Makefile.in missing ar-lib depcomp: configure.ac Makefile.am NEWS README AUTHORS ChangeLog src/Makefile.am tests/Makefile.am config.rpath
+Makefile.in missing ar-lib depcomp: configure.ac Makefile.am NEWS README AUTHORS ChangeLog config.rpath
 	automake -a -c -W all --gnu
 
 NEWS:
@@ -50,5 +50,5 @@ ChangeLog:
 	touch $@
 
 clean:
-	rm -f aclocal.m4 config.guess config.sub configure install-sh depcomp config.h.in missing ltmain.sh ar-lib config.status stamp-h1 m4/* Makefile.in src/Makefile.in tests/Makefile.in config.rpath
+	rm -f aclocal.m4 config.guess config.sub configure install-sh depcomp config.h.in missing ltmain.sh ar-lib config.status stamp-h1 Makefile.in src/Makefile.in tests/Makefile.in config.rpath
 	rm -rf autom4te.cache

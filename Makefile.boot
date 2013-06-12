@@ -1,11 +1,13 @@
 # -*- mode: makefile -*-
 #
+# Use -f on autconf and automake to force update of files.
+#
 # $Id$
 
 VPATH=.:m4
 
 configure: configure.ac config.h.in aclocal.m4 ltmain.sh Makefile.in missing ar-lib depcomp nls.m4 po.m4
-	autoconf
+	autoconf -f
 
 aclocal.m4: configure.ac libtool.m4 ltoptions.m4 ltversion.m4 ltsugar.m4 
 	aclocal -I m4
@@ -34,8 +36,8 @@ config.rpath:
 nls.m4 po.m4:
 	gettextize -f
 
-Makefile.in missing ar-lib depcomp: configure.ac Makefile.am NEWS README AUTHORS ChangeLog config.rpath
-	automake -a -c -W all --gnu
+Makefile.in missing ar-lib depcomp: configure.ac Makefile.am NEWS README AUTHORS ChangeLog config.rpath tests/basic/Makefile.am tests/preloadlib/Makefile.am tests/ui-interactive/Makefile.am tests/ui-non-interactive/Makefile.am
+	automake -a -c -W all --gnu -f
 
 NEWS:
 	touch $@

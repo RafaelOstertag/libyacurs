@@ -58,7 +58,7 @@
  * @c SIGINT   | @c EVT_SIGINT
  * @c SIGTERM  | @c EVT_SIGTERM
  * @c SIGQUIT  | @c EVT_SIGQUIT
- * @c SIGCONT  | @c EVT_SIGCONT
+v * @c SIGCONT  | @c EVT_SIGCONT
  * @c SIGTSTP  | @c EVT_SIGTSTP
  *
  *
@@ -98,7 +98,7 @@
  * unrealized() and then realized() again.
  *
  *
- * @section Window Events
+ * @section winevt Window Events
  *
  * Upon showing a window by calling @c WindowBase->show(), @c
  * EVT_WINDOW_SHOW will be emitted. When a window is closed by a call

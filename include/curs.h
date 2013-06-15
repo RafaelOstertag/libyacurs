@@ -42,7 +42,8 @@ namespace YACURS {
      * Class taking care of initializing and unitializing curses, and
      * running the application.
      *
-     * It can take of showing a title, status line, and/or main window.
+     * It takes care of showing a title, status line, and/or main
+     * window.
      */
     class Curses {
         private:

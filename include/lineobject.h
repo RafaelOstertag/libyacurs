@@ -73,7 +73,7 @@ namespace YACURS {
             LineObject(const LineObject&);
             LineObject& operator=(const LineObject&);
 
-	    size_t text_length() const;
+            size_t text_length() const;
 
         protected:
             void put_line();

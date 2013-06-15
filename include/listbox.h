@@ -133,16 +133,16 @@ namespace YACURS {
 
             void delete_selected();
 
-	    /**
-	     * High light item.
-	     *
-	     * high light first item exactly matching @c _i.
-	     *
-	     * @param _i item to hight light.
-	     */
+            /**
+             * High light item.
+             *
+             * high light first item exactly matching @c _i.
+             *
+             * @param _i item to hight light.
+             */
             void high_light(const _T& _i);
 
-	    void high_light(lsz_t pos);
+            void high_light(lsz_t pos);
 
             // From WidgetBase
 
@@ -468,11 +468,12 @@ namespace YACURS {
 
     template<class _T> void
     ListBox<_T>::high_light(lsz_t pos) {
-	if (pos >= __list.length() )
-	    throw std::out_of_range("ListBox<>::high_light() position out of range");
+        if (pos >= __list.length() )
+            throw std::out_of_range(
+                      "ListBox<>::high_light() position out of range");
 
         typename std::list<_T>::iterator it = __list.begin();
-	lsz_t i;
+        lsz_t i;
         for (i = 0;
              it != __list.end();
              it++, i++) ;
@@ -493,7 +494,6 @@ namespace YACURS {
         if (realization() == REALIZED)
             refresh(true);
     }
-    
 
     // From WidgetBase
     template<class _T> void

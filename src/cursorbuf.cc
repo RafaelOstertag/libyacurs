@@ -159,11 +159,11 @@ CursorBuffer::clear_eol() {
 
 void
 CursorBuffer::clear_sol() {
-    if (__buffer.empty() || __vcurs_pos==0) return;
+    if (__buffer.empty() || __vcurs_pos == 0) return;
 
     __buffer = __buffer.erase(0, __vcurs_pos);
 
-    __vcurs_pos=0;
+    __vcurs_pos = 0;
 
     __mbs_cache_valid = false;
 }
@@ -232,25 +232,28 @@ CursorBuffer::insert(std::wstring::value_type c) {
 
 void
 CursorBuffer::info(int16_t _size, int16_t* len, int16_t* curs_pos) const {
-    if (_size<2) throw std::out_of_range(_("_size must not be <2"));
+    if (_size < 2) throw std::out_of_range(_("_size must not be <2") );
 
     int16_t tmp_curs;
-    if (__vcurs_pos==0)
-	tmp_curs=0;
-    else 
-	tmp_curs=__vcurs_pos%(_size-1)==0?_size-1:__vcurs_pos%(_size-1);
+    if (__vcurs_pos == 0)
+        tmp_curs = 0;
+    else
+        tmp_curs = __vcurs_pos %
+                   (_size - 1) == 0 ? _size - 1 : __vcurs_pos % (_size - 1);
 
     if (curs_pos)
-	*curs_pos=tmp_curs;
+        *curs_pos = tmp_curs;
 
     if (len) {
-	tsz_t offset=__vcurs_pos-tmp_curs;
-	if (__buffer.empty())
-	    *len=0;
-	else
-	    *len=static_cast<uint16_t>(((offset + _size > __buffer.length() - 1) ? __buffer.length() - offset : _size ) - offset);
+        tsz_t offset = __vcurs_pos - tmp_curs;
+        if (__buffer.empty() )
+            *len = 0;
+        else
+            *len =
+                static_cast<uint16_t>( ( (offset + _size > __buffer.length() -
+                                          1) ? __buffer.length() -
+                                         offset : _size) - offset);
     }
-
 }
 
 /**
@@ -264,21 +267,22 @@ CursorBuffer::info(int16_t _size, int16_t* len, int16_t* curs_pos) const {
  */
 std::wstring
 CursorBuffer::wstring(int16_t _size, int16_t* curs_pos) const {
-    if (_size<2) throw std::out_of_range(_("_size must not be <2"));
+    if (_size < 2) throw std::out_of_range(_("_size must not be <2") );
 
     int16_t tmp_curs;
-    if (__vcurs_pos==0)
-	tmp_curs=0;
-    else 
-	tmp_curs=__vcurs_pos%(_size-1)==0?_size-1:__vcurs_pos%(_size-1);
+    if (__vcurs_pos == 0)
+        tmp_curs = 0;
+    else
+        tmp_curs = __vcurs_pos %
+                   (_size - 1) == 0 ? _size - 1 : __vcurs_pos % (_size - 1);
 
     if (curs_pos)
-	*curs_pos=tmp_curs;
+        *curs_pos = tmp_curs;
 
-    tsz_t offset=__vcurs_pos-tmp_curs;
+    tsz_t offset = __vcurs_pos - tmp_curs;
 
-    return __buffer.substr(offset,(offset + _size > __buffer.length() -
-				   1) ? __buffer.length() - offset : _size );
+    return __buffer.substr(offset, (offset + _size > __buffer.length() -
+                                    1) ? __buffer.length() - offset : _size);
 }
 
 std::string

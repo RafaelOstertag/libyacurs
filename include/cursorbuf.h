@@ -30,10 +30,9 @@
 
 namespace YACURS {
     namespace INTERNAL {
-
-	/**
-	 * @todo implement smooth scrolling if possible
-	 */
+        /**
+         * @todo implement smooth scrolling if possible
+         */
         class CursorBuffer {
             public:
 
@@ -131,11 +130,11 @@ namespace YACURS {
                  */
                 void clear_eol();
 
-		/**
-		 * Clear buffer starting from the current cursor
-		 * position to the start.
-		 */
-		void clear_sol();
+                /**
+                 * Clear buffer starting from the current cursor
+                 * position to the start.
+                 */
+                void clear_sol();
 
                 /**
                  * Backspace from the current cursor position.
@@ -175,14 +174,15 @@ namespace YACURS {
                  */
                 void insert(std::wstring::value_type c);
 
-		/**
-		 * Get length and cursor position of string that would
-		 * be returned.
-		 *
-		 * @internal
-		 * this function is mostly used for obfuscated output.
-		 */
-		void info(int16_t _size, int16_t* len, int16_t* curs_pos) const;
+                /**
+                 * Get length and cursor position of string that would
+                 * be returned.
+                 *
+                 * @internal
+                 * this function is mostly used for obfuscated output.
+                 */
+                void info(int16_t _size, int16_t* len,
+                          int16_t* curs_pos) const;
 
                 std::wstring wstring(int16_t _size, int16_t* curs_pos) const;
 

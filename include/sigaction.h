@@ -76,6 +76,11 @@ namespace YACURS {
                  */
                 ~Sigaction();
 
+                /**
+                 * Get the signal.
+                 *
+                 * @returns the signal.
+                 */
                 int signo() const {
                     return __signo;
                 }

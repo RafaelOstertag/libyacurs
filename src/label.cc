@@ -40,9 +40,9 @@ Label::operator=(const Label&) {
 size_t
 Label::label_length() const {
 #ifdef USE_WCHAR
-    size_t mbslen=mbstowcs(NULL, __label.c_str(), 0);
-    if (mbslen==(size_t)-1)
-	throw EXCEPTIONS::SystemError(errno);
+    size_t mbslen = mbstowcs(NULL, __label.c_str(), 0);
+    if (mbslen == (size_t)-1)
+        throw EXCEPTIONS::SystemError(errno);
 
     return mbslen;
 #else
@@ -59,7 +59,7 @@ Label::label_length() const {
 //
 Label::Label(const std::string& _l) : __color(DEFAULT),
     __label(_l),
-    __size(Size(1,label_length()) ) {
+    __size(Size(1, label_length() ) ) {
 }
 
 Label::~Label() {

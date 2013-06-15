@@ -61,11 +61,11 @@ namespace YACURS {
 
                     void operator()(const std::string& _s) {
 #ifdef USE_WCHAR
-			size_t mbslen=mbstowcs(NULL, _s.c_str(), 0);
-			if (mbslen==(size_t)-1)
-			    throw EXCEPTIONS::SystemError(errno);
+                        size_t mbslen = mbstowcs(NULL, _s.c_str(), 0);
+                        if (mbslen == (size_t)-1)
+                            throw EXCEPTIONS::SystemError(errno);
 
-			__max_len = std::max(mbslen, __max_len);
+                        __max_len = std::max(mbslen, __max_len);
 #else
                         __max_len = std::max(_s.length(), __max_len);
 #endif

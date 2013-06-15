@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libyacurs 0.1\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
-"POT-Creation-Date: 2013-05-10 12:58+0200\n"
-"PO-Revision-Date: 2013-05-18 10:38+0200\n"
+"POT-Creation-Date: 2013-06-14 06:30+0200\n"
+"PO-Revision-Date: 2013-06-15 21:39+0200\n"
 "Last-Translator: Rafael Ostertag <rafi@guengel.ch>\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -17,19 +17,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/checkbox.cc:168
+#: src/checkbox.cc:181
 msgid "CheckBox: index "
 msgstr "CheckBox: Index "
 
-#: src/checkbox.cc:169
+#: src/checkbox.cc:182
 msgid " out of range."
 msgstr " ausserhalb Bereich."
 
-#: src/checkbox.cc:182
+#: src/checkbox.cc:195
 msgid "Item '"
 msgstr "Element »"
 
-#: src/checkbox.cc:182
+#: src/checkbox.cc:195
 msgid "' not found in CheckBox"
 msgstr "« nicht gefunden in CheckBox"
 
@@ -57,27 +57,27 @@ msgstr "keine gültige Farbe: "
 msgid "not a valid attribute: "
 msgstr "kein gültiges Attribut: "
 
-#: src/curswin.cc:45
+#: src/curswin.cc:47
 msgid "argument 'win' must not be 0"
 msgstr "Argument »win« darf nicht 0 sein"
 
-#: src/curswin.cc:70
+#: src/curswin.cc:72
 msgid "Area must not be zero"
 msgstr "Fläche darf nicht 0 sein"
 
-#: src/dialog.cc:148
+#: src/dialog.cc:142
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/dialog.cc:152
+#: src/dialog.cc:146
 msgid "OK"
 msgstr "Ok"
 
-#: src/dialog.cc:157
+#: src/dialog.cc:151
 msgid "No"
 msgstr "Nein"
 
-#: src/dialog.cc:161
+#: src/dialog.cc:155
 msgid "Yes"
 msgstr "Ja"
 
@@ -178,6 +178,10 @@ msgstr "Operation nicht unterstützt"
 #: src/yacursex.cc:112
 msgid "Invalid dialog type"
 msgstr "Ungültiger Dialogtyp"
+
+#: src/cursorbuf.cc:235 src/cursorbuf.cc:267
+msgid "_size must not be <2"
+msgstr "_size darf nicht <2 sein"
 
 #~ msgid "Rows cannot be <0"
 #~ msgstr "Zeilen können nicht kleiner 0 sein"

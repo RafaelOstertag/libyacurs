@@ -107,15 +107,31 @@ Dialog::button_press_handler(Event& _e) {
 
     if (evt.data() == __bok) {
         __dstate = DIALOG_OK;
-        close();
-        return;
+	on_ok_button();
     }
 
     if (evt.data() == __bcancel) {
         __dstate = DIALOG_CANCEL;
-        close();
-        return;
+	on_cancel_button();
     }
+
+    on_close(__dstate);
+    close();
+}
+
+void
+Dialog::on_close(STATE st) {
+    /* Intentionally empty */
+}
+
+void
+Dialog::on_ok_button() {
+    /* Intentionally empty */
+}
+
+void
+Dialog::on_cancel_button() {
+    /* Intentionally empty */
 }
 
 //

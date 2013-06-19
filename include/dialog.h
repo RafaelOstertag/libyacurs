@@ -37,8 +37,13 @@ namespace YACURS {
 
     class Dialog : public Window {
         public:
+	    /**
+	     * State of dialog.
+	     */
             enum STATE {
+		/// Dialog was confirmed
                 DIALOG_OK,
+		/// Dialog was cancelled
                 DIALOG_CANCEL
             };
 
@@ -77,6 +82,32 @@ namespace YACURS {
             void dialog_state(STATE st);
 
             virtual void button_press_handler(Event& _e);
+
+	    /**
+	     * Called on close.
+	     *
+	     * Will be called before dialog closes.
+	     * To be implemented by user if needed.
+	     *
+	     * @param st state. See STATE for possible values.
+	     */
+	    virtual void on_close(STATE st);
+
+	    /**
+	     * Called on OK button press.
+	     *
+	     * Will be called on OK button press.
+	     * To be implemented by user if needed.
+	     */
+	    virtual void on_ok_button();
+
+	    /**
+	     * Called on Cancel button press.
+	     *
+	     * Will be called on Cancel button press.
+	     * To be implemented by user if needed.
+	     */
+	    virtual void on_cancel_button();
 
         public:
             Dialog(const std::string& _title,

@@ -597,7 +597,7 @@ namespace YACURS {
 
         widget_subwin()->erase();
 
-        std::list<std::string>::iterator it = __list.begin();
+        typename std::list<_T>::iterator it = __list.begin();
 
         // Make sure cursor position is not off the list, i.e. on
         // the border of the widget.
@@ -612,13 +612,13 @@ namespace YACURS {
             __offset = 0; // we must not use an offset.
 
         // Advance to offset
-        for (std::list<std::string>::size_type i = 0;
+        for (typename std::list<_T>::size_type i = 0;
              i < __offset;
              it++, i++) ;
 
-        for (std::list<std::string>::size_type i = 0;
+        for (typename std::list<_T>::size_type i = 0;
              i <
-             std::min<std::list<std::string>::size_type>(pagesize(),
+             std::min<typename std::list<_T>::size_type>(pagesize(),
                                                          __list.size() );
              it++, i++) {
             CurStr line(*it,

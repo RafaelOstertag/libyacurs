@@ -56,8 +56,7 @@ namespace YACURS {
             void window_close_handler(Event& _e);
 
         public:
-            FileLoadDialog(std::string _path=std::string(),
-                           DIALOG_TYPE _dt=OKCANCEL);
+            FileLoadDialog(std::string _path=std::string());
 
             virtual ~FileLoadDialog();
 

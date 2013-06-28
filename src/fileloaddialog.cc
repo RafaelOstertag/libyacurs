@@ -199,9 +199,8 @@ FileLoadDialog::window_close_handler(Event& _e) {
 // Public
 //
 
-FileLoadDialog::FileLoadDialog(std::string _path,
-                               DIALOG_TYPE _dt) :
-    Dialog(std::string(_("Load File") ), _dt,
+FileLoadDialog::FileLoadDialog(std::string _path) :
+    Dialog(std::string(_("Load File") ), OKCANCEL,
            Dialog::FULLSIZE),
     __msgbox(0),
     __path(0),

@@ -49,6 +49,8 @@ CursorBuffer::CursorBuffer(const std::wstring& _buffer, tsz_t _max_size) :
     __mbs_cache(),
     __mbs_cache_valid(false),
     __vcurs_pos(0),
+    __curs_pos(0),
+    __offset(0),
     __max_size(_max_size) {
 }
 
@@ -56,6 +58,8 @@ CursorBuffer::CursorBuffer(const std::string& _buffer, tsz_t _max_size) :
     __mbs_cache(),
     __mbs_cache_valid(false),
     __vcurs_pos(0),
+    __curs_pos(0),
+    __offset(0),
     __max_size(_max_size) {
     wchar_t* tmpbuf = new wchar_t[_buffer.length() + 1];
 
@@ -79,6 +83,8 @@ CursorBuffer::CursorBuffer(const CursorBuffer& _cb) :
     __mbs_cache(_cb.__mbs_cache),
     __mbs_cache_valid(_cb.__mbs_cache_valid),
     __vcurs_pos(_cb.__vcurs_pos),
+    __curs_pos(_cb.__curs_pos),
+    __offset(_cb.__offset),
     __max_size(_cb.__max_size) {
 }
 
@@ -90,6 +96,8 @@ CursorBuffer::operator=(const CursorBuffer& _cb) {
     __mbs_cache = _cb.__mbs_cache;
     __mbs_cache_valid = _cb.__mbs_cache_valid;
     __vcurs_pos = _cb.__vcurs_pos;
+    __curs_pos = _cb.__curs_pos;
+    __offset = _cb.__offset;
     __max_size = _cb.__max_size;
 
     return *this;
@@ -98,6 +106,8 @@ CursorBuffer::operator=(const CursorBuffer& _cb) {
 void
 CursorBuffer::set(const std::wstring& _b) {
     __vcurs_pos = 0;
+    __curs_pos = 0;
+    __offset = 0;
     if (_b.length() > __max_size)
         __buffer = _b.substr(0, __max_size - 1);
     else
@@ -130,11 +140,6 @@ CursorBuffer::length() const {
     return __buffer.length();
 }
 
-void
-CursorBuffer::reset_cursor() {
-    __vcurs_pos = 0;
-}
-
 CursorBuffer::tsz_t
 CursorBuffer::get_cursor() const {
     return __vcurs_pos;
@@ -144,6 +149,7 @@ void
 CursorBuffer::clear() {
     __buffer.clear();
     __vcurs_pos = 0;
+    __curs_pos = 0;
     __mbs_cache_valid = false;
 }
 
@@ -164,6 +170,7 @@ CursorBuffer::clear_sol() {
     __buffer = __buffer.erase(0, __vcurs_pos);
 
     __vcurs_pos = 0;
+    __curs_pos = 0;
 
     __mbs_cache_valid = false;
 }
@@ -173,6 +180,7 @@ CursorBuffer::backspace() {
     if (__vcurs_pos == 0 || __buffer.empty() ) return;
 
     __vcurs_pos--;
+    __curs_pos--;
 
     __buffer = __buffer.erase(__vcurs_pos, 1);
 
@@ -192,6 +200,7 @@ CursorBuffer::del() {
 void
 CursorBuffer::home() {
     __vcurs_pos = 0;
+    __curs_pos = 0;
 }
 
 void
@@ -199,6 +208,7 @@ CursorBuffer::end() {
     if (__buffer.empty() ) return;
 
     __vcurs_pos = __buffer.length();
+    __curs_pos = __buffer.length();
 }
 
 void
@@ -206,6 +216,7 @@ CursorBuffer::back_step() {
     if (__vcurs_pos == 0 || __buffer.empty() ) return;
 
     __vcurs_pos--;
+    __curs_pos--;
 }
 
 void
@@ -213,6 +224,7 @@ CursorBuffer::forward_step() {
     if (__buffer.empty() || __vcurs_pos >= __buffer.length() ) return;
 
     __vcurs_pos++;
+    __curs_pos++;
 }
 
 void
@@ -228,8 +240,14 @@ CursorBuffer::insert(std::wstring::value_type c) {
         __buffer.insert(__vcurs_pos, 1, c);
 
     __vcurs_pos++;
+    __curs_pos++;
 }
 
+/**
+ *
+ * Not adapted to new scrolling, still on paging...
+ *
+ */
 void
 CursorBuffer::info(int16_t _size, int16_t* len, int16_t* curs_pos) const {
     if (_size < 2) throw std::out_of_range(_("_size must not be <2") );
@@ -261,32 +279,48 @@ CursorBuffer::info(int16_t _size, int16_t* len, int16_t* curs_pos) const {
  *
  * @internal
  *
- * This implementation shows at least one character of the previous
- * page when paging to the right.
+ * This implementation shows propper scrolling.
  *
  */
 std::wstring
-CursorBuffer::wstring(int16_t _size, int16_t* curs_pos) const {
+CursorBuffer::wstring(int16_t _size, int16_t* curs_pos) {
     if (_size < 2) throw std::out_of_range(_("_size must not be <2") );
 
-    int16_t tmp_curs;
-    if (__vcurs_pos == 0)
-        tmp_curs = 0;
-    else
-        tmp_curs = __vcurs_pos %
-                   (_size - 1) == 0 ? _size - 1 : __vcurs_pos % (_size - 1);
+    /**
+     *
+     * __offset needs to be changed, if __curs_pos exceeds window limit.
+     *
+     */
+    if (__curs_pos >= _size - 1) {
+        __curs_pos = _size - 1;
+        __offset = __vcurs_pos - _size + 1;
+    }
+
+    /**
+     *
+     * display always 1char on the left, to see what you delete.
+     *
+     */
+    if (__curs_pos < 2) {
+        if (__vcurs_pos > 0) {
+            __curs_pos = 1;
+            __offset = __vcurs_pos - 1;
+        } else {
+            __curs_pos = 0;
+            __offset = 0;
+        }
+    }
 
     if (curs_pos)
-        *curs_pos = tmp_curs;
+        *curs_pos = __curs_pos;
 
-    tsz_t offset = __vcurs_pos - tmp_curs;
-
-    return __buffer.substr(offset, (offset + _size > __buffer.length() -
-                                    1) ? __buffer.length() - offset : _size);
+    return __buffer.substr(__offset, (__offset + _size > __buffer.length() -
+                                      1) ? __buffer.length() -
+                           __offset : _size);
 }
 
 std::string
-CursorBuffer::string(int16_t _size, int16_t* curs_pos) const {
+CursorBuffer::string(int16_t _size, int16_t* curs_pos) {
     std::wstring tmp_wbuf = wstring(_size, curs_pos);
 
     size_t mbr_len = wcstombs(0, tmp_wbuf.c_str(), 0);

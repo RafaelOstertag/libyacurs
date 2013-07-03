@@ -243,11 +243,7 @@ CursorBuffer::insert(std::wstring::value_type c) {
     __curs_pos++;
 }
 
-/**
- *
- * Not adapted to new scrolling, still on paging...
- *
- */
+#warning "Not adapted to new scrolling, still on paging..."
 void
 CursorBuffer::info(int16_t _size, int16_t* len, int16_t* curs_pos) const {
     if (_size < 2) throw std::out_of_range(_("_size must not be <2") );

@@ -38,7 +38,7 @@ namespace YACURS {
 
                 // Convenience
                 typedef std::wstring::size_type tsz_t;
-                //typedef long tss_t;
+	    typedef long tss_t;
 
             private:
                 /**
@@ -65,17 +65,17 @@ namespace YACURS {
                 /**
                  * Cursor position.
                  */
-                tsz_t __vcurs_pos;
+                //tsz_t __vcurs_pos;
+	    
+	    /**
+	     * Displayed Cursor position. (Scrolling)
+	     */
+	    tss_t __curs_pos;
 
-                /**
-                 * Displayed Cursor position. (Scrolling)
-                 */
-                tsz_t __curs_pos;
-
-                /**
-                 * Window offset. (Srolling)
-                 */
-                tsz_t __offset;
+	    /**
+	     * Window offset. (Srolling)
+	     */
+	    tsz_t __offset;
 
                 /**
                  * Maximum size of of buffer.
@@ -192,7 +192,7 @@ namespace YACURS {
 
                 std::wstring wstring(int16_t _size, int16_t* curs_pos);
 
-                std::string  string(int16_t _size, int16_t* curs_pos);
+	    std::string  string(int16_t _size, int16_t* curs_pos);
 
                 const std::wstring& wstring() const;
 

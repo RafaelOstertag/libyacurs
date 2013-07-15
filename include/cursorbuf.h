@@ -62,10 +62,10 @@ namespace YACURS {
                  */
                 mutable bool __mbs_cache_valid;
 
-                /**
-                 * Cursor position.
-                 */
-                //tsz_t __vcurs_pos;
+		/**
+		 * Flag indicating whether or not buffer has been changed.
+		 */
+		bool __changed;
 	    
 	    /**
 	     * Displayed Cursor position. (Scrolling)
@@ -197,6 +197,8 @@ namespace YACURS {
                 const std::wstring& wstring() const;
 
                 const std::string& string() const;
+
+		bool changed() const;
         };
     } // namespace INTERNAL
 } // namespace YACURS

@@ -11,7 +11,7 @@ AC_USE_SYSTEM_EXTENSIONS
 AC_PROG_CC
 AC_PROG_CXX
 AM_PROG_AR
-LT_INIT([disable-static])
+LT_INIT
 LT_LANG([C++])
 
 # Conditional compiling on Cygwin: tests using LD_PRELOAD don't just

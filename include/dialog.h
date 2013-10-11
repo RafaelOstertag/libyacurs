@@ -43,15 +43,19 @@ namespace YACURS {
             enum STATE {
 		/// Dialog was confirmed
                 DIALOG_OK,
+		DIALOG_YES,
 		/// Dialog was cancelled
-                DIALOG_CANCEL
+                DIALOG_CANCEL,
+		DIALOG_NO
+		
             };
 
             enum DIALOG_TYPE {
                 OK_ONLY,
                 YES_ONLY,
                 OKCANCEL,
-                YESNO
+                YESNO,
+		YESNOCANCEL
             };
 
             enum DIALOG_SIZE {
@@ -62,8 +66,10 @@ namespace YACURS {
         private:
             VPack* __vpack;
             HPack* __hpack;
+	    Button* __byes;
             Button* __bok;
             Button* __bcancel;
+	    Button* __bno;
             STATE __dstate;
             DIALOG_TYPE __dialog_type;
             DIALOG_SIZE __dialog_size;
@@ -78,6 +84,10 @@ namespace YACURS {
             const Button* const ok_button() const;
 
             const Button* const cancel_button() const;
+
+            const Button* const yes_button() const;
+
+            const Button* const no_button() const;
 
             void dialog_state(STATE st);
 
@@ -102,6 +112,14 @@ namespace YACURS {
 	    virtual void on_ok_button();
 
 	    /**
+	     * Called on Yes button press.
+	     *
+	     * Will be called on Yes button press.
+	     * To be implemented by user if needed.
+	     */
+	    virtual void on_yes_button();
+
+	    /**
 	     * Called on Cancel button press.
 	     *
 	     * Will be called on Cancel button press.
@@ -109,12 +127,21 @@ namespace YACURS {
 	     */
 	    virtual void on_cancel_button();
 
+	    /**
+	     * Called on No button press.
+	     *
+	     * Will be called on No button press.
+	     * To be implemented by user if needed.
+	     */
+	    virtual void on_no_button();
+
         public:
             Dialog(const std::string& _title,
                    DIALOG_TYPE _dt=OKCANCEL,
                    DIALOG_SIZE _ds=AUTOMATIC);
             virtual ~Dialog();
             STATE dialog_state() const;
+	    DIALOG_TYPE dialog_type() const;
 
             void widget(WidgetBase* _w);
 

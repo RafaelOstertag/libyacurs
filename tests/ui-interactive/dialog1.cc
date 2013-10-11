@@ -18,42 +18,93 @@ wint_t
 #else
 int
 #endif
-__test_data[] = {
-    // Open dialog, and cancel
-    '\n', '\n',
-    // Open Dialog, and Ok
-    '\n', '\t', '\n',
-    // Quit app
-    '\t', '\n', 0
+__test_data[10][5] = {
+    // OK_ONLY
+    { '\n', '\n', 0 },
+    // YES_ONLY
+    { '\t', '\n', '\n', 0 },
+    // OKCANCEL: OK
+    { '\t', '\n', '\n', 0 },
+    // OKCANCEL: Cancel
+    { '\n', '\t', '\n', 0 },
+    // YESNO: Yes
+    { '\t', '\n', '\n', 0 },
+    // YESNO: No
+    { '\n', '\t', '\n', 0 },
+    // YESNOCANCEL: Yes
+    { '\t', '\n', '\n', 0 },
+    // YESNOCANCEL: No
+    { '\n', '\t', '\n', 0 },
+    // YESNOCANCEL: Cancel
+    { '\n', '\t', '\t', '\n', 0 },
+    // QUIT
+    { '\t', '\n', 0 }
 };
+
+YACURS::Dialog::STATE expectation[9] = {
+    YACURS::Dialog::DIALOG_OK,
+    YACURS::Dialog::DIALOG_YES,
+    YACURS::Dialog::DIALOG_OK,
+    YACURS::Dialog::DIALOG_CANCEL,
+    YACURS::Dialog::DIALOG_YES,
+    YACURS::Dialog::DIALOG_NO,
+    YACURS::Dialog::DIALOG_YES,
+    YACURS::Dialog::DIALOG_NO,
+    YACURS::Dialog::DIALOG_CANCEL
+};
+
+
+static YACURS::Dialog::STATE last_dialog_state;
 
 #ifdef USE_WCHAR
 extern "C" int
 __test_wget_wch(void*, wint_t* i) {
-    static wint_t* ptr2 = __test_data;
+    static int row = 0;
+    static int col = 0;
+    static YACURS::Dialog::STATE* exptr = expectation;
 
     usleep(70000);
 
-    if (*ptr2 == 0) {
-        abort();
+    if (__test_data[row][col] == 0) {
+	// Test expectation
+	if (*exptr != last_dialog_state)
+	    abort();
+
+	// Next round
+	exptr++;
+	if (++row>9)
+	    abort();
+
+	col=0;
     }
 
-    *i=*ptr2++;
+    *i = __test_data[row][col++];
 
     return OK;
 }
 #else
 extern "C" int
 __test_wgetch(void*) {
-    static int* ptr2 = __test_data;
+    static int row = 0;
+    static int col = 0;
+    static YACURS::Dialog::STATE* exptr = expectation;
 
     usleep(70000);
 
-    if (*ptr2 == 0) {
-        abort();
+    if (__test_data[row][col] == 0) {
+	// Test expectation
+	if (*exptr != last_dialog_state)
+	    abort();
+
+	// Next round
+	exptr++;
+	if (++row>9)
+	    abort();
+
+	col=0;
     }
 
-    return *ptr2++;
+    return __test_data[row][col++];
 }
 #endif
 
@@ -63,8 +114,12 @@ class MainWindow : public YACURS::Window {
         YACURS::HPack* hpack1;
         YACURS::Button* button1;
         YACURS::Button* button2;
+        YACURS::Button* button3;
+        YACURS::Button* button4;
+        YACURS::Button* button5;
+        YACURS::Button* button6;
         YACURS::Label* label1;
-        YACURS::Dialog* dialog1;
+	YACURS::Dialog* dialog;
 
     protected:
         void window_close_handler(YACURS::Event& _e) {
@@ -72,20 +127,30 @@ class MainWindow : public YACURS::Window {
             YACURS::EventEx<YACURS::WindowBase*>& evt =
                 dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
-            if (dialog1 != 0 && evt.data() == dialog1) {
+            if (dialog != 0 && evt.data() == dialog) {
 #ifdef USE_WCHAR
 		YACURS::Curses::statusbar()->push_msg("Dialog 1 clösed");
 #else
                 YACURS::Curses::statusbar()->push_msg("Dialog 1 closed");
 #endif
 
-                if (dialog1->dialog_state() == YACURS::Dialog::DIALOG_OK)
+		switch (last_dialog_state=dialog->dialog_state()) {
+		case YACURS::Dialog::DIALOG_OK:
                     label1->label("DIALOG_OK");
-                else
-                    label1->label("DIALOG_CANCEL");
+		    break;
+		case YACURS::Dialog::DIALOG_YES:
+		    label1->label("DIALOG_YES");
+		    break;
+		case YACURS::Dialog::DIALOG_CANCEL:
+		    label1->label("DIALOG_CANCEL");
+		    break;
+		case YACURS::Dialog::DIALOG_NO:
+		    label1->label("DIALOG_NO");
+		    break;
+		}
 
-                delete dialog1;
-                dialog1 = 0;
+                delete dialog;
+                dialog = 0;
             }
         }
 
@@ -95,14 +160,46 @@ class MainWindow : public YACURS::Window {
                 dynamic_cast<YACURS::EventEx<YACURS::Button*>&>(_e);
 
             if (e.data() == button1) {
-                assert(dialog1 == 0);
+                assert(dialog == 0);
 
-                dialog1 = new YACURS::Dialog("Test Dialog");
-                dialog1->show();
+                dialog = new YACURS::Dialog("OK_ONLY Dialog", YACURS::Dialog::OK_ONLY);
+                dialog->show();
                 return;
             }
 
             if (e.data() == button2) {
+                assert(dialog == 0);
+
+                dialog = new YACURS::Dialog("YES_ONLY Dialog", YACURS::Dialog::YES_ONLY);
+                dialog->show();
+                return;
+            }
+
+            if (e.data() == button3) {
+                assert(dialog == 0);
+
+                dialog = new YACURS::Dialog("OKCANCEL Dialog", YACURS::Dialog::OKCANCEL);
+                dialog->show();
+                return;
+            }
+
+            if (e.data() == button4) {
+                assert(dialog == 0);
+
+                dialog = new YACURS::Dialog("YESNO Dialog", YACURS::Dialog::YESNO);
+                dialog->show();
+                return;
+            }
+
+            if (e.data() == button5) {
+                assert(dialog == 0);
+
+                dialog = new YACURS::Dialog("YESNOCANCEL Dialog", YACURS::Dialog::YESNOCANCEL);
+                dialog->show();
+                return;
+            }
+
+            if (e.data() == button6) {
                 YACURS::EventQueue::submit(YACURS::EVT_QUIT);
                 return;
             }
@@ -110,14 +207,23 @@ class MainWindow : public YACURS::Window {
 
     public:
         MainWindow() : YACURS::Window(YACURS::Margin(1, 0, 1,
-                                                     0) ), dialog1(0) {
-            button1 = new YACURS::Button("New Window");
-            button2 = new YACURS::Button("Quit");
+                                                     0) ),
+		       dialog(0) {
+            button1 = new YACURS::Button("OK_ONLY");
+            button2 = new YACURS::Button("YES_ONLY");
+            button3 = new YACURS::Button("OKCANCEL");
+            button4 = new YACURS::Button("YESNO");
+            button5 = new YACURS::Button("YESNOCANCEL");
+            button6 = new YACURS::Button("Quit");
             vpack1 = new YACURS::VPack;
             hpack1 = new YACURS::HPack;
             label1 = new YACURS::Label("dialog state");
             hpack1->add_back(button1);
             hpack1->add_back(button2);
+            hpack1->add_back(button3);
+            hpack1->add_back(button4);
+            hpack1->add_back(button5);
+            hpack1->add_back(button6);
             vpack1->add_front(label1);
             vpack1->add_back(hpack1);
             widget(vpack1);
@@ -137,11 +243,15 @@ class MainWindow : public YACURS::Window {
         }
 
         ~MainWindow() {
-            if (dialog1)
-                delete dialog1;
+            if (dialog)
+                delete dialog;
 
             delete button1;
             delete button2;
+            delete button3;
+            delete button4;
+            delete button5;
+            delete button6;
             delete hpack1;
             delete vpack1;
             delete label1;

@@ -91,6 +91,16 @@ Dialog::cancel_button() const {
     return __bcancel;
 }
 
+const Button* const
+Dialog::yes_button() const {
+    return __byes;
+}
+
+const Button* const
+Dialog::no_button() const {
+    return __bno;
+}
+
 void
 Dialog::dialog_state(STATE st) {
     __dstate = st;
@@ -103,8 +113,6 @@ Dialog::button_press_handler(Event& _e) {
     assert(_e == EVT_BUTTON_PRESS);
     EventEx<Button*>& evt = dynamic_cast<EventEx<Button*>&>(_e);
 
-    assert(__bok != 0);
-
     if (evt.data() == __bok) {
         __dstate = DIALOG_OK;
 	on_ok_button();
@@ -113,6 +121,16 @@ Dialog::button_press_handler(Event& _e) {
     if (evt.data() == __bcancel) {
         __dstate = DIALOG_CANCEL;
 	on_cancel_button();
+    }
+
+    if (evt.data() == __byes) {
+        __dstate = DIALOG_YES;
+	on_yes_button();
+    }
+
+    if (evt.data() == __bno) {
+        __dstate = DIALOG_NO;
+	on_no_button();
     }
 
     on_close(__dstate);
@@ -134,6 +152,16 @@ Dialog::on_cancel_button() {
     /* Intentionally empty */
 }
 
+void
+Dialog::on_yes_button() {
+    /* Intentionally empty */
+}
+
+void
+Dialog::on_no_button() {
+    /* Intentionally empty */
+}
+
 //
 // Public
 //
@@ -141,13 +169,15 @@ Dialog::on_cancel_button() {
 Dialog::Dialog(const std::string& _title,
                DIALOG_TYPE _dt,
                DIALOG_SIZE _ds) : __vpack(0),
-    __hpack(0),
-    __bok(0),
-    __bcancel(0),
-    __dstate(DIALOG_CANCEL),
-    __dialog_type(_dt),
-    __dialog_size(_ds),
-    __title(_title) {
+				  __hpack(0),
+				  __byes(0),
+				  __bok(0),
+				  __bcancel(0),
+				  __bno(0),
+				  __dstate(DIALOG_CANCEL),
+				  __dialog_type(_dt),
+				  __dialog_size(_ds),
+				  __title(_title) {
     __vpack = new VPack;
     __hpack = new HPack;
 
@@ -157,20 +187,32 @@ Dialog::Dialog(const std::string& _title,
     case OKCANCEL:
         __bcancel = new Button(_("Cancel") );
         __hpack->add_back(__bcancel);
-
+	// Fall thru
+	
     case OK_ONLY:
         __bok = new Button(_("OK") );
         __hpack->add_front(__bok);
         break;
-
+	
     case YESNO:
-        __bcancel = new Button(_("No") );
-        __hpack->add_back(__bcancel);
-
+        __bno = new Button(_("No") );
+        __hpack->add_front(__bno);
+	// Fall thru
+	
     case YES_ONLY:
-        __bok = new Button(_("Yes") );
-        __hpack->add_front(__bok);
+        __byes = new Button(_("Yes") );
+        __hpack->add_front(__byes);
         break;
+	
+	// handled separately
+    case YESNOCANCEL:
+        __bcancel = new Button(_("Cancel") );
+        __hpack->add_back(__bcancel);
+        __bno = new Button(_("No") );
+        __hpack->add_front(__bno);
+        __byes = new Button(_("Yes") );
+        __hpack->add_front(__byes);
+	break;
 
     default:
         throw EXCEPTIONS::InvalidDialogType();
@@ -186,16 +228,18 @@ Dialog::Dialog(const std::string& _title,
 Dialog::~Dialog() {
     assert(__vpack != 0);
     assert(__hpack != 0);
-    assert(__bok != 0);
 
     delete __vpack;
     delete __hpack;
-    delete __bok;
 
-    if (__dialog_type) {
-        assert(__bcancel != 0);
-        delete __bcancel;
-    }
+    if (__bok)
+	delete __bok;
+    if (__byes)
+	delete __byes;
+    if (__bcancel)
+	delete __bcancel;
+    if (__bno)
+	delete __bno;
 
     EventQueue::disconnect_event(EventConnectorMethod1<Dialog>(
                                      EVT_BUTTON_PRESS, this,

@@ -176,6 +176,16 @@ namespace YACURS {
              */
             bool readonly() const;
 
+	    /**
+	     * Set maximum size of input.
+	     */
+	    void max_input(tsz_t _max_input);
+
+	    /**
+	     * Get maximum input size.
+	     */
+	    tsz_t max_input() const;
+
             /**
              * Set input obscure mode
              *
@@ -205,6 +215,11 @@ namespace YACURS {
             void hide_input(bool _m);
 
             bool hide_input() const;
+
+	    /**
+	     * Indicate whether or not input has changed.
+	     */
+	    bool changed() const;
 
             // From WidgetBase
 
@@ -429,6 +444,27 @@ namespace YACURS {
         return __read_only;
     }
 
+#warning "test max_input()"
+    template<class T> void
+    Input<T>::max_input(tsz_t _max_input) {
+	// Chop down the buffer in case it is bigger than the new
+	// maximal input size
+	if (_max_input < __max_size &&
+	    __buffer.length() > _max_input) {
+	    std::wstring tmp=__buffer.wstring();
+	    tmp.erase(_max_input-1,
+		      tmp.length()-_max_input);	   
+	    __buffer.set(tmp);
+	}
+
+	__max_size=_max_input;
+    }
+
+    template<class T> typename Input<T>::tsz_t
+    Input<T>::max_input() const {
+	return __max_size;
+    }
+
     template<class T> void
     Input<T>::obscure_input(bool _m) {
         if (_m && __hide_input)
@@ -461,6 +497,11 @@ namespace YACURS {
     template<class T> bool
     Input<T>::hide_input() const {
         return __hide_input;
+    }
+
+    template<class T> bool
+    Input<T>::changed() const {
+	return __buffer.changed();
     }
 
     template<class T> void

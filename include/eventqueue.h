@@ -113,7 +113,7 @@ namespace YACURS {
              * requests are queue up for processing later.
              */
             static std::list<EventConnectorBase*> evtconn_rem_request;
-            static std::map<EVENT_TYPE,
+            static std::map<EventType,
                             std::list<EventConnectorBase*> > evtconn_map;
 
             /**
@@ -188,7 +188,7 @@ namespace YACURS {
             static void suspend(const EventConnectorBase& ec);
 
             /// Suspend all events equal to a given event
-            static void suspend_all(EVENT_TYPE _t);
+            static void suspend_all(const EventType _t);
 
             /// Suspend all events except the one given
             static void suspend_except(const EventConnectorBase& ec);
@@ -197,13 +197,13 @@ namespace YACURS {
             static void unsuspend(const EventConnectorBase& ec);
 
             /// Unsuspend all events equal to a given event
-            static void unsuspend_all(EVENT_TYPE _t);
+            static void unsuspend_all(const EventType _t);
 
             /// Unsuspend all events except the one given
             static void unsuspend_except(const EventConnectorBase& ec);
 
             /// Add an event to the qeue
-            static void submit(EVENT_TYPE _et);
+            static void submit(const EventType _et);
 
             static void submit(const Event& ev);
 

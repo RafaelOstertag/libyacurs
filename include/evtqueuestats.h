@@ -61,7 +61,7 @@ namespace YACURS {
 
                 /// Number of Events submitted during run time of
                 /// queue by type
-                std::map<EVENT_TYPE, uint32_t> evt_submitted_by_type;
+                std::map<EventType, uint32_t> evt_submitted_by_type;
 
                 /// Events that were pending during cleanup()
                 uint32_t evt_pending_cleanup;
@@ -70,7 +70,7 @@ namespace YACURS {
                 uint32_t evt_proc_total;
 
                 /// Events processed by type
-                std::map<EVENT_TYPE, uint32_t> evt_proc_by_type;
+                std::map<EventType, uint32_t> evt_proc_by_type;
 
                 /// Max Events connected
                 uint32_t ec_max;
@@ -79,13 +79,13 @@ namespace YACURS {
                 uint32_t ec_min;
 
                 /// Events connected by type
-                std::map<EVENT_TYPE, uint32_t> ec_max_by_type;
+                std::map<EventType, uint32_t> ec_max_by_type;
 
                 /// Total Event Connectors calls
                 uint32_t ec_calls_total;
 
                 /// Event connector calls by type
-                std::map<EVENT_TYPE, uint32_t> ec_call_by_type;
+                std::map<EventType, uint32_t> ec_call_by_type;
 
                 /// Total EventConnector remove requests processed
                 uint32_t ec_rm_total;
@@ -104,7 +104,7 @@ namespace YACURS {
 
                 void clear();
 
-                void update_ec_calls_by_type(EVENT_TYPE _t);
+                void update_ec_calls_by_type(const EventType _t);
 
                 void update_ec_call_time(clock_t t0, clock_t t1);
 
@@ -114,14 +114,14 @@ namespace YACURS {
 
                 void update_ec_rm_cancelled();
 
-                void update_evt_submitted_by_type(EVENT_TYPE _t);
+                void update_evt_submitted_by_type(const EventType _t);
 
-                void update_ec_count(const std::map<EVENT_TYPE,
+                void update_ec_count(const std::map<EventType,
                                                     std::list<EventConnectorBase*> >& _ec_map);
 
                 void update_evq_size_max(uint16_t v);
 
-                void update_evt_proc_by_type(EVENT_TYPE _t);
+                void update_evt_proc_by_type(const EventType _t);
 
                 void update_evt_pending_cleanup();
 
@@ -133,7 +133,7 @@ namespace YACURS {
         };
 
         inline void
-        EventQueueStats::update_ec_calls_by_type(EVENT_TYPE _t) {
+        EventQueueStats::update_ec_calls_by_type(const EventType _t) {
             ec_calls_total++;
             ec_call_by_type[_t]++;
         }
@@ -160,16 +160,16 @@ namespace YACURS {
         }
 
         inline void
-        EventQueueStats::update_evt_submitted_by_type(EVENT_TYPE _t) {
+        EventQueueStats::update_evt_submitted_by_type(const EventType _t) {
             evt_submitted++;
             evt_submitted_by_type[_t]++;
         }
 
         inline void
-        EventQueueStats::update_ec_count(const std::map<EVENT_TYPE,
+        EventQueueStats::update_ec_count(const std::map<EventType,
                                                         std::list<EventConnectorBase*> >& _ec_map)
         {
-            std::map<EVENT_TYPE,
+            std::map<EventType,
                      std::list<EventConnectorBase*> >::const_iterator map_it =
                 _ec_map.begin();
 
@@ -194,7 +194,7 @@ namespace YACURS {
         }
 
         inline void
-        EventQueueStats::update_evt_proc_by_type(EVENT_TYPE _t) {
+        EventQueueStats::update_evt_proc_by_type(const EventType _t) {
             evt_proc_total++;
             evt_proc_by_type[_t]++;
         }

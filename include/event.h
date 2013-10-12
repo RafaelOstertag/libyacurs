@@ -23,6 +23,10 @@
 #ifndef EVENT_H
 #define EVENT_H 1
 
+#include <stdint.h>
+#include <cstring>
+#include <stdexcept>
+
 #include "area.h"
 
 namespace YACURS {
@@ -34,7 +38,7 @@ namespace YACURS {
      *
      * Events, Event Queue, and Event Connectors.
      *
-     * Events (@c EVENT_TYPE) can be connected to by means of Event
+     * Events (@c EventType) can be connected to by means of Event
      * Connectors (@c EventConnectorBase). A list of Event Connectors is
      * maintained by the Event Queue (@c EventQueue). Events can be
      * submitted to the Event Queue, which in turn calls all Event
@@ -51,106 +55,112 @@ namespace YACURS {
      *
      * @see EventConnectorBase
      * @see EventQueue
-     *
-     * @internal
-     *
-     * @warning Don't forget to update Event::__str_table if
-     * rearranging, adding, or removing events.
      */
-    enum EVENT_TYPE {
-        /**
-         * Terminates the EventQueue main loop
-         */
-        EVT_QUIT,
+    class EventType {
+	private:
+	    enum {
+		MAX_NAME_LENGTH=64
+	    };
 
-        /**
-         * Key pressed
-         */
-        EVT_KEY,
+	    char __name[MAX_NAME_LENGTH];
+	    uint32_t __hashval;
 
-        /**
-         * A refresh is usually issued after a resize. The refresh
-         * must not be immediate, i.e. no wrefresh(), but
-         * wnoutrefresh().
-         */
-        EVT_REFRESH,
+	public:
+	    EventType(std::string name);
 
-        /**
-         * Force curses window to refresh. This is used to completely
-         * redraw the screen upon Ctrl-L. The handler can be
-         * implemented as simple call to touchwin().
-         */
-        EVT_FORCEREFRESH,
+	    virtual ~EventType();
 
-        /**
-         *
-         * A doupdate is usually issued after a refresh. Only one
-         * EVT_DOUPDATE handler should exist, since curses takes care
-         * of refreshing all windows.
-         */
-        EVT_DOUPDATE,
+	    bool operator==(const EventType& rhs) const;
 
-        /**
-         * Re-setup terminal. Mainly used when resizing screen or
-         * complete screen refresh. @sa EventQueue
-         */
-        EVT_TERMRESETUP,
+	    bool operator!=(const EventType& rhs) const;
 
-        /**
-         * Notification of window size change.
-         *
-         * Only Curses is supposed to handle this Event. Widgets and
-         * Windows should not use it in order to resize.
-         */
-        EVT_SIGWINCH,
+	    bool operator<(const EventType& rhs) const;
 
-        /**
-         * Notification of alarm signal
-         */
-        EVT_SIGALRM,
+	    bool operator>(const EventType& rhs) const;
 
-        EVT_SIGUSR1,
-        EVT_SIGUSR2,
-        EVT_SIGINT,
-        EVT_SIGTERM,
-        EVT_SIGQUIT,
-        EVT_SIGCONT,
-        EVT_SIGTSTP,
+	    operator std::string() const;
 
-        /**
-         * Advises Focus Manager to give focus to the next Widget in
-         * the Current Focus Group.
-         */
-        EVT_FOCUS_NEXT,
-
-        /**
-         * Advises Focus Manager to give focus to the next Widget in
-         * the Current Focus Group.
-         */
-        EVT_FOCUS_PREVIOUS,
-
-        /**
-         * Windows emit events of this type when shown by calling
-         * show().
-         */
-        EVT_WINDOW_SHOW,
-
-        /**
-         * Windows emit events of this type when closed by calling
-         * close().
-         */
-        EVT_WINDOW_CLOSE,
-
-        /**
-         * Will be emitted when Button is pressed.
-         */
-        EVT_BUTTON_PRESS,
-
-        /**
-         * Will be emitted when ENTER is pressed in ListBox.
-         */
-        EVT_LISTBOX_ENTER
+	    operator uint32_t() const;
     };
+
+    /**
+     * Terminates the EventQueue main loop
+     */
+    const EventType EVT_QUIT("EVT_QUIT");
+    /**
+     * Key pressed
+     */
+    const EventType EVT_KEY("EVT_KEY");
+    /**
+     * A refresh is usually issued after a resize. The refresh
+     * must not be immediate, i.e. no wrefresh(), but
+     * wnoutrefresh().
+     */
+    const EventType EVT_REFRESH("EVT_REFRESH");
+    /**
+     * Force curses window to refresh. This is used to completely
+     * redraw the screen upon Ctrl-L. The handler can be
+     * implemented as simple call to touchwin().
+     */
+    const EventType EVT_FORCEREFRESH("EVT_FORCEREFRESH");
+    /**
+     * A doupdate is usually issued after a refresh. Only one
+     * EVT_DOUPDATE handler should exist, since curses takes care
+     * of refreshing all windows.
+     */
+    const EventType EVT_DOUPDATE("EVT_DOUPDATE");
+    /**
+     * Re-setup terminal. Mainly used when resizing screen or
+     * complete screen refresh. @sa EventQueue
+     */
+    const EventType EVT_TERMRESETUP("EVT_TERMRESETUP");
+    /**
+     * Notification of window size change.
+     *
+     * Only Curses is supposed to handle this Event. Widgets and
+     * Windows should not use it in order to resize.
+     */
+    const EventType EVT_SIGWINCH("EVT_SIGWINCH");
+    /**
+     * Notification of alarm signal
+     */
+    const EventType EVT_SIGALRM("EVT_SIGALRM");
+    const EventType EVT_SIGUSR1("EVT_SIGUSR1");
+    const EventType EVT_SIGUSR2("EVT_SIGUSR2");
+    const EventType EVT_SIGINT("EVT_SIGINT");
+    const EventType EVT_SIGTERM("EVT_SIGTERM");
+    const EventType EVT_SIGQUIT("EVT_SIGQUIT");
+    const EventType EVT_SIGCONT("EVT_SIGCONT");
+    const EventType EVT_SIGTSTP("EVT_SIGTSTP");
+    /**
+     * Advises Focus Manager to give focus to the next Widget in
+     * the Current Focus Group.
+     */
+    const EventType EVT_FOCUS_NEXT("EVT_FOCUS_NEXT");
+    /**
+     * Advises Focus Manager to give focus to the next Widget in
+     * the Current Focus Group.
+     */
+    const EventType EVT_FOCUS_PREVIOUS("EVT_FOCUS_PREVIOUS");
+    /**
+     * Windows emit events of this type when shown by calling
+     * show().
+     */
+    const EventType EVT_WINDOW_SHOW("EVT_WINDOW_SHOW");
+    /**
+     * Windows emit events of this type when closed by calling
+     * close().
+     */
+    const EventType EVT_WINDOW_CLOSE("EVT_WINDOW_CLOSE");
+    /**
+     * Will be emitted when Button is pressed.
+     */
+    const EventType EVT_BUTTON_PRESS("EVT_BUTTON_PRESS");
+    /**
+     * Will be emitted when ENTER is pressed in ListBox.
+     */
+    const EventType EVT_LISTBOX_ENTER("EVT_LISTBOX_ENTER");
+
 
     /**
      * @ingroup Event
@@ -165,7 +175,7 @@ namespace YACURS {
             /**
              * The type of the Event
              */
-            EVENT_TYPE event_type;
+            EventType event_type;
 
             /**
              * Indicate whether or not the Event should not be
@@ -179,7 +189,7 @@ namespace YACURS {
             /**
              * @param _et the event type
              */
-            Event(EVENT_TYPE _et);
+            Event(const EventType _et);
 
             virtual ~Event();
 
@@ -197,19 +207,19 @@ namespace YACURS {
              * Tests whether the given event type is equal to type of this
              * object.
              *
-             * @param _et rhs EVENT_TYPE
+             * @param _et rhs EventType
              *
              * @return \c true if the event types are equal, \c false
              * otherwise.
              */
-            bool operator==(EVENT_TYPE _et) const;
+            bool operator==(const EventType _et) const;
 
             /**
              * Get the event type of the object.
              *
              * @return event type of the object.
              */
-            EVENT_TYPE type() const;
+            const EventType type() const;
 
             /**
              * Set stop flag.
@@ -239,9 +249,9 @@ namespace YACURS {
              */
             virtual Event* clone() const;
 
-            operator EVENT_TYPE() const;
+            operator const EventType() const;
 
-            static std::string evt2str(EVENT_TYPE _et);
+            static std::string evt2str(const EventType _et);
     };
 
     /**
@@ -264,7 +274,7 @@ namespace YACURS {
              * @param _payload reference to the data. The data will be copied to
              * an internal variable.
              */
-            EventEx(EVENT_TYPE _et, const T& _payload) : Event(_et),
+            EventEx(const EventType _et, const T& _payload) : Event(_et),
                 __payload(_payload) {
             }
 

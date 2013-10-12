@@ -14,10 +14,10 @@
 
 class Handler {
     private:
-        YACURS::EVENT_TYPE expected_evt;
+        YACURS::EventType expected_evt;
         int calls;
     public:
-        Handler(YACURS::EVENT_TYPE expected) :
+        Handler(YACURS::EventType expected) :
             expected_evt(expected), calls(0) {
         }
 
@@ -52,7 +52,7 @@ class AlrmHandler : public Handler {
         }
 
         void handler(YACURS::Event& e) {
-            std::cout << "WinChHandler\r" << std::endl;
+            std::cout << "AlrmHandler\r" << std::endl;
             Handler::handler(e);
         }
 };

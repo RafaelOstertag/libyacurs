@@ -41,19 +41,13 @@ FocusManager::focus_change_handler(Event& _e) {
     assert(__focus_groups[__active_focusgroup] != 0);
     assert(__focus_groups[__active_focusgroup]->active() );
 
-    switch (_e.type() ) {
-    case EVT_FOCUS_NEXT:
+    if (_e.type() == EVT_FOCUS_NEXT) {
         __focus_groups[__active_focusgroup]->focus_next();
-        break;
-
-    case EVT_FOCUS_PREVIOUS:
+    } else if (_e.type() == EVT_FOCUS_PREVIOUS) {
         __focus_groups[__active_focusgroup]->focus_previous();
-        break;
-
-    default:
+    } else {
         throw EXCEPTIONS::UnexpectedEvent();
     }
-    ;
 }
 
 //

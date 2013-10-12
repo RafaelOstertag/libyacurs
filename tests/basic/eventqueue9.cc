@@ -38,16 +38,11 @@ __test_wgetch(void*) {
 
 class Handler {
     private:
-        YACURS::EVENT_TYPE expected_evt;
+        YACURS::EventType expected_evt;
         int calls;
     public:
-        Handler(YACURS::EVENT_TYPE evt) :
+        Handler(YACURS::EventType evt) :
             expected_evt(evt), calls(0) {
-        }
-
-        Handler(const Handler& _h) {
-            expected_evt = _h.expected_evt;
-            calls = _h.calls;
         }
 
         virtual ~Handler() {

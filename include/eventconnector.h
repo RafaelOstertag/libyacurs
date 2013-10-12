@@ -38,7 +38,7 @@ namespace YACURS {
     /**
      * @ingroup Event
      *
-     * An Event Connector connects an event (@c EVENT_TYPE) to an
+     * An Event Connector connects an event (@c EventType) to an
      * handler (function, or member function).
      *
      * When connecting an event to a member function, it is expected
@@ -60,7 +60,7 @@ namespace YACURS {
     class EventConnectorBase {
         private:
             /// The event type the handler is connected to.
-            EVENT_TYPE evt;
+            EventType evt;
 
             /**
              * indication whether (@c true) or not (@c false) the
@@ -76,7 +76,7 @@ namespace YACURS {
              * @param _e the event type
              * @param _s whether or not the handler is suspended.
              */
-            EventConnectorBase(EVENT_TYPE _e, bool _s=false);
+            EventConnectorBase(const EventType _e, bool _s=false);
 
             virtual ~EventConnectorBase();
 
@@ -144,16 +144,16 @@ namespace YACURS {
              * @return @c true if _evt and @c _et are equal, @c false
              * otherwise.
              */
-            bool operator==(EVENT_TYPE _et) const;
+            bool operator==(const EventType _et) const;
 
-            bool operator!=(EVENT_TYPE _et) const;
+            bool operator!=(const EventType _et) const;
 
             /**
              * Returns the event the handler is connected to.
              *
-             * @return the EVENT_TYPE
+             * @return the EventType
              */
-            EVENT_TYPE type() const;
+            const EventType type() const;
 
             /**
              * Set the suspended state to the given value.
@@ -191,7 +191,7 @@ namespace YACURS {
              */
             virtual EventConnectorBase* clone() const = 0;
 
-            operator EVENT_TYPE() const;
+            operator const EventType() const;
     };
 
     /**
@@ -244,7 +244,7 @@ namespace YACURS {
              *  EventConnector1<A> c(EVT_RESIZE, &a, &A::event_handler);
              * </pre>
              */
-            EventConnectorMethod1(EVENT_TYPE _e,
+            EventConnectorMethod1(const EventType _e,
                                   _obj_ptr_t _obj_ptr,
                                   __mem_fun_t _func) : EventConnectorBase(_e),
                 __func(_func),
@@ -318,7 +318,7 @@ namespace YACURS {
              *
              * @param _func the pointer to the function.
              */
-            EventConnectorFunction1(EVENT_TYPE _e, fptr_t _func);
+            EventConnectorFunction1(const EventType _e, fptr_t _func);
 
             /**
              * The id returned is the pointer to the function converted to

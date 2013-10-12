@@ -40,7 +40,7 @@ using namespace YACURS;
 //
 // Public
 //
-EventConnectorBase::EventConnectorBase(EVENT_TYPE _e, bool _s) :
+EventConnectorBase::EventConnectorBase(const EventType _e, bool _s) :
     evt(_e), __suspended(_s) {
 }
 
@@ -69,16 +69,16 @@ EventConnectorBase::operator!=(const Event& _eb) const {
 }
 
 bool
-EventConnectorBase::operator==(EVENT_TYPE _et) const {
+EventConnectorBase::operator==(const EventType _et) const {
     return _et == evt;
 }
 
 bool
-EventConnectorBase::operator!=(EVENT_TYPE _et) const {
+EventConnectorBase::operator!=(const EventType _et) const {
     return !operator==(_et);
 }
 
-EVENT_TYPE
+const EventType
 EventConnectorBase::type() const {
     return evt;
 }
@@ -93,7 +93,7 @@ EventConnectorBase::suspended() const {
     return __suspended;
 }
 
-EventConnectorBase::operator EVENT_TYPE() const {
+EventConnectorBase::operator const EventType() const {
     return evt;
 }
 
@@ -114,7 +114,7 @@ EventConnectorFunction1::id() const {
 //
 // Public
 //
-EventConnectorFunction1::EventConnectorFunction1(EVENT_TYPE _e,
+EventConnectorFunction1::EventConnectorFunction1(const EventType _e,
                                                  fptr_t _func) :
     EventConnectorBase(_e), __func(_func) {
     assert(__func != 0);

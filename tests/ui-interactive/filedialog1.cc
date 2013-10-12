@@ -112,6 +112,11 @@ select_item() {
     return tmp;
 }
 
+void
+quit() {
+    YACURS::EventQueue::submit(YACURS::EVT_QUIT);
+}
+
 #ifdef USE_WCHAR
 extern "C" int
 __test_wget_wch(void*, wint_t* i) {
@@ -151,7 +156,9 @@ __test_wget_wch(void*, wint_t* i) {
         return OK;
     }
 
-    abort();
+    // There are constellations we cannot intercept using the test
+    // mechanism, so we simply quit
+    quit();
 
     return ERR;
 }
@@ -185,7 +192,9 @@ __test_wgetch(void*) {
     if (*ptr_end_app != 0)
         return *ptr_end_app++;
 
-    abort();
+    // There are constellations we cannot intercept using the test
+    // mechanism, so we simply quit
+    quit();
 
     return 0;
 }
@@ -431,7 +440,7 @@ main() {
 
         YACURS::Curses::title(new YACURS::TitleBar(YACURS::TitleBar::
                                                    POS_TOP,
-                                                   "FileSaveDialog 1") );
+                                                   "FileDialog 1") );
         YACURS::Curses::statusbar(new YACURS::StatusBar);
 
         YACURS::Curses::mainwindow(new MainWindow);

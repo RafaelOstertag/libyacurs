@@ -8,3 +8,4 @@ src/filesavedialog.cc
 src/unlockdiadefault.cc
 src/yacursex.cc
 src/cursorbuf.cc
+src/event.cc

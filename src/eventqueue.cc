@@ -81,7 +81,7 @@ bool EventQueue::signal_blocked = false;
 
 std::queue<Event*> EventQueue::evt_queue;
 std::list<EventConnectorBase*> EventQueue::evtconn_rem_request;
-std::map<EVENT_TYPE, std::list<EventConnectorBase*> > EventQueue::evtconn_map;
+std::map<EventType, std::list<EventConnectorBase*> > EventQueue::evtconn_map;
 
 LockScreen* EventQueue::__lockscreen = 0;
 unsigned int EventQueue::__timeout = 0;
@@ -129,7 +129,7 @@ namespace YACURS {
              */
             class EvtConnSetSuspend {
                 private:
-                    EVENT_TYPE __evt;
+                    const EventType __evt;
                     bool __suspend;
 
                 public:
@@ -141,7 +141,7 @@ namespace YACURS {
                      * suspend the EventConnector, @c false to
                      * unsuspend the EventConnector.
                      */
-                    EvtConnSetSuspend(EVENT_TYPE _e, bool _s) :
+                    EvtConnSetSuspend(const EventType _e, bool _s) :
                         __evt(_e), __suspend(_s) {
                     }
 
@@ -177,7 +177,7 @@ namespace YACURS {
                 public:
                     /**
                      * @param _e all EventConnectors having the same
-                     * EVENT_TYPE as this, will have set their suspend
+                     * EventType as this, will have set their suspend
                      * state. _e will not be changed, though.
                      *
                      * @param _s suspend state to set: @c true to
@@ -708,7 +708,7 @@ EventQueue::suspend(const EventConnectorBase& ec) {
 }
 
 void
-EventQueue::suspend_all(EVENT_TYPE _t) {
+EventQueue::suspend_all(const EventType _t) {
     std::list<EventConnectorBase*>& list = evtconn_map[_t];
 
     std::for_each(list.begin(),
@@ -742,7 +742,7 @@ EventQueue::unsuspend(const EventConnectorBase& ec) {
 }
 
 void
-EventQueue::unsuspend_all(EVENT_TYPE _t) {
+EventQueue::unsuspend_all(const EventType _t) {
     std::list<EventConnectorBase*>& list = evtconn_map[_t];
     std::for_each(list.begin(),
                   list.end(),
@@ -758,7 +758,7 @@ EventQueue::unsuspend_except(const EventConnectorBase& ec) {
 }
 
 void
-EventQueue::submit(EVENT_TYPE _et) {
+EventQueue::submit(const EventType _et) {
     submit(Event(_et) );
 }
 
@@ -898,7 +898,7 @@ EventQueue::cleanup() {
     proc_rem_request();
 
     // Free the memory occupied by remaining connectors
-    std::map<EVENT_TYPE,
+    std::map<EventType,
              std::list<EventConnectorBase*> >::iterator m_it =
         evtconn_map.begin();
     while (m_it != evtconn_map.end() ) {

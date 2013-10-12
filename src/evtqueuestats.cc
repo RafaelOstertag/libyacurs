@@ -111,7 +111,7 @@ EventQueueStats::dump(std::ostream& _os) const {
     _os << "-----------------------" << std::endl;
     _os << std::endl;
 
-    std::map<EVENT_TYPE, unsigned int>::const_iterator map_it =
+    std::map<EventType, unsigned int>::const_iterator map_it =
         evt_submitted_by_type.begin();
 
     uint32_t total = 0;

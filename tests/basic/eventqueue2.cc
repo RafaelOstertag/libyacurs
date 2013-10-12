@@ -14,10 +14,10 @@
 
 class Handler {
     private:
-        YACURS::EVENT_TYPE expected_evt;
+        YACURS::EventType expected_evt;
         int calls;
     public:
-        Handler(YACURS::EVENT_TYPE expected) :
+        Handler(YACURS::EventType expected) :
             expected_evt(expected), calls(0) {
         }
 

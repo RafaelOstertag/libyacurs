@@ -23,37 +23,64 @@
 #include "config.h"
 #endif
 
+#include <gettext.h>
+
 #include "event.h"
 
 using namespace YACURS;
 
-// This array will be used to translate EVENT_TYPE to event names. The
-// enums will be used as indices, i.e. __str_table[EVT_QUIT].
+////////////////////////////////////////////////////////
 //
-// Keep this in sync with EVENT_TYPE all the time.
-const char* Event::__str_table[] = {
-    "EVT_QUIT",
-    "EVT_KEY",
-    "EVT_REFRESH",
-    "EVT_FORCEREFRESH",
-    "EVT_DOUPDATE",
-    "EVT_TERMRESETUP",
-    "EVT_SIGWINCH",
-    "EVT_SIGALRM",
-    "EVT_SIGUSR1",
-    "EVT_SIGUSR2",
-    "EVT_SIGINT",
-    "EVT_SIGTERM",
-    "EVT_SIGQUIT",
-    "EVT_SIGCONT",
-    "EVT_SIGTSTP",
-    "EVT_FOCUS_NEXT",
-    "EVT_FOCUS_PREVIOUS",
-    "EVT_WINDOW_SHOW",
-    "EVT_WINDOW_CLOSE",
-    "EVT_BUTTON_PRESS",
-    "EVT_LISTBOX_ENTER"
-};
+// class EventType
+//
+////////////////////////////////////////////////////////
+EventType::EventType(std::string name): __hashval(0x811c9dc5) {
+    if (name.length()>MAX_NAME_LENGTH-1)
+	throw std::length_error(_("Event names must not be greater than 63 characters."));
+
+    if (name.empty()) 
+	throw std::length_error(_("Event names must not be empty."));
+
+    // See http://isthe.com/chongo/tech/comp/fnv/
+    std::string::size_type len = name.length();
+    for (std::string::size_type i=0; i<len; i++) {
+	__hashval *= 0x01000193;
+	__hashval ^= (uint32_t)name[i];
+    }
+
+    strncpy(__name, name.c_str(), MAX_NAME_LENGTH-1);
+    __name[MAX_NAME_LENGTH-1] = 0;
+}
+
+EventType::~EventType() {}
+
+bool
+EventType::operator==(const EventType& rhs) const {
+    return __hashval == rhs.__hashval;
+}
+
+bool
+EventType::operator!=(const EventType& rhs) const {
+    return !operator==(rhs);
+}
+
+bool
+EventType::operator<(const EventType& rhs) const {
+    return __hashval < rhs.__hashval;
+}
+
+bool
+EventType::operator>(const EventType& rhs) const {
+    return __hashval > rhs.__hashval;
+}
+
+EventType::operator std::string() const {
+    return __name;
+}
+
+EventType::operator uint32_t() const {
+    return __hashval;
+}
 
 ////////////////////////////////////////////////////////
 //
@@ -61,7 +88,7 @@ const char* Event::__str_table[] = {
 //
 ////////////////////////////////////////////////////////
 
-Event::Event(EVENT_TYPE _et) : event_type(_et), __stop(false) {
+Event::Event(const EventType _et) : event_type(_et), __stop(false) {
 }
 
 Event::~Event() {
@@ -73,11 +100,11 @@ Event::operator==(const Event& _e) const {
 }
 
 bool
-Event::operator==(EVENT_TYPE _et) const {
+Event::operator==(const EventType _et) const {
     return event_type == _et;
 }
 
-EVENT_TYPE
+const EventType
 Event::type() const {
     return event_type;
 }
@@ -97,11 +124,11 @@ Event::clone() const {
     return new Event(*this);
 }
 
-Event::operator EVENT_TYPE() const {
+Event::operator const EventType() const {
     return event_type;
 }
 
 std::string
-Event::evt2str(EVENT_TYPE _et) {
-    return __str_table[_et];
+Event::evt2str(const EventType _et) {
+    return static_cast<std::string>(_et);
 }

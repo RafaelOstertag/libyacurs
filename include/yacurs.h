@@ -64,6 +64,7 @@
 #include "dialog.h"
 #include "messagebox.h"
 #include "messagebox2.h"
+#include "messagebox3.h"
 #include "inputbox.h"
 #include "filesavedialog.h"
 #include "fileloaddialog.h"

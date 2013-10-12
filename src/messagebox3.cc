@@ -19,10 +19,8 @@
 //
 // $Id$
 
-#include <cstdlib>
-#include <cassert>
+#include "messagebox3.h"
 
-#include "messagebox2.h"
 #include "yacursex.h"
 
 using namespace YACURS;
@@ -30,8 +28,8 @@ using namespace YACURS;
 //
 // Private
 //
-MessageBox2&
-MessageBox2::operator=(const MessageBox2&) {
+MessageBox3&
+MessageBox3::operator=(const MessageBox3&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -44,32 +42,21 @@ MessageBox2::operator=(const MessageBox2&) {
 // Public
 //
 
-MessageBox2::MessageBox2(const std::string& _title,
+MessageBox3::MessageBox3(const std::string& _title,
                          const std::string& _message1,
                          const std::string& _message2,
-                         DIALOG_TYPE _dt) : Dialog(_title, _dt),
-					    __message1(0),
-					    __message2(0),
-					    __vpack(0) {
-    __message1 = new Label(_message1);
-    __message1->color(DIALOG);
-    __message2 = new Label(_message2);
-    __message2->color(DIALOG);
-
-    __vpack = new VPack;
-
-    __vpack->add_back(__message1);
-    __vpack->add_back(__message2);
-
-    widget(__vpack);
+			 const std::string& _message3,
+                         DIALOG_TYPE _dt) : MessageBox2(_title,
+							_message1,
+							_message2,
+							_dt),
+					    __message3(0) {
+    __message3 = new Label(_message3);
+    __message3->color(DIALOG);
+    __vpack->add_back(__message3);
 }
 
-MessageBox2::~MessageBox2() {
-    assert(__vpack != 0);
-    assert(__message1 != 0);
-    assert(__message2 != 0);
-
-    delete __vpack;
-    delete __message1;
-    delete __message2;
+MessageBox3::~MessageBox3() {
+    assert(__message3 != 0);
+    delete __message3;
 }

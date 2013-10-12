@@ -20,34 +20,28 @@
 //
 // $Id$
 
-#ifndef MESSAGEBOX2_H
-#define MESSAGEBOX2_H 1
+#ifndef MESSAGEBOX3_H
+#define MESSAGEBOX3_H 1
 
-#include <string>
-
-#include "dialog.h"
-#include "label.h"
+#include "messagebox2.h"
 
 namespace YACURS {
-    class MessageBox2 : public Dialog {
+    class MessageBox3 : public MessageBox2 {
         private:
-            Label* __message1;
-            Label* __message2;
+            Label* __message3;
 
             // Not supported
-            MessageBox2& operator=(const MessageBox2&);
-
-	protected:
-            VPack* __vpack;
+            MessageBox3& operator=(const MessageBox3&);
 
         public:
-            MessageBox2(const std::string& _title,
+            MessageBox3(const std::string& _title,
                         const std::string& _message1,
                         const std::string& _message2,
+                        const std::string& _message3,
                         DIALOG_TYPE _dt=OKCANCEL);
 
-            virtual ~MessageBox2();
+            virtual ~MessageBox3();
     };
 }
 
-#endif // MESSAGEBOX2_H
+#endif // MESSAGEBOX3_H

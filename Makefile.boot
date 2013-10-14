@@ -16,22 +16,22 @@ config.h.in: configure.ac aclocal.m4
 	autoheader
 
 ltmain.sh: libtool.m4 ltoptions.m4 ltversion.m4 ltsugar.m4
-	libtoolize -c -i
+	libtoolize -c -i --force
 
 libtool.m4:
-	libtoolize -c -i
+	libtoolize -c -i --force
 
 ltoptions.m4:
-	libtoolize -c -i
+	libtoolize -c -i --force
 
 ltversion.m4:
-	libtoolize -c -i
+	libtoolize -c -i --force
 
 ltsugar.m4:
-	libtoolize -c -i
+	libtoolize -c -i --force
 
 config.rpath:
-	touch $@
+	gettextize -f
 
 nls.m4 po.m4:
 	gettextize -f

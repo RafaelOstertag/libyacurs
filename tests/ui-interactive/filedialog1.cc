@@ -156,10 +156,6 @@ __test_wget_wch(void*, wint_t* i) {
         return OK;
     }
 
-    // There are constellations we cannot intercept using the test
-    // mechanism, so we simply quit
-    quit();
-
     return ERR;
 }
 #else
@@ -191,10 +187,6 @@ __test_wgetch(void*) {
 
     if (*ptr_end_app != 0)
         return *ptr_end_app++;
-
-    // There are constellations we cannot intercept using the test
-    // mechanism, so we simply quit
-    quit();
 
     return 0;
 }

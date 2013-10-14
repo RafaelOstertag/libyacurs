@@ -29,8 +29,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libyacurs 0.1\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
-"POT-Creation-Date: 2013-06-14 06:30+0200\n"
-"PO-Revision-Date: 2013-06-14 06:30+0200\n"
+"POT-Creation-Date: 2013-10-13 21:46+0200\n"
+"PO-Revision-Date: 2013-10-13 21:46+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: en@quot\n"
@@ -87,33 +87,33 @@ msgstr "argument ‘win’ must not be 0"
 msgid "Area must not be zero"
 msgstr "Area must not be zero"
 
-#: src/dialog.cc:142
+#: src/dialog.cc:188 src/dialog.cc:209
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/dialog.cc:146
+#: src/dialog.cc:193
 msgid "OK"
 msgstr "OK"
 
-#: src/dialog.cc:151
+#: src/dialog.cc:198 src/dialog.cc:211
 msgid "No"
 msgstr "No"
 
-#: src/dialog.cc:155
+#: src/dialog.cc:203 src/dialog.cc:213
 msgid "Yes"
 msgstr "Yes"
 
-#: src/fileloaddialog.cc:160 src/fileloaddialog.cc:314
+#: src/fileloaddialog.cc:160 src/fileloaddialog.cc:313
 #: src/filesavedialog.cc:160 src/filesavedialog.cc:375
 msgid "Cannot change to "
 msgstr "Cannot change to "
 
-#: src/fileloaddialog.cc:161 src/fileloaddialog.cc:315
+#: src/fileloaddialog.cc:161 src/fileloaddialog.cc:314
 #: src/filesavedialog.cc:161 src/filesavedialog.cc:376
 msgid "System Error"
 msgstr "System Error"
 
-#: src/fileloaddialog.cc:204
+#: src/fileloaddialog.cc:203
 msgid "Load File"
 msgstr "Load File"
 
@@ -201,6 +201,14 @@ msgstr "Operation not supported"
 msgid "Invalid dialog type"
 msgstr "Invalid dialog type"
 
-#: src/cursorbuf.cc:235 src/cursorbuf.cc:267
+#: src/cursorbuf.cc:258 src/cursorbuf.cc:284
 msgid "_size must not be <2"
 msgstr "_size must not be <2"
+
+#: src/event.cc:39
+msgid "Event names must not be greater than 63 characters."
+msgstr "Event names must not be greater than 63 characters."
+
+#: src/event.cc:42
+msgid "Event names must not be empty."
+msgstr "Event names must not be empty."

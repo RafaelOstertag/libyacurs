@@ -208,7 +208,7 @@ namespace YACURS {
         case KEY_ENTER:
         case KEY_RETURN:
         case KEY_RETURN2:
-            EventQueue::submit(EventEx<ListBox*>(EVT_LISTBOX_ENTER, this) );
+            EventQueue::submit(EventEx<ListBox<_T>*>(EVT_LISTBOX_ENTER, this) );
             break;
 
         case KEY_TAB:

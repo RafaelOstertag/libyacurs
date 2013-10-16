@@ -25,6 +25,7 @@
 
 #include <string>
 #include <list>
+#include <iterator>
 #include <functional>
 #include <cassert>
 #include <cstdlib>
@@ -96,7 +97,6 @@ namespace YACURS {
                 return *this;
             }
 
-            inline
             lsz_t pagesize() const {
                 return __size.rows() - 2;
             }
@@ -117,6 +117,20 @@ namespace YACURS {
 
             virtual void set(const std::list<_T>& _l);
 
+	    /**
+	     * Replace item.
+	     *
+	     * Replace the item @c item at position @c index.
+	     *
+	     * If @c index is greater than the list size, a @c
+	     * std::out_of_range exception is thrown.
+	     *
+	     * @param item new value
+	     *
+	     * @param index position where to set the value.
+	     */
+	    virtual void set(const _T& item, lsz_t index);
+
             const std::list<_T>& list() const;
 
             virtual void clear();
@@ -129,6 +143,13 @@ namespace YACURS {
 
             const _T& selected() const;
 
+	    /**
+	     * Replace the selected item.
+	     *
+	     * Replaced he selected item by @c _item
+	     *
+	     * @param _item new value of selected item.
+	     */
             void selected(_T& _item);
 
             void delete_selected();
@@ -362,6 +383,18 @@ namespace YACURS {
             refresh(true);
     }
 
+    template<class _T> void 
+    ListBox<_T>::set(const _T& item, lsz_t index) {
+	if (index >= __list.size() )
+            throw std::out_of_range(
+                      "ListBox<>::set() position out of range");
+
+	typename std::list<_T>::iterator it = __list.begin();
+	std::advance(it, index);
+
+	*it = item;
+    }
+
     template<class _T> const std::list<_T>&
     ListBox<_T>::list() const {
         return __list;
@@ -401,16 +434,24 @@ namespace YACURS {
     ListBox<_T>::selected() const {
         if (__list.empty() ) return __empty;
 
+	assert((__curs_pos + __offset) < __list.size());
+
         typename std::list<_T>::const_iterator it = __list.begin();
-        for (lsz_t i = 0; i < __curs_pos + __offset; it++, i++) ;
+#warning "TEST proper use of std::advance"
+	std::advance(it,  __curs_pos + __offset);
+	//        for (lsz_t i = 0; i < __curs_pos + __offset; it++, i++) ;
 
         return *it;
     }
 
     template<class _T> void
     ListBox<_T>::selected(_T& _item) {
+	assert((__curs_pos + __offset) < __list.size());
+
         typename std::list<_T>::iterator it = __list.begin();
-        for (lsz_t i = 0; i < __curs_pos + __offset; it++, i++) ;
+#warning "TEST proper use of std::advance"
+	std::advance(it,  __curs_pos + __offset);
+	//        for (lsz_t i = 0; i < __curs_pos + __offset; it++, i++) ;
 
         *it = _item;
 
@@ -422,8 +463,12 @@ namespace YACURS {
     ListBox<_T>::delete_selected() {
         if (__list.empty() ) return;
 
+	assert((__curs_pos + __offset) < __list.size());
+
         typename std::list<_T>::iterator it = __list.begin();
-        for (lsz_t i = 0; i < __curs_pos + __offset; it++, i++) ;
+#warning "TEST proper use of std::advance"
+	std::advance(it,  __curs_pos + __offset);
+	//        for (lsz_t i = 0; i < __curs_pos + __offset; it++, i++) ;
 
         __list.erase(it);
 
@@ -468,7 +513,7 @@ namespace YACURS {
 
     template<class _T> void
     ListBox<_T>::high_light(lsz_t pos) {
-        if (pos >= __list.length() )
+        if (pos >= __list.size() )
             throw std::out_of_range(
                       "ListBox<>::high_light() position out of range");
 
@@ -573,12 +618,7 @@ namespace YACURS {
         UNREALIZE_LEAVE;
     }
 
-    /**
-     * Refresh the Input.
-     *
-     * @param immediate not directly used by Label::refresh() but
-     * passed to Widget::refresh().
-     */
+
     template<class _T> void
     ListBox<_T>::refresh(bool immediate) {
         if (realization() != REALIZED) return;
@@ -612,9 +652,11 @@ namespace YACURS {
             __offset = 0; // we must not use an offset.
 
         // Advance to offset
-        for (typename std::list<_T>::size_type i = 0;
-             i < __offset;
-             it++, i++) ;
+#warning "TEST proper use of std::advance"
+	std::advance(it, __offset);
+	//        for (typename std::list<_T>::size_type i = 0;
+	//             i < __offset;
+	//             it++, i++) ;
 
         for (typename std::list<_T>::size_type i = 0;
              i <

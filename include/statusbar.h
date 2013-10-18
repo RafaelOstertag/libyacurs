@@ -46,7 +46,11 @@ namespace YACURS {
             StatusBar();
             virtual ~StatusBar();
             void push_msg(const std::string& m);
-
+#warning "TODO"
+	    // TODO: add method for simply setting the top most
+	    // message, without growing the stack, i.e replacing the
+	    // top element of the stack. In fact, I don't see why
+	    // using a stack at all.
             void pop_msg();
     };
 }

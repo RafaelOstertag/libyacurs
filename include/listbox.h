@@ -534,7 +534,7 @@ namespace YACURS {
         typename std::list<_T>::iterator it = __list.begin();
         lsz_t i;
         for (i = 0;
-             it != __list.end();
+             it != __list.end() && i<pos;
              it++, i++) ;
 
         if (it == __list.end() ) return;

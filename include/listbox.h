@@ -113,9 +113,9 @@ namespace YACURS {
 
             virtual ~ListBox();
 
-            virtual void add(const _T& _i);
+            void add(const _T& _i);
 
-            virtual void set(const std::list<_T>& _l);
+            void set(const std::list<_T>& _l);
 
 	    /**
 	     * Replace item.
@@ -133,13 +133,17 @@ namespace YACURS {
 
             const std::list<_T>& list() const;
 
-            virtual void clear();
+	    bool empty() const;
+
+	    lsz_t count() const;
+
+            void clear();
 
             void sort_order(SORT_ORDER _sort_order);
 
             SORT_ORDER sort_order() const;
 
-            virtual lsz_t selected_index() const;
+	    lsz_t selected_index() const;
 
             const _T& selected() const;
 
@@ -398,6 +402,16 @@ namespace YACURS {
     template<class _T> const std::list<_T>&
     ListBox<_T>::list() const {
         return __list;
+    }
+
+    template<class _T> typename ListBox<_T>::lsz_t
+    ListBox<_T>::count() const {
+	return __list.size();
+    }
+
+    template<class _T> bool
+    ListBox<_T>::empty() const {
+	return __list.empty();
     }
 
     template<class _T> void

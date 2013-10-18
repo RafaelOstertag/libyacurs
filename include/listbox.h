@@ -508,7 +508,9 @@ namespace YACURS {
              it != __list.end() && (*it) != _i;
              it++, i++) ;
 
-        if (it == __list.end() ) return;
+        if (it == __list.end() )
+            throw std::out_of_range(
+		      "ListBox<>::high_light() position out of range");
 
         if (__list.size() > pagesize() &&
             i > (__list.size() - pagesize() ) ) {
@@ -536,8 +538,6 @@ namespace YACURS {
         for (i = 0;
              it != __list.end() && i<pos;
              it++, i++) ;
-
-        if (it == __list.end() ) return;
 
         if (__list.size() > pagesize() &&
             i > (__list.size() - pagesize() ) ) {

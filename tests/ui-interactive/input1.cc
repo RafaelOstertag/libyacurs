@@ -39,6 +39,7 @@ void check_input(int step) {
 	// Test if the string has been properly written
 	YACURS::Curses::statusbar()->pop_msg();
 	YACURS::Curses::statusbar()->push_msg("Expected string written?");
+	if (!testinput->changed()) abort();
 	if (testinput->input() != "abcd") abort();
 	YACURS::Curses::statusbar()->pop_msg();
 	YACURS::Curses::statusbar()->push_msg("Set input readonly");

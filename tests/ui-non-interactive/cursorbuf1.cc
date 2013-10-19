@@ -386,7 +386,109 @@ void test3() {
     if (!cb_ptr->changed()) abort();
 
     delete cb_ptr;
+
+    // CursorBuffer must obey maximum size when initializing
+    cb_ptr = new YACURS::INTERNAL::CursorBuffer("Test Buffer", 4);
+
+    if (cb_ptr->changed()) abort();
+    if (cb_ptr->length() != 4) abort();
+    if (cb_ptr->string() != "Test") abort();
+
+    delete cb_ptr;
 }
+
+#ifdef USE_WCHAR
+void test4() {
+    YACURS::INTERNAL::CursorBuffer* cb_ptr = 
+	new YACURS::INTERNAL::CursorBuffer(L"T€st Buffer");
+
+    // Newly created CursorBuffer must not be in changed state
+    if (cb_ptr->changed()) abort();
+
+    // Must not change CursorBuffer change state, since string is less
+    // than 64 characters.
+    cb_ptr->max_size(64);
+    if (cb_ptr->changed()) abort();
+
+    // Change state has to be set, since string is greater than 4
+    // characters.
+    cb_ptr->max_size(4);
+    if (!cb_ptr->changed()) abort();
+
+    // String must be "Test" now.
+    if (cb_ptr->wstring() != L"T€st") abort();
+    if (cb_ptr->string() != "T€st") abort();
+
+    delete cb_ptr;
+
+    cb_ptr = new YACURS::INTERNAL::CursorBuffer(L"T€st Buffer");
+
+    // These methods must not change the change state of the buffer
+    cb_ptr->end();
+    cb_ptr->home();
+    cb_ptr->forward_step();
+    cb_ptr->back_step();
+    if (cb_ptr->changed()) abort();
+
+    // This function must change the change state
+    cb_ptr->insert(L'ä');
+    if (!cb_ptr->changed()) abort();
+
+    delete cb_ptr;
+    cb_ptr = new YACURS::INTERNAL::CursorBuffer(L"T€st Buffer");
+
+    // Cursor must be at beginning of buffer, thus a backspace must
+    // not change the buffer.
+    cb_ptr->backspace();
+    if (cb_ptr->changed()) abort();
+
+    // This must change the buffer
+    cb_ptr->end();
+    cb_ptr->backspace();
+    if (!cb_ptr->changed()) abort();
+
+    delete cb_ptr;
+    cb_ptr = new YACURS::INTERNAL::CursorBuffer(L"T€st Buffer");
+
+    // Deleting a character at the very end must not change the
+    // buffer, since there is no change
+    cb_ptr->end();
+    cb_ptr->del();
+    if (cb_ptr->changed()) abort();
+
+    // Deleting a chracter at the beginning of the buffer must set the
+    // changed state.
+    cb_ptr->home();
+    cb_ptr->del();
+    if (!cb_ptr->changed()) abort();
+
+
+    delete cb_ptr;
+    cb_ptr = new YACURS::INTERNAL::CursorBuffer(L"T€st Buffer");
+
+    // Setting the value to the same value must not change
+    // the changed state.
+    cb_ptr->set(L"T€st Buffer");
+    if (cb_ptr->changed()) abort;
+
+    // Setting the value to something different must change the
+    // changed state.
+    cb_ptr->set(L"T€st");
+    if (!cb_ptr->changed()) abort();
+
+    delete cb_ptr;
+
+    // CursorBuffer must obey maximum size when initializing
+    cb_ptr = new YACURS::INTERNAL::CursorBuffer(L"T€st Buffer", 4);
+
+    if (cb_ptr->changed()) abort();
+    if (cb_ptr->length() != 4) abort();
+    if (cb_ptr->wstring() != L"T€st") abort();
+    if (cb_ptr->string() != "T€st") abort();
+
+    delete cb_ptr;
+}
+#endif // USE_WCHAR
 
 int
 main() {
@@ -399,6 +501,9 @@ main() {
 #endif
 
     test3();
+#ifdef USE_WCHAR
+    test4();
+#endif
 
     YACURS::Curses::init();
 

@@ -38,7 +38,7 @@ namespace YACURS {
 
                 // Convenience
                 typedef std::wstring::size_type tsz_t;
-	    typedef long tss_t;
+		typedef long tss_t;
 
             private:
                 /**
@@ -67,15 +67,15 @@ namespace YACURS {
 		 */
 		bool __changed;
 	    
-	    /**
-	     * Displayed Cursor position. (Scrolling)
-	     */
-	    tss_t __curs_pos;
+		/**
+		 * Displayed Cursor position. (Scrolling)
+		 */
+		tss_t __curs_pos;
 
-	    /**
-	     * Window offset. (Srolling)
-	     */
-	    tsz_t __offset;
+		/**
+		 * Window offset. (Srolling)
+		 */
+		tsz_t __offset;
 
                 /**
                  * Maximum size of of buffer.
@@ -95,12 +95,12 @@ namespace YACURS {
                  * @param _buffer initial values of the buffer.
                  */
                 CursorBuffer(
-                    const std::wstring& _buffer=std::wstring(), tsz_t _max_size=
-                        255);
+			     const std::wstring& _buffer=std::wstring(), tsz_t _max_size=
+			     255);
 
                 CursorBuffer(
-                    const std::string& _buffer=std::string(), tsz_t _max_size=
-                        255);
+			     const std::string& _buffer=std::string(), tsz_t _max_size=
+			     255);
 
                 CursorBuffer(const CursorBuffer& _cb);
                 CursorBuffer& operator=(const CursorBuffer& _cb);
@@ -119,6 +119,23 @@ namespace YACURS {
                  * Get length of buffer.
                  */
                 tsz_t length() const;
+
+
+		/** 
+		 * Set maximum size of buffer.
+		 *
+		 * If the current content off the buffer is greater
+		 * than the new maximum size, it will be truncated.
+		 *
+		 * @param max_size new maximum size
+		 */
+		void max_size(tsz_t max_size);
+
+
+		/**
+		 * Get maximum size of buffer.
+		 */
+		tsz_t max_size() const;
 
                 /**
                  * Get the current cursor position
@@ -192,7 +209,7 @@ namespace YACURS {
 
                 std::wstring wstring(int16_t _size, int16_t* curs_pos);
 
-	    std::string  string(int16_t _size, int16_t* curs_pos);
+		std::string  string(int16_t _size, int16_t* curs_pos);
 
                 const std::wstring& wstring() const;
 

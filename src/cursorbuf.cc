@@ -105,10 +105,13 @@ CursorBuffer::operator=(const CursorBuffer& _cb) {
 
 void
 CursorBuffer::set(const std::wstring& _b) {
+    // Do nothing if the string is the same as the one we already have
+    if (_b == __buffer) return;
+
     __curs_pos = 0;
     __offset = 0;
     if (_b.length() > __max_size)
-        __buffer = _b.substr(0, __max_size - 1);
+        __buffer = _b.substr(0, __max_size);
     else
         __buffer = _b;
 
@@ -138,6 +141,27 @@ CursorBuffer::set(const std::string& _b) {
 CursorBuffer::tsz_t
 CursorBuffer::length() const {
     return __buffer.length();
+}
+
+void
+CursorBuffer::max_size(CursorBuffer::tsz_t max_size) {
+    __max_size = max_size;
+
+    // Re-set buffer, so it will be truncated. We do not
+    // uncoditionally call set(), because set() will set the state of
+    // the buffer to changed.
+    if (__buffer.length() > max_size) {
+	set(__buffer.substr(0, max_size));
+
+	// reset scrolling information
+	__curs_pos = 0;
+	__offset = 0;
+    }
+}
+
+CursorBuffer::tsz_t
+CursorBuffer::max_size() const {
+    return __max_size;
 }
 
 

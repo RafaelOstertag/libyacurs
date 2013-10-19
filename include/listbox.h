@@ -156,6 +156,7 @@ namespace YACURS {
 	     */
             void selected(_T& _item);
 
+#warning "TODO ahead"
 	    /**
 	     * Delete selected item.
 	     *

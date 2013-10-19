@@ -67,7 +67,7 @@ namespace YACURS {
      *  - Key Down, Enter, Tab: focus next Widget.
      *  - Key Up, Shift-Tab: focus previous Widget.
      *
-     * When Input is put in read-only mode, all editing keys keys are
+     * When Input is put in read-only mode, all editing keys are
      * disabled. Only cursor motion is available.
      */
     template<class T = std::string> class Input : public Widget {
@@ -75,13 +75,6 @@ namespace YACURS {
             typedef typename T::size_type tsz_t;
         private:
             INTERNAL::CursorBuffer __buffer;
-
-            /**
-             * Maximum size of input.
-             *
-             * If it is 0, there is no limit.
-             */
-            tsz_t __max_size;
 
             /**
              * Length of the input line.
@@ -130,8 +123,8 @@ namespace YACURS {
 
         public:
             /**
-             * @param _length the length (columns) the widget requires. If
-             * zero, it will dynamically size. Default 0.
+             * @param _length the length (columns) the widget
+             * requires. If zero, it will dynamically size. Default 0.
              *
              * @param _max_size maximum size of input. Default 255.
              *
@@ -163,8 +156,8 @@ namespace YACURS {
             /**
              * Set readonly mode.
              *
-             * @param _s @c true, no editing allowed. @c false, editing
-             * allowed.
+             * @param _s @c true, no editing allowed. @c false,
+             * editing allowed.
              */
             void readonly(bool _s);
 
@@ -178,8 +171,12 @@ namespace YACURS {
 
 	    /**
 	     * Set maximum size of input.
+	     *
+	     * Set maximum size (characters) of input.
+	     *
+	     * @param max_input new maximum size of input
 	     */
-	    void max_input(tsz_t _max_input);
+	    void max_input(tsz_t max_input);
 
 	    /**
 	     * Get maximum input size.
@@ -356,7 +353,8 @@ namespace YACURS {
 #else
             if (!isprint(ekey.data() ) ) return;
 #endif
-            __buffer.insert(ekey.data() );
+
+	    __buffer.insert(ekey.data() );
             break;
         }
 
@@ -387,8 +385,7 @@ namespace YACURS {
                                                                   key_handler) );
 
         assert(focusgroup_id() != FocusManager::nfgid);
-
-        Widget::unrealize();
+	Widget::unrealize();
         UNREALIZE_LEAVE;
     }
 
@@ -400,7 +397,6 @@ namespace YACURS {
                                       const T& _t) :
         Widget(),
         __buffer(_t, _max_size),
-        __max_size(_max_size),
         __length(_length),
         __read_only(false),
         __obscure_input(false),
@@ -444,25 +440,17 @@ namespace YACURS {
         return __read_only;
     }
 
-#warning "test max_input()"
     template<class T> void
-    Input<T>::max_input(tsz_t _max_input) {
-	// Chop down the buffer in case it is bigger than the new
-	// maximal input size
-	if (_max_input < __max_size &&
-	    __buffer.length() > _max_input) {
-	    std::wstring tmp=__buffer.wstring();
-	    tmp.erase(_max_input-1,
-		      tmp.length()-_max_input);	   
-	    __buffer.set(tmp);
-	}
+    Input<T>::max_input(typename Input<T>::tsz_t max_input) {
+	__buffer.max_size(max_input);
 
-	__max_size=_max_input;
+	if (realization() == REALIZED)
+	    refresh(true);
     }
 
     template<class T> typename Input<T>::tsz_t
     Input<T>::max_input() const {
-	return __max_size;
+	return __buffer.max_size();
     }
 
     template<class T> void

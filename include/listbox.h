@@ -683,7 +683,7 @@ namespace YACURS {
         //
         // Box creation and scroll marker setting was moved here,
         // because it didn't work properly, i.e. there were
-        // artifcats on the right side of the box, when it is
+        // artifacts on the right side of the box, when it is
         // placed in front of the above code block.
         //
         if (focus() ) {

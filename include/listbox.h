@@ -156,6 +156,14 @@ namespace YACURS {
 	     */
             void selected(_T& _item);
 
+	    /**
+	     * Delete selected item.
+	     *
+	     * Delete selected item.
+	     *
+	     * @todo when deleting, don't move cursor upwards unless
+	     * deleteing last item in list.
+	     */
             void delete_selected();
 
             /**

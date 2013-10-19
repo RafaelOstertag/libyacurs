@@ -45,7 +45,7 @@ using namespace YACURS::INTERNAL;
 // Public
 //
 CursorBuffer::CursorBuffer(const std::wstring& _buffer, tsz_t _max_size) :
-    __buffer(_buffer),
+    __buffer(_buffer.length()>_max_size ? _buffer.substr(0,_max_size): _buffer),
     __mbs_cache(),
     __mbs_cache_valid(false),
     __changed(false),
@@ -63,10 +63,12 @@ CursorBuffer::CursorBuffer(const std::string& _buffer, tsz_t _max_size) :
     __max_size(_max_size) {
     wchar_t* tmpbuf = new wchar_t[_buffer.length() + 1];
 
-    size_t retval = mbstowcs(tmpbuf, _buffer.c_str(), _buffer.length() + 1);
+    size_t len=_buffer.length() > __max_size ? __max_size : _buffer.length();
 
-    if (retval == _buffer.length() + 1)
-        tmpbuf[_buffer.length()] = L'\0';
+    size_t retval = mbstowcs(tmpbuf, _buffer.c_str(), len + 1);
+
+    if (retval == len + 1)
+        tmpbuf[len] = L'\0';
 
     if (retval == (size_t)-1) {
         delete[] tmpbuf;

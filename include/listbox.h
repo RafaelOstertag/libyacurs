@@ -451,9 +451,7 @@ namespace YACURS {
 	assert((__curs_pos + __offset) < __list.size());
 
         typename std::list<_T>::const_iterator it = __list.begin();
-#warning "TEST proper use of std::advance"
 	std::advance(it,  __curs_pos + __offset);
-	//        for (lsz_t i = 0; i < __curs_pos + __offset; it++, i++) ;
 
         return *it;
     }
@@ -463,9 +461,7 @@ namespace YACURS {
 	assert((__curs_pos + __offset) < __list.size());
 
         typename std::list<_T>::iterator it = __list.begin();
-#warning "TEST proper use of std::advance"
 	std::advance(it,  __curs_pos + __offset);
-	//        for (lsz_t i = 0; i < __curs_pos + __offset; it++, i++) ;
 
         *it = _item;
 
@@ -480,9 +476,7 @@ namespace YACURS {
 	assert((__curs_pos + __offset) < __list.size());
 
         typename std::list<_T>::iterator it = __list.begin();
-#warning "TEST proper use of std::advance"
 	std::advance(it,  __curs_pos + __offset);
-	//        for (lsz_t i = 0; i < __curs_pos + __offset; it++, i++) ;
 
         __list.erase(it);
 
@@ -666,11 +660,7 @@ namespace YACURS {
             __offset = 0; // we must not use an offset.
 
         // Advance to offset
-#warning "TEST proper use of std::advance"
 	std::advance(it, __offset);
-	//        for (typename std::list<_T>::size_type i = 0;
-	//             i < __offset;
-	//             it++, i++) ;
 
         for (typename std::list<_T>::size_type i = 0;
              i <

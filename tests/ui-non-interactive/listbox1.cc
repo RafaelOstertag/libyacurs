@@ -104,14 +104,143 @@ test_driver(YACURS::Event& _e) {
 	YACURS::Curses::statusbar()->push_msg("Set selected item by index.");
 	testlb->high_light(49);
 	if (testlb->selected_index() != 49) abort();
+	if (testlb->selected() != std::string("item 49 added")) abort();
 	break;
     case 15:
-	sleep(3);
+	YACURS::Curses::statusbar()->pop_msg();
+	YACURS::Curses::statusbar()->push_msg("High light non existent item");
+	try {
+	    testlb->high_light(std::string("non existing item"));
+	    abort();
+	} catch (std::out_of_range& ex) {
+	    // good, expected
+	} catch(...) {
+	    // bad
+	    abort();
+	}
+	break;
+    case 16:
+	YACURS::Curses::statusbar()->pop_msg();
+	YACURS::Curses::statusbar()->push_msg("High light off bounds index");
+	try {
+	    testlb->high_light(100);
+	    abort();
+	} catch (std::out_of_range& ex) {
+	    // good, expected
+	} catch(...) {
+	    // bad
+	    abort();
+	}
+	break;
+    case 17:
+	YACURS::Curses::statusbar()->pop_msg();
+	YACURS::Curses::statusbar()->push_msg("High light item 5");
+	testlb->high_light(5);
+	break;
+    case 18:
+	YACURS::Curses::statusbar()->pop_msg();
+	YACURS::Curses::statusbar()->push_msg("Delete high lighted item");
+	testlb->delete_selected();
+	if (testlb->count() != 49) abort();
+	if (testlb->selected_index() != 4) abort();
+	if (testlb->selected() != std::string("item 4 added")) abort();
+	break;
+    case 19:
+	YACURS::Curses::statusbar()->pop_msg();
+	YACURS::Curses::statusbar()->push_msg("Set selected item to value"); 
+	try {
+	    std::string newstr("replaced by selected()");
+	    testlb->selected(newstr);
+	} catch (std::out_of_range& ex) {
+	    abort();
+	}
+	if (testlb->selected() != std::string("replaced by selected()")) abort();
+	break;
+    case 20:
+	YACURS::Curses::statusbar()->pop_msg();
+	YACURS::Curses::statusbar()->push_msg("Go to just set item by index"); 
+	try {
+	    testlb->high_light(4);
+	} catch(std::out_of_range& ex) {
+	    abort();
+	}
+	if (testlb->selected() != std::string("replaced by selected()")) abort();
+	break;
+    case 21:
+	YACURS::Curses::statusbar()->pop_msg();
+	YACURS::Curses::statusbar()->push_msg("Go to just set item by item search"); 
+	try {
+	    testlb->high_light(std::string("replaced by selected()"));
+	} catch (std::out_of_range& ex) {
+	    abort();
+	}
+	if (testlb->selected() != std::string("replaced by selected()")) abort();
+	if (testlb->selected_index() != 4) abort();
+	break;
+    case 22:
+	YACURS::Curses::statusbar()->pop_msg();
+	YACURS::Curses::statusbar()->push_msg("Clear list"); 
+	testlb->clear();
+	if (!testlb->empty()) abort();
+	if (testlb->count() != 0) abort();
+	break;
+    case 23: {
+	YACURS::Curses::statusbar()->pop_msg();
+	YACURS::Curses::statusbar()->push_msg("Assign list");
+	std::list<std::string> lst;
+	for (int i=0; i<10; i++) {
+	    std::ostringstream I;
+	    I << i;
+	    lst.push_back(I.str() + " list item");
+	}
+	testlb->set(lst);
+	if (testlb->empty()) abort();
+	if (testlb->count() != 10) abort();
+    }
+	break;
+    case 24:
+	YACURS::Curses::statusbar()->pop_msg();
+	YACURS::Curses::statusbar()->push_msg("Set sort order ascending");
+	testlb->sort_order(YACURS::ASCENDING);
+	if (testlb->sort_order()!=YACURS::ASCENDING) abort();
+	try {
+	    testlb->high_light(0);
+	} catch (std::out_of_range) {
+	    abort();
+	}
+	if (testlb->selected() != "0 list item") abort();
+	try {
+	    testlb->high_light(9);
+	} catch (std::out_of_range) {
+	    abort();
+	}
+	if (testlb->selected() != "9 list item") abort();
+	break;
+    case 25:
+	YACURS::Curses::statusbar()->pop_msg();
+	YACURS::Curses::statusbar()->push_msg("Set sort order descending");
+	testlb->sort_order(YACURS::DESCENDING);
+	if (testlb->sort_order()!=YACURS::DESCENDING) abort();
+	try {
+	    testlb->high_light(0);
+	} catch (std::out_of_range) {
+	    abort();
+	}
+	if (testlb->selected() != "9 list item") abort();
+	try {
+	    testlb->high_light(9);
+	} catch (std::out_of_range) {
+	    abort();
+	}
+	if (testlb->selected() != "0 list item") abort();
+	break;
+    case 26:
 	YACURS::EventQueue::submit(YACURS::EVT_QUIT);
 	break;
     }
 
     step++;
+    usleep(70000);
     YACURS::EventQueue::submit(EVT_TEST_EVENT);
 }
 

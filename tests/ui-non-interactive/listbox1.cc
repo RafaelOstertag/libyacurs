@@ -1,4 +1,4 @@
-// $Id: dynlabel1.cc 5189 2013-06-11 20:03:17Z rafisol $
+// $Id$
 //
 // Test listbox.h
 #ifdef HAVE_CONFIG_H

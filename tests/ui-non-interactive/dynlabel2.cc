@@ -1,4 +1,4 @@
-// $Id: dynlabel1.cc 5180 2013-06-09 17:31:20Z rafisol $
+// $Id$
 //
 // Test basic functionality of Curses class
 #ifdef HAVE_CONFIG_H

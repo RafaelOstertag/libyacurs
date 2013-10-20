@@ -25,63 +25,51 @@ test_driver(YACURS::Event& _e) {
 
     switch (step) {
     case 0:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Calling empty() on empty ListBox");
+	YACURS::Curses::statusbar()->set("Calling empty() on empty ListBox");
 	if (testlb->empty()!=true) abort();
 	break;
     case 1:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Calling selected_index() on empty ListBox");
+	YACURS::Curses::statusbar()->set("Calling selected_index() on empty ListBox");
 	if (testlb->selected_index()!=0) abort();
 	break;
     case 2:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Calling selected() on empty ListBox");
+	YACURS::Curses::statusbar()->set("Calling selected() on empty ListBox");
 	if (testlb->selected() != std::string()) abort();
 	break;
     case 3:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Add one item");
+	YACURS::Curses::statusbar()->set("Add one item");
 	testlb->add("One item added");
 	break;
     case 4:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Calling empty() on non-empty ListBox");
+	YACURS::Curses::statusbar()->set("Calling empty() on non-empty ListBox");
 	if (testlb->empty()!=false) abort();
 	break;
     case 5:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Calling selected_index() on non-empty ListBox");
+	YACURS::Curses::statusbar()->set("Calling selected_index() on non-empty ListBox");
 	if (testlb->selected_index()!=0) abort();
 	break;
     case 6:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Calling selected() on non-empty ListBox");
+	YACURS::Curses::statusbar()->set("Calling selected() on non-empty ListBox");
 	if (testlb->selected() != "One item added") abort();
 	break;
     case 7:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Clearing Listbox");
+	YACURS::Curses::statusbar()->set("Clearing Listbox");
 	testlb->clear();
 	break;
     case 8:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Calling empty() on empty ListBox");
+	YACURS::Curses::statusbar()->set("Calling empty() on empty ListBox");
 	if (testlb->empty()!=true) abort();
 	break;
     case 9:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Calling selected_index() on empty ListBox");
+	YACURS::Curses::statusbar()->set("Calling selected_index() on empty ListBox");
 	if (testlb->selected_index()!=0) abort();
 	break;
     case 10:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Calling selected() on empty ListBox");
+	YACURS::Curses::statusbar()->set("Calling selected() on empty ListBox");
 	if (testlb->selected() != std::string()) abort();
 	break;
     case 11:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Add several items iteratively");
+	YACURS::Curses::statusbar()->set("Add several items iteratively");
 	for (int i=0; i<50; i++) {
 	    std::ostringstream I;
 	    I << i;
@@ -89,26 +77,22 @@ test_driver(YACURS::Event& _e) {
 	}
 	break;
     case 12:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Check ListBox size.");
+	YACURS::Curses::statusbar()->set("Check ListBox size.");
 	if (testlb->count()!=50) abort();
 	break;
     case 13:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Set selected item by item.");
+	YACURS::Curses::statusbar()->set("Set selected item by item.");
 	testlb->high_light(std::string("item 3 added"));
 	if (testlb->selected_index() != 3) abort();
 	break;
     case 14:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Set selected item by index.");
+	YACURS::Curses::statusbar()->set("Set selected item by index.");
 	testlb->high_light(49);
 	if (testlb->selected_index() != 49) abort();
 	if (testlb->selected() != std::string("item 49 added")) abort();
 	break;
     case 15:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("High light non existent item");
+	YACURS::Curses::statusbar()->set("High light non existent item");
 	try {
 	    testlb->high_light(std::string("non existing item"));
 	    abort();
@@ -120,8 +104,7 @@ test_driver(YACURS::Event& _e) {
 	}
 	break;
     case 16:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("High light off bounds index");
+	YACURS::Curses::statusbar()->set("High light off bounds index");
 	try {
 	    testlb->high_light(100);
 	    abort();
@@ -133,21 +116,18 @@ test_driver(YACURS::Event& _e) {
 	}
 	break;
     case 17:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("High light item 5");
+	YACURS::Curses::statusbar()->set("High light item 5");
 	testlb->high_light(5);
 	break;
     case 18:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Delete high lighted item");
+	YACURS::Curses::statusbar()->set("Delete high lighted item");
 	testlb->delete_selected();
 	if (testlb->count() != 49) abort();
 	if (testlb->selected_index() != 4) abort();
 	if (testlb->selected() != std::string("item 4 added")) abort();
 	break;
     case 19:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Set selected item to value"); 
+	YACURS::Curses::statusbar()->set("Set selected item to value"); 
 	try {
 	    std::string newstr("replaced by selected()");
 	    testlb->selected(newstr);
@@ -157,8 +137,7 @@ test_driver(YACURS::Event& _e) {
 	if (testlb->selected() != std::string("replaced by selected()")) abort();
 	break;
     case 20:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Go to just set item by index"); 
+	YACURS::Curses::statusbar()->set("Go to just set item by index"); 
 	try {
 	    testlb->high_light(4);
 	} catch(std::out_of_range& ex) {
@@ -167,8 +146,7 @@ test_driver(YACURS::Event& _e) {
 	if (testlb->selected() != std::string("replaced by selected()")) abort();
 	break;
     case 21:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Go to just set item by item search"); 
+	YACURS::Curses::statusbar()->set("Go to just set item by item search"); 
 	try {
 	    testlb->high_light(std::string("replaced by selected()"));
 	} catch (std::out_of_range& ex) {
@@ -178,15 +156,13 @@ test_driver(YACURS::Event& _e) {
 	if (testlb->selected_index() != 4) abort();
 	break;
     case 22:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Clear list"); 
+	YACURS::Curses::statusbar()->set("Clear list"); 
 	testlb->clear();
 	if (!testlb->empty()) abort();
 	if (testlb->count() != 0) abort();
 	break;
     case 23: {
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Assign list");
+	YACURS::Curses::statusbar()->set("Assign list");
 	std::list<std::string> lst;
 	for (int i=0; i<10; i++) {
 	    std::ostringstream I;
@@ -199,8 +175,7 @@ test_driver(YACURS::Event& _e) {
     }
 	break;
     case 24:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Set sort order ascending");
+	YACURS::Curses::statusbar()->set("Set sort order ascending");
 	testlb->sort_order(YACURS::ASCENDING);
 	if (testlb->sort_order()!=YACURS::ASCENDING) abort();
 	try {
@@ -217,8 +192,7 @@ test_driver(YACURS::Event& _e) {
 	if (testlb->selected() != "9 list item") abort();
 	break;
     case 25:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Set sort order descending");
+	YACURS::Curses::statusbar()->set("Set sort order descending");
 	testlb->sort_order(YACURS::DESCENDING);
 	if (testlb->sort_order()!=YACURS::DESCENDING) abort();
 	try {

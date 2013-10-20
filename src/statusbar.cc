@@ -32,7 +32,7 @@ using namespace YACURS;
 //
 
 void
-StatusBar::put_top_msg() {
+StatusBar::show_top_msg() {
     if (__messages.empty() )
         line(std::string() );
     else
@@ -63,12 +63,22 @@ StatusBar::~StatusBar() {
 void
 StatusBar::push(const std::string& m) {
     __messages.push(m);
-    put_top_msg();
+    show_top_msg();
+}
+
+void
+StatusBar::set(const std::string& m) {
+    if (!__messages.empty())
+	__messages.pop();
+
+    __messages.push(m);
+
+    show_top_msg();
 }
 
 void
 StatusBar::pop() {
     if (__messages.empty() ) return;
     __messages.pop();
-    put_top_msg();
+    show_top_msg();
 }

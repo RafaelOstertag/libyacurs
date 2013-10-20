@@ -38,19 +38,38 @@ namespace YACURS {
         private:
             std::stack<std::string> __messages;
 
-            void put_top_msg();
+            void show_top_msg();
 
             StatusBar& operator=(const StatusBar&);
 
         public:
             StatusBar();
             virtual ~StatusBar();
+	    /**
+	     * Push a message on the stack.
+	     *
+	     * Push a message on the stack. The message will be
+	     * visible immediately.
+	     *
+	     * @param m message
+	     */
             void push(const std::string& m);
-#warning "TODO"
-	    // TODO: add method for simply setting the top most
-	    // message, without growing the stack, i.e replacing the
-	    // top element of the stack. In fact, I don't see why
-	    // using a stack at all.
+
+	    /**
+	     * Set the top most message.
+	     *
+	     * Set the top most message without growing the stack.
+	     *
+	     * @param m message
+	     */
+	    void set(const std::string& m);
+
+	    /**
+	     * Remove the top most message.
+	     *
+	     * Remove the top most message from the stack and display
+	     * the new top most message, if any.
+	     */
             void pop();
     };
 }

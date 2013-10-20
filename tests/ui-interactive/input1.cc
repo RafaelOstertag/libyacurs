@@ -37,58 +37,48 @@ void check_input(int step) {
     switch (step) {
     case 0:
 	// Test if the string has been properly written
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Expected string written?");
+	YACURS::Curses::statusbar()->set("Expected string written?");
 	if (!testinput->changed()) abort();
 	if (testinput->input() != "abcd") abort();
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Set input readonly");
+	YACURS::Curses::statusbar()->set("Set input readonly");
 	// Prepare for the read only test
 	testinput->readonly(true);
 	break;
     case 1:
 	// Some keys have been pressed, however we're read only, so
 	// the buffer must still be the same.
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Still same input?");
+	YACURS::Curses::statusbar()->set("Still same input?");
 	if (testinput->input() != "abcd") abort();
-	YACURS::Curses::statusbar()->pop();
 	// Clear the input buffer and let be some more keys pressed
-	YACURS::Curses::statusbar()->push("Clear input");
+	YACURS::Curses::statusbar()->set("Clear input");
 	testinput->clear();
 	break;
     case 2:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Read only mode succeeded?");
+	YACURS::Curses::statusbar()->set("Read only mode succeeded?");
 	// The input must still be empty, since read-only.
 	if (!testinput->input().empty()) abort();
 
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Unset read only mode");
+	YACURS::Curses::statusbar()->set("Unset read only mode");
 	// We unset read only, and see if key strokes come thru again
 	testinput->readonly(false);
 	break;
     case 3:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Unsetting read only mode succeeded?");
+	YACURS::Curses::statusbar()->set("Unsetting read only mode succeeded?");
 	// Did keystrokes come thru?
 	if (testinput->input() != "abcd" ) abort();
 
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Creating new input with max length");
+	YACURS::Curses::statusbar()->set("Creating new input with max length");
 	// Clear for the next test, which limimts the maximum length
 	// of the input to 2 characters.
 	testinput->max_input(2);
 	testinput->clear();
 	break;
     case 4:
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Expected string written?");
+	YACURS::Curses::statusbar()->set("Expected string written?");
 	// Input must be exactly two characters, namely "ab"
 	if (testinput->input().length() != 2) abort();
 	if (testinput->input() != "ab") abort();
-	YACURS::Curses::statusbar()->pop();
-	YACURS::Curses::statusbar()->push("Clear input");
+	YACURS::Curses::statusbar()->set("Clear input");
 	testinput->clear();
 	break;
     default:

@@ -299,13 +299,13 @@ button_press_handler(YACURS::Event& _e) {
 
     if (ev.data() == b1) {
         b4->enabled(false);
-        YACURS::Curses::statusbar()->push_msg(ifixed->input() );
+        YACURS::Curses::statusbar()->push(ifixed->input() );
         return;
     }
 
     if (ev.data() == b2) {
         b4->enabled(true);
-        YACURS::Curses::statusbar()->push_msg(idyn->input() );
+        YACURS::Curses::statusbar()->push(idyn->input() );
         return;
     }
 

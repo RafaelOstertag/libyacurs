@@ -20,26 +20,26 @@ alrm(YACURS::Event& _e) {
     switch (calls) {
     case 0:
 #ifdef USE_WCHAR
-	YACURS::Curses::statusbar()->push_msg("Status ¹");
+	YACURS::Curses::statusbar()->push("Status ¹");
 #else
-        YACURS::Curses::statusbar()->push_msg("Status 1");
+        YACURS::Curses::statusbar()->push("Status 1");
 #endif
         break;
 
     case 1:
 #ifdef USE_WCHAR
-	YACURS::Curses::statusbar()->push_msg("Status ²");
+	YACURS::Curses::statusbar()->push("Status ²");
 #else
-        YACURS::Curses::statusbar()->push_msg("Status 2");
+        YACURS::Curses::statusbar()->push("Status 2");
 #endif
         break;
 
     case 2:
-        YACURS::Curses::statusbar()->pop_msg();
+        YACURS::Curses::statusbar()->pop();
         break;
 
     case 3:
-        YACURS::Curses::statusbar()->pop_msg();
+        YACURS::Curses::statusbar()->pop();
         break;
     }
 

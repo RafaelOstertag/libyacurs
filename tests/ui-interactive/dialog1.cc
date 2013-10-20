@@ -129,9 +129,9 @@ class MainWindow : public YACURS::Window {
 
             if (dialog != 0 && evt.data() == dialog) {
 #ifdef USE_WCHAR
-		YACURS::Curses::statusbar()->push_msg("Dialog 1 clösed");
+		YACURS::Curses::statusbar()->push("Dialog 1 clösed");
 #else
-                YACURS::Curses::statusbar()->push_msg("Dialog 1 closed");
+                YACURS::Curses::statusbar()->push("Dialog 1 closed");
 #endif
 
 		switch (last_dialog_state=dialog->dialog_state()) {

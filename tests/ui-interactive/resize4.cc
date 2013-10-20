@@ -65,7 +65,7 @@ class MyWindow : public YACURS::Window {
             snprintf(buff, 32, "%d", winch.data().cols() );
             status_msg += buff;
 
-            YACURS::Curses::statusbar()->push_msg(status_msg);
+            YACURS::Curses::statusbar()->push(status_msg);
         }
 
     public:
@@ -130,7 +130,7 @@ main() {
         w1->add_hotkey(HotKeyQuit('Q') );
 
         YACURS::StatusBar* sl = new YACURS::StatusBar();
-        sl->push_msg("Press Q to quit");
+        sl->push("Press Q to quit");
         YACURS::Curses::statusbar(sl);
 
         YACURS::HPack* hpack = new YACURS::HPack;

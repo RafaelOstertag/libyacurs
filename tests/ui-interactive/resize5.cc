@@ -122,7 +122,7 @@ main() {
         w1->add_hotkey(HotKeyQuit('Q') );
 
         YACURS::StatusBar* sl = new YACURS::StatusBar();
-        sl->push_msg("Press Q to quit");
+        sl->push("Press Q to quit");
         YACURS::Curses::statusbar(sl);
 
         YACURS::HPack* hpack = new YACURS::HPack;

@@ -117,7 +117,7 @@ class MainWindow : public YACURS::Window {
                 dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
             if (inputbox1 != 0 && evt.data() == inputbox1) {
-                YACURS::Curses::statusbar()->push_msg("Dialog 1 closed");
+                YACURS::Curses::statusbar()->push("Dialog 1 closed");
 
                 if (inputbox1->dialog_state() == YACURS::Dialog::DIALOG_OK)
                     label1->label("DIALOG_OK");

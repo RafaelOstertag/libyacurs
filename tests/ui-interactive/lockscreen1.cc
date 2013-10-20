@@ -381,7 +381,7 @@ class MainWindow : public YACURS::Window {
                 dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
             if (win1 != 0 && evt.data() == win1) {
-                YACURS::Curses::statusbar()->push_msg("Window 1 closed");
+                YACURS::Curses::statusbar()->push("Window 1 closed");
                 delete win1;
                 win1 = 0;
                 return;

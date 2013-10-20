@@ -161,7 +161,7 @@ main() {
 
         YACURS::StatusBar* sl = new YACURS::StatusBar();
         YACURS::Curses::statusbar(sl);
-        sl->push_msg("Press Q to quit");
+        sl->push("Press Q to quit");
 
         YACURS::Curses::mainwindow(w1);
 

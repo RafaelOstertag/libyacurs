@@ -61,13 +61,13 @@ StatusBar::~StatusBar() {
 }
 
 void
-StatusBar::push_msg(const std::string& m) {
+StatusBar::push(const std::string& m) {
     __messages.push(m);
     put_top_msg();
 }
 
 void
-StatusBar::pop_msg() {
+StatusBar::pop() {
     if (__messages.empty() ) return;
     __messages.pop();
     put_top_msg();

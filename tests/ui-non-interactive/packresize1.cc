@@ -48,7 +48,7 @@ alrm(YACURS::Event& _e) {
     snprintf(buff, 32, "%d", _scrdim.cols() );
     status_msg += buff;
 
-    YACURS::Curses::statusbar()->push_msg(status_msg);
+    YACURS::Curses::statusbar()->push(status_msg);
 
     winsize ws;
 

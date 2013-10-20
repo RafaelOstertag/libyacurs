@@ -220,7 +220,7 @@ class MainWindow : public YACURS::Window {
                 dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
             if (filesavedialog != 0 && evt.data() == filesavedialog) {
-                YACURS::Curses::statusbar()->push_msg("FileSaveDialog closed");
+                YACURS::Curses::statusbar()->push("FileSaveDialog closed");
 
                 if (filesavedialog->dialog_state() ==
                     YACURS::Dialog::DIALOG_OK) {
@@ -240,7 +240,7 @@ class MainWindow : public YACURS::Window {
             }
 
             if (fileloaddialog != 0 && evt.data() == fileloaddialog) {
-                YACURS::Curses::statusbar()->push_msg("FileLoadDialog closed");
+                YACURS::Curses::statusbar()->push("FileLoadDialog closed");
 
                 if (fileloaddialog->dialog_state() ==
                     YACURS::Dialog::DIALOG_OK) {

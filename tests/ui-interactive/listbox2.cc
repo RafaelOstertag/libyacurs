@@ -882,11 +882,11 @@ class MainWindow : public YACURS::Window {
                 if (inputdialog->dialog_state() ==
                     YACURS::Dialog::DIALOG_OK) {
                     listbox->add(inputdialog->input() );
-                    YACURS::Curses::statusbar()->pop_msg();
-                    YACURS::Curses::statusbar()->push_msg("Dialog OK");
+                    YACURS::Curses::statusbar()->pop();
+                    YACURS::Curses::statusbar()->push("Dialog OK");
                 } else {
-                    YACURS::Curses::statusbar()->pop_msg();
-                    YACURS::Curses::statusbar()->push_msg("Dialog Cancelled");
+                    YACURS::Curses::statusbar()->pop();
+                    YACURS::Curses::statusbar()->push("Dialog Cancelled");
                 }
 
                 delete inputdialog;

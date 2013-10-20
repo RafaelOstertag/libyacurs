@@ -64,7 +64,7 @@ class MyWindow : public YACURS::Window {
             snprintf(buff, 32, "%d", winch.data().cols() );
             status_msg += buff;
 
-            YACURS::Curses::statusbar()->push_msg(status_msg);
+            YACURS::Curses::statusbar()->push(status_msg);
         }
 
     public:
@@ -128,7 +128,7 @@ main() {
 
         YACURS::StatusBar* sl = new YACURS::StatusBar();
         YACURS::Curses::statusbar(sl);
-        sl->push_msg("Press Q to quit");
+        sl->push("Press Q to quit");
 
         YACURS::Curses::mainwindow(w1);
 

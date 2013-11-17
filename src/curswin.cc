@@ -488,6 +488,46 @@ CursWin::delch() {
 }
 
 CursWin&
+CursWin::hrule(const Coordinates& ypos) {
+    Coordinates where(ypos);
+
+    where.x(__box?1:0);
+    if (ypos==Coordinates::zero()) {
+	where.y(__box?1:0);
+    }
+
+#if !defined(_XOPEN_CURSES) || defined(NCURSES_VERSION)
+    if (mvwhline(__window, where.y(), where.x(), 0, __client_area.cols() ) == ERR)
+        throw EXCEPTIONS::CursesException("mvwhline");
+#else
+    if (mvwhline(__window, where.y(), where.x(), '_', __client_area.cols() ) == ERR)
+        throw EXCEPTIONS::CursesException("mvwhline");
+#endif
+
+    return *this;
+}
+
+CursWin&
+CursWin::vrule(const Coordinates& xpos) {
+    Coordinates where(xpos);
+
+    where.y(__box?1:0);
+    if (xpos==Coordinates::zero()) {
+	where.x(__box?1:0);
+    }
+
+#if !defined(_XOPEN_CURSES) || defined(NCURSES_VERSION)
+    if (mvwvline(__window, where.y(), where.x(), 0, __client_area.rows() ) == ERR)
+        throw EXCEPTIONS::CursesException("mvwvline");
+#else
+    if (mvwvline(__window, where.y(), where.x(), '|', __client_area.rows() ) == ERR)
+        throw EXCEPTIONS::CursesException("mvwvline");
+#endif
+
+    return *this;
+}
+
+CursWin&
 CursWin::clearok(bool fl) {
     if (::clearok(__window, fl ? TRUE : FALSE) == ERR)
         throw EXCEPTIONS::CursesException("clearok");

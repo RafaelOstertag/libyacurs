@@ -2,9 +2,10 @@
 
 AUTOMAKE_OPTIONS = serial-tests
 
-check_PROGRAMS = basic1 basic2 cursinit cursorbuf1 curswin1 curswin2 \
-dynlabel1 dynlabel2 pack1 pack2 pack3 pack4 pack5 pack6 pack7 pack8  \
-pack9 packresize1 resize1 resize2 widget1 widget2 widget3 listbox1
+check_PROGRAMS = basic1 basic2 cursinit cursorbuf1 curswin1 curswin2	\
+curswin3 dynlabel1 dynlabel2 pack1 pack2 pack3 pack4 pack5 pack6	\
+pack7 pack8 pack9 packresize1 resize1 resize2 widget1 widget2 widget3	\
+listbox1
 
 TESTS = $(check_PROGRAMS)
 

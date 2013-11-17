@@ -249,6 +249,20 @@ namespace YACURS {
 
                 CursWin& delch();
 
+		/**
+		 * Horizontal rule
+		 *
+		 * @param ypos only the y-component is used.
+		 */
+		CursWin& hrule(const Coordinates& ypos=Coordinates::zero());
+
+		/**
+		 * Vertical rule
+		 *
+		 * @param xpos only the x-component is used.
+		 */
+		CursWin& vrule(const Coordinates& xpos=Coordinates::zero());
+
                 CursWin& clearok(bool fl);
 
                 CursWin& scrollok(bool fl);

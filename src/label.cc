@@ -57,7 +57,9 @@ Label::label_length() const {
 //
 // Public
 //
-Label::Label(const std::string& _l) : __color(DEFAULT),
+Label::Label(const std::string& _l) : 
+    Widget(),
+    __color(DEFAULT),
     __label(_l),
     __size(Size(1, label_length() ) ) {
 }

@@ -24,8 +24,26 @@ test1() {
 
 void
 test2() {
+    YACURS::INTERNAL::CursWin win(YACURS::Area(3, 2, 15, 3) );
+    win.vrule();
+    win.refresh();
+
+    sleep(2);
+}
+
+void
+test3() {
     YACURS::INTERNAL::CursWin win(YACURS::Area(3, 2, 3, 60) );
     win.box();
+    win.hrule();
+    win.refresh();
+
+    sleep(2);
+}
+
+void
+test4() {
+    YACURS::INTERNAL::CursWin win(YACURS::Area(3, 2, 3, 60) );
     win.hrule();
     win.refresh();
 
@@ -51,6 +69,16 @@ main() {
     wrefresh(stdscr);
 
     test2();
+
+    wclear(stdscr);
+    wrefresh(stdscr);
+
+    test3();
+
+    wclear(stdscr);
+    wrefresh(stdscr);
+
+    test4();
 
     YACURS::Curses::end();
 }

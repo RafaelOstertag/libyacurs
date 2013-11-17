@@ -12,7 +12,7 @@ includeyacurs_HEADERS = sigaction.h libyacurscfg.h coordinates.h	\
  colors.h colorparser.h input.h listbox.h yacursconst.h yacurstypes.h	\
  dialog.h messagebox.h messagebox2.h messagebox3.h inputbox.h		\
  filesavedialog.h fileloaddialog.h checkbox.h radiobox.h		\
- unlockdialog.h unlockdiadefault.h evtqueuestats.h
+ unlockdialog.h unlockdiadefault.h evtqueuestats.h vrule.h hrule.h
 
 noinst_HEADERS = gettext.h
 

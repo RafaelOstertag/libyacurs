@@ -20,8 +20,8 @@
 //
 // $Id$
 
-#ifndef HRULE_H
-#define HRULE_H 1
+#ifndef VRULE_H
+#define VRULE_H 1
 
 #include "widget.h"
 
@@ -34,10 +34,10 @@ namespace YACURS {
      * Label is not dynamic, i.e. if the text is too long, it might happen
      * that it cannot be realized() and throwing an exception.
      */
-    class HRule : public Widget {
+    class VRule : public Widget {
         private:
             // Not supported
-            HRule& operator=(const HRule&);
+            VRule& operator=(const VRule&);
 
             COLOROBJ __color;
 
@@ -55,9 +55,9 @@ namespace YACURS {
              *
              * @param _l label
              */
-            HRule();
+            VRule();
 
-            virtual ~HRule();
+            virtual ~VRule();
 
             void color(COLOROBJ c);
 
@@ -74,7 +74,7 @@ namespace YACURS {
             /**
              * Dummy. Does nothing.
              *
-             * HRule is not a container Widget, hence it may not notified
+             * VRule is not a container Widget, hence it may not notified
              * of size changes().
              *
              * @return always @false
@@ -86,15 +86,15 @@ namespace YACURS {
             // From Realizeable
 
             /**
-             * Refresh the HRule.
+             * Refresh the VRule.
              *
-             * Adds the HRule text to the subwin.
+             * Adds the VRule text to the subwin.
              *
-             * @param immediate not directly used by HRule::refresh()
+             * @param immediate not directly used by VRule::refresh()
              * but passed to Widget::refresh().
              */
             void refresh(bool immediate);
     };
 }
 
-#endif // HRULE_H
+#endif // VRULE_H

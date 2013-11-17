@@ -23,7 +23,7 @@
 #ifndef HRULE_H
 #define HRULE_H 1
 
-#include "widget.h"
+#include "rule.h"
 
 namespace YACURS {
     /**
@@ -34,20 +34,10 @@ namespace YACURS {
      * Label is not dynamic, i.e. if the text is too long, it might happen
      * that it cannot be realized() and throwing an exception.
      */
-    class HRule : public Widget {
+    class HRule : public Rule {
         private:
             // Not supported
             HRule& operator=(const HRule&);
-
-            COLOROBJ __color;
-
-        protected:
-            /**
-             * The size the Label requires. Rows are always 1. Cols are
-             * __label.length(). Derrived classes may define other
-             * constraints.
-             */
-            Size __size;
 
         public:
             /**
@@ -59,29 +49,11 @@ namespace YACURS {
 
             virtual ~HRule();
 
-            void color(COLOROBJ c);
-
-            COLOROBJ color() const;
-
             // From WidgetBase
-
-            Size size() const;
 
             void size_available(const Size& _s);
 
             Size size_hint() const;
-
-            /**
-             * Dummy. Does nothing.
-             *
-             * HRule is not a container Widget, hence it may not notified
-             * of size changes().
-             *
-             * @return always @false
-             */
-            bool size_change();
-
-            void reset_size();
 
             // From Realizeable
 

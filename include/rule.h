@@ -20,10 +20,10 @@
 //
 // $Id$
 
-#ifndef VRULE_H
-#define VRULE_H 1
+#ifndef RULE_H
+#define RULE_H 1
 
-#include "rule.h"
+#include "widget.h"
 
 namespace YACURS {
     /**
@@ -34,10 +34,20 @@ namespace YACURS {
      * Label is not dynamic, i.e. if the text is too long, it might happen
      * that it cannot be realized() and throwing an exception.
      */
-    class VRule : public Rule {
+    class Rule : public Widget {
         private:
             // Not supported
-            VRule& operator=(const VRule&);
+            Rule& operator=(const Rule&);
+
+        protected:
+            COLOROBJ __color;
+
+            /**
+             * The size the Label requires. Rows are always 1. Cols are
+             * __label.length(). Derrived classes may define other
+             * constraints.
+             */
+            Size __size;
 
         public:
             /**
@@ -45,28 +55,42 @@ namespace YACURS {
              *
              * @param _l label
              */
-            VRule();
+            Rule();
 
-            virtual ~VRule();
+            virtual ~Rule();
+
+            void color(COLOROBJ c);
+
+            COLOROBJ color() const;
 
             // From WidgetBase
 
-            void size_available(const Size& _s);
+            Size size() const;
 
-            Size size_hint() const;
+            /**
+             * Dummy. Does nothing.
+             *
+             * Rule is not a container Widget, hence it may not notified
+             * of size changes().
+             *
+             * @return always @false
+             */
+            bool size_change();
+
+            void reset_size();
 
             // From Realizeable
 
             /**
-             * Refresh the VRule.
+             * Refresh the Rule.
              *
-             * Adds the VRule text to the subwin.
+             * Adds the Rule text to the subwin.
              *
-             * @param immediate not directly used by VRule::refresh()
+             * @param immediate not directly used by Rule::refresh()
              * but passed to Widget::refresh().
              */
             void refresh(bool immediate);
     };
 }
 
-#endif // VRULE_H
+#endif // RULE_H

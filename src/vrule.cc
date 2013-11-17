@@ -43,17 +43,10 @@ VRule::operator=(const VRule&) {
 //
 // Public
 //
-VRule::VRule() : 
-    Widget(),
-    __color(DEFAULT) {
+VRule::VRule() : Rule() {
 }
 
 VRule::~VRule() {
-}
-
-Size
-VRule::size() const {
-    return __size;
 }
 
 void
@@ -66,18 +59,6 @@ VRule::size_available(const Size& _s) {
 Size
 VRule::size_hint() const {
     return Size(0,1);
-}
-
-bool
-VRule::size_change() {
-    // We don't handle size changes since we're not a container
-    // Widget.
-    return false;
-}
-
-void
-VRule::reset_size() {
-    __size = Size::zero();
 }
 
 void

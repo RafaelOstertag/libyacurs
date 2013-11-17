@@ -22,7 +22,7 @@
 #include <cassert>
 #include <cstdlib>
 
-#include "hrule.h"
+#include "rule.h"
 #include "yacursex.h"
 
 using namespace YACURS;
@@ -30,8 +30,8 @@ using namespace YACURS;
 //
 // Private
 //
-HRule&
-HRule::operator=(const HRule&) {
+Rule&
+Rule::operator=(const Rule&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -43,33 +43,37 @@ HRule::operator=(const HRule&) {
 //
 // Public
 //
-HRule::HRule() : Rule() {
+Rule::Rule() : 
+    Widget(),
+    __color(DEFAULT) {
 }
 
-HRule::~HRule() {
+Rule::~Rule() {
 }
 
 void
-HRule::size_available(const Size& _s) {
-    assert(_s.rows() > 0);
-    WidgetBase::size_available(_s);
-    __size = Size(1, _s.cols() );
+Rule::color(COLOROBJ c) {
+    __color = c;
+}
+
+COLOROBJ
+Rule::color() const {
+    return __color;
 }
 
 Size
-HRule::size_hint() const {
-    return Size(1, 0);
+Rule::size() const {
+    return __size;
+}
+
+bool
+Rule::size_change() {
+    // We don't handle size changes since we're not a container
+    // Widget.
+    return false;
 }
 
 void
-HRule::refresh(bool immediate) {
-    if (realization() != REALIZED && realization() != REALIZING) return;
-
-    assert(widget_subwin() != 0);
-
-    widget_subwin()->set_color(__color);
-    widget_subwin()->set_bg(__color);
-    widget_subwin()->hrule();
-
-    Widget::refresh(immediate);
+Rule::reset_size() {
+    __size = Size::zero();
 }

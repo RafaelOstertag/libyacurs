@@ -64,6 +64,7 @@ AC_ARG_ENABLE([wchar],
 
 AC_LANG([C++])
 AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION(0.18.2)
 
 AC_CHECK_HEADERS([locale.h stropts.h signal.h sys/termios.h termios.h unistd.h stdint.h sys/types.h sys/ioctl.h])
 

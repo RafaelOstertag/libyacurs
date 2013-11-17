@@ -215,7 +215,9 @@ FileSaveDialog::button_press_handler(Event& _e) {
     assert(_e == EVT_BUTTON_PRESS);
     EventEx<Button*>& evt = dynamic_cast<EventEx<Button*>&>(_e);
 
-    if (evt.data() == ok_button() ) {
+    // Take into account that dialog type can be specified by user
+    if (evt.data() == ok_button() ||
+	evt.data() == yes_button() ) {
         struct stat wdc;
         int retval;
         if ( (retval = stat(filepath().c_str(), &wdc) ) == 0) {

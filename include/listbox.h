@@ -490,12 +490,12 @@ namespace YACURS {
         __list.erase(it);
 
         // Adjust cursor position
-        if (__offset > 0) {
-            __offset--;
-        } else {
-            if (__curs_pos > 0)
-                __curs_pos--;
-        }
+	if (__offset > 0) {
+	    __offset--;
+	} else {
+	    if (__curs_pos > 0)
+		__curs_pos--;
+	}
 
         if (realization() == REALIZED)
             refresh(true);
@@ -585,7 +585,7 @@ namespace YACURS {
      * Input Widget is not a container Widget, hence it may not
      * notified of size changes().
      *
-     * @return always @false
+     * @return always @c false
      */
     template<class _T> bool
     ListBox<_T>::size_change() {
@@ -594,8 +594,6 @@ namespace YACURS {
 
     /**
      * Reset size.
-     *
-     * If __length is zero, resets __size. Else does nothing.
      */
     template<class _T> void
     ListBox<_T>::reset_size() {

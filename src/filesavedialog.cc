@@ -191,7 +191,7 @@ FileSaveDialog::window_close_handler(Event& _e) {
     }
 
     if (__confirmdia != 0 && __confirmdia == _evt.data() ) {
-        if (__confirmdia->dialog_state() == DIALOG_OK) {
+        if (__confirmdia->dialog_state() == DIALOG_YES) {
             // It is ok to overwrite
             dialog_state(DIALOG_OK);
             close();

@@ -57,6 +57,7 @@
 #include "hpack.h"
 #include "widget.h"
 #include "label.h"
+#include "rule.h"
 #include "hrule.h"
 #include "vrule.h"
 #include "dynlabel.h"

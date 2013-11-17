@@ -26,6 +26,7 @@
 #include <string>
 
 #include "window.h"
+#include "hrule.h"
 #include "vpack.h"
 #include "hpack.h"
 #include "button.h"
@@ -70,6 +71,7 @@ namespace YACURS {
             Button* __bok;
             Button* __bcancel;
 	    Button* __bno;
+	    HRule* __hrule;
             STATE __dstate;
             DIALOG_TYPE __dialog_type;
             DIALOG_SIZE __dialog_size;

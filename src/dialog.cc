@@ -170,13 +170,16 @@ Dialog::Dialog(const std::string& _title,
 				  __bok(0),
 				  __bcancel(0),
 				  __bno(0),
+				  __hrule(0),
 				  __dstate(DIALOG_CANCEL),
 				  __dialog_type(_dt),
 				  __dialog_size(_ds),
 				  __title(_title) {
     __vpack = new VPack;
     __hpack = new HPack;
+    __hrule = new HRule;
 
+    __vpack->add_back(__hrule);
     __vpack->add_back(__hpack);
 
     switch (__dialog_type) {
@@ -224,9 +227,11 @@ Dialog::Dialog(const std::string& _title,
 Dialog::~Dialog() {
     assert(__vpack != 0);
     assert(__hpack != 0);
+    assert(__hrule != 0);
 
     delete __vpack;
     delete __hpack;
+    delete __hrule;
 
     if (__bok)
 	delete __bok;

@@ -118,7 +118,7 @@ CursorBuffer::set(const std::wstring& _b) {
         __buffer = _b;
 
     __mbs_cache_valid = false;
-    __changed = true;
+    __changed = false;
 }
 
 void

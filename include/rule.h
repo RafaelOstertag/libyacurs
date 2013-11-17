@@ -78,18 +78,6 @@ namespace YACURS {
             bool size_change();
 
             void reset_size();
-
-            // From Realizeable
-
-            /**
-             * Refresh the Rule.
-             *
-             * Adds the Rule text to the subwin.
-             *
-             * @param immediate not directly used by Rule::refresh()
-             * but passed to Widget::refresh().
-             */
-            void refresh(bool immediate);
     };
 }
 

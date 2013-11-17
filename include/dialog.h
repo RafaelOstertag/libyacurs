@@ -135,6 +135,13 @@ namespace YACURS {
             STATE dialog_state() const;
 	    DIALOG_TYPE dialog_type() const;
 
+	    /**
+	     * Add widget
+	     *
+	     * Add widget to front of vpack.
+	     *
+	     * @param _w widget to be added.
+	     */
             void widget(WidgetBase* _w);
 
             // Those are from Realizable

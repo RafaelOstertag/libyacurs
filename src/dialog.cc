@@ -178,6 +178,7 @@ Dialog::Dialog(const std::string& _title,
     __vpack = new VPack;
     __hpack = new HPack;
     __hrule = new HRule;
+    __hrule->color(DIALOG);
 
     __vpack->add_back(__hrule);
     __vpack->add_back(__hpack);

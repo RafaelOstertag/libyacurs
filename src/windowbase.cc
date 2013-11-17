@@ -88,6 +88,11 @@ WindowBase::unrealize() {
     UNREALIZE_LEAVE;
 }
 
+bool
+WindowBase::on_close() {
+    return true;
+}
+
 //
 // Public
 //
@@ -180,6 +185,8 @@ WindowBase::show() {
 void
 WindowBase::close() {
     if (realization() != REALIZED) return;
+
+    if (!on_close()) return;
 
     unrealize();
 

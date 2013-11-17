@@ -93,15 +93,7 @@ namespace YACURS {
 
             virtual void button_press_handler(Event& _e);
 
-	    /**
-	     * Called on close.
-	     *
-	     * Will be called before dialog closes.
-	     * To be implemented by user if needed.
-	     *
-	     * @param st state. See STATE for possible values.
-	     */
-	    virtual void on_close(STATE st);
+
 
 	    /**
 	     * Called on OK button press.

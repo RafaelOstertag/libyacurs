@@ -113,6 +113,18 @@ namespace YACURS {
 
             void unrealize();
 
+	    /**
+	     * Called on close.
+	     *
+	     * Will be called before dialog closes.
+	     * To be implemented by user if needed.
+	     *
+	     * @param st state. See STATE for possible values.
+	     *
+	     * @return @c false prevents window from being closed.
+	     */
+	    virtual bool on_close();
+
         public:
             /**
              * @param _m margin to be used.

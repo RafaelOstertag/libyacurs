@@ -406,6 +406,8 @@ namespace YACURS {
 	std::advance(it, index);
 
 	*it = item;
+
+	sort();
     }
 
     template<class _T> const std::list<_T>&
@@ -473,6 +475,8 @@ namespace YACURS {
 	std::advance(it,  __curs_pos + __offset);
 
         *it = _item;
+
+	sort();
 
         if (realization() == REALIZED)
             refresh(true);

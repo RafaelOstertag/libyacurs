@@ -67,15 +67,15 @@ sigset_t EventQueue::block_sigmask;
 sigset_t EventQueue::tmp_old_sigmask;
 sigset_t EventQueue::old_sigmask;
 
-INTERNAL::Sigaction* EventQueue::sigwinch;
-INTERNAL::Sigaction* EventQueue::sigalrm;
-INTERNAL::Sigaction* EventQueue::sigusr1;
-INTERNAL::Sigaction* EventQueue::sigusr2;
-INTERNAL::Sigaction* EventQueue::sigint;
-INTERNAL::Sigaction* EventQueue::sigterm;
-INTERNAL::Sigaction* EventQueue::sigquit;
-INTERNAL::Sigaction* EventQueue::sigtstp;
-INTERNAL::Sigaction* EventQueue::sigcont;
+INTERNAL::Sigaction* EventQueue::sigwinch=0;
+INTERNAL::Sigaction* EventQueue::sigalrm=0;
+INTERNAL::Sigaction* EventQueue::sigusr1=0;
+INTERNAL::Sigaction* EventQueue::sigusr2=0;
+INTERNAL::Sigaction* EventQueue::sigint=0;
+INTERNAL::Sigaction* EventQueue::sigterm=0;
+INTERNAL::Sigaction* EventQueue::sigquit=0;
+INTERNAL::Sigaction* EventQueue::sigtstp=0;
+INTERNAL::Sigaction* EventQueue::sigcont=0;
 
 bool EventQueue::signal_blocked = false;
 
@@ -441,32 +441,50 @@ EventQueue::setup_signal() {
 
 void
 EventQueue::restore_signal() {
-    if (sigwinch)
+    if (sigwinch) {
         delete sigwinch;
+	sigwinch = 0;
+    }
 
-    if (sigalrm)
+    if (sigalrm) {
         delete sigalrm;
+	sigalrm = 0;
+    }
 
-    if (sigusr1)
+    if (sigusr1) {
         delete sigusr1;
+	sigusr1=0;
+    }
 
-    if (sigusr2)
+    if (sigusr2) {
         delete sigusr2;
+	sigusr2 =0;
+    }
 
-    if (sigint)
+    if (sigint) {
         delete sigint;
+	sigint = 0;
+    }
 
-    if (sigterm)
+    if (sigterm) {
         delete sigterm;
+	sigterm =0;
+    }
 
-    if (sigquit)
+    if (sigquit) {
         delete sigquit;
+	sigquit = 0;
+    }
 
-    if (sigtstp)
+    if (sigtstp) {
         delete sigtstp;
+	sigtstp = 0;
+    }
 
-    if (sigcont)
+    if (sigcont) {
         delete sigcont;
+	sigcont = 0;
+    }
 
     if (sigprocmask(SIG_SETMASK, &old_sigmask, 0) != 0)
         throw EXCEPTIONS::SystemError(errno);
@@ -954,7 +972,9 @@ EventQueue::timeout(unsigned int _t) {
     // we reset the action.
 #if defined(__sun) && defined(_CURSES_H) && !defined(_XOPEN_CURSES)
 # warning "SyS V workaround for Solaris enabled"
-    sigalrm->reset();
+    // We may be called with sigalrm not being initialized yet
+    if (sigalrm!=0)
+	sigalrm->reset();
 #endif
 }
 

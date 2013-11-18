@@ -380,10 +380,10 @@ void test3() {
     cb_ptr->set("Test Buffer");
     if (cb_ptr->changed()) abort;
 
-    // Setting the value to something different must change the
+    // Setting the value to something different must not change the
     // changed state.
     cb_ptr->set("Test");
-    if (!cb_ptr->changed()) abort();
+    if (cb_ptr->changed()) abort();
 
     delete cb_ptr;
 
@@ -471,10 +471,10 @@ void test4() {
     cb_ptr->set(L"T€st Buffer");
     if (cb_ptr->changed()) abort;
 
-    // Setting the value to something different must change the
+    // Setting the value to something different must not change the
     // changed state.
     cb_ptr->set(L"T€st");
-    if (!cb_ptr->changed()) abort();
+    if (cb_ptr->changed()) abort();
 
     delete cb_ptr;
 

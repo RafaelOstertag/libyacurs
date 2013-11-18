@@ -149,11 +149,12 @@ void
 CursorBuffer::max_size(CursorBuffer::tsz_t max_size) {
     __max_size = max_size;
 
-    // Re-set buffer, so it will be truncated. We do not
-    // uncoditionally call set(), because set() will set the state of
-    // the buffer to changed.
+    // Re-set buffer, so it will be truncated. 
     if (__buffer.length() > max_size) {
 	set(__buffer.substr(0, max_size));
+	// set() does not set __changed state.  Since we know, the
+	// string has been changed, we set it here.
+	__changed = true;
 
 	// reset scrolling information
 	__curs_pos = 0;

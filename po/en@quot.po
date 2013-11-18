@@ -1,0 +1,214 @@
+# English translations for libyacurs package.
+# Copyright (C) 2013 Rafael Ostertag
+# This file is distributed under the same license as the libyacurs package.
+# Automatically generated, 2013.
+#
+# All this catalog "translates" are quotation characters.
+# The msgids must be ASCII and therefore cannot contain real quotation
+# characters, only substitutes like grave accent (0x60), apostrophe (0x27)
+# and double quote (0x22). These substitutes look strange; see
+# http://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html
+#
+# This catalog translates grave accent (0x60) and apostrophe (0x27) to
+# left single quotation mark (U+2018) and right single quotation mark (U+2019).
+# It also translates pairs of apostrophe (0x27) to
+# left single quotation mark (U+2018) and right single quotation mark (U+2019)
+# and pairs of quotation mark (0x22) to
+# left double quotation mark (U+201C) and right double quotation mark (U+201D).
+#
+# When output to an UTF-8 terminal, the quotation characters appear perfectly.
+# When output to an ISO-8859-1 terminal, the single quotation marks are
+# transliterated to apostrophes (by iconv in glibc 2.2 or newer) or to
+# grave/acute accent (by libiconv), and the double quotation marks are
+# transliterated to 0x22.
+# When output to an ASCII terminal, the single quotation marks are
+# transliterated to apostrophes, and the double quotation marks are
+# transliterated to 0x22.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libyacurs 0.1\n"
+"Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
+"POT-Creation-Date: 2013-10-13 21:46+0200\n"
+"PO-Revision-Date: 2013-10-13 21:46+0200\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: en@quot\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/checkbox.cc:181
+msgid "CheckBox: index "
+msgstr "CheckBox: index "
+
+#: src/checkbox.cc:182
+msgid " out of range."
+msgstr " out of range."
+
+#: src/checkbox.cc:195
+msgid "Item '"
+msgstr "Item '"
+
+#: src/checkbox.cc:195
+msgid "' not found in CheckBox"
+msgstr "' not found in CheckBox"
+
+#: src/colorparser.cc:65
+msgid " does not contain ':'"
+msgstr " does not contain ‘:’"
+
+#: src/colorparser.cc:71
+msgid "Color Object size invalid"
+msgstr "Color Object size invalid"
+
+#: src/colorparser.cc:77
+msgid "Color size invalid"
+msgstr "Color size invalid"
+
+#: src/colorparser.cc:83
+msgid " is not valid color object"
+msgstr " is not valid color object"
+
+#: src/colorparser.cc:90 src/colorparser.cc:97
+msgid "not a valid color: "
+msgstr "not a valid color: "
+
+#: src/colorparser.cc:104
+msgid "not a valid attribute: "
+msgstr "not a valid attribute: "
+
+#: src/curswin.cc:47
+msgid "argument 'win' must not be 0"
+msgstr "argument ‘win’ must not be 0"
+
+#: src/curswin.cc:72
+msgid "Area must not be zero"
+msgstr "Area must not be zero"
+
+#: src/dialog.cc:188 src/dialog.cc:209
+msgid "Cancel"
+msgstr "Cancel"
+
+#: src/dialog.cc:193
+msgid "OK"
+msgstr "OK"
+
+#: src/dialog.cc:198 src/dialog.cc:211
+msgid "No"
+msgstr "No"
+
+#: src/dialog.cc:203 src/dialog.cc:213
+msgid "Yes"
+msgstr "Yes"
+
+#: src/fileloaddialog.cc:160 src/fileloaddialog.cc:313
+#: src/filesavedialog.cc:160 src/filesavedialog.cc:375
+msgid "Cannot change to "
+msgstr "Cannot change to "
+
+#: src/fileloaddialog.cc:161 src/fileloaddialog.cc:314
+#: src/filesavedialog.cc:161 src/filesavedialog.cc:376
+msgid "System Error"
+msgstr "System Error"
+
+#: src/fileloaddialog.cc:203
+msgid "Load File"
+msgstr "Load File"
+
+#: src/filesavedialog.cc:223
+msgid "Confirmation"
+msgstr "Confirmation"
+
+#: src/filesavedialog.cc:226
+msgid "already exists. Do you want to overwrite?"
+msgstr "already exists. Do you want to overwrite?"
+
+#: src/filesavedialog.cc:235
+msgid "Error"
+msgstr "Error"
+
+#: src/filesavedialog.cc:265
+msgid "Save File"
+msgstr "Save File"
+
+#: src/unlockdiadefault.cc:47
+msgid "Unlock Screen"
+msgstr "Unlock Screen"
+
+#: src/unlockdiadefault.cc:54
+msgid "Please enter password in order to unlock screen"
+msgstr "Please enter password in order to unlock screen"
+
+#: src/yacursex.cc:46
+msgid "() failed"
+msgstr "() failed"
+
+#: src/yacursex.cc:50
+msgid "unable to initialize curses"
+msgstr "unable to initialize curses"
+
+#: src/yacursex.cc:54
+msgid "curses not initialized"
+msgstr "curses not initialized"
+
+#: src/yacursex.cc:58
+msgid "curses has already been initialized"
+msgstr "curses has already been initialized"
+
+#: src/yacursex.cc:62
+msgid "object already realized"
+msgstr "object already realized"
+
+#: src/yacursex.cc:66
+msgid "object not realized"
+msgstr "object not realized"
+
+#: src/yacursex.cc:80
+msgid "TIOCGWINSZ info invalid"
+msgstr "TIOCGWINSZ info invalid"
+
+#: src/yacursex.cc:84
+msgid "unable to get window size"
+msgstr "unable to get window size"
+
+#: src/yacursex.cc:88
+msgid "Cannot focus"
+msgstr "Cannot focus"
+
+#: src/yacursex.cc:92
+msgid "Size is invalid"
+msgstr "Size is invalid"
+
+#: src/yacursex.cc:96
+msgid "Unexpected event received"
+msgstr "Unexpected event received"
+
+#: src/yacursex.cc:100
+msgid "Colors not initialized"
+msgstr "Colors not initialized"
+
+#: src/yacursex.cc:104
+msgid "An object exceeded space constraints"
+msgstr "An object exceeded space constraints"
+
+#: src/yacursex.cc:108
+msgid "Operation not supported"
+msgstr "Operation not supported"
+
+#: src/yacursex.cc:112
+msgid "Invalid dialog type"
+msgstr "Invalid dialog type"
+
+#: src/cursorbuf.cc:258 src/cursorbuf.cc:284
+msgid "_size must not be <2"
+msgstr "_size must not be <2"
+
+#: src/event.cc:39
+msgid "Event names must not be greater than 63 characters."
+msgstr "Event names must not be greater than 63 characters."
+
+#: src/event.cc:42
+msgid "Event names must not be empty."
+msgstr "Event names must not be empty."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libyacurs 0.1\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
-"POT-Creation-Date: 2013-10-13 21:46+0200\n"
+"POT-Creation-Date: 2013-11-18 02:40+0100\n"
 "PO-Revision-Date: 2013-06-15 21:41+0200\n"
 "Last-Translator: Rafael Ostertag <rafi@guengel.ch>\n"
 "Language-Team: English\n"
@@ -57,6 +57,10 @@ msgstr "not a valid color: "
 msgid "not a valid attribute: "
 msgstr "not a valid attribute: "
 
+#: src/cursorbuf.cc:284 src/cursorbuf.cc:310
+msgid "_size must not be <2"
+msgstr "_size must not be <2"
+
 #: src/curswin.cc:47
 msgid "argument 'win' must not be 0"
 msgstr "argument 'win' must not be 0"
@@ -81,13 +85,22 @@ msgstr "No"
 msgid "Yes"
 msgstr "Yes"
 
+#: src/event.cc:39
+msgid "Event names must not be greater than 63 characters."
+msgstr ""
+
+#: src/event.cc:42
+#, fuzzy
+msgid "Event names must not be empty."
+msgstr "Area must not be zero"
+
 #: src/fileloaddialog.cc:160 src/fileloaddialog.cc:313
-#: src/filesavedialog.cc:160 src/filesavedialog.cc:375
+#: src/filesavedialog.cc:160 src/filesavedialog.cc:377
 msgid "Cannot change to "
 msgstr "Cannot change to "
 
 #: src/fileloaddialog.cc:161 src/fileloaddialog.cc:314
-#: src/filesavedialog.cc:161 src/filesavedialog.cc:376
+#: src/filesavedialog.cc:161 src/filesavedialog.cc:378
 msgid "System Error"
 msgstr "System Error"
 
@@ -95,21 +108,34 @@ msgstr "System Error"
 msgid "Load File"
 msgstr "Load File"
 
-#: src/filesavedialog.cc:223
+#: src/filesavedialog.cc:225
 msgid "Confirmation"
 msgstr "Confirmation"
 
-#: src/filesavedialog.cc:226
+#: src/filesavedialog.cc:228
 msgid "already exists. Do you want to overwrite?"
 msgstr "already exists. Do you want to overwrite?"
 
-#: src/filesavedialog.cc:235
+#: src/filesavedialog.cc:237
 msgid "Error"
 msgstr "Error"
 
-#: src/filesavedialog.cc:265
+#: src/filesavedialog.cc:267
 msgid "Save File"
 msgstr "Save File"
+
+#: src/lockscreen.cc:80
+#, fuzzy
+msgid "Unlock Failed"
+msgstr "Unlock Screen"
+
+#: src/lockscreen.cc:81
+msgid "Wrong Password"
+msgstr ""
+
+#: src/lockscreen.cc:110
+msgid "InputDialog may not be 0"
+msgstr ""
 
 #: src/unlockdiadefault.cc:47
 msgid "Unlock Screen"
@@ -178,19 +204,6 @@ msgstr "Operation not supported"
 #: src/yacursex.cc:112
 msgid "Invalid dialog type"
 msgstr "Invalid dialog type"
-
-#: src/cursorbuf.cc:258 src/cursorbuf.cc:284
-msgid "_size must not be <2"
-msgstr "_size must not be <2"
-
-#: src/event.cc:39
-msgid "Event names must not be greater than 63 characters."
-msgstr ""
-
-#: src/event.cc:42
-#, fuzzy
-msgid "Event names must not be empty."
-msgstr "Area must not be zero"
 
 #~ msgid "Rows cannot be <0"
 #~ msgstr "Rows cannot be <0"

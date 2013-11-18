@@ -274,7 +274,7 @@ class BoxDialog : public YACURS::Dialog {
         YACURS::RadioBox* radiobox;
 
     public:
-        BoxDialog() : Dialog("Box Dialog", Dialog::OK_ONLY),
+        BoxDialog() : Dialog("Box Dialog", YACURS::OK_ONLY),
             hpack(0),
             checkbox(0),
             radiobox(0) {

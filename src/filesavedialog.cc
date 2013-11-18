@@ -265,7 +265,7 @@ FileSaveDialog::button_press_handler(Event& _e) {
 FileSaveDialog::FileSaveDialog(std::string _path,
                                DIALOG_TYPE _dt) :
     Dialog(std::string(_("Save File") ), _dt,
-           Dialog::FULLSIZE),
+           FULLSIZE),
     __errmsgbox(0),
     __confirmdia(0),
     __path(0),

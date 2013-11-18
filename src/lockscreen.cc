@@ -75,11 +75,11 @@ LockScreen::window_close_event_handler(Event& _e) {
         if (__unlock_dialog->unlock() ) {
             close();
         } else {
-            if (__unlock_dialog->dialog_state() == Dialog::DIALOG_OK) {
+            if (__unlock_dialog->dialog_state() == DIALOG_OK) {
                 assert(__msgbox == 0);
                 __msgbox = new MessageBox(_("Unlock Failed"),
                                           _("Wrong Password"),
-                                          Dialog::OK_ONLY);
+                                          OK_ONLY);
                 __msgbox->show();
             }
         }

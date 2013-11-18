@@ -52,7 +52,7 @@ namespace YACURS {
                 }
 
                 void action() {
-                    __dialog.__dstate = Dialog::DIALOG_CANCEL;
+                    __dialog.__dstate = DIALOG_CANCEL;
                     __dialog.close();
                 }
 
@@ -102,7 +102,7 @@ Dialog::no_button() const {
 }
 
 void
-Dialog::dialog_state(STATE st) {
+Dialog::dialog_state(DIALOG_STATE st) {
     __dstate = st;
 }
 
@@ -254,13 +254,13 @@ Dialog::widget(WidgetBase* _w) {
     __vpack->add_front(_w);
 }
 
-Dialog::STATE
+DIALOG_STATE
 Dialog::dialog_state() const {
     return __dstate;
 
 }
 
-Dialog::DIALOG_TYPE
+DIALOG_TYPE
 Dialog::dialog_type() const {
     return __dialog_type;
 }

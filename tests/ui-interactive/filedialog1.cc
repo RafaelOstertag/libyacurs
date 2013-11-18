@@ -223,7 +223,7 @@ class MainWindow : public YACURS::Window {
                 YACURS::Curses::statusbar()->push("FileSaveDialog closed");
 
                 if (filesavedialog->dialog_state() ==
-                    YACURS::Dialog::DIALOG_OK) {
+                    YACURS::DIALOG_OK) {
                     label1->label("DIALOG_OK");
                     label2->label(filesavedialog->filepath() );
                     label3->label(filesavedialog->directory() );
@@ -243,7 +243,7 @@ class MainWindow : public YACURS::Window {
                 YACURS::Curses::statusbar()->push("FileLoadDialog closed");
 
                 if (fileloaddialog->dialog_state() ==
-                    YACURS::Dialog::DIALOG_OK) {
+                    YACURS::DIALOG_OK) {
                     label1->label("DIALOG_OK");
                     label2->label(fileloaddialog->filepath() );
                     label3->label(fileloaddialog->directory() );

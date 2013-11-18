@@ -39,6 +39,31 @@ namespace YACURS {
         UNSORTED
     };
 
+    /**
+     * State of dialog.
+     */
+    enum DIALOG_STATE {
+	/// Dialog was confirmed
+	DIALOG_OK,
+	DIALOG_YES,
+	/// Dialog was cancelled
+	DIALOG_CANCEL,
+	DIALOG_NO
+    };
+    
+    enum DIALOG_TYPE {
+	OK_ONLY,
+	YES_ONLY,
+	OKCANCEL,
+	YESNO,
+	YESNOCANCEL
+    };
+
+    enum DIALOG_SIZE {
+	AUTOMATIC,
+	FULLSIZE
+    };
+
     namespace INTERNAL {
 #ifdef SA_SIGINFO
 

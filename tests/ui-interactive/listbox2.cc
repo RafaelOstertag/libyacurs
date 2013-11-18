@@ -880,7 +880,7 @@ class MainWindow : public YACURS::Window {
 
             if (inputdialog == _ex.data() ) {
                 if (inputdialog->dialog_state() ==
-                    YACURS::Dialog::DIALOG_OK) {
+                    YACURS::DIALOG_OK) {
                     listbox->add(inputdialog->input() );
                     YACURS::Curses::statusbar()->pop();
                     YACURS::Curses::statusbar()->push("Dialog OK");
@@ -896,7 +896,7 @@ class MainWindow : public YACURS::Window {
 
             if (searchdialog == _ex.data() ) {
                 if (searchdialog->dialog_state() ==
-                    YACURS::Dialog::DIALOG_OK) {
+                    YACURS::DIALOG_OK) {
                     listbox->high_light(searchdialog->input() );
                 }
                 delete searchdialog;

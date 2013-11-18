@@ -119,7 +119,7 @@ class MainWindow : public YACURS::Window {
             if (inputbox1 != 0 && evt.data() == inputbox1) {
                 YACURS::Curses::statusbar()->push("Dialog 1 closed");
 
-                if (inputbox1->dialog_state() == YACURS::Dialog::DIALOG_OK)
+                if (inputbox1->dialog_state() == YACURS::DIALOG_OK)
                     label1->label("DIALOG_OK");
                 else
                     label1->label("DIALOG_CANCEL");

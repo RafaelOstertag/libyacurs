@@ -25,6 +25,7 @@
 
 #include <string>
 
+#include "yacurstypes.h"
 #include "window.h"
 #include "hrule.h"
 #include "vpack.h"
@@ -37,33 +38,6 @@ namespace YACURS {
     }
 
     class Dialog : public Window {
-        public:
-	    /**
-	     * State of dialog.
-	     */
-            enum STATE {
-		/// Dialog was confirmed
-                DIALOG_OK,
-		DIALOG_YES,
-		/// Dialog was cancelled
-                DIALOG_CANCEL,
-		DIALOG_NO
-		
-            };
-
-            enum DIALOG_TYPE {
-                OK_ONLY,
-                YES_ONLY,
-                OKCANCEL,
-                YESNO,
-		YESNOCANCEL
-            };
-
-            enum DIALOG_SIZE {
-                AUTOMATIC,
-                FULLSIZE
-            };
-
         private:
             VPack* __vpack;
             HPack* __hpack;
@@ -72,7 +46,7 @@ namespace YACURS {
             Button* __bcancel;
 	    Button* __bno;
 	    HRule* __hrule;
-            STATE __dstate;
+            DIALOG_STATE __dstate;
             DIALOG_TYPE __dialog_type;
             DIALOG_SIZE __dialog_size;
 
@@ -91,7 +65,7 @@ namespace YACURS {
 
             const Button* const no_button() const;
 
-            void dialog_state(STATE st);
+            void dialog_state(DIALOG_STATE st);
 
             virtual void button_press_handler(Event& _e);
 
@@ -134,7 +108,7 @@ namespace YACURS {
                    DIALOG_TYPE _dt=OKCANCEL,
                    DIALOG_SIZE _ds=AUTOMATIC);
             virtual ~Dialog();
-            STATE dialog_state() const;
+            DIALOG_STATE dialog_state() const;
 	    DIALOG_TYPE dialog_type() const;
 
 	    void title(const std::string& _title);

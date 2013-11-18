@@ -96,7 +96,7 @@ namespace YACURS {
 	     * Holds the terminals we know that can have set the
 	     * title.
 	     */
-	    static char* __xterm_list[];
+	    static const char* __xterm_list[];
 
 	    static bool is_xterm();
 

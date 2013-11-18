@@ -64,7 +64,7 @@ Window* Curses::__mainwindow = 0;
 bool Curses::initialized = false;
 volatile bool Curses::__suspended = false;
 
-char* Curses::__xterm_list[] = {
+const char* Curses::__xterm_list[] = {
     "xterm",
     "dtterm",
     "screen",
@@ -79,7 +79,7 @@ bool
 Curses::is_xterm() {
 #ifdef HAVE_TERMNAME
     const char** tmp = __xterm_list;
-    char* tn = termname();
+    const char* tn = termname();
 
     while (*tmp != NULL) {
         if (strstr (tn, *tmp) != 0) return true;

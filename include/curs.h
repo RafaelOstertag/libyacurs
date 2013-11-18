@@ -90,6 +90,16 @@ namespace YACURS {
              */
             static volatile bool __suspended;
 
+	    /**
+	     * The terminals we know
+	     *
+	     * Holds the terminals we know that can have set the
+	     * title.
+	     */
+	    static char* __xterm_list[];
+
+	    static bool is_xterm();
+
         protected:
             /**
              * Handler for EVT_DOUPDATE event.
@@ -137,6 +147,8 @@ namespace YACURS {
             static Size current_screensize();
 
             static Size inquiry_screensize();
+
+	    static void set_terminal_title(const std::string& _str);
     };
 }
 

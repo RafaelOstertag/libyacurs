@@ -46,6 +46,7 @@
 
 #include <cerrno>
 #include <cstdlib>
+#include <cstdio>
 
 #include "curs.h"
 #include "eventqueue.h"
@@ -63,9 +64,34 @@ Window* Curses::__mainwindow = 0;
 bool Curses::initialized = false;
 volatile bool Curses::__suspended = false;
 
+char* Curses::__xterm_list[] = {
+    "xterm",
+    "dtterm",
+    "screen",
+    0
+};
+
 //
 // Private
 //
+
+bool
+Curses::is_xterm() {
+#ifdef HAVE_TERMNAME
+    const char** tmp = __xterm_list;
+    char* tn = termname();
+
+    while (*tmp != NULL) {
+        if (strstr (tn, *tmp) != 0) return true;
+
+        tmp++;
+    }
+
+    return false;
+#else
+    return false;
+#endif
+}
 
 //
 // Protected
@@ -383,4 +409,12 @@ Curses::current_screensize() {
     getmaxyx(stdscr, nrows, ncols);
 
     return Size(nrows, ncols);
+}
+
+void
+Curses::set_terminal_title(const std::string& _str) {
+    if (Curses::is_xterm()) {
+	fprintf (stdout, "%c]0;%s%c", '\033', _str.c_str(), '\007');
+	fflush (stdout);
+    }
 }

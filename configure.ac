@@ -88,6 +88,28 @@ AC_CHECK_FUNC([resize_term],
 		[AC_DEFINE([HAVE_RESIZETERM],[1],[Define to 1 if you have the `resizeterm' function.])])])
 
 # Some custom tests
+AC_MSG_CHECKING([for termname])
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM([[
+	#if defined HAVE_NCURSESW_CURSES_H
+	#	 include <ncursesw/curses.h>
+	#elif defined HAVE_NCURSESW_H
+	#	 include <ncursesw.h>
+	#elif defined HAVE_NCURSES_CURSES_H
+	#	 include <ncurses/curses.h>
+	#elif defined HAVE_NCURSES_H
+	#	 include <ncurses.h>
+	#elif defined HAVE_CURSES_H
+	#	 include <curses.h>
+	#else
+	#	 error "SysV or X/Open-compatible Curses header file required"
+	#endif
+	char *tmp;]],
+	[[tmp = termname()]])],
+	[AC_MSG_RESULT([yes])],
+	[AC_MSG_RESULT([no])
+	AC_DEFINE([HAVE_TERMNAME],[1],[Set to 1 if you have termname])])
+
 AC_MSG_CHECKING([whether waddstr() use const char*])
 AC_COMPILE_IFELSE(
 	[AC_LANG_PROGRAM([[

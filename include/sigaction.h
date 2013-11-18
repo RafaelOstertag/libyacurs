@@ -46,6 +46,8 @@ namespace YACURS {
                  * Third argument to sigaction().
                  */
                 struct sigaction __saved_action;
+		
+		struct sigaction __current_action;
 
                 /**
                  * Signal Number.
@@ -84,6 +86,14 @@ namespace YACURS {
                 int signo() const {
                     return __signo;
                 }
+
+		/**
+		 * Set the signal again
+		 *
+		 * Calls sigaction with the parameters received upon
+		 * initialization.
+		 */
+		void reset() const;
         };
     } // namespace INTERNAL
 } // namespace YACURS

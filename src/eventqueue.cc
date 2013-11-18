@@ -796,7 +796,7 @@ EventQueue::run() {
     for (;; ) {
         if (__lockscreen != 0) {
             // Adding lockscreen will set timeout.
-            alarm(__timeout);
+            timeout(__timeout);
         }
 
         // This is to move the cursor to the focused widget. Before
@@ -929,7 +929,7 @@ void
 EventQueue::lock_screen(LockScreen* _ls) {
     __lockscreen = _ls;
     if (__lockscreen == 0) {
-        alarm(0);
+        timeout(0);
         disconnect_event(EventConnectorFunction1(EVT_SIGALRM,
                                                  &EventQueue::timeout_handler) );
     } else {
@@ -948,6 +948,14 @@ void
 EventQueue::timeout(unsigned int _t) {
     __timeout = _t;
     alarm(__timeout);
+    // On Solaris 10/11 when using Sys V curses, letting a unlock
+    // dialog time out twice in a row, results in signal handler for
+    // SIGALRM to be lost, i.e. SIG_DFL appears to be in place. Thus,
+    // we reset the action.
+#if defined(__sun) && defined(_CURSES_H) && !defined(_XOPEN_CURSES)
+# warning "SyS V workaround for Solaris enabled"
+    sigalrm->reset();
+#endif
 }
 
 unsigned int

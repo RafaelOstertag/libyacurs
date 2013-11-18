@@ -257,6 +257,25 @@ Dialog::widget(WidgetBase* _w) {
 Dialog::STATE
 Dialog::dialog_state() const {
     return __dstate;
+
+}
+
+Dialog::DIALOG_TYPE
+Dialog::dialog_type() const {
+    return __dialog_type;
+}
+
+void
+Dialog::title(const std::string& _title) {
+    __title = _title;
+
+    if (realization() == REALIZED)
+	refresh(true);
+}
+
+std::string
+Dialog::title() const {
+    return __title;
 }
 
 void

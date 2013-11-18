@@ -137,6 +137,11 @@ namespace YACURS {
             STATE dialog_state() const;
 	    DIALOG_TYPE dialog_type() const;
 
+	    void title(const std::string& _title);
+
+	    std::string title() const;
+	    
+
 	    /**
 	     * Add widget
 	     *

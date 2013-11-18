@@ -269,8 +269,14 @@ void
 Dialog::title(const std::string& _title) {
     __title = _title;
 
-    if (realization() == REALIZED)
+    if (realization() == REALIZED) {
+	// Ugly hack, reset box, so that it will be adjusted to new
+	// title...
+	if (frame())
+	    curses_window()->box();
+
 	refresh(true);
+    }
 }
 
 std::string

@@ -457,7 +457,11 @@ namespace YACURS {
     Input<T>::obscure_input(bool _m) {
         if (_m && __hide_input)
             __hide_input = false;
+
         __obscure_input = _m;
+
+	if (realization() == REALIZED)
+	    refresh(true);
     }
 
     template<class T> bool
@@ -479,7 +483,11 @@ namespace YACURS {
     Input<T>::hide_input(bool _m) {
         if (_m && __obscure_input)
             __obscure_input = false;
+
         __hide_input = _m;
+
+	if (realization() == REALIZED)
+	    refresh(true);
     }
 
     template<class T> bool

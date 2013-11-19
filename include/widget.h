@@ -54,6 +54,8 @@ namespace YACURS {
             Widget& operator=(const Widget&);
 
         protected:
+            void redraw_handler(Event& _e);
+
             void force_refresh_handler(Event& _e);
 
             void unrealize();

@@ -114,6 +114,10 @@ WindowBase::WindowBase(const Margin& _m) :
 
 WindowBase::~WindowBase() {
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
+                                     EVT_REDRAW, this,
+                                     &WindowBase::redraw_handler) );
+
+    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
                                      EVT_FORCEREFRESH, this,
                                      &WindowBase::force_refresh_handler) );
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
@@ -168,6 +172,10 @@ WindowBase::show() {
     if (realization() != UNREALIZED) return;
 
     EventQueue::connect_event(EventConnectorMethod1<WindowBase>(
+                                  EVT_REDRAW, this,
+                                  &WindowBase::redraw_handler) );
+
+    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(
                                   EVT_FORCEREFRESH, this,
                                   &WindowBase::force_refresh_handler) );
     EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,
@@ -189,6 +197,10 @@ WindowBase::close() {
     if (!on_close()) return;
 
     unrealize();
+
+    EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
+                                     EVT_REDRAW, this,
+                                     &WindowBase::redraw_handler) );
 
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
                                      EVT_FORCEREFRESH, this,
@@ -224,13 +236,23 @@ WindowBase::shown() const {
 }
 
 void
+WindowBase::redraw_handler(Event& _e) {
+    if (realization() != REALIZED) return;
+
+    assert(_e == EVT_REDRAW);
+    assert(__curses_window != 0);
+
+    __curses_window->erase();
+}
+
+void
 WindowBase::force_refresh_handler(Event& _e) {
     if (realization() != REALIZED) return;
 
     assert(_e == EVT_FORCEREFRESH);
     assert(__curses_window != 0);
 
-    __curses_window->erase();
+    __curses_window->touch();
 }
 
 void

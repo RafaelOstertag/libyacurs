@@ -42,13 +42,23 @@ Widget::operator=(const Widget&) {
 // Protected
 //
 void
+Widget::redraw_handler(Event& _e) {
+    if (realization() != REALIZED) return;
+
+    assert(_e == EVT_REDRAW);
+    assert(__widget_subwin != 0);
+
+    __widget_subwin->erase();
+}
+
+void
 Widget::force_refresh_handler(Event& _e) {
     if (realization() != REALIZED) return;
 
     assert(_e == EVT_FORCEREFRESH);
     assert(__widget_subwin != 0);
 
-    __widget_subwin->erase();
+    __widget_subwin->touch();
 }
 
 void
@@ -59,6 +69,10 @@ Widget::unrealize() {
     EventQueue::disconnect_event(EventConnectorMethod1<Widget>(
                                      EVT_FORCEREFRESH, this,
                                      &Widget::force_refresh_handler) );
+
+    EventQueue::disconnect_event(EventConnectorMethod1<Widget>(
+                                     EVT_REDRAW, this,
+                                     &Widget::redraw_handler) );
 
     assert(__widget_subwin != 0);
 
@@ -102,6 +116,10 @@ Widget::~Widget() {
     EventQueue::disconnect_event(EventConnectorMethod1<Widget>(
                                      EVT_FORCEREFRESH, this,
                                      &Widget::force_refresh_handler) );
+
+    EventQueue::disconnect_event(EventConnectorMethod1<Widget>(
+                                     EVT_REDRAW, this,
+                                     &Widget::redraw_handler) );
 
     if (realization() == REALIZED) {
         assert(__widget_subwin != 0);
@@ -151,6 +169,11 @@ Widget::realize() {
                                                             this,
                                                             &Widget::
                                                             force_refresh_handler) );
+
+    EventQueue::connect_event(EventConnectorMethod1<Widget>(EVT_REDRAW,
+                                                            this,
+                                                            &Widget::
+                                                            redraw_handler) );
 
     // We cannot assert on parent() since it might be legally 0
     // assert(parent()!=0

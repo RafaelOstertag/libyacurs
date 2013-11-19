@@ -151,6 +151,11 @@ LockScreen::show() {
     EventQueue::suspend_except(EventConnectorMethod1<LockScreen>(
                                    EVT_FORCEREFRESH, this,
                                    &WindowBase::force_refresh_handler) );
+
+    EventQueue::suspend_except(EventConnectorMethod1<LockScreen>(
+                                   EVT_REDRAW, this,
+                                   &WindowBase::redraw_handler) );
+
     EventQueue::suspend_except(EventConnectorMethod1<LockScreen>(EVT_REFRESH,
                                                                  this,
                                                                  &WindowBase::
@@ -171,6 +176,7 @@ LockScreen::close() {
                                      EVT_WINDOW_CLOSE, this,
                                      &LockScreen::window_close_event_handler) );
     EventQueue::unsuspend_all(EVT_FORCEREFRESH);
+    EventQueue::unsuspend_all(EVT_REDRAW);
     EventQueue::unsuspend_all(EVT_REFRESH);
 
     Window::close();

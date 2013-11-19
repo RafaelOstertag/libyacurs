@@ -40,9 +40,12 @@ using namespace YACURS::INTERNAL;
 //
 // Protected
 //
-CursWin::CursWin(WINDOW* win, COLOROBJ dc) : __window(win),
-    __def_color(dc),
-    __box(false) {
+CursWin::CursWin(WINDOW* win, COLOROBJ dc, bool subwin) : __window(win),
+					     __def_color(dc),
+					     __box(false),
+					     __subwin(subwin),
+					     __horch(0),
+					     __verch(0) {
     if (win == 0)
         throw std::invalid_argument(_("argument 'win' must not be 0") );
 
@@ -65,9 +68,11 @@ CursWin::CursWin(WINDOW* win, COLOROBJ dc) : __window(win),
 // Public
 //
 CursWin::CursWin(const Area& _a, COLOROBJ c) : __window(0),
-    __def_color(c),
-    __box(false),
-    __subwin(false) {
+					       __def_color(c),
+					       __box(false),
+					       __subwin(false),
+					       __horch(0),
+					       __verch(0) {
     if (_a == Area::zero() ) {
         throw std::invalid_argument(_("Area must not be zero") );
     }
@@ -85,11 +90,13 @@ CursWin::CursWin(const Area& _a, COLOROBJ c) : __window(0),
 }
 
 CursWin::CursWin(const CursWin& cw) : __window(dupwin(cw.__window) ),
-    __def_color(cw.__def_color),
-    __box(cw.__box),
-    __subwin(cw.__subwin),
-    __area(cw.__area),
-    __client_area(cw.__client_area) {
+				      __def_color(cw.__def_color),
+				      __box(cw.__box),
+				      __subwin(cw.__subwin),
+				      __area(cw.__area),
+				      __client_area(cw.__client_area),
+				      __horch(cw.__horch),
+				      __verch(cw.__verch) {
     if (__window == 0)
         throw EXCEPTIONS::CursesException("dupwin");
 }
@@ -112,6 +119,9 @@ CursWin::operator=(const CursWin& cw) {
     __subwin = cw.__subwin;
     __area = cw.__area;
     __client_area = cw.__client_area;
+
+    __horch = cw.__horch;
+    __verch = cw.__verch;
 
     return *this;
 }
@@ -156,18 +166,20 @@ CursWin::has_box() const {
 
 CursWin&
 CursWin::box(chtype verch, chtype horch) {
+    __verch = verch;
+    __horch = horch;
     // X/Open has trouble with colors and ACS_* characters, as used
     // with borders. Therefore, we fall back to non ACS_*
     // characters. Beware, NCurses also defines _XOPEN_CURSES,
     // though.
 #if !defined(_XOPEN_CURSES) || defined(NCURSES_VERSION)
-    if (::box(__window, verch, horch) == ERR)
+    if (::box(__window, __verch, __horch) == ERR)
         throw EXCEPTIONS::CursesException("box");
 #else
-    if (wborder(__window, verch == 0 ? '|' : verch,
-                verch == 0 ? '|' : verch,
-                horch == 0 ? '-' : horch,
-                horch == 0 ? '-' : horch,
+    if (wborder(__window, __verch == 0 ? '|' : __verch,
+                __verch == 0 ? '|' : __verch,
+                __horch == 0 ? '-' : __horch,
+                __horch == 0 ? '-' : __horch
                 '+', '+', '+', '+') == ERR)
         throw EXCEPTIONS::CursesException("wborder");
 #endif
@@ -248,6 +260,13 @@ CursWin&
 CursWin::erase() {
     if (werase(__window) == ERR)
         throw EXCEPTIONS::CursesException("werase");
+
+    // This has been introduced with the EVT_REDRAW event.
+    //
+    // After a erase, the box is gone, so we assume that when we have
+    // a box, it should stay.
+    if (__box)
+	box(__verch, __horch);
 
     return *this;
 }
@@ -553,24 +572,14 @@ CursWin::leaveok(bool fl) {
 
 CursWin*
 CursWin::derwin(const Area& a) const {
-    CursWin* tmp =
-        new CursWin(::derwin(__window, a.rows(), a.cols(), a.y(),
-                             a.x() ), __def_color);
-
-    tmp->__subwin = true;
-
-    return tmp;
+    return new CursWin(::derwin(__window, a.rows(), a.cols(), a.y(),
+				a.x() ), __def_color, true);
 }
 
 CursWin*
 CursWin::subwin(const Area& a) const {
-    CursWin* tmp =
-        new CursWin(::subwin(__window, a.rows(), a.cols(), a.y(),
-                             a.x() ), __def_color);
-
-    tmp->__subwin = true;
-
-    return tmp;
+    return new CursWin(::subwin(__window, a.rows(), a.cols(), a.y(),
+				a.x() ), __def_color, true);
 }
 
 CursWin&

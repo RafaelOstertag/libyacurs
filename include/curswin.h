@@ -64,6 +64,16 @@ namespace YACURS {
                 COLOROBJ __def_color;
 
                 /**
+                 * Size and position of the Window.
+                 */
+                Area __area;
+
+                /**
+                 * Area available to client.
+                 */
+                Area __client_area;
+
+                /**
                  * Flag whether or not Curses Window has a box.
                  */
                 bool __box;
@@ -73,15 +83,15 @@ namespace YACURS {
                  */
                 bool __subwin;
 
-                /**
-                 * Size and position of the Window.
-                 */
-                Area __area;
+		/**
+		 * Horizontal character for box.
+		 */
+		chtype __horch;
 
-                /**
-                 * Area available to client.
-                 */
-                Area __client_area;
+		/**
+		 * Vertical character for box.
+		 */
+		chtype __verch;
             protected:
                 /**
                  * Initialize CursWin from WINDOW.
@@ -90,7 +100,7 @@ namespace YACURS {
                  *
                  * @param dc default color.
                  */
-                CursWin(WINDOW* win, COLOROBJ dc);
+                CursWin(WINDOW* win, COLOROBJ dc, bool subwin);
 
             public:
                 /**

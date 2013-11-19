@@ -840,7 +840,7 @@ EventQueue::run() {
             switch (c) {
             case KEY_REFRESH:
             case KEY_CTRL_L:
-                submit(Event(EVT_FORCEREFRESH) );
+                submit(Event(EVT_REDRAW) );
                 submit(Event(EVT_REFRESH) );
                 submit(Event(EVT_DOUPDATE) );
                 break;

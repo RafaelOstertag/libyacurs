@@ -806,6 +806,17 @@ __test_wgetch(void*) {
 }
 #endif
 
+class Match {
+    private:
+	std::string match;
+
+    public:
+	Match(std::string m): match(m) {}
+	bool operator() (const std::string& haystack) {
+	    return haystack==match;
+	}
+};
+
 class MainWindow : public YACURS::Window {
     private:
         YACURS::Button* badd;
@@ -897,7 +908,7 @@ class MainWindow : public YACURS::Window {
             if (searchdialog == _ex.data() ) {
                 if (searchdialog->dialog_state() ==
                     YACURS::DIALOG_OK) {
-                    listbox->high_light(searchdialog->input() );
+                    listbox->search(Match(searchdialog->input()) );
                 }
                 delete searchdialog;
                 searchdialog = 0;

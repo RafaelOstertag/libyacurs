@@ -37,6 +37,7 @@
 #include "colors.h"
 
 namespace YACURS {
+    
     template<class _T = std::string> class ListBox : public Widget {
         public:
             static bool cmp_asc(const _T& a,
@@ -166,16 +167,10 @@ namespace YACURS {
 	     */
             void delete_selected();
 
-            /**
-             * High light item.
-             *
-             * high light first item exactly matching @c _i.
-             *
-             * @param _i item to hight light.
-             */
-            void high_light(const _T& _i);
-
             void high_light(lsz_t pos);
+
+	    template<class _Pred>
+	    bool search(typename _Pred p, lsz_t start=0, lsz_t* pos=0);
 
             // From WidgetBase
 
@@ -505,26 +500,22 @@ namespace YACURS {
     }
 
     template<class _T> void
-    ListBox<_T>::high_light(const _T& _i) {
-        if (__list.empty() ) return;
+    ListBox<_T>::high_light(lsz_t pos) {
+        if (pos >= __list.size() )
+            throw std::out_of_range(
+                      "ListBox<>::high_light() position out of range");
 
         typename std::list<_T>::iterator it = __list.begin();
-        lsz_t i;
-        for (i = 0;
-             it != __list.end() && (*it) != _i;
-             it++, i++) ;
+	std::advance(it, pos);
 
-        if (it == __list.end() )
-            throw std::out_of_range(
-		      "ListBox<>::high_light() position out of range");
 
         if (__list.size() > pagesize() &&
-            i > (__list.size() - pagesize() ) ) {
+            pos > (__list.size() - pagesize() ) ) {
             __offset = __list.size() - pagesize();
-            __curs_pos = i - __offset;
+            __curs_pos = pos - __offset;
         } else {
-            __offset = (i / pagesize() ) * pagesize();
-            __curs_pos = i - __offset;
+            __offset = (pos / pagesize() ) * pagesize();
+            __curs_pos = pos - __offset;
         }
 
         assert(__offset + __curs_pos < __list.size() );
@@ -533,31 +524,34 @@ namespace YACURS {
             refresh(true);
     }
 
-    template<class _T> void
-    ListBox<_T>::high_light(lsz_t pos) {
-        if (pos >= __list.size() )
+    template<class _T>
+    template<class _Pred> bool 
+    ListBox<_T>::search(typename _Pred p, lsz_t start, lsz_t* pos) {
+        if (start >= __list.size() )
             throw std::out_of_range(
-                      "ListBox<>::high_light() position out of range");
+                      "ListBox<>::search() position out of range");
 
-        typename std::list<_T>::iterator it = __list.begin();
-        lsz_t i;
-        for (i = 0;
-             it != __list.end() && i<pos;
-             it++, i++) ;
+	typename std::list<_T>::iterator start_it = __list.begin();
 
-        if (__list.size() > pagesize() &&
-            i > (__list.size() - pagesize() ) ) {
-            __offset = __list.size() - pagesize();
-            __curs_pos = i - __offset;
-        } else {
-            __offset = (i / pagesize() ) * pagesize();
-            __curs_pos = i - __offset;
-        }
+	std::advance(start_it, start);
 
-        assert(__offset + __curs_pos < __list.size() );
+	typename std::list<_T>::iterator it = 
+	    std::find_if(start_it,
+			 __list.end(),
+			 p);
+	// see if we have a match
+	if (it != __list.end() ) {
+	    typename std::list<_T>::difference_type dist=0;
+	    std::distance(__list.begin(), it, dist);
 
-        if (realization() == REALIZED)
-            refresh(true);
+	    if (pos != 0) *pos=dist;
+
+	    high_light(dist);
+
+	    return true;
+	}
+
+	return false;
     }
 
     // From WidgetBase

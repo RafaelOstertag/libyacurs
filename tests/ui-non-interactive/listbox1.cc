@@ -16,6 +16,17 @@ const YACURS::EventType EVT_TEST_EVENT("test_event");
 
 YACURS::ListBox<std::string>* testlb;
 
+class Match {
+    private:
+	std::string match;
+
+    public:
+	Match(std::string m): match(m) {}
+	bool operator() (const std::string& haystack) {
+	    return haystack==match;
+	}
+};
+
 void
 test_driver(YACURS::Event& _e) {
     assert(testlb!=0);
@@ -23,6 +34,8 @@ test_driver(YACURS::Event& _e) {
     static int step=0;
     assert(_e == EVT_TEST_EVENT);
 
+    // Used for ListBox<>::search()
+    YACURS::ListBox<std::string>::lsz_t pos;
     switch (step) {
     case 0:
 	YACURS::Curses::statusbar()->set("Calling empty() on empty ListBox");
@@ -81,29 +94,12 @@ test_driver(YACURS::Event& _e) {
 	if (testlb->count()!=50) abort();
 	break;
     case 13:
-	YACURS::Curses::statusbar()->set("Set selected item by item.");
-	testlb->high_light(std::string("item 3 added"));
-	if (testlb->selected_index() != 3) abort();
-	break;
-    case 14:
 	YACURS::Curses::statusbar()->set("Set selected item by index.");
 	testlb->high_light(49);
 	if (testlb->selected_index() != 49) abort();
 	if (testlb->selected() != std::string("item 49 added")) abort();
 	break;
-    case 15:
-	YACURS::Curses::statusbar()->set("High light non existent item");
-	try {
-	    testlb->high_light(std::string("non existing item"));
-	    abort();
-	} catch (std::out_of_range& ex) {
-	    // good, expected
-	} catch(...) {
-	    // bad
-	    abort();
-	}
-	break;
-    case 16:
+    case 14:
 	YACURS::Curses::statusbar()->set("High light off bounds index");
 	try {
 	    testlb->high_light(100);
@@ -115,18 +111,18 @@ test_driver(YACURS::Event& _e) {
 	    abort();
 	}
 	break;
-    case 17:
+    case 15:
 	YACURS::Curses::statusbar()->set("High light item 5");
 	testlb->high_light(5);
 	break;
-    case 18:
+    case 16:
 	YACURS::Curses::statusbar()->set("Delete high lighted item");
 	testlb->delete_selected();
 	if (testlb->count() != 49) abort();
 	if (testlb->selected_index() != 4) abort();
 	if (testlb->selected() != std::string("item 4 added")) abort();
 	break;
-    case 19:
+    case 17:
 	YACURS::Curses::statusbar()->set("Set selected item to value"); 
 	try {
 	    std::string newstr("replaced by selected()");
@@ -136,7 +132,7 @@ test_driver(YACURS::Event& _e) {
 	}
 	if (testlb->selected() != std::string("replaced by selected()")) abort();
 	break;
-    case 20:
+    case 18:
 	YACURS::Curses::statusbar()->set("Go to just set item by index"); 
 	try {
 	    testlb->high_light(4);
@@ -145,23 +141,24 @@ test_driver(YACURS::Event& _e) {
 	}
 	if (testlb->selected() != std::string("replaced by selected()")) abort();
 	break;
-    case 21:
+    case 19:
 	YACURS::Curses::statusbar()->set("Go to just set item by item search"); 
-	try {
-	    testlb->high_light(std::string("replaced by selected()"));
-	} catch (std::out_of_range& ex) {
+	if (!testlb->search(Match(std::string("replaced by selected()")),0, &pos ) )
 	    abort();
-	}
+
+	if (pos!=4)
+	    abort();
+
 	if (testlb->selected() != std::string("replaced by selected()")) abort();
 	if (testlb->selected_index() != 4) abort();
 	break;
-    case 22:
+    case 20:
 	YACURS::Curses::statusbar()->set("Clear list"); 
 	testlb->clear();
 	if (!testlb->empty()) abort();
 	if (testlb->count() != 0) abort();
 	break;
-    case 23: {
+    case 21: {
 	YACURS::Curses::statusbar()->set("Assign list");
 	std::list<std::string> lst;
 	for (int i=0; i<10; i++) {
@@ -174,7 +171,7 @@ test_driver(YACURS::Event& _e) {
 	if (testlb->count() != 10) abort();
     }
 	break;
-    case 24:
+    case 22:
 	YACURS::Curses::statusbar()->set("Set sort order ascending");
 	testlb->sort_order(YACURS::ASCENDING);
 	if (testlb->sort_order()!=YACURS::ASCENDING) abort();
@@ -191,7 +188,7 @@ test_driver(YACURS::Event& _e) {
 	}
 	if (testlb->selected() != "9 list item") abort();
 	break;
-    case 25:
+    case 23:
 	YACURS::Curses::statusbar()->set("Set sort order descending");
 	testlb->sort_order(YACURS::DESCENDING);
 	if (testlb->sort_order()!=YACURS::DESCENDING) abort();
@@ -207,10 +204,62 @@ test_driver(YACURS::Event& _e) {
 	    abort();
 	}
 	if (testlb->selected() != "0 list item") abort();
+
 	break;
-    case 26:
+    case 24:
+	YACURS::Curses::statusbar()->set("Test search");
+	YACURS::ListBox<std::string>::lsz_t pos;
+
+	try {
+	    testlb->search(Match(std::string("4 list item")), 90, &pos );
+	    abort();
+	} catch (std::out_of_range) {
+	    // OK!
+	}
+
+	// Must be found at position 5
+	if (!testlb->search(Match(std::string("4 list item")), 0, &pos ) )
+	    abort();
+
+	if (pos != 5)
+	    abort();
+	if (testlb->selected_index() != 5)
+	    abort();
+
+	// Nothing must happen
+	if (testlb->search(Match(std::string("9 list item")), pos, &pos ) )
+	    abort();
+
+	if (pos != 5)
+	    abort();
+	if (testlb->selected_index() != 5)
+	    abort();
+
+	// Nothing must change
+	if (!testlb->search(Match(std::string("4 list item")), pos, &pos ) )
+	    abort();
+
+	if (pos != 5)
+	    abort();
+	if (testlb->selected_index() != 5)
+	    abort();
+
+	// Add duplicate and find it
+	testlb->add(std::string("4 list item"));
+	if (!testlb->search(Match(std::string("4 list item")), pos+1, &pos ) )
+	    abort();
+
+	if (pos != 6)
+	    abort();
+	if (testlb->selected_index() != 6)
+	    abort();
+	break;
+    case 25:
 	YACURS::EventQueue::submit(YACURS::EVT_QUIT);
 	break;
+
+    default:
+	abort();
     }
 
     step++;

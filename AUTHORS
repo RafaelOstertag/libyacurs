@@ -1,4 +1,5 @@
 
 * Rafael Ostertag <rafi@guengel.ch>
 
-* Markus Neumann <markus@neumann.ch> (CursorBuffer::wstring())
+* Markus Neumann <markus@neumann.ch> (CursorBuffer::wstring() and
+  scrolling)

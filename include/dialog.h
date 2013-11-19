@@ -67,9 +67,14 @@ namespace YACURS {
 
             void dialog_state(DIALOG_STATE st);
 
+	    /**
+	     * Add a button to the button pack.
+	     *
+	     * @param b button to be added.
+	     */
+	    void add_button(Button* b);
+
             virtual void button_press_handler(Event& _e);
-
-
 
 	    /**
 	     * Called on OK button press.

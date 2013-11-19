@@ -971,7 +971,7 @@ EventQueue::timeout(unsigned int _t) {
     // SIGALRM to be lost, i.e. SIG_DFL appears to be in place. Thus,
     // we reset the action.
 #if defined(__sun) && defined(_CURSES_H) && !defined(_XOPEN_CURSES)
-# warning "SyS V workaround for Solaris enabled"
+# warning "SYSV curses workaround for Solaris enabled"
     // We may be called with sigalrm not being initialized yet
     if (sigalrm!=0)
 	sigalrm->reset();

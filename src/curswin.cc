@@ -91,12 +91,12 @@ CursWin::CursWin(const Area& _a, COLOROBJ c) : __window(0),
 
 CursWin::CursWin(const CursWin& cw) : __window(dupwin(cw.__window) ),
 				      __def_color(cw.__def_color),
-				      __box(cw.__box),
-				      __subwin(cw.__subwin),
 				      __area(cw.__area),
 				      __client_area(cw.__client_area),
+				      __box(cw.__box),
+     				  __subwin(cw.__subwin),
 				      __horch(cw.__horch),
-				      __verch(cw.__verch) {
+					  __verch(cw.__verch) {
     if (__window == 0)
         throw EXCEPTIONS::CursesException("dupwin");
 }

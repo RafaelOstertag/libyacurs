@@ -242,7 +242,7 @@ WindowBase::redraw_handler(Event& _e) {
     assert(_e == EVT_REDRAW);
     assert(__curses_window != 0);
 
-    __curses_window->erase();
+    __curses_window->clear();
 }
 
 void

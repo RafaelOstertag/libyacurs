@@ -99,13 +99,13 @@ namespace YACURS {
     const EventType EVT_REFRESH("EVT_REFRESH");
     /**
      * Force a redraw. This is used to completely redraw the screen
-     * upon Ctrl-L. Can be implement as a call to werase().
+     * upon Ctrl-L. Can be implement as a call to wclear().
      *
      * @internal
      *
      * EVT_REDRAW has been introduced, since EVT_FORCEREFRESH had no
      * effect if screen content was `damaged', e.g., a background
-     * process overwriting screen content. Instead of using werase()
+     * process overwriting screen content. Instead of using wtouch()
      * for EVT_FORCEREFRESH, we created a new event to be used with
      * Ctrl-L.
      */

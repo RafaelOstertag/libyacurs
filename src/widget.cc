@@ -48,7 +48,7 @@ Widget::redraw_handler(Event& _e) {
     assert(_e == EVT_REDRAW);
     assert(__widget_subwin != 0);
 
-    __widget_subwin->erase();
+    __widget_subwin->clear();
 }
 
 void

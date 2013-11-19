@@ -230,7 +230,7 @@ WindowBase::force_refresh_handler(Event& _e) {
     assert(_e == EVT_FORCEREFRESH);
     assert(__curses_window != 0);
 
-    __curses_window->touch();
+    __curses_window->erase();
 }
 
 void

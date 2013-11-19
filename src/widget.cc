@@ -48,7 +48,7 @@ Widget::force_refresh_handler(Event& _e) {
     assert(_e == EVT_FORCEREFRESH);
     assert(__widget_subwin != 0);
 
-    __widget_subwin->touch();
+    __widget_subwin->erase();
 }
 
 void

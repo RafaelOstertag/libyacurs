@@ -106,9 +106,10 @@ AC_COMPILE_IFELSE(
 	#endif
 	char *tmp;]],
 	[[tmp = termname()]])],
-	[AC_MSG_RESULT([yes])],
-	[AC_MSG_RESULT([no])
-	AC_DEFINE([HAVE_TERMNAME],[1],[Set to 1 if you have termname])])
+	[AC_MSG_RESULT([yes])
+	AC_DEFINE([HAVE_TERMNAME],[1],[Set to 1 if you have termname])
+	],
+	[AC_MSG_RESULT([no])])
 
 AC_MSG_CHECKING([whether waddstr() use const char*])
 AC_COMPILE_IFELSE(

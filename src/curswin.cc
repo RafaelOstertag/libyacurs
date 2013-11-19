@@ -245,6 +245,13 @@ CursWin::clear() {
     if (wclear(__window) == ERR)
         throw EXCEPTIONS::CursesException("wclear");
 
+    // This has been introduced with the EVT_REDRAW event.
+    //
+    // After a erase, the box is gone, so we assume that when we have
+    // a box, it should stay.
+    if (__box)
+	box(__verch, __horch);
+
     return *this;
 }
 
@@ -261,8 +268,6 @@ CursWin::erase() {
     if (werase(__window) == ERR)
         throw EXCEPTIONS::CursesException("werase");
 
-    // This has been introduced with the EVT_REDRAW event.
-    //
     // After a erase, the box is gone, so we assume that when we have
     // a box, it should stay.
     if (__box)

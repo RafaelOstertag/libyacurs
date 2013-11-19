@@ -25,20 +25,15 @@
 
 #include <string>
 
-#include "dialog.h"
-#include "label.h"
+#include "messagebox.h"
 
 namespace YACURS {
-    class MessageBox2 : public Dialog {
+    class MessageBox2 : public MessageBox {
         private:
-            Label* __message1;
-            Label* __message2;
+            DynLabel* __message2;
 
             // Not supported
             MessageBox2& operator=(const MessageBox2&);
-
-	protected:
-            VPack* __vpack;
 
         public:
             MessageBox2(const std::string& _title,

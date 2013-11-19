@@ -50,8 +50,7 @@ MessageBox3::MessageBox3(const std::string& _title,
 							_message1,
 							_message2,
 							_dt),
-					    __message3(0) {
-    __message3 = new Label(_message3);
+					    __message3(new DynLabel(_message3)) {
     __message3->color(DIALOG);
     __vpack->add_back(__message3);
 }

@@ -26,12 +26,15 @@
 #include <string>
 
 #include "dialog.h"
-#include "label.h"
+#include "dynlabel.h"
 
 namespace YACURS {
     class MessageBox : public Dialog {
         private:
-            Label* __message;
+            DynLabel* __message;
+
+	protected:
+	    VPack* __vpack;
 
             // Not supported
             MessageBox& operator=(const MessageBox&);

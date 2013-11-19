@@ -27,6 +27,7 @@
 #include <list>
 #include <iterator>
 #include <functional>
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 
@@ -170,7 +171,7 @@ namespace YACURS {
             void high_light(lsz_t pos);
 
 	    template<class _Pred>
-	    bool search(typename _Pred p, lsz_t start=0, lsz_t* pos=0);
+	    bool search(_Pred p, lsz_t start=0, lsz_t* pos=0);
 
             // From WidgetBase
 
@@ -526,7 +527,7 @@ namespace YACURS {
 
     template<class _T>
     template<class _Pred> bool 
-    ListBox<_T>::search(typename _Pred p, lsz_t start, lsz_t* pos) {
+    ListBox<_T>::search(_Pred p, lsz_t start, lsz_t* pos) {
         if (start >= __list.size() )
             throw std::out_of_range(
                       "ListBox<>::search() position out of range");

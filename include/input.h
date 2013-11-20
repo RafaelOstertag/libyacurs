@@ -28,7 +28,10 @@
 #include <cstdlib>
 #include <cerrno>
 #ifdef USE_WCHAR
-#include <cwctype>
+# include <cwchar>
+# include <cwctype>
+#else
+# include <cctype>
 #endif
 
 #include "input.h"
@@ -40,6 +43,127 @@
 #include "cursorbuf.h"
 
 namespace YACURS {
+    /**
+     * Base class for filtering input.
+     */
+    class InputFilter {
+	public:
+	    /**
+	     * Filter method.
+	     *
+	     * Determines whether (@c true) or not (@c false) the
+	     * input is accepted.
+	     *
+	     * @param c character
+	     *
+	     * @retrun @c true if the input has to be accepted, or @c
+	     * false if it is to be discarded.
+	     */
+#ifdef USE_WCHAR
+	    virtual bool use(wint_t) = 0;
+#else
+	    virtual bool use(char) = 0;
+#endif
+	    virtual InputFilter* clone() const = 0;
+	    virtual ~InputFilter() {}
+    };
+
+    /**
+     * Filter printable characters.
+     */
+    class FilterPrint : public InputFilter {
+	public:
+#ifdef USE_WCHAR
+	    virtual bool use(wint_t wc) {
+		return iswprint(wc) != 0;
+	    }
+#else
+	    virtual bool use(char c) {
+		return isprint(c) != 0;
+	    }
+#endif
+	    virtual InputFilter* clone() const {
+		return new FilterPrint;
+	    }
+    };
+
+    /**
+     * Filter alphabetic characters.
+     */
+    class FilterAlpha : public InputFilter {
+	public:
+#ifdef USE_WCHAR
+	    virtual bool use(wint_t wc) {
+		return iswalpha(wc) != 0;
+	    }
+#else
+	    virtual bool use(char c) {
+		return isalpha(c) != 0;
+	    }
+#endif
+	    virtual InputFilter* clone() const {
+		return new FilterAlpha;
+	    }
+    };
+
+    /**
+     * Filter alphanumeric characters.
+     */
+    class FilterAlnum : public InputFilter {
+	public:
+#ifdef USE_WCHAR
+	    virtual bool use(wint_t wc) {
+		return iswalnum(wc) != 0;
+	    }
+#else
+	    virtual bool use(char c) {
+		return isalnum(c) != 0;
+	    }
+#endif
+	    virtual InputFilter* clone() const {
+		return new FilterAlnum;
+	    }
+    };
+
+    /**
+     * Filter digit characters.
+     */
+    class FilterDigit : public InputFilter {
+	public:
+#ifdef USE_WCHAR
+	    virtual bool use(wint_t wc) {
+		return iswdigit(wc) != 0;
+	    }
+#else
+	    virtual bool use(char c) {
+		return isdigit(c) != 0;
+	    }
+#endif
+	    virtual InputFilter* clone() const {
+		return new FilterDigit;
+	    }
+    };
+
+    /**
+     * Filter hex digit characters.
+     */
+    class FilterXDigit : public InputFilter {
+	public:
+#ifdef USE_WCHAR
+	    virtual bool use(wint_t wc) {
+		return iswxdigit(wc) != 0;
+	    }
+#else
+	    virtual bool use(char c) {
+		return isxdigit(c) != 0;
+	    }
+#endif
+	    virtual InputFilter* clone() const {
+		return new FilterXDigit;
+	    }
+    };
+	    
+	    
     /**
      * Input line.
      *
@@ -69,6 +193,11 @@ namespace YACURS {
      *
      * When Input is put in read-only mode, all editing keys are
      * disabled. Only cursor motion is available.
+     *
+     * Custom input filter can be used to filter user input. However,
+     * filter do not take effect on data set using the input()
+     * method. Also, filters do not affect any data already in the
+     * buffer when a new filter is set.
      */
     template<class T = std::string> class Input : public Widget {
         public:
@@ -109,6 +238,11 @@ namespace YACURS {
              * May be Size::zero() when dynamically sized, else the
              */
             Size __size;
+
+	    /**
+	     * Input filter.
+	     */
+	    InputFilter* __filter;
 
             // Not supported
             Input<T>& operator=(const Input<T>& _i);
@@ -217,6 +351,17 @@ namespace YACURS {
 	     * Indicate whether or not input has changed.
 	     */
 	    bool changed() const;
+
+	    /**
+	     * Set a new character filter.
+	     *
+	     * Setting a new filter does not affect characters already
+	     * in buffer.
+	     *
+	     * @param _f reference to filter.
+	     */
+	    void filter(const InputFilter& _f);
+
 
             // From WidgetBase
 
@@ -348,11 +493,9 @@ namespace YACURS {
 
         default: // regular key presses
             if (__read_only) return;
-#ifdef USE_WCHAR
-            if (!iswprint(ekey.data() ) ) return;
-#else
-            if (!isprint(ekey.data() ) ) return;
-#endif
+
+	    // Call the filter
+	    if (!__filter->use(ekey.data())) return;
 
 	    __buffer.insert(ekey.data() );
             break;
@@ -402,7 +545,8 @@ namespace YACURS {
         __obscure_input(false),
         __hide_input(false),
         __obscure_char('*'),
-        __size(__length > 0 ? Size(1, __length) : Size::zero() ) {
+        __size(__length > 0 ? Size(1, __length) : Size::zero() ),
+	__filter(new FilterPrint) {
         can_focus(true);
     }
 
@@ -411,6 +555,9 @@ namespace YACURS {
                                                                   this,
                                                                   &Input<T>::
                                                                   key_handler) );
+
+	assert(__filter!=0);
+	delete __filter;
     }
 
     template<class T> void
@@ -498,6 +645,15 @@ namespace YACURS {
     template<class T> bool
     Input<T>::changed() const {
 	return __buffer.changed();
+    }
+
+    template<class T> void 
+    Input<T>::filter(const InputFilter& _f) {
+	assert(__filter!=0);
+	delete __filter;
+
+	__filter = _f.clone();
+	assert(__filter!=0);
     }
 
     template<class T> void

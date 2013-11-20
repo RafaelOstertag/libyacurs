@@ -17,7 +17,7 @@
     defined(HAVE_CWCHAR) && \
     !defined(DISABLE_WCHAR)
 # define USE_WCHAR 1
-# include <locale.h>
+# include <clocale>
 # include <cwchar>
 #else
 # undef USE_WCHAR

@@ -50,7 +50,7 @@
     defined(HAVE_CWCTYPE) && \
     !defined(DISABLE_WCHAR)
 # define USE_WCHAR 1
-# include <locale.h>
+# include <clocale>
 #else
 # undef USE_WCHAR
 #endif

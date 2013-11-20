@@ -43,21 +43,24 @@ DASH_LDFLAGS_clang="-L/usr/lib"
 host_dash() {
     for c in default clang 43 44
     do
-	make distclean
-	./configure CXX="`eval echo \\$DASH_CXX_$c`" \
-	    CC="`eval echo \\$DASH_CC_$c`" \
-	    CFLAGS="`eval echo \\$DASH_CFLAGS_$c`" \
-	    CXXFLAGS="`eval echo \\$DASH_CXXFLAGS_$c`" \
-	    LDFLAGS="`eval echo \\$DASH_LDFLAGS_$c`"
-
-	had_error $? "Error in CXX=`eval echo \\$DASH_CXX_$c` CC=`eval echo \\$DASH_CC_$c` CFLAGS=`eval echo \\$DASH_CFLAGS_$c` CXXFLAGS=`eval echo \\$DASH_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DASH_LDFLAGS_$c`"
-
-	make clean
-	make
-	had_error $? "Error in CXX=`eval echo \\$DASH_CXX_$c` CC=`eval echo \\$DASH_CC_$c` CFLAGS=`eval echo \\$DASH_CFLAGS_$c` CXXFLAGS=`eval echo \\$DASH_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DASH_LDFLAGS_$c`"
-
-	make check
-	had_error $? "Error in CXX=`eval echo \\$DASH_CXX_$c` CC=`eval echo \\$DASH_CC_$c` CFLAGS=`eval echo \\$DASH_CFLAGS_$c` CXXFLAGS=`eval echo \\$DASH_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DASH_LDFLAGS_$c`"
+	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
+	do
+	    make distclean
+	    ./configure $configflags CXX="`eval echo \\$DASH_CXX_$c`" \
+		CC="`eval echo \\$DASH_CC_$c`" \
+		CFLAGS="`eval echo \\$DASH_CFLAGS_$c`" \
+		CXXFLAGS="`eval echo \\$DASH_CXXFLAGS_$c`" \
+		LDFLAGS="`eval echo \\$DASH_LDFLAGS_$c`"
+	    
+	    had_error $? "Error in CXX=`eval echo \\$DASH_CXX_$c` CC=`eval echo \\$DASH_CC_$c` CFLAGS=`eval echo \\$DASH_CFLAGS_$c` CXXFLAGS=`eval echo \\$DASH_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DASH_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+	    
+	    make clean
+	    make
+	    had_error $? "Error in CXX=`eval echo \\$DASH_CXX_$c` CC=`eval echo \\$DASH_CC_$c` CFLAGS=`eval echo \\$DASH_CFLAGS_$c` CXXFLAGS=`eval echo \\$DASH_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DASH_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+	    
+	    make check
+	    had_error $? "Error in CXX=`eval echo \\$DASH_CXX_$c` CC=`eval echo \\$DASH_CC_$c` CFLAGS=`eval echo \\$DASH_CFLAGS_$c` CXXFLAGS=`eval echo \\$DASH_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DASH_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+	done
     done
 }
 
@@ -94,21 +97,24 @@ WHEEZY_LDFLAGS_clang="-L/usr/lib"
 host_wheezy() {
     for c in default clang 44 46 47
     do
-	make distclean
-	./configure CXX="`eval echo \\$WHEEZY_CXX_$c`" \
-	    CC="`eval echo \\$WHEEZY_CC_$c`" \
-	    CFLAGS="`eval echo \\$WHEEZY_CFLAGS_$c`" \
-	    CXXFLAGS="`eval echo \\$WHEEZY_CXXFLAGS_$c`" \
-	    LDFLAGS="`eval echo \\$WHEEZY_LDFLAGS_$c`"
+	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
+	do
+	    make distclean
+	    ./configure $configflags CXX="`eval echo \\$WHEEZY_CXX_$c`" \
+		CC="`eval echo \\$WHEEZY_CC_$c`" \
+		CFLAGS="`eval echo \\$WHEEZY_CFLAGS_$c`" \
+		CXXFLAGS="`eval echo \\$WHEEZY_CXXFLAGS_$c`" \
+		LDFLAGS="`eval echo \\$WHEEZY_LDFLAGS_$c`"
+	    
+	    had_error $? "Error in CXX=`eval echo \\$WHEEZY_CXX_$c` CC=`eval echo \\$WHEEZY_CC_$c` CFLAGS=`eval echo \\$WHEEZY_CFLAGS_$c` CXXFLAGS=`eval echo \\$WHEEZY_CXXFLAGS_$c` LDFLAGS=`eval echo \\$WHEEZY_LDFLAGS_$c` CONFIGFLAGS=$configflags"
 
-	had_error $? "Error in CXX=`eval echo \\$WHEEZY_CXX_$c` CC=`eval echo \\$WHEEZY_CC_$c` CFLAGS=`eval echo \\$WHEEZY_CFLAGS_$c` CXXFLAGS=`eval echo \\$WHEEZY_CXXFLAGS_$c` LDFLAGS=`eval echo \\$WHEEZY_LDFLAGS_$c`"
-
-	make clean
-	make
-	had_error $? "Error in CXX=`eval echo \\$WHEEZY_CXX_$c` CC=`eval echo \\$WHEEZY_CC_$c` CFLAGS=`eval echo \\$WHEEZY_CFLAGS_$c` CXXFLAGS=`eval echo \\$WHEEZY_CXXFLAGS_$c` LDFLAGS=`eval echo \\$WHEEZY_LDFLAGS_$c`"
-
-	make check
-	had_error $? "Error in CXX=`eval echo \\$WHEEZY_CXX_$c` CC=`eval echo \\$WHEEZY_CC_$c` CFLAGS=`eval echo \\$WHEEZY_CFLAGS_$c` CXXFLAGS=`eval echo \\$WHEEZY_CXXFLAGS_$c` LDFLAGS=`eval echo \\$WHEEZY_LDFLAGS_$c`"
+	    make clean
+	    make
+	    had_error $? "Error in CXX=`eval echo \\$WHEEZY_CXX_$c` CC=`eval echo \\$WHEEZY_CC_$c` CFLAGS=`eval echo \\$WHEEZY_CFLAGS_$c` CXXFLAGS=`eval echo \\$WHEEZY_CXXFLAGS_$c` LDFLAGS=`eval echo \\$WHEEZY_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+	    
+	    make check
+	    had_error $? "Error in CXX=`eval echo \\$WHEEZY_CXX_$c` CC=`eval echo \\$WHEEZY_CC_$c` CFLAGS=`eval echo \\$WHEEZY_CFLAGS_$c` CXXFLAGS=`eval echo \\$WHEEZY_CXXFLAGS_$c` LDFLAGS=`eval echo \\$WHEEZY_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+	done
     done
 }
 
@@ -140,21 +146,24 @@ host_debian32() {
     # clang has been removed from list, it currently fails when running the tests
     for c in default 43 44
     do
-	make distclean
-	./configure CXX="`eval echo \\$DEBIAN32_CXX_$c`" \
-	    CC="`eval echo \\$DEBIAN32_CC_$c`" \
-	    CFLAGS="`eval echo \\$DEBIAN32_CFLAGS_$c`" \
-	    CXXFLAGS="`eval echo \\$DEBIAN32_CXXFLAGS_$c`" \
-	    LDFLAGS="`eval echo \\$DEBIAN32_LDFLAGS_$c`"
-
-	had_error $? "Error in CXX=`eval echo \\$DEBIAN32_CXX_$c` CC=`eval echo \\$DEBIAN32_CC_$c` CFLAGS=`eval echo \\$DEBIAN32_CFLAGS_$c` CXXFLAGS=`eval echo \\$DEBIAN32_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DEBIAN32_LDFLAGS_$c`"
-
-	make clean
-	make
-	had_error $? "Error in CXX=`eval echo \\$DEBIAN32_CXX_$c` CC=`eval echo \\$DEBIAN32_CC_$c` CFLAGS=`eval echo \\$DEBIAN32_CFLAGS_$c` CXXFLAGS=`eval echo \\$DEBIAN32_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DEBIAN32_LDFLAGS_$c`"
-
-	make check
-	had_error $? "Error in CXX=`eval echo \\$DEBIAN32_CXX_$c` CC=`eval echo \\$DEBIAN32_CC_$c` CFLAGS=`eval echo \\$DEBIAN32_CFLAGS_$c` CXXFLAGS=`eval echo \\$DEBIAN32_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DEBIAN32_LDFLAGS_$c`"
+	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
+	do
+	    make distclean
+	    ./configure $configflags CXX="`eval echo \\$DEBIAN32_CXX_$c`" \
+		CC="`eval echo \\$DEBIAN32_CC_$c`" \
+		CFLAGS="`eval echo \\$DEBIAN32_CFLAGS_$c`" \
+		CXXFLAGS="`eval echo \\$DEBIAN32_CXXFLAGS_$c`" \
+		LDFLAGS="`eval echo \\$DEBIAN32_LDFLAGS_$c`"
+	    
+	    had_error $? "Error in CXX=`eval echo \\$DEBIAN32_CXX_$c` CC=`eval echo \\$DEBIAN32_CC_$c` CFLAGS=`eval echo \\$DEBIAN32_CFLAGS_$c` CXXFLAGS=`eval echo \\$DEBIAN32_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DEBIAN32_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+	    
+	    make clean
+	    make
+	    had_error $? "Error in CXX=`eval echo \\$DEBIAN32_CXX_$c` CC=`eval echo \\$DEBIAN32_CC_$c` CFLAGS=`eval echo \\$DEBIAN32_CFLAGS_$c` CXXFLAGS=`eval echo \\$DEBIAN32_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DEBIAN32_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+	    
+	    make check
+	    had_error $? "Error in CXX=`eval echo \\$DEBIAN32_CXX_$c` CC=`eval echo \\$DEBIAN32_CC_$c` CFLAGS=`eval echo \\$DEBIAN32_CFLAGS_$c` CXXFLAGS=`eval echo \\$DEBIAN32_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DEBIAN32_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+	done
     done
 }
 
@@ -209,24 +218,27 @@ AURORA_CURSES_LDFLAGS_ncurses='-L/usr/local/lib'
 host_aurora() {
     for c in default clang 42 44 46 47 48
     do
-	for curs in system
+	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	do
-	    gmake distclean
-	    ./configure CXX="`eval echo \\$AURORA_CXX_$c`" \
-		CC="`eval echo \\$AURORA_CC_$c`" \
-		CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" \
-		CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" \
-		CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" \
-		LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`"
-
-	    had_error $? "Error in CXX="`eval echo \\$AURORA_CXX_$c`" CC="`eval echo \\$AURORA_CC_$c`" CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`""
-
-	    gmake clean
-	    gmake
-	    had_error $? "Error in CXX="`eval echo \\$AURORA_CXX_$c`" CC="`eval echo \\$AURORA_CC_$c`" CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`""
-	    
-	    gmake check
-	    had_error $? "Error in CXX="`eval echo \\$AURORA_CXX_$c`" CC="`eval echo \\$AURORA_CC_$c`" CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`""
+	    for curs in system
+	    do
+		gmake distclean
+		./configure $configflags CXX="`eval echo \\$AURORA_CXX_$c`" \
+		    CC="`eval echo \\$AURORA_CC_$c`" \
+		    CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" \
+		    CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" \
+		    CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" \
+		    LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`"
+		
+		had_error $? "Error in CXX="`eval echo \\$AURORA_CXX_$c`" CC="`eval echo \\$AURORA_CC_$c`" CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`" CONFIGFLAGS=$configflags"
+		
+		gmake clean
+		gmake
+		had_error $? "Error in CXX="`eval echo \\$AURORA_CXX_$c`" CC="`eval echo \\$AURORA_CC_$c`" CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`" CONFIGFLAGS=$configflags"
+		
+		gmake check
+		had_error $? "Error in CXX="`eval echo \\$AURORA_CXX_$c`" CC="`eval echo \\$AURORA_CC_$c`" CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`"  CONFIGFLAGS=$configflags"
+	    done
 	done
     done
 }
@@ -284,99 +296,117 @@ host_freebsd32() {
     do
 	for curs in system
 	do
-	    gmake distclean
-	    ./configure --disable-nls CXX="`eval echo \\$FREEBSD32_CXX_$c`" \
-		CC="`eval echo \\$FREEBSD32_CC_$c`" \
-		CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" \
-		CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" \
-		CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" \
-		LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`"
-
-	    had_error $? "Error in CXX="`eval echo \\$FREEBSD32_CXX_$c`" CC="`eval echo \\$FREEBSD32_CC_$c`" CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`""
-
-	    gmake clean
-	    gmake
-	    had_error $? "Error in CXX="`eval echo \\$FREEBSD32_CXX_$c`" CC="`eval echo \\$FREEBSD32_CC_$c`" CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`""
-	    
-	    gmake check
-	    had_error $? "Error in CXX="`eval echo \\$FREEBSD32_CXX_$c`" CC="`eval echo \\$FREEBSD32_CC_$c`" CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`""
+	    for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
+	    do
+		gmake distclean
+		./configure $configflags --disable-nls CXX="`eval echo \\$FREEBSD32_CXX_$c`" \
+		    CC="`eval echo \\$FREEBSD32_CC_$c`" \
+		    CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" \
+		    CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" \
+		    CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" \
+		    LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`"
+		
+		had_error $? "Error in CXX="`eval echo \\$FREEBSD32_CXX_$c`" CC="`eval echo \\$FREEBSD32_CC_$c`" CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`" CONFIGFLAGS=$configflags"
+		
+		gmake clean
+		gmake
+		had_error $? "Error in CXX="`eval echo \\$FREEBSD32_CXX_$c`" CC="`eval echo \\$FREEBSD32_CC_$c`" CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`" CONFIGFLAGS=$configflags"
+		
+		gmake check
+		had_error $? "Error in CXX="`eval echo \\$FREEBSD32_CXX_$c`" CC="`eval echo \\$FREEBSD32_CC_$c`" CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`" CONFIGFLAGS=$configflags"
+	    done
 	done
     done
 }
 
 host_abraxas() {
-    gmake distclean
-    ./configure \
-	CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
-	CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
-    had_error $? "Error on abraxas"
-
-    gmake clean
-    gmake
-    had_error $? "Error on abraxas"
-
-    gmake check
-    had_error $? "Error on abraxas"
+	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
+	do
+	    gmake distclean
+	    ./configure $configflags \
+		CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
+		CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
+	    had_error $? "Error on abraxas CONFIGFLAGS=$configflags"
+	    
+	    gmake clean
+	    gmake
+	    had_error $? "Error on abraxas CONFIGFLAGS=$configflags"
+	    
+	    gmake check
+	    had_error $? "Error on abraxas CONFIGFLAGS=$configflags"
+	done
 }
 
 host_netbsd32() {
-    gmake distclean
-    ./configure \
-	CFLAGS="-O3 -Wall -Werror -pedantic" \
-	CXXFLAGS="-O3 -Wall -Werror -pedantic"
-    had_error $? "Error on netbsd32"
-
-    gmake clean
-    gmake
-    had_error $? "Error on netbsd32"
-
-    gmake check
-    had_error $? "Error on netbsd32"
+	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
+	do
+	    gmake distclean
+	    ./configure $configflags \
+		CFLAGS="-O3 -Wall -Werror -pedantic" \
+		CXXFLAGS="-O3 -Wall -Werror -pedantic"
+	    had_error $? "Error on netbsd32 CONFIGFLAGS=$configflags"
+	    
+	    gmake clean
+	    gmake
+	    had_error $? "Error on netbsd32 CONFIGFLAGS=$configflags"
+	    
+	    gmake check
+	    had_error $? "Error on netbsd32 CONFIGFLAGS=$configflags"
+	done
 }
 
 host_fish() {
-    gmake distclean
-    ./configure \
-	CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
-	CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
-    had_error $? "Error on fish"
-
-    gmake clean
-    gmake
-    had_error $? "Error on fish"
-
-    gmake check
-    had_error $? "Error on fish"
+	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
+	do
+	    gmake distclean
+	    ./configure $configflags \
+		CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
+		CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
+	    had_error $? "Error on fish CONFIGFLAGS=$configflags"
+	    
+	    gmake clean
+	    gmake
+	    had_error $? "Error on fish CONFIGFLAGS=$configflags"
+	    
+	    gmake check
+	    had_error $? "Error on fish CONFIGFLAGS=$configflags"
+	done
 }
 
 host_puffy() {
-    gmake distclean
-    ./configure \
-	CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
-	CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
-    had_error $? "Error on fish"
-
-    gmake clean
-    gmake
-    had_error $? "Error on fish"
-
-    gmake check
-    had_error $? "Error on fish"
+	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
+	do
+	    gmake distclean
+	    ./configure $configflags \
+		CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
+		CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
+	    had_error $? "Error on fish CONFIGFLAGS=$configflags"
+	    
+	    gmake clean
+	    gmake
+	    had_error $? "Error on fish CONFIGFLAGS=$configflags"
+	    
+	    gmake check
+	    had_error $? "Error on fish CONFIGFLAGS=$configflags"
+	done
 }
 
 host_openbsd32() {
-    gmake distclean
-    ./configure \
-	CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
-	CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
-    had_error $? "Error in OpenBSD32"
-
-    gmake clean
-    gmake
-    had_error $? "Error in OpenBSD32"
-
-    gmake check
-    had_error $? "Error in OpenBSD32"
+	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
+	do
+	    gmake distclean
+	    ./configure $configflags \
+		CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
+		CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
+	    had_error $? "Error in OpenBSD32 CONFIGFLAGS=$configflags"
+	    
+	    gmake clean
+	    gmake
+	    had_error $? "Error in OpenBSD32 CONFIGFLAGS=$configflags"
+	    
+	    gmake check
+	    had_error $? "Error in OpenBSD32 CONFIGFLAGS=$configflags"
+	done
 }
 
 host_odin() {
@@ -389,30 +419,33 @@ host_odin() {
 	    do
 		for flags in xpg4 solaris ncurses
 		do
-		    case $flags in
-			xpg4)
-			    LDFLAGS="-L/usr/xpg4/lib/${arch#-m} -R/usr/xpg4/lib/${arch#-m}"
-			    CPPFLAGS="-I/usr/xpg4/include"
-			    CONFIGARGS="--without-ncurses"
+		    for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
+		    do
+			case $flags in
+			    xpg4)
+				LDFLAGS="-L/usr/xpg4/lib/${arch#-m} -R/usr/xpg4/lib/${arch#-m}"
+				CPPFLAGS="-I/usr/xpg4/include"
+				CONFIGARGS="--without-ncurses"
+				;;
+			    solaris)
+				CONFIGARGS="--without-ncurses"
 			    ;;
-			solaris)
-			    CONFIGARGS="--without-ncurses"
-			    ;;
-			ncurses)
-			    CPPFLAGS="-I/usr/include/ncurses"
-			    CONFIGARGS="--with-ncurses"
-			    ;;
-		    esac
-
-		    gmake distclean
-		    ./configure CXX=${c}/CC CC=${c}/cc LDFLAGS="$LDFLAGS" CPPFLAGS="$CPPFLAGS" CFLAGS="-fast $arch" CXXFLAGS="-fast $arch" $CONFIGARGS
-		    had_error $? "Error in ${c}:$arch:$flags"
-
-		    gmake
-		    had_error $? "Error in ${c}:$arch:$flags"
-
-		    gmake check
-		    had_error $? "Error in ${c}:$arch:$flags"
+			    ncurses)
+				CPPFLAGS="-I/usr/include/ncurses"
+				CONFIGARGS="--with-ncurses"
+				;;
+			esac
+			
+			gmake distclean
+			./configure $configflags CXX=${c}/CC CC=${c}/cc LDFLAGS="$LDFLAGS" CPPFLAGS="$CPPFLAGS" CFLAGS="-fast $arch" CXXFLAGS="-fast $arch" $CONFIGARGS
+			had_error $? "Error in ${c}:$arch:$flags CONFIGFLAGS=$configflags"
+			
+			gmake
+			had_error $? "Error in ${c}:$arch:$flags CONFIGFLAGS=$configflags"
+			
+			gmake check
+			had_error $? "Error in ${c}:$arch:$flags CONFIGFLAGS=$configflags"
+		    done
 		done
 	    done
 	done
@@ -431,40 +464,43 @@ host_starchild() {
 	    do
 		for flags in xpg4 solaris
 		do
-		    unset LDFLAGS CPPFLAGS
-		    case $flags in
-			xpg4)
-			    case $arch in
-				-m64)
-				    LDFLAGS="-L/usr/xpg4/lib/${arch#-m} -R/usr/xpg4/lib/${arch#-m}"
-				    CPPFLAGS="-I/usr/xpg4/include"
-				    ;;
-				-m32)
-				    LDFLAGS="-L/usr/xpg4/lib -R/usr/xpg4/lib"
-				    CPPFLAGS="-I/usr/xpg4/include"
-				    ;;
-			    esac
-			    ;;
-			solaris)
-			    :
-			    ;;
-			ncurses)
-			    CPPFLAGS="-I/usr/include/ncurses"
-			    ;;
-		    esac
-
-		    export LDFLAGS
-		    export CPPFLAGS
-
-		    gmake distclean
-		    ./configure CXX=${c}/CC CC=${c}/cc CFLAGS="-fast $arch" CXXFLAGS="-fast $arch"
-		    had_error $? "Error in ${c}:$arch:$flags"
-
-		    gmake -j4
-		    had_error $? "Error in ${c}:$arch:$flags"
-
-		    gmake check
-		    had_error $? "Error in ${c}:$arch:$flags"
+		    for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
+		    do
+			unset LDFLAGS CPPFLAGS
+			case $flags in
+			    xpg4)
+				case $arch in
+				    -m64)
+					LDFLAGS="-L/usr/xpg4/lib/${arch#-m} -R/usr/xpg4/lib/${arch#-m}"
+					CPPFLAGS="-I/usr/xpg4/include"
+					;;
+				    -m32)
+					LDFLAGS="-L/usr/xpg4/lib -R/usr/xpg4/lib"
+					CPPFLAGS="-I/usr/xpg4/include"
+					;;
+				esac
+				;;
+			    solaris)
+				:
+				;;
+			    ncurses)
+				CPPFLAGS="-I/usr/include/ncurses"
+				;;
+			esac
+			
+			export LDFLAGS
+			export CPPFLAGS
+			
+			gmake distclean
+			./configure $configflags CXX=${c}/CC CC=${c}/cc CFLAGS="-fast $arch" CXXFLAGS="-fast $arch"
+			had_error $? "Error in ${c}:$arch:$flags CONFIGFLAGS=$configflags"
+			
+			gmake -j4
+			had_error $? "Error in ${c}:$arch:$flags CONFIGFLAGS=$configflags"
+			
+			gmake check
+			had_error $? "Error in ${c}:$arch:$flags CONFIGFLAGS=$configflags"
+		    done
 		done
 	    done
 	done

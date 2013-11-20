@@ -179,7 +179,7 @@ CursWin::box(chtype verch, chtype horch) {
     if (wborder(__window, __verch == 0 ? '|' : __verch,
                 __verch == 0 ? '|' : __verch,
                 __horch == 0 ? '-' : __horch,
-                __horch == 0 ? '-' : __horch
+                __horch == 0 ? '-' : __horch,
                 '+', '+', '+', '+') == ERR)
         throw EXCEPTIONS::CursesException("wborder");
 #endif

@@ -73,3 +73,8 @@ RadioBox::set_selection(unsigned short _cursor) {
 
     __items[_cursor].selected = true;
 }
+
+void
+RadioBox::set_selection(const std::string& _i) {
+    CheckBox::set_selection(_i);
+}

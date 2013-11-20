@@ -37,6 +37,8 @@ namespace YACURS {
             virtual ~RadioBox();
 
             virtual void set_selection(unsigned short _cursor);
+
+            virtual void set_selection(const std::string& _i);
     };
 }
 

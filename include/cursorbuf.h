@@ -30,9 +30,6 @@
 
 namespace YACURS {
     namespace INTERNAL {
-        /**
-         * @todo implement smooth scrolling if possible
-         */
         class CursorBuffer {
             public:
 

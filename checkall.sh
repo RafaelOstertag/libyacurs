@@ -158,12 +158,6 @@ host_debian32() {
     done
 }
 
-AURORA_CXXFLAGS_34='-O3 -pedantic -Wall -Werror'
-AURORA_CFLAGS_34="$AURORA_CXXFLAGS_34"
-AURORA_CC_34=gcc34
-AURORA_CXX_34=g++34
-AURORA_LDFLAGS_34="-L/usr/local/lib/gcc34 -R/usr/local/lib/gcc34"
-
 AURORA_CXXFLAGS_42='-march=native -mtune=native -O3 -pedantic -Wall -Werror'
 AURORA_CFLAGS_42="$AURORA_CXXFLAGS_42"
 AURORA_CC_42=gcc42
@@ -213,7 +207,7 @@ AURORA_CURSES_CPPFLAGS_ncurses='-I/usr/local/include'
 AURORA_CURSES_LDFLAGS_ncurses='-L/usr/local/lib'
 
 host_aurora() {
-    for c in default clang 34 42 44 46 47 48
+    for c in default clang 42 44 46 47 48
     do
 	for curs in system
 	do
@@ -236,12 +230,6 @@ host_aurora() {
 	done
     done
 }
-
-FREEBSD32_CXXFLAGS_34='-O3 -pedantic -Wall -Werror'
-FREEBSD32_CFLAGS_34="$FREEBSD32_CXXFLAGS_34"
-FREEBSD32_CC_34=gcc34
-FREEBSD32_CXX_34=g++34
-FREEBSD32_LDFLAGS_34="-L/usr/local/lib/gcc34 -R/usr/local/lib/gcc34"
 
 FREEBSD32_CXXFLAGS_42='-march=native -mtune=native -O3 -pedantic -Wall -Werror'
 FREEBSD32_CFLAGS_42="$FREEBSD32_CXXFLAGS_42"
@@ -292,7 +280,7 @@ FREEBSD32_CURSES_CPPFLAGS_ncurses='-I/usr/local/include'
 FREEBSD32_CURSES_LDFLAGS_ncurses='-L/usr/local/lib'
 
 host_freebsd32() {
-    for c in default clang 34 42 44 46 47 48
+    for c in default clang 42 44 46 47 48
     do
 	for curs in system
 	do

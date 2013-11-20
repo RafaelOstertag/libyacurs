@@ -420,7 +420,7 @@ host_odin() {
 		    ./configure CXX=${c}/CC CC=${c}/cc LDFLAGS="$LDFLAGS" CPPFLAGS="$CPPFLAGS" CFLAGS="-fast $arch" CXXFLAGS="-fast $arch" $CONFIGARGS
 		    had_error $? "Error in ${c}:$arch:$flags"
 
-		    gmake -j 10
+		    gmake
 		    had_error $? "Error in ${c}:$arch:$flags"
 
 		    gmake check

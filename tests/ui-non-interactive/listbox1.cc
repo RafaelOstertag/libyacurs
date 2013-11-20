@@ -104,7 +104,7 @@ test_driver(YACURS::Event& _e) {
 	try {
 	    testlb->high_light(100);
 	    abort();
-	} catch (std::out_of_range& ex) {
+	} catch (std::out_of_range&) {
 	    // good, expected
 	} catch(...) {
 	    // bad
@@ -127,7 +127,7 @@ test_driver(YACURS::Event& _e) {
 	try {
 	    std::string newstr("replaced by selected()");
 	    testlb->selected(newstr);
-	} catch (std::out_of_range& ex) {
+	} catch (std::out_of_range&) {
 	    abort();
 	}
 	if (testlb->selected() != std::string("replaced by selected()")) abort();
@@ -136,7 +136,7 @@ test_driver(YACURS::Event& _e) {
 	YACURS::Curses::statusbar()->set("Go to just set item by index"); 
 	try {
 	    testlb->high_light(4);
-	} catch(std::out_of_range& ex) {
+	} catch(std::out_of_range&) {
 	    abort();
 	}
 	if (testlb->selected() != std::string("replaced by selected()")) abort();
@@ -177,13 +177,13 @@ test_driver(YACURS::Event& _e) {
 	if (testlb->sort_order()!=YACURS::ASCENDING) abort();
 	try {
 	    testlb->high_light(0);
-	} catch (std::out_of_range) {
+	} catch (std::out_of_range&) {
 	    abort();
 	}
 	if (testlb->selected() != "0 list item") abort();
 	try {
 	    testlb->high_light(9);
-	} catch (std::out_of_range) {
+	} catch (std::out_of_range&) {
 	    abort();
 	}
 	if (testlb->selected() != "9 list item") abort();
@@ -194,13 +194,13 @@ test_driver(YACURS::Event& _e) {
 	if (testlb->sort_order()!=YACURS::DESCENDING) abort();
 	try {
 	    testlb->high_light(0);
-	} catch (std::out_of_range) {
+	} catch (std::out_of_range&) {
 	    abort();
 	}
 	if (testlb->selected() != "9 list item") abort();
 	try {
 	    testlb->high_light(9);
-	} catch (std::out_of_range) {
+	} catch (std::out_of_range&) {
 	    abort();
 	}
 	if (testlb->selected() != "0 list item") abort();
@@ -213,7 +213,7 @@ test_driver(YACURS::Event& _e) {
 	try {
 	    testlb->search(Match(std::string("4 list item")), 90, &pos );
 	    abort();
-	} catch (std::out_of_range) {
+	} catch (std::out_of_range&) {
 	    // OK!
 	}
 

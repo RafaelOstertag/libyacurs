@@ -361,6 +361,21 @@ host_fish() {
     had_error $? "Error on fish"
 }
 
+host_puffy() {
+    gmake distclean
+    ./configure \
+	CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
+	CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
+    had_error $? "Error on fish"
+
+    gmake clean
+    gmake
+    had_error $? "Error on fish"
+
+    gmake check
+    had_error $? "Error on fish"
+}
+
 host_openbsd32() {
     gmake distclean
     ./configure \

@@ -95,7 +95,7 @@ WHEEZY_CXX_clang=clang++
 WHEEZY_LDFLAGS_clang="-L/usr/lib"
 
 host_wheezy() {
-    for c in default clang 44 46 47
+    for c in default 44 46 47 clang 
     do
 	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	do

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libyacurs 0.1\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
-"POT-Creation-Date: 2013-11-18 02:40+0100\n"
+"POT-Creation-Date: 2013-11-20 23:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,20 +17,46 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/checkbox.cc:181
-msgid "CheckBox: index "
+#: src/dialog.cc:193 src/dialog.cc:214
+msgid "Cancel"
 msgstr ""
 
-#: src/checkbox.cc:182
-msgid " out of range."
+#: src/dialog.cc:198
+msgid "OK"
 msgstr ""
 
-#: src/checkbox.cc:195
-msgid "Item '"
+#: src/dialog.cc:203 src/dialog.cc:216
+msgid "No"
 msgstr ""
 
-#: src/checkbox.cc:195
-msgid "' not found in CheckBox"
+#: src/dialog.cc:208 src/dialog.cc:218
+msgid "Yes"
+msgstr ""
+
+#: src/filesavedialog.cc:169 src/filesavedialog.cc:386
+#: src/fileloaddialog.cc:169 src/fileloaddialog.cc:322
+msgid "Cannot change to "
+msgstr ""
+
+#: src/filesavedialog.cc:170 src/filesavedialog.cc:387
+#: src/fileloaddialog.cc:170 src/fileloaddialog.cc:323
+msgid "System Error"
+msgstr ""
+
+#: src/filesavedialog.cc:234
+msgid "Confirmation"
+msgstr ""
+
+#: src/filesavedialog.cc:237
+msgid "already exists. Do you want to overwrite?"
+msgstr ""
+
+#: src/filesavedialog.cc:246
+msgid "Error"
+msgstr ""
+
+#: src/filesavedialog.cc:276
+msgid "Save File"
 msgstr ""
 
 #: src/colorparser.cc:65
@@ -55,92 +81,6 @@ msgstr ""
 
 #: src/colorparser.cc:104
 msgid "not a valid attribute: "
-msgstr ""
-
-#: src/cursorbuf.cc:284 src/cursorbuf.cc:310
-msgid "_size must not be <2"
-msgstr ""
-
-#: src/curswin.cc:47
-msgid "argument 'win' must not be 0"
-msgstr ""
-
-#: src/curswin.cc:72
-msgid "Area must not be zero"
-msgstr ""
-
-#: src/dialog.cc:188 src/dialog.cc:209
-msgid "Cancel"
-msgstr ""
-
-#: src/dialog.cc:193
-msgid "OK"
-msgstr ""
-
-#: src/dialog.cc:198 src/dialog.cc:211
-msgid "No"
-msgstr ""
-
-#: src/dialog.cc:203 src/dialog.cc:213
-msgid "Yes"
-msgstr ""
-
-#: src/event.cc:39
-msgid "Event names must not be greater than 63 characters."
-msgstr ""
-
-#: src/event.cc:42
-msgid "Event names must not be empty."
-msgstr ""
-
-#: src/fileloaddialog.cc:160 src/fileloaddialog.cc:313
-#: src/filesavedialog.cc:160 src/filesavedialog.cc:377
-msgid "Cannot change to "
-msgstr ""
-
-#: src/fileloaddialog.cc:161 src/fileloaddialog.cc:314
-#: src/filesavedialog.cc:161 src/filesavedialog.cc:378
-msgid "System Error"
-msgstr ""
-
-#: src/fileloaddialog.cc:203
-msgid "Load File"
-msgstr ""
-
-#: src/filesavedialog.cc:225
-msgid "Confirmation"
-msgstr ""
-
-#: src/filesavedialog.cc:228
-msgid "already exists. Do you want to overwrite?"
-msgstr ""
-
-#: src/filesavedialog.cc:237
-msgid "Error"
-msgstr ""
-
-#: src/filesavedialog.cc:267
-msgid "Save File"
-msgstr ""
-
-#: src/lockscreen.cc:80
-msgid "Unlock Failed"
-msgstr ""
-
-#: src/lockscreen.cc:81
-msgid "Wrong Password"
-msgstr ""
-
-#: src/lockscreen.cc:110
-msgid "InputDialog may not be 0"
-msgstr ""
-
-#: src/unlockdiadefault.cc:47
-msgid "Unlock Screen"
-msgstr ""
-
-#: src/unlockdiadefault.cc:54
-msgid "Please enter password in order to unlock screen"
 msgstr ""
 
 #: src/yacursex.cc:46
@@ -201,4 +141,72 @@ msgstr ""
 
 #: src/yacursex.cc:112
 msgid "Invalid dialog type"
+msgstr ""
+
+#: src/cursorbuf.cc:285 src/cursorbuf.cc:311
+msgid "_size must not be <2"
+msgstr ""
+
+#: src/lockscreen.cc:80
+msgid "Unlock Failed"
+msgstr ""
+
+#: src/lockscreen.cc:81
+msgid "Wrong Password"
+msgstr ""
+
+#: src/lockscreen.cc:110
+msgid "InputDialog may not be 0"
+msgstr ""
+
+#: src/curswin.cc:50
+msgid "argument 'win' must not be 0"
+msgstr ""
+
+#: src/curswin.cc:77
+msgid "Area must not be zero"
+msgstr ""
+
+#: src/fileloaddialog.cc:212
+msgid "Load File"
+msgstr ""
+
+#: src/unlockdiadefault.cc:47
+msgid "Unlock Screen"
+msgstr ""
+
+#: src/unlockdiadefault.cc:54
+msgid "Please enter password in order to unlock screen"
+msgstr ""
+
+#: src/event.cc:39
+msgid "Event names must not be greater than 63 characters."
+msgstr ""
+
+#: src/event.cc:42
+msgid "Event names must not be empty."
+msgstr ""
+
+#: src/checkbox.cc:176
+msgid "CheckBox: index "
+msgstr ""
+
+#: src/checkbox.cc:177
+msgid " out of range."
+msgstr ""
+
+#: src/checkbox.cc:190 src/checkbox.cc:210
+msgid "Item '"
+msgstr ""
+
+#: src/checkbox.cc:190 src/checkbox.cc:210
+msgid "' not found in CheckBox"
+msgstr ""
+
+#: src/checkbox.cc:196
+msgid "CheckBox cursor out of range in set_selection()"
+msgstr ""
+
+#: src/radiobox.cc:67
+msgid "RadioBox cursor out of range in set_selection()"
 msgstr ""

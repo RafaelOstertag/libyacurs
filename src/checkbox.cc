@@ -110,6 +110,7 @@ CheckBox::key_handler(Event& _e) {
     case KEY_RETURN2:
     case ' ':
         set_selection(__cursor);
+	EventQueue::submit(EventEx<CheckBox*>(EVT_CHECKBOX_SELECTION, this) );
         break;
 
     case KEY_DOWN:

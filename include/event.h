@@ -172,6 +172,10 @@ namespace YACURS {
      * Will be emitted when ENTER is pressed in ListBox.
      */
     const EventType EVT_LISTBOX_ENTER("EVT_LISTBOX_ENTER");
+    /**
+     * Will be emitted when the selection changes in a CheckBox.
+     */
+    const EventType EVT_CHECKBOX_SELECTION("EVT_CHECKBOX_SELECTION");
 
 
     /**

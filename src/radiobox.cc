@@ -18,6 +18,11 @@
 //
 //
 // $Id$
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "gettext.h"
 
 #include <cassert>
 #include <cstdlib>
@@ -40,16 +45,7 @@ RadioBox::operator=(const RadioBox&) {
 //
 // Protected
 //
-void
-RadioBox::set_selection(unsigned short _cursor) {
-    assert(_cursor < __items.size() );
-    for (std::vector<INTERNAL::Selectable>::size_type i = 0;
-         i < __items.size();
-         i++)
-        __items[i].selected = false;
 
-    __items[_cursor].selected = true;
-}
 
 //
 // Public
@@ -63,4 +59,17 @@ RadioBox::RadioBox(const std::string& _title,
 }
 
 RadioBox::~RadioBox() {
+}
+
+void
+RadioBox::set_selection(unsigned short _cursor) {
+    if (_cursor >= __items.size() )
+	throw std::out_of_range(_("RadioBox cursor out of range in set_selection()"));
+
+    for (std::vector<INTERNAL::Selectable>::size_type i = 0;
+         i < __items.size();
+         i++)
+        __items[i].selected = false;
+
+    __items[_cursor].selected = true;
 }

@@ -88,8 +88,6 @@ namespace YACURS {
 
             virtual void key_handler(Event& _e);
 
-            virtual void set_selection(unsigned short _cursor);
-
         public:
             CheckBox(const std::string& _title,
                      const std::vector<std::string>& _items);
@@ -99,6 +97,10 @@ namespace YACURS {
             bool selected(unsigned short _i);
 
             bool selected(const std::string& _i);
+
+            virtual void set_selection(unsigned short _cursor);
+
+            virtual void set_selection(const std::string& _i);
 
             // From WidgetBase
             void size_available(const Size& _s);

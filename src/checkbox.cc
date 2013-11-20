@@ -134,12 +134,6 @@ CheckBox::key_handler(Event& _e) {
     refresh(true);
 }
 
-void
-CheckBox::set_selection(unsigned short _cursor) {
-    assert(_cursor < __items.size() );
-    __items[_cursor].selected = !__items[_cursor].selected;
-}
-
 //
 // Public
 //
@@ -191,6 +185,26 @@ CheckBox::selected(const std::string& _i) {
          n < __items.size(); n++)
         if (__items[n].item == _i)
             return __items[n].selected;
+
+    throw std::out_of_range(_("Item '") + _i + _("' not found in CheckBox") );
+}
+
+void
+CheckBox::set_selection(unsigned short _cursor) {
+    if (_cursor >= __items.size() )
+	throw std::out_of_range(_("CheckBox cursor out of range in set_selection()"));
+
+    __items[_cursor].selected = !__items[_cursor].selected;
+}
+
+void
+CheckBox::set_selection(const std::string& _i) {
+    std::vector<INTERNAL::Selectable>::size_type n;
+    for (n = 0; n < __items.size(); n++)
+        if (__items[n].item == _i) {
+            set_selection(n);
+	    return;
+	}
 
     throw std::out_of_range(_("Item '") + _i + _("' not found in CheckBox") );
 }

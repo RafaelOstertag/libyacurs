@@ -23,9 +23,10 @@
 #ifndef EVENT_H
 #define EVENT_H 1
 
-#ifdef HAVE_STDINT_H
+// Can't use #ifdef HAVE_STDINT_H since that would require pulling in
+// config.h or libyacurscfg.h which might cause undesired side
+// effects.
 #include <stdint.h>
-#endif
 
 #include <cstring>
 #include <stdexcept>

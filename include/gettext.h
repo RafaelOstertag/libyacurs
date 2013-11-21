@@ -31,7 +31,9 @@
 
 /* NLS can be disabled through the configure --disable-nls option.  */
 #if ENABLE_NLS
-# include <libintl.h>
+# if HAVE_LIBINTL_H
+#  include <libintl.h>
+# endif
 # define _(String) dgettext(PACKAGE, String)
 #else
 # define _(String) (String)

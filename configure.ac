@@ -64,11 +64,17 @@ AC_ARG_ENABLE([wchar],
 
 AC_LANG([C++])
 AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION(0.18.1)
+AM_GNU_GETTEXT_VERSION([0.18.1])
 
-AC_CHECK_HEADERS([locale.h stropts.h signal.h sys/termios.h termios.h unistd.h stdint.h sys/types.h sys/ioctl.h])
+AC_HEADER_TIME
+AC_CHECK_HEADERS([fcntl.h locale.h libintl.h stropts.h signal.h sys/termios.h termios.h unistd.h stdint.h sys/types.h sys/ioctl.h sys/time.h])
 
 AC_CHECK_HEADERS([cwchar cwctype])
+
+AC_TYPE_INT16_T
+AC_TYPE_SIZE_T
+AC_TYPE_UINT16_T
+AC_TYPE_UINT32_T
 
 AX_CXX_HEADER_STDCXX_98
 AS_IF([test x$ax_cv_cxx_stdcxx_98 = xno],
@@ -81,11 +87,16 @@ AS_IF([test x$ax_cv_curses != xyes],
 my_saved_LIBS="$LIBS"
 LIBS="$my_save_LIBS $CURSES_LIB"
 
+AC_CHECK_FUNCS([alarm getcwd memset strdup strerror strstr],,[AC_MSG_ERROR([required function not found])])
+AC_CHECK_FUNCS([setlocale])
+
+if test x"$DISABLE_WCHAR" = xno
+then
+	AC_CHECK_FUNCS([iswprint],,[AC_MSG_ERROR([wchar support enabled, but no iswprint(). Try with --disable-wchar.])])
+fi
+
 # resize_term() is NCurses, resizeterm() is NetBSD curses
-AC_CHECK_FUNC([resize_term],
-	[AC_DEFINE([HAVE_RESIZE_TERM],[1],[Define to 1 if you have the `resize_term' function.])],
-	[AC_CHECK_FUNC([resizeterm],
-		[AC_DEFINE([HAVE_RESIZETERM],[1],[Define to 1 if you have the `resizeterm' function.])])])
+AC_CHECK_FUNCS([resize_term resizeterm],[break])
 
 # Some custom tests
 AC_MSG_CHECKING([for termname])

@@ -23,6 +23,10 @@
 #ifndef EVENTCONNECTOR_H
 #define EVENTCONNECTOR_H 1
 
+
+// Can't use #ifdef HAVE_STDINT_H since that would require pulling in
+// config.h or libyacurscfg.h which might cause undesired side
+// effects.
 #include <stdint.h>
 
 #include <cstdlib>

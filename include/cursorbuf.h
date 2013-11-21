@@ -23,7 +23,9 @@
 #ifndef CURSORBUF_H
 #define CURSORBUF_H 1
 
+#ifdef HAVE_STDINT_H
 #include <stdint.h>
+#endif
 
 #include <string>
 #include <cstdlib>

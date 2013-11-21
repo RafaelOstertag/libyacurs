@@ -23,7 +23,10 @@
 #ifndef EVENT_H
 #define EVENT_H 1
 
+#ifdef HAVE_STDINT_H
 #include <stdint.h>
+#endif
+
 #include <cstring>
 #include <stdexcept>
 

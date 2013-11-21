@@ -23,7 +23,9 @@
 #ifndef SIZE_H
 #define SIZE_H 1
 
+#ifdef HAVE_STDINT_H
 #include <stdint.h>
+#endif
 #include <string>
 #include <cassert>
 #include <stdexcept>

@@ -23,7 +23,9 @@
 #ifndef EVTQUEUESTATS_H
 #define EVTQUEUESTATS_H 1
 
+#ifdef HAVE_STDINT_H
 #include <stdint.h>
+#endif
 
 #include <map>
 #include <list>

@@ -497,6 +497,9 @@ main() {
     sleep(15);
 #endif
 #ifdef YACURS_USE_WCHAR
+#if !defined(HAVE_SETLOCALE)
+# error "NLS support requested, but no setlocale() available"
+#endif
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 

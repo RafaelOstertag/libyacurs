@@ -143,6 +143,8 @@ test_driver(YACURS::Event& _e) {
 	break;
     case 19:
 	YACURS::Curses::statusbar()->set("Go to just set item by item search"); 
+	// fix to make gcc48 stop complaining
+	pos = 0;
 	if (!testlb->search(Match(std::string("replaced by selected()")),0, &pos ) )
 	    abort();
 

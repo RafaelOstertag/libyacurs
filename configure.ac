@@ -29,6 +29,11 @@ case $host in
 esac
 AM_CONDITIONAL([NOTCYGWIN],[test x$my_cygwin = xfalse])
 
+# Needed on BSD/Linux for libtestpreload.so which is linking back into
+# executable.
+#
+AX_CHECK_LINK_FLAG([-Wl,--export-dynamic],[AC_SUBST([LD_EXPORT_DYNAMIC],[-Wl,--export-dynamic])])
+
 #
 # Configure options
 #

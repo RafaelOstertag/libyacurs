@@ -24,6 +24,7 @@
 #define YACURS_H 1
 
 #include "libyacurscfg.h"
+#include "yacurscuses.h"
 #include "curswin.h"
 #include "curstr.h"
 #include "cursorbuf.h"

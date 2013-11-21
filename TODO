@@ -1,0 +1,11 @@
+TODO
+====
+
+ * Use static instead of dynamic allocation for widgets in classes
+   derived from Dialog
+
+
+$Id$
+Local Variables:
+mode: text
+End:

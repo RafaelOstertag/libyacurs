@@ -27,7 +27,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <cerrno>
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 # include <cwchar>
 # include <cwctype>
 #else
@@ -59,7 +59,7 @@ namespace YACURS {
 	     * @retrun @c true if the input has to be accepted, or @c
 	     * false if it is to be discarded.
 	     */
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 	    virtual bool use(wint_t) = 0;
 #else
 	    virtual bool use(char) = 0;
@@ -73,7 +73,7 @@ namespace YACURS {
      */
     class FilterPrint : public InputFilter {
 	public:
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 	    virtual bool use(wint_t wc) {
 		return iswprint(wc) != 0;
 	    }
@@ -92,7 +92,7 @@ namespace YACURS {
      */
     class FilterAlpha : public InputFilter {
 	public:
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 	    virtual bool use(wint_t wc) {
 		return iswalpha(wc) != 0;
 	    }
@@ -111,7 +111,7 @@ namespace YACURS {
      */
     class FilterAlnum : public InputFilter {
 	public:
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 	    virtual bool use(wint_t wc) {
 		return iswalnum(wc) != 0;
 	    }
@@ -130,7 +130,7 @@ namespace YACURS {
      */
     class FilterDigit : public InputFilter {
 	public:
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 	    virtual bool use(wint_t wc) {
 		return iswdigit(wc) != 0;
 	    }
@@ -149,7 +149,7 @@ namespace YACURS {
      */
     class FilterXDigit : public InputFilter {
 	public:
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 	    virtual bool use(wint_t wc) {
 		return iswxdigit(wc) != 0;
 	    }
@@ -424,7 +424,7 @@ namespace YACURS {
 
         if (!focus() ) return;
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(_e);
 #else
         EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(_e);

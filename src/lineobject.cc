@@ -75,7 +75,7 @@ LineObject::operator=(const LineObject& lo) {
 
 size_t
 LineObject::text_length() const {
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     size_t mbslen = mbstowcs(NULL, __linetext.c_str(), 0);
     if (mbslen == (size_t)-1)
         throw EXCEPTIONS::SystemError(errno);

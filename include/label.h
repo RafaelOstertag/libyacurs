@@ -46,7 +46,7 @@ namespace YACURS {
             /**
              * Length of label.
              *
-             * @returns length of label, if compiled with USE_WCHAR
+             * @returns length of label, if compiled with YACURS_USE_WCHAR
              * defined, takes MB characters into account.
              */
             size_t label_length() const;

@@ -49,10 +49,10 @@
     defined(HAVE_CWCHAR) && \
     defined(HAVE_CWCTYPE) && \
     !defined(DISABLE_WCHAR)
-# define USE_WCHAR 1
+# define YACURS_USE_WCHAR 1
 # include <locale.h>
 #else
-# undef USE_WCHAR
+# undef YACURS_USE_WCHAR
 #endif
 
 // My Keys.

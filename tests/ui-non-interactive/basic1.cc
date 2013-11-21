@@ -52,14 +52,14 @@ main() {
     sleep(15);
 #endif
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
     try {
         YACURS::Curses::init();
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 	title = new YACURS::TitleBar(YACURS::TitleBar::POS_TOP,
 				     "Basıc ¹");
 #else

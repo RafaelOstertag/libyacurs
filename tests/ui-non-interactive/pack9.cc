@@ -138,7 +138,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
@@ -162,7 +162,7 @@ main() {
         vpack2_1 = new YACURS::VPack();
         vpack2_2 = new YACURS::VPack();
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         label1 = new YACURS::Label("T€st lab€l");
         YACURS::Label* label2 = new YACURS::Label("T€st lab€l²");
         label3 = new YACURS::Label("T€st lab€l³");
@@ -243,7 +243,7 @@ main() {
         hpack2->add_back(label15);
         hpack2->add_back(label16);
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         label1->label("N€w T€st Lab€l");
         label2->label("N€w T€st Lab€l²");
         label3->label("N€w T€st Lab€l³");

@@ -33,7 +33,7 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t
 #else
 int
@@ -443,7 +443,7 @@ __test_data[] = {
     0
 };
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 extern "C" int
 __test_wget_wch(void*, wint_t* i) {
     static wint_t* ptr2 = __test_data;
@@ -492,7 +492,7 @@ class HotKeyQuit : public YACURS::HotKey {
 
 int
 main() {
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
@@ -519,7 +519,7 @@ main() {
         w1->add_hotkey(HotKeyQuit('Q') );
 
         std::vector<std::string> items;
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         items.push_back("It€m 1");
         items.push_back("It€m 2");
         items.push_back("It€m 3");

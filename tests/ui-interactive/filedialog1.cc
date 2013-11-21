@@ -15,7 +15,7 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t
 #else
 int
@@ -63,7 +63,7 @@ __test_data_1[] = {
     0
 };
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t
 #else
 int
@@ -82,7 +82,7 @@ __dir_up_data[] = {
 };
 
 // Quit dialog
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t
 #else
 int
@@ -92,7 +92,7 @@ __test_data_end_dialog[] = {
 };
 
 // Quit app
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t
 #else
 int
@@ -117,7 +117,7 @@ quit() {
     YACURS::EventQueue::submit(YACURS::EVT_QUIT);
 }
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 extern "C" int
 __test_wget_wch(void*, wint_t* i) {
     static wint_t* ptr1 = __test_data_1;
@@ -397,7 +397,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 #ifdef ENABLE_NLS

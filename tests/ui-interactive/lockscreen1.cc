@@ -17,7 +17,7 @@ enum {
 };
 
 // Used when preloading libtestpreload.so
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t
 #else
 int
@@ -105,7 +105,7 @@ int
     '\t', '\n', 0
 };
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t
 #else
 int
@@ -119,7 +119,7 @@ __unlock_screen[] = {
     0
 };
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t
 #else
 int
@@ -128,7 +128,7 @@ __quit_data[] = {
     KEY_LEFT, '\n', 0
 };
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 extern "C" int
 __test_wget_wch(void*, wint_t* i) {
     static wint_t* ptr2 = __test_data;

@@ -24,7 +24,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
@@ -42,14 +42,14 @@ main() {
         YACURS::VPack* vpack = new YACURS::VPack;
         w1->widget(vpack);
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         YACURS::Label* label1 = new YACURS::Label("«T€st·lab€l»");
 #else
         YACURS::Label* label1 = new YACURS::Label("Test label");
 #endif
         vpack->add_front(label1);
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         YACURS::Label* label2 = new YACURS::Label("“T€st·lab€l2”");
 #else
         YACURS::Label* label2 = new YACURS::Label("Test label2");

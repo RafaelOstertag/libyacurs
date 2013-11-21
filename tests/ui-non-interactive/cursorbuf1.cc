@@ -397,7 +397,7 @@ void test3() {
     delete cb_ptr;
 }
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 void test4() {
     YACURS::INTERNAL::CursorBuffer* cb_ptr = 
 	new YACURS::INTERNAL::CursorBuffer(L"T€st Buffer");
@@ -488,7 +488,7 @@ void test4() {
 
     delete cb_ptr;
 }
-#endif // USE_WCHAR
+#endif // YACURS_USE_WCHAR
 
 int
 main() {
@@ -496,12 +496,12 @@ main() {
     std::cout << getpid() << std::endl;
     sleep(15);
 #endif
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
     test3();
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     test4();
 #endif
 
@@ -514,7 +514,7 @@ main() {
         wrefresh(stdscr);
     }
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     for (int i = 8; i < 30; i = i + 5) {
         test2(i);
         sleep(1);

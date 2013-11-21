@@ -13,7 +13,7 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t
 #else
 int
@@ -56,7 +56,7 @@ YACURS::DIALOG_STATE expectation[9] = {
 
 static YACURS::DIALOG_STATE last_dialog_state;
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 extern "C" int
 __test_wget_wch(void*, wint_t* i) {
     static int row = 0;
@@ -128,7 +128,7 @@ class MainWindow : public YACURS::Window {
                 dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
             if (dialog != 0 && evt.data() == dialog) {
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 		YACURS::Curses::statusbar()->push("Dialog 1 clösed");
 #else
                 YACURS::Curses::statusbar()->push("Dialog 1 closed");
@@ -278,7 +278,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 

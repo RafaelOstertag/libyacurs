@@ -13,7 +13,7 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t
 #else
 int
@@ -27,7 +27,7 @@ __test_data[] = {
     '\t', '\n', 0
 };
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 extern "C" int
 __test_wget_wch(void*, wint_t* i) {
     static wint_t* ptr2 = __test_data;
@@ -93,7 +93,7 @@ class MainWindow : public YACURS::Window {
             if (e.data() == button1) {
                 assert(messagebox1 == 0);
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
                 messagebox1 = new YACURS::MessageBox("«Test Dialog»",
                                                      "“This is the message”");
 #else
@@ -113,7 +113,7 @@ class MainWindow : public YACURS::Window {
     public:
         MainWindow() : YACURS::Window(YACURS::Margin(1, 0, 1,
                                                      0) ), messagebox1(0) {
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
             button1 = new YACURS::Button("«New Window»");
             button2 = new YACURS::Button("«Quit»");
 #else
@@ -175,7 +175,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     setlocale(LC_ALL,"");
 #endif
 

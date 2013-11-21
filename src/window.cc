@@ -60,7 +60,7 @@ Window::key_event_handler(Event& _e) {
     if (__fgid != FocusManager::active_focus_group() ||
         __hot_keys.empty() ) return;
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     EventEx<wint_t>& event = dynamic_cast<EventEx<wint_t>&>(_e);
 #else
     EventEx<int>& event = dynamic_cast<EventEx<int>&>(_e);

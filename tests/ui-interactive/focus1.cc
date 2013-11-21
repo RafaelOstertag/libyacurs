@@ -14,14 +14,14 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t
 #else
 int
 #endif
 __test_data[] = {
     // First Input Widget
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     'L', 'o', 'r', L'€', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', L'ô', 'l',
 #else
     'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', 'o', 'l',
@@ -60,7 +60,7 @@ __test_data[] = {
     // delete line
     KEY_CTRL_U,
     // enter line again
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     'L', 'o', 'r', L'€', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', L'ô', 'l',
 #else
     'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', 'o', 'l',
@@ -86,7 +86,7 @@ __test_data[] = {
     // delete line
     KEY_CTRL_A, KEY_CTRL_K,
     // Reenter line
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     'L', 'o', 'r', L'€', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', L'ô', 'l',
 #else
     'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', 'o', 'l',
@@ -116,7 +116,7 @@ __test_data[] = {
     KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL, KEY_BKSPC_SOL,
     // Second Input Widget
     '\t',
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     'L', 'o', 'r', L'€', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', L'ô', 'l',
 #else
     'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', 'o', 'l',
@@ -155,7 +155,7 @@ __test_data[] = {
     // delete line
     KEY_CTRL_U,
     // enter line again
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     'L', 'o', 'r', L'€', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', L'ô', 'l',
 #else
     'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', 'o', 'l',
@@ -181,7 +181,7 @@ __test_data[] = {
     // delete line
     KEY_CTRL_A, KEY_CTRL_K,
     // Reenter line
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     'L', 'o', 'r', L'€', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', L'ô', 'l',
 #else
     'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', 'o', 'l',
@@ -250,7 +250,7 @@ __test_data[] = {
     '\n', 0
 };
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 extern "C" int
 __test_wget_wch(void*, wint_t* i) {
     static wint_t* ptr2 = __test_data;
@@ -323,7 +323,7 @@ button_press_handler(YACURS::Event& _e) {
 
 int
 main() {
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
     std::list<std::string> items;
@@ -331,7 +331,7 @@ main() {
     for (int i = 0; i < 120; i++) {
         std::ostringstream n;
         n << i;
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         items.push_back("(€Ääü¼½) Item Number " + n.str() );
 #else
 	items.push_back("Long Name ListBox Item Number " + n.str() );

@@ -23,7 +23,7 @@ alrm(YACURS::Event& _e) {
 
     switch (i++) {
     case 0:
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         label1->label("B ï g   N € w    L a b € l ¹");
 #else
         label1->label("B i g   N e w    L a b e l 1");
@@ -32,7 +32,7 @@ alrm(YACURS::Event& _e) {
         break;
 
     case 1:
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         label1->label("Small lab€l¹");
 #else
         label1->label("Small label1");
@@ -41,7 +41,7 @@ alrm(YACURS::Event& _e) {
         break;
 
     case 2:
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         label1->label("T h i s   s h o u l d   r € s i z €");
 #else
         label1->label("T h i s   s h o u l d   r e s i z e");
@@ -50,7 +50,7 @@ alrm(YACURS::Event& _e) {
         break;
 
     case 3:
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         label3->label("H  u  g  €    B  i  g    L  a  b  €  l  ³");
 #else
         label3->label("H  u  g  e     B  i  g     L  a  b  e  l   3");
@@ -71,7 +71,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
@@ -94,7 +94,7 @@ main() {
         hpack->add_back(vpack1);
         hpack->add_back(vpack2);
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         label1 = new YACURS::Label("T€st lab€ļ");
 #else
         label1 = new YACURS::Label("Test label");
@@ -102,14 +102,14 @@ main() {
 
         vpack1->add_front(label1);
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         YACURS::Label* label2 = new YACURS::Label("T€st lab€ļ²");
 #else
         YACURS::Label* label2 = new YACURS::Label("Test label2");
 #endif
         vpack1->add_back(label2);
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         label3 = new YACURS::Label("T€st lab€ļ³");
         YACURS::Label* label4 = new YACURS::Label("T€st lab€ļ⁴");
 #else
@@ -119,7 +119,7 @@ main() {
         vpack2->add_back(label3);
         vpack2->add_back(label4);
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         label1->label("N€w T€st Lab€l");
         label2->label("N€w T€st Lab€l²");
         label3->label("N€w T€st Lab€l³");

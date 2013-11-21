@@ -33,7 +33,7 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t
 #else
 int
@@ -67,7 +67,7 @@ __test_data[] = {
     'q', 0
 };
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 extern "C" int
 __test_wget_wch(void*, wint_t* i) {
     static wint_t* ptr2 = __test_data;
@@ -116,7 +116,7 @@ class HotKeyQuit : public YACURS::HotKey {
 
 int
 main() {
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
@@ -125,7 +125,7 @@ main() {
     for (int i = 0; i < 24; i++) {
         std::ostringstream n;
         n << i;
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 	items.push_back("Lôñg Nàm€ LïstBóx Ïtëm Nümbèr " + n.str() );
 #else
 	items.push_back("Long Name ListBox Item Number " + n.str() );

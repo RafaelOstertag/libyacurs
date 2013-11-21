@@ -13,7 +13,7 @@
 
 // Used when preloading libtestpreload.so
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t __test_str[] = { 
     L'H', L'e', L'l', L'l', L'o', L',', L' ', L'W', L'o', L'r', L'l', L'd', L'!', L'\0'
 };
@@ -77,7 +77,7 @@ class MyHandler : public Handler {
         void handler(YACURS::Event& e) {
             Handler::handler(e);
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 	    if (typeid (e) != typeid (YACURS::EventEx<wint_t>) ) std::abort();
 	    YACURS::EventEx<wint_t>& tmp =
 		dynamic_cast<YACURS::EventEx<wint_t>&>(e);
@@ -110,7 +110,7 @@ class MyHandler : public Handler {
 
 int
 main() {
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 

@@ -13,7 +13,7 @@
 #include "yacurs.h"
 
 // Used when preloading libtestpreload.so
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 wint_t
 #else
 int
@@ -22,7 +22,7 @@ __test_data[] = {
     // Press first button
     '\n',
     // enter text
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     'L', 'o', 'r', L'€', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', L'ô', 'l',
 #else
     'L', 'o', 'r', 'e', 'm', ' ', 'i', 'p', 's', 'u', 'm', ' ', 'd', 'o', 'l',
@@ -98,7 +98,7 @@ __test_data[] = {
     '\t', '\n', 0
 };
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 extern "C" int
 __test_wget_wch(void*, wint_t* i) {
     static wint_t* ptr2 = __test_data;
@@ -207,7 +207,7 @@ class ListBoxWin : public YACURS::Window {
                 for (int i = 0; i < 120; i++) {
                     std::ostringstream n;
                     n << i;
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 		    listbox->add("Loñg Nam€ Listßox Item Number " + n.str() );
 #else
                     listbox->add("Long Name ListBox Item Number " + n.str() );
@@ -284,7 +284,7 @@ class BoxDialog : public YACURS::Dialog {
             for (int i = 0; i < 10; i++) {
                 std::ostringstream _i;
                 _i << i;
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
                 items.push_back("Ch€ck Box İtem " + _i.str() );
 #else
                 items.push_back("Check Box Item " + _i.str() );
@@ -298,7 +298,7 @@ class BoxDialog : public YACURS::Dialog {
             for (int i = 0; i < 10; i++) {
                 std::ostringstream _i;
                 _i << i;
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
                 items.push_back("Rádio Box It€m " + _i.str() );
 #else
 		items.push_back("Radio Box Item " + _i.str() );
@@ -396,7 +396,7 @@ class MainWindow : public YACURS::Window {
         MainWindow() : YACURS::Window(YACURS::Margin(1, 0, 1,
                                                      0) ), win1(0), lbwin(0),
             boxdialog(0) {
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
             button1 = new YACURS::Button("«New Window»");
             button2 = new YACURS::Button("«Quit»");
             button3 = new YACURS::Button("«List Box Win»");
@@ -463,7 +463,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 

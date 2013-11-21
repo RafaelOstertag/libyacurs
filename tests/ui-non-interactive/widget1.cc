@@ -24,7 +24,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 
@@ -39,7 +39,7 @@ main() {
         YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0) );
         w1->frame(true);
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 	YACURS::Label* label1 = new YACURS::Label("Tëst label");
 #else
         YACURS::Label* label1 = new YACURS::Label("Test label");

@@ -336,7 +336,7 @@ CursWin::addstrx(const CurStr& str) {
     }
 
     set_color(str.color() );
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     // addnstr() will convert to wide char, we're only interested in
     // length here.
     size_t _mbslen = mbstowcs( (wchar_t*)0, str.c_str(),
@@ -373,7 +373,7 @@ CursWin::addlinex(const CurStr& str) {
 
     size_t mylen;
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     mylen = mbstowcs( (wchar_t*)0, str.c_str(), 0);
     if (mylen == (size_t)-1)
         throw EXCEPTIONS::SystemError(errno);
@@ -399,7 +399,7 @@ CursWin&
 CursWin::addnstr(const CurStr& str, int n) {
     set_color(str.color() );
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     size_t buflen = mbstowcs( (wchar_t*)0, str.c_str(), 0);
     if (buflen == (size_t)-1)
         throw EXCEPTIONS::SystemError(errno);

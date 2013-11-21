@@ -227,7 +227,7 @@ namespace YACURS {
 
         if (!focus() ) return;
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(_e);
 #else
         EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(_e);

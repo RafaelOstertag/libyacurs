@@ -60,7 +60,7 @@ namespace YACURS {
                     }
 
                     void operator()(const std::string& _s) {
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
                         size_t mbslen = mbstowcs(NULL, _s.c_str(), 0);
                         if (mbslen == (size_t)-1)
                             throw EXCEPTIONS::SystemError(errno);
@@ -94,7 +94,7 @@ CheckBox::key_handler(Event& _e) {
 
     if (!focus() ) return;
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(_e);
 #else
     EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(_e);

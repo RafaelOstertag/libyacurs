@@ -16,18 +16,18 @@
     defined(HAVE_LOCALE_H) && \
     defined(HAVE_CWCHAR) && \
     !defined(DISABLE_WCHAR)
-# define USE_WCHAR 1
+# define YACURS_USE_WCHAR 1
 # include <clocale>
 # include <cwchar>
 #else
-# undef USE_WCHAR
+# undef YACURS_USE_WCHAR
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
 int __test_wget_wch(void*, std::wint_t* i);
 
 int

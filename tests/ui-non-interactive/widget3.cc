@@ -29,7 +29,7 @@ alrm(YACURS::Event& _e) {
 
     switch (i++) {
     case 0:
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         input1->input(
             "åƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
 #else
@@ -39,7 +39,7 @@ alrm(YACURS::Event& _e) {
         break;
 
     case 1:
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         input2->input(
             "åƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
 #else
@@ -49,7 +49,7 @@ alrm(YACURS::Event& _e) {
         break;
 
     case 2:
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         label1->label(
             "åƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
 #else
@@ -59,7 +59,7 @@ alrm(YACURS::Event& _e) {
         break;
 
     case 3:
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
         label2->label(
             "åƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥḩíjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
 #else
@@ -83,7 +83,7 @@ main() {
     sleep(15);
 #endif
 
-#ifdef USE_WCHAR
+#ifdef YACURS_USE_WCHAR
     if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
 #endif
 

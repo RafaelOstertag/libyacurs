@@ -2,7 +2,12 @@ TODO
 ====
 
  * Use static instead of dynamic allocation for widgets in classes
-   derived from Dialog
+   derived from Dialog.
+
+ * FileSaveDialog and FileLoadDialog should optionally check if the
+   the selection is a file, and, if not, display a warning.
+
+ * FileSaveDialog and FileLoadDialog should optionally do a chdir().
 
 
 $Id$

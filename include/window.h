@@ -26,7 +26,7 @@
 #include <map>
 #include <string>
 
-#include "mycurses.h"
+#include "yacurscurses.h"
 #include "windowbase.h"
 #include "widgetbase.h"
 #include "hotkey.h"

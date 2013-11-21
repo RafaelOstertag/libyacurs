@@ -27,7 +27,7 @@
 #include "realizeable.h"
 #include "margin.h"
 #include "event.h"
-#include "mycurses.h"
+#include "yacurscurses.h"
 
 namespace YACURS {
     /**

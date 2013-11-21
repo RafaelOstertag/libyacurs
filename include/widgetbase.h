@@ -31,7 +31,7 @@
 #include "realizeable.h"
 #include "area.h"
 #include "window.h"
-#include "mycurses.h"
+#include "yacurscurses.h"
 
 namespace YACURS {
     // Forward declaration because window.h already included widgetbase.h

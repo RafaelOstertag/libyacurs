@@ -28,7 +28,7 @@
 #include "colors.h"
 #include "area.h"
 #include "curstr.h"
-#include "mycurses.h"
+#include "yacurscurses.h"
 
 namespace YACURS {
     /**

@@ -26,7 +26,7 @@
 #include <vector>
 #include <string>
 
-#include "mycurses.h"
+#include "yacurscurses.h"
 
 namespace YACURS {
     namespace INTERNAL {

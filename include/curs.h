@@ -30,7 +30,7 @@
 #include "statusbar.h"
 #include "window.h"
 #include "event.h"
-#include "mycurses.h"
+#include "yacurscurses.h"
 
 /**
  * General name space of libyacurs.

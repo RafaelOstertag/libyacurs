@@ -27,7 +27,7 @@
 #include <string>
 
 #include "widgetbase.h"
-#include "mycurses.h"
+#include "yacurscurses.h"
 
 namespace YACURS {
     /**

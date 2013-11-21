@@ -27,7 +27,7 @@
 #include <map>
 
 #include "colors.h"
-#include "mycurses.h"
+#include "yacurscurses.h"
 
 namespace YACURS {
     namespace INTERNAL {

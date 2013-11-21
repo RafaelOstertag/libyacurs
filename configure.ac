@@ -30,12 +30,6 @@ esac
 AM_CONDITIONAL([NOTCYGWIN],[test x$my_cygwin = xfalse])
 
 #
-# Needed on BSD/Linux for libtestpreload.so which is linking back into
-# executable.
-#
-AX_CHECK_LINK_FLAG([-Wl,--export-dynamic],[AC_SUBST([LD_EXPORT_DYNAMIC],[-Wl,--export-dynamic])])
-
-#
 # Configure options
 #
 AC_ARG_ENABLE([debug],
@@ -67,7 +61,10 @@ AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.1])
 
 AC_HEADER_TIME
-AC_CHECK_HEADERS([fcntl.h locale.h libintl.h stropts.h signal.h sys/termios.h termios.h unistd.h stdint.h sys/types.h sys/ioctl.h sys/time.h])
+AC_CHECK_HEADERS([fcntl.h locale.h libintl.h stropts.h sys/termios.h termios.h sys/types.h sys/ioctl.h sys/time.h])
+
+# Those are headers we don't protect by #ifdef's
+AC_CHECK_HEADERS([stdint.h signal.h unistd.h],,[AC_MSG_ERROR([required header not found])])
 
 AC_CHECK_HEADERS([cwchar cwctype])
 

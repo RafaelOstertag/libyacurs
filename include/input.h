@@ -27,6 +27,8 @@
 #include <cassert>
 #include <cstdlib>
 #include <cerrno>
+
+#include "mycurses.h" // required for YACURS_USE_WCHAR
 #ifdef YACURS_USE_WCHAR
 # include <cwchar>
 # include <cwctype>

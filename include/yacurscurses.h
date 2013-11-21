@@ -20,8 +20,8 @@
 //
 // $Id$
 
-#ifndef MYCURSES_H
-#define MYCURSES_H 1
+#ifndef YACURSCURSES_H
+#define YACURSCURSES_H 1
 
 #include "libyacurscfg.h"
 

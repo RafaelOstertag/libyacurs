@@ -11,7 +11,8 @@ had_error() {
 
 	if [ $retval -ne 0 ]
 	then
-	    echo "[$HOST] $msg"
+	    message "[$HOST] $msg"
+	    message "---- end(ERROR): `date`"
 	    mailx -s "libyacurs test on $HOST had errors" rafi@guengel.ch < checkall.log
 	    exit $retval
 	fi
@@ -67,7 +68,7 @@ host_dash() {
 	    make check
 	    had_error $? "Error in CXX=`eval echo \\$DASH_CXX_$c` CC=`eval echo \\$DASH_CC_$c` CFLAGS=`eval echo \\$DASH_CFLAGS_$c` CXXFLAGS=`eval echo \\$DASH_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DASH_LDFLAGS_$c` CONFIGFLAGS=$configflags"
 
-	    message "*** OK: CXX=`eval echo \\$DASH_CXX_$c` CC=`eval echo \\$DASH_CC_$c` CFLAGS=`eval echo \\$DASH_CFLAGS_$c` CXXFLAGS=`eval echo \\$DASH_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DASH_LDFLAGS_$c` CONFIGFLAGS=$configflags" >> checkall.log
+	    message "*** OK: CXX=`eval echo \\$DASH_CXX_$c` CC=`eval echo \\$DASH_CC_$c` CFLAGS=`eval echo \\$DASH_CFLAGS_$c` CXXFLAGS=`eval echo \\$DASH_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DASH_LDFLAGS_$c` CONFIGFLAGS=$configflags"
 	done
     done
 }
@@ -542,6 +543,8 @@ host_starchild() {
 HOST="`uname -n | sed 's/\..*//'`"
 
 rm -f checkall.log
+message "---- start: `date`"
 host_$HOST
+message "---- end(OK): `date`"
 
 mailx -s "libyacurs test on $HOST OK" rafi@guengel.ch < checkall.log

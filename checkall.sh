@@ -41,7 +41,7 @@ DASH_CXX_clang=clang++
 DASH_LDFLAGS_clang="-L/usr/lib"
 
 host_dash() {
-    for c in default clang 43 44
+    for c in default 43 44
     do
 	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	do

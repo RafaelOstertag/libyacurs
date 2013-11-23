@@ -40,7 +40,7 @@ Label::operator=(const Label&) {
 size_t
 Label::label_length() const {
 #ifdef YACURS_USE_WCHAR
-    size_t mbslen = mbstowcs(NULL, __label.c_str(), 0);
+    size_t mbslen = std::mbstowcs(0, __label.c_str(), 0);
     if (mbslen == (size_t)-1)
         throw EXCEPTIONS::SystemError(errno);
 

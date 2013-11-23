@@ -122,8 +122,8 @@ waddstr_c(WINDOW* win, const char* str) {
     char* tmp_ptr = strdup(str);
     int retval = waddstr(win, tmp_ptr);
 
-    memset(tmp_ptr, 0, strlen(tmp_ptr) );
-    free(tmp_ptr);
+    std::memset(tmp_ptr, 0, std::strlen(tmp_ptr) );
+    std::free(tmp_ptr);
     return retval;
 }
 
@@ -146,8 +146,8 @@ mvwaddstr_c(WINDOW* win, int y, int x, const char* str) {
     char* tmp_ptr = strdup(str);
     int retval = mvwaddstr(win, y, x, tmp_ptr);
 
-    memset(tmp_ptr, 0, strlen(tmp_ptr) );
-    free(tmp_ptr);
+    std::memset(tmp_ptr, 0, std::strlen(tmp_ptr) );
+    std::free(tmp_ptr);
     return retval;
 }
 
@@ -170,8 +170,8 @@ mvwaddnstr_c(WINDOW* win, int y, int x, const char* str, int n) {
     char* tmp_ptr = strdup(str);
     int retval = mvwaddnstr(win, y, x, tmp_ptr, n);
 
-    memset(tmp_ptr, 0, strlen(tmp_ptr) );
-    free(tmp_ptr);
+    std::memset(tmp_ptr, 0, std::strlen(tmp_ptr) );
+    std::free(tmp_ptr);
     return retval;
 }
 
@@ -194,8 +194,8 @@ waddnstr_c(WINDOW* win, const char* str, int n) {
     char* tmp_ptr = strdup(str);
     int retval = waddnstr(win, tmp_ptr, n);
 
-    memset(tmp_ptr, 0, strlen(tmp_ptr) );
-    free(tmp_ptr);
+    std::memset(tmp_ptr, 0, std::strlen(tmp_ptr) );
+    std::free(tmp_ptr);
     return retval;
 }
 

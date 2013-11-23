@@ -81,8 +81,8 @@ Curses::is_xterm() {
     const char** tmp = __xterm_list;
     const char* tn = termname();
 
-    while (*tmp != NULL) {
-        if (strstr (tn, *tmp) != 0) return true;
+    while (*tmp != 0) {
+        if (std::strstr (tn, *tmp) != 0) return true;
 
         tmp++;
     }

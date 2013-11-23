@@ -339,7 +339,7 @@ CursWin::addstrx(const CurStr& str) {
 #ifdef YACURS_USE_WCHAR
     // addnstr() will convert to wide char, we're only interested in
     // length here.
-    size_t _mbslen = mbstowcs( (wchar_t*)0, str.c_str(),
+    size_t _mbslen = std::mbstowcs( (wchar_t*)0, str.c_str(),
                                1);
     if (_mbslen == (size_t)-1)
         throw EXCEPTIONS::SystemError(errno);
@@ -374,7 +374,7 @@ CursWin::addlinex(const CurStr& str) {
     size_t mylen;
 
 #ifdef YACURS_USE_WCHAR
-    mylen = mbstowcs( (wchar_t*)0, str.c_str(), 0);
+    mylen = std::mbstowcs( (wchar_t*)0, str.c_str(), 0);
     if (mylen == (size_t)-1)
         throw EXCEPTIONS::SystemError(errno);
 #else
@@ -400,7 +400,7 @@ CursWin::addnstr(const CurStr& str, int n) {
     set_color(str.color() );
 
 #ifdef YACURS_USE_WCHAR
-    size_t buflen = mbstowcs( (wchar_t*)0, str.c_str(), 0);
+    size_t buflen = std::mbstowcs( (wchar_t*)0, str.c_str(), 0);
     if (buflen == (size_t)-1)
         throw EXCEPTIONS::SystemError(errno);
 
@@ -408,7 +408,7 @@ CursWin::addnstr(const CurStr& str, int n) {
     if (wbuffer == 0)
         throw EXCEPTIONS::SystemError(ENOMEM);
 
-    size_t retval = mbstowcs(wbuffer, str.c_str(), buflen + 1);
+    size_t retval = std::mbstowcs(wbuffer, str.c_str(), buflen + 1);
     assert(buflen == retval);
     if (retval == (size_t)-1) {
         delete[] wbuffer;

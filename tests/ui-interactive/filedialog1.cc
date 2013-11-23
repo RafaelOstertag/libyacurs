@@ -398,7 +398,7 @@ main() {
 #endif
 
 #ifdef YACURS_USE_WCHAR
-    if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
+    if (setlocale(LC_ALL,"en_US.UTF-8")==0) exit(77);
 #endif
 #ifdef ENABLE_NLS
     bindtextdomain("filedialog1", LOCALEDIR);
@@ -420,7 +420,7 @@ main() {
             selection1[i][tmp + 1] = 0;
         } else {
             selection1[i] = (int*)calloc(21, sizeof (int) );
-            memcpy(selection1[i], __dir_up_data, 20 * sizeof (int) );
+            std::memcpy(selection1[i], __dir_up_data, 20 * sizeof (int) );
             selection1[i][20] = 0;
         }
     }
@@ -452,7 +452,7 @@ main() {
     }
 
     for (int i = 0; i < 30; i++)
-        free(selection1[i]);
+        std::free(selection1[i]);
 
     return 0;
 }

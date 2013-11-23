@@ -83,7 +83,7 @@ class MyHandler : public Handler {
 		dynamic_cast<YACURS::EventEx<wint_t>&>(e);
 
 	    char *tmp_str = new char[MB_CUR_MAX];
-	    int retval=wctomb(tmp_str, tmp.data());
+	    int retval=std::wctomb(tmp_str, tmp.data());
 	    if (retval==-1) {
 		delete[] tmp_str;
 		std::cerr << "Unable to convert wchar to MB char" << std::endl;
@@ -111,7 +111,7 @@ class MyHandler : public Handler {
 int
 main() {
 #ifdef YACURS_USE_WCHAR
-    if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
+    if (setlocale(LC_ALL,"en_US.UTF-8")==0) exit(77);
 #endif
 
     try {

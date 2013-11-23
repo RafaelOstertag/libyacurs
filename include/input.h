@@ -81,7 +81,7 @@ namespace YACURS {
 	    }
 #else
 	    virtual bool use(char c) {
-		return isprint(c) != 0;
+		return std::isprint(c) != 0;
 	    }
 #endif
 	    virtual InputFilter* clone() const {
@@ -100,7 +100,7 @@ namespace YACURS {
 	    }
 #else
 	    virtual bool use(char c) {
-		return isalpha(c) != 0;
+		return std::isalpha(c) != 0;
 	    }
 #endif
 	    virtual InputFilter* clone() const {
@@ -119,7 +119,7 @@ namespace YACURS {
 	    }
 #else
 	    virtual bool use(char c) {
-		return isalnum(c) != 0;
+		return std::isalnum(c) != 0;
 	    }
 #endif
 	    virtual InputFilter* clone() const {
@@ -138,7 +138,7 @@ namespace YACURS {
 	    }
 #else
 	    virtual bool use(char c) {
-		return isdigit(c) != 0;
+		return std::isdigit(c) != 0;
 	    }
 #endif
 	    virtual InputFilter* clone() const {
@@ -157,7 +157,7 @@ namespace YACURS {
 	    }
 #else
 	    virtual bool use(char c) {
-		return isxdigit(c) != 0;
+		return std::isxdigit(c) != 0;
 	    }
 #endif
 	    virtual InputFilter* clone() const {

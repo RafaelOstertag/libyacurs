@@ -58,7 +58,7 @@ Sigaction::Sigaction(int signo, sig_handler hndlr, sigset_t& mask) : __signo(
     __current_action.sa_flags = 0;
 #endif
 
-    memcpy(&__current_action.sa_mask, &mask, sizeof (sigset_t) );
+    std::memcpy(&__current_action.sa_mask, &mask, sizeof (sigset_t) );
 
     if (sigaction(__signo, &__current_action, &__saved_action) != 0)
         throw EXCEPTIONS::SystemError(errno);

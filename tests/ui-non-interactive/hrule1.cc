@@ -73,7 +73,7 @@ alrm(YACURS::Event& _e) {
 int
 main() {
 #ifdef YACURS_USE_WCHAR
-    if (setlocale(LC_ALL,"en_US.UTF-8")==NULL) exit(77);
+    if (setlocale(LC_ALL,"en_US.UTF-8")==0) exit(77);
 #endif
 
     winsize wsave;

@@ -26,7 +26,7 @@ main() {
 #else
 	(void)cbuff1.string(8,&stringcurs);
 #endif
-	cbuff1.info(8, NULL, &infocurs);
+	cbuff1.info(8, 0, &infocurs);
 
 	if (infocurs!=stringcurs) exit(1);
 

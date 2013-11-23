@@ -413,7 +413,7 @@ host_odin() {
     for t in xterm xterm-color
     do
 	export TERM=$t
-	for c in /opt/solarisstudio12.3/bin /opt/solstudio12.2/bin /opt/sunstudio12.1/bin
+	for c in /opt/solarisstudio12.3/bin /opt/solstudio12.2/bin
 	do
 	    for arch in -m64 -m32
 	    do

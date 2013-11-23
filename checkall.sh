@@ -11,9 +11,15 @@ had_error() {
 
 	if [ $retval -ne 0 ]
 	then
-	    echo "$msg"
+	    echo "[$HOST] $msg"
+	    mailx -s "libyacurs test on $HOST had errors" rafi@guengel.ch < checkall.log
 	    exit $retval
 	fi
+}
+
+message() {
+    echo "[$HOST] $*"
+    echo "[$HOST] $*" >> checkall.log
 }
 
 DASH_CXXFLAGS_43='-march=native -mtune=native -O3 -pedantic -Wall -Werror'
@@ -60,6 +66,8 @@ host_dash() {
 	    
 	    make check
 	    had_error $? "Error in CXX=`eval echo \\$DASH_CXX_$c` CC=`eval echo \\$DASH_CC_$c` CFLAGS=`eval echo \\$DASH_CFLAGS_$c` CXXFLAGS=`eval echo \\$DASH_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DASH_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+
+	    message "*** OK: CXX=`eval echo \\$DASH_CXX_$c` CC=`eval echo \\$DASH_CC_$c` CFLAGS=`eval echo \\$DASH_CFLAGS_$c` CXXFLAGS=`eval echo \\$DASH_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DASH_LDFLAGS_$c` CONFIGFLAGS=$configflags" >> checkall.log
 	done
     done
 }
@@ -114,6 +122,8 @@ host_wheezy() {
 	    
 	    make check
 	    had_error $? "Error in CXX=`eval echo \\$WHEEZY_CXX_$c` CC=`eval echo \\$WHEEZY_CC_$c` CFLAGS=`eval echo \\$WHEEZY_CFLAGS_$c` CXXFLAGS=`eval echo \\$WHEEZY_CXXFLAGS_$c` LDFLAGS=`eval echo \\$WHEEZY_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+
+	    message "*** OK: CXX=`eval echo \\$WHEEZY_CXX_$c` CC=`eval echo \\$WHEEZY_CC_$c` CFLAGS=`eval echo \\$WHEEZY_CFLAGS_$c` CXXFLAGS=`eval echo \\$WHEEZY_CXXFLAGS_$c` LDFLAGS=`eval echo \\$WHEEZY_LDFLAGS_$c` CONFIGFLAGS=$configflags"
 	done
     done
 }
@@ -163,6 +173,8 @@ host_debian32() {
 	    
 	    make check
 	    had_error $? "Error in CXX=`eval echo \\$DEBIAN32_CXX_$c` CC=`eval echo \\$DEBIAN32_CC_$c` CFLAGS=`eval echo \\$DEBIAN32_CFLAGS_$c` CXXFLAGS=`eval echo \\$DEBIAN32_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DEBIAN32_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+
+	    message "*** OK: CXX=`eval echo \\$DEBIAN32_CXX_$c` CC=`eval echo \\$DEBIAN32_CC_$c` CFLAGS=`eval echo \\$DEBIAN32_CFLAGS_$c` CXXFLAGS=`eval echo \\$DEBIAN32_CXXFLAGS_$c` LDFLAGS=`eval echo \\$DEBIAN32_LDFLAGS_$c` CONFIGFLAGS=$configflags"
 	done
     done
 }
@@ -238,6 +250,8 @@ host_aurora() {
 		
 		gmake check
 		had_error $? "Error in CXX="`eval echo \\$AURORA_CXX_$c`" CC="`eval echo \\$AURORA_CC_$c`" CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`"  CONFIGFLAGS=$configflags"
+
+		message "*** OK: CXX="`eval echo \\$AURORA_CXX_$c`" CC="`eval echo \\$AURORA_CC_$c`" CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$AURORA_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$AURORA_LDFLAGS_$c` `eval echo \\$AURORA_CURSES_LDFLAGS_$curs`"  CONFIGFLAGS=$configflags"
 	    done
 	done
     done
@@ -314,6 +328,8 @@ host_freebsd32() {
 		
 		gmake check
 		had_error $? "Error in CXX="`eval echo \\$FREEBSD32_CXX_$c`" CC="`eval echo \\$FREEBSD32_CC_$c`" CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`" CONFIGFLAGS=$configflags"
+
+		message "*** OK: CXX="`eval echo \\$FREEBSD32_CXX_$c`" CC="`eval echo \\$FREEBSD32_CC_$c`" CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" 	CXXFLAGS="`eval echo \\$FREEBSD32_CXXFLAGS_$c`" LDFLAGS="`eval echo \\$FREEBSD32_LDFLAGS_$c` `eval echo \\$FREEBSD32_CURSES_LDFLAGS_$curs`" CONFIGFLAGS=$configflags"
 	    done
 	done
     done
@@ -334,6 +350,8 @@ host_abraxas() {
 	    
 	    gmake check
 	    had_error $? "Error on abraxas CONFIGFLAGS=$configflags"
+
+	    message "*** OK: CONFIGFLAGS=$configflags"
 	done
 }
 
@@ -352,6 +370,8 @@ host_netbsd32() {
 	    
 	    gmake check
 	    had_error $? "Error on netbsd32 CONFIGFLAGS=$configflags"
+
+	    message "*** OK: CONFIGFLAGS=$configflags"
 	done
 }
 
@@ -370,6 +390,8 @@ host_fish() {
 	    
 	    gmake check
 	    had_error $? "Error on fish CONFIGFLAGS=$configflags"
+
+	    message "*** OK: CONFIGFLAGS=$configflags"
 	done
 }
 
@@ -388,6 +410,8 @@ host_puffy() {
 	    
 	    gmake check
 	    had_error $? "Error on fish CONFIGFLAGS=$configflags"
+
+	    message "*** OK: CONFIGFLAGS=$configflags"
 	done
 }
 
@@ -406,6 +430,8 @@ host_openbsd32() {
 	    
 	    gmake check
 	    had_error $? "Error in OpenBSD32 CONFIGFLAGS=$configflags"
+
+	    message "*** OK: CONFIGFLAGS=$configflags"
 	done
 }
 
@@ -445,6 +471,8 @@ host_odin() {
 			
 			gmake check
 			had_error $? "Error in ${c}:$arch:$flags CONFIGFLAGS=$configflags"
+
+			message "*** OK: ${c}:$arch:$flags CONFIGFLAGS=$configflags"
 		    done
 		done
 	    done
@@ -500,6 +528,8 @@ host_starchild() {
 			
 			gmake check
 			had_error $? "Error in ${c}:$arch:$flags CONFIGFLAGS=$configflags"
+
+			message "*** OK: ${c}:$arch:$flags CONFIGFLAGS=$configflags"
 		    done
 		done
 	    done
@@ -511,4 +541,7 @@ host_starchild() {
 
 HOST="`uname -n | sed 's/\..*//'`"
 
+rm -f checkall.log
 host_$HOST
+
+mailx -s "libyacurs test on $HOST OK" rafi@guengel.ch < checkall.log

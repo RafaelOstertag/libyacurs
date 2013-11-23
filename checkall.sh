@@ -299,7 +299,7 @@ host_freebsd32() {
 	    for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	    do
 		gmake distclean
-		./configure $configflags --disable-nls CXX="`eval echo \\$FREEBSD32_CXX_$c`" \
+		./configure $configflags CXX="`eval echo \\$FREEBSD32_CXX_$c`" \
 		    CC="`eval echo \\$FREEBSD32_CC_$c`" \
 		    CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" \
 		    CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" \

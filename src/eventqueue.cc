@@ -833,11 +833,20 @@ EventQueue::run() {
         FocusManager::refocus();
 
 #ifdef YACURS_USE_WCHAR
-        wint_t c;
-        int retval = wget_wch(stdscr, &c);
+	wint_t c=0;
 #else
-        int c = wgetch(stdscr);
+	int c=0;
 #endif
+	// There might be some events already pending on first entry,
+	// so we skip getch() and process.
+
+	if (evt_queue.empty()) {
+#ifdef YACURS_USE_WCHAR
+	    int retval = wget_wch(stdscr, &c);
+#else
+	    c = wgetch(stdscr);
+#endif
+	}
         clock_t t0 = clock();
 
         blocksignal();

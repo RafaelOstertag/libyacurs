@@ -834,6 +834,7 @@ EventQueue::run() {
 
 #ifdef YACURS_USE_WCHAR
 	wint_t c=0;
+	int retval;
 #else
 	int c=0;
 #endif
@@ -842,7 +843,7 @@ EventQueue::run() {
 
 	if (evt_queue.empty()) {
 #ifdef YACURS_USE_WCHAR
-	    int retval = wget_wch(stdscr, &c);
+	    retval = wget_wch(stdscr, &c);
 #else
 	    c = wgetch(stdscr);
 #endif

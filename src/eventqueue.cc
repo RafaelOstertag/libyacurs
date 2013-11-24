@@ -833,10 +833,14 @@ EventQueue::run() {
         FocusManager::refocus();
 
 #ifdef YACURS_USE_WCHAR
-	wint_t c=0;
-	int retval;
+	wint_t c;
+	// Initialize to ERR, so that we don't submit a key event if
+	// wgetch()/wget_wch() isn't called
+	int retval = ERR; 
 #else
-	int c=0;
+	// Initialize to ERR, so that we don't submit a key event if
+	// wgetch()/wget_wch() isn't called
+	int c=ERR;
 #endif
 	// There might be some events already pending on first entry,
 	// so we skip getch() and process.

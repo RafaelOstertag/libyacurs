@@ -206,7 +206,7 @@ Curses::sigcont_handler(Event& e) {
 // Public
 //
 void
-Curses::init() {
+Curses::init(const std::string& colors) {
     if (Curses::initialized)
         throw EXCEPTIONS::AlreadyInitialized();
 
@@ -217,7 +217,7 @@ Curses::init() {
     bindtextdomain(PACKAGE, LOCALEDIR);
 #endif
 
-    YACURS::Colors::init_colors();
+    YACURS::Colors::init_colors(colors);
 
     EventQueue::connect_event(EventConnectorFunction1(EVT_DOUPDATE,
                                                       Curses::doupdate_handler) );

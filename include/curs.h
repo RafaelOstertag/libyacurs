@@ -115,7 +115,7 @@ namespace YACURS {
             static void sigcont_handler(Event& e);
 
         public:
-            static void init();
+            static void init(const std::string& colors=std::string());
 
             static void end();
 

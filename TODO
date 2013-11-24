@@ -1,17 +1,7 @@
 TODO
 ====
 
- * Use static instead of dynamic allocation for widgets in classes
-   derived from Dialog.
-
- * FileSaveDialog and FileLoadDialog should optionally check if the
-   the selection is a file, and, if not, display a warning.
-
- * FileSaveDialog and FileLoadDialog should have a flag indicating
-   whether or not the selection should be a file or directory (may
-   clash with the above todo).
-
- * FileSaveDialog and FileLoadDialog should optionally do a chdir().
+ See https://bugs.guengel.ch/buglist.cgi?product=YAPET&component=libyacurs
 
 
 $Id$

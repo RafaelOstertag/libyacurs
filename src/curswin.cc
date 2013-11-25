@@ -127,7 +127,7 @@ CursWin::operator=(const CursWin& cw) {
 }
 
 CursWin::~CursWin() {
-    if (__window != 0)
+    if (__window != 0) {
         if (delwin(__window) == ERR)
             throw EXCEPTIONS::CursesException("delwin");
 }
@@ -577,14 +577,22 @@ CursWin::leaveok(bool fl) {
 
 CursWin*
 CursWin::derwin(const Area& a) const {
-    return new CursWin(::derwin(__window, a.rows(), a.cols(), a.y(),
-				a.x() ), __def_color, true);
+    WINDOW* _subwin = ::derwin(__window, a.rows(), a.cols(), a.y(),
+			       a.x() );
+    if (_subwin == 0)
+	throw EXCEPTIONS::CursesException("derwin");
+
+    return new CursWin(_subwin, __def_color, true);
 }
 
 CursWin*
 CursWin::subwin(const Area& a) const {
-    return new CursWin(::subwin(__window, a.rows(), a.cols(), a.y(),
-				a.x() ), __def_color, true);
+    WINDOW* _subwin = ::subwin(__window, a.rows(), a.cols(), a.y(),
+			       a.x() );
+    if (_subwin == 0)
+	throw EXCEPTIONS::CursesException("subwin");
+
+    return new CursWin(_subwin, __def_color, true);
 }
 
 CursWin&

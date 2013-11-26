@@ -127,7 +127,7 @@ CursWin::operator=(const CursWin& cw) {
 }
 
 CursWin::~CursWin() {
-    if (__window != 0) {
+    if (__window != 0)
         if (delwin(__window) == ERR)
             throw EXCEPTIONS::CursesException("delwin");
 }

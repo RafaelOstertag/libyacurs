@@ -44,6 +44,7 @@ namespace YACURS {
             Input<>* __filename;
             HPack* __hpack;
             VPack* __vpack;
+	    bool __do_chdir;
 
             // Not supported
             FileSaveDialog& operator=(const FileSaveDialog&);
@@ -61,6 +62,7 @@ namespace YACURS {
 
         public:
             FileSaveDialog(std::string _path=std::string(),
+			   bool _do_chdir=false,
                            DIALOG_TYPE _dt=OKCANCEL);
 
             virtual ~FileSaveDialog();
@@ -70,6 +72,10 @@ namespace YACURS {
             const std::string& directory() const;
 
             const std::string& filename() const;
+
+	    void do_chdir(bool _v);
+
+	    bool do_chdir() const;
 
             void refresh(bool immediate);
     };

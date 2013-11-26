@@ -43,6 +43,7 @@ namespace YACURS {
             Input<>* __filename;
             HPack* __hpack;
             VPack* __vpack;
+	    bool __do_chdir;
 
             // Not supported
             FileLoadDialog& operator=(const FileLoadDialog&);
@@ -56,7 +57,7 @@ namespace YACURS {
             void window_close_handler(Event& _e);
 
         public:
-            FileLoadDialog(std::string _path=std::string());
+            FileLoadDialog(std::string _path=std::string(), bool _do_chdir=false);
 
             virtual ~FileLoadDialog();
 
@@ -65,6 +66,10 @@ namespace YACURS {
             const std::string& directory() const;
 
             const std::string& filename() const;
+
+	    void do_chdir(bool _v);
+
+	    bool do_chdir() const;
 
             void refresh(bool immediate);
     };

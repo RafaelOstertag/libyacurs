@@ -92,6 +92,12 @@ FileSaveDialog::read_dir() {
     if (dir == 0)
         throw EXCEPTIONS::SystemError(errno);
 
+    if (__do_chdir && (chdir(__path->label().c_str())!=0)) {
+	int sav_errno=errno;
+	(void)closedir(dir);
+	throw EXCEPTIONS::SystemError(sav_errno);
+    }
+
     std::string _base(__path->label() );
     assert(_base.length() > 0);
 
@@ -268,6 +274,7 @@ FileSaveDialog::button_press_handler(Event& _e) {
 //
 
 FileSaveDialog::FileSaveDialog(std::string _path,
+			       bool _do_chdir,
                                DIALOG_TYPE _dt) :
     Dialog(std::string(_("Save File") ), _dt,
            FULLSIZE),
@@ -278,7 +285,8 @@ FileSaveDialog::FileSaveDialog(std::string _path,
     __files(0),
     __filename(0),
     __hpack(0),
-    __vpack(0) {
+    __vpack(0),
+    __do_chdir(_do_chdir) {
     __vpack = new VPack;
     __hpack = new HPack;
 
@@ -370,6 +378,16 @@ FileSaveDialog::directory() const {
 const std::string&
 FileSaveDialog::filename() const {
     return __filename->input();
+}
+
+void
+FileSaveDialog::do_chdir(bool _v) {
+    __do_chdir=_v;
+}
+
+bool
+FileSaveDialog::do_chdir() const {
+    return __do_chdir;
 }
 
 void

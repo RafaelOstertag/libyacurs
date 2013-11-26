@@ -92,6 +92,12 @@ FileLoadDialog::read_dir() {
     if (dir == 0)
         throw EXCEPTIONS::SystemError(errno);
 
+    if (__do_chdir && (chdir(__path->label().c_str())!=0)) {
+	int sav_errno=errno;
+	(void)closedir(dir);
+	throw EXCEPTIONS::SystemError(sav_errno);
+    }
+
     std::string _base(__path->label() );
     assert(_base.length() > 0);
 
@@ -204,7 +210,7 @@ FileLoadDialog::window_close_handler(Event& _e) {
 // Public
 //
 
-FileLoadDialog::FileLoadDialog(std::string _path) :
+FileLoadDialog::FileLoadDialog(std::string _path, bool _do_chdir) :
     Dialog(std::string(_("Load File") ), OKCANCEL,
            FULLSIZE),
     __msgbox(0),
@@ -213,7 +219,8 @@ FileLoadDialog::FileLoadDialog(std::string _path) :
     __files(0),
     __filename(0),
     __hpack(0),
-    __vpack(0) {
+    __vpack(0),
+    __do_chdir(_do_chdir) {
     __vpack = new VPack;
     __hpack = new HPack;
 
@@ -306,6 +313,16 @@ FileLoadDialog::directory() const {
 const std::string&
 FileLoadDialog::filename() const {
     return __filename->input();
+}
+
+void
+FileLoadDialog::do_chdir(bool _v) {
+    __do_chdir=_v;
+}
+
+bool
+FileLoadDialog::do_chdir() const {
+    return __do_chdir;
 }
 
 void

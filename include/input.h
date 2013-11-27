@@ -479,6 +479,7 @@ namespace YACURS {
             __buffer.home();
             break;
 
+	case KEY_END:
         case KEY_CTRL_E:
             __buffer.end();
             break;

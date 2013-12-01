@@ -95,6 +95,7 @@ namespace YACURS {
 //
 
 FocusGroup::FocusGroup() : __active(false), __focus(__widgets.end() ) {
+    DEBUGOUT("[" << (void*)this << "] Created Focus Group.");
 }
 
 FocusGroup::FocusGroup(const FocusGroup& _f) : __active(_f.__active),
@@ -108,6 +109,7 @@ FocusGroup::~FocusGroup() {
     assert(__focus != __widgets.end() );
     assert( (*__focus) != 0);
     (*__focus)->focus(false);
+    DEBUGOUT("[" << (void*)this << "] Destroyed Focus Group. Focus taken from " << (void*)(*__focus));
 }
 
 FocusGroup&
@@ -136,7 +138,7 @@ FocusGroup::activate() {
 
     (*__focus)->focus(true);
 
-    DEBUGOUT("[" << (void*)this << "] Activated focus group. Focus given to " << (void*)(*__focus));
+    DEBUGOUT("[" << (void*)this << "] Activated Focus Group. Focus given to " << (void*)(*__focus));
 
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
@@ -162,7 +164,7 @@ FocusGroup::deactivate() {
 
     (*__focus)->focus(false);
 
-    DEBUGOUT("[" << (void*)this << "] deactivated focus group and focus taken from " << (void*)(*__focus));
+    DEBUGOUT("[" << (void*)this << "] deactivated Focus Group and focus taken from " << (void*)(*__focus));
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
@@ -206,7 +208,7 @@ FocusGroup::add(WidgetBase* _w) {
         __widgets.push_back(_w);
     }
 
-    DEBUGOUT("[" << (void*)this << "] widget " << (void*)(_w) << " added to focus group");
+    DEBUGOUT("[" << (void*)this << "] widget " << (void*)(_w) << " added to Focus Group");
 }
 
 void
@@ -230,7 +232,7 @@ FocusGroup::remove(WidgetBase* _w) {
 
     __widgets.remove(_w);
 
-    DEBUGOUT("[" << (void*)this << "] widget " << (void*)(_w) << " removed from focus group");
+    DEBUGOUT("[" << (void*)this << "] widget " << (void*)(_w) << " removed from Focus Group");
 
     // No more widgets left, we cannot assign focus to anything.
     if (__widgets.empty() ) return;

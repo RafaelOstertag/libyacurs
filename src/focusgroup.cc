@@ -230,7 +230,7 @@ FocusGroup::remove(WidgetBase* _w) {
 
     __widgets.remove(_w);
 
-    DEBUGOUT("[" << (void*)this << "] wdget " << (void*)(_w) << " removed from focus group");
+    DEBUGOUT("[" << (void*)this << "] widget " << (void*)(_w) << " removed from focus group");
 
     // No more widgets left, we cannot assign focus to anything.
     if (__widgets.empty() ) return;

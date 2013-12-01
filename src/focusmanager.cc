@@ -216,12 +216,12 @@ FocusManager::focus_group_activate(fgid_t _id) {
         0 /* Focus Group destroyed */) {
         assert(__active_focusgroup < __focus_groups.size() );
         __focus_groups[__active_focusgroup]->deactivate();
-	DEBUGOUT("Deactivate Focus Group " << (void*)(__focus_groups[__active_focusgroup]) << " with ID: " << __active_focusgroup);
+	DEBUGOUT("Deactivated Focus Group " << (void*)(__focus_groups[__active_focusgroup]) << " with ID: " << __active_focusgroup);
     }
 
     __focus_groups[_id]->activate();
     __active_focusgroup = _id;
-    DEBUGOUT("Deactivate Focus Group " << (void*)(__focus_groups[_id]) << " with ID: " << _id);
+    DEBUGOUT("Activated Focus Group " << (void*)(__focus_groups[_id]) << " with ID: " << _id);
 }
 
 void

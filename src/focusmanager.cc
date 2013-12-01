@@ -20,12 +20,31 @@
 // $Id$
 
 #include <cassert>
+#include <fstream>
 
 #include "focusmanager.h"
 #include "yacursex.h"
 #include "eventqueue.h"
 
 using namespace YACURS;
+
+#if !defined(NDEBUG) && defined(FOCUSDEBUG)
+#define DEBUGOUT(x) try {                                                       \
+        char* __debugfile_name__;                                       \
+        if ( (__debugfile_name__ = std::getenv("LIBYACURS_FOCUSMGR_DBGFN") ) != \
+             0) { \
+            if (!__debugfile.is_open() )                                 \
+                __debugfile.open(__debugfile_name__,                    \
+                                 std::ios::out | std::ios::trunc);      \
+            __debugfile << x << std::endl;                              \
+        }                                                               \
+} catch (...) {                                                     \
+}
+#else
+#define DEBUGOUT(x)
+#endif
+
+static std::ofstream __debugfile;
 
 const FocusManager::fgid_t FocusManager::nfgid = (FocusManager::fgid_t)-1;
 FocusManager::fgid_t FocusManager::__active_focusgroup = FocusManager::nfgid;
@@ -36,6 +55,8 @@ std::vector<FocusGroup*> FocusManager::__focus_groups;
 //
 void
 FocusManager::focus_change_handler(Event& _e) {
+    assert(_e == EVT_FOCUS_NEXT || _e == EVT_FOCUS_PREVIOUS);
+
     if (__focus_groups.empty() ) return;
     assert(__active_focusgroup < __focus_groups.size() );
     assert(__focus_groups[__active_focusgroup] != 0);
@@ -43,8 +64,10 @@ FocusManager::focus_change_handler(Event& _e) {
 
     if (_e.type() == EVT_FOCUS_NEXT) {
         __focus_groups[__active_focusgroup]->focus_next();
+	DEBUGOUT("focus_next() on " << __active_focusgroup);
     } else if (_e.type() == EVT_FOCUS_PREVIOUS) {
         __focus_groups[__active_focusgroup]->focus_previous();
+	DEBUGOUT("focus_previous() on " << __active_focusgroup);
     } else {
         throw EXCEPTIONS::UnexpectedEvent();
     }
@@ -60,6 +83,7 @@ FocusManager::focus_change_handler(Event& _e) {
 
 void
 FocusManager::init() {
+    DEBUGOUT("Initialize Focus Manager");
     EventQueue::connect_event(EventConnectorFunction1(EVT_FOCUS_NEXT,
                                                       FocusManager::
                                                       focus_change_handler) );
@@ -70,6 +94,7 @@ FocusManager::init() {
 
 void
 FocusManager::uninit() {
+    DEBUGOUT("Uninitialize Focus Manager");
     EventQueue::disconnect_event(EventConnectorFunction1(EVT_FOCUS_NEXT,
                                                          FocusManager::
                                                          focus_change_handler) );
@@ -91,6 +116,7 @@ FocusManager::new_focus_group() {
     if (__focus_groups.empty() ) {
         _id = __focus_groups.size(); // == 0
         __focus_groups.push_back(new FocusGroup);
+	DEBUGOUT("New Focus Group (first) " << (void*)(__focus_groups[_id]) << " with ID: " << _id);
     } else {
         // Search for a free slot in the vector
         for (fgid_t i = 0; i < __focus_groups.size(); i++) {
@@ -98,6 +124,7 @@ FocusManager::new_focus_group() {
                 // found free slot
                 _id = i;
                 __focus_groups[i] = new FocusGroup;
+		DEBUGOUT("New Focus Group (reuse slot) " << (void*)(__focus_groups[_id]) << " with ID: " << _id);
                 break;
             }
         }
@@ -107,6 +134,7 @@ FocusManager::new_focus_group() {
             // No, no free slot, so create new slot.
             _id = __focus_groups.size();
             __focus_groups.push_back(new FocusGroup);
+	    DEBUGOUT("New Focus Group (new slot) " << (void*)(__focus_groups[_id]) << " with ID: " << _id);
         }
     }
 
@@ -133,6 +161,7 @@ FocusManager::destroy_focus_group(fgid_t _id) {
     // focus, so we simply destroy the group.
     delete __focus_groups[_id];
     __focus_groups[_id] = 0;
+    DEBUGOUT("Destroy Focus Group " << (void*)(__focus_groups[_id]) << " with ID: " << _id);
 
     if (__active_focusgroup == _id)
         __active_focusgroup = FocusManager::nfgid;
@@ -146,6 +175,8 @@ FocusManager::focus_group_add(fgid_t _id, WidgetBase* _w) {
     assert(__focus_groups[_id] != 0);
 
     __focus_groups[_id]->add(_w);
+
+    DEBUGOUT("Add widget " << (void*)(_w) << " to Focus Group " << (void*)(__focus_groups[_id]) << " with ID: " << _id);
 }
 
 void
@@ -163,6 +194,8 @@ FocusManager::focus_group_remove(fgid_t _id, WidgetBase* _w) {
         return;
 
     __focus_groups[_id]->remove(_w);
+
+    DEBUGOUT("Remove widget " << (void*)(_w) << " to Focus Group " << (void*)(__focus_groups[_id]) << " with ID: " << _id);
 }
 
 void
@@ -183,10 +216,12 @@ FocusManager::focus_group_activate(fgid_t _id) {
         0 /* Focus Group destroyed */) {
         assert(__active_focusgroup < __focus_groups.size() );
         __focus_groups[__active_focusgroup]->deactivate();
+	DEBUGOUT("Deactivate Focus Group " << (void*)(__focus_groups[__active_focusgroup]) << " with ID: " << __active_focusgroup);
     }
 
     __focus_groups[_id]->activate();
     __active_focusgroup = _id;
+    DEBUGOUT("Deactivate Focus Group " << (void*)(__focus_groups[_id]) << " with ID: " << _id);
 }
 
 void
@@ -201,6 +236,7 @@ FocusManager::refocus() {
     //assert(!__focus_groups.empty());
 
     __focus_groups[__active_focusgroup]->refocus();
+    DEBUGOUT("Refocus Focus Group " << (void*)(__focus_groups[__active_focusgroup]) << " with ID: " << __active_focusgroup);
 }
 
 void
@@ -209,6 +245,7 @@ FocusManager::reset() {
     assert(__active_focusgroup != FocusManager::nfgid);
     assert(__focus_groups[__active_focusgroup] != 0);
     __focus_groups[__active_focusgroup]->reset();
+    DEBUGOUT("Reset Focus Group " << (void*)(__focus_groups[__active_focusgroup]) << " with ID: " << __active_focusgroup);
 }
 
 FocusManager::fgid_t

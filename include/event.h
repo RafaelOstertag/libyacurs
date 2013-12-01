@@ -72,7 +72,11 @@ namespace YACURS {
 	public:
 	    EventType(std::string name);
 
+	    EventType(const EventType& et);
+
 	    virtual ~EventType();
+
+	    EventType& operator=(const EventType& rhs);
 
 	    bool operator==(const EventType& rhs) const;
 

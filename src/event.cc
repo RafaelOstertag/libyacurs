@@ -52,7 +52,23 @@ EventType::EventType(std::string name): __hashval(0x811c9dc5) {
     __name[MAX_NAME_LENGTH-1] = 0;
 }
 
+EventType::EventType(const EventType& et) : __hashval(et.__hashval) {
+    strncpy(__name, et.__name, MAX_NAME_LENGTH);
+}
+
 EventType::~EventType() {}
+
+EventType&
+EventType::operator=(const EventType& rhs) {
+    if (this == &rhs)
+	return *this;
+
+    strncpy(__name, rhs.__name, MAX_NAME_LENGTH);
+    __hashval = rhs.__hashval;
+
+    return *this;
+}
+
 
 bool
 EventType::operator==(const EventType& rhs) const {

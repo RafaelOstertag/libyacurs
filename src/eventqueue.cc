@@ -708,7 +708,7 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 
         DEBUGOUT(
             "Replaced Connector: " << (void*)(*it)->id() << ": " <<
-            Event::evt2str(ec) );
+            Event::evt2str(ec) << " suspended: " << (*it)->suspended() );
     } else {
         // We have to push_back(). The last registered event connector
         // has to be called last. This is required when:
@@ -760,7 +760,7 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
     // nobody is reading the list.
     evtconn_rem_request.push_back(ec.clone() );
 
-    DEBUGOUT("Disconnect: " << (void*)ec.id() << ": " << Event::evt2str(ec) );
+    DEBUGOUT("Disconnect request: " << (void*)ec.id() << ": " << Event::evt2str(ec) );
 
     // However, the event connector must not be called anymore,
     // because the object might have been destroyed meanwhile.
@@ -774,6 +774,7 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
     if (it != list.end() ) {
         assert(*it != 0);
         (*it)->suspended(true);
+	DEBUGOUT("Suspend due to removal request: " << (void*)((*it)->id()) << ": " << Event::evt2str(*(*it)));
     }
 }
 

@@ -39,20 +39,24 @@ Debug::out(DBGTYPE dt, const std::string& c) {
 		__debugfile.open(__debugfile_name__,
 				 std::ios::out | std::ios::trunc);
 
+	    std::string prefix;
 	    switch(dt) {
 	    case DBG_EVT:
 		if (std::getenv("LIBYACURS_EVTQUEUE") == 0)
 		    return;
+		prefix = "[EVTQUEUE]";
 		break;
 
 	    case DBG_FOCUSGRP:
 		if (std::getenv("LIBYACURS_FOCUSGRP") == 0)
 		    return;
+		prefix = "[FOCUSGRP]";
 		break;
 
 	    case DBG_FOCUSMGR:
 		if (std::getenv("LIBYACURS_FOCUSMGR") == 0)
 		    return;
+		prefix = "[FOCUSMGR]";
 		break;
 
 	    default:
@@ -60,7 +64,7 @@ Debug::out(DBGTYPE dt, const std::string& c) {
 		break;
 	    }
 
-	    __debugfile << c << std::endl;
+	    __debugfile << prefix << c << std::endl;
 	}
     } catch (...) {
     }

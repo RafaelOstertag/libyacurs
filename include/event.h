@@ -213,7 +213,11 @@ namespace YACURS {
              */
             Event(const EventType _et);
 
+	    Event(const Event& _e);
+
             virtual ~Event();
+
+	    Event& operator=(const Event& _rhs);
 
             /**
              * Tests Event objects for equality.
@@ -296,9 +300,23 @@ namespace YACURS {
              * @param _payload reference to the data. The data will be copied to
              * an internal variable.
              */
-            EventEx(const EventType _et, const T& _payload) : Event(_et),
+            EventEx<T>(const EventType _et, const T& _payload) : Event(_et),
                 __payload(_payload) {
             }
+
+	    EventEx<T>(const EventEx<T>& _e) : Event(_e),
+		__payload(_e.__payload) {}
+
+	    EventEx<T>& operator=(const EventEx<T>& _rhs) {
+		if (this == &_rhs)
+		    return *this;
+
+		Event::operator=(_rhs);
+
+		__payload = _rhs.__payload;
+
+		return *this;
+	    }
 
             /**
              * Create an exact copy of this object.

@@ -107,7 +107,21 @@ EventType::operator uint32_t() const {
 Event::Event(const EventType _et) : event_type(_et), __stop(false) {
 }
 
+Event::Event(const Event& _e) : event_type(_e.event_type),
+				__stop(_e.__stop) {}
+
 Event::~Event() {
+}
+
+Event&
+Event::operator=(const Event& _rhs) {
+    if (this == &_rhs)
+	return *this;
+
+    event_type = _rhs.event_type;
+    __stop = _rhs.__stop;
+
+    return *this;
 }
 
 bool

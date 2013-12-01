@@ -18,4 +18,4 @@ includeyacurs_HEADERS = sigaction.h libyacurscfg.h coordinates.h	\
 noinst_HEADERS = gettext.h
 
 AM_CPPFLAGS = -DPACKAGE=\"$(PACKAGE)\" -DLOCALEDIR=\"$(localedir)\"	\
-$(ENABLEDEBUG) $(EVTQDEBUG)
+$(ENABLEDEBUG)

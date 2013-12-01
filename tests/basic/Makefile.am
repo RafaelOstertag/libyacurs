@@ -13,7 +13,7 @@ TESTS = $(filter-out $(interactive_tests), $(check_PROGRAMS))
 AM_DEFAULT_SOURCE_EXT = .cc
 
 AM_CPPFLAGS = -D_XOPEN_SOURCE_EXTENDED=1 -DLOCALEDIR=\"$(localedir)\"	\
--I$(top_srcdir)/include $(ENABLEDEBUG) $(EVTQDEBUG)
+-I$(top_srcdir)/include $(ENABLEDEBUG)
 
 AM_LDFLAGS  = -L$(top_builddir)/src -lyacurs  $(LTLIBINTL)
 if NOTCYGWIN

@@ -41,17 +41,10 @@ AC_ARG_ENABLE([debug],
 		[AS_HELP_STRING([--enable-debug],
 				[enable debug mode])],
 		[AS_IF([test x$enableval = xyes],
-		       [AC_SUBST([ENABLEDEBUG], [-DDEBUG])],
+		       [AC_SUBST([ENABLEDEBUG], [-DDEBUG -DEVTQDEBUG -DFOCUSDEBUG])],
 		       [AC_SUBST([ENABLEDEBUG], [-DNDEBUG])])],
 		[AC_SUBST([ENABLEDEBUG],[-DNDEBUG])])
 
-AC_ARG_ENABLE([eventqueue-debug],
-		[AS_HELP_STRING([--enable-eventqueue-debug],
-				[enable event queue debug mode])],
-		[AS_IF([test x$enableval = xyes],
-		       [AC_SUBST([EVTQDEBUG], [-DEVTQDEBUG])],
-		       [AC_SUBST([EVTQDEBUG], [-DNEVTQDEBUG])])],
-		[AC_SUBST([EVTQDEBUG],[-DNEVTQDEBUG])])
 AC_ARG_ENABLE([wchar],
 		[AS_HELP_STRING([--disable-wchar],
 				[disable wide character support])],
@@ -246,5 +239,4 @@ AC_MSG_NOTICE([  prefix            $prefix])
 AC_MSG_NOTICE([  Use NLS           $USE_NLS])
 AC_MSG_NOTICE([  Curses library    $CURSES_LIB])
 AC_MSG_NOTICE([  Debug mode        $ENABLEDEBUG])
-AC_MSG_NOTICE([  Event Queue Debug $EVTQDEBUG])
 AC_MSG_NOTICE([  Disable wchar     $DISABLE_WCHAR])

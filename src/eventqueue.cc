@@ -50,28 +50,12 @@
 #include "focusmanager.h"
 #include "curs.h"
 #include "evtqueuestats.h"
+#include "yacursdbg.h"
 
 using namespace YACURS;
 
-#if !defined(NDEBUG) && defined(EVTQDEBUG)
-#define DEBUGOUT(x) try {                                                       \
-        char* __debugfile_name__;                                       \
-        if ( (__debugfile_name__ = std::getenv("LIBYACURS_EVT_DBGFN") ) != \
-             0) { \
-            if (!__debugfile.is_open() )                                 \
-                __debugfile.open(__debugfile_name__,                    \
-                                 std::ios::out | std::ios::trunc);      \
-            __debugfile << x << std::endl;                              \
-        }                                                               \
-} catch (...) {                                                     \
-}
-#else
-#define DEBUGOUT(x)
-#endif
-
 static INTERNAL::EventQueueStats statistics;
 static std::ofstream __statsfile;
-static std::ofstream __debugfile;
 
 sigset_t EventQueue::block_sigmask;
 sigset_t EventQueue::tmp_old_sigmask;
@@ -160,12 +144,12 @@ namespace YACURS {
                         assert(eb != 0);
                         if (*eb == __evt) {
                             if (__suspend) {
-                                DEBUGOUT(
+                                DEBUGOUT(DBG_EVT,
                                     "Suspend: " << (void*)(eb->id() ) << ": " <<
                                     Event::evt2str(*eb) );
                                 eb->suspended(true);
                             } else {
-                                DEBUGOUT(
+                                DEBUGOUT(DBG_EVT,
                                     "Unsuspend: " << (void*)(eb->id() ) << ": " <<
                                     Event::evt2str(*eb) );
                                 eb->suspended(false);
@@ -205,12 +189,12 @@ namespace YACURS {
                         if (*eb == __evt.type() &&
                             !(__evt == *eb) ) {
                             if (__suspend) {
-                                DEBUGOUT("Suspend Except: " <<
+                                DEBUGOUT(DBG_EVT,"Suspend Except: " <<
                                          (void*)(eb->id() ) << ": " <<
                                          Event::evt2str(*eb) );
                                 eb->suspended(true);
                             } else {
-                                DEBUGOUT("Unsuspend Except: " <<
+                                DEBUGOUT(DBG_EVT,"Unsuspend Except: " <<
                                          (void*)(eb->id() ) << ": " <<
                                          Event::evt2str(*eb) );
                                 eb->suspended(false);
@@ -277,7 +261,7 @@ namespace YACURS {
                             __eb.stop() == false) {
                             statistics.update_ec_calls_by_type(_ec->type() );
 
-                            DEBUGOUT("Call: " <<
+                            DEBUGOUT(DBG_EVT,"Call: " <<
                                      (void*)(_ec->id() ) << ": " <<
                                      Event::evt2str(*_ec) );
                             clock_t t0 = clock();
@@ -662,7 +646,7 @@ EventQueue::proc_rem_request() {
 
         assert(*it != 0);
 
-	DEBUGOUT("Removed connector: " << (void*)*it << ": " << Event::evt2str(*(*it)) );
+	DEBUGOUT(DBG_EVT,"Removed connector: " << (void*)*it << ": " << Event::evt2str(*(*it)) );
 
         delete *it;
         list.erase(it);
@@ -708,7 +692,7 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 
         *(*it) = ec;
 
-        DEBUGOUT(
+        DEBUGOUT(DBG_EVT,
             "Replaced Connector: " << (void*)(*it)->id() << ": " <<
             Event::evt2str(ec) << " suspended: " << (*it)->suspended() );
     } else {
@@ -721,7 +705,7 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
         EventConnectorBase* __tmp = ec.clone();
         list.push_back(__tmp);
 
-        DEBUGOUT("Connect: " << (void*)__tmp->id() << ": " <<
+        DEBUGOUT(DBG_EVT,"Connect: " << (void*)__tmp->id() << ": " <<
                  Event::evt2str(ec) );
     }
 
@@ -744,7 +728,7 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
 
         assert(*it_erq != 0);
 
-        DEBUGOUT(
+        DEBUGOUT(DBG_EVT,
             "Cancelled Removal: " << (void*)(*it_erq)->id() << ": " <<
             Event::evt2str(ec) );
 
@@ -762,7 +746,7 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
     // nobody is reading the list.
     evtconn_rem_request.push_back(ec.clone() );
 
-    DEBUGOUT("Disconnect request: " << (void*)ec.id() << ": " << Event::evt2str(ec) );
+    DEBUGOUT(DBG_EVT,"Disconnect request: " << (void*)ec.id() << ": " << Event::evt2str(ec) );
 
     // However, the event connector must not be called anymore,
     // because the object might have been destroyed meanwhile.
@@ -776,7 +760,7 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
     if (it != list.end() ) {
         assert(*it != 0);
         (*it)->suspended(true);
-	DEBUGOUT("Suspend due to removal request: " << (void*)((*it)->id()) << ": " << Event::evt2str(*(*it)));
+	DEBUGOUT(DBG_EVT,"Suspend due to removal request: " << (void*)((*it)->id()) << ": " << Event::evt2str(*(*it)));
     }
 }
 
@@ -791,7 +775,7 @@ EventQueue::suspend(const EventConnectorBase& ec) {
 
     if (it == list.end() ) return;
 
-    DEBUGOUT("Suspend: " << (void*)ec.id() << ": " << Event::evt2str(ec) );
+    DEBUGOUT(DBG_EVT,"Suspend: " << (void*)ec.id() << ": " << Event::evt2str(ec) );
 
     (*it)->suspended(true);
 }
@@ -825,7 +809,7 @@ EventQueue::unsuspend(const EventConnectorBase& ec) {
 
     if (it == list.end() ) return;
 
-    DEBUGOUT("Unsuspend: " << (void*)ec.id() << ": " << Event::evt2str(ec) );
+    DEBUGOUT(DBG_EVT,"Unsuspend: " << (void*)ec.id() << ": " << Event::evt2str(ec) );
 
     (*it)->suspended(false);
 }
@@ -855,7 +839,7 @@ void
 EventQueue::submit(const Event& ev) {
     blocksignal();
     try {
-        DEBUGOUT("Submitted: " << Event::evt2str(ev) );
+        DEBUGOUT(DBG_EVT,"Submitted: " << Event::evt2str(ev) );
         evt_queue.push(ev.clone() );
         statistics.update_evt_submitted_by_type(ev);
     }
@@ -874,7 +858,7 @@ EventQueue::submit(const Event& ev) {
 
 void
 EventQueue::run() {
-    DEBUGOUT("EventQueue::run(): --- enter");
+    DEBUGOUT(DBG_EVT,"EventQueue::run(): --- enter");
 
     setup_signal();
 
@@ -957,7 +941,7 @@ EventQueue::run() {
                 goto QUIT;
             }
 
-            DEBUGOUT("Processing: " << Event::evt2str(*evt) );
+            DEBUGOUT(DBG_EVT,"Processing: " << Event::evt2str(*evt) );
             clock_t evt_t0 = clock();
             std::list<EventConnectorBase*>& list = evtconn_map[*evt];
             std::for_each(list.begin(),
@@ -983,16 +967,16 @@ QUIT:
     restore_signal();
 
     cleanup();
-    DEBUGOUT("EventQueue::run(): --- leave");
+    DEBUGOUT(DBG_EVT,"EventQueue::run(): --- leave");
 }
 
 void
 EventQueue::cleanup() {
-    DEBUGOUT("EventQueue::cleanup()");
+    DEBUGOUT(DBG_EVT,"EventQueue::cleanup()");
     /* Cleanup event queue */
     while (!evt_queue.empty() ) {
         statistics.update_evt_pending_cleanup();
-        DEBUGOUT("Discarded: " << Event::evt2str(*(evt_queue.front() ) ) );
+        DEBUGOUT(DBG_EVT,"Discarded: " << Event::evt2str(*(evt_queue.front() ) ) );
         delete evt_queue.front();
         evt_queue.pop();
     }

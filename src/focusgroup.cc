@@ -22,30 +22,12 @@
 #include <cassert>
 #include <algorithm>
 #include <functional>
-#include <fstream>
 
 #include "focusgroup.h"
 #include "widgetbase.h"
+#include "yacursdbg.h"
 
 using namespace YACURS;
-
-#if !defined(NDEBUG) && defined(FOCUSDEBUG)
-#define DEBUGOUT(x) try {                                                       \
-        char* __debugfile_name__;                                       \
-        if ( (__debugfile_name__ = std::getenv("LIBYACURS_FOCUS_DBGFN") ) != \
-             0) { \
-            if (!__debugfile.is_open() )                                 \
-                __debugfile.open(__debugfile_name__,                    \
-                                 std::ios::out | std::ios::trunc);      \
-            __debugfile << x << std::endl;                              \
-        }                                                               \
-} catch (...) {                                                     \
-}
-#else
-#define DEBUGOUT(x)
-#endif
-
-static std::ofstream __debugfile;
 
 //
 // Functors
@@ -95,7 +77,7 @@ namespace YACURS {
 //
 
 FocusGroup::FocusGroup() : __active(false), __focus(__widgets.end() ) {
-    DEBUGOUT("[" << (void*)this << "] Created Focus Group.");
+    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] Created Focus Group.");
 }
 
 FocusGroup::FocusGroup(const FocusGroup& _f) : __active(_f.__active),
@@ -109,7 +91,7 @@ FocusGroup::~FocusGroup() {
     assert(__focus != __widgets.end() );
     assert( (*__focus) != 0);
     (*__focus)->focus(false);
-    DEBUGOUT("[" << (void*)this << "] Destroyed Focus Group. Focus taken from " << (void*)(*__focus));
+    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] Destroyed Focus Group. Focus taken from " << (void*)(*__focus));
 }
 
 FocusGroup&
@@ -138,7 +120,7 @@ FocusGroup::activate() {
 
     (*__focus)->focus(true);
 
-    DEBUGOUT("[" << (void*)this << "] Activated Focus Group. Focus given to " << (void*)(*__focus));
+    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] Activated Focus Group. Focus given to " << (void*)(*__focus));
 
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
@@ -164,7 +146,7 @@ FocusGroup::deactivate() {
 
     (*__focus)->focus(false);
 
-    DEBUGOUT("[" << (void*)this << "] deactivated Focus Group and focus taken from " << (void*)(*__focus));
+    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] deactivated Focus Group and focus taken from " << (void*)(*__focus));
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
@@ -208,7 +190,7 @@ FocusGroup::add(WidgetBase* _w) {
         __widgets.push_back(_w);
     }
 
-    DEBUGOUT("[" << (void*)this << "] widget " << (void*)(_w) << " added to Focus Group");
+    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] widget " << (void*)(_w) << " added to Focus Group");
 }
 
 void
@@ -232,7 +214,7 @@ FocusGroup::remove(WidgetBase* _w) {
 
     __widgets.remove(_w);
 
-    DEBUGOUT("[" << (void*)this << "] widget " << (void*)(_w) << " removed from Focus Group");
+    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] widget " << (void*)(_w) << " removed from Focus Group");
 
     // No more widgets left, we cannot assign focus to anything.
     if (__widgets.empty() ) return;
@@ -269,7 +251,7 @@ FocusGroup::focus_next() {
     // remove focus of current Widget.
     (*__focus)->focus(false);
     (*__focus)->refresh(true);
-    DEBUGOUT("[" << (void*)this << "] (focus_next) widget " << (void*)(*__focus) << " lost focus");
+    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] (focus_next) widget " << (void*)(*__focus) << " lost focus");
 
     // Then, advance to the next widget. If we hit the end, we start
     // at the beginning again.
@@ -279,7 +261,7 @@ FocusGroup::focus_next() {
     (*__focus)->focus(true);
     (*__focus)->refresh(true);
 
-    DEBUGOUT("[" << (void*)this << "] (focus_next) widget " << (void*)(*__focus) << " got focus");
+    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] (focus_next) widget " << (void*)(*__focus) << " got focus");
 
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
@@ -309,7 +291,7 @@ FocusGroup::focus_previous() {
     // remove focus of current Widget.
     (*__focus)->focus(false);
     (*__focus)->refresh(true);
-    DEBUGOUT("[" << (void*)this << "] (focus_previous) widget " << (void*)(*__focus) << " lost focus");
+    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] (focus_previous) widget " << (void*)(*__focus) << " lost focus");
 
     // Then, advance to the previous widget. If we are already at the
     // start, wrap to the last widget
@@ -320,7 +302,7 @@ FocusGroup::focus_previous() {
 
     (*__focus)->focus(true);
     (*__focus)->refresh(true);
-    DEBUGOUT("[" << (void*)this << "] (focus_previous) widget " << (void*)(*__focus) << " got focus");
+    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] (focus_previous) widget " << (void*)(*__focus) << " got focus");
 
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
@@ -339,7 +321,7 @@ FocusGroup::refocus() const {
 
     (*__focus)->focus(true);
     (*__focus)->refresh(true);
-    DEBUGOUT("[" << (void*)this << "] widget " << (void*)(*__focus) << " refocused");
+    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] widget " << (void*)(*__focus) << " refocused");
 }
 
 void
@@ -349,7 +331,7 @@ FocusGroup::reset() {
     if (__active && __focus != __widgets.end() ) {
         (*__focus)->focus(false);
         (*__focus)->refresh(true);
-	DEBUGOUT("[" << (void*)this << "] (focus reset) widget " << (void*)(*__focus) << " lost focus");
+	DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] (focus reset) widget " << (void*)(*__focus) << " lost focus");
     }
 
     __focus = __widgets.begin();
@@ -357,6 +339,6 @@ FocusGroup::reset() {
     if (__active) {
         (*__focus)->focus(true);
         (*__focus)->refresh(true);
-	DEBUGOUT("[" << (void*)this << "] (focus reset) widget " << (void*)(*__focus) << " got focus");
+	DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] (focus reset) widget " << (void*)(*__focus) << " got focus");
     }
 }

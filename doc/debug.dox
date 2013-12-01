@@ -3,48 +3,20 @@
 /**
  * @page debugfacilities Debug Facilities
  *
- * @section EventQueue Debug
+ * When compiled with debug code enabled (@c -DDEBUG), set the
+ * environment variable @c LIBYACURS_DEBUG_LOGFILE to the debug output
+ * file.
  *
- * If libyacurs has been compiled with <tt>-DEVTQDEBUG</tt> the
- * environment variable @c LIBYACURS_EVT_DBGFN can be used to specify
- * the file where to store debug output. E.g., in a bash shell, you
- * would use
- *
- * <code>
- * export LIBYACURS_EVT_DBGFN=/tmp/evtdebug.out
- * </code>
- *
- * or, in csh shell
- *
- * <code>
- * setenv LIBYACURS_EVT_DBGFN /tmp/evtdebug.out
- * </code>
- *
- * and then launch the executable linked against libyacurs.
- *
- * @section EventQueue Connection Map
- *
- * If the environment variable @c LIBYACURS_EVTCONNMAP_DBGFN is
- * set, a SIGINFO raised will dump the event connector map to the file
- * specified in the environment variable.
- *
- * @section EventQueue Statistics
  * 
- * Setting @c LIBYACURS_EVT_STATS to a file path will print EventQueue
- * statistics. E.g.,
+ * * setting the environment variable @c LIBYACURS_EVTQUEUE to any
+ *   value will enable Event Queue debug messages sent to @c
+ *   $LIBYACURS_DEBUG_LOGFILE.
  *
- * <code>
- * export LIBYACURS_EVT_STATS=/tmp/evtstats.out
- * </code>
+ * * setting the environment variable @c LIBYACURS_FOCUSGROUP to any
+ *   value will enable Focus Group debug messages sent to @c
+ *   $LIBYACURS_DEBUG_LOGFILE.
  *
- * and then launch the executable linked against libyacurs.
- *
- * @section Focus Debug
- *
- * If libyacurs has been compiled with <tt>-DFOCUSDEBUG</tt> the
- * environment variable @c LIBYACURS_FOCUS_DBGFN can be used to specify
- * the file where to store focus debug output.
- *
- * The environment variable @c LIBYACURS_FOCUSMGR_DBGFN does the same
- * for the Focus Manager.
+ * * setting the environment variable @c LIBYACURS_FOCUSMGR to any a
+ *   value will enable Focus Manager debug messages sent to @c
+ *   $LIBYACURS_DEBUG_LOGFILE.
  */

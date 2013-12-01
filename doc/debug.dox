@@ -24,7 +24,7 @@
  *
  * @section EventQueue Connection Map
  *
- * If the environment variable <tt>LIBYACURS_EVTCONNMAP_DBGFN</tt> is
+ * If the environment variable @c LIBYACURS_EVTCONNMAP_DBGFN is
  * set, a SIGINFO raised will dump the event connector map to the file
  * specified in the environment variable.
  *
@@ -38,4 +38,10 @@
  * </code>
  *
  * and then launch the executable linked against libyacurs.
+ *
+ * @section Focus Debug
+ *
+ * If libyacurs has been compiled with <tt>-DFOCUSDEBUG</tt> the
+ * environment variable @c LIBYACURS_FOCUS_DBGFN can be used to specify
+ * the file where to store debug output.
  */

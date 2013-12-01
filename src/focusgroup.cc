@@ -22,11 +22,30 @@
 #include <cassert>
 #include <algorithm>
 #include <functional>
+#include <fstream>
 
 #include "focusgroup.h"
 #include "widgetbase.h"
 
 using namespace YACURS;
+
+#if !defined(NDEBUG) && defined(FOCUSDEBUG)
+#define DEBUGOUT(x) try {                                                       \
+        char* __debugfile_name__;                                       \
+        if ( (__debugfile_name__ = std::getenv("LIBYACURS_FOCUS_DBGFN") ) != \
+             0) { \
+            if (!__debugfile.is_open() )                                 \
+                __debugfile.open(__debugfile_name__,                    \
+                                 std::ios::out | std::ios::trunc);      \
+            __debugfile << x << std::endl;                              \
+        }                                                               \
+} catch (...) {                                                     \
+}
+#else
+#define DEBUGOUT(x)
+#endif
+
+static std::ofstream __debugfile;
 
 //
 // Functors
@@ -117,6 +136,8 @@ FocusGroup::activate() {
 
     (*__focus)->focus(true);
 
+    DEBUGOUT("[" << (void*)this << "] Activated focus group. Focus given to " << (void*)(*__focus));
+
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
@@ -140,6 +161,8 @@ FocusGroup::deactivate() {
     assert( (*__focus) != 0);
 
     (*__focus)->focus(false);
+
+    DEBUGOUT("[" << (void*)this << "] deactivated focus group and focus taken from " << (void*)(*__focus));
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
@@ -182,6 +205,8 @@ FocusGroup::add(WidgetBase* _w) {
     } else {
         __widgets.push_back(_w);
     }
+
+    DEBUGOUT("[" << (void*)this << "] widget " << (void*)(_w) << " added to focus group");
 }
 
 void
@@ -204,6 +229,8 @@ FocusGroup::remove(WidgetBase* _w) {
     }
 
     __widgets.remove(_w);
+
+    DEBUGOUT("[" << (void*)this << "] wdget " << (void*)(_w) << " removed from focus group");
 
     // No more widgets left, we cannot assign focus to anything.
     if (__widgets.empty() ) return;
@@ -240,6 +267,7 @@ FocusGroup::focus_next() {
     // remove focus of current Widget.
     (*__focus)->focus(false);
     (*__focus)->refresh(true);
+    DEBUGOUT("[" << (void*)this << "] (focus_next) widget " << (void*)(*__focus) << " lost focus");
 
     // Then, advance to the next widget. If we hit the end, we start
     // at the beginning again.
@@ -248,6 +276,8 @@ FocusGroup::focus_next() {
 
     (*__focus)->focus(true);
     (*__focus)->refresh(true);
+
+    DEBUGOUT("[" << (void*)this << "] (focus_next) widget " << (void*)(*__focus) << " got focus");
 
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
@@ -277,6 +307,7 @@ FocusGroup::focus_previous() {
     // remove focus of current Widget.
     (*__focus)->focus(false);
     (*__focus)->refresh(true);
+    DEBUGOUT("[" << (void*)this << "] (focus_previous) widget " << (void*)(*__focus) << " lost focus");
 
     // Then, advance to the previous widget. If we are already at the
     // start, wrap to the last widget
@@ -287,6 +318,7 @@ FocusGroup::focus_previous() {
 
     (*__focus)->focus(true);
     (*__focus)->refresh(true);
+    DEBUGOUT("[" << (void*)this << "] (focus_previous) widget " << (void*)(*__focus) << " got focus");
 
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
@@ -305,6 +337,7 @@ FocusGroup::refocus() const {
 
     (*__focus)->focus(true);
     (*__focus)->refresh(true);
+    DEBUGOUT("[" << (void*)this << "] widget " << (void*)(*__focus) << " refocused");
 }
 
 void
@@ -314,6 +347,7 @@ FocusGroup::reset() {
     if (__active && __focus != __widgets.end() ) {
         (*__focus)->focus(false);
         (*__focus)->refresh(true);
+	DEBUGOUT("[" << (void*)this << "] (focus reset) widget " << (void*)(*__focus) << " lost focus");
     }
 
     __focus = __widgets.begin();
@@ -321,5 +355,6 @@ FocusGroup::reset() {
     if (__active) {
         (*__focus)->focus(true);
         (*__focus)->refresh(true);
+	DEBUGOUT("[" << (void*)this << "] (focus reset) widget " << (void*)(*__focus) << " got focus");
     }
 }

@@ -104,6 +104,7 @@ namespace YACURS {
             static INTERNAL::Sigaction* sigquit;
             static INTERNAL::Sigaction* sigtstp;
             static INTERNAL::Sigaction* sigcont;
+	    static INTERNAL::Sigaction* siginfo;
 
             static bool signal_blocked;
             static std::queue<Event*> evt_queue;
@@ -218,6 +219,8 @@ namespace YACURS {
             static void timeout(unsigned int _t);
 
             static unsigned int timeout();
+
+	    static void __dump_event_conn_map();
     };
 }
 

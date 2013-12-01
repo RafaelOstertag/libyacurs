@@ -22,6 +22,12 @@
  *
  * and then launch the executable linked against libyacurs.
  *
+ * @section EventQueue Connection Map
+ *
+ * If the environment variable <tt>LIBYACURS_EVTCONNMAP_DBGFN</tt> is
+ * set, a SIGINFO raised will dump the event connector map to the file
+ * specified in the environment variable.
+ *
  * @section EventQueue Statistics
  * 
  * Setting @c LIBYACURS_EVT_STATS to a file path will print EventQueue

@@ -86,6 +86,7 @@ INTERNAL::Sigaction* EventQueue::sigterm=0;
 INTERNAL::Sigaction* EventQueue::sigquit=0;
 INTERNAL::Sigaction* EventQueue::sigtstp=0;
 INTERNAL::Sigaction* EventQueue::sigcont=0;
+INTERNAL::Sigaction* EventQueue::siginfo=0;
 
 bool EventQueue::signal_blocked = false;
 
@@ -317,6 +318,9 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGQUIT);
     sigaddset(&mask, SIGCONT);
     sigaddset(&mask, SIGTSTP);
+#ifdef SIGINFO
+    sigaddset(&mask, SIGINFO);
+#endif
     sigwinch = new INTERNAL::Sigaction(SIGWINCH, signal_handler, mask);
 
     //
@@ -331,6 +335,9 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGWINCH);
     sigaddset(&mask, SIGCONT);
     sigaddset(&mask, SIGTSTP);
+#ifdef SIGINFO
+    sigaddset(&mask, SIGINFO);
+#endif
     sigquit = new INTERNAL::Sigaction(SIGQUIT, signal_handler, mask);
 
     //
@@ -345,6 +352,9 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGQUIT);
     sigaddset(&mask, SIGCONT);
     sigaddset(&mask, SIGTSTP);
+#ifdef SIGINFO
+    sigaddset(&mask, SIGINFO);
+#endif
     sigalrm = new INTERNAL::Sigaction(SIGALRM, signal_handler, mask);
 
     //
@@ -359,6 +369,9 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGQUIT);
     sigaddset(&mask, SIGCONT);
     sigaddset(&mask, SIGTSTP);
+#ifdef SIGINFO
+    sigaddset(&mask, SIGINFO);
+#endif
     sigusr1 = new INTERNAL::Sigaction(SIGUSR1, signal_handler, mask);
 
     //
@@ -373,6 +386,9 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGQUIT);
     sigaddset(&mask, SIGCONT);
     sigaddset(&mask, SIGTSTP);
+#ifdef SIGINFO
+    sigaddset(&mask, SIGINFO);
+#endif
     sigusr2 = new INTERNAL::Sigaction(SIGUSR2, signal_handler, mask);
 
     //
@@ -387,6 +403,9 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGQUIT);
     sigaddset(&mask, SIGCONT);
     sigaddset(&mask, SIGTSTP);
+#ifdef SIGINFO
+    sigaddset(&mask, SIGINFO);
+#endif
     sigint = new INTERNAL::Sigaction(SIGINT, signal_handler, mask);
 
     //
@@ -401,6 +420,9 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGQUIT);
     sigaddset(&mask, SIGCONT);
     sigaddset(&mask, SIGTSTP);
+#ifdef SIGINFO
+    sigaddset(&mask, SIGINFO);
+#endif
     sigterm = new INTERNAL::Sigaction(SIGTERM, signal_handler, mask);
 
     //
@@ -415,6 +437,9 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGQUIT);
     sigaddset(&mask, SIGTERM);
     sigaddset(&mask, SIGTSTP);
+#ifdef SIGINFO
+    sigaddset(&mask, SIGINFO);
+#endif
     sigcont = new INTERNAL::Sigaction(SIGCONT, signal_handler, mask);
 
     //
@@ -429,7 +454,26 @@ EventQueue::setup_signal() {
     sigaddset(&mask, SIGQUIT);
     sigaddset(&mask, SIGTERM);
     sigaddset(&mask, SIGCONT);
+#ifdef SIGINFO
+    sigaddset(&mask, SIGINFO);
+#endif
     sigtstp = new INTERNAL::Sigaction(SIGTSTP, signal_handler, mask);
+
+#ifdef SIGINFO
+    //
+    // SIGINFO
+    //
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGWINCH);
+    sigaddset(&mask, SIGALRM);
+    sigaddset(&mask, SIGUSR1);
+    sigaddset(&mask, SIGUSR2);
+    sigaddset(&mask, SIGINT);
+    sigaddset(&mask, SIGQUIT);
+    sigaddset(&mask, SIGTERM);
+    sigaddset(&mask, SIGCONT);
+    siginfo = new INTERNAL::Sigaction(SIGINFO, signal_handler, mask);
+#endif
 
     //
     // Unblock signals
@@ -444,6 +488,9 @@ EventQueue::setup_signal() {
     sigaddset(&block_sigmask, SIGQUIT);
     sigaddset(&block_sigmask, SIGTSTP);
     sigaddset(&block_sigmask, SIGCONT);
+#ifdef SIGINFO
+    sigaddset(&block_sigmask, SIGINFO);
+#endif
 
     if (sigprocmask(SIG_UNBLOCK, &block_sigmask, &old_sigmask) != 0)
         throw EXCEPTIONS::SystemError(errno);
@@ -496,6 +543,11 @@ EventQueue::restore_signal() {
 	sigcont = 0;
     }
 
+    if (siginfo) {
+        delete siginfo;
+	siginfo = 0;
+    }
+    
     if (sigprocmask(SIG_SETMASK, &old_sigmask, 0) != 0)
         throw EXCEPTIONS::SystemError(errno);
 }
@@ -548,6 +600,12 @@ EventQueue::signal_handler(int signo)
     case SIGCONT:
         submit(EVT_SIGCONT);
         break;
+
+#ifdef SIGINFO
+    case SIGINFO:
+	__dump_event_conn_map();
+	break;
+#endif
     }
 
     errno = olderrno;
@@ -797,13 +855,14 @@ EventQueue::submit(const Event& ev) {
         DEBUGOUT("Submitted: " << Event::evt2str(ev) );
         evt_queue.push(ev.clone() );
         statistics.update_evt_submitted_by_type(ev);
+    }
 #ifndef NDEBUG
-    } catch (std::exception& e) {
+    catch (std::exception& e) {
         std::cerr << e.what() << std::endl;
         std::abort();
     }
 #else
-    } catch (std::exception&) {
+    catch (std::exception&) {
         // Intentionally empty
     }
 #endif
@@ -859,7 +918,7 @@ EventQueue::run() {
 #ifdef YACURS_USE_WCHAR
         if (retval != ERR) {
 #else
-        if (c != ERR) {
+	if (c != ERR) {
 #endif
             switch (c) {
             case KEY_REFRESH:
@@ -1005,4 +1064,36 @@ EventQueue::timeout(unsigned int _t) {
 unsigned int
 EventQueue::timeout() {
     return __timeout;
+}
+ 
+void
+EventQueue::__dump_event_conn_map() {
+    if (std::getenv("LIBYACURS_EVTCONNMAP_DBGFN") == 0)
+	return;
+
+    try {
+	std::ofstream f(std::getenv("LIBYACURS_EVTCONNMAP_DBGFN"),                                 std::ios::out | std::ios::trunc);
+
+	std::map<EventType,
+		 std::list<EventConnectorBase*> >::iterator it=evtconn_map.begin();
+
+	while (it != evtconn_map.end() ) {
+	    f << static_cast<std::string>((*it).first) <<
+	       "(" << (*it).first << ")" << std::endl;
+	    f << "_____________________" << std::endl;
+	    std::list<EventConnectorBase*>& conlist = (*it).second;
+	    std::list<EventConnectorBase*>::iterator it2 = conlist.begin();
+	    
+	    while (it2 != conlist.end() ) {
+		f << "[" << (void*)*it2 << "]" <<
+		    " suspended: " << (*it2)->suspended() << 
+		    " id: " << (*it2)->id() << std::endl;
+		it2++;
+	    }
+	    it++;
+
+	    f << std::endl;
+	}
+	f.close();
+    } catch (...) { /* intentionally empty */}
 }

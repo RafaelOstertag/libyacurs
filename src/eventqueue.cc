@@ -662,6 +662,8 @@ EventQueue::proc_rem_request() {
 
         assert(*it != 0);
 
+	DEBUGOUT("Removed connector: " << (void*)*it << ": " << Event::evt2str(*(*it)) );
+
         delete *it;
         list.erase(it);
     }

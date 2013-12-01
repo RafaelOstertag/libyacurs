@@ -203,8 +203,6 @@ namespace YACURS {
              */
             bool __stop;
 
-            static const char* __str_table[];
-
         public:
             /**
              * @param _et the event type

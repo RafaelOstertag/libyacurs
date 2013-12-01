@@ -23,6 +23,44 @@ message() {
     echo "[$HOST] $*" >> checkall.log
 }
 
+HYPERION_CXXFLAGS_default="-march=native -mtune=native -O3 -pedantic -Wall -Werror"
+HYPERION_CFLAGS_default="$HYPERION_CXXFLAGS_default"
+HYPERION_CC_default=gcc
+HYPERION_CXX_default=g++
+HYPERION_LDFLAGS_default=""
+
+HYPERION_CXXFLAGS_clang="$HYPERION_CXXFLAGS_default"
+HYPERION_CFLAGS_clang="$HYPERION_CXXFLAGS_default"
+HYPERION_CC_clang=clang
+HYPERION_CXX_clang=clang++
+HYPERION_LDFLAGS_clang=""
+
+host_hyperion() {
+    for c in default clang
+    do
+	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
+	do
+	    make distclean
+	    ./configure $configflags CXX="`eval echo \\$HYPERION_CXX_$c`" \
+		CC="`eval echo \\$HYPERION_CC_$c`" \
+		CFLAGS="`eval echo \\$HYPERION_CFLAGS_$c`" \
+		CXXFLAGS="`eval echo \\$HYPERION_CXXFLAGS_$c`" \
+		LDFLAGS="`eval echo \\$HYPERION_LDFLAGS_$c`"
+	    
+	    had_error $? "Error in CXX=`eval echo \\$HYPERION_CXX_$c` CC=`eval echo \\$HYPERION_CC_$c` CFLAGS=`eval echo \\$HYPERION_CFLAGS_$c` CXXFLAGS=`eval echo \\$HYPERION_CXXFLAGS_$c` LDFLAGS=`eval echo \\$HYPERION_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+	    
+	    make clean
+	    make
+	    had_error $? "Error in CXX=`eval echo \\$HYPERION_CXX_$c` CC=`eval echo \\$HYPERION_CC_$c` CFLAGS=`eval echo \\$HYPERION_CFLAGS_$c` CXXFLAGS=`eval echo \\$HYPERION_CXXFLAGS_$c` LDFLAGS=`eval echo \\$HYPERION_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+	    
+	    make check
+	    had_error $? "Error in CXX=`eval echo \\$HYPERION_CXX_$c` CC=`eval echo \\$HYPERION_CC_$c` CFLAGS=`eval echo \\$HYPERION_CFLAGS_$c` CXXFLAGS=`eval echo \\$HYPERION_CXXFLAGS_$c` LDFLAGS=`eval echo \\$HYPERION_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+
+	    message "*** OK: CXX=`eval echo \\$HYPERION_CXX_$c` CC=`eval echo \\$HYPERION_CC_$c` CFLAGS=`eval echo \\$HYPERION_CFLAGS_$c` CXXFLAGS=`eval echo \\$HYPERION_CXXFLAGS_$c` LDFLAGS=`eval echo \\$HYPERION_LDFLAGS_$c` CONFIGFLAGS=$configflags"
+	done
+    done
+}
+
 DASH_CXXFLAGS_43='-march=native -mtune=native -O3 -pedantic -Wall -Werror'
 DASH_CFLAGS_43="$DASH_CXXFLAGS_43"
 DASH_CC_43=gcc-4.3

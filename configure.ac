@@ -41,7 +41,7 @@ AC_ARG_ENABLE([debug],
 		[AS_HELP_STRING([--enable-debug],
 				[enable debug mode])],
 		[AS_IF([test x$enableval = xyes],
-		       [AC_SUBST([ENABLEDEBUG], [-DDEBUG -DEVTQDEBUG -DFOCUSDEBUG])],
+		       [AC_SUBST([ENABLEDEBUG], ["-DDEBUG -DEVTQDEBUG -DFOCUSDEBUG"])],
 		       [AC_SUBST([ENABLEDEBUG], [-DNDEBUG])])],
 		[AC_SUBST([ENABLEDEBUG],[-DNDEBUG])])
 

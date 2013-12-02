@@ -25,9 +25,9 @@
 
 #include "yacursdbg.h"
 
+#if defined(DEBUG)
 using namespace YACURS;
 
-#if defined(DEBUG)
 std::ofstream Debug::__debugfile;
 
 void

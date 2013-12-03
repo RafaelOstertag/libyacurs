@@ -744,6 +744,19 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
     // disconnects itself? std::for_each iterating over the connector
     // list in run() would freak out. So we wait until we're sure that
     // nobody is reading the list.
+    //
+    // But first make sure there isn't already a removal request for
+    // the given event connector.
+    std::list<EventConnectorBase*>::iterator it_erq =
+        std::find_if(evtconn_rem_request.begin(),
+                     evtconn_rem_request.end(),
+                     FUNCTORS::EVENTQUEUE::EventConnectorEqual(ec) );    
+
+    if (it_erq!=evtconn_rem_request.end()) {
+	DEBUGOUT(DBG_EVT,"Skipping disconnect request: " << (void*)ec.id() << ": " << Event::evt2str(ec) << " already in removal request list");
+	return;
+    }
+
     evtconn_rem_request.push_back(ec.clone() );
 
     DEBUGOUT(DBG_EVT,"Disconnect request: " << (void*)ec.id() << ": " << Event::evt2str(ec) );

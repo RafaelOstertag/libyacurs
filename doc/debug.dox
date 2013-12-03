@@ -6,7 +6,6 @@
  * When compiled with debug code enabled (@c -DDEBUG), set the
  * environment variable @c LIBYACURS_DEBUG_LOGFILE to the debug output
  * file.
- *
  * 
  * * setting the environment variable @c LIBYACURS_EVTQUEUE to any
  *   value will enable Event Queue debug messages sent to @c
@@ -19,4 +18,14 @@
  * * setting the environment variable @c LIBYACURS_FOCUSMGR to any a
  *   value will enable Focus Manager debug messages sent to @c
  *   $LIBYACURS_DEBUG_LOGFILE.
+ *
+ *
+ * @section Other Environment Variables
+ *
+ * * Setting @c LIBYACURS_EVT_STATS environment variable will print
+ *   event queue statistics upon exit of the event queue to the file
+ *   specified.
+ *
+ * * If @c SIGINFO is supported, setting @c LIBYACURS_EVTCONNMAP_DBGFN
+ *   to a file path will dump the event connector map upon SIGINFO.
  */

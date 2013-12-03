@@ -747,6 +747,8 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
     //
     // But first make sure there isn't already a removal request for
     // the given event connector.
+    // 
+    // Fixes bug 105.
     std::list<EventConnectorBase*>::iterator it_erq =
         std::find_if(evtconn_rem_request.begin(),
                      evtconn_rem_request.end(),

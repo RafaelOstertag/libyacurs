@@ -64,7 +64,7 @@ Debug::out(DBGTYPE dt, const std::string& c) {
 		break;
 	    }
 
-	    __debugfile << prefix << c << std::endl;
+	    __debugfile << prefix << " " << c << std::endl;
 	}
     } catch (...) {
     }

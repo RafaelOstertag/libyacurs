@@ -96,6 +96,10 @@ namespace YACURS {
                 /// Number of Cancelled EventConnector removal requests
                 uint32_t ec_rm_cancelled;
 
+		/// Number of skipped removal requests due to
+		/// duplicates
+		uint32_t ec_rm_skipped;
+
                 /// Max size of EventQueue
                 uint16_t evq_size_max;
 
@@ -116,6 +120,8 @@ namespace YACURS {
                 void update_ec_rm_total();
 
                 void update_ec_rm_cancelled();
+
+                void update_ec_rm_skipped();
 
                 void update_evt_submitted_by_type(const EventType _t);
 
@@ -160,6 +166,11 @@ namespace YACURS {
         inline void
         EventQueueStats::update_ec_rm_cancelled() {
             ec_rm_cancelled++;
+        }
+
+        inline void
+        EventQueueStats::update_ec_rm_skipped() {
+            ec_rm_skipped++;
         }
 
         inline void

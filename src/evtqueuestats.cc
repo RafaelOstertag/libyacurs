@@ -49,16 +49,17 @@ void
 EventQueueStats::clear() {
     evq_max_proc_time =
         evt_max_proc_time =
-            ec_call_max_time =
-                evt_submitted =
-                    evt_pending_cleanup =
-                        evt_proc_total =
-                            ec_max =
-                                ec_calls_total =
-                                    ec_rm_total =
-                                        ec_rm_cancelled =
-                                            evq_size_max =
-                                                ec_rmq_size_max = 0;
+	ec_call_max_time =
+	evt_submitted =
+	evt_pending_cleanup =
+	evt_proc_total =
+	ec_max =
+	ec_calls_total =
+	ec_rm_total =
+	ec_rm_cancelled =
+	ec_rm_skipped =
+	evq_size_max =
+	ec_rmq_size_max = 0;
 
     ec_min = (uint32_t)-1;
 
@@ -94,6 +95,7 @@ EventQueueStats::dump(std::ostream& _os) const {
     PRINTSTATS("Max Queue Size", evq_size_max);
     PRINTSTATS("EventConnector Removal Requests", ec_rm_total);
     PRINTSTATS("EvtConn Removal Requests Cancel", ec_rm_cancelled);
+    PRINTSTATS("EvtConn Removal Requests Skipped", ec_rm_skipped);
     PRINTSTATS("Max EventConnecor Rem Queue Size", ec_rmq_size_max);
     PRINTSTATS("Event Connector Calls", ec_calls_total);
     PRINTSTATS("EvtConn List max size", ec_max);

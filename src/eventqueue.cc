@@ -756,6 +756,7 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
 
     if (it_erq!=evtconn_rem_request.end()) {
 	DEBUGOUT(DBG_EVT,"Skipping disconnect request: " << (void*)ec.id() << ": " << Event::evt2str(ec) << " already in removal request list");
+	statistics.update_ec_rm_skipped();
 	return;
     }
 

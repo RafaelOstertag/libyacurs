@@ -59,6 +59,10 @@ class AlrmHandler : public Handler {
 
 int
 main() {
+    // test will not be run if stdout or stdin is not a tty.
+    if (isatty(STDOUT_FILENO)!=1 ||
+	isatty(STDIN_FILENO)!=1) exit(77);
+
     try {
         WinChHandler whandler;
         AlrmHandler ahandler;

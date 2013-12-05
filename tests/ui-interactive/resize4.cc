@@ -98,6 +98,10 @@ class HotKeyQuit : public YACURS::HotKey {
 
 int
 main() {
+    // test will not be run if stdout or stdin is not a tty.
+    if (isatty(STDOUT_FILENO)!=1 ||
+	isatty(STDIN_FILENO)!=1) exit(77);
+
 #if 0
     std::cout << getpid() << std::endl;
     sleep(15);

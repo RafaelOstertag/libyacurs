@@ -68,6 +68,10 @@ class AlrmHandler2 : public AlrmHandler {
 
 int
 main() {
+    // test will not be run if stdout or stdin is not a tty.
+    if (isatty(STDOUT_FILENO)!=1 ||
+	isatty(STDIN_FILENO)!=1) exit(77);
+
     try {
         AlrmHandler ahandler;
         AlrmHandler2 ahandler2_1;

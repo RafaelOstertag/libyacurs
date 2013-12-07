@@ -70,6 +70,7 @@
 #include "messagebox2.h"
 #include "messagebox3.h"
 #include "inputbox.h"
+#include "filedialog.h"
 #include "filesavedialog.h"
 #include "fileloaddialog.h"
 #include "checkbox.h"

@@ -64,6 +64,15 @@ namespace YACURS {
 	FULLSIZE
     };
 
+    /**
+     * File types allowed for selection in FileDialog.
+     */
+    enum FILEDIALOG_SELECTION_TYPE {
+	ANY,
+	DIRECTORY,
+	FILE
+    };
+
     namespace INTERNAL {
 #ifdef SA_SIGINFO
 

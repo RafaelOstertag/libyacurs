@@ -15,7 +15,8 @@ libyacurs_la_SOURCES = sigaction.cc coordinates.cc size.cc margin.cc	\
  lineobject.cc widgetbase.cc pack.cc vpack.cc hpack.cc widget.cc	\
  label.cc dynlabel.cc yacursex.cc colors.cc colorparser.cc		\
  focusgroup.cc focusmanager.cc button.cc dialog.cc messagebox.cc	\
- messagebox2.cc messagebox3.cc inputbox.cc filesavedialog.cc		\
- fileloaddialog.cc checkbox.cc radiobox.cc unlockdialog.cc		\
- unlockdiadefault.cc rule.cc hrule.cc vrule.cc yacursdbg.cc
+ messagebox2.cc messagebox3.cc inputbox.cc filedialog.cc		\
+ filesavedialog.cc fileloaddialog.cc checkbox.cc radiobox.cc		\
+ unlockdialog.cc unlockdiadefault.cc rule.cc hrule.cc vrule.cc		\
+ yacursdbg.cc
 

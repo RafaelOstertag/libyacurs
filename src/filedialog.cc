@@ -259,7 +259,7 @@ FileDialog::button_press_handler(Event& _e) {
 
     // Ok, yes or ok button pressed, let's see about the file type
     struct stat statbuf;
-    if (stat(filepath().c_str(), &statbuf) == 0) {
+    if (stat(filepath().c_str(), &statbuf) != 0) {
 	// there is an error, it might be, that the selected file does
 	// not exist. In that case, we can't make any assertion about
 	// the file type and assume that it matches the selection

@@ -55,150 +55,18 @@ FileSaveDialog::operator=(const FileSaveDialog&) {
     return *this;
 }
 
-std::string
-FileSaveDialog::dir_up(const std::string& dir) {
-    std::string::size_type pos = dir.rfind('/');
-
-    std::string retval;
-
-    if (pos != 0) {
-        retval = dir.substr(0, pos);
-    } else {
-        // pos==0 is the root directory, which we want
-        // to preserve
-        retval = "/";
-    }
-
-    return retval;
-}
-
-void
-FileSaveDialog::read_dir() {
-    std::list<std::string> _dirs;
-    std::list<std::string> _files;
-
-    if (__path->label().empty() ) {
-        char buff[CWDBUFSZ];
-        if (!getcwd(buff, CWDBUFSZ) ) {
-            if (errno == EACCES)
-                __path->label("/");
-            else
-                throw EXCEPTIONS::SystemError(errno);
-        }
-        __path->label(buff);
-    }
-
-    DIR* dir = opendir(__path->label().c_str() );
-    if (dir == 0)
-        throw EXCEPTIONS::SystemError(errno);
-
-    if (__do_chdir && (chdir(__path->label().c_str())!=0)) {
-	int sav_errno=errno;
-	(void)closedir(dir);
-	throw EXCEPTIONS::SystemError(sav_errno);
-    }
-
-    std::string _base(__path->label() );
-    assert(_base.length() > 0);
-
-    // If _base.length()==1, then it is the root directory and we
-    // don't append a slash
-    if (_base.length() > 1)
-        _base += "/";
-
-    dirent* dent;
-    while (errno = 0, dent = readdir(dir) ) {
-        std::string _tmp(_base + dent->d_name);
-
-        struct stat _stat;
-        if (stat(_tmp.c_str(), &_stat) == -1) {
-            // reset errno
-            errno = 0;
-            continue;
-        }
-
-        if (_stat.st_mode & S_IFDIR) {
-            _dirs.push_back(dent->d_name);
-            continue;
-        }
-        if (_stat.st_mode & S_IFREG) {
-            _files.push_back(dent->d_name);
-            continue;
-        }
-    }
-
-    // On Fedora 18, somewhere in __directories->set(_dirs), errno
-    // will be updated, so we save it here, before proceeding
-    int errno_save = errno;
-
-    __directories->set(_dirs);
-    __files->set(_files);
-
-    if (errno_save != 0) {
-        (void)closedir(dir);
-        throw EXCEPTIONS::SystemError(errno);
-    }
-
-    if (closedir(dir) != 0)
-        throw EXCEPTIONS::SystemError(errno);
-}
-
-void
-FileSaveDialog::listbox_enter_handler(Event& _e) {
-    assert(_e == EVT_LISTBOX_ENTER);
-
-    EventEx<ListBox<>*>& _evt = dynamic_cast<EventEx<ListBox<>*>&>(_e);
-
-    if (__directories == _evt.data() ) {
-        if (__directories->selected() == ".")
-            return;
-
-        if (__directories->selected() == "..") {
-            __path->label(dir_up(__path->label() ) );
-        } else {
-            // If __path->label().length()==1, then it is the root
-            // directory and we don't append a slash
-            if (__path->label().length() > 1)
-                __path->label(__path->label() + "/" +
-                              __directories->selected() );
-            else
-                __path->label(__path->label() +
-                              __directories->selected() );
-        }
-        try {
-            read_dir();
-        } catch (EXCEPTIONS::SystemError& ex) {
-            std::string _tmp(_("Cannot change to ") + __path->label() + ":");
-            __errmsgbox = new MessageBox2(_("System Error"),
-                                          _tmp,
-                                          ex.what(),
-                                          OK_ONLY);
-            __errmsgbox->show();
-
-            // Most likely the directory is not accessible, so go
-            // one up. If we happen to reach the root directory,
-            // and that's not accessible too, the system probably
-            // is messed up...
-            __path->label(dir_up(__path->label() ) );
-        }
-        return;
-    }
-
-    if (__files == _evt.data() ) {
-        __filename->input(__files->selected() );
-    }
-}
-
 void
 FileSaveDialog::window_close_handler(Event& _e) {
+    FileDialog::window_close_handler(_e);
+
     assert(_e == EVT_WINDOW_CLOSE);
 
     EventEx<WindowBase*>& _evt = dynamic_cast<EventEx<WindowBase*>&>(_e);
 
-    if (__errmsgbox != 0 && __errmsgbox == _evt.data() ) {
-        delete __errmsgbox;
-        __errmsgbox = 0;
-        return;
+    if (__errmsgbox == _evt.data()) {
+	delete __errmsgbox;
+	__errmsgbox=0;
+	return;
     }
 
     if (__confirmdia != 0 && __confirmdia == _evt.data() ) {
@@ -223,12 +91,18 @@ FileSaveDialog::button_press_handler(Event& _e) {
 
     if (realization() != REALIZED) return;
 
+    FileDialog::button_press_handler(_e);
+
     assert(_e == EVT_BUTTON_PRESS);
     EventEx<Button*>& evt = dynamic_cast<EventEx<Button*>&>(_e);
 
-    // Take into account that dialog type can be specified by user
-    if (evt.data() == ok_button() ||
-	evt.data() == yes_button() ) {
+    // Take into account that dialog type can be specified by user.
+    // Further, if the event is stopped, the FileDialog button press
+    // handler already did something (e.g. displaying that selection
+    // is not a file) so we don't touch it.
+    if ((evt.data() == ok_button() ||
+	 evt.data() == yes_button()) &&
+	!_e.stop()) {
         struct stat wdc;
         int retval;
         if ( (retval = stat(filepath().c_str(), &wdc) ) == 0) {
@@ -265,8 +139,6 @@ FileSaveDialog::button_press_handler(Event& _e) {
             }
         }
     }
-
-    Dialog::button_press_handler(_e);
 }
 
 //
@@ -276,50 +148,13 @@ FileSaveDialog::button_press_handler(Event& _e) {
 FileSaveDialog::FileSaveDialog(std::string _path,
 			       bool _do_chdir,
                                DIALOG_TYPE _dt) :
-    Dialog(std::string(_("Save File") ), _dt,
-           FULLSIZE),
-    __errmsgbox(0),
+    FileDialog(std::string(_("Save File") ), _path, _do_chdir, _dt),
     __confirmdia(0),
-    __path(0),
-    __directories(0),
-    __files(0),
-    __filename(0),
-    __hpack(0),
-    __vpack(0),
-    __do_chdir(_do_chdir) {
-    __vpack = new VPack;
-    __hpack = new HPack;
+    __errmsgbox(0) {
 
-    __path = new DynLabel(_path);
-    __path->color(DIALOG);
+    // Only allow files
+    selection_type(YACURS::FILE);
 
-    __directories = new ListBox<>;
-    __directories->sort_order(ASCENDING);
-
-    __files = new ListBox<>;
-    __files->sort_order(ASCENDING);
-
-    __hpack->add_back(__directories);
-    __hpack->add_back(__files);
-
-    __hpack->always_dynamic(true);
-    __hpack->hinting(false);
-
-    __vpack->add_back(__path);
-    __vpack->add_back(__hpack);
-
-    __filename = new Input<>;
-
-    __vpack->add_back(__filename);
-
-    __vpack->always_dynamic(true);
-    __vpack->hinting(false);
-
-    widget(__vpack);
-
-    EventQueue::connect_event(EventConnectorMethod1<FileSaveDialog>(
-                                  EVT_LISTBOX_ENTER, this,
-                                  &FileSaveDialog::listbox_enter_handler) );
     EventQueue::connect_event(EventConnectorMethod1<FileSaveDialog>(
                                   EVT_WINDOW_CLOSE, this,
                                   &FileSaveDialog::window_close_handler) );
@@ -327,87 +162,9 @@ FileSaveDialog::FileSaveDialog(std::string _path,
 
 FileSaveDialog::~FileSaveDialog() {
     EventQueue::disconnect_event(EventConnectorMethod1<FileSaveDialog>(
-                                     EVT_LISTBOX_ENTER, this,
-                                     &FileSaveDialog::listbox_enter_handler) );
-    EventQueue::disconnect_event(EventConnectorMethod1<FileSaveDialog>(
                                      EVT_WINDOW_CLOSE, this,
                                      &FileSaveDialog::window_close_handler) );
 
-    assert(__path != 0);
-    assert(__directories != 0);
-    assert(__files != 0);
-    assert(__filename != 0);
-    assert(__hpack != 0);
-    assert(__vpack != 0);
-
-    delete __path;
-    delete __directories;
-    delete __files;
-    delete __filename;
-    delete __hpack;
-    delete __vpack;
-}
-
-std::string
-FileSaveDialog::filepath() const {
-    assert(__path != 0);
-    assert(__directories != 0);
-    assert(__files != 0);
-    assert(__filename != 0);
-
-    std::string retval;
-
-    if (__path->label() == "/")
-        retval = __path->label() + __filename->input();
-    else
-        retval = __path->label() + "/" + __filename->input();
-
-    return retval;
-}
-
-const std::string&
-FileSaveDialog::directory() const {
-    assert(__path != 0);
-    assert(__directories != 0);
-    assert(__files != 0);
-    assert(__filename != 0);
-
-    return __path->label();
-}
-
-const std::string&
-FileSaveDialog::filename() const {
-    return __filename->input();
-}
-
-void
-FileSaveDialog::do_chdir(bool _v) {
-    __do_chdir=_v;
-}
-
-bool
-FileSaveDialog::do_chdir() const {
-    return __do_chdir;
-}
-
-void
-FileSaveDialog::refresh(bool immediate) {
-    Dialog::refresh(immediate);
-
-    try {
-        read_dir();
-    } catch (EXCEPTIONS::SystemError& ex) {
-        std::string _tmp(_("Cannot change to ") + __path->label() + ":");
-        __errmsgbox = new MessageBox2(_("System Error"),
-                                      _tmp,
-                                      ex.what(),
-                                      OK_ONLY);
-        __errmsgbox->show();
-
-        // Most likely the directory is not accessible, so go one
-        // up. If we happen to reach the root directory, and
-        // that's not accessible too, the system probably is
-        // messed up...
-        __path->label(dir_up(__path->label() ) );
-    }
+    if (__confirmdia) delete __confirmdia;
+    if (__errmsgbox) delete __errmsgbox;
 }

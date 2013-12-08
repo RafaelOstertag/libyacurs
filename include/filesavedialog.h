@@ -27,37 +27,24 @@
 
 #include <unistd.h>
 
-#include "dialog.h"
+#include "filedialog.h"
 #include "dynlabel.h"
 #include "input.h"
 #include "listbox.h"
 #include "messagebox2.h"
 
 namespace YACURS {
-    class FileSaveDialog : public Dialog {
+    class FileSaveDialog : public FileDialog {
         private:
-            MessageBox2* __errmsgbox;
             MessageBox2* __confirmdia;
-            DynLabel* __path;
-            ListBox<>* __directories;
-            ListBox<>* __files;
-            Input<>* __filename;
-            HPack* __hpack;
-            VPack* __vpack;
-	    bool __do_chdir;
+	    MessageBox2* __errmsgbox;
 
             // Not supported
             FileSaveDialog& operator=(const FileSaveDialog&);
 
-            std::string dir_up(const std::string& dir);
-
-            void read_dir();
-
-            void listbox_enter_handler(Event& _e);
-
-            void window_close_handler(Event& _e);
-
         protected:
+	    virtual void window_close_handler(Event& _e);
+
             virtual void button_press_handler(Event& _e);
 
         public:
@@ -66,18 +53,6 @@ namespace YACURS {
                            DIALOG_TYPE _dt=OKCANCEL);
 
             virtual ~FileSaveDialog();
-
-            std::string filepath() const;
-
-            const std::string& directory() const;
-
-            const std::string& filename() const;
-
-	    void do_chdir(bool _v);
-
-	    bool do_chdir() const;
-
-            void refresh(bool immediate);
     };
 }
 

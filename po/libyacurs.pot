@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libyacurs 0.1\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
-"POT-Creation-Date: 2013-11-20 23:58+0100\n"
+"POT-Creation-Date: 2013-12-09 18:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,29 +33,19 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: src/filesavedialog.cc:169 src/filesavedialog.cc:386
-#: src/fileloaddialog.cc:169 src/fileloaddialog.cc:322
-msgid "Cannot change to "
-msgstr ""
-
-#: src/filesavedialog.cc:170 src/filesavedialog.cc:387
-#: src/fileloaddialog.cc:170 src/fileloaddialog.cc:323
-msgid "System Error"
-msgstr ""
-
-#: src/filesavedialog.cc:234
+#: src/filesavedialog.cc:104
 msgid "Confirmation"
 msgstr ""
 
-#: src/filesavedialog.cc:237
+#: src/filesavedialog.cc:107
 msgid "already exists. Do you want to overwrite?"
 msgstr ""
 
-#: src/filesavedialog.cc:246
+#: src/filesavedialog.cc:116
 msgid "Error"
 msgstr ""
 
-#: src/filesavedialog.cc:276
+#: src/filesavedialog.cc:150
 msgid "Save File"
 msgstr ""
 
@@ -167,7 +157,15 @@ msgstr ""
 msgid "Area must not be zero"
 msgstr ""
 
-#: src/fileloaddialog.cc:212
+#: src/fileloaddialog.cc:171 src/fileloaddialog.cc:335
+msgid "Cannot change to "
+msgstr ""
+
+#: src/fileloaddialog.cc:172 src/fileloaddialog.cc:336
+msgid "System Error"
+msgstr ""
+
+#: src/fileloaddialog.cc:214
 msgid "Load File"
 msgstr ""
 

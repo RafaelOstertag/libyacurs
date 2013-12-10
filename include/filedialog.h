@@ -65,6 +65,18 @@ namespace YACURS {
 
 	    virtual void button_press_handler(Event& _e);
 
+	    /**
+	     * Test if the selected file path matches the requested
+	     * selection type.
+	     *
+	     * Be advised, if the method returns @c false, it has
+	     * created a dialog.
+	     *
+	     * @return @c true if the selected file matches the
+	     * requested selection type. @c false otherwise.
+	     */
+	    bool selection_type_match();
+
         public:
             FileDialog(const std::string& title,
 		       std::string _path=std::string(),

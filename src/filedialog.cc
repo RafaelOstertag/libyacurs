@@ -250,14 +250,33 @@ FileDialog::button_press_handler(Event& _e) {
     assert(_e == EVT_BUTTON_PRESS);
     EventEx<Button*>& evt = dynamic_cast<EventEx<Button*>&>(_e);
 
-    // only intercept ok or yes button
+    // make sure the event is intended for us
+    if (evt.data() != ok_button() &&
+	evt.data() != yes_button() &&
+	evt.data() != cancel_button() &&
+	evt.data() != no_button() )
+	return;
+
+    // only intercept ok or yes button, i.e. ignore cancel or no
+    // button.
     if (evt.data() != ok_button() &&
 	evt.data() != yes_button() ) {
 	Dialog::button_press_handler(_e);
 	return;
     }
 
-    // Ok, yes or ok button pressed, let's see about the file type
+    if (!selection_type_match()) {
+	// the selection did not match the requested selection
+	// type. The method has raised a dialog to indicate the
+	// missmatch to the user. So we have to return and do nothing.
+	return;
+    }
+
+    Dialog::button_press_handler(_e);
+}
+
+bool
+FileDialog::selection_type_match() {
     struct stat statbuf;
     if (stat(filepath().c_str(), &statbuf) != 0) {
 	// there is an error, it might be, that the selected file does
@@ -266,8 +285,7 @@ FileDialog::button_press_handler(Event& _e) {
 	// criteria.
 	if (errno == ENOENT) {
 	    // ok, no such file
-	    Dialog::button_press_handler(_e);
-	    return;
+	    return true;
 	}
 
 	// some other error
@@ -282,9 +300,7 @@ FileDialog::button_press_handler(Event& _e) {
 				      _err.what(),
 				      OK_ONLY);
 	__errmsgbox->show();
-	// stop the event from further processing and return
-	_e.stop(true);
-	return;
+	return false;
     }
 
     // no error, let's see if the selection matches the expectation
@@ -297,9 +313,7 @@ FileDialog::button_press_handler(Event& _e) {
 						 _("is not a file"),
 						 OK_ONLY);
 	    __filetypemismatch->show();
-	    // stop the event from further processing and return
-	    _e.stop(true);
-	    return;
+	    return false;
 	}
 	break;
     case DIRECTORY:
@@ -310,9 +324,7 @@ FileDialog::button_press_handler(Event& _e) {
 						 _("is not a directory"),
 						 OK_ONLY);
 	    __filetypemismatch->show();
-	    // stop the event from further processing and return
-	    _e.stop(true);
-	    return;
+	    return false;
 	}
 	break;
     default:
@@ -320,7 +332,7 @@ FileDialog::button_press_handler(Event& _e) {
 	break;
     }
 
-    Dialog::button_press_handler(_e);
+    return true;
 }
 
 //

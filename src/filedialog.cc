@@ -353,7 +353,8 @@ FileDialog::FileDialog(const std::string& title,
     __hpack(),
     __vpack(),
     __do_chdir(_do_chdir),
-    __sel_type(ANY) {
+    __sel_type(ANY),
+    __suffix() {
 
     __path.color(DIALOG);
     // Make sure the path specified by the user does not have a
@@ -417,9 +418,9 @@ FileDialog::filepath() const {
     std::string retval;
 
     if (__path.label() == "/")
-        retval = __path.label() + __filename.input();
+        retval = __path.label() + filename();
     else
-        retval = __path.label() + "/" + __filename.input();
+        retval = __path.label() + "/" + filename();
 
     return retval;
 }
@@ -429,9 +430,22 @@ FileDialog::directory() const {
     return __path.label();
 }
 
-const std::string&
+std::string
 FileDialog::filename() const {
-    return __filename.input();
+    if (__sel_type == FILE &&
+	!__suffix.empty()) {
+
+	if (__filename.input().length() < __suffix.length())
+	    return __filename.input() + __suffix;
+
+	if (__filename.input().substr(__filename.input().length() -
+				      __suffix.length())!=__suffix)
+	    return __filename.input() + __suffix;
+
+	return __filename.input();
+    } else {
+	return __filename.input();
+    }
 }
 
 void
@@ -452,6 +466,11 @@ FileDialog::selection_type(FILEDIALOG_SELECTION_TYPE _t) {
 FILEDIALOG_SELECTION_TYPE
 FileDialog::selection_type() const {
     return __sel_type;
+}
+
+void
+FileDialog::suffix(const std::string& _s) {
+    __suffix=_s;
 }
 
 void

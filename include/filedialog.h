@@ -46,7 +46,8 @@ namespace YACURS {
             VPack __vpack;
 	    bool __do_chdir;
 	    FILEDIALOG_SELECTION_TYPE __sel_type;
-
+	    std::string __suffix;
+	    
             // Not supported
             FileDialog& operator=(const FileDialog&);
 
@@ -89,7 +90,7 @@ namespace YACURS {
 
             const std::string& directory() const;
 
-            const std::string& filename() const;
+            std::string filename() const;
 
 	    void do_chdir(bool _v);
 
@@ -98,6 +99,14 @@ namespace YACURS {
 	    void selection_type(FILEDIALOG_SELECTION_TYPE _t);
 
 	    FILEDIALOG_SELECTION_TYPE selection_type() const;
+
+	    /**
+	     * File name suffix.
+	     *
+	     * String that is appended to file name and file path when
+	     * selection type is FILE.
+	     */
+	    void suffix(const std::string& _s);
 
             void refresh(bool immediate);
     };

@@ -27,51 +27,22 @@
 
 #include <unistd.h>
 
-#include "dialog.h"
+#include "filedialog.h"
 #include "dynlabel.h"
 #include "input.h"
 #include "listbox.h"
 #include "messagebox2.h"
 
 namespace YACURS {
-    class FileLoadDialog : public Dialog {
+    class FileLoadDialog : public FileDialog {
         private:
-            MessageBox2* __msgbox;
-            DynLabel* __path;
-            ListBox<>* __directories;
-            ListBox<>* __files;
-            Input<>* __filename;
-            HPack* __hpack;
-            VPack* __vpack;
-	    bool __do_chdir;
-
             // Not supported
             FileLoadDialog& operator=(const FileLoadDialog&);
-
-            std::string dir_up(const std::string& dir);
-
-            void read_dir();
-
-            void listbox_enter_handler(Event& _e);
-
-            void window_close_handler(Event& _e);
 
         public:
             FileLoadDialog(std::string _path=std::string(), bool _do_chdir=false);
 
             virtual ~FileLoadDialog();
-
-            std::string filepath() const;
-
-            const std::string& directory() const;
-
-            const std::string& filename() const;
-
-	    void do_chdir(bool _v);
-
-	    bool do_chdir() const;
-
-            void refresh(bool immediate);
     };
 }
 

@@ -38,8 +38,6 @@
 #endif
 
 #include <unistd.h>
-#include <climits>
-#include <dirent.h>
 
 #include "filesavedialog.h"
 #include "yacursconst.h"
@@ -91,18 +89,27 @@ FileSaveDialog::button_press_handler(Event& _e) {
 
     if (realization() != REALIZED) return;
 
-    FileDialog::button_press_handler(_e);
-
     assert(_e == EVT_BUTTON_PRESS);
     EventEx<Button*>& evt = dynamic_cast<EventEx<Button*>&>(_e);
 
-    // Take into account that dialog type can be specified by user.
-    // Further, if the event is stopped, the FileDialog button press
-    // handler already did something (e.g. displaying that selection
-    // is not a file) so we don't touch it.
-    if ((evt.data() == ok_button() ||
-	 evt.data() == yes_button()) &&
-	!_e.stop()) {
+    if (evt.data() == ok_button() ||
+	evt.data() == yes_button()) {
+	
+	// This is also called in
+	// FileDialog::button_press_handler(). But since
+	// FileDialog::button_press_handler() closes the dialog if the
+	// selection type matches (we don't want that, we also have to
+	// check for existing file), we call it ourselves and avoid
+	// FileDialog::button_press_handler() till the end of the
+	// method.
+	if (!selection_type_match()) {
+	    // the selection did not match the requested selection
+	    // type. The method has raised a dialog to indicate the
+	    // missmatch to the user. So we have to return and do
+	    // nothing.
+	    return;
+	}
+
         struct stat wdc;
         int retval;
         if ( (retval = stat(filepath().c_str(), &wdc) ) == 0) {
@@ -113,7 +120,6 @@ FileSaveDialog::button_press_handler(Event& _e) {
                                                "already exists. Do you want to overwrite?"),
                                            YESNO);
             __confirmdia->show();
-            _e.stop(true);
             return;
         } else {
             int s_errno = errno;
@@ -139,6 +145,8 @@ FileSaveDialog::button_press_handler(Event& _e) {
             }
         }
     }
+
+    FileDialog::button_press_handler(_e);
 }
 
 //

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libyacurs 0.1\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
-"POT-Creation-Date: 2013-12-09 18:09+0100\n"
+"POT-Creation-Date: 2013-12-13 12:04+0100\n"
 "PO-Revision-Date: 2013-11-21 00:01+0100\n"
 "Last-Translator: Rafael Ostertag <rafi@guengel.ch>\n"
 "Language-Team: German\n"
@@ -35,19 +35,19 @@ msgstr "Nein"
 msgid "Yes"
 msgstr "Ja"
 
-#: src/filesavedialog.cc:104
+#: src/filesavedialog.cc:117
 msgid "Confirmation"
 msgstr "Bestätigung"
 
-#: src/filesavedialog.cc:107
+#: src/filesavedialog.cc:120
 msgid "already exists. Do you want to overwrite?"
 msgstr "existiert bereits. Überschreiben?"
 
-#: src/filesavedialog.cc:116
+#: src/filesavedialog.cc:128
 msgid "Error"
 msgstr "Fehler"
 
-#: src/filesavedialog.cc:150
+#: src/filesavedialog.cc:159
 msgid "Save File"
 msgstr "Datei speichern"
 
@@ -159,15 +159,7 @@ msgstr "Argument 'win' darf nicht 0 sein"
 msgid "Area must not be zero"
 msgstr "Fläche darf nicht 0 sein"
 
-#: src/fileloaddialog.cc:171 src/fileloaddialog.cc:335
-msgid "Cannot change to "
-msgstr "Kann nicht wechseln zu "
-
-#: src/fileloaddialog.cc:172 src/fileloaddialog.cc:336
-msgid "System Error"
-msgstr "System Fehler"
-
-#: src/fileloaddialog.cc:214
+#: src/fileloaddialog.cc:64
 msgid "Load File"
 msgstr "Datei laden"
 
@@ -210,3 +202,9 @@ msgstr "CheckBox Cursor ausserhalb Bereich in set_selection()"
 #: src/radiobox.cc:67
 msgid "RadioBox cursor out of range in set_selection()"
 msgstr "RadioBox Cursor ausserhalb Bereich in set_selection()"
+
+#~ msgid "Cannot change to "
+#~ msgstr "Kann nicht wechseln zu "
+
+#~ msgid "System Error"
+#~ msgstr "System Fehler"

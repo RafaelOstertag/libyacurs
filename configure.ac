@@ -1,7 +1,7 @@
 # $Id$
 AC_INIT([libyacurs], [0.1], [https://bugs.guengel.ch/enter_bug.cgi?product=YAPET])
 AC_CONFIG_SRCDIR([src/curs.cc])
-AC_CONFIG_AUX_DIR([aux])
+AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE
 AM_SILENT_RULES([yes])
 AC_REVISION([$Revision$])

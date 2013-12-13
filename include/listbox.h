@@ -529,8 +529,7 @@ namespace YACURS {
     template<class _Pred> bool 
     ListBox<_T>::search(_Pred p, lsz_t start, lsz_t* pos) {
         if (start >= __list.size() )
-            throw std::out_of_range(
-                      "ListBox<>::search() position out of range");
+	    return false;
 
 	typename std::list<_T>::iterator start_it = __list.begin();
 
@@ -546,7 +545,7 @@ namespace YACURS {
 #if defined(__SUNPRO_CC)
 	    std::distance(__list.begin(), it, dist);
 #else
-		dist = std::distance(__list.begin(), it);
+	    dist = std::distance(__list.begin(), it);
 #endif
 
 	    if (pos != 0) *pos=dist;

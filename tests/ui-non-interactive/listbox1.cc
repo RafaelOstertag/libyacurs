@@ -212,12 +212,8 @@ test_driver(YACURS::Event& _e) {
 	YACURS::Curses::statusbar()->set("Test search");
 	YACURS::ListBox<std::string>::lsz_t pos;
 
-	try {
-	    testlb->search(Match(std::string("4 list item")), 90, &pos );
+	if (testlb->search(Match(std::string("4 list item")), 90, &pos ))
 	    abort();
-	} catch (std::out_of_range&) {
-	    // OK!
-	}
 
 	// Must be found at position 5
 	if (!testlb->search(Match(std::string("4 list item")), 0, &pos ) )

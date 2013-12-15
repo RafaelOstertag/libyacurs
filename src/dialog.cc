@@ -169,20 +169,18 @@ Dialog::on_no_button() {
 
 Dialog::Dialog(const std::string& _title,
                DIALOG_TYPE _dt,
-               DIALOG_SIZE _ds) : __vpack(0),
-				  __hpack(0),
+               DIALOG_SIZE _ds) : __vpack(new VPack),
+				  __hpack(new HPack),
 				  __byes(0),
 				  __bok(0),
+				  __ok_spacer(new Spacer),
 				  __bcancel(0),
 				  __bno(0),
-				  __hrule(0),
+				  __hrule(new HRule),
 				  __dstate(DIALOG_CANCEL),
 				  __dialog_type(_dt),
 				  __dialog_size(_ds),
 				  __title(_title) {
-    __vpack = new VPack;
-    __hpack = new HPack;
-    __hrule = new HRule;
     __hrule->color(DIALOG);
 
     __vpack->add_back(__hrule);
@@ -192,6 +190,7 @@ Dialog::Dialog(const std::string& _title,
     case OKCANCEL:
         __bcancel = new Button(_("Cancel") );
         __hpack->add_back(__bcancel);
+	__hpack->add_front(__ok_spacer);
 	// Fall thru
 	
     case OK_ONLY:
@@ -202,6 +201,7 @@ Dialog::Dialog(const std::string& _title,
     case YESNO:
         __bno = new Button(_("No") );
         __hpack->add_front(__bno);
+	__hpack->add_front(__ok_spacer);
 	// Fall thru
 	
     case YES_ONLY:
@@ -213,8 +213,10 @@ Dialog::Dialog(const std::string& _title,
     case YESNOCANCEL:
         __bcancel = new Button(_("Cancel") );
         __hpack->add_back(__bcancel);
+	__hpack->add_front(__ok_spacer);
         __bno = new Button(_("No") );
         __hpack->add_front(__bno);
+	__hpack->add_front(__ok_spacer);
         __byes = new Button(_("Yes") );
         __hpack->add_front(__byes);
 	break;
@@ -234,10 +236,12 @@ Dialog::~Dialog() {
     assert(__vpack != 0);
     assert(__hpack != 0);
     assert(__hrule != 0);
+    assert(__ok_spacer != 0);
 
     delete __vpack;
     delete __hpack;
     delete __hrule;
+    delete __ok_spacer;
 
     if (__bok)
 	delete __bok;

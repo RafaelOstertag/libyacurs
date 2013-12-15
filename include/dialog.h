@@ -31,6 +31,7 @@
 #include "vpack.h"
 #include "hpack.h"
 #include "button.h"
+#include "spacer.h"
 
 namespace YACURS {
     namespace INTERNAL {
@@ -43,6 +44,7 @@ namespace YACURS {
             HPack* __hpack;
 	    Button* __byes;
             Button* __bok;
+	    Spacer* __ok_spacer;
             Button* __bcancel;
 	    Button* __bno;
 	    HRule* __hrule;

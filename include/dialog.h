@@ -76,6 +76,13 @@ namespace YACURS {
 	     */
 	    void add_button(Button* b);
 
+	    /**
+	     * Add a spacer to the button pack.
+	     *
+	     * @param s spacer to add to the button pack.
+	     */
+	    void add_button(Spacer* s);
+
             virtual void button_press_handler(Event& _e);
 
 	    /**

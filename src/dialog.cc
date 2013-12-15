@@ -112,6 +112,11 @@ Dialog::add_button(Button* b) {
 }
 
 void
+Dialog::add_button(Spacer* s) {
+    __hpack->add_back(s);
+}
+
+void
 Dialog::button_press_handler(Event& _e) {
     if (realization() != REALIZED) return;
 

@@ -131,15 +131,6 @@ Label::refresh(bool immediate) {
 }
 
 void
-WidgetBase::unrealize() {
-    UNREALIZE_ENTER;
-
-    // Intentionally empty
-
-    UNREALIZE_LEAVE;
-}
-
-void
 Label::color(COLOROBJ c) {
     __color = c;
 }

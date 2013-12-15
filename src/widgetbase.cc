@@ -157,3 +157,12 @@ WidgetBase::focus() const {
 
     return __focus;
 }
+
+void
+WidgetBase::unrealize() {
+    UNREALIZE_ENTER;
+
+    // Intentionally empty
+
+    UNREALIZE_LEAVE;
+}

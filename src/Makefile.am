@@ -18,5 +18,5 @@ libyacurs_la_SOURCES = sigaction.cc coordinates.cc size.cc margin.cc	\
  messagebox2.cc messagebox3.cc inputbox.cc filedialog.cc		\
  filesavedialog.cc fileloaddialog.cc checkbox.cc radiobox.cc		\
  unlockdialog.cc unlockdiadefault.cc rule.cc hrule.cc vrule.cc		\
- yacursdbg.cc
+ spacer.cc yacursdbg.cc
 

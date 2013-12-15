@@ -61,6 +61,7 @@
 #include "rule.h"
 #include "hrule.h"
 #include "vrule.h"
+#include "spacer.h"
 #include "dynlabel.h"
 #include "button.h"
 #include "input.h"

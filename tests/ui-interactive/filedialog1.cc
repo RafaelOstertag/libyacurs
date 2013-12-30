@@ -19,15 +19,13 @@
 #ifdef YACURS_USE_WCHAR
 extern "C" int
 __test_wget_wch(void*, wint_t*) {
-    // skipping
-    std::exit(77);
-    return -1;
+    throw std::runtime_error("Does not use preload lib");
+    return ERR;
 }
 #else
 extern "C" int
 __test_wgetch(void*) {
-    // skipping
-    std::exit(77);
+    throw std::runtime_error("Does not use preload lib");
     return -1;
 }
 #endif
@@ -281,6 +279,10 @@ main() {
         delete YACURS::Curses::statusbar();
 
         YACURS::Curses::end();
+    } catch (std::runtime_error& e) {
+	YACURS::Curses::end();
+	std::cerr << e.what() << std::endl;
+	return 77;
     } catch (std::exception& e) {
         YACURS::Curses::end();
         std::cerr << e.what() << std::endl;

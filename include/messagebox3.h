@@ -28,7 +28,7 @@
 namespace YACURS {
     class MessageBox3 : public MessageBox2 {
         private:
-            DynLabel* __message3;
+            DynLabel __message3;
 
             // Not supported
             MessageBox3& operator=(const MessageBox3&);

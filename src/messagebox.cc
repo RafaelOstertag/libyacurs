@@ -48,18 +48,14 @@ MessageBox::MessageBox(const std::string& _title,
                        const std::string& _message,
                        DIALOG_TYPE _dt) :
     Dialog(_title, _dt),
-    __message(new DynLabel(_message)),
-    __vpack(new VPack) {
-    __message->color(DIALOG);
+    __message(_message),
+    __vpack() {
+    __message.color(DIALOG);
     // Required to make dynlabel work
-    __vpack->always_dynamic(true);
-    __vpack->add_back(__message);
-    widget(__vpack);
+    __vpack.always_dynamic(true);
+    __vpack.add_back(&__message);
+    widget(&__vpack);
 }
 
 MessageBox::~MessageBox() {
-    assert(__message != 0);
-    assert(__vpack != 0);
-    delete __message;
-    delete __vpack;
 }

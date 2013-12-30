@@ -48,13 +48,10 @@ MessageBox2::MessageBox2(const std::string& _title,
                          const std::string& _message1,
                          const std::string& _message2,
                          DIALOG_TYPE _dt) : MessageBox(_title, _message1, _dt),
-					    __message2(new DynLabel(_message2)) {
-    __message2->color(DIALOG);
-    __vpack->add_back(__message2);
+					    __message2(_message2) {
+    __message2.color(DIALOG);
+    __vpack.add_back(&__message2);
 }
 
 MessageBox2::~MessageBox2() {
-    assert(__message2 != 0);
-
-    delete __message2;
 }

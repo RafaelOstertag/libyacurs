@@ -32,9 +32,9 @@
 namespace YACURS {
     class InputBox : public Dialog {
         private:
-            Label* __message;
-            Input<>* __input;
-            VPack* __vpack;
+            Label __message;
+            Input<> __input;
+            VPack __vpack;
 
             // Not supported
             InputBox& operator=(const InputBox&);

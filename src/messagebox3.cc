@@ -50,12 +50,10 @@ MessageBox3::MessageBox3(const std::string& _title,
 							_message1,
 							_message2,
 							_dt),
-					    __message3(new DynLabel(_message3)) {
-    __message3->color(DIALOG);
-    __vpack->add_back(__message3);
+					    __message3(_message3) {
+    __message3.color(DIALOG);
+    __vpack.add_back(&__message3);
 }
 
 MessageBox3::~MessageBox3() {
-    assert(__message3 != 0);
-    delete __message3;
 }

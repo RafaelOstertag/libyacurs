@@ -31,10 +31,10 @@
 namespace YACURS {
     class MessageBox : public Dialog {
         private:
-            DynLabel* __message;
+            DynLabel __message;
 
 	protected:
-	    VPack* __vpack;
+	    VPack __vpack;
 
             // Not supported
             MessageBox& operator=(const MessageBox&);

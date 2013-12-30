@@ -64,7 +64,7 @@ class MainWindow : public YACURS::Window {
         YACURS::Button* button1;
         YACURS::Button* button2;
         YACURS::Label* label1;
-        YACURS::MessageBox* messagebox1;
+        YACURS::MessageBox3* messagebox3;
 
     protected:
         void window_close_handler(YACURS::Event& _e) {
@@ -72,16 +72,16 @@ class MainWindow : public YACURS::Window {
             YACURS::EventEx<YACURS::WindowBase*>& evt =
                 dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
-            if (messagebox1 != 0 && evt.data() == messagebox1) {
-                YACURS::Curses::statusbar()->push("MessageBox closed");
+            if (messagebox3 != 0 && evt.data() == messagebox3) {
+                YACURS::Curses::statusbar()->push("MessageBox3 closed");
 
-                if (messagebox1->dialog_state() == YACURS::DIALOG_OK)
+                if (messagebox3->dialog_state() == YACURS::DIALOG_OK)
                     label1->label("DIALOG_OK");
                 else
                     label1->label("DIALOG_CANCEL");
 
-                delete messagebox1;
-                messagebox1 = 0;
+                delete messagebox3;
+                messagebox3 = 0;
             }
         }
 
@@ -91,16 +91,20 @@ class MainWindow : public YACURS::Window {
                 dynamic_cast<YACURS::EventEx<YACURS::Button*>&>(_e);
 
             if (e.data() == button1) {
-                assert(messagebox1 == 0);
+                assert(messagebox3 == 0);
 
 #ifdef YACURS_USE_WCHAR
-                messagebox1 = new YACURS::MessageBox("«Test MessageBox»",
-                                                     "“This is the message”");
+                messagebox3 = new YACURS::MessageBox3("«Test MessageBox3»",
+                                                     "“This is the message 1”",
+						     "“This is the message 2”",
+						     "“This is the message 3”");
 #else
-                messagebox1 = new YACURS::MessageBox("Test MessageBox",
-                                                     "This is the message");
+                messagebox3 = new YACURS::MessageBox3("Test MessageBox3",
+						      "This is the message 1",
+						      "This is the message 2",
+						      "This is the message 3");
 #endif
-                messagebox1->show();
+                messagebox3->show();
                 return;
             }
 
@@ -112,7 +116,7 @@ class MainWindow : public YACURS::Window {
 
     public:
         MainWindow() : YACURS::Window(YACURS::Margin(1, 0, 1,
-                                                     0) ), messagebox1(0) {
+                                                     0) ), messagebox3(0) {
 #ifdef YACURS_USE_WCHAR
             button1 = new YACURS::Button("«New Window»");
             button2 = new YACURS::Button("«Quit»");
@@ -144,8 +148,8 @@ class MainWindow : public YACURS::Window {
         }
 
         ~MainWindow() {
-            if (messagebox1)
-                delete messagebox1;
+            if (messagebox3)
+                delete messagebox3;
 
             delete button1;
             delete button2;
@@ -188,7 +192,7 @@ main() {
 
         YACURS::Curses::title(new YACURS::TitleBar(YACURS::TitleBar::
                                                    POS_TOP,
-                                                   "YACURS::MessageBox") );
+                                                   "YACURS::MessageBox3") );
         YACURS::Curses::statusbar(new YACURS::StatusBar);
 
         YACURS::Curses::mainwindow(new MainWindow);

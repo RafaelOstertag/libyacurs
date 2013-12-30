@@ -2,9 +2,10 @@
 
 AUTOMAKE_OPTIONS = serial-tests
 
-check_PROGRAMS = input1 app1 checkbox1 dialog1 filedialog1	     \
-filedialog2 filedialog3 focus1 inputbox1 listbox1 listbox2	     \
-lockscreen1 messagebox1 packremove radiobox1 resize3 resize4 resize5
+check_PROGRAMS = input1 app1 checkbox1 dialog1 filedialog1		\
+filedialog2 filedialog3 focus1 inputbox1 listbox1 listbox2		\
+lockscreen1 messagebox1 messagebox2 messagebox3 packremove radiobox1	\
+resize3 resize4 resize5
 
 AM_DEFAULT_SOURCE_EXT = .cc
 

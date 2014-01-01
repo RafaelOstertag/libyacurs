@@ -34,7 +34,7 @@ do
     cd "${TESTDIRHOST}" || exit 1
 
 
-    xterm -T "${h}" -n "${h}" -e "ssh -t $h 'cd ${TESTDIRHOST} ; if [ -x /usr/xpg4/bin/sh ] ; then /usr/xpg4/bin/sh ${TESTDIR_SRC}/scripts/checkall.sh ; else /bin/sh ${TESTDIR_SRC}/scripts/checkall.sh" ; fi ; echo '============= DONE =============' ; read BLA'" &
+    xterm -T "${h}" -n "${h}" -e "ssh -t $h 'cd ${TESTDIRHOST} ; if [ -x /usr/xpg4/bin/sh ] ; then /usr/xpg4/bin/sh ${TESTDIR_SRC}/scripts/checkall.sh ; else /bin/sh ${TESTDIR_SRC}/scripts/checkall.sh ; fi ; echo '============= DONE =============' ; read BLA'" &
 done
 
 exit 0

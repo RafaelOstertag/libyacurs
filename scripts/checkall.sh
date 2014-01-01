@@ -41,7 +41,7 @@ host_hyperion() {
 	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	do
 	    make distclean
-	    ./configure $configflags CXX="`eval echo \\$HYPERION_CXX_$c`" \
+	    ../libyacurs-src/configure $configflags CXX="`eval echo \\$HYPERION_CXX_$c`" \
 		CC="`eval echo \\$HYPERION_CC_$c`" \
 		CFLAGS="`eval echo \\$HYPERION_CFLAGS_$c`" \
 		CXXFLAGS="`eval echo \\$HYPERION_CXXFLAGS_$c`" \
@@ -91,7 +91,7 @@ host_dash() {
 	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	do
 	    make distclean
-	    ./configure $configflags CXX="`eval echo \\$DASH_CXX_$c`" \
+	    ../libyacurs-src/configure $configflags CXX="`eval echo \\$DASH_CXX_$c`" \
 		CC="`eval echo \\$DASH_CC_$c`" \
 		CFLAGS="`eval echo \\$DASH_CFLAGS_$c`" \
 		CXXFLAGS="`eval echo \\$DASH_CXXFLAGS_$c`" \
@@ -147,7 +147,7 @@ host_wheezy() {
 	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	do
 	    make distclean
-	    ./configure $configflags CXX="`eval echo \\$WHEEZY_CXX_$c`" \
+	    ../libyacurs-src/configure $configflags CXX="`eval echo \\$WHEEZY_CXX_$c`" \
 		CC="`eval echo \\$WHEEZY_CC_$c`" \
 		CFLAGS="`eval echo \\$WHEEZY_CFLAGS_$c`" \
 		CXXFLAGS="`eval echo \\$WHEEZY_CXXFLAGS_$c`" \
@@ -198,7 +198,7 @@ host_debian32() {
 	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	do
 	    make distclean
-	    ./configure $configflags CXX="`eval echo \\$DEBIAN32_CXX_$c`" \
+	    ../libyacurs-src/configure $configflags CXX="`eval echo \\$DEBIAN32_CXX_$c`" \
 		CC="`eval echo \\$DEBIAN32_CC_$c`" \
 		CFLAGS="`eval echo \\$DEBIAN32_CFLAGS_$c`" \
 		CXXFLAGS="`eval echo \\$DEBIAN32_CXXFLAGS_$c`" \
@@ -274,7 +274,7 @@ host_aurora() {
 	    for curs in system
 	    do
 		gmake distclean
-		./configure $configflags CXX="`eval echo \\$AURORA_CXX_$c`" \
+		../libyacurs-src/configure $configflags CXX="`eval echo \\$AURORA_CXX_$c`" \
 		    CC="`eval echo \\$AURORA_CC_$c`" \
 		    CFLAGS="`eval echo \\$AURORA_CFLAGS_$c`" \
 		    CPPFLAGS="`eval echo \\$AURORA_CURSES_CPPFLAGS_$curs`" \
@@ -352,7 +352,7 @@ host_freebsd32() {
 	    for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	    do
 		gmake distclean
-		./configure $configflags CXX="`eval echo \\$FREEBSD32_CXX_$c`" \
+		../libyacurs-src/configure $configflags CXX="`eval echo \\$FREEBSD32_CXX_$c`" \
 		    CC="`eval echo \\$FREEBSD32_CC_$c`" \
 		    CFLAGS="`eval echo \\$FREEBSD32_CFLAGS_$c`" \
 		    CPPFLAGS="`eval echo \\$FREEBSD32_CURSES_CPPFLAGS_$curs`" \
@@ -378,7 +378,7 @@ host_abraxas() {
 	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	do
 	    gmake distclean
-	    ./configure $configflags \
+	    ../libyacurs-src/configure $configflags \
 		CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
 		CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
 	    had_error $? "Error on abraxas CONFIGFLAGS=$configflags"
@@ -398,7 +398,7 @@ host_netbsd32() {
 	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	do
 	    gmake distclean
-	    ./configure $configflags \
+	    ../libyacurs-src/configure $configflags \
 		CFLAGS="-O3 -Wall -Werror -pedantic" \
 		CXXFLAGS="-O3 -Wall -Werror -pedantic"
 	    had_error $? "Error on netbsd32 CONFIGFLAGS=$configflags"
@@ -418,7 +418,7 @@ host_fish() {
 	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	do
 	    gmake distclean
-	    ./configure $configflags \
+	    ../libyacurs-src/configure $configflags \
 		CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
 		CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
 	    had_error $? "Error on fish CONFIGFLAGS=$configflags"
@@ -438,7 +438,7 @@ host_puffy() {
 	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	do
 	    gmake distclean
-	    ./configure $configflags \
+	    ../libyacurs-src/configure $configflags \
 		CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
 		CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
 	    had_error $? "Error on fish CONFIGFLAGS=$configflags"
@@ -458,7 +458,7 @@ host_openbsd32() {
 	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	do
 	    gmake distclean
-	    ./configure $configflags \
+	    ../libyacurs-src/configure $configflags \
 		CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
 		CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
 	    had_error $? "Error in OpenBSD32 CONFIGFLAGS=$configflags"
@@ -502,7 +502,7 @@ host_odin() {
 			esac
 			
 			gmake distclean
-			./configure $configflags CXX=${c}/CC CC=${c}/cc LDFLAGS="$LDFLAGS" CPPFLAGS="$CPPFLAGS" CFLAGS="-fast $arch" CXXFLAGS="-fast $arch" $CONFIGARGS
+			../libyacurs-src/configure $configflags CXX=${c}/CC CC=${c}/cc LDFLAGS="$LDFLAGS" CPPFLAGS="$CPPFLAGS" CFLAGS="-fast $arch" CXXFLAGS="-fast $arch" $CONFIGARGS
 			had_error $? "Error in ${c}:$arch:$flags CONFIGFLAGS=$configflags"
 			
 			gmake
@@ -559,7 +559,7 @@ host_starchild() {
 			export CPPFLAGS
 			
 			gmake distclean
-			./configure $configflags CXX=${c}/CC CC=${c}/cc CFLAGS="-fast $arch" CXXFLAGS="-fast $arch"
+			../libyacurs-src/configure $configflags CXX=${c}/CC CC=${c}/cc CFLAGS="-fast $arch" CXXFLAGS="-fast $arch"
 			had_error $? "Error in ${c}:$arch:$flags CONFIGFLAGS=$configflags"
 			
 			gmake -j4

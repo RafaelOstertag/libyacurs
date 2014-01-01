@@ -1,8 +1,22 @@
 #!/bin/sh
 
+TESTDIR="${HOME}/libyacurs-test"
+TESTDIR_SRC="${TESTDIR}/libyacurs-src"
+if [ ! -d "${TESTDIR_SRC}" ]
+then
+    svn co https://gizmo.kruemel.home/svn/swprojects/libyacurs/trunk "${TESTDIR_SRC}"
+else
+    cd "${TESTDIR_SRC}"
+    svn update || exit 1
+fi
+
+cd "${TESTDIR_SRC}"
+touch ChangeLog
+touch README
+autoreconf -fi || exit 1
+
 for h in fish dash debian32 freebsd32 openbsd32 netbsd32 abraxas aurora starchild odin wheezy puffy hyperion
 do
-    TESTDIR="${HOME}/libyacurs-test"
     TESTDIRHOST="${TESTDIR}/${h}"
 
     if [ ! -d "${TESTDIR}" ]
@@ -12,18 +26,15 @@ do
 
     if [ -d "${TESTDIRHOST}" ]
     then
-	cd "${TESTDIRHOST}"
-	svn update || exit 1
+	rm -rf "${TESTDIRHOST}"/*
     else
-	svn co https://gizmo.kruemel.home/svn/swprojects/libyacurs/trunk "${TESTDIRHOST}" || exit 1
+	mkdir "${TESTDIRHOST}"
     fi
     
     cd "${TESTDIRHOST}" || exit 1
-    touch ChangeLog
-    touch README
-    autoreconf -fi || exit 1
 
-    xterm -T "${h}" -n "${h}" -e "ssh -t $h 'cd ${TESTDIRHOST} ; if [ -x /usr/xpg4/bin/sh ] ; then /usr/xpg4/bin/sh scripts/checkall.sh ; else /bin/sh scripts/checkall.sh ; fi ; echo '============= DONE =============' ; read BLA'" &
+
+    xterm -T "${h}" -n "${h}" -e "ssh -t $h 'cd ${TESTDIRHOST} ; if [ -x /usr/xpg4/bin/sh ] ; then /usr/xpg4/bin/sh ${TESTDIR_SRC}/scripts/checkall.sh ; else /bin/sh ${TESTDIR_SRC}/scripts/checkall.sh" ; fi ; echo '============= DONE =============' ; read BLA'" &
 done
 
 exit 0

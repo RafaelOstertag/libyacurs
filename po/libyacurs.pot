@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libyacurs 0.1\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
-"POT-Creation-Date: 2013-12-28 19:54+0100\n"
+"POT-Creation-Date: 2014-01-01 19:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,7 +165,7 @@ msgstr ""
 msgid "Unlock Screen"
 msgstr ""
 
-#: src/unlockdiadefault.cc:54
+#: src/unlockdiadefault.cc:50
 msgid "Please enter password in order to unlock screen"
 msgstr ""
 

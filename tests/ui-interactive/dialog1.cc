@@ -63,7 +63,9 @@ __test_wget_wch(void*, wint_t* i) {
     static int col = 0;
     static YACURS::DIALOG_STATE* exptr = expectation;
 
-    usleep(70000);
+    #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
     if (__test_data[row][col] == 0) {
 	// Test expectation
@@ -89,7 +91,9 @@ __test_wgetch(void*) {
     static int col = 0;
     static YACURS::DIALOG_STATE* exptr = expectation;
 
-    usleep(70000);
+    #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
     if (__test_data[row][col] == 0) {
 	// Test expectation

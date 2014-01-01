@@ -93,7 +93,9 @@ __test_wget_wch(void*, wint_t* i) {
     static int row=0;
     static int col=0;
 
-    usleep(70000);
+    #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
     if (__test_data[row][col] == 0) {
 	check_input(step++);
@@ -116,7 +118,9 @@ __test_wgetch(void*) {
     static int row=0;
     static int col=0;
 
-    usleep(70000);
+    #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
     if (__test_data[row][col] == 0) {
 	check_input(step++);

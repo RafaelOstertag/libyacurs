@@ -48,7 +48,9 @@ __test_wget_wch(void*, wint_t* i) {
         ptr2 = __test_data2;
     }
 
-    usleep(100);
+    #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
     if (*ptr2 == 0) {
         abort();
@@ -72,7 +74,9 @@ __test_wgetch(void*) {
         ptr2 = __test_data2;
     }
 
-    usleep(100);
+    #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
     if (*ptr2 == 0) {
         abort();

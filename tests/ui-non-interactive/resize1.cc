@@ -50,20 +50,26 @@ main() {
         w1->realize();
         w1->refresh(true);
 
-        sleep(1);
+        #ifdef SLOW_TESTS
+	sleep(1);
+#endif
 
         YACURS::Size scrsz(YACURS::Curses::inquiry_screensize() );
         YACURS::Area newsz(0, 0, scrsz.rows() - 1, scrsz.cols() - 1);
         w1->resize(newsz);
         w1->refresh(true);
 
-        sleep(1);
+        #ifdef SLOW_TESTS
+	sleep(1);
+#endif
 
         newsz = YACURS::Area(0, 0, scrsz.rows() - 2, scrsz.cols() - 2);
         w1->resize(newsz);
         w1->refresh(true);
 
-        sleep(1);
+        #ifdef SLOW_TESTS
+	sleep(1);
+#endif
 
         delete w1;
         YACURS::Curses::end();

@@ -261,7 +261,9 @@ test_driver(YACURS::Event& _e) {
     }
 
     step++;
-    usleep(70000);
+    #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
     YACURS::EventQueue::submit(EVT_TEST_EVENT);
 }
 

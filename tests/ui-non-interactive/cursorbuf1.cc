@@ -32,7 +32,9 @@ test1(uint16_t w) {
 
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         buff.forward_step();
     }
@@ -48,7 +50,9 @@ test1(uint16_t w) {
 
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         buff.back_step();
     }
@@ -64,7 +68,9 @@ test1(uint16_t w) {
         win.move(YACURS::Coordinates(1 + curs_pos, 1) );
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         buff.home();
         str = YACURS::CurStr(buff.string(w,
@@ -74,7 +80,9 @@ test1(uint16_t w) {
         win.move(YACURS::Coordinates(1 + curs_pos, 1) );
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
     }
 
     buff.end();
@@ -89,7 +97,9 @@ test1(uint16_t w) {
 
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         buff.backspace();
     }
@@ -109,7 +119,9 @@ test1(uint16_t w) {
 
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         buff.del ();
     }
@@ -133,7 +145,9 @@ test1(uint16_t w) {
 
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
     }   while (*wptr != L'\0');
 
     assert(buff.wstring() == L"abcdefghijklmnopqrstuvwxyz");
@@ -154,7 +168,9 @@ test1(uint16_t w) {
 
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
     }   while (*wptr != L'\0');
 
     curs_set(0);
@@ -180,7 +196,9 @@ test2(uint16_t w) {
 
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         buff.forward_step();
     }
@@ -196,7 +214,9 @@ test2(uint16_t w) {
 
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         buff.back_step();
     }
@@ -212,7 +232,9 @@ test2(uint16_t w) {
         win.move(YACURS::Coordinates(1 + curs_pos, 1) );
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         buff.home();
         str = YACURS::CurStr(buff.string(w,
@@ -222,7 +244,9 @@ test2(uint16_t w) {
         win.move(YACURS::Coordinates(1 + curs_pos, 1) );
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
     }
 
     buff.end();
@@ -237,7 +261,9 @@ test2(uint16_t w) {
 
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         buff.backspace();
     }
@@ -257,7 +283,9 @@ test2(uint16_t w) {
 
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         buff.del ();
     }
@@ -281,7 +309,9 @@ test2(uint16_t w) {
 
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
     }   while (*wptr != L'\0');
 
     assert(buff.wstring() == L"äbÄcdëËfghijklmnöpqrstüvwxÿŸzàéè€¼½");
@@ -302,7 +332,9 @@ test2(uint16_t w) {
 
         win.refresh();
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
     }   while (*wptr != L'\0');
 
     curs_set(0);
@@ -516,7 +548,9 @@ main() {
 
     for (int i = 8; i < 30; i = i + 5) {
         test1(i);
-        sleep(1);
+        #ifdef SLOW_TESTS
+	sleep(1);
+#endif
         wclear(stdscr);
         wrefresh(stdscr);
     }
@@ -524,7 +558,9 @@ main() {
 #ifdef YACURS_USE_WCHAR
     for (int i = 8; i < 30; i = i + 5) {
         test2(i);
-        sleep(1);
+        #ifdef SLOW_TESTS
+	sleep(1);
+#endif
         wclear(stdscr);
         wrefresh(stdscr);
     }

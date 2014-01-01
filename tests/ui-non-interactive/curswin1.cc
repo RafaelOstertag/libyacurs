@@ -79,7 +79,9 @@ test4() {
 
         for (int x = 0; x < 10; x++) {
             win.addch(chr);
-            usleep(10000);
+            #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
             win.refresh();
         }
 
@@ -89,7 +91,9 @@ test4() {
     for (int y = 9; y >= 0; y--) {
         for (int x = 9; x >= 0; x--) {
             win.mvdelch(YACURS::Coordinates(x, y) );
-            usleep(10000);
+            #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
             win.refresh();
         }
     }
@@ -105,7 +109,9 @@ test5() {
             YACURS::CurStr str("abcdefghijklmnopqrstuvwxyz",
                                YACURS::Coordinates(i, 9 - i) );
             win1.addstrx(str);
-            usleep(50000);
+            #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
             win1.refresh();
         }
 
@@ -115,7 +121,9 @@ test5() {
             YACURS::CurStr str("abcdefghijklmnopqrstuvwxyz",
                                YACURS::Coordinates(i, i) );
             win2.addstrx(str);
-            usleep(50000);
+            #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
             win2.refresh();
         }
 
@@ -125,7 +133,9 @@ test5() {
             YACURS::CurStr str("abcdefghijklmnopqrstuvwxyz",
                                YACURS::Coordinates(0, i) );
             win4.addnstr(str, 9 - i);
-            usleep(50000);
+            #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
             win4.refresh();
         }
 
@@ -135,27 +145,39 @@ test5() {
             YACURS::CurStr str("abcdefghijklmnopqrstuvwxyz",
                                YACURS::Coordinates(0, i) );
             win3.addnstr(str, i);
-            usleep(50000);
+            #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
             win3.refresh();
         }
 
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         win1.clear();
         win1.refresh();
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         win2.clear();
         win2.refresh();
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         win3.clear();
         win3.refresh();
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
         win4.clear();
         win4.refresh();
-        usleep(50000);
+        #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
     }
 }
 
@@ -295,43 +317,57 @@ main() {
     YACURS::Curses::init();
 
     test1();
-    sleep(1);
+    #ifdef SLOW_TESTS
+	sleep(1);
+#endif
 
     test2();
     test3();
     test4();
 
-    sleep(1);
+    #ifdef SLOW_TESTS
+	sleep(1);
+#endif
 
     wclear(stdscr);
     wrefresh(stdscr);
 
     test5();
 
-    sleep(1);
+    #ifdef SLOW_TESTS
+	sleep(1);
+#endif
 
     wclear(stdscr);
     wrefresh(stdscr);
 
     test6();
 
-    sleep(1);
+    #ifdef SLOW_TESTS
+	sleep(1);
+#endif
 
     wclear(stdscr);
     wrefresh(stdscr);
 
     test7();
 
-    sleep(1);
+    #ifdef SLOW_TESTS
+	sleep(1);
+#endif
 
     wclear(stdscr);
     wrefresh(stdscr);
 
     test8();
-    sleep(1);
+    #ifdef SLOW_TESTS
+	sleep(1);
+#endif
 
     test9();
-    sleep(1);
+    #ifdef SLOW_TESTS
+	sleep(1);
+#endif
 
     YACURS::Curses::end();
 }

@@ -76,7 +76,9 @@ extern "C" int
 __test_wget_wch(void*, wint_t* i) {
     static wint_t* ptr2 = __test_data;
 
-    usleep(20000);
+    #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
     if (*ptr2 == 0) {
         abort();
@@ -91,7 +93,9 @@ extern "C" int
 __test_wgetch(void*) {
      static int* ptr2 = __test_data;
 
-    usleep(70000);
+    #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
     if (*ptr2 == 0) {
         abort();

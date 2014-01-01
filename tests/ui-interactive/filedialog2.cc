@@ -126,7 +126,9 @@ __test_wget_wch(void*, wint_t* i) {
     static int selection_index = 0;
     static int selection_index2 = 0;
 
-    usleep(70000);
+    #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
     // Open dialog
     if (*ptr1 != 0) {
@@ -167,7 +169,9 @@ __test_wgetch(void*) {
     static int selection_index = 0;
     static int selection_index2 = 0;
 
-    usleep(70000);
+    #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
     // Open dialog
     if (*ptr1 != 0)

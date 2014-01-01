@@ -134,7 +134,9 @@ __test_wget_wch(void*, wint_t* i) {
     static wint_t* ptr2 = __test_data;
     static int rounds = 0;
 
-    usleep(100);
+    #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
     if (*ptr2 == 0) {
         ptr2 = __test_data;
@@ -160,7 +162,9 @@ __test_wgetch(void*) {
     static int* ptr2 = __test_data;
     static int rounds = 0;
 
-    usleep(100);
+    #ifdef SLOW_TESTS
+	usleep(70000);
+#endif
 
     if (*ptr2 == 0) {
         ptr2 = __test_data;

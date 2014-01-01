@@ -1,6 +1,10 @@
 # $Id$
 
+if DISABLEINSTALL
+noinst_LTLIBRARIES = libyacurs.la
+else
 lib_LTLIBRARIES = libyacurs.la
+endif
 
 libyacurs_la_LDFLAGS = -version-info 0 $(CURSES_LIB) $(LTLIBINTL)
 

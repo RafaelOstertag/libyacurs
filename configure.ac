@@ -46,6 +46,12 @@ AC_ARG_ENABLE([debug],
 		       [AC_SUBST([ENABLEDEBUG], [-DNDEBUG])])],
 		[AC_SUBST([ENABLEDEBUG],[-DNDEBUG])])
 
+AC_ARG_ENABLE([install],
+		[AS_HELP_STRING([--disable-install],
+				[disable installation of library and header files])],
+		[AM_CONDITIONAL([DISABLEINSTALL],[test x$enableval = xno])],
+		[AM_CONDITIONAL([DISABLEINSTALL],[test 1 = 0])])
+
 AC_ARG_ENABLE([wchar],
 		[AS_HELP_STRING([--disable-wchar],
 				[disable wide character support])],

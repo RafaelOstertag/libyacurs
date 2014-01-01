@@ -1,6 +1,6 @@
 # $Id$
 
-lib_LTLIBRARIES = libtestpreload.la
+noinst_LTLIBRARIES = libtestpreload.la
 
 libtestpreload_la_SOURCES = testpreload.cc
 

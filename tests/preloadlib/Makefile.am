@@ -13,12 +13,14 @@ myCPPFLAGS = -D_XOPEN_SOURCE_EXTENDED=1			\
 -I$(top_builddir)
 
 testpreload.lo: testpreload.cc
-	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) -shared $(myCPPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(AM_CPPFLAGS) -c -o $(builddir)/$@ $<
+	$(LIBTOOL) --tag=CXX --mode=compile $(CXX) -shared $(myCPPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(AM_CPPFLAGS) -DHAVE_CONFIG_H -c -o $(builddir)/$@ $<
 
-libtestpreload.so: testpreload.lo
-	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXX) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -G -h$@ -o $@ $<
+libtestpreload.la: testpreload.lo
+	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXX) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -rpath $(libdir) -version-info 0 -o $@ $<
 
-all-local: libtestpreload.so
+all-local: libtestpreload.la
 
 clean-local:
-	rm -f testpreload.lo libtestpreload.so
+	rm -f *.la
+	rm -f *.o
+	rm -rf .deps

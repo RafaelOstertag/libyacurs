@@ -20,7 +20,7 @@ AM_LDFLAGS += $(LD_EXPORT_DYNAMIC)
 
 check-local: $(check_PROGRAMS)
 	for f in $(check_PROGRAMS) ; do \
-		$(LIBTOOL) --mode=execute env LD_PRELOAD="$(top_builddir)/tests/preloadlib/libtestpreload.so" $(builddir)/$$f ; \
+		$(LIBTOOL) --mode=execute env LD_PRELOAD="$(top_builddir)/tests/preloadlib/.libs/libtestpreload.so" $(builddir)/$$f ; \
 		retval=$$? ; \
 		if test "x$$retval" = "x77" ; then \
 			echo "*** $$f skipped" ; \

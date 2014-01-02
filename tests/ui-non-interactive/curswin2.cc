@@ -19,20 +19,26 @@ test1() {
 
     win << str1;
     win.refresh();
-    sleep(2);
+    #ifdef SLOW_TESTS
+	sleep(2);
+#endif
 
     win.clear();
     win.box();
     YACURS::CurStr str2("Ḩ€łłø, ẇøřļđ!", YACURS::Coordinates(1, 1) );
     win << str2;
     win.refresh();
-    sleep(2);
+    #ifdef SLOW_TESTS
+	sleep(2);
+#endif
 
     YACURS::INTERNAL::CursWin* subwin =
         win.derwin(YACURS::Area(2, 2, 10, 10) );
     subwin->box();
     subwin->refresh();
-    sleep(2);
+    #ifdef SLOW_TESTS
+	sleep(2);
+#endif
 
     win.clear();
     subwin->clear();

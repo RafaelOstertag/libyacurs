@@ -19,7 +19,9 @@ test1() {
     win.vrule();
     win.refresh();
 
-    sleep(2);
+    #ifdef SLOW_TESTS
+	sleep(2);
+#endif
 }
 
 void
@@ -28,7 +30,9 @@ test2() {
     win.vrule();
     win.refresh();
 
-    sleep(2);
+    #ifdef SLOW_TESTS
+	sleep(2);
+#endif
 }
 
 void
@@ -38,7 +42,9 @@ test3() {
     win.hrule();
     win.refresh();
 
-    sleep(2);
+    #ifdef SLOW_TESTS
+	sleep(2);
+#endif
 }
 
 void
@@ -47,7 +53,9 @@ test4() {
     win.hrule();
     win.refresh();
 
-    sleep(2);
+    #ifdef SLOW_TESTS
+	sleep(2);
+#endif
 }
 
 int

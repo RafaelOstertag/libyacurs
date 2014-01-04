@@ -454,6 +454,26 @@ host_puffy() {
 	done
 }
 
+host_merlin() {
+	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
+	do
+	    gmake distclean
+	    ../libyacurs-src/configure $configflags \
+		CFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native" \
+		CXXFLAGS="-O3 -Wall -Werror -pedantic -march=native -mtune=native"
+	    had_error $? "Error on fish CONFIGFLAGS=$configflags"
+	    
+	    gmake clean
+	    gmake
+	    had_error $? "Error on fish CONFIGFLAGS=$configflags"
+	    
+	    gmake check
+	    had_error $? "Error on fish CONFIGFLAGS=$configflags"
+
+	    message "*** OK: CONFIGFLAGS=$configflags"
+	done
+}
+
 host_openbsd32() {
 	for configflags in --enable-wchar --enable-nls --disable-wchar --disable-nls
 	do

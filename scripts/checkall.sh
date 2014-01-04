@@ -514,10 +514,13 @@ host_odin() {
 				;;
 			    solaris)
 				CONFIGARGS="--without-ncurses"
-			    ;;
+				LDFLAGS=""
+				CPPFLAGS=""
+				;;
 			    ncurses)
 				CPPFLAGS="-I/usr/include/ncurses"
 				CONFIGARGS="--with-ncurses"
+				LDFLAGS=""
 				;;
 			esac
 			
@@ -568,7 +571,8 @@ host_starchild() {
 				esac
 				;;
 			    solaris)
-				:
+				LDFLAGS=""
+				CPPFLAGS=""
 				;;
 			    ncurses)
 				CPPFLAGS="-I/usr/include/ncurses"

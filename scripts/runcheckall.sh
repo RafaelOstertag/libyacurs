@@ -15,7 +15,7 @@ touch ChangeLog
 touch README
 autoreconf -fi || exit 1
 
-for h in fish dash debian32 freebsd32 openbsd32 netbsd32 abraxas aurora starchild odin wheezy puffy hyperion
+for h in fish dash debian32 freebsd32 openbsd32 netbsd32 abraxas aurora starchild odin wheezy puffy hyperion merlin
 do
     TESTDIRHOST="${TESTDIR}/${h}"
 

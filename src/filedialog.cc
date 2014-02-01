@@ -98,14 +98,14 @@ FileDialog::read_dir() {
     std::list<std::string> _files;
 
     if (__path.label().empty() ) {
-        char buff[CWDBUFSZ];
-        if (!getcwd(buff, CWDBUFSZ) ) {
-            if (errno == EACCES)
-                __path.label("/");
-            else
-                throw EXCEPTIONS::SystemError(errno);
-        }
-        __path.label(buff);
+	try {
+	    __path.label(getcwd());
+	} catch (EXCEPTIONS::SystemError& e) {
+	    if (e.errorno() == EACCES)
+		__path.label("/");
+	    else
+		throw;
+	}
     }
 
     DIR* dir = opendir(__path.label().c_str() );
@@ -132,8 +132,6 @@ FileDialog::read_dir() {
 
         struct stat _stat;
         if (stat(_tmp.c_str(), &_stat) == -1) {
-            // reset errno
-            errno = 0;
             continue;
         }
 
@@ -152,6 +150,15 @@ FileDialog::read_dir() {
     int errno_save = errno;
 
     __directories.set(_dirs);
+    // If the file mode on the directory is only read for the user,
+    // e.g. 444, and we don't do a chdir(), we end up with an empty
+    // directory list. So, make sure at least `.' and `..' is in the
+    // list.
+    if (__directories.empty()) {
+	__directories.add(".");
+	__directories.add("..");
+    }
+
     __files.set(_files);
 
     if (errno_save != 0) {
@@ -212,6 +219,38 @@ FileDialog::listbox_enter_handler(Event& _e) {
 void
 FileDialog::filename_readonly(bool _ro) {
     __filename.readonly(_ro);
+}
+
+std::string
+FileDialog::getcwd() const {
+    long path_max;
+    if (__path.label().empty()) {
+	path_max = pathconf("/", _PC_PATH_MAX);
+    } else {
+	path_max = pathconf(__path.label().c_str(), _PC_PATH_MAX);
+    }
+
+    if (path_max < 0) {
+	// probably something went wrong in call to pathconf(). Use
+	// the fallback size.
+	path_max = DEFCWDBUFSZ;
+    }
+
+    char* cwd = new char[path_max];
+    if (cwd == 0)
+	throw EXCEPTIONS::SystemError(ENOMEM);
+
+    char* ptr = ::getcwd(cwd, path_max);
+    int errno_sav=errno;
+    if (ptr == 0) {
+	delete[] cwd;
+	throw EXCEPTIONS::SystemError(errno_sav);
+    }
+
+    std::string retval(ptr);
+    delete[] cwd;
+
+    return retval;
 }
 
 void

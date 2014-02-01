@@ -60,9 +60,10 @@ namespace YACURS {
 
     enum {
         /**
-         * Buffer size used for getcwd().
+         * Default buffer size used for getcwd() if call to pathconf()
+         * fails.
          */
-        CWDBUFSZ = 1024
+        DEFCWDBUFSZ = 1024
     };
 }
 

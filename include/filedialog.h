@@ -62,6 +62,8 @@ namespace YACURS {
 
 	    void filename_readonly(bool _ro);
 
+	    std::string getcwd() const;
+
 	    virtual void window_close_handler(Event& _e);
 
 	    virtual void button_press_handler(Event& _e);

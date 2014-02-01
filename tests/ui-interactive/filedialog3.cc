@@ -111,7 +111,7 @@ class MainWindow : public YACURS::Window {
             if (e.data() == button1) {
                 assert(filesavedialog == 0);
 
-                filesavedialog = new YACURS::FileSaveDialog;
+                filesavedialog = new YACURS::FileSaveDialog(std::string(), true);
 		filesavedialog->suffix(".suffix");
                 filesavedialog->show();
                 return;
@@ -120,7 +120,7 @@ class MainWindow : public YACURS::Window {
             if (e.data() == button3) {
                 assert(fileloaddialog == 0);
 
-                fileloaddialog = new YACURS::FileLoadDialog;
+                fileloaddialog = new YACURS::FileLoadDialog(std::string(), true);
 		fileloaddialog->suffix(".suffix");
                 fileloaddialog->show();
                 return;

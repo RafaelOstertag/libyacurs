@@ -163,7 +163,7 @@ FileDialog::read_dir() {
 
     if (errno_save != 0) {
         (void)closedir(dir);
-        throw EXCEPTIONS::SystemError(errno);
+        throw EXCEPTIONS::SystemError(errno_save);
     }
 
     if (closedir(dir) != 0)

@@ -241,10 +241,9 @@ FileDialog::getcwd() const {
 	throw EXCEPTIONS::SystemError(ENOMEM);
 
     char* ptr = ::getcwd(cwd, path_max);
-    int errno_sav=errno;
     if (ptr == 0) {
 	delete[] cwd;
-	throw EXCEPTIONS::SystemError(errno_sav);
+	throw EXCEPTIONS::SystemError(errno);
     }
 
     std::string retval(ptr);

@@ -122,13 +122,12 @@ FileSaveDialog::button_press_handler(Event& _e) {
             __confirmdia->show();
             return;
         } else {
-            int s_errno = errno;
-            switch (s_errno) {
+            switch (errno) {
             case EACCES:
                 __errmsgbox = new MessageBox2(_("Error"),
                                               filepath(),
                                               EXCEPTIONS::SystemError(
-                                                  s_errno).what(),
+                                                  errno).what(),
                                               OK_ONLY);
                 __errmsgbox->show();
                 return;
@@ -140,7 +139,7 @@ FileSaveDialog::button_press_handler(Event& _e) {
                 break;
 
             default:
-                throw EXCEPTIONS::SystemError(s_errno);
+                throw EXCEPTIONS::SystemError(errno);
                 break;
             }
         }

@@ -237,8 +237,6 @@ FileDialog::getcwd() const {
     }
 
     char* cwd = new char[path_max];
-    if (cwd == 0)
-	throw EXCEPTIONS::SystemError(ENOMEM);
 
     char* ptr = ::getcwd(cwd, path_max);
     if (ptr == 0) {

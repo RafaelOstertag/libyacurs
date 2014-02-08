@@ -404,9 +404,11 @@ CursWin::addnstr(const CurStr& str, int n) {
     if (buflen == (size_t)-1)
         throw EXCEPTIONS::SystemError(errno);
 
-    wchar_t* wbuffer = new wchar_t[buflen + 1];
-    if (wbuffer == 0)
+    try {
+	wchar_t* wbuffer = new wchar_t[buflen + 1];
+    } catch (...) {
         throw EXCEPTIONS::SystemError(ENOMEM);
+    }
 
     size_t retval = std::mbstowcs(wbuffer, str.c_str(), buflen + 1);
     assert(buflen == retval);

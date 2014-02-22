@@ -25,6 +25,6 @@ AM_LDFLAGS += $(LD_EXPORT_DYNAMIC)
 check-local: $(interactive_tests)
 	for f in $(interactive_tests) ; do \
 		$(LIBTOOL) --mode=execute env LD_PRELOAD="$(top_builddir)/tests/preloadlib/.libs/libtestpreload.so" $(builddir)/$$f ; \
-		test "x$$?" = "x0" || { echo "*** $$f failed" ; exit 1 ; } ; \
+		test "x$$?" = "x0" -o "x$$?" = "x77" || { echo "*** $$f failed" ; exit 1 ; } ; \
 	done
 endif

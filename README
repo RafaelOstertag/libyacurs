@@ -1,6 +1,9 @@
 README
 ======
 
+libyacurs is a curses widget library for fast development of curses
+applications.
+
 
 Supported Operating Systems
 ---------------------------

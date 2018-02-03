@@ -1,0 +1,6 @@
+0.2
+===
+
+* Builds with clang 6.0
+* Fixed compiler warnings
+	

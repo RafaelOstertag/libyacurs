@@ -54,7 +54,8 @@ CurStr::CurStr(const CurStr& cs) : std::string(cs),
 
 CurStr&
 CurStr::operator=(const CurStr& cs) {
-    if (this == &cs) return *this; std::string::operator=(cs);
+    if (this == &cs) return *this;
+    std::string::operator=(cs);
 
     __position = cs.__position;
     __color = cs.__color;

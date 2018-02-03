@@ -65,8 +65,7 @@ Sigaction::Sigaction(int signo, sig_handler hndlr, sigset_t& mask) : __signo(
 }
 
 Sigaction::~Sigaction() {
-    if (sigaction(__signo, &__saved_action, 0) != 0)
-        throw EXCEPTIONS::SystemError(errno);
+    sigaction(__signo, &__saved_action, 0);
 }
 
 void

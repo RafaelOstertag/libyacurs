@@ -145,7 +145,7 @@ Widget::resize(const Area& _a) {
     //
     // 2. The actual resize has to be done in a derived class
     //
-    if (!realization() == REALIZED) return;
+    if (!(realization() == REALIZED)) return;
 
     unrealize();
 

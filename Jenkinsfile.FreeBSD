@@ -7,5 +7,5 @@ properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '',
 node("freebsd") {
     yapet.checkout()
     yapet.autoconf()
-    configure "FreeBSD"
+    yapet.configure "FreeBSD"
 }

@@ -1,0 +1,14 @@
+@Library('yapetJenkins') _
+
+properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '',
+				      artifactNumToKeepStr: '',
+				      daysToKeepStr: '', numToKeepStr:
+				      '10'))])
+
+node("netbsd") {
+    os = "NetBSD"
+    yapet.checkout()
+    yapet.autoconf()
+    yapet.configure os
+    yapet.build os
+}

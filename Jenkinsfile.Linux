@@ -6,7 +6,9 @@ properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '',
 				      '10'))])
 
 node("linux") {
+    os = "Linux"
     yapet.checkout()
     yapet.autoconf()
-    yapet.build "Linux"
+    yapet.configure os
+    yapet.build os
 }

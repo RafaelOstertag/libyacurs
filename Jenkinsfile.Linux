@@ -9,6 +9,7 @@ node("linux") {
     yapet.notify {
 	os = "Linux"
 	yapet.checkout()
+        yapet.makeChangeLog()
 	yapet.autoconf()
 	yapet.configure os
 	yapet.build os

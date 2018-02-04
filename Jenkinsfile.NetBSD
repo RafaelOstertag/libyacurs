@@ -9,6 +9,7 @@ node("netbsd") {
     yapet.notify {
 	os = "NetBSD"
 	yapet.checkout()
+        yapet.makeChangeLog()
 	yapet.autoconf()
 	yapet.configure os
 	yapet.build os

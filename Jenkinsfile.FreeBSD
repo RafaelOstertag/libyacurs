@@ -8,6 +8,7 @@ node("freebsd") {
     yapet.notify {
 	os = "FreeBSD"
 	yapet.checkout()
+        yapet.makeChangeLog()
 	yapet.autoconf()
 	yapet.configure os
 	yapet.build os

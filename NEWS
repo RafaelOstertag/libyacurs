@@ -1,10 +1,13 @@
 NEWS
 ===
 
-0.2
+0.3
+  * Revived NEWS file.
+  * Fixed version in configure.ac.
 
+0.2
   * Builds with clang 6.0
-   * Fixed compiler warnings
+  * Fixed compiler warnings
 
 0.1
   * Initial release.

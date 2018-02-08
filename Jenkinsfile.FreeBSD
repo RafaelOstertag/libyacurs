@@ -12,6 +12,5 @@ node("freebsd") {
 	yapet.autoconf()
 	yapet.configure os
 	yapet.build os
-        release.roll()
     }
 }

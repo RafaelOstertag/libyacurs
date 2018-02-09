@@ -17,7 +17,7 @@ if NOTCYGWIN
 # LD_EXPORT_DYNAMIC is basically only used for interactive_tests and
 # only works on non-cygwin systems
 AM_LDFLAGS += $(LD_EXPORT_DYNAMIC)
-AM_CXXFLAGS = -std=c++98
+AM_CXXFLAGS = $(STDC98_FLAG)
 
 check-local: $(check_PROGRAMS)
 	for f in $(check_PROGRAMS) ; do \

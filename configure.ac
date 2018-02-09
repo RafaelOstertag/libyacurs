@@ -61,6 +61,7 @@ AC_ARG_ENABLE([wchar],
 		[DISABLE_WCHAR=no])
 
 AC_LANG([C++])
+AX_CHECK_COMPILE_FLAG([-std=c++98], AC_SUBST([STDC98_FLAG],[-std=c++98])
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.1])
 

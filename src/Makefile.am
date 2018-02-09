@@ -12,7 +12,7 @@ libyacurs_la_CPPFLAGS = -D_XOPEN_SOURCE_EXTENDED=1	\
 -DPACKAGE=\"$(PACKAGE)\" -DLOCALEDIR=\"$(localedir)\"	\
 -I$(top_srcdir)/include $(ENABLEDEBUG)
 
-libyacurs_la_CXXFLAGS = $(STDC98_FLAG)
+libyacurs_la_CXXFLAGS = @STDC98_FLAG@
 
 libyacurs_la_SOURCES = sigaction.cc coordinates.cc size.cc margin.cc	\
  area.cc curstr.cc curswin.cc cursorbuf.cc event.cc eventconnector.cc	\

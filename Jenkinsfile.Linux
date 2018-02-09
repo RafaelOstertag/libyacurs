@@ -6,7 +6,6 @@ properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '',
 				      '10'))])
 
 node("linux") {
-    github.notifyPending()
     yapet.notify {
 	os = "Linux"
 	yapet.checkout()

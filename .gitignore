@@ -14,6 +14,7 @@ configure
 include/Makefile.in
 m4/
 !m4/ax_check_link_flag.m4
+!m4/ax_check_compile_flag.m4
 !m4/ax_cxx_header_stdcxx_98.m4
 !m4/ax_with_curses.m4
 !m4/nls.m4

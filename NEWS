@@ -1,6 +1,9 @@
 NEWS
 ===
 
+0.4
+  * Check if `-std=c++98` is supported by compiler, before using it.
+
 0.3
   * Revived NEWS file.
   * Fixed version in configure.ac.

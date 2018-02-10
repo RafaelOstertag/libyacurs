@@ -1,4 +1,4 @@
-AC_INIT([libyacurs], [0.3], [https://bugs.guengel.ch/enter_bug.cgi?product=YAPET])
+AC_INIT([libyacurs], [0.4], [https://bugs.guengel.ch/enter_bug.cgi?product=YAPET])
 AC_CONFIG_SRCDIR([src/curs.cc])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([check-news])
@@ -61,6 +61,7 @@ AC_ARG_ENABLE([wchar],
 		[DISABLE_WCHAR=no])
 
 AC_LANG([C++])
+AX_CHECK_COMPILE_FLAG([-std=c++98], [AC_SUBST([STDCXX98_FLAG],[-std=c++98])])
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.1])
 

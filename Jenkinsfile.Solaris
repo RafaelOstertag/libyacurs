@@ -1,0 +1,17 @@
+@Library('yapetJenkins') _
+
+properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '',
+				      artifactNumToKeepStr: '',
+				      daysToKeepStr: '', numToKeepStr:
+				      '10'))])
+
+node("solaris") {
+    yapet.notify {
+	os = "Solaris"
+	yapet.checkout()
+        yapet.makeChangeLog()
+	yapet.autoconf()
+	yapet.configure os
+	yapet.build os
+    }
+}

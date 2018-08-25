@@ -3,26 +3,3 @@ README
 
 libyacurs is a curses widget library for fast development of curses
 applications.
-
-
-Supported Operating Systems
----------------------------
-
-libyacurs build has been tested on Solaris 10+, FreeBSD, OpenBSD,
-NetBSD, and Linux.
-
-
-Supported compilers
--------------------
-
- * Sun/Solaris Studio 12.X.
- 
- * GCC 4.X
-
- * Clang is partially supported.
-
-
-$Id$
-Local Variables:
-mode: text
-End:

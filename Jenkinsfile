@@ -216,9 +216,4 @@ pipeline {
     		} // parallel
         } // stage("OS Build")
     } // stages
-
-    post {
-       
-    }
-
 }

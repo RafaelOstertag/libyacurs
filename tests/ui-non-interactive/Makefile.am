@@ -14,7 +14,7 @@ AM_DEFAULT_SOURCE_EXT = .cc
 AM_CPPFLAGS = -D_XOPEN_SOURCE_EXTENDED=1 -DLOCALEDIR=\"$(localedir)\"	\
 -I$(top_srcdir)/include $(ENABLEDEBUG)
 
-AM_LDFLAGS  = -L$(top_builddir)/src -lyacurs  $(LTLIBINTL)
+AM_LDFLAGS  = -L$(top_builddir)/src -lyacurs $(CURSES_LIB) $(LTLIBINTL)
 if NOTCYGWIN
 # LD_EXPORT_DYNAMIC is basically only used for interactive_tests and
 # only works on non-cygwin systems

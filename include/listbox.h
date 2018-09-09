@@ -542,7 +542,7 @@ namespace YACURS {
 	// see if we have a match
 	if (it != __list.end() ) {
 		typename std::list<_T>::difference_type dist=0;
-#if defined(__SUNPRO_CC)
+#if defined(__SUNPRO_CC) && (__SUNPRO_CC < 0x5150)
 	    std::distance(__list.begin(), it, dist);
 #else
 	    dist = std::distance(__list.begin(), it);

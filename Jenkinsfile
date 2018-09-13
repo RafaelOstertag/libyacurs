@@ -6,6 +6,10 @@ pipeline {
         buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10')
     }
 
+    environment {
+        PEDANTIC_FLAGS = "-Wall -pedantic -Werror -O3 -Wno-unknown-pragmas"
+    }
+
     stages {
         stage("OS Build") {
             parallel {
@@ -27,7 +31,7 @@ pipeline {
                         stage("Configure") {
                             steps {
                                 dir("obj") {
-                                    sh "../configure --enable-debug --disable-silent-rules CXXFLAGS='-Wall -pedantic'"
+                                    sh "../configure --enable-debug --disable-silent-rules"
                                 }
                             }
                         }
@@ -35,7 +39,7 @@ pipeline {
                         stage("Build") {
                             steps {
                                 dir("obj") {
-                                    sh '$MAKE all'
+                                    sh '$MAKE all CXXFLAGS="${PEDANTIC_FLAGS}"'
                                 }
                             }
                         }
@@ -43,7 +47,7 @@ pipeline {
                         stage("Test") {
                             steps {
                                 dir("obj") {
-                                    sh '$MAKE check'
+                                    sh '$MAKE check CXXFLAGS="${PEDANTIC_FLAGS}"'
                                 }
                             }
                         }
@@ -57,9 +61,9 @@ pipeline {
 					stages {
 						stage("Bootstrap Build") {
                              steps {
-                                sh "git log --stat > ChangeLog"
+                                sh "touch ChangeLog"
                                 dir("libyacurs") {
-                                    sh "git log --stat > ChangeLog"
+                                    sh "touch ChangeLog"
                                 }
                                 sh "autoreconf -I m4 -i"
                             }
@@ -68,7 +72,7 @@ pipeline {
                         stage("Configure") {
                             steps {
                                 dir("obj") {
-                                    sh "../configure --enable-debug --disable-silent-rules CXXFLAGS='-Wall -pedantic'"
+                                    sh "../configure --enable-debug --disable-silent-rules"
                                 }
                             }
                         }
@@ -76,7 +80,7 @@ pipeline {
 						stage("Build") {
                             steps {
                                 dir("obj") {
-                                    sh '$MAKE all'
+                                    sh '$MAKE all CXXFLAGS="${PEDANTIC_FLAGS}"'
                                 }
                              }
                         }
@@ -84,7 +88,7 @@ pipeline {
                         stage("Test") {
                             steps {
                                 dir("obj") {
-                                    sh '$MAKE check'
+                                    sh '$MAKE check CXXFLAGS="${PEDANTIC_FLAGS}"'
                                 }
                             }
                         }
@@ -98,9 +102,9 @@ pipeline {
 					stages {
 						stage("Bootstrap Build") {
                              steps {
-                                sh "git log --stat > ChangeLog"
+                                sh "touch ChangeLog"
                                 dir("libyacurs") {
-                                    sh "git log --stat > ChangeLog"
+                                    sh "touch ChangeLog"
                                 }
                                 sh "autoreconf -I m4 -i"
                             }
@@ -109,7 +113,7 @@ pipeline {
                         stage("Configure") {
                             steps {
                                 dir("obj") {
-                                    sh "../configure --enable-debug --disable-silent-rules CC=cc CXX=c++ CXXFLAGS='-Wall -pedantic'"
+                                    sh "../configure --enable-debug --disable-silent-rules CC=cc CXX=c++"
                                 }
                             }
                         }
@@ -117,7 +121,7 @@ pipeline {
 						stage("Build") {
                             steps {
                                 dir("obj") {
-                                    sh '$MAKE all'
+                                    sh '$MAKE all CXXFLAGS="${PEDANTIC_FLAGS}"'
                                 }
                              }
                         }
@@ -125,7 +129,7 @@ pipeline {
                         stage("Test") {
                             steps {
                                 dir("obj") {
-                                    sh '$MAKE check'
+                                    sh '$MAKE check CXXFLAGS="${PEDANTIC_FLAGS}"'
                                 }
                             }
                         }
@@ -139,9 +143,9 @@ pipeline {
 					stages {
 						stage("Bootstrap Build") {
                              steps {
-                                sh "git log --stat > ChangeLog"
+                                sh "touch ChangeLog"
                                 dir("libyacurs") {
-                                    sh "git log --stat > ChangeLog"
+                                    sh "touch ChangeLog"
                                 }
                                 sh "autoreconf -I m4 -i"
                             }
@@ -150,7 +154,7 @@ pipeline {
                         stage("Configure") {
                             steps {
                                 dir("obj") {
-                                    sh "../configure --enable-debug --disable-silent-rules CXXFLAGS='-Wall -pedantic'"
+                                    sh "../configure --enable-debug --disable-silent-rules"
                                 }
                             }
                         }
@@ -158,7 +162,7 @@ pipeline {
 						stage("Build") {
                             steps {
                                 dir("obj") {
-                                    sh '$MAKE all'
+                                    sh '$MAKE all CXXFLAGS="${PEDANTIC_FLAGS}"'
                                 }
                              }
                         }
@@ -166,7 +170,7 @@ pipeline {
                         stage("Test") {
                             steps {
                                 dir("obj") {
-                                    sh '$MAKE check'
+                                    sh '$MAKE check CXXFLAGS="${PEDANTIC_FLAGS}"'
                                 }
                             }
                         }

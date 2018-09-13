@@ -1,9 +1,8 @@
-AC_INIT([libyacurs], [0.4], [https://bugs.guengel.ch/enter_bug.cgi?product=YAPET])
+AC_INIT([libyacurs], [1.0.0-dev], [https://bugs.guengel.ch/enter_bug.cgi?product=YAPET])
 AC_CONFIG_SRCDIR([src/curs.cc])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([check-news])
 AM_SILENT_RULES([yes])
-AC_REVISION([$Revision$])
 
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -13,6 +12,9 @@ AC_PROG_CXX
 AM_PROG_AR
 LT_INIT
 LT_LANG([C++])
+AC_LANG([C++])
+
+AX_CXX_COMPILE_STDCXX([14], [noext], [mandatory])
 
 # Conditional compiling on Cygwin: tests using LD_PRELOAD don't just
 # work on Cygwin, so we only run them if not built on a cygwin box.
@@ -60,8 +62,6 @@ AC_ARG_ENABLE([wchar],
                        [DISABLE_WCHAR=no])],
 		[DISABLE_WCHAR=no])
 
-AC_LANG([C++])
-AX_CHECK_COMPILE_FLAG([-std=c++98], [AC_SUBST([STDCXX98_FLAG],[-std=c++98])])
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION([0.18.1])
 
@@ -73,14 +73,6 @@ AC_CHECK_HEADERS([stdint.h signal.h unistd.h],,[AC_MSG_ERROR([required header no
 
 AC_CHECK_HEADERS([cwchar cwctype])
 
-AC_TYPE_INT16_T
-AC_TYPE_SIZE_T
-AC_TYPE_UINT16_T
-AC_TYPE_UINT32_T
-
-AX_CXX_HEADER_STDCXX_98
-AS_IF([test x$ax_cv_cxx_stdcxx_98 = xno],
-	    [AC_MSG_ERROR([ISO C++ 98 not supported])])
 
 AX_MY_WITH_CURSES
 AS_IF([test x$ax_cv_curses != xyes],

@@ -1,6 +1,10 @@
 NEWS
 ===
 
+1.0.0
+  * Drop support for Solaris
+  * Require C++14
+
 0.4
   * Check if `-std=c++98` is supported by compiler, before using it.
 

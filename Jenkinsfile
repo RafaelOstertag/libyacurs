@@ -61,7 +61,7 @@ pipeline {
 
                             steps {
                                 dir("obj") {
-                                    sh '$MAKE distcheck LDFLAGS="-L/usr/local/lib"'
+                                    sh '$MAKE distcheck'
                                 }
                             }
 

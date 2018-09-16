@@ -1,5 +1,4 @@
-# $Id$
-
+DISTCHECK_CONFIGURE_FLAGS = --enable-nls
 ACLOCAL_AMFLAGS= -I m4
 SUBDIRS = po include src tests
 

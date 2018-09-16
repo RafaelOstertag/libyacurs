@@ -34,22 +34,23 @@ using namespace YACURS;
 // class EventType
 //
 ////////////////////////////////////////////////////////
-EventType::EventType(std::string name): __hashval(0x811c9dc5) {
-    if (name.length()>MAX_NAME_LENGTH-1)
-	throw std::length_error(_("Event names must not be greater than 63 characters."));
+EventType::EventType(std::string name) : __hashval(0x811c9dc5) {
+    if (name.length() > MAX_NAME_LENGTH - 1)
+        throw std::length_error(
+            _("Event names must not be greater than 63 characters."));
 
-    if (name.empty()) 
-	throw std::length_error(_("Event names must not be empty."));
+    if (name.empty())
+        throw std::length_error(_("Event names must not be empty."));
 
     // See http://isthe.com/chongo/tech/comp/fnv/
     std::string::size_type len = name.length();
-    for (std::string::size_type i=0; i<len; i++) {
-	__hashval *= 0x01000193;
-	__hashval ^= (uint32_t)name[i];
+    for (std::string::size_type i = 0; i < len; i++) {
+        __hashval *= 0x01000193;
+        __hashval ^= (uint32_t)name[i];
     }
 
-    strncpy(__name, name.c_str(), MAX_NAME_LENGTH-1);
-    __name[MAX_NAME_LENGTH-1] = 0;
+    strncpy(__name, name.c_str(), MAX_NAME_LENGTH - 1);
+    __name[MAX_NAME_LENGTH - 1] = 0;
 }
 
 EventType::EventType(const EventType& et) : __hashval(et.__hashval) {
@@ -58,10 +59,8 @@ EventType::EventType(const EventType& et) : __hashval(et.__hashval) {
 
 EventType::~EventType() {}
 
-EventType&
-EventType::operator=(const EventType& rhs) {
-    if (this == &rhs)
-	return *this;
+EventType& EventType::operator=(const EventType& rhs) {
+    if (this == &rhs) return *this;
 
     strncpy(__name, rhs.__name, MAX_NAME_LENGTH);
     __hashval = rhs.__hashval;
@@ -69,34 +68,25 @@ EventType::operator=(const EventType& rhs) {
     return *this;
 }
 
-
-bool
-EventType::operator==(const EventType& rhs) const {
+bool EventType::operator==(const EventType& rhs) const {
     return __hashval == rhs.__hashval;
 }
 
-bool
-EventType::operator!=(const EventType& rhs) const {
+bool EventType::operator!=(const EventType& rhs) const {
     return !operator==(rhs);
 }
 
-bool
-EventType::operator<(const EventType& rhs) const {
+bool EventType::operator<(const EventType& rhs) const {
     return __hashval < rhs.__hashval;
 }
 
-bool
-EventType::operator>(const EventType& rhs) const {
+bool EventType::operator>(const EventType& rhs) const {
     return __hashval > rhs.__hashval;
 }
 
-EventType::operator std::string() const {
-    return __name;
-}
+EventType::operator std::string() const { return __name; }
 
-EventType::operator uint32_t() const {
-    return __hashval;
-}
+EventType::operator uint32_t() const { return __hashval; }
 
 ////////////////////////////////////////////////////////
 //
@@ -104,19 +94,14 @@ EventType::operator uint32_t() const {
 //
 ////////////////////////////////////////////////////////
 
-Event::Event(const EventType _et) : event_type(_et), __stop(false) {
-}
+Event::Event(const EventType _et) : event_type(_et), __stop(false) {}
 
-Event::Event(const Event& _e) : event_type(_e.event_type),
-				__stop(_e.__stop) {}
+Event::Event(const Event& _e) : event_type(_e.event_type), __stop(_e.__stop) {}
 
-Event::~Event() {
-}
+Event::~Event() {}
 
-Event&
-Event::operator=(const Event& _rhs) {
-    if (this == &_rhs)
-	return *this;
+Event& Event::operator=(const Event& _rhs) {
+    if (this == &_rhs) return *this;
 
     event_type = _rhs.event_type;
     __stop = _rhs.__stop;
@@ -124,41 +109,22 @@ Event::operator=(const Event& _rhs) {
     return *this;
 }
 
-bool
-Event::operator==(const Event& _e) const {
+bool Event::operator==(const Event& _e) const {
     return event_type == _e.event_type;
 }
 
-bool
-Event::operator==(const EventType _et) const {
-    return event_type == _et;
-}
+bool Event::operator==(const EventType _et) const { return event_type == _et; }
 
-const EventType
-Event::type() const {
-    return event_type;
-}
+const EventType Event::type() const { return event_type; }
 
-void
-Event::stop(bool _s) {
-    __stop = _s;
-}
+void Event::stop(bool _s) { __stop = _s; }
 
-bool
-Event::stop() const {
-    return __stop;
-}
+bool Event::stop() const { return __stop; }
 
-Event*
-Event::clone() const {
-    return new Event(*this);
-}
+Event* Event::clone() const { return new Event(*this); }
 
-Event::operator const EventType() const {
-    return event_type;
-}
+Event::operator const EventType() const { return event_type; }
 
-std::string
-Event::evt2str(const EventType _et) {
+std::string Event::evt2str(const EventType _et) {
     return static_cast<std::string>(_et);
 }

@@ -23,29 +23,26 @@
 #include "config.h"
 #endif
 
-#include <stdexcept>
 #include <cassert>
 #include <cstdlib>
+#include <stdexcept>
 
-#include "curs.h"
-#include "yacursex.h"
-#include "window.h"
 #include "area.h"
+#include "colors.h"
+#include "curs.h"
 #include "eventqueue.h"
 #include "focusmanager.h"
-#include "colors.h"
+#include "window.h"
+#include "yacursex.h"
 
 using namespace YACURS;
 
 //
 // Private
 //
-Window::Window(const Window&) {
-    throw EXCEPTIONS::NotSupported();
-}
+Window::Window(const Window&) { throw EXCEPTIONS::NotSupported(); }
 
-Window&
-Window::operator=(const Window&) {
+Window& Window::operator=(const Window&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -53,12 +50,11 @@ Window::operator=(const Window&) {
 //
 // Protected
 //
-void
-Window::key_event_handler(Event& _e) {
+void Window::key_event_handler(Event& _e) {
     assert(_e == EVT_KEY);
 
-    if (__fgid != FocusManager::active_focus_group() ||
-        __hot_keys.empty() ) return;
+    if (__fgid != FocusManager::active_focus_group() || __hot_keys.empty())
+        return;
 
 #ifdef YACURS_USE_WCHAR
     EventEx<wint_t>& event = dynamic_cast<EventEx<wint_t>&>(_e);
@@ -66,8 +62,8 @@ Window::key_event_handler(Event& _e) {
     EventEx<int>& event = dynamic_cast<EventEx<int>&>(_e);
 #endif
 
-    std::map<int, HotKey*>::iterator it = __hot_keys.find(event.data() );
-    if (it != __hot_keys.end() ) {
+    std::map<int, HotKey*>::iterator it = __hot_keys.find(event.data());
+    if (it != __hot_keys.end()) {
         if (it->second != 0) {
             it->second->action();
             _e.stop(true);
@@ -75,14 +71,11 @@ Window::key_event_handler(Event& _e) {
     }
 }
 
-void
-Window::unrealize() {
+void Window::unrealize() {
     UNREALIZE_ENTER;
 
-    EventQueue::disconnect_event(EventConnectorMethod1<Window>(EVT_KEY,
-                                                               this,
-                                                               &Window::
-                                                               key_event_handler) );
+    EventQueue::disconnect_event(EventConnectorMethod1<Window>(
+        EVT_KEY, this, &Window::key_event_handler));
 
     if (__widget) __widget->unrealize();
     WindowBase::unrealize();
@@ -97,27 +90,23 @@ Window::unrealize() {
 // Public
 //
 
-Window::Window(const Margin& m) : WindowBase(m),
-    __widget(0),
-    __fgid(FocusManager::nfgid) {
+Window::Window(const Margin& m)
+    : WindowBase(m), __widget(0), __fgid(FocusManager::nfgid) {
     // It is imperative that a new Focus Group is created before the
     // Widget is realized()!
     __fgid = FocusManager::new_focus_group();
 }
 
 Window::~Window() {
-    EventQueue::disconnect_event(EventConnectorMethod1<Window>(EVT_KEY,
-                                                               this,
-                                                               &Window::
-                                                               key_event_handler) );
+    EventQueue::disconnect_event(EventConnectorMethod1<Window>(
+        EVT_KEY, this, &Window::key_event_handler));
 
     FocusManager::destroy_focus_group(__fgid);
 
-    if (!__hot_keys.empty() ) {
+    if (!__hot_keys.empty()) {
         std::map<int, HotKey*>::iterator it = __hot_keys.begin();
-        while (it != __hot_keys.end() ) {
-            if (it->second != 0)
-                delete it->second;
+        while (it != __hot_keys.end()) {
+            if (it->second != 0) delete it->second;
             it++;
         }
         __hot_keys.clear();
@@ -126,29 +115,20 @@ Window::~Window() {
     __fgid = FocusManager::nfgid;
 }
 
-void
-Window::widget(WidgetBase* _w) {
-    __widget = _w;
-}
+void Window::widget(WidgetBase* _w) { __widget = _w; }
 
-WidgetBase*
-Window::widget() const {
-    return __widget;
-}
+WidgetBase* Window::widget() const { return __widget; }
 
-void
-Window::add_hotkey(const HotKey& hk) {
-    if (__hot_keys[hk.key()] != 0)
-        delete __hot_keys[hk.key()];
+void Window::add_hotkey(const HotKey& hk) {
+    if (__hot_keys[hk.key()] != 0) delete __hot_keys[hk.key()];
 
     __hot_keys[hk.key()] = hk.clone();
 }
 
-void
-Window::remove_hotkey(const HotKey& hk) {
-    std::map<int, HotKey*>::iterator it = __hot_keys.find(hk.key() );
+void Window::remove_hotkey(const HotKey& hk) {
+    std::map<int, HotKey*>::iterator it = __hot_keys.find(hk.key());
 
-    if (it != __hot_keys.end() ) {
+    if (it != __hot_keys.end()) {
         assert(it->second != 0);
         delete it->second;
         __hot_keys.erase(it);
@@ -156,11 +136,10 @@ Window::remove_hotkey(const HotKey& hk) {
     return;
 }
 
-void
-Window::refresh(bool immediate) {
+void Window::refresh(bool immediate) {
     if (realization() != REALIZED) return;
 
-    curses_window()->set_color(color() );
+    curses_window()->set_color(color());
 
     WindowBase::refresh(immediate);
 
@@ -170,16 +149,14 @@ Window::refresh(bool immediate) {
     if (__widget) __widget->refresh(immediate);
 }
 
-void
-Window::realize() {
+void Window::realize() {
     REALIZE_ENTER;
     WindowBase::realize();
 
     FocusManager::focus_group_activate(__fgid);
 
-    EventQueue::connect_event(EventConnectorMethod1<Window>(EVT_KEY, this,
-                                                            &Window::
-                                                            key_event_handler) );
+    EventQueue::connect_event(EventConnectorMethod1<Window>(
+        EVT_KEY, this, &Window::key_event_handler));
 
     if (__widget) {
         assert(__widget->realization() == UNREALIZED);
@@ -187,16 +164,16 @@ Window::realize() {
         // This is imperative, so that the widget also is aware of the
         // new curses window in case we're called in the course of a
         // resize.
-        __widget->curses_window(curses_window() );
+        __widget->curses_window(curses_window());
 
         // This widget does not have another widget as parent.
         __widget->parent(0);
 
         __widget->focusgroup_id(__fgid);
 
-        __widget->position(widget_area() );
+        __widget->position(widget_area());
 
-        __widget->size_available(widget_area() );
+        __widget->size_available(widget_area());
 
         __widget->realize();
     }

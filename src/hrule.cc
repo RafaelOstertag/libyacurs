@@ -30,8 +30,7 @@ using namespace YACURS;
 //
 // Private
 //
-HRule&
-HRule::operator=(const HRule&) {
+HRule& HRule::operator=(const HRule&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -43,26 +42,19 @@ HRule::operator=(const HRule&) {
 //
 // Public
 //
-HRule::HRule() : Rule() {
-}
+HRule::HRule() : Rule() {}
 
-HRule::~HRule() {
-}
+HRule::~HRule() {}
 
-void
-HRule::size_available(const Size& _s) {
+void HRule::size_available(const Size& _s) {
     assert(_s.rows() > 0);
     WidgetBase::size_available(_s);
-    __size = Size(1, _s.cols() );
+    __size = Size(1, _s.cols());
 }
 
-Size
-HRule::size_hint() const {
-    return Size(1, 0);
-}
+Size HRule::size_hint() const { return Size(1, 0); }
 
-void
-HRule::refresh(bool immediate) {
+void HRule::refresh(bool immediate) {
     if (realization() != REALIZED && realization() != REALIZING) return;
 
     assert(widget_subwin() != 0);

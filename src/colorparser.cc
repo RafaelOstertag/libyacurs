@@ -20,7 +20,7 @@
 // $Id$
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include "config.h"
 #endif
 
 #include "gettext.h"
@@ -36,29 +36,27 @@ using namespace YACURS::INTERNAL;
 // Private
 //
 const std::string ColorParser::__default_colors(
-    "DEF:wk0;DIA:wb0;DIT:bw3;IWN:kw3;IWF:kg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;LBH:kg3;CBG:yc0;TLB:bw0;STB:bw0");
+    "DEF:wk0;DIA:wb0;DIT:bw3;IWN:kw3;IWF:kg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;"
+    "LBH:kg3;CBG:yc0;TLB:bw0;STB:bw0");
 
-std::vector<std::string>
-ColorParser::tokenize(const std::string& str) const {
+std::vector<std::string> ColorParser::tokenize(const std::string& str) const {
     std::string::size_type pos;
     std::vector<std::string> retval(0);
 
     std::string tmpstr(str);
 
-    while ( (pos = tmpstr.find(';') ) != std::string::npos) {
-        retval.push_back(tmpstr.substr(0, pos) );
+    while ((pos = tmpstr.find(';')) != std::string::npos) {
+        retval.push_back(tmpstr.substr(0, pos));
         tmpstr.erase(0, pos + 1);
     }
 
     // Sort in remaining parts
-    if (tmpstr.length() == 7)
-        retval.push_back(tmpstr);
+    if (tmpstr.length() == 7) retval.push_back(tmpstr);
 
     return retval;
 }
 
-CursColor
-ColorParser::process_token(const std::string& tkn) {
+CursColor ColorParser::process_token(const std::string& tkn) {
     std::string::size_type pos = tkn.find(':');
 
     if (pos == std::string::npos) {
@@ -79,28 +77,28 @@ ColorParser::process_token(const std::string& tkn) {
     }
 
     CursColor retval;
-    if (color_name_map.find(col_obj) == color_name_map.end() ) {
+    if (color_name_map.find(col_obj) == color_name_map.end()) {
         col_obj += _(" is not valid color object");
         throw std::out_of_range(col_obj);
     }
 
     retval.no = color_name_map[col_obj];
 
-    if (curs_colors_map.find(cols[0]) == curs_colors_map.end() ) {
+    if (curs_colors_map.find(cols[0]) == curs_colors_map.end()) {
         std::string tmp = _("not a valid color: ");
         tmp += cols[0];
         throw std::out_of_range(tmp);
     }
     retval.fg = curs_colors_map[cols[0]];
 
-    if (curs_colors_map.find(cols[1]) == curs_colors_map.end() ) {
+    if (curs_colors_map.find(cols[1]) == curs_colors_map.end()) {
         std::string tmp = _("not a valid color: ");
         tmp += cols[1];
         throw std::out_of_range(tmp);
     }
     retval.bg = curs_colors_map[cols[1]];
 
-    if (curs_attrs_map.find(cols[2]) == curs_attrs_map.end() ) {
+    if (curs_attrs_map.find(cols[2]) == curs_attrs_map.end()) {
         std::string tmp = _("not a valid attribute: ");
         tmp += cols[2];
         throw std::out_of_range(tmp);
@@ -110,15 +108,14 @@ ColorParser::process_token(const std::string& tkn) {
     return retval;
 }
 
-std::vector<CursColor>
-ColorParser::get_default_scheme() {
-    std::vector<std::string> default_tokens = tokenize(default_colors() );
+std::vector<CursColor> ColorParser::get_default_scheme() {
+    std::vector<std::string> default_tokens = tokenize(default_colors());
 
     std::vector<CursColor> retval(NUMBER_OF_COLOROBJ);
 
     std::vector<std::string>::iterator it = default_tokens.begin();
 
-    while (it != default_tokens.end() ) {
+    while (it != default_tokens.end()) {
         // We don't catch exceptions, since there must be none. The
         // default color scheme has to be flawless.
         CursColor tmp = process_token(*it++);
@@ -173,14 +170,12 @@ ColorParser::ColorParser() {
     curs_attrs_map['7'] = A_INVIS;
 }
 
-ColorParser::ColorParser(const ColorParser& cp) : color_name_map(
-        cp.color_name_map),
-    curs_colors_map(cp.curs_colors_map),
-    curs_attrs_map(cp.curs_attrs_map) {
-}
+ColorParser::ColorParser(const ColorParser& cp)
+    : color_name_map(cp.color_name_map),
+      curs_colors_map(cp.curs_colors_map),
+      curs_attrs_map(cp.curs_attrs_map) {}
 
-ColorParser&
-ColorParser::operator=(const ColorParser& cp) {
+ColorParser& ColorParser::operator=(const ColorParser& cp) {
     if (this == &cp) return *this;
 
     color_name_map = cp.color_name_map;
@@ -190,8 +185,7 @@ ColorParser::operator=(const ColorParser& cp) {
     return *this;
 }
 
-std::vector<CursColor>
-ColorParser::operator()(const std::string& colorstr) {
+std::vector<CursColor> ColorParser::operator()(const std::string& colorstr) {
     std::vector<CursColor> default_scheme = get_default_scheme();
 
     std::vector<std::string> tokens = tokenize(colorstr);
@@ -200,7 +194,7 @@ ColorParser::operator()(const std::string& colorstr) {
 
     if (tokens.size() > 0) {
         std::vector<std::string>::iterator it = tokens.begin();
-        while (it != tokens.end() ) {
+        while (it != tokens.end()) {
             try {
                 CursColor tmp = process_token(*it);
                 // Color number is off by +1 due to NCurses
@@ -214,8 +208,7 @@ ColorParser::operator()(const std::string& colorstr) {
         // Merge with default colors, so unspecified colors will be
         // initialized.
         for (int i = 0; i < NUMBER_OF_COLOROBJ; i++) {
-            if (retval.at(i).no == -1)
-                retval.at(i) = default_scheme.at(i);
+            if (retval.at(i).no == -1) retval.at(i) = default_scheme.at(i);
         }
     } else {
         return default_scheme;
@@ -224,7 +217,4 @@ ColorParser::operator()(const std::string& colorstr) {
     return retval;
 }
 
-const std::string&
-ColorParser::default_colors() {
-    return __default_colors;
-}
+const std::string& ColorParser::default_colors() { return __default_colors; }

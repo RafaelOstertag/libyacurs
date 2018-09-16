@@ -25,35 +25,35 @@
 
 #include <string>
 
+#include "input.h"
+#include "label.h"
 #include "unlockdialog.h"
 #include "vpack.h"
-#include "label.h"
-#include "input.h"
 
 namespace YACURS {
-    /**
-     * Default unlock dialog.
-     *
-     * Convenience class providing simple unlock dialog.
-     */
-    class UnlockDialogDefault : public UnlockDialog {
-        private:
-            std::string __secret;
-            VPack __vpack;
-            Label __text;
-            Input<> __secret_input;
+/**
+ * Default unlock dialog.
+ *
+ * Convenience class providing simple unlock dialog.
+ */
+class UnlockDialogDefault : public UnlockDialog {
+   private:
+    std::string __secret;
+    VPack __vpack;
+    Label __text;
+    Input<> __secret_input;
 
-            UnlockDialogDefault& operator=(const UnlockDialogDefault&);
+    UnlockDialogDefault& operator=(const UnlockDialogDefault&);
 
-        public:
-            UnlockDialogDefault(const std::string& _secret);
+   public:
+    UnlockDialogDefault(const std::string& _secret);
 
-            ~UnlockDialogDefault();
+    ~UnlockDialogDefault();
 
-            bool unlock();
+    bool unlock();
 
-            void clear();
-    };
-}
+    void clear();
+};
+}  // namespace YACURS
 
-#endif // UNLOCKDIADEFAULT_H
+#endif  // UNLOCKDIADEFAULT_H

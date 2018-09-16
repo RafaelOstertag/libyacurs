@@ -21,8 +21,8 @@
 
 #include <cstdlib>
 
-#include "yacursex.h"
 #include "titlebar.h"
+#include "yacursex.h"
 
 using namespace YACURS;
 
@@ -30,8 +30,7 @@ using namespace YACURS;
 // Private
 //
 
-TitleBar&
-TitleBar::operator=(const TitleBar&) {
+TitleBar& TitleBar::operator=(const TitleBar&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -44,6 +43,5 @@ TitleBar::operator=(const TitleBar&) {
 // Public
 //
 
-TitleBar::TitleBar(POSITION _pos, const std::string& _t) :
-    LineObject(_pos, _t, TITLEBAR) {
-}
+TitleBar::TitleBar(POSITION _pos, const std::string& _t)
+    : LineObject(_pos, _t, TITLEBAR) {}

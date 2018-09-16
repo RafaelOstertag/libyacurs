@@ -22,8 +22,8 @@
 #include <cstdlib>
 
 #include "curs.h"
-#include "yacursex.h"
 #include "statusbar.h"
+#include "yacursex.h"
 
 using namespace YACURS;
 
@@ -31,16 +31,14 @@ using namespace YACURS;
 // Private
 //
 
-void
-StatusBar::show_top_msg() {
-    if (__messages.empty() )
-        line(std::string() );
+void StatusBar::show_top_msg() {
+    if (__messages.empty())
+        line(std::string());
     else
-        line(__messages.top() );
+        line(__messages.top());
 }
 
-StatusBar&
-StatusBar::operator=(const StatusBar&) {
+StatusBar& StatusBar::operator=(const StatusBar&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -53,32 +51,25 @@ StatusBar::operator=(const StatusBar&) {
 // Public
 //
 
-StatusBar::StatusBar() :
-    LineObject(POS_BOTTOM, std::string(), STATUSBAR) {
-}
+StatusBar::StatusBar() : LineObject(POS_BOTTOM, std::string(), STATUSBAR) {}
 
-StatusBar::~StatusBar() {
-}
+StatusBar::~StatusBar() {}
 
-void
-StatusBar::push(const std::string& m) {
+void StatusBar::push(const std::string& m) {
     __messages.push(m);
     show_top_msg();
 }
 
-void
-StatusBar::set(const std::string& m) {
-    if (!__messages.empty())
-	__messages.pop();
+void StatusBar::set(const std::string& m) {
+    if (!__messages.empty()) __messages.pop();
 
     __messages.push(m);
 
     show_top_msg();
 }
 
-void
-StatusBar::pop() {
-    if (__messages.empty() ) return;
+void StatusBar::pop() {
+    if (__messages.empty()) return;
     __messages.pop();
     show_top_msg();
 }

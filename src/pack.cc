@@ -23,14 +23,14 @@
 #include "config.h"
 #endif
 
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
-#include <algorithm>
 #include <functional>
 
-#include "yacursex.h"
-#include "pack.h"
 #include "eventqueue.h"
+#include "pack.h"
+#include "yacursex.h"
 
 using namespace YACURS;
 
@@ -41,48 +41,38 @@ using namespace YACURS;
 //
 // Private
 //
-void
-Pack::set_all_curses_window() {
-    std::for_each(widget_list.begin(),
-                  widget_list.end(),
-                  std::bind2nd(std::mem_fun<void, WidgetBase,
-                                            YACURS::INTERNAL::CursWin*>(&
-                                                                        WidgetBase
-                                                                        ::
-                                                                        curses_window),
-                               WidgetBase::curses_window() ) );
+void Pack::set_all_curses_window() {
+    std::for_each(
+        widget_list.begin(), widget_list.end(),
+        std::bind2nd(std::mem_fun<void, WidgetBase, YACURS::INTERNAL::CursWin*>(
+                         &WidgetBase ::curses_window),
+                     WidgetBase::curses_window()));
 }
 
-void
-Pack::set_all_focusgroup_id() {
-    std::for_each(widget_list.begin(),
-                  widget_list.end(),
-                  std::bind2nd(std::mem_fun<void, WidgetBase,
-                                            FocusManager::fgid_t>(&WidgetBase
-                                                                  ::
-                                                                  focusgroup_id),
-                               WidgetBase::focusgroup_id() ) );
+void Pack::set_all_focusgroup_id() {
+    std::for_each(
+        widget_list.begin(), widget_list.end(),
+        std::bind2nd(std::mem_fun<void, WidgetBase, FocusManager::fgid_t>(
+                         &WidgetBase ::focusgroup_id),
+                     WidgetBase::focusgroup_id()));
 }
 
-void
-Pack::refresh_all_widgets(bool i) {
-    std::for_each(widget_list.begin(),
-                  widget_list.end(),
-                  std::bind2nd(std::mem_fun<void, WidgetBase,
-                                            bool>(&WidgetBase::refresh), i) );
+void Pack::refresh_all_widgets(bool i) {
+    std::for_each(
+        widget_list.begin(), widget_list.end(),
+        std::bind2nd(std::mem_fun<void, WidgetBase, bool>(&WidgetBase::refresh),
+                     i));
 }
 
-void
-Pack::take_over(WidgetBase* _w) {
+void Pack::take_over(WidgetBase* _w) {
     assert(_w != 0);
 
     _w->parent(this);
-    _w->curses_window(WidgetBase::curses_window() );
-    _w->focusgroup_id(WidgetBase::focusgroup_id() );
+    _w->curses_window(WidgetBase::curses_window());
+    _w->focusgroup_id(WidgetBase::focusgroup_id());
 }
 
-Pack&
-Pack::operator=(const Pack& _p) {
+Pack& Pack::operator=(const Pack& _p) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -90,14 +80,12 @@ Pack::operator=(const Pack& _p) {
 //
 // Protected
 //
-void
-Pack::unrealize() {
+void Pack::unrealize() {
     UNREALIZE_ENTER;
     WidgetBase::unrealize();
 
-    std::for_each(widget_list.begin(),
-                  widget_list.end(),
-                  std::mem_fun(&WidgetBase::unrealize) );
+    std::for_each(widget_list.begin(), widget_list.end(),
+                  std::mem_fun(&WidgetBase::unrealize));
 
     // Required since pack is a dynamically sized Widget.
     reset_size();
@@ -108,9 +96,7 @@ Pack::unrealize() {
 //
 // Public
 //
-Pack::Pack() : __hinting(true),
-    __always_dynamic(false) {
-}
+Pack::Pack() : __hinting(true), __always_dynamic(false) {}
 
 Pack::~Pack() {
     // We don't unrealize widget, since they may be already deleted by
@@ -123,28 +109,24 @@ Pack::~Pack() {
     // packs on destruction...
 }
 
-std::list<WidgetBase*>::size_type
-Pack::widgets() const {
+std::list<WidgetBase*>::size_type Pack::widgets() const {
     return widget_list.size();
 }
 
-void
-Pack::add_front(WidgetBase* _w) {
+void Pack::add_front(WidgetBase* _w) {
     assert(_w != 0);
 
     widget_list.push_front(_w);
     take_over(_w);
 
     if (realization() == REALIZED) {
-        if (_w->realization() == REALIZED)
-            _w->unrealize();
+        if (_w->realization() == REALIZED) _w->unrealize();
 
         size_change();
     }
 }
 
-void
-Pack::add_back(WidgetBase* _w) {
+void Pack::add_back(WidgetBase* _w) {
     assert(_w != 0);
 
     widget_list.push_back(_w);
@@ -152,32 +134,27 @@ Pack::add_back(WidgetBase* _w) {
     take_over(_w);
 
     if (realization() == REALIZED) {
-        if (_w->realization() == REALIZED)
-            _w->unrealize();
+        if (_w->realization() == REALIZED) _w->unrealize();
 
         size_change();
     }
 }
 
-void
-Pack::remove(WidgetBase* _w) {
+void Pack::remove(WidgetBase* _w) {
     assert(_w != 0);
 
     //    if (realization()!=UNREALIZED) throw AlreadyRealized();
 
     widget_list.remove(_w);
 
-    if (_w->realization() != UNREALIZED)
-        _w->unrealize();
+    if (_w->realization() != UNREALIZED) _w->unrealize();
 
     _w->focusgroup_id(FocusManager::nfgid);
 
-    if (realization() == REALIZED)
-        size_change();
+    if (realization() == REALIZED) size_change();
 }
 
-void
-Pack::curses_window(YACURS::INTERNAL::CursWin* _p) {
+void Pack::curses_window(YACURS::INTERNAL::CursWin* _p) {
     WidgetBase::curses_window(_p);
 
     // We have to make sure that the associated widgets have the same
@@ -185,8 +162,7 @@ Pack::curses_window(YACURS::INTERNAL::CursWin* _p) {
     set_all_curses_window();
 }
 
-void
-Pack::focusgroup_id(FocusManager::fgid_t _id) {
+void Pack::focusgroup_id(FocusManager::fgid_t _id) {
     WidgetBase::focusgroup_id(_id);
 
     // We have to make sure that the associated widgets have the same
@@ -194,13 +170,11 @@ Pack::focusgroup_id(FocusManager::fgid_t _id) {
     set_all_focusgroup_id();
 }
 
-void
-Pack::size_available(const Size& _s) {
+void Pack::size_available(const Size& _s) {
     WidgetBase::size_available(__size = _s);
 }
 
-Size
-Pack::size() const {
+Size Pack::size() const {
     // If we are always dynamic, simply return the current value of
     // __size, which may be Size::zero() if a call was made to
     // reset_size().
@@ -210,45 +184,31 @@ Pack::size() const {
     // size. This only succeeds if there are no dynamically sized
     // widgets.
     Size non_dynamic = calc_size_non_dynamic();
-    if (non_dynamic != Size::zero() )
-        return non_dynamic;
+    if (non_dynamic != Size::zero()) return non_dynamic;
 
     // __size might have been set by a former call to size_available()
     // so return that.
     return __size;
 }
 
-void
-Pack::hinting(bool _h) {
+void Pack::hinting(bool _h) {
     __hinting = _h;
     size_change();
 }
 
-bool
-Pack::hinting() const {
-    return __hinting;
-}
+bool Pack::hinting() const { return __hinting; }
 
-void
-Pack::always_dynamic(bool _d) {
+void Pack::always_dynamic(bool _d) {
     __always_dynamic = _d;
     size_change();
 }
 
-bool
-Pack::always_dynamic() const {
-    return __always_dynamic;
-}
+bool Pack::always_dynamic() const { return __always_dynamic; }
 
-void
-Pack::reset_size() {
-    __size = Size::zero();
-}
+void Pack::reset_size() { __size = Size::zero(); }
 
-bool
-Pack::size_change() {
-    if (parent() != 0)
-        return parent()->size_change();
+bool Pack::size_change() {
+    if (parent() != 0) return parent()->size_change();
 
     if (realization() != REALIZED) return true;
 
@@ -259,11 +219,11 @@ Pack::size_change() {
     // We don't use resize() because we would loose the Focus Group
     // ID. So we implement our own resize() again here.
     //
-    //resize(Area(position(),
+    // resize(Area(position(),
     //		WidgetBase::size_available()) );
 
     FocusManager::fgid_t save_id = WidgetBase::focusgroup_id();
-    Area _save_area = Area(position(), WidgetBase::size_available() );
+    Area _save_area = Area(position(), WidgetBase::size_available());
 
     unrealize();
 
@@ -279,7 +239,7 @@ Pack::size_change() {
     // the same event sequence as by a screen resize. A call
     // refresh(true) produces to much flicker.
     //
-    //refresh(true)
+    // refresh(true)
 
     EventQueue::submit(EVT_REFRESH);
     EventQueue::submit(EVT_DOUPDATE);
@@ -287,31 +247,19 @@ Pack::size_change() {
     return true;
 }
 
-bool
-Pack::can_focus() const {
-    return false;
-}
+bool Pack::can_focus() const { return false; }
 
-void
-Pack::focus(bool) {
-    throw EXCEPTIONS::CannotFocus();
-}
+void Pack::focus(bool) { throw EXCEPTIONS::CannotFocus(); }
 
-bool
-Pack::focus() const {
-    return false;
-}
+bool Pack::focus() const { return false; }
 
-void
-Pack::refresh(bool immediate) {
-    if (!(realization() == REALIZED ||
-          realization() == REALIZING) ) return;
+void Pack::refresh(bool immediate) {
+    if (!(realization() == REALIZED || realization() == REALIZING)) return;
 
     refresh_all_widgets(immediate);
 }
 
-void
-Pack::resize(const Area& _a) {
+void Pack::resize(const Area& _a) {
     if (realization() != REALIZED) return;
 
     unrealize();

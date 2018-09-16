@@ -25,17 +25,17 @@
 
 #include "gettext.h"
 
-#include <cstdlib>
 #include <cassert>
 #include <cerrno>
+#include <cstdlib>
 
-#include <unistd.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 #include <sys/stat.h>
 
 #ifdef HAVE_FCNTL_H
-# include <fcntl.h>
+#include <fcntl.h>
 #endif
 
 #include "fileloaddialog.h"
@@ -46,8 +46,7 @@ using namespace YACURS;
 //
 // Private
 //
-FileLoadDialog&
-FileLoadDialog::operator=(const FileLoadDialog&) {
+FileLoadDialog& FileLoadDialog::operator=(const FileLoadDialog&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -60,8 +59,8 @@ FileLoadDialog::operator=(const FileLoadDialog&) {
 // Public
 //
 
-FileLoadDialog::FileLoadDialog(std::string _path, bool _do_chdir) :
-    FileDialog(std::string(_("Load File") ), _path, _do_chdir, OKCANCEL){
+FileLoadDialog::FileLoadDialog(std::string _path, bool _do_chdir)
+    : FileDialog(std::string(_("Load File")), _path, _do_chdir, OKCANCEL) {
     filename_readonly(true);
     // Only allow files
     selection_type(YACURS::FILE);

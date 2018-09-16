@@ -25,273 +25,274 @@
 
 #include <list>
 
-#include "colors.h"
 #include "area.h"
+#include "colors.h"
 #include "curstr.h"
 #include "yacurscurses.h"
 
 namespace YACURS {
+/**
+ * Name space of internal facilities.
+ */
+namespace INTERNAL {
+/**
+ * Wrapper class for WINDOW.
+ *
+ * CursWin provides wrapper for Curses WINDOW and
+ * corresponding member functions to modfiy WINDOW.
+ *
+ * Member functions are named like their Curses counterparts,
+ * except for the @c w prefix, e.g. @c wclear() becomes @c
+ * clear().
+ *
+ * Member functions writing character strings in CursWin come
+ * in two flavors: the ones taking @c std::string as argument,
+ * and the other taking @c YACURS::CursStr.
+ *
+ * CursWin features a default color, which
+ */
+class CursWin {
+   private:
     /**
-     * Name space of internal facilities.
+     * Pointer to Curses Window.
      */
-    namespace INTERNAL {
-        /**
-         * Wrapper class for WINDOW.
-         *
-         * CursWin provides wrapper for Curses WINDOW and
-         * corresponding member functions to modfiy WINDOW.
-         *
-         * Member functions are named like their Curses counterparts,
-         * except for the @c w prefix, e.g. @c wclear() becomes @c
-         * clear().
-         *
-         * Member functions writing character strings in CursWin come
-         * in two flavors: the ones taking @c std::string as argument,
-         * and the other taking @c YACURS::CursStr.
-         *
-         * CursWin features a default color, which
-         */
-        class CursWin {
-            private:
-                /**
-                 * Pointer to Curses Window.
-                 */
-                WINDOW* __window;
+    WINDOW* __window;
 
-                /**
-                 * Default color for Curses Window.
-                 */
-                COLOROBJ __def_color;
+    /**
+     * Default color for Curses Window.
+     */
+    COLOROBJ __def_color;
 
-                /**
-                 * Size and position of the Window.
-                 */
-                Area __area;
+    /**
+     * Size and position of the Window.
+     */
+    Area __area;
 
-                /**
-                 * Area available to client.
-                 */
-                Area __client_area;
+    /**
+     * Area available to client.
+     */
+    Area __client_area;
 
-                /**
-                 * Flag whether or not Curses Window has a box.
-                 */
-                bool __box;
+    /**
+     * Flag whether or not Curses Window has a box.
+     */
+    bool __box;
 
-                /**
-                 * Flag indicating whether or not this is Subwindow.
-                 */
-                bool __subwin;
+    /**
+     * Flag indicating whether or not this is Subwindow.
+     */
+    bool __subwin;
 
-		/**
-		 * Horizontal character for box.
-		 */
-		chtype __horch;
+    /**
+     * Horizontal character for box.
+     */
+    chtype __horch;
 
-		/**
-		 * Vertical character for box.
-		 */
-		chtype __verch;
-            protected:
-                /**
-                 * Initialize CursWin from WINDOW.
-                 *
-                 * @param win pointer to Curses WINDOW.
-                 *
-                 * @param dc default color.
-                 */
-                CursWin(WINDOW* win, COLOROBJ dc, bool subwin);
+    /**
+     * Vertical character for box.
+     */
+    chtype __verch;
 
-            public:
-                /**
-                 * Constructor.
-                 *
-                 * @param _a area the occupied on screen
-                 *
-                 * @param dc default color
-                 */
-                CursWin(const Area& _a, COLOROBJ dc=DEFAULT);
+   protected:
+    /**
+     * Initialize CursWin from WINDOW.
+     *
+     * @param win pointer to Curses WINDOW.
+     *
+     * @param dc default color.
+     */
+    CursWin(WINDOW* win, COLOROBJ dc, bool subwin);
 
-                /**
-                 * Copy Constructor.
-                 */
-                CursWin(const CursWin& cw);
+   public:
+    /**
+     * Constructor.
+     *
+     * @param _a area the occupied on screen
+     *
+     * @param dc default color
+     */
+    CursWin(const Area& _a, COLOROBJ dc = DEFAULT);
 
-                /**
-                 * Assignment operator.
-                 */
-                CursWin& operator=(const CursWin& cw);
+    /**
+     * Copy Constructor.
+     */
+    CursWin(const CursWin& cw);
 
-                /**
-                 * Destructor.
-                 */
-                ~CursWin();
+    /**
+     * Assignment operator.
+     */
+    CursWin& operator=(const CursWin& cw);
 
-                /**
-                 * Size and position of the Window.
-                 *
-                 * @return size and position of the Window.
-                 */
-                const Area& area() const;
+    /**
+     * Destructor.
+     */
+    ~CursWin();
 
-                /**
-                 * Size and position available to clients.
-                 *
-                 * Size and position available for use.
-                 *
-                 * @return size and position.
-                 */
-                const Area& client_area() const;
+    /**
+     * Size and position of the Window.
+     *
+     * @return size and position of the Window.
+     */
+    const Area& area() const;
 
-                /**
-                 * Refresh Curses Window.
-                 *
-                 * @param immediate if @c true, call wrefresh() on the
-                 * Curses Window, @c false make it call
-                 * wnoutrefresh().
-                 *
-                 * @return reference to *this.
-                 */
-                CursWin& refresh(bool immediate=true);
+    /**
+     * Size and position available to clients.
+     *
+     * Size and position available for use.
+     *
+     * @return size and position.
+     */
+    const Area& client_area() const;
 
-                /**
-                 * Get sub window flag.
-                 *
-                 * @return @c true if CursWin is a sub window, @c
-                 * false otherwise.
-                 */
-                bool issubwin() const;
+    /**
+     * Refresh Curses Window.
+     *
+     * @param immediate if @c true, call wrefresh() on the
+     * Curses Window, @c false make it call
+     * wnoutrefresh().
+     *
+     * @return reference to *this.
+     */
+    CursWin& refresh(bool immediate = true);
 
-                /**
-                 * Get box flag.
-                 *
-                 * @return @c true if CursWin has box, @c false
-                 * otherwise.
-                 */
-                bool has_box() const;
+    /**
+     * Get sub window flag.
+     *
+     * @return @c true if CursWin is a sub window, @c
+     * false otherwise.
+     */
+    bool issubwin() const;
 
-                /**
-                 * Create box.
-                 *
-                 * Draw a box around the edges of a window
-                 *
-                 * @param verch vertical character. If zero, default
-                 * value is used.
-                 *
-                 * @param horch horizontal character. If zero, default
-                 * value is used.
-                 *
-                 * @return reference to *this.
-                 *
-                 * @internal wrapper for box().
-                 */
-                CursWin& box(chtype verch=0, chtype horch=0);
+    /**
+     * Get box flag.
+     *
+     * @return @c true if CursWin has box, @c false
+     * otherwise.
+     */
+    bool has_box() const;
 
-                /**
-                 * Set background property.
-                 *
-                 * Set the background property of the current or
-                 * specified window and then apply this setting to
-                 * every character position in that window
-                 *
-                 * @param ch rendition.
-                 *
-                 * @return reference to *this.
-                 *
-                 * @internal wrapper for bgkd().
-                 */
-                CursWin& bkgd(chtype ch);
+    /**
+     * Create box.
+     *
+     * Draw a box around the edges of a window
+     *
+     * @param verch vertical character. If zero, default
+     * value is used.
+     *
+     * @param horch horizontal character. If zero, default
+     * value is used.
+     *
+     * @return reference to *this.
+     *
+     * @internal wrapper for box().
+     */
+    CursWin& box(chtype verch = 0, chtype horch = 0);
 
-                /**
-                 * Set Color.
-                 *
-                 * @param c color.
-                 *
-                 * @sa COLOROBJ
-                 */
-                CursWin& set_color(COLOROBJ c);
+    /**
+     * Set background property.
+     *
+     * Set the background property of the current or
+     * specified window and then apply this setting to
+     * every character position in that window
+     *
+     * @param ch rendition.
+     *
+     * @return reference to *this.
+     *
+     * @internal wrapper for bgkd().
+     */
+    CursWin& bkgd(chtype ch);
 
-                CursWin& set_bg(COLOROBJ c);
+    /**
+     * Set Color.
+     *
+     * @param c color.
+     *
+     * @sa COLOROBJ
+     */
+    CursWin& set_color(COLOROBJ c);
 
-                CursWin& unset_box();
+    CursWin& set_bg(COLOROBJ c);
 
-                Coordinates get_cursor() const;
+    CursWin& unset_box();
 
-                CursWin& move(const Coordinates& pos);
+    Coordinates get_cursor() const;
 
-                CursWin& clear();
+    CursWin& move(const Coordinates& pos);
 
-                CursWin& clrtobot();
+    CursWin& clear();
 
-                CursWin& erase();
+    CursWin& clrtobot();
 
-                CursWin& touch();
+    CursWin& erase();
 
-                CursWin& untouch();
+    CursWin& touch();
 
-                bool is_touched() const;
+    CursWin& untouch();
 
-                CursWin& addstr(const CurStr& str);
+    bool is_touched() const;
 
-                CursWin& addstr(const std::string& str);
+    CursWin& addstr(const CurStr& str);
 
-                CursWin& addstrx(const CurStr& str);
+    CursWin& addstr(const std::string& str);
 
-                CursWin& addstrx(const std::string& str);
+    CursWin& addstrx(const CurStr& str);
 
-                CursWin& addlinex(const CurStr& str);
+    CursWin& addstrx(const std::string& str);
 
-                CursWin& addlinex(const std::string& str);
+    CursWin& addlinex(const CurStr& str);
 
-                CursWin& addnstr(const CurStr& str, int n);
+    CursWin& addlinex(const std::string& str);
 
-                CursWin& addnstr(const std::string& str, int n);
+    CursWin& addnstr(const CurStr& str, int n);
 
-                CursWin& addch(const chtype ch);
+    CursWin& addnstr(const std::string& str, int n);
 
-                CursWin& mvaddch(const Coordinates& pos, const chtype ch);
+    CursWin& addch(const chtype ch);
 
-                CursWin& insch(const chtype ch);
+    CursWin& mvaddch(const Coordinates& pos, const chtype ch);
 
-                CursWin& mvinsch(const Coordinates& pos, const chtype ch);
+    CursWin& insch(const chtype ch);
 
-                CursWin& mvdelch(const Coordinates& pos);
+    CursWin& mvinsch(const Coordinates& pos, const chtype ch);
 
-                CursWin& delch();
+    CursWin& mvdelch(const Coordinates& pos);
 
-		/**
-		 * Horizontal rule
-		 *
-		 * @param ypos only the y-component is used.
-		 */
-		CursWin& hrule(const Coordinates& ypos=Coordinates::zero());
+    CursWin& delch();
 
-		/**
-		 * Vertical rule
-		 *
-		 * @param xpos only the x-component is used.
-		 */
-		CursWin& vrule(const Coordinates& xpos=Coordinates::zero());
+    /**
+     * Horizontal rule
+     *
+     * @param ypos only the y-component is used.
+     */
+    CursWin& hrule(const Coordinates& ypos = Coordinates::zero());
 
-                CursWin& clearok(bool fl);
+    /**
+     * Vertical rule
+     *
+     * @param xpos only the x-component is used.
+     */
+    CursWin& vrule(const Coordinates& xpos = Coordinates::zero());
 
-                CursWin& scrollok(bool fl);
+    CursWin& clearok(bool fl);
 
-                CursWin& leaveok(bool fl);
+    CursWin& scrollok(bool fl);
 
-                CursWin* derwin(const Area& a) const;
+    CursWin& leaveok(bool fl);
 
-                CursWin* subwin(const Area& a) const;
+    CursWin* derwin(const Area& a) const;
 
-                CursWin& operator+=(const CurStr& str);
+    CursWin* subwin(const Area& a) const;
 
-                CursWin& operator+=(const std::string& str);
+    CursWin& operator+=(const CurStr& str);
 
-                CursWin& operator<<(const CurStr& str);
+    CursWin& operator+=(const std::string& str);
 
-                CursWin& operator<<(const std::string& str);
-        };
-    } // namespace INTERNAL
-} // namespace YACURS
+    CursWin& operator<<(const CurStr& str);
 
-#endif // CURSWIN_H
+    CursWin& operator<<(const std::string& str);
+};
+}  // namespace INTERNAL
+}  // namespace YACURS
+
+#endif  // CURSWIN_H

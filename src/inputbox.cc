@@ -19,8 +19,8 @@
 //
 // $Id$
 
-#include <cstdlib>
 #include <cassert>
+#include <cstdlib>
 
 #include "inputbox.h"
 
@@ -29,8 +29,7 @@ using namespace YACURS;
 //
 // Private
 //
-InputBox&
-InputBox::operator=(const InputBox&) {
+InputBox& InputBox::operator=(const InputBox&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -43,13 +42,9 @@ InputBox::operator=(const InputBox&) {
 // Public
 //
 
-InputBox::InputBox(const std::string& _title,
-                   const std::string& _message,
-                   DIALOG_TYPE _dt) : Dialog(_title, _dt),
-    __message(_message),
-    __input(),
-    __vpack() {
-
+InputBox::InputBox(const std::string& _title, const std::string& _message,
+                   DIALOG_TYPE _dt)
+    : Dialog(_title, _dt), __message(_message), __input(), __vpack() {
     __message.color(DIALOG);
 
     __vpack.add_back(&__message);
@@ -60,15 +55,8 @@ InputBox::InputBox(const std::string& _title,
     widget(&__vpack);
 }
 
-InputBox::~InputBox() {
-}
+InputBox::~InputBox() {}
 
-const std::string&
-InputBox::input() const {
-    return __input.input();
-}
+const std::string& InputBox::input() const { return __input.input(); }
 
-void
-InputBox::clear() {
-    __input.clear();
-}
+void InputBox::clear() { __input.clear(); }

@@ -22,12 +22,12 @@
 #include <cerrno>
 #include <cstdlib>
 
+#include "colors.h"
 #include "curs.h"
 #include "eventqueue.h"
-#include "yacursex.h"
 #include "lineobject.h"
-#include "colors.h"
 #include "yacursconst.h"
+#include "yacursex.h"
 
 using namespace YACURS;
 
@@ -35,50 +35,44 @@ using namespace YACURS;
 // Private
 //
 
-void
-LineObject::compute_margin() {
+void LineObject::compute_margin() {
 #ifndef NDEBUG
     Margin __m_debug;
-#endif // NDEBUG
+#endif  // NDEBUG
     switch (__position) {
-    case POS_TOP:
+        case POS_TOP:
 #ifdef NDEBUG
-        margin(Margin(0, 0, area().rows() - 1, 0) );
-#else // NDEBUG
-        __m_debug = Margin(0, 0, area().rows() - 1, 0);
-        assert(__m_debug.bottom() >= 0);
-        margin(__m_debug);
-#endif //NDEBUG
-        break;
+            margin(Margin(0, 0, area().rows() - 1, 0));
+#else   // NDEBUG
+            __m_debug = Margin(0, 0, area().rows() - 1, 0);
+            assert(__m_debug.bottom() >= 0);
+            margin(__m_debug);
+#endif  // NDEBUG
+            break;
 
-    case POS_BOTTOM:
+        case POS_BOTTOM:
 #ifdef NDEBUG
-        margin(Margin(area().rows() - 1, 0, 0, 0) );
-#else // NDEBUG
-        __m_debug = Margin(area().rows() - 1, 0, 0, 0);
-        assert(__m_debug.top() >= 0);
-        margin(__m_debug);
+            margin(Margin(area().rows() - 1, 0, 0, 0));
+#else  // NDEBUG
+            __m_debug = Margin(area().rows() - 1, 0, 0, 0);
+            assert(__m_debug.top() >= 0);
+            margin(__m_debug);
 #endif
-        break;
+            break;
     }
 }
 
-LineObject::LineObject(const LineObject&) {
-    throw EXCEPTIONS::NotSupported();
-}
+LineObject::LineObject(const LineObject&) { throw EXCEPTIONS::NotSupported(); }
 
-LineObject&
-LineObject::operator=(const LineObject& lo) {
+LineObject& LineObject::operator=(const LineObject& lo) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
 
-size_t
-LineObject::text_length() const {
+size_t LineObject::text_length() const {
 #ifdef YACURS_USE_WCHAR
     size_t mbslen = std::mbstowcs(0, __linetext.c_str(), 0);
-    if (mbslen == (size_t)-1)
-        throw EXCEPTIONS::SystemError(errno);
+    if (mbslen == (size_t)-1) throw EXCEPTIONS::SystemError(errno);
 
     return mbslen;
 #else
@@ -90,46 +84,41 @@ LineObject::text_length() const {
 // Protected
 //
 
-void
-LineObject::put_line() {
-    if (!(realization() == REALIZED ||
-          realization() == REALIZING) ) return;
+void LineObject::put_line() {
+    if (!(realization() == REALIZED || realization() == REALIZING)) return;
 
     curses_window()->erase();
 
     if (text_length() < 1) return;
 
     assert(area().cols() >= MIN_COLS);
-    if (static_cast<std::string::size_type>(area().cols() ) <=
-        text_length() ) {
+    if (static_cast<std::string::size_type>(area().cols()) <= text_length()) {
         // Since we are here, the text is too big for the screen
         // width, so we can't align anyway.
-        CurStr tmp(__linetext, Coordinates(0, 0) );
+        CurStr tmp(__linetext, Coordinates(0, 0));
         curses_window()->addstrx(tmp);
     } else {
         int hpos = 0;
         switch (__alignment) {
-        case LEFT:
-            // Nothing to do, since hpos is == 0
-            assert(hpos == 0);
-            break;
+            case LEFT:
+                // Nothing to do, since hpos is == 0
+                assert(hpos == 0);
+                break;
 
-        case CENTER:
-            assert(
-                static_cast<std::string::size_type>(area().cols() ) >=
-                text_length() );
-            hpos = (area().cols() - text_length() ) / 2;
-            break;
+            case CENTER:
+                assert(static_cast<std::string::size_type>(area().cols()) >=
+                       text_length());
+                hpos = (area().cols() - text_length()) / 2;
+                break;
 
-        case RIGHT:
-            assert(
-                static_cast<std::string::size_type>(area().cols() ) >=
-                text_length() );
-            hpos = area().cols() - text_length();
-            break;
+            case RIGHT:
+                assert(static_cast<std::string::size_type>(area().cols()) >=
+                       text_length());
+                hpos = area().cols() - text_length();
+                break;
         }
 
-        CurStr tmp(__linetext, Coordinates(hpos, 0), color() );
+        CurStr tmp(__linetext, Coordinates(hpos, 0), color());
         curses_window()->addstr(tmp);
     }
 }
@@ -137,17 +126,14 @@ LineObject::put_line() {
 //
 // Public
 //
-LineObject::LineObject(POSITION _pos, const std::string& _t,
-                       COLOROBJ _color) :
-    __linetext(_t), __position(_pos), __alignment(LEFT) {
+LineObject::LineObject(POSITION _pos, const std::string& _t, COLOROBJ _color)
+    : __linetext(_t), __position(_pos), __alignment(LEFT) {
     color(_color);
 }
 
-LineObject::~LineObject() {
-}
+LineObject::~LineObject() {}
 
-void
-LineObject::line(const std::string& _str) {
+void LineObject::line(const std::string& _str) {
     __linetext = _str;
     // Refresh is responsible for taking care of whether or not the
     // refresh can happen, for instance, it cannot happen if the
@@ -155,34 +141,24 @@ LineObject::line(const std::string& _str) {
     refresh(true);
 }
 
-void
-LineObject::alignment(ALIGNMENT _a) {
+void LineObject::alignment(ALIGNMENT _a) {
     __alignment = _a;
 
-    if (realization() == REALIZED)
-        refresh(true);
+    if (realization() == REALIZED) refresh(true);
 }
 
-LineObject::ALIGNMENT
-LineObject::alignment() const {
-    return __alignment;
-}
+LineObject::ALIGNMENT LineObject::alignment() const { return __alignment; }
 
-std::string
-LineObject::line() const {
-    return __linetext;
-}
+std::string LineObject::line() const { return __linetext; }
 
-void
-LineObject::realize() {
+void LineObject::realize() {
     REALIZE_ENTER;
     compute_margin();
     WindowBase::realize();
     REALIZE_LEAVE;
 }
 
-void
-LineObject::refresh(bool immediate) {
+void LineObject::refresh(bool immediate) {
     if (realization() != REALIZED) return;
     put_line();
 

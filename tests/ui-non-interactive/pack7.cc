@@ -15,60 +15,57 @@
 YACURS::Label* label1;
 YACURS::Label* label3;
 
-void
-alrm(YACURS::Event& _e) {
+void alrm(YACURS::Event& _e) {
     static int i = 0;
 
     assert(_e == YACURS::EVT_SIGALRM);
 
     switch (i++) {
-    case 0:
+        case 0:
 #ifdef YACURS_USE_WCHAR
-        label1->label("B ï g   N € w    L a b € l ¹");
+            label1->label("B ï g   N € w    L a b € l ¹");
 #else
-        label1->label("B i g   N e w    L a b e l 1");
+            label1->label("B i g   N e w    L a b e l 1");
 #endif
-        alarm(2);
-        break;
+            alarm(2);
+            break;
 
-    case 1:
+        case 1:
 #ifdef YACURS_USE_WCHAR
-        label1->label("Small lab€l¹");
+            label1->label("Small lab€l¹");
 #else
-        label1->label("Small label1");
+            label1->label("Small label1");
 #endif
-        alarm(2);
-        break;
+            alarm(2);
+            break;
 
-    case 2:
+        case 2:
 #ifdef YACURS_USE_WCHAR
-        label1->label("T h i s   s h o u l d   r € s i z €");
+            label1->label("T h i s   s h o u l d   r € s i z €");
 #else
-        label1->label("T h i s   s h o u l d   r e s i z e");
+            label1->label("T h i s   s h o u l d   r e s i z e");
 #endif
-        alarm(2);
-        break;
+            alarm(2);
+            break;
 
-    case 3:
+        case 3:
 #ifdef YACURS_USE_WCHAR
-        label3->label("H  u  g  €   B  i  g   L  a  b  €  l  ³");
+            label3->label("H  u  g  €   B  i  g   L  a  b  €  l  ³");
 #else
-        label3->label("H  u  g  e   B  i  g   L  a  b  e  l   3");
+            label3->label("H  u  g  e   B  i  g   L  a  b  e  l   3");
 #endif
-        alarm(2);
-        break;
+            alarm(2);
+            break;
 
-    default:
-        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT) );
-        break;
+        default:
+            YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
+            break;
     }
 }
 
-int
-main() {
+int main() {
     // test will not be run if stdout or stdin is not a tty.
-    if (isatty(STDOUT_FILENO)!=1 ||
-	isatty(STDIN_FILENO)!=1) exit(77);
+    if (isatty(STDOUT_FILENO) != 1 || isatty(STDIN_FILENO) != 1) exit(77);
 
 #if 0
     std::cout << getpid() << std::endl;
@@ -76,7 +73,7 @@ main() {
 #endif
 
 #ifdef YACURS_USE_WCHAR
-    if (setlocale(LC_ALL,"en_US.UTF-8")==0) exit(77);
+    if (setlocale(LC_ALL, "en_US.UTF-8") == 0) exit(77);
 #endif
 
     try {
@@ -87,7 +84,7 @@ main() {
             "Pack 7: Always dynamic, only vertical hinting");
         YACURS::Curses::title(title);
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0) );
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0));
         w1->frame(true);
 
         YACURS::VPack* vpack = new YACURS::VPack;
@@ -196,8 +193,8 @@ main() {
 
         YACURS::Curses::mainwindow(w1);
 
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(
-                                              YACURS::EVT_SIGALRM, &alrm) );
+        YACURS::EventQueue::connect_event(
+            YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM, &alrm));
 
         alarm(5);
         YACURS::Curses::run();

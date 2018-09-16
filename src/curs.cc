@@ -25,35 +25,35 @@
 
 #include "gettext.h"
 
-#include <unistd.h>
 #include <signal.h>
+#include <unistd.h>
 
 #ifdef HAVE_STROPTS_H
 #include <stropts.h>
-#endif // HAVE_STROPTS_H
+#endif  // HAVE_STROPTS_H
 
 #ifdef HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>
-#endif // HAVE_SYS_IOCTL_H
+#endif  // HAVE_SYS_IOCTL_H
 
 #ifdef HAVE_TERMIOS_H
 #include <termios.h>
-#else // HAVE_TERMIOS_H
+#else  // HAVE_TERMIOS_H
 #ifdef HAVE_SYS_TERMIOS_H
 #include <sys/termios.h>
-#endif // HAVE_SYS_TERMIOS_H
-#endif // HAVE_TERMIOS_H
+#endif  // HAVE_SYS_TERMIOS_H
+#endif  // HAVE_TERMIOS_H
 
 #include <cerrno>
-#include <cstdlib>
 #include <cstdio>
+#include <cstdlib>
 
+#include "colors.h"
 #include "curs.h"
 #include "eventqueue.h"
-#include "yacursex.h"
 #include "focusmanager.h"
-#include "colors.h"
 #include "yacursconst.h"
+#include "yacursex.h"
 
 using namespace YACURS;
 
@@ -64,25 +64,19 @@ Window* Curses::__mainwindow = 0;
 bool Curses::initialized = false;
 volatile bool Curses::__suspended = false;
 
-const char* Curses::__xterm_list[] = {
-    "xterm",
-    "dtterm",
-    "screen",
-    0
-};
+const char* Curses::__xterm_list[] = {"xterm", "dtterm", "screen", 0};
 
 //
 // Private
 //
 
-bool
-Curses::is_xterm() {
+bool Curses::is_xterm() {
 #ifdef HAVE_TERMNAME
     const char** tmp = __xterm_list;
     const char* tn = termname();
 
     while (*tmp != 0) {
-        if (std::strstr (tn, *tmp) != 0) return true;
+        if (std::strstr(tn, *tmp) != 0) return true;
 
         tmp++;
     }
@@ -96,53 +90,45 @@ Curses::is_xterm() {
 //
 // Protected
 //
-void
-Curses::doupdate_handler(Event& e) {
+void Curses::doupdate_handler(Event& e) {
     assert(e == EVT_DOUPDATE);
 
-    if (doupdate() == ERR)
-        throw EXCEPTIONS::CursesException("doupdate");
+    if (doupdate() == ERR) throw EXCEPTIONS::CursesException("doupdate");
 }
 
-void
-Curses::termresetup_handler(Event& e) {
+void Curses::termresetup_handler(Event& e) {
     assert(e == EVT_TERMRESETUP);
 #if defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
     // We only support resizing for Curses implementation having
     // resize_term.
 
-    Size _tmp(Curses::inquiry_screensize() );
+    Size _tmp(Curses::inquiry_screensize());
 
     // If minimum size is underrun, resizing stops.
-    if (_tmp.rows() < MIN_ROWS || _tmp.cols() < MIN_COLS)
-        return;
+    if (_tmp.rows() < MIN_ROWS || _tmp.cols() < MIN_COLS) return;
 
 #ifdef HAVE_RESIZE_TERM
-    resize_term(_tmp.rows(), _tmp.cols() );
-#else // HAVE_RESIZE_TERM
-# ifdef HAVE_RESIZETERM
-    resizeterm(_tmp.rows(), _tmp.cols() );
-# endif // HAVE_RESIZETERM
-#endif // HAVE_RESIZE_TERM
+    resize_term(_tmp.rows(), _tmp.cols());
+#else  // HAVE_RESIZE_TERM
+#ifdef HAVE_RESIZETERM
+    resizeterm(_tmp.rows(), _tmp.cols());
+#endif  // HAVE_RESIZETERM
+#endif  // HAVE_RESIZE_TERM
 
-    if (wclear(stdscr) == ERR)
-        throw EXCEPTIONS::CursesException("wclear");
+    if (wclear(stdscr) == ERR) throw EXCEPTIONS::CursesException("wclear");
 
-    if (wrefresh(stdscr) == ERR)
-        throw EXCEPTIONS::CursesException("wrefresh");
-#endif // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
+    if (wrefresh(stdscr) == ERR) throw EXCEPTIONS::CursesException("wrefresh");
+#endif  // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
 }
 
-void
-Curses::sigtstp_handler(Event& e) {
+void Curses::sigtstp_handler(Event& e) {
     assert(e == EVT_SIGTSTP);
 
     if (__suspended) return;
 
     int old_errno = errno;
 
-    if (savetty() == ERR)
-        EXCEPTIONS::CursesException("savetty");
+    if (savetty() == ERR) EXCEPTIONS::CursesException("savetty");
 
     // Block SIGWINCH and SIGALRM
     sigset_t mymask, oldmask;
@@ -168,34 +154,32 @@ Curses::sigtstp_handler(Event& e) {
     errno = old_errno;
 }
 
-void
-Curses::sigcont_handler(Event& e) {
+void Curses::sigcont_handler(Event& e) {
     assert(e == EVT_SIGCONT);
 
     if (!__suspended) return;
 
     int old_errno = errno;
 
-    if (resetty() == ERR)
-        EXCEPTIONS::CursesException("resetty");
+    if (resetty() == ERR) EXCEPTIONS::CursesException("resetty");
 
 #if defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
-    if (suspend_scrsz != inquiry_screensize() ) {
+    if (suspend_scrsz != inquiry_screensize()) {
         EventQueue::submit(EVT_TERMRESETUP);
-        EventQueue::submit(EventEx<Size>(EVT_SIGWINCH,
-                                         Curses::inquiry_screensize() ) );
+        EventQueue::submit(
+            EventEx<Size>(EVT_SIGWINCH, Curses::inquiry_screensize()));
         EventQueue::submit(EVT_REFRESH);
         EventQueue::submit(EVT_DOUPDATE);
     } else {
-        EventQueue::submit(Event(EVT_FORCEREFRESH) );
-        EventQueue::submit(Event(EVT_REFRESH) );
-        EventQueue::submit(Event(EVT_DOUPDATE) );
+        EventQueue::submit(Event(EVT_FORCEREFRESH));
+        EventQueue::submit(Event(EVT_REFRESH));
+        EventQueue::submit(Event(EVT_DOUPDATE));
     }
-#else // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
-    EventQueue::submit(Event(EVT_FORCEREFRESH) );
-    EventQueue::submit(Event(EVT_REFRESH) );
-    EventQueue::submit(Event(EVT_DOUPDATE) );
-#endif // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
+#else   // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
+    EventQueue::submit(Event(EVT_FORCEREFRESH));
+    EventQueue::submit(Event(EVT_REFRESH));
+    EventQueue::submit(Event(EVT_DOUPDATE));
+#endif  // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
 
     __suspended = false;
 
@@ -205,13 +189,10 @@ Curses::sigcont_handler(Event& e) {
 //
 // Public
 //
-void
-Curses::init(const std::string& colors) {
-    if (Curses::initialized)
-        throw EXCEPTIONS::AlreadyInitialized();
+void Curses::init(const std::string& colors) {
+    if (Curses::initialized) throw EXCEPTIONS::AlreadyInitialized();
 
-    if (initscr() == 0)
-        throw EXCEPTIONS::UnableToInitialize();
+    if (initscr() == 0) throw EXCEPTIONS::UnableToInitialize();
 
 #ifdef ENABLE_NLS
     bindtextdomain(PACKAGE, LOCALEDIR);
@@ -219,28 +200,22 @@ Curses::init(const std::string& colors) {
 
     YACURS::Colors::init_colors(colors);
 
-    EventQueue::connect_event(EventConnectorFunction1(EVT_DOUPDATE,
-                                                      Curses::doupdate_handler) );
-    EventQueue::connect_event(EventConnectorFunction1(EVT_TERMRESETUP,
-                                                      Curses::
-                                                      termresetup_handler) );
+    EventQueue::connect_event(
+        EventConnectorFunction1(EVT_DOUPDATE, Curses::doupdate_handler));
+    EventQueue::connect_event(
+        EventConnectorFunction1(EVT_TERMRESETUP, Curses::termresetup_handler));
 
-    EventQueue::connect_event(EventConnectorFunction1(EVT_SIGTSTP,
-                                                      Curses::
-                                                      sigtstp_handler) );
+    EventQueue::connect_event(
+        EventConnectorFunction1(EVT_SIGTSTP, Curses::sigtstp_handler));
 
-    EventQueue::connect_event(EventConnectorFunction1(EVT_SIGCONT,
-                                                      Curses::
-                                                      sigcont_handler) );
+    EventQueue::connect_event(
+        EventConnectorFunction1(EVT_SIGCONT, Curses::sigcont_handler));
 
-    if (nonl() == ERR)
-        throw EXCEPTIONS::CursesException("nonl");
+    if (nonl() == ERR) throw EXCEPTIONS::CursesException("nonl");
 
-    if (cbreak() == ERR)
-        throw EXCEPTIONS::CursesException("cbreak");
+    if (cbreak() == ERR) throw EXCEPTIONS::CursesException("cbreak");
 
-    if (noecho() == ERR)
-        throw EXCEPTIONS::CursesException("noecho");
+    if (noecho() == ERR) throw EXCEPTIONS::CursesException("noecho");
 
     if (keypad(stdscr, TRUE) == ERR)
         throw EXCEPTIONS::CursesException("keypad");
@@ -254,37 +229,32 @@ Curses::init(const std::string& colors) {
     // We don't fail if that doesn't work, so no check on retval.
     curs_set(0);
 
-    wbkgd(stdscr, ' ' | Colors::color_pair(DEFAULT) );
+    wbkgd(stdscr, ' ' | Colors::color_pair(DEFAULT));
 
 #if NCURSES_VERSION_PATCH < 20100313
-    wattrset(stdscr, Colors::color_pair(DEFAULT) );
+    wattrset(stdscr, Colors::color_pair(DEFAULT));
 #else
-    if (wattrset(stdscr, Colors::color_pair(DEFAULT) ) == ERR)
+    if (wattrset(stdscr, Colors::color_pair(DEFAULT)) == ERR)
         throw EXCEPTIONS::CursesException("wattrset");
 #endif
 
     // Curses clears stdscr upon first call to getch, which may
     // produce undesired results, i.e. already created Curses Windows
     // may be overwritten. Therefore we refresh stdscr preventively.
-    if (wrefresh(stdscr) == ERR)
-        throw EXCEPTIONS::CursesException("wrefresh");
+    if (wrefresh(stdscr) == ERR) throw EXCEPTIONS::CursesException("wrefresh");
 
     initialized = true;
 }
 
-void
-Curses::end() {
+void Curses::end() {
     if (!initialized) throw EXCEPTIONS::NotInitialized();
 
     // On FreeBSD, for instance, endwin() does not clear screen, so we
     // unconditionally issue calls to do so
-    if (wclear(stdscr) == ERR)
-        throw EXCEPTIONS::CursesException("wclear");
-    if (wrefresh(stdscr) == ERR)
-        throw EXCEPTIONS::CursesException("wfresh");
+    if (wclear(stdscr) == ERR) throw EXCEPTIONS::CursesException("wclear");
+    if (wrefresh(stdscr) == ERR) throw EXCEPTIONS::CursesException("wfresh");
 
-    if (endwin() == ERR)
-        throw EXCEPTIONS::CursesException("endwin");
+    if (endwin() == ERR) throw EXCEPTIONS::CursesException("endwin");
 
     // Widgets and Windows deleted after the EventQueue loop has
     // terminated will have put Event Connector Removal requests into
@@ -296,8 +266,7 @@ Curses::end() {
     initialized = false;
 }
 
-void
-Curses::run() {
+void Curses::run() {
     if (!initialized) throw EXCEPTIONS::NotInitialized();
 
     FocusManager::init();
@@ -319,38 +288,19 @@ Curses::run() {
     FocusManager::uninit();
 }
 
-void
-Curses::title(TitleBar* _title) {
-    __title = _title;
-}
+void Curses::title(TitleBar* _title) { __title = _title; }
 
-TitleBar*
-Curses::title() {
-    return __title;
-}
+TitleBar* Curses::title() { return __title; }
 
-void
-Curses::statusbar(StatusBar* _sl) {
-    __statusbar = _sl;
-}
+void Curses::statusbar(StatusBar* _sl) { __statusbar = _sl; }
 
-StatusBar*
-Curses::statusbar() {
-    return __statusbar;
-}
+StatusBar* Curses::statusbar() { return __statusbar; }
 
-void
-Curses::mainwindow(Window* _w) {
-    __mainwindow = _w;
-}
+void Curses::mainwindow(Window* _w) { __mainwindow = _w; }
 
-Window*
-Curses::mainwindow() {
-    return __mainwindow;
-}
+Window* Curses::mainwindow() { return __mainwindow; }
 
-Size
-Curses::inquiry_screensize() {
+Size Curses::inquiry_screensize() {
     if (!initialized) throw EXCEPTIONS::NotInitialized();
 
     // If we have resize term, we need to get the actual terminal
@@ -391,19 +341,16 @@ Curses::inquiry_screensize() {
 
     // Make sure we don't underrun the minimum size. The SIGWINCH
     // handler does also check and not initiate a resize term.
-    if (__scrdim.rows() < MIN_ROWS)
-        __scrdim.rows(MIN_ROWS);
-    if (__scrdim.cols() < MIN_COLS)
-        __scrdim.cols(MIN_COLS);
-#else // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
+    if (__scrdim.rows() < MIN_ROWS) __scrdim.rows(MIN_ROWS);
+    if (__scrdim.cols() < MIN_COLS) __scrdim.cols(MIN_COLS);
+#else   // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
     __scrdim = current_screensize();
-#endif // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
+#endif  // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
 
     return __scrdim;
 }
 
-Size
-Curses::current_screensize() {
+Size Curses::current_screensize() {
     int nrows, ncols;
 
     getmaxyx(stdscr, nrows, ncols);
@@ -411,10 +358,9 @@ Curses::current_screensize() {
     return Size(nrows, ncols);
 }
 
-void
-Curses::set_terminal_title(const std::string& _str) {
+void Curses::set_terminal_title(const std::string& _str) {
     if (Curses::is_xterm()) {
-	fprintf (stdout, "%c]0;%s%c", '\033', _str.c_str(), '\007');
-	fflush (stdout);
+        fprintf(stdout, "%c]0;%s%c", '\033', _str.c_str(), '\007');
+        fflush(stdout);
     }
 }

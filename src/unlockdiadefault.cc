@@ -34,8 +34,8 @@ using namespace YACURS;
 //
 // Private
 //
-UnlockDialogDefault&
-UnlockDialogDefault::operator=(const UnlockDialogDefault&) {
+UnlockDialogDefault& UnlockDialogDefault::operator=(
+    const UnlockDialogDefault&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -43,12 +43,12 @@ UnlockDialogDefault::operator=(const UnlockDialogDefault&) {
 //
 // Protected
 //
-UnlockDialogDefault::UnlockDialogDefault(const std::string& _secret) :
-    UnlockDialog(_("Unlock Screen") ),
-    __secret(_secret),
-    __vpack(),
-    __text(_("Please enter password in order to unlock screen")),
-    __secret_input() {
+UnlockDialogDefault::UnlockDialogDefault(const std::string& _secret)
+    : UnlockDialog(_("Unlock Screen")),
+      __secret(_secret),
+      __vpack(),
+      __text(_("Please enter password in order to unlock screen")),
+      __secret_input() {
     __vpack.always_dynamic(true);
     __text.color(DIALOG);
     __secret_input.obscure_input(true);
@@ -58,22 +58,16 @@ UnlockDialogDefault::UnlockDialogDefault(const std::string& _secret) :
     widget(&__vpack);
 }
 
-UnlockDialogDefault::~UnlockDialogDefault() {
-}
+UnlockDialogDefault::~UnlockDialogDefault() {}
 
-bool
-UnlockDialogDefault::unlock() {
-    if (dialog_state() == DIALOG_OK &&
-        __secret_input.input() == __secret)
+bool UnlockDialogDefault::unlock() {
+    if (dialog_state() == DIALOG_OK && __secret_input.input() == __secret)
         return true;
 
     return false;
 }
 
-void
-UnlockDialogDefault::clear() {
-    __secret_input.clear();
-}
+void UnlockDialogDefault::clear() { __secret_input.clear(); }
 
 //
 // Public

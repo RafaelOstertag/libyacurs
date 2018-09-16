@@ -28,196 +28,190 @@
 // effects.
 #include <stdint.h>
 
-#include <string>
 #include <cstdlib>
+#include <string>
 
 namespace YACURS {
-    namespace INTERNAL {
-        class CursorBuffer {
-            public:
+namespace INTERNAL {
+class CursorBuffer {
+   public:
+    // Convenience
+    typedef std::wstring::size_type tsz_t;
+    typedef long tss_t;
 
-                // Convenience
-                typedef std::wstring::size_type tsz_t;
-		typedef long tss_t;
+   private:
+    /**
+     * The input
+     */
+    std::wstring __buffer;
 
-            private:
-                /**
-                 * The input
-                 */
-                std::wstring __buffer;
+    /**
+     * Cache
+     *
+     * Holds __buffer converted to multibyte
+     * string. Reference returned by string().
+     */
+    mutable std::string __mbs_cache;
 
-                /**
-                 * Cache
-                 *
-                 * Holds __buffer converted to multibyte
-                 * string. Reference returned by string().
-                 */
-                mutable std::string __mbs_cache;
+    /**
+     * Cache Valid Flag
+     *
+     * Flag indicating whether or not __mbs_cache is
+     * valid, or has to be re-calculated.
+     */
+    mutable bool __mbs_cache_valid;
 
-                /**
-                 * Cache Valid Flag
-                 *
-                 * Flag indicating whether or not __mbs_cache is
-                 * valid, or has to be re-calculated.
-                 */
-                mutable bool __mbs_cache_valid;
+    /**
+     * Flag indicating whether or not buffer has been changed.
+     */
+    bool __changed;
 
-		/**
-		 * Flag indicating whether or not buffer has been changed.
-		 */
-		bool __changed;
-	    
-		/**
-		 * Displayed Cursor position. (Scrolling)
-		 */
-		tss_t __curs_pos;
+    /**
+     * Displayed Cursor position. (Scrolling)
+     */
+    tss_t __curs_pos;
 
-		/**
-		 * Window offset. (Srolling)
-		 */
-		tsz_t __offset;
+    /**
+     * Window offset. (Srolling)
+     */
+    tsz_t __offset;
 
-                /**
-                 * Maximum size of of buffer.
-                 *
-                 * If it is 0, there is no limit.
-                 */
-                tsz_t __max_size;
+    /**
+     * Maximum size of of buffer.
+     *
+     * If it is 0, there is no limit.
+     */
+    tsz_t __max_size;
 
-            public:
-                /**
-                 * Constructor.
-                 *
-                 * @param _size display size
-                 *
-                 * @param _max_size maximum size of the input buffer.
-                 *
-                 * @param _buffer initial values of the buffer.
-                 */
-                CursorBuffer(
-			     const std::wstring& _buffer=std::wstring(), tsz_t _max_size=
-			     255);
+   public:
+    /**
+     * Constructor.
+     *
+     * @param _size display size
+     *
+     * @param _max_size maximum size of the input buffer.
+     *
+     * @param _buffer initial values of the buffer.
+     */
+    CursorBuffer(const std::wstring& _buffer = std::wstring(),
+                 tsz_t _max_size = 255);
 
-                CursorBuffer(
-			     const std::string& _buffer=std::string(), tsz_t _max_size=
-			     255);
+    CursorBuffer(const std::string& _buffer = std::string(),
+                 tsz_t _max_size = 255);
 
-                CursorBuffer(const CursorBuffer& _cb);
-                CursorBuffer& operator=(const CursorBuffer& _cb);
+    CursorBuffer(const CursorBuffer& _cb);
+    CursorBuffer& operator=(const CursorBuffer& _cb);
 
-                /**
-                 * Set new buffer content.
-                 */
-                void set(const std::wstring& _b);
+    /**
+     * Set new buffer content.
+     */
+    void set(const std::wstring& _b);
 
-                /**
-                 * Set new buffer content.
-                 */
-                void set(const std::string& _b);
+    /**
+     * Set new buffer content.
+     */
+    void set(const std::string& _b);
 
-                /**
-                 * Get length of buffer.
-                 */
-                tsz_t length() const;
+    /**
+     * Get length of buffer.
+     */
+    tsz_t length() const;
 
+    /**
+     * Set maximum size of buffer.
+     *
+     * If the current content off the buffer is greater
+     * than the new maximum size, it will be truncated.
+     *
+     * @param max_size new maximum size
+     */
+    void max_size(tsz_t max_size);
 
-		/** 
-		 * Set maximum size of buffer.
-		 *
-		 * If the current content off the buffer is greater
-		 * than the new maximum size, it will be truncated.
-		 *
-		 * @param max_size new maximum size
-		 */
-		void max_size(tsz_t max_size);
+    /**
+     * Get maximum size of buffer.
+     */
+    tsz_t max_size() const;
 
+    /**
+     * Get the current cursor position
+     */
+    tsz_t get_cursor() const;
 
-		/**
-		 * Get maximum size of buffer.
-		 */
-		tsz_t max_size() const;
+    /**
+     * Clear the content of the buffer
+     */
+    void clear();
 
-                /**
-                 * Get the current cursor position
-                 */
-                tsz_t get_cursor() const;
+    /**
+     * Clear buffer starting from the current cursor
+     * position to the end.
+     */
+    void clear_eol();
 
-                /**
-                 * Clear the content of the buffer
-                 */
-                void clear();
+    /**
+     * Clear buffer starting from the current cursor
+     * position to the start.
+     */
+    void clear_sol();
 
-                /**
-                 * Clear buffer starting from the current cursor
-                 * position to the end.
-                 */
-                void clear_eol();
+    /**
+     * Backspace from the current cursor position.
+     */
+    void backspace();
 
-                /**
-                 * Clear buffer starting from the current cursor
-                 * position to the start.
-                 */
-                void clear_sol();
+    /**
+     * Delete character at current cursor position.
+     */
+    void del();
 
-                /**
-                 * Backspace from the current cursor position.
-                 */
-                void backspace();
+    /**
+     * Move cursor to beginning of buffer.
+     */
+    void home();
 
-                /**
-                 * Delete character at current cursor position.
-                 */
-                void del();
+    /**
+     * Move cursor to end of buffer.
+     */
+    void end();
 
-                /**
-                 * Move cursor to beginning of buffer.
-                 */
-                void home();
+    /**
+     * Move cursor one character towards the beginning of
+     * the buffer.
+     */
+    void back_step();
 
-                /**
-                 * Move cursor to end of buffer.
-                 */
-                void end();
+    /**
+     * Move cursor one character towards the end of the
+     * buffer.
+     */
+    void forward_step();
 
-                /**
-                 * Move cursor one character towards the beginning of
-                 * the buffer.
-                 */
-                void back_step();
+    /**
+     * Insert one character at the current cursor
+     * position.
+     */
+    void insert(std::wstring::value_type c);
 
-                /**
-                 * Move cursor one character towards the end of the
-                 * buffer.
-                 */
-                void forward_step();
+    /**
+     * Get length and cursor position of string that would
+     * be returned.
+     *
+     * @internal
+     * this function is mostly used for obfuscated output.
+     */
+    void info(int16_t _size, int16_t* len, int16_t* curs_pos) const;
 
-                /**
-                 * Insert one character at the current cursor
-                 * position.
-                 */
-                void insert(std::wstring::value_type c);
+    std::wstring wstring(int16_t _size, int16_t* curs_pos);
 
-                /**
-                 * Get length and cursor position of string that would
-                 * be returned.
-                 *
-                 * @internal
-                 * this function is mostly used for obfuscated output.
-                 */
-                void info(int16_t _size, int16_t* len,
-                          int16_t* curs_pos) const;
+    std::string string(int16_t _size, int16_t* curs_pos);
 
-                std::wstring wstring(int16_t _size, int16_t* curs_pos);
+    const std::wstring& wstring() const;
 
-		std::string  string(int16_t _size, int16_t* curs_pos);
+    const std::string& string() const;
 
-                const std::wstring& wstring() const;
+    bool changed() const;
+};
+}  // namespace INTERNAL
+}  // namespace YACURS
 
-                const std::string& string() const;
-
-		bool changed() const;
-        };
-    } // namespace INTERNAL
-} // namespace YACURS
-
-#endif // CURSORBUF_H
+#endif  // CURSORBUF_H

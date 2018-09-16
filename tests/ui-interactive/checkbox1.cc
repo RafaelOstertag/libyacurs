@@ -9,23 +9,23 @@
 
 #ifdef HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>
-#endif // HAVE_SYS_IOCTL_H
+#endif  // HAVE_SYS_IOCTL_H
 
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
-#endif // HAVE_SYS_TYPES_H
+#endif  // HAVE_SYS_TYPES_H
 
 #ifdef HAVE_STROPTS_H
 #include <stropts.h>
-#endif // HAVE_STROPTS_H
+#endif  // HAVE_STROPTS_H
 
 #ifdef HAVE_TERMIOS_H
-# include <termios.h>
-#else // HAVE_TERMIOS_H
-# ifdef HAVE_SYS_TERMIOS_H
-#  include <sys/termios.h>
-# endif // HAVE_SYS_TERMIOS_H
-#endif // HAVE_TERMIOS_H
+#include <termios.h>
+#else  // HAVE_TERMIOS_H
+#ifdef HAVE_SYS_TERMIOS_H
+#include <sys/termios.h>
+#endif  // HAVE_SYS_TERMIOS_H
+#endif  // HAVE_TERMIOS_H
 
 #include <iostream>
 #include <sstream>
@@ -38,435 +38,130 @@ wint_t
 #else
 int
 #endif
-__test_data[] = {
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_UP,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    ' ', KEY_DOWN,
-    'Q',
-    0
-};
+    __test_data[] = {' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,   ' ', KEY_UP,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN, ' ', KEY_DOWN,
+                     'Q', 0};
 
 #ifdef YACURS_USE_WCHAR
-extern "C" int
-__test_wget_wch(void*, wint_t* i) {
+extern "C" int __test_wget_wch(void*, wint_t* i) {
     static wint_t* ptr2 = __test_data;
 
-    #ifdef SLOW_TESTS
-	usleep(70000);
+#ifdef SLOW_TESTS
+    usleep(70000);
 #endif
 
     if (*ptr2 == 0) {
         abort();
     }
 
-    *i=*ptr2++;
+    *i = *ptr2++;
 
     return OK;
 }
 #else
-extern "C" int
-__test_wgetch(void*) {
+extern "C" int __test_wgetch(void*) {
     static int* ptr2 = __test_data;
 
-    #ifdef SLOW_TESTS
-	usleep(70000);
+#ifdef SLOW_TESTS
+    usleep(70000);
 #endif
 
     if (*ptr2 == 0) {
@@ -478,38 +173,29 @@ __test_wgetch(void*) {
 #endif
 
 class HotKeyQuit : public YACURS::HotKey {
-    public:
-        HotKeyQuit(int k) : HotKey(k) {
-        }
+   public:
+    HotKeyQuit(int k) : HotKey(k) {}
 
-        HotKeyQuit(const HotKeyQuit& hk) : HotKey(hk) {
-        }
+    HotKeyQuit(const HotKeyQuit& hk) : HotKey(hk) {}
 
-        void action() {
-            YACURS::EventQueue::submit(YACURS::EVT_QUIT);
-        }
+    void action() { YACURS::EventQueue::submit(YACURS::EVT_QUIT); }
 
-        HotKey* clone() const {
-            return new HotKeyQuit(*this);
-        }
+    HotKey* clone() const { return new HotKeyQuit(*this); }
 };
 
-int
-main() {
+int main() {
     // test will not be run if stdout or stdin is not a tty.
-    if (isatty(STDOUT_FILENO)!=1 ||
-	isatty(STDIN_FILENO)!=1) exit(77);
+    if (isatty(STDOUT_FILENO) != 1 || isatty(STDIN_FILENO) != 1) exit(77);
 
 #ifdef YACURS_USE_WCHAR
-    if (setlocale(LC_ALL,"en_US.UTF-8")==0) exit(77);
+    if (setlocale(LC_ALL, "en_US.UTF-8") == 0) exit(77);
 #endif
 
     try {
         YACURS::Curses::init();
 
-        YACURS::TitleBar* title = new YACURS::TitleBar(
-            YACURS::TitleBar::POS_TOP,
-            "CheckBox 1");
+        YACURS::TitleBar* title =
+            new YACURS::TitleBar(YACURS::TitleBar::POS_TOP, "CheckBox 1");
         YACURS::Curses::title(title);
 
         // NOTE:
@@ -521,10 +207,10 @@ main() {
         // last YACURS::EventConnector connected first, StatusBar has to be
         // created AFTER MyWindow.
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 1, 0) );
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 1, 0));
         w1->frame(true);
-        w1->add_hotkey(HotKeyQuit('q') );
-        w1->add_hotkey(HotKeyQuit('Q') );
+        w1->add_hotkey(HotKeyQuit('q'));
+        w1->add_hotkey(HotKeyQuit('Q'));
 
         std::vector<std::string> items;
 #ifdef YACURS_USE_WCHAR

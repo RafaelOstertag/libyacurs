@@ -28,50 +28,50 @@
 #include "lineobject.h"
 
 namespace YACURS {
+/**
+ * Status Line.
+ *
+ * Maintains a stack of messages, where the top most message will
+ * be displayed.
+ */
+class StatusBar : public LineObject {
+   private:
+    std::stack<std::string> __messages;
+
+    void show_top_msg();
+
+    StatusBar& operator=(const StatusBar&);
+
+   public:
+    StatusBar();
+    virtual ~StatusBar();
     /**
-     * Status Line.
+     * Push a message on the stack.
      *
-     * Maintains a stack of messages, where the top most message will
-     * be displayed.
+     * Push a message on the stack. The message will be
+     * visible immediately.
+     *
+     * @param m message
      */
-    class StatusBar : public LineObject {
-        private:
-            std::stack<std::string> __messages;
+    void push(const std::string& m);
 
-            void show_top_msg();
+    /**
+     * Set the top most message.
+     *
+     * Set the top most message without growing the stack.
+     *
+     * @param m message
+     */
+    void set(const std::string& m);
 
-            StatusBar& operator=(const StatusBar&);
-
-        public:
-            StatusBar();
-            virtual ~StatusBar();
-	    /**
-	     * Push a message on the stack.
-	     *
-	     * Push a message on the stack. The message will be
-	     * visible immediately.
-	     *
-	     * @param m message
-	     */
-            void push(const std::string& m);
-
-	    /**
-	     * Set the top most message.
-	     *
-	     * Set the top most message without growing the stack.
-	     *
-	     * @param m message
-	     */
-	    void set(const std::string& m);
-
-	    /**
-	     * Remove the top most message.
-	     *
-	     * Remove the top most message from the stack and display
-	     * the new top most message, if any.
-	     */
-            void pop();
-    };
-}
+    /**
+     * Remove the top most message.
+     *
+     * Remove the top most message from the stack and display
+     * the new top most message, if any.
+     */
+    void pop();
+};
+}  // namespace YACURS
 
 #endif

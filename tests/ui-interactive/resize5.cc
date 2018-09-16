@@ -9,23 +9,23 @@
 
 #ifdef HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>
-#endif // HAVE_SYS_IOCTL_H
+#endif  // HAVE_SYS_IOCTL_H
 
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
-#endif // HAVE_SYS_TYPES_H
+#endif  // HAVE_SYS_TYPES_H
 
 #ifdef HAVE_STROPTS_H
 #include <stropts.h>
-#endif // HAVE_STROPTS_H
+#endif  // HAVE_STROPTS_H
 
 #ifdef HAVE_TERMIOS_H
-# include <termios.h>
-#else // HAVE_TERMIOS_H
-# ifdef HAVE_SYS_TERMIOS_H
-#  include <sys/termios.h>
-# endif // HAVE_SYS_TERMIOS_H
-#endif // HAVE_TERMIOS_H
+#include <termios.h>
+#else  // HAVE_TERMIOS_H
+#ifdef HAVE_SYS_TERMIOS_H
+#include <sys/termios.h>
+#endif  // HAVE_SYS_TERMIOS_H
+#endif  // HAVE_TERMIOS_H
 
 #include <iostream>
 #include <sstream>
@@ -34,65 +34,53 @@
 
 // Used when preloading libtestpreload.so
 #ifdef YACURS_USE_WCHAR
-extern "C" int
-__test_wget_wch(void*, wint_t* i) {
-    *i='q';
+extern "C" int __test_wget_wch(void*, wint_t* i) {
+    *i = 'q';
     return OK;
 }
 #else
-extern "C" int
-__test_wgetch(void*) {
-    return 'q';
-}
+extern "C" int __test_wgetch(void*) { return 'q'; }
 #endif
 
 class HotKeyQuit : public YACURS::HotKey {
-    public:
-        HotKeyQuit(int k) : HotKey(k) {
-        }
+   public:
+    HotKeyQuit(int k) : HotKey(k) {}
 
-        HotKeyQuit(const HotKeyQuit& hk) : HotKey(hk) {
-        }
+    HotKeyQuit(const HotKeyQuit& hk) : HotKey(hk) {}
 
-        void action() {
-            YACURS::EventQueue::submit(YACURS::EVT_QUIT);
-        }
+    void action() { YACURS::EventQueue::submit(YACURS::EVT_QUIT); }
 
-        HotKey* clone() const {
-            return new HotKeyQuit(*this);
-        }
+    HotKey* clone() const { return new HotKeyQuit(*this); }
 };
 
 class MyWindow : public YACURS::Window {
-    private:
-        YACURS::Window* win;
-    public:
-        void show() {
-            YACURS::Window::show();
+   private:
+    YACURS::Window* win;
 
-            win = new YACURS::Window(YACURS::Margin(3, 3, 3, 3) );
-            win->frame(true);
-            win->add_hotkey(HotKeyQuit('q') );
-            win->add_hotkey(HotKeyQuit('Q') );
-            win->show();
-        }
+   public:
+    void show() {
+        YACURS::Window::show();
 
-        void close() {
-            assert(win != 0);
-            win->close();
-            delete win;
-            win = 0;
-        }
+        win = new YACURS::Window(YACURS::Margin(3, 3, 3, 3));
+        win->frame(true);
+        win->add_hotkey(HotKeyQuit('q'));
+        win->add_hotkey(HotKeyQuit('Q'));
+        win->show();
+    }
 
-        MyWindow(const YACURS::Margin& m) : YACURS::Window(m), win(0) {
-        }
+    void close() {
+        assert(win != 0);
+        win->close();
+        delete win;
+        win = 0;
+    }
+
+    MyWindow(const YACURS::Margin& m) : YACURS::Window(m), win(0) {}
 };
 
-int
-main() {
+int main() {
     // test will not be run if stdout or stdin is not a tty.
-    if (isatty(STDOUT_FILENO)!=1 ||
-	isatty(STDIN_FILENO)!=1) exit(77);
+    if (isatty(STDOUT_FILENO) != 1 || isatty(STDIN_FILENO) != 1) exit(77);
 
 #if 0
     std::cout << getpid() << std::endl;
@@ -100,15 +88,14 @@ main() {
 #endif
 
 #ifdef YACURS_USE_WCHAR
-    if (setlocale(LC_ALL,"en_US.UTF-8")==0) exit(77);
+    if (setlocale(LC_ALL, "en_US.UTF-8") == 0) exit(77);
 #endif
 
     try {
         YACURS::Curses::init();
 
         YACURS::TitleBar* title = new YACURS::TitleBar(
-            YACURS::TitleBar::POS_TOP,
-            "Resize 5: Overlapping windows");
+            YACURS::TitleBar::POS_TOP, "Resize 5: Overlapping windows");
         YACURS::Curses::title(title);
 
         // NOTE:
@@ -120,10 +107,10 @@ main() {
         // last YACURS::EventConnector connected first, StatusBar has to be
         // created AFTER MyWindow.
 
-        MyWindow* w1 = new MyWindow(YACURS::Margin(1, 0, 1, 0) );
+        MyWindow* w1 = new MyWindow(YACURS::Margin(1, 0, 1, 0));
         w1->frame(true);
-        w1->add_hotkey(HotKeyQuit('q') );
-        w1->add_hotkey(HotKeyQuit('Q') );
+        w1->add_hotkey(HotKeyQuit('q'));
+        w1->add_hotkey(HotKeyQuit('Q'));
 
         YACURS::StatusBar* sl = new YACURS::StatusBar();
         sl->push("Press Q to quit");
@@ -149,7 +136,7 @@ main() {
         for (int i = 0; i < 20; i++) {
             std::ostringstream _i;
             _i << i;
-            vls[i] = new YACURS::Label("VYACURS::Label " + _i.str() );
+            vls[i] = new YACURS::Label("VYACURS::Label " + _i.str());
             vpack->add_back(vls[i]);
         }
 

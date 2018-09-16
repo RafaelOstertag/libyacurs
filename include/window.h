@@ -26,95 +26,95 @@
 #include <map>
 #include <string>
 
-#include "yacurscurses.h"
-#include "windowbase.h"
-#include "widgetbase.h"
 #include "hotkey.h"
+#include "widgetbase.h"
+#include "windowbase.h"
+#include "yacurscurses.h"
 
 namespace YACURS {
-    // Forward declaration because widgetbase.h already included window.h
-    class WidgetBase;
+// Forward declaration because widgetbase.h already included window.h
+class WidgetBase;
+
+/**
+ * Window for displaying a widget.
+ *
+ * @subsection Widget
+ *
+ * Window is responsible for realizing/unrealizing/refreshing the
+ * Widget.
+ *
+ * A screen resize will result in Window calling resize() of the
+ * Widget.
+ *
+ * Several Widgets can be displayed by the use of Packs.
+ *
+ * Window will call set
+ *
+ *  - Curses Window (curses_window())
+ *  - Focus Group (focusgroup_id())
+ *  - Position (position())
+ *  - Available Size (size_available())
+ *
+ * @subsection Focus
+ *
+ * Upon realization, Window will create a new Focus Group. When
+ * unrealized, it will destroy the Focus Group.
+ *
+ * Window is responsible for passing along Focus Group ID to
+ * Widget.
+ *
+ * Window will activate its Focus Group upon refresh(). This ensures
+ * that the last Window refresh()'ed will have the focus.
+ *
+ * @subsection Events
+ *
+ * It implements unrealize(), refresh(), and realize(), which will
+ * be called by Event Handlers of WindowBase.
+ *
+ * In order to implement Hot Keys, it connects to EVT_KEY.
+ */
+class Window : public WindowBase {
+   private:
+    std::map<int, HotKey*> __hot_keys;
+
+    WidgetBase* __widget;
 
     /**
-     * Window for displaying a widget.
+     * ID of the Focus Group.
      *
-     * @subsection Widget
-     *
-     * Window is responsible for realizing/unrealizing/refreshing the
-     * Widget.
-     *
-     * A screen resize will result in Window calling resize() of the
-     * Widget.
-     *
-     * Several Widgets can be displayed by the use of Packs.
-     *
-     * Window will call set
-     *
-     *  - Curses Window (curses_window())
-     *  - Focus Group (focusgroup_id())
-     *  - Position (position())
-     *  - Available Size (size_available())
-     *
-     * @subsection Focus
-     *
-     * Upon realization, Window will create a new Focus Group. When
-     * unrealized, it will destroy the Focus Group.
-     *
-     * Window is responsible for passing along Focus Group ID to
-     * Widget.
-     *
-     * Window will activate its Focus Group upon refresh(). This ensures
-     * that the last Window refresh()'ed will have the focus.
-     *
-     * @subsection Events
-     *
-     * It implements unrealize(), refresh(), and realize(), which will
-     * be called by Event Handlers of WindowBase.
-     *
-     * In order to implement Hot Keys, it connects to EVT_KEY.
+     * The ID of the Focus Group belonging to this
+     * Window. Supposed to be passed along Widget(s).
      */
-    class Window : public WindowBase {
-        private:
-            std::map<int, HotKey*> __hot_keys;
+    FocusManager::fgid_t __fgid;
 
-            WidgetBase* __widget;
+    // Not supported
+    Window(const Window&);
+    Window& operator=(const Window&);
 
-            /**
-             * ID of the Focus Group.
-             *
-             * The ID of the Focus Group belonging to this
-             * Window. Supposed to be passed along Widget(s).
-             */
-            FocusManager::fgid_t __fgid;
+   protected:
+    virtual void key_event_handler(Event& _e);
 
-            // Not supported
-            Window(const Window&);
-            Window& operator=(const Window&);
+    void unrealize();
 
-        protected:
-            virtual void key_event_handler(Event& _e);
+   public:
+    Window(const Margin& m = Margin());
+    virtual ~Window();
 
-            void unrealize();
+    void widget(WidgetBase* _w);
 
-        public:
-            Window(const Margin& m=Margin() );
-            virtual ~Window();
+    WidgetBase* widget() const;
 
-            void widget(WidgetBase* _w);
+    void add_hotkey(const HotKey& hk);
 
-            WidgetBase* widget() const;
+    void remove_hotkey(const HotKey& hk);
 
-            void add_hotkey(const HotKey& hk);
+    // Those are from Realizable
+    void refresh(bool immediate);
 
-            void remove_hotkey(const HotKey& hk);
+    // Does nothing, everything handled in parent.
+    // void resize(const Area& _a);
+    void realize();
+};
+}  // namespace YACURS
 
-            // Those are from Realizable
-            void refresh(bool immediate);
-
-            // Does nothing, everything handled in parent.
-            //void resize(const Area& _a);
-            void realize();
-    };
-}
-
-#endif // WINDOW_H
+#endif  // WINDOW_H

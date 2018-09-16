@@ -23,9 +23,9 @@
 #include <cstdlib>
 
 #include "button.h"
+#include "colors.h"
 #include "eventqueue.h"
 #include "focusmanager.h"
-#include "colors.h"
 #include "yacursex.h"
 
 using namespace YACURS;
@@ -34,8 +34,7 @@ using namespace YACURS;
 // Private
 //
 
-Button&
-Button::operator=(const Button&) {
+Button& Button::operator=(const Button&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -43,11 +42,10 @@ Button::operator=(const Button&) {
 //
 // Protected
 //
-void
-Button::key_handler(Event& _e) {
+void Button::key_handler(Event& _e) {
     assert(_e.type() == EVT_KEY);
 
-    if (!focus() ) return;
+    if (!focus()) return;
 
 #ifdef YACURS_USE_WCHAR
     EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(_e);
@@ -55,50 +53,46 @@ Button::key_handler(Event& _e) {
     EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(_e);
 #endif
 
-    switch (ekey.data() ) {
-    case KEY_DOWN:
-    case KEY_RIGHT:
-    case KEY_TAB:
-        EventQueue::submit(EVT_FOCUS_NEXT);
-        break;
+    switch (ekey.data()) {
+        case KEY_DOWN:
+        case KEY_RIGHT:
+        case KEY_TAB:
+            EventQueue::submit(EVT_FOCUS_NEXT);
+            break;
 
-    case KEY_UP:
-    case KEY_LEFT:
-    case KEY_BTAB:
-        EventQueue::submit(EVT_FOCUS_PREVIOUS);
-        break;
+        case KEY_UP:
+        case KEY_LEFT:
+        case KEY_BTAB:
+            EventQueue::submit(EVT_FOCUS_PREVIOUS);
+            break;
 
-    case KEY_ENTER:
-    case KEY_RETURN:
-    case KEY_RETURN2:
-        if (!__enabled) return;
-        EventQueue::submit(EventEx<Button*>(EVT_BUTTON_PRESS, this) );
-        break;
+        case KEY_ENTER:
+        case KEY_RETURN:
+        case KEY_RETURN2:
+            if (!__enabled) return;
+            EventQueue::submit(EventEx<Button*>(EVT_BUTTON_PRESS, this));
+            break;
     }
 }
 
-void
-Button::realize() {
+void Button::realize() {
     REALIZE_ENTER;
 
     Label::realize();
 
-    EventQueue::connect_event(EventConnectorMethod1<Button>(EVT_KEY, this,
-                                                            &Button::
-                                                            key_handler) );
+    EventQueue::connect_event(
+        EventConnectorMethod1<Button>(EVT_KEY, this, &Button::key_handler));
 
     assert(focusgroup_id() != FocusManager::nfgid);
 
     REALIZE_LEAVE;
 }
 
-void
-Button::unrealize() {
+void Button::unrealize() {
     UNREALIZE_ENTER;
 
-    EventQueue::disconnect_event(EventConnectorMethod1<Button>(EVT_KEY, this,
-                                                               &Button::
-                                                               key_handler) );
+    EventQueue::disconnect_event(
+        EventConnectorMethod1<Button>(EVT_KEY, this, &Button::key_handler));
 
     assert(focusgroup_id() != FocusManager::nfgid);
 
@@ -120,13 +114,11 @@ Button::Button(const std::string& _b) : __enabled(true) {
 }
 
 Button::~Button() {
-    EventQueue::disconnect_event(EventConnectorMethod1<Button>(EVT_KEY, this,
-                                                               &Button::
-                                                               key_handler) );
+    EventQueue::disconnect_event(
+        EventConnectorMethod1<Button>(EVT_KEY, this, &Button::key_handler));
 }
 
-void
-Button::label(const std::string& _l) {
+void Button::label(const std::string& _l) {
     __tmp_label = _l;
     if (__enabled)
         Label::label("[ " + _l + " ]");
@@ -134,30 +126,22 @@ Button::label(const std::string& _l) {
         Label::label("( " + _l + " )");
 }
 
-const std::string&
-Button::label() const {
-    return __tmp_label;
-}
+const std::string& Button::label() const { return __tmp_label; }
 
-void
-Button::enabled(bool _f) {
+void Button::enabled(bool _f) {
     __enabled = _f;
     // Re-set label
     label(__tmp_label);
 }
 
-bool
-Button::enabled() const {
-    return __enabled;
-}
+bool Button::enabled() const { return __enabled; }
 
-void
-Button::refresh(bool immediate) {
+void Button::refresh(bool immediate) {
     if (realization() != REALIZED) return;
 
     assert(widget_subwin() != 0);
 
-    if (focus() ) {
+    if (focus()) {
         color(YACURS::BUTTON_FOCUS);
         widget_subwin()->leaveok(false);
     } else {

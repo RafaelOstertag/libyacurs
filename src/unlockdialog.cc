@@ -24,8 +24,8 @@
 
 #include "unlockdialog.h"
 
-#include "focusmanager.h"
 #include "eventqueue.h"
+#include "focusmanager.h"
 #include "yacursex.h"
 
 using namespace YACURS;
@@ -33,8 +33,7 @@ using namespace YACURS;
 //
 // Private
 //
-UnlockDialog&
-UnlockDialog::operator=(const UnlockDialog&) {
+UnlockDialog& UnlockDialog::operator=(const UnlockDialog&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -47,15 +46,12 @@ UnlockDialog::operator=(const UnlockDialog&) {
 // Public
 //
 
-UnlockDialog::UnlockDialog(const std::string& _title) :
-    Dialog(_title, OKCANCEL, AUTOMATIC) {
-}
+UnlockDialog::UnlockDialog(const std::string& _title)
+    : Dialog(_title, OKCANCEL, AUTOMATIC) {}
 
-UnlockDialog::~UnlockDialog() {
-}
+UnlockDialog::~UnlockDialog() {}
 
-void
-UnlockDialog::realize() {
+void UnlockDialog::realize() {
     REALIZE_ENTER;
 
     Dialog::realize();

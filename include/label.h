@@ -28,101 +28,101 @@
 #include "widget.h"
 
 namespace YACURS {
+/**
+ * Display text on the screen.
+ *
+ * Simple widget for displaying text on the screen.
+ *
+ * Label is not dynamic, i.e. if the text is too long, it might happen
+ * that it cannot be realized() and throwing an exception.
+ */
+class Label : public Widget {
+   private:
+    // Not supported
+    Label& operator=(const Label&);
+
+    COLOROBJ __color;
+
     /**
-     * Display text on the screen.
+     * Length of label.
      *
-     * Simple widget for displaying text on the screen.
-     *
-     * Label is not dynamic, i.e. if the text is too long, it might happen
-     * that it cannot be realized() and throwing an exception.
+     * @returns length of label, if compiled with YACURS_USE_WCHAR
+     * defined, takes MB characters into account.
      */
-    class Label : public Widget {
-        private:
-            // Not supported
-            Label& operator=(const Label&);
+    size_t label_length() const;
 
-            COLOROBJ __color;
+   protected:
+    /**
+     * The text to be displayed.
+     */
+    std::string __label;
 
-            /**
-             * Length of label.
-             *
-             * @returns length of label, if compiled with YACURS_USE_WCHAR
-             * defined, takes MB characters into account.
-             */
-            size_t label_length() const;
+    /**
+     * The size the Label requires. Rows are always 1. Cols are
+     * __label.length(). Derrived classes may define other
+     * constraints.
+     */
+    Size __size;
 
-        protected:
-            /**
-             * The text to be displayed.
-             */
-            std::string __label;
+   public:
+    /**
+     * Constructor.
+     *
+     * @param _l label
+     */
+    Label(const std::string& _l = std::string());
 
-            /**
-             * The size the Label requires. Rows are always 1. Cols are
-             * __label.length(). Derrived classes may define other
-             * constraints.
-             */
-            Size __size;
+    virtual ~Label();
 
-        public:
-            /**
-             * Constructor.
-             *
-             * @param _l label
-             */
-            Label(const std::string& _l=std::string() );
+    virtual void label(const std::string& _l);
 
-            virtual ~Label();
+    virtual const std::string& label() const;
 
-            virtual void label(const std::string& _l);
+    void color(COLOROBJ c);
 
-            virtual const std::string& label() const;
+    COLOROBJ color() const;
 
-            void color(COLOROBJ c);
+    // From WidgetBase
 
-            COLOROBJ color() const;
+    /**
+     * Size the Label requires.
+     *
+     * @return Size::rows() always 1. Size::cols() equal the
+     * length of the string to be displayed.
+     */
+    Size size() const;
 
-            // From WidgetBase
+    Size size_hint() const;
 
-            /**
-             * Size the Label requires.
-             *
-             * @return Size::rows() always 1. Size::cols() equal the
-             * length of the string to be displayed.
-             */
-            Size size() const;
+    /**
+     * Dummy. Does nothing.
+     *
+     * Label is not a container Widget, hence it may not notified
+     * of size changes().
+     *
+     * @return always @false
+     */
+    bool size_change();
 
-            Size size_hint() const;
+    /**
+     * Does nothing.
+     *
+     * Does nothing on a Label, but we have to override.
+     */
+    void reset_size();
 
-            /**
-             * Dummy. Does nothing.
-             *
-             * Label is not a container Widget, hence it may not notified
-             * of size changes().
-             *
-             * @return always @false
-             */
-            bool size_change();
+    // From Realizeable
 
-            /**
-             * Does nothing.
-             *
-             * Does nothing on a Label, but we have to override.
-             */
-            void reset_size();
+    /**
+     * Refresh the label.
+     *
+     * Adds the Label text to the subwin.
+     *
+     * @param immediate not directly used by Label::refresh() but
+     * passed to Widget::refresh().
+     */
+    void refresh(bool immediate);
+};
+}  // namespace YACURS
 
-            // From Realizeable
-
-            /**
-             * Refresh the label.
-             *
-             * Adds the Label text to the subwin.
-             *
-             * @param immediate not directly used by Label::refresh() but
-             * passed to Widget::refresh().
-             */
-            void refresh(bool immediate);
-    };
-}
-
-#endif // LABEL_H
+#endif  // LABEL_H

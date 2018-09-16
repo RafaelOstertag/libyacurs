@@ -19,8 +19,8 @@
 //
 // $Id$
 
-#include <cassert>
 #include <algorithm>
+#include <cassert>
 #include <functional>
 
 #include "focusgroup.h"
@@ -34,34 +34,32 @@ using namespace YACURS;
 //
 #ifndef NDEBUG
 namespace YACURS {
-    namespace FUNCTORS {
-        namespace FOCUSGROUP {
-            /**
-             * Class for debugging.
-             *
-             * Functor counting the number of widgets having focus in
-             * the Focus Group.
-             *
-             * Usually, this should either be 1 or 0.
-             */
-            class CountFocus {
-                private:
-                    int __count;
-                public:
-                    CountFocus() : __count(0) {
-                    }
+namespace FUNCTORS {
+namespace FOCUSGROUP {
+/**
+ * Class for debugging.
+ *
+ * Functor counting the number of widgets having focus in
+ * the Focus Group.
+ *
+ * Usually, this should either be 1 or 0.
+ */
+class CountFocus {
+   private:
+    int __count;
 
-                    void operator()(const WidgetBase* _w) {
-                        if (_w->focus() ) __count++;
-                    }
+   public:
+    CountFocus() : __count(0) {}
 
-                    int count() const {
-                        return __count;
-                    }
-            };
-        } // namespace CHECKBOX
-    } // namespace FUNCTORS
-} // namespace YACURS
+    void operator()(const WidgetBase* _w) {
+        if (_w->focus()) __count++;
+    }
+
+    int count() const { return __count; }
+};
+}  // namespace FOCUSGROUP
+}  // namespace FUNCTORS
+}  // namespace YACURS
 #endif
 
 //
@@ -76,95 +74,88 @@ namespace YACURS {
 // Public
 //
 
-FocusGroup::FocusGroup() : __active(false), __focus(__widgets.end() ) {
-    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] Created Focus Group.");
+FocusGroup::FocusGroup() : __active(false), __focus(__widgets.end()) {
+    DEBUGOUT(DBG_FOCUSGRP, "[" << (void*)this << "] Created Focus Group.");
 }
 
-FocusGroup::FocusGroup(const FocusGroup& _f) : __active(_f.__active),
-    __widgets(_f.__widgets),
-    __focus(_f.__focus) {
-}
+FocusGroup::FocusGroup(const FocusGroup& _f)
+    : __active(_f.__active), __widgets(_f.__widgets), __focus(_f.__focus) {}
 
 FocusGroup::~FocusGroup() {
-    if (__widgets.empty() ) return;
+    if (__widgets.empty()) return;
 
-    assert(__focus != __widgets.end() );
-    assert( (*__focus) != 0);
+    assert(__focus != __widgets.end());
+    assert((*__focus) != 0);
     (*__focus)->focus(false);
-    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] Destroyed Focus Group. Focus taken from " << (void*)(*__focus));
+    DEBUGOUT(DBG_FOCUSGRP, "[" << (void*)this
+                               << "] Destroyed Focus Group. Focus taken from "
+                               << (void*)(*__focus));
 }
 
-FocusGroup&
-FocusGroup::operator=(const FocusGroup& _f) {
+FocusGroup& FocusGroup::operator=(const FocusGroup& _f) {
     __active = _f.__active;
     __widgets = _f.__widgets;
     __focus = _f.__focus;
     return *this;
 }
 
-void
-FocusGroup::activate() {
+void FocusGroup::activate() {
     if (__active) return;
 
     __active = true;
 
-    if (__widgets.empty() ) return;
+    if (__widgets.empty()) return;
 
     // If we are called the first time, make the first Widget getting
     // the focus. Else do not change __focus, allowing to resume the
     // last state of the focus in the group.
-    if (__focus == __widgets.end() )
-        __focus = __widgets.begin();
+    if (__focus == __widgets.end()) __focus = __widgets.begin();
 
-    assert( (*__focus) != 0);
+    assert((*__focus) != 0);
 
     (*__focus)->focus(true);
 
-    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] Activated Focus Group. Focus given to " << (void*)(*__focus));
+    DEBUGOUT(DBG_FOCUSGRP, "[" << (void*)this
+                               << "] Activated Focus Group. Focus given to "
+                               << (void*)(*__focus));
 
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
-    FUNCTORS::FOCUSGROUP::CountFocus cf =
-        std::for_each(__widgets.begin(),
-                      __widgets.end(),
-                      FUNCTORS::FOCUSGROUP::CountFocus() );
+    FUNCTORS::FOCUSGROUP::CountFocus cf = std::for_each(
+        __widgets.begin(), __widgets.end(), FUNCTORS::FOCUSGROUP::CountFocus());
     assert(cf.count() < 2);
-#endif // NDEBUG
+#endif  // NDEBUG
 }
 
-void
-FocusGroup::deactivate() {
+void FocusGroup::deactivate() {
     if (!__active) return;
 
     __active = false;
 
-    if (__widgets.empty() ) return;
+    if (__widgets.empty()) return;
 
-    assert(__focus != __widgets.end() );
-    assert( (*__focus) != 0);
+    assert(__focus != __widgets.end());
+    assert((*__focus) != 0);
 
     (*__focus)->focus(false);
 
-    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] deactivated Focus Group and focus taken from " << (void*)(*__focus));
+    DEBUGOUT(DBG_FOCUSGRP,
+             "[" << (void*)this
+                 << "] deactivated Focus Group and focus taken from "
+                 << (void*)(*__focus));
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
-    FUNCTORS::FOCUSGROUP::CountFocus cf =
-        std::for_each(__widgets.begin(),
-                      __widgets.end(),
-                      FUNCTORS::FOCUSGROUP::CountFocus() );
+    FUNCTORS::FOCUSGROUP::CountFocus cf = std::for_each(
+        __widgets.begin(), __widgets.end(), FUNCTORS::FOCUSGROUP::CountFocus());
     assert(cf.count() == 0);
-#endif // NDEBUG
+#endif  // NDEBUG
 }
 
-bool
-FocusGroup::active() const {
-    return __active;
-}
+bool FocusGroup::active() const { return __active; }
 
-void
-FocusGroup::add(WidgetBase* _w) {
+void FocusGroup::add(WidgetBase* _w) {
     assert(_w != 0);
 
     // If the Focus Groups is empty but activate, we set the focus to
@@ -173,7 +164,7 @@ FocusGroup::add(WidgetBase* _w) {
     //
     // In any other case, activate() will take (has taken) care of
     // giving the focus to a widget.
-    if (__widgets.empty() ) {
+    if (__widgets.empty()) {
         __widgets.push_back(_w);
         __focus = __widgets.begin();
         (*__focus)->focus(true);
@@ -181,157 +172,149 @@ FocusGroup::add(WidgetBase* _w) {
         // Solaris Studio 12.3 forced me to do it that way, i.e. with
         // functor.
         FUNCTORS::FOCUSGROUP::CountFocus cf =
-            std::for_each(__widgets.begin(),
-                          __widgets.end(),
-                          FUNCTORS::FOCUSGROUP::CountFocus() );
+            std::for_each(__widgets.begin(), __widgets.end(),
+                          FUNCTORS::FOCUSGROUP::CountFocus());
         assert(cf.count() == 1);
-#endif // NDEBUG
+#endif  // NDEBUG
     } else {
         __widgets.push_back(_w);
     }
 
-    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] widget " << (void*)(_w) << " added to Focus Group");
+    DEBUGOUT(DBG_FOCUSGRP, "[" << (void*)this << "] widget " << (void*)(_w)
+                               << " added to Focus Group");
 }
 
-void
-FocusGroup::remove(WidgetBase* _w) {
+void FocusGroup::remove(WidgetBase* _w) {
     assert(_w != 0);
-    assert(!__widgets.empty() );
+    assert(!__widgets.empty());
 
     // Will be set to true, if the removed widget had the focus
     bool removed_had_focus = false;
 
     // Find out, whether the Widget to be removed has the focus, if
     // so, give the focus to another widget.
-    if ( (*__focus) == _w) {
+    if ((*__focus) == _w) {
         _w->focus(false);
 
         removed_had_focus = true;
 
-        if (++__focus == __widgets.end() )
-            __focus = __widgets.begin();
+        if (++__focus == __widgets.end()) __focus = __widgets.begin();
     }
 
     __widgets.remove(_w);
 
-    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] widget " << (void*)(_w) << " removed from Focus Group");
+    DEBUGOUT(DBG_FOCUSGRP, "[" << (void*)this << "] widget " << (void*)(_w)
+                               << " removed from Focus Group");
 
     // No more widgets left, we cannot assign focus to anything.
-    if (__widgets.empty() ) return;
+    if (__widgets.empty()) return;
 
     // Make sure we don't point at the end of the list
-    if (removed_had_focus)
-        (*__focus)->focus(true);
+    if (removed_had_focus) (*__focus)->focus(true);
 
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
-    FUNCTORS::FOCUSGROUP::CountFocus cf =
-        std::for_each(__widgets.begin(),
-                      __widgets.end(),
-                      FUNCTORS::FOCUSGROUP::CountFocus() );
+    FUNCTORS::FOCUSGROUP::CountFocus cf = std::for_each(
+        __widgets.begin(), __widgets.end(), FUNCTORS::FOCUSGROUP::CountFocus());
     assert(cf.count() < 2);
-#endif // NDEBUG
+#endif  // NDEBUG
 }
 
-void
-FocusGroup::focus_next() {
-    assert(!__widgets.empty() );
+void FocusGroup::focus_next() {
+    assert(!__widgets.empty());
     if (!__active) return;
 
     // If activate() has been called, __focus must point to something,
     // but surely not the end().
-    assert(__focus != __widgets.end() );
+    assert(__focus != __widgets.end());
 
     // Not that it would be an error calling focus(false) on a Widget
     // not having the focus, but it would show that something within
     // the FocusGroup is weird.
-    assert( (*__focus)->focus() );
+    assert((*__focus)->focus());
 
     // remove focus of current Widget.
     (*__focus)->focus(false);
     (*__focus)->refresh(true);
-    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] (focus_next) widget " << (void*)(*__focus) << " lost focus");
+    DEBUGOUT(DBG_FOCUSGRP, "[" << (void*)this << "] (focus_next) widget "
+                               << (void*)(*__focus) << " lost focus");
 
     // Then, advance to the next widget. If we hit the end, we start
     // at the beginning again.
-    if (++__focus == __widgets.end() )
-        __focus = __widgets.begin();
+    if (++__focus == __widgets.end()) __focus = __widgets.begin();
 
     (*__focus)->focus(true);
     (*__focus)->refresh(true);
 
-    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] (focus_next) widget " << (void*)(*__focus) << " got focus");
+    DEBUGOUT(DBG_FOCUSGRP, "[" << (void*)this << "] (focus_next) widget "
+                               << (void*)(*__focus) << " got focus");
 
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
-    FUNCTORS::FOCUSGROUP::CountFocus cf =
-        std::for_each(__widgets.begin(),
-                      __widgets.end(),
-                      FUNCTORS::FOCUSGROUP::CountFocus() );
+    FUNCTORS::FOCUSGROUP::CountFocus cf = std::for_each(
+        __widgets.begin(), __widgets.end(), FUNCTORS::FOCUSGROUP::CountFocus());
     assert(cf.count() == 1);
-#endif // NDEBUG
+#endif  // NDEBUG
 }
 
-void
-FocusGroup::focus_previous() {
-    assert(!__widgets.empty() );
+void FocusGroup::focus_previous() {
+    assert(!__widgets.empty());
     if (!__active) return;
 
     // If activate() has been called, __focus must point to something,
     // but surely not the end().
-    assert(__focus != __widgets.end() );
+    assert(__focus != __widgets.end());
 
     // Not that it would be an error calling focus(false) on a Widget
     // not having the focus, but it would show that something within
     // the FocusGroup is weird.
-    assert( (*__focus)->focus() );
+    assert((*__focus)->focus());
 
     // remove focus of current Widget.
     (*__focus)->focus(false);
     (*__focus)->refresh(true);
-    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] (focus_previous) widget " << (void*)(*__focus) << " lost focus");
+    DEBUGOUT(DBG_FOCUSGRP, "[" << (void*)this << "] (focus_previous) widget "
+                               << (void*)(*__focus) << " lost focus");
 
     // Then, advance to the previous widget. If we are already at the
     // start, wrap to the last widget
-    if (__focus == __widgets.begin() )
-        __focus = __widgets.end();
+    if (__focus == __widgets.begin()) __focus = __widgets.end();
 
     __focus--;
 
     (*__focus)->focus(true);
     (*__focus)->refresh(true);
-    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] (focus_previous) widget " << (void*)(*__focus) << " got focus");
+    DEBUGOUT(DBG_FOCUSGRP, "[" << (void*)this << "] (focus_previous) widget "
+                               << (void*)(*__focus) << " got focus");
 
 #ifndef NDEBUG
     // Solaris Studio 12.3 forced me to do it that way, i.e. with
     // functor.
-    FUNCTORS::FOCUSGROUP::CountFocus cf =
-        std::for_each(__widgets.begin(),
-                      __widgets.end(),
-                      FUNCTORS::FOCUSGROUP::CountFocus() );
+    FUNCTORS::FOCUSGROUP::CountFocus cf = std::for_each(
+        __widgets.begin(), __widgets.end(), FUNCTORS::FOCUSGROUP::CountFocus());
     assert(cf.count() == 1);
-#endif // NDEBUG
+#endif  // NDEBUG
 }
 
-void
-FocusGroup::refocus() const {
-    if (__widgets.empty() ) return;
+void FocusGroup::refocus() const {
+    if (__widgets.empty()) return;
 
     (*__focus)->focus(true);
     (*__focus)->refresh(true);
-    DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] widget " << (void*)(*__focus) << " refocused");
+    DEBUGOUT(DBG_FOCUSGRP, "[" << (void*)this << "] widget "
+                               << (void*)(*__focus) << " refocused");
 }
 
-void
-FocusGroup::reset() {
-    if (__widgets.empty() ) return;
+void FocusGroup::reset() {
+    if (__widgets.empty()) return;
 
-    if (__active && __focus != __widgets.end() ) {
+    if (__active && __focus != __widgets.end()) {
         (*__focus)->focus(false);
         (*__focus)->refresh(true);
-	DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] (focus reset) widget " << (void*)(*__focus) << " lost focus");
+        DEBUGOUT(DBG_FOCUSGRP, "[" << (void*)this << "] (focus reset) widget "
+                                   << (void*)(*__focus) << " lost focus");
     }
 
     __focus = __widgets.begin();
@@ -339,6 +322,7 @@ FocusGroup::reset() {
     if (__active) {
         (*__focus)->focus(true);
         (*__focus)->refresh(true);
-	DEBUGOUT(DBG_FOCUSGRP,"[" << (void*)this << "] (focus reset) widget " << (void*)(*__focus) << " got focus");
+        DEBUGOUT(DBG_FOCUSGRP, "[" << (void*)this << "] (focus reset) widget "
+                                   << (void*)(*__focus) << " got focus");
     }
 }

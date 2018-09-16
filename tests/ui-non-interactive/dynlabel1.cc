@@ -9,43 +9,42 @@
 
 #ifdef HAVE_SYS_IOCTL_H
 #include <sys/ioctl.h>
-#endif // HAVE_SYS_IOCTL_H
+#endif  // HAVE_SYS_IOCTL_H
 
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
-#endif // HAVE_SYS_TYPES_H
+#endif  // HAVE_SYS_TYPES_H
 
 #ifdef HAVE_STROPTS_H
 #include <stropts.h>
-#endif // HAVE_STROPTS_H
+#endif  // HAVE_STROPTS_H
 
 #ifdef HAVE_TERMIOS_H
-# include <termios.h>
-#else // HAVE_TERMIOS_H
-# ifdef HAVE_SYS_TERMIOS_H
-#  include <sys/termios.h>
-# endif // HAVE_SYS_TERMIOS_H
-#endif // HAVE_TERMIOS_H
+#include <termios.h>
+#else  // HAVE_TERMIOS_H
+#ifdef HAVE_SYS_TERMIOS_H
+#include <sys/termios.h>
+#endif  // HAVE_SYS_TERMIOS_H
+#endif  // HAVE_TERMIOS_H
 
 #include <iostream>
 
 #include "yacurs.h"
 
-void
-alrm(YACURS::Event& _e) {
+void alrm(YACURS::Event& _e) {
     assert(_e == YACURS::EVT_SIGALRM);
 
     std::string status_msg("YACURS::Size: rows=");
 
-    YACURS::Size _scrdim(YACURS::Curses::inquiry_screensize() );
+    YACURS::Size _scrdim(YACURS::Curses::inquiry_screensize());
 
     char buff[32];
-    snprintf(buff, 32, "%d", _scrdim.rows() );
+    snprintf(buff, 32, "%d", _scrdim.rows());
     status_msg += buff;
 
     status_msg += " cols=";
 
-    snprintf(buff, 32, "%d", _scrdim.cols() );
+    snprintf(buff, 32, "%d", _scrdim.cols());
     status_msg += buff;
 
     YACURS::Curses::statusbar()->push(status_msg);
@@ -63,18 +62,15 @@ alrm(YACURS::Event& _e) {
         return;
     }
 
-    if (ws.ws_row <= YACURS::MIN_ROWS ||
-        ws.ws_col <= YACURS::MIN_COLS)
-        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT) );
+    if (ws.ws_row <= YACURS::MIN_ROWS || ws.ws_col <= YACURS::MIN_COLS)
+        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
     else
         alarm(1);
 }
 
-int
-main() {
+int main() {
     // test will not be run if stdout or stdin is not a tty.
-    if (isatty(STDOUT_FILENO)!=1 ||
-	isatty(STDIN_FILENO)!=1) exit(77);
+    if (isatty(STDOUT_FILENO) != 1 || isatty(STDIN_FILENO) != 1) exit(77);
 
 #if 0
     std::cout << getpid() << std::endl;
@@ -82,7 +78,7 @@ main() {
 #endif
 
 #ifdef YACURS_USE_WCHAR
-    if (setlocale(LC_ALL,"en_US.UTF-8")==0) exit(77);
+    if (setlocale(LC_ALL, "en_US.UTF-8") == 0) exit(77);
 #endif
 
     winsize wsave;
@@ -94,12 +90,11 @@ main() {
     try {
         YACURS::Curses::init();
 
-        YACURS::TitleBar* title = new YACURS::TitleBar(
-            YACURS::TitleBar::POS_TOP,
-            "DynLabel 1");
+        YACURS::TitleBar* title =
+            new YACURS::TitleBar(YACURS::TitleBar::POS_TOP, "DynLabel 1");
         YACURS::Curses::title(title);
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 1, 0) );
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 1, 0));
         w1->frame(true);
 
         YACURS::StatusBar* sl = new YACURS::StatusBar();
@@ -127,8 +122,8 @@ main() {
 
         YACURS::Curses::mainwindow(w1);
 
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(
-                                              YACURS::EVT_SIGALRM, &alrm) );
+        YACURS::EventQueue::connect_event(
+            YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM, &alrm));
         alarm(2);
 
         YACURS::Curses::run();

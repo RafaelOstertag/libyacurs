@@ -26,30 +26,29 @@
 #include <string>
 
 #include "dialog.h"
-#include "label.h"
 #include "input.h"
+#include "label.h"
 
 namespace YACURS {
-    class InputBox : public Dialog {
-        private:
-            Label __message;
-            Input<> __input;
-            VPack __vpack;
+class InputBox : public Dialog {
+   private:
+    Label __message;
+    Input<> __input;
+    VPack __vpack;
 
-            // Not supported
-            InputBox& operator=(const InputBox&);
+    // Not supported
+    InputBox& operator=(const InputBox&);
 
-        public:
-            InputBox(const std::string& _title,
-                     const std::string& _message,
-                     DIALOG_TYPE _dt=OKCANCEL);
+   public:
+    InputBox(const std::string& _title, const std::string& _message,
+             DIALOG_TYPE _dt = OKCANCEL);
 
-            virtual ~InputBox();
+    virtual ~InputBox();
 
-            const std::string& input() const;
+    const std::string& input() const;
 
-            void clear();
-    };
-}
+    void clear();
+};
+}  // namespace YACURS
 
-#endif // INPUTBOX_H
+#endif  // INPUTBOX_H

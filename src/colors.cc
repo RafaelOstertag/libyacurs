@@ -20,14 +20,14 @@
 // $Id$
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include "config.h"
 #endif
 
-#include <vector>
 #include <cassert>
+#include <vector>
 
-#include "colors.h"
 #include "colorparser.h"
+#include "colors.h"
 #include "yacursex.h"
 
 using namespace YACURS;
@@ -36,13 +36,12 @@ bool Colors::__initialized = false;
 
 std::vector<INTERNAL::CursColor> Colors::__colors;
 
-void
-Colors::init_colors(const std::string& colorstr) {
+void Colors::init_colors(const std::string& colorstr) {
     if (__initialized) return;
 
     INTERNAL::ColorParser cp;
 
-    if (colorstr.empty() )
+    if (colorstr.empty())
         __colors = cp();
     else
         __colors = cp(colorstr);
@@ -54,26 +53,21 @@ Colors::init_colors(const std::string& colorstr) {
         return;
     }
 
-    if (start_color() == ERR)
-        throw EXCEPTIONS::CursesException("start_color");
+    if (start_color() == ERR) throw EXCEPTIONS::CursesException("start_color");
 
     __initialized = true;
 
-    if (COLOR_PAIRS < NUMBER_OF_COLOROBJ)
-        return;
+    if (COLOR_PAIRS < NUMBER_OF_COLOROBJ) return;
 
     for (int i = 0; i < NUMBER_OF_COLOROBJ; i++) {
-        if (init_pair(__colors.at(i).no,
-                      __colors.at(i).fg,
+        if (init_pair(__colors.at(i).no, __colors.at(i).fg,
                       __colors.at(i).bg) == ERR)
             throw EXCEPTIONS::CursesException("init_pair");
     }
 }
 
-int
-Colors::color_pair(COLOROBJ c) {
-    if (!__initialized)
-        throw EXCEPTIONS::ColorsNotInitialized();
+int Colors::color_pair(COLOROBJ c) {
+    if (!__initialized) throw EXCEPTIONS::ColorsNotInitialized();
 
     if (has_colors() == TRUE && COLOR_PAIRS >= NUMBER_OF_COLOROBJ) {
         return COLOR_PAIR(__colors[c].no);

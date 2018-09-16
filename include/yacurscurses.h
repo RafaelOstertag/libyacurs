@@ -31,28 +31,25 @@
 #endif
 
 #if defined HAVE_NCURSESW_CURSES_H
-#        include <ncursesw/curses.h>
+#include <ncursesw/curses.h>
 #elif defined HAVE_NCURSESW_H
-#        include <ncursesw.h>
+#include <ncursesw.h>
 #elif defined HAVE_NCURSES_CURSES_H
-#        include <ncurses/curses.h>
+#include <ncurses/curses.h>
 #elif defined HAVE_NCURSES_H
-#        include <ncurses.h>
+#include <ncurses.h>
 #elif defined HAVE_CURSES_H
-#        include <curses.h>
+#include <curses.h>
 #else
-#        error "SysV or X/Open-compatible Curses header file required"
+#error "SysV or X/Open-compatible Curses header file required"
 #endif
 
-#if defined(HAVE_CURSES_ENHANCED) && \
-    defined(HAVE_LOCALE_H) && \
-    defined(HAVE_CWCHAR) && \
-    defined(HAVE_CWCTYPE) && \
-    !defined(DISABLE_WCHAR)
-# define YACURS_USE_WCHAR 1
-# include <locale.h>
+#if defined(HAVE_CURSES_ENHANCED) && defined(HAVE_LOCALE_H) && \
+    defined(HAVE_CWCHAR) && defined(HAVE_CWCTYPE) && !defined(DISABLE_WCHAR)
+#define YACURS_USE_WCHAR 1
+#include <locale.h>
 #else
-# undef YACURS_USE_WCHAR
+#undef YACURS_USE_WCHAR
 #endif
 
 // My Keys.
@@ -101,7 +98,7 @@ enum {
     // Backspace in Solaris' Curses
     KEY_BKSPC_SOL = 127,
 #endif
-    __KEY_MY_DUMMY__ = 0 // To make compiler stop complaining about comma
+    __KEY_MY_DUMMY__ = 0  // To make compiler stop complaining about comma
 };
 
 #ifdef tab
@@ -110,114 +107,106 @@ enum {
 
 #ifdef WADDSTR_USE_CHAR
 #ifdef __SVR4
-# include <stdlib.h>
-# include <string.h>
-#else // __SVR4
-# include <cstdlib>
-# include <cstring>
-#endif // __SVR4
+#include <stdlib.h>
+#include <string.h>
+#else  // __SVR4
+#include <cstdlib>
+#include <cstring>
+#endif  // __SVR4
 
-inline int
-waddstr_c(WINDOW* win, const char* str) {
+inline int waddstr_c(WINDOW* win, const char* str) {
     char* tmp_ptr = strdup(str);
     int retval = waddstr(win, tmp_ptr);
 
-    std::memset(tmp_ptr, 0, std::strlen(tmp_ptr) );
+    std::memset(tmp_ptr, 0, std::strlen(tmp_ptr));
     std::free(tmp_ptr);
     return retval;
 }
 
 #define mywaddstr(a, b) waddstr_c(a, b)
-#else // WADDSTR_USE_CHAR
+#else  // WADDSTR_USE_CHAR
 #define mywaddstr(a, b) waddstr(a, b)
-#endif // WADDSTR_USE_CHAR
+#endif  // WADDSTR_USE_CHAR
 
 #ifdef MVWADDSTR_USE_CHAR
 #ifdef __SVR4
-# include <stdlib.h>
-# include <string.h>
-#else // __SVR4
-# include <cstdlib>
-# include <cstring>
-#endif // __SVR4
+#include <stdlib.h>
+#include <string.h>
+#else  // __SVR4
+#include <cstdlib>
+#include <cstring>
+#endif  // __SVR4
 
-inline int
-mvwaddstr_c(WINDOW* win, int y, int x, const char* str) {
+inline int mvwaddstr_c(WINDOW* win, int y, int x, const char* str) {
     char* tmp_ptr = strdup(str);
     int retval = mvwaddstr(win, y, x, tmp_ptr);
 
-    std::memset(tmp_ptr, 0, std::strlen(tmp_ptr) );
+    std::memset(tmp_ptr, 0, std::strlen(tmp_ptr));
     std::free(tmp_ptr);
     return retval;
 }
 
 #define mymvwaddstr(a, b, c, d) mvwaddstr_c(a, b, c, d)
-#else // MVWADDSTR_USE_CHAR
+#else  // MVWADDSTR_USE_CHAR
 #define mymvwaddstr(a, b, c, d) mvwaddstr(a, b, c, d)
-#endif // MVWADDSTR_USE_CHAR
+#endif  // MVWADDSTR_USE_CHAR
 
 #ifdef MVWADDNSTR_USE_CHAR
 #ifdef __SVR4
-# include <stdlib.h>
-# include <string.h>
-#else // __SVR4
-# include <cstdlib>
-# include <cstring>
-#endif // __SVR4
+#include <stdlib.h>
+#include <string.h>
+#else  // __SVR4
+#include <cstdlib>
+#include <cstring>
+#endif  // __SVR4
 
-inline int
-mvwaddnstr_c(WINDOW* win, int y, int x, const char* str, int n) {
+inline int mvwaddnstr_c(WINDOW* win, int y, int x, const char* str, int n) {
     char* tmp_ptr = strdup(str);
     int retval = mvwaddnstr(win, y, x, tmp_ptr, n);
 
-    std::memset(tmp_ptr, 0, std::strlen(tmp_ptr) );
+    std::memset(tmp_ptr, 0, std::strlen(tmp_ptr));
     std::free(tmp_ptr);
     return retval;
 }
 
 #define mymvwaddnstr(a, b, c, d, e) mvwaddnstr_c(a, b, c, d, e)
-#else // MVWADDSTR_USE_CHAR
+#else  // MVWADDSTR_USE_CHAR
 #define mymvwaddnstr(a, b, c, d, e) mvwaddnstr(a, b, c, d, e)
-#endif // MVWADDSTR_USE_CHAR
+#endif  // MVWADDSTR_USE_CHAR
 
 #ifdef WADDNSTR_USE_CHAR
 #ifdef __SVR4
-# include <stdlib.h>
-# include <string.h>
-#else // __SVR4
-# include <cstdlib>
-# include <cstring>
-#endif // __SVR4
+#include <stdlib.h>
+#include <string.h>
+#else  // __SVR4
+#include <cstdlib>
+#include <cstring>
+#endif  // __SVR4
 
-inline int
-waddnstr_c(WINDOW* win, const char* str, int n) {
+inline int waddnstr_c(WINDOW* win, const char* str, int n) {
     char* tmp_ptr = strdup(str);
     int retval = waddnstr(win, tmp_ptr, n);
 
-    std::memset(tmp_ptr, 0, std::strlen(tmp_ptr) );
+    std::memset(tmp_ptr, 0, std::strlen(tmp_ptr));
     std::free(tmp_ptr);
     return retval;
 }
 
 #define mywaddnstr(a, b, c) waddnstr_c(a, b, c)
-#else // WADDSTR_USE_CHAR
+#else  // WADDSTR_USE_CHAR
 #define mywaddnstr(a, b, c) waddnstr(a, b, c)
-#endif // WADDSTR_USE_CHAR
+#endif  // WADDSTR_USE_CHAR
 
 // Those macros collide with CursWin
 #ifdef addstr
 #undef addstr
-inline int
-addstr(const char* str) {
-    return mywaddstr(stdscr, str);
-}
+inline int addstr(const char* str) { return mywaddstr(stdscr, str); }
 
 #endif
 
 #ifdef addnstr
 #undef addnstr
-inline int
-addnstr(const char* str, int n) {
+inline int addnstr(const char* str, int n) {
     return mywaddnstr(stdscr, str, n);
 }
 
@@ -225,17 +214,13 @@ addnstr(const char* str, int n) {
 
 #ifdef addch
 #undef addch
-inline int
-addch(const chtype ch) {
-    return waddch(stdscr, ch);
-}
+inline int addch(const chtype ch) { return waddch(stdscr, ch); }
 
 #endif
 
 #ifdef mvaddch
 #undef mvaddch
-inline int
-mvaddch(int y, int x, const chtype ch) {
+inline int mvaddch(int y, int x, const chtype ch) {
     return mvwaddch(stdscr, y, x, ch);
 }
 
@@ -243,17 +228,13 @@ mvaddch(int y, int x, const chtype ch) {
 
 #ifdef insch
 #undef insch
-inline int
-insch(const chtype ch) {
-    return winsch(stdscr, ch);
-}
+inline int insch(const chtype ch) { return winsch(stdscr, ch); }
 
 #endif
 
 #ifdef mvinsch
 #undef mvinsch
-inline int
-mvinsch(int y, int x, const chtype ch) {
+inline int mvinsch(int y, int x, const chtype ch) {
     return mvwinsch(stdscr, y, x, ch);
 }
 
@@ -261,17 +242,13 @@ mvinsch(int y, int x, const chtype ch) {
 
 #ifdef timeout
 #undef timeout
-inline void
-timeout(int n) {
-    wtimeout(stdscr, n);
-}
+inline void timeout(int n) { wtimeout(stdscr, n); }
 
 #endif
 
 #ifdef box
 #undef box
-inline int
-box(WINDOW* win, int verch, int horch) {
+inline int box(WINDOW* win, int verch, int horch) {
     return wborder(win, verch, verch, horch, horch, 0, 0, 0, 0);
 }
 
@@ -279,73 +256,49 @@ box(WINDOW* win, int verch, int horch) {
 
 #ifdef clear
 #undef clear
-inline int
-clear() {
-    return wclear(stdscr);
-}
+inline int clear() { return wclear(stdscr); }
 
 #endif
 
 #ifdef erase
 #undef erase
-inline int
-erase() {
-    return werase(stdscr);
-}
+inline int erase() { return werase(stdscr); }
 
 #endif
 
 #ifdef mvdelch
 #undef mvdelch
-inline int
-mvdelch(int y, int x) {
-    return mvwdelch(stdscr, y, x);
-}
+inline int mvdelch(int y, int x) { return mvwdelch(stdscr, y, x); }
 
 #endif
 
 #ifdef delch
 #undef delch
-inline int
-delch() {
-    return wdelch(stdscr);
-}
+inline int delch() { return wdelch(stdscr); }
 
 #endif
 
 #ifdef move
 #undef move
-inline int
-move(int y, int x) {
-    return wmove(stdscr, y, x);
-}
+inline int move(int y, int x) { return wmove(stdscr, y, x); }
 
 #endif
 
 #ifdef refresh
 #undef refresh
-inline int
-refresh() {
-    return wrefresh(stdscr);
-}
+inline int refresh() { return wrefresh(stdscr); }
 
 #endif
 
 #ifdef bkgd
 #undef bkgd
-inline int
-bkgd(chtype ch) {
-    return wbkgd(stdscr, ch);
-}
+inline int bkgd(chtype ch) { return wbkgd(stdscr, ch); }
 
 #endif
 
 #ifdef clrtobot
 #undef clrtobot
-inline int
-clrtobot() {
-    return wclrtobot(stdscr);
-}
+inline int clrtobot() { return wclrtobot(stdscr); }
 
 #endif
 

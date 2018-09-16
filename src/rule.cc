@@ -30,8 +30,7 @@ using namespace YACURS;
 //
 // Private
 //
-Rule&
-Rule::operator=(const Rule&) {
+Rule& Rule::operator=(const Rule&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -43,37 +42,21 @@ Rule::operator=(const Rule&) {
 //
 // Public
 //
-Rule::Rule() : 
-    Widget(),
-    __color(DEFAULT) {
-}
+Rule::Rule() : Widget(), __color(DEFAULT) {}
 
-Rule::~Rule() {
-}
+Rule::~Rule() {}
 
-void
-Rule::color(COLOROBJ c) {
-    __color = c;
-}
+void Rule::color(COLOROBJ c) { __color = c; }
 
 COLOROBJ
-Rule::color() const {
-    return __color;
-}
+Rule::color() const { return __color; }
 
-Size
-Rule::size() const {
-    return __size;
-}
+Size Rule::size() const { return __size; }
 
-bool
-Rule::size_change() {
+bool Rule::size_change() {
     // We don't handle size changes since we're not a container
     // Widget.
     return false;
 }
 
-void
-Rule::reset_size() {
-    __size = Size::zero();
-}
+void Rule::reset_size() { __size = Size::zero(); }

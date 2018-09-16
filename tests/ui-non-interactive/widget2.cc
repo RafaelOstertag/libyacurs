@@ -23,82 +23,87 @@ YACURS::Label* label2;
 YACURS::Input<>* input1;
 YACURS::Input<>* input2;
 
-void
-alrm(YACURS::Event& _e) {
+void alrm(YACURS::Event& _e) {
     static int i = 0;
 
     assert(_e == YACURS::EVT_SIGALRM);
 
     switch (i++) {
-    case 0:
+        case 0:
 #ifdef YACURS_USE_WCHAR
-	input1->input(
-            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+            input1->input(
+                "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıj"
+                "ķł₥ñøṗqṙşŧūvẇ×¥ƶ");
 #else
-        input1->input(
-            "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+            input1->input(
+                "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghij"
+                "klmnopqrstuvwxyz");
 #endif
-        break;
+            break;
 
-    case 1:
+        case 1:
 #ifdef YACURS_USE_WCHAR
-        input2->input(
-            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+            input2->input(
+                "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıj"
+                "ķł₥ñøṗqṙşŧūvẇ×¥ƶ");
 #else
-        input2->input(
-            "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+            input2->input(
+                "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghij"
+                "klmnopqrstuvwxyz");
 #endif
-        break;
+            break;
 
-    case 2:
+        case 2:
 #ifdef YACURS_USE_WCHAR
-        label1->label("åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+            label1->label("åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
 #else
-        label1->label("abcdefghijklmnopqrstuvwxyz");
+            label1->label("abcdefghijklmnopqrstuvwxyz");
 #endif
-        break;
+            break;
 
-    case 3:
+        case 3:
 #ifdef YACURS_USE_WCHAR
-        label2->label("åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+            label2->label("åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
 #else
-        label2->label("abcdefghijklmnopqrstuvwxyz");
+            label2->label("abcdefghijklmnopqrstuvwxyz");
 #endif
-        break;
+            break;
 
-    case 4:
+        case 4:
 #ifdef YACURS_USE_WCHAR
-        label1->label(
-            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+            label1->label(
+                "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıj"
+                "ķł₥ñøṗqṙşŧūvẇ×¥ƶ");
 #else
-        label1->label(
-            "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+            label1->label(
+                "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghij"
+                "klmnopqrstuvwxyz");
 #endif
-        break;
+            break;
 
-    case 5:
+        case 5:
 #ifdef YACURS_USE_WCHAR
-        label2->label(
-            "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶ");
+            label2->label(
+                "åƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıjķł₥ñøṗqṙşŧūvẇ×¥ƶåƀčđėḟǥħıj"
+                "ķł₥ñøṗqṙşŧūvẇ×¥ƶ");
 #else
-        label2->label(
-            "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz");
+            label2->label(
+                "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghij"
+                "klmnopqrstuvwxyz");
 #endif
-        break;
+            break;
 
-    default:
-        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT) );
-        break;
+        default:
+            YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
+            break;
     }
 
     alarm(1);
 }
 
-int
-main() {
+int main() {
     // test will not be run if stdout or stdin is not a tty.
-    if (isatty(STDOUT_FILENO)!=1 ||
-	isatty(STDIN_FILENO)!=1) exit(77);
+    if (isatty(STDOUT_FILENO) != 1 || isatty(STDIN_FILENO) != 1) exit(77);
 
 #if 0
     std::cout << getpid() << std::endl;
@@ -106,7 +111,7 @@ main() {
 #endif
 
 #ifdef YACURS_USE_WCHAR
-    if (setlocale(LC_ALL,"en_US.UTF-8")==0) exit(77);
+    if (setlocale(LC_ALL, "en_US.UTF-8") == 0) exit(77);
 #endif
 
     try {
@@ -117,7 +122,7 @@ main() {
             "Widget 2: setting text in realized YACURS::Input/YACURS::Label");
         YACURS::Curses::title(title);
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0) );
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0));
         w1->frame(true);
 
         hpack = new YACURS::HPack;
@@ -143,8 +148,8 @@ main() {
 
         YACURS::Curses::mainwindow(w1);
 
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(
-                                              YACURS::EVT_SIGALRM, &alrm) );
+        YACURS::EventQueue::connect_event(
+            YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM, &alrm));
 
         alarm(5);
         YACURS::Curses::run();

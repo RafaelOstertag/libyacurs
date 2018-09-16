@@ -29,31 +29,31 @@
 #include "widgetbase.h"
 
 namespace YACURS {
-    /**
-     * A 1x1 spacer
-     */
-    class Spacer : public WidgetBase {
-        private:
-            // Not supported
-            Spacer& operator=(const Spacer&);
+/**
+ * A 1x1 spacer
+ */
+class Spacer : public WidgetBase {
+   private:
+    // Not supported
+    Spacer& operator=(const Spacer&);
 
-        public:
-            Spacer();
-            virtual ~Spacer();
+   public:
+    Spacer();
+    virtual ~Spacer();
 
-	    // from WidgetBase
-	    bool size_change();
-	    Size size() const;
-	    Size size_hint() const;
-	    void reset_hint();
-	    void reset_size();
-	    bool can_focus() const;
+    // from WidgetBase
+    bool size_change();
+    Size size() const;
+    Size size_hint() const;
+    void reset_hint();
+    void reset_size();
+    bool can_focus() const;
 
-	    // from Realizeable
-	    void refresh(bool);
-	    void resize(const Area&);
-	    void realize();
-    };
-}
+    // from Realizeable
+    void refresh(bool);
+    void resize(const Area&);
+    void realize();
+};
+}  // namespace YACURS
 
-#endif // PACKSPACER_H
+#endif  // PACKSPACER_H

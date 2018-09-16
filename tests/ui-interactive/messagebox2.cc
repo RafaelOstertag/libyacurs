@@ -18,39 +18,36 @@ wint_t
 #else
 int
 #endif
-__test_data[] = {
-    // Open dialog, and cancel
-    '\n', '\t', '\n',
-    // Open Dialog, and Ok
-    '\n', '\n',
-    // Quit app
-    '\t', '\n', 0
-};
+    __test_data[] = {
+        // Open dialog, and cancel
+        '\n', '\t', '\n',
+        // Open Dialog, and Ok
+        '\n', '\n',
+        // Quit app
+        '\t', '\n', 0};
 
 #ifdef YACURS_USE_WCHAR
-extern "C" int
-__test_wget_wch(void*, wint_t* i) {
+extern "C" int __test_wget_wch(void*, wint_t* i) {
     static wint_t* ptr2 = __test_data;
 
-    #ifdef SLOW_TESTS
-	usleep(70000);
+#ifdef SLOW_TESTS
+    usleep(70000);
 #endif
 
     if (*ptr2 == 0) {
         abort();
     }
 
-    *i=*ptr2++;
+    *i = *ptr2++;
 
     return OK;
 }
 #else
-extern "C" int
-__test_wgetch(void*) {
+extern "C" int __test_wgetch(void*) {
     static int* ptr2 = __test_data;
 
-    #ifdef SLOW_TESTS
-	usleep(70000);
+#ifdef SLOW_TESTS
+    usleep(70000);
 #endif
 
     if (*ptr2 == 0) {
@@ -62,123 +59,111 @@ __test_wgetch(void*) {
 #endif
 
 class MainWindow : public YACURS::Window {
-    private:
-        YACURS::VPack* vpack1;
-        YACURS::HPack* hpack1;
-        YACURS::Button* button1;
-        YACURS::Button* button2;
-        YACURS::Label* label1;
-        YACURS::MessageBox2* messagebox2;
+   private:
+    YACURS::VPack* vpack1;
+    YACURS::HPack* hpack1;
+    YACURS::Button* button1;
+    YACURS::Button* button2;
+    YACURS::Label* label1;
+    YACURS::MessageBox2* messagebox2;
 
-    protected:
-        void window_close_handler(YACURS::Event& _e) {
-            assert(_e == YACURS::EVT_WINDOW_CLOSE);
-            YACURS::EventEx<YACURS::WindowBase*>& evt =
-                dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
+   protected:
+    void window_close_handler(YACURS::Event& _e) {
+        assert(_e == YACURS::EVT_WINDOW_CLOSE);
+        YACURS::EventEx<YACURS::WindowBase*>& evt =
+            dynamic_cast<YACURS::EventEx<YACURS::WindowBase*>&>(_e);
 
-            if (messagebox2 != 0 && evt.data() == messagebox2) {
-                YACURS::Curses::statusbar()->push("MessageBox2 closed");
+        if (messagebox2 != 0 && evt.data() == messagebox2) {
+            YACURS::Curses::statusbar()->push("MessageBox2 closed");
 
-                if (messagebox2->dialog_state() == YACURS::DIALOG_OK)
-                    label1->label("DIALOG_OK");
-                else
-                    label1->label("DIALOG_CANCEL");
+            if (messagebox2->dialog_state() == YACURS::DIALOG_OK)
+                label1->label("DIALOG_OK");
+            else
+                label1->label("DIALOG_CANCEL");
 
-                delete messagebox2;
-                messagebox2 = 0;
-            }
+            delete messagebox2;
+            messagebox2 = 0;
         }
+    }
 
-        void button_press_handler(YACURS::Event& _e) {
-            assert(_e == YACURS::EVT_BUTTON_PRESS);
-            YACURS::EventEx<YACURS::Button*>& e =
-                dynamic_cast<YACURS::EventEx<YACURS::Button*>&>(_e);
+    void button_press_handler(YACURS::Event& _e) {
+        assert(_e == YACURS::EVT_BUTTON_PRESS);
+        YACURS::EventEx<YACURS::Button*>& e =
+            dynamic_cast<YACURS::EventEx<YACURS::Button*>&>(_e);
 
-            if (e.data() == button1) {
-                assert(messagebox2 == 0);
+        if (e.data() == button1) {
+            assert(messagebox2 == 0);
 
 #ifdef YACURS_USE_WCHAR
-                messagebox2 = new YACURS::MessageBox2("«Test MessageBox2»",
-                                                     "“This is the message 1”",
-						     "“This is the message 2”");
+            messagebox2 = new YACURS::MessageBox2("«Test MessageBox2»",
+                                                  "“This is the message 1”",
+                                                  "“This is the message 2”");
 #else
-                messagebox2 = new YACURS::MessageBox2("Test MessageBox2",
-						      "This is the message 1",
-						      "This is the message 2");
+            messagebox2 = new YACURS::MessageBox2("Test MessageBox2",
+                                                  "This is the message 1",
+                                                  "This is the message 2");
 #endif
-                messagebox2->show();
-                return;
-            }
-
-            if (e.data() == button2) {
-                YACURS::EventQueue::submit(YACURS::EVT_QUIT);
-                return;
-            }
+            messagebox2->show();
+            return;
         }
 
-    public:
-        MainWindow() : YACURS::Window(YACURS::Margin(1, 0, 1,
-                                                     0) ), messagebox2(0) {
+        if (e.data() == button2) {
+            YACURS::EventQueue::submit(YACURS::EVT_QUIT);
+            return;
+        }
+    }
+
+   public:
+    MainWindow() : YACURS::Window(YACURS::Margin(1, 0, 1, 0)), messagebox2(0) {
 #ifdef YACURS_USE_WCHAR
-            button1 = new YACURS::Button("«New Window»");
-            button2 = new YACURS::Button("«Quit»");
+        button1 = new YACURS::Button("«New Window»");
+        button2 = new YACURS::Button("«Quit»");
 #else
-            button1 = new YACURS::Button("New Window");
-            button2 = new YACURS::Button("Quit");
+        button1 = new YACURS::Button("New Window");
+        button2 = new YACURS::Button("Quit");
 #endif
-            vpack1 = new YACURS::VPack;
-            hpack1 = new YACURS::HPack;
-            label1 = new YACURS::Label("dialog state");
-            hpack1->add_back(button1);
-            hpack1->add_back(button2);
-            vpack1->add_front(label1);
-            vpack1->add_back(hpack1);
-            widget(vpack1);
+        vpack1 = new YACURS::VPack;
+        hpack1 = new YACURS::HPack;
+        label1 = new YACURS::Label("dialog state");
+        hpack1->add_back(button1);
+        hpack1->add_back(button2);
+        vpack1->add_front(label1);
+        vpack1->add_back(hpack1);
+        widget(vpack1);
 
-            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
-                                                  MainWindow>(YACURS::
-                                                              EVT_BUTTON_PRESS,
-                                                              this,
-                                                              &MainWindow::
-                                                              button_press_handler) );
-            YACURS::EventQueue::connect_event(YACURS::EventConnectorMethod1<
-                                                  MainWindow>(YACURS::
-                                                              EVT_WINDOW_CLOSE,
-                                                              this,
-                                                              &MainWindow::
-                                                              window_close_handler) );
-        }
+        YACURS::EventQueue::connect_event(
+            YACURS::EventConnectorMethod1<MainWindow>(
+                YACURS::EVT_BUTTON_PRESS, this,
+                &MainWindow::button_press_handler));
+        YACURS::EventQueue::connect_event(
+            YACURS::EventConnectorMethod1<MainWindow>(
+                YACURS::EVT_WINDOW_CLOSE, this,
+                &MainWindow::window_close_handler));
+    }
 
-        ~MainWindow() {
-            if (messagebox2)
-                delete messagebox2;
+    ~MainWindow() {
+        if (messagebox2) delete messagebox2;
 
-            delete button1;
-            delete button2;
-            delete hpack1;
-            delete vpack1;
-            delete label1;
+        delete button1;
+        delete button2;
+        delete hpack1;
+        delete vpack1;
+        delete label1;
 
-            YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<
-                                                     MainWindow>(
-                                                     YACURS::EVT_BUTTON_PRESS,
-                                                     this,
-                                                     &MainWindow::
-                                                     button_press_handler) );
-            YACURS::EventQueue::disconnect_event(YACURS::EventConnectorMethod1<
-                                                     MainWindow>(
-                                                     YACURS::EVT_WINDOW_CLOSE,
-                                                     this,
-                                                     &MainWindow::
-                                                     window_close_handler) );
-        }
+        YACURS::EventQueue::disconnect_event(
+            YACURS::EventConnectorMethod1<MainWindow>(
+                YACURS::EVT_BUTTON_PRESS, this,
+                &MainWindow::button_press_handler));
+        YACURS::EventQueue::disconnect_event(
+            YACURS::EventConnectorMethod1<MainWindow>(
+                YACURS::EVT_WINDOW_CLOSE, this,
+                &MainWindow::window_close_handler));
+    }
 };
 
-int
-main() {
+int main() {
     // test will not be run if stdout or stdin is not a tty.
-    if (isatty(STDOUT_FILENO)!=1 ||
-	isatty(STDIN_FILENO)!=1) exit(77);
+    if (isatty(STDOUT_FILENO) != 1 || isatty(STDIN_FILENO) != 1) exit(77);
 
 #if 0
     std::cout << getpid() << std::endl;
@@ -186,15 +171,14 @@ main() {
 #endif
 
 #ifdef YACURS_USE_WCHAR
-    setlocale(LC_ALL,"");
+    setlocale(LC_ALL, "");
 #endif
 
     try {
         YACURS::Curses::init();
 
-        YACURS::Curses::title(new YACURS::TitleBar(YACURS::TitleBar::
-                                                   POS_TOP,
-                                                   "YACURS::MessageBox2") );
+        YACURS::Curses::title(new YACURS::TitleBar(YACURS::TitleBar::POS_TOP,
+                                                   "YACURS::MessageBox2"));
         YACURS::Curses::statusbar(new YACURS::StatusBar);
 
         YACURS::Curses::mainwindow(new MainWindow);

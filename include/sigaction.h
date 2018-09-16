@@ -28,74 +28,72 @@
 #include "yacurstypes.h"
 
 namespace YACURS {
-    namespace INTERNAL {
-        /**
-         * Convenience class for sigaction().
-         *
-         * Upon creation, it installs the new signal handler and saves
-         * the previous sigaction struct.
-         *
-         * Upon destruction, it restores the sigaction struct using
-         * the saved sigaction struct.
-         */
-        class Sigaction {
-            private:
-                /**
-                 * Saved sigaction.
-                 *
-                 * Third argument to sigaction().
-                 */
-                struct sigaction __saved_action;
-		
-		struct sigaction __current_action;
+namespace INTERNAL {
+/**
+ * Convenience class for sigaction().
+ *
+ * Upon creation, it installs the new signal handler and saves
+ * the previous sigaction struct.
+ *
+ * Upon destruction, it restores the sigaction struct using
+ * the saved sigaction struct.
+ */
+class Sigaction {
+   private:
+    /**
+     * Saved sigaction.
+     *
+     * Third argument to sigaction().
+     */
+    struct sigaction __saved_action;
 
-                /**
-                 * Signal Number.
-                 */
-                int __signo;
+    struct sigaction __current_action;
 
-                Sigaction(const Sigaction&);
-                Sigaction& operator=(const Sigaction&);
+    /**
+     * Signal Number.
+     */
+    int __signo;
 
-            public:
-                /**
-                 * Constructor.
-                 *
-                 * @param signo signal
-                 *
-                 * @param hndlr pointer to function handling signal.
-                 *
-                 * @param mask signal mask to block during execution
-                 * of hndlr.
-                 */
-                Sigaction(int signo, sig_handler hndlr, sigset_t& mask);
+    Sigaction(const Sigaction&);
+    Sigaction& operator=(const Sigaction&);
 
-                /**
-                 * Restores sigaction.
-                 *
-                 * Restores signal action to the saved state upon
-                 * invocation.
-                 */
-                ~Sigaction();
+   public:
+    /**
+     * Constructor.
+     *
+     * @param signo signal
+     *
+     * @param hndlr pointer to function handling signal.
+     *
+     * @param mask signal mask to block during execution
+     * of hndlr.
+     */
+    Sigaction(int signo, sig_handler hndlr, sigset_t& mask);
 
-                /**
-                 * Get the signal.
-                 *
-                 * @returns the signal.
-                 */
-                int signo() const {
-                    return __signo;
-                }
+    /**
+     * Restores sigaction.
+     *
+     * Restores signal action to the saved state upon
+     * invocation.
+     */
+    ~Sigaction();
 
-		/**
-		 * Set the signal again
-		 *
-		 * Calls sigaction with the parameters received upon
-		 * initialization.
-		 */
-		void reset() const;
-        };
-    } // namespace INTERNAL
-} // namespace YACURS
+    /**
+     * Get the signal.
+     *
+     * @returns the signal.
+     */
+    int signo() const { return __signo; }
 
-#endif // SIGACTION_H
+    /**
+     * Set the signal again
+     *
+     * Calls sigaction with the parameters received upon
+     * initialization.
+     */
+    void reset() const;
+};
+}  // namespace INTERNAL
+}  // namespace YACURS
+
+#endif  // SIGACTION_H

@@ -28,200 +28,199 @@
 #include <map>
 #include <queue>
 
-#include "sigaction.h"
+#include "area.h"
 #include "event.h"
 #include "eventconnector.h"
-#include "area.h"
 #include "lockscreen.h"
+#include "sigaction.h"
 
 namespace YACURS {
+/**
+ * @ingroup Event
+ *
+ * The Event Queue dispatches Events submitted to the respective
+ * connectors.
+ *
+ * It is started by calling EventQueue::run(). It will then wait for
+ * keyboard input or Unix Signals and dispatch, aka. `emit`, the Event
+ * to all Event Connectors for the given event.
+ *
+ * The Event Queue will terminate upon submission of @c EVT_QUIT.
+ *
+ * Libyacurs counts on the order events are connected, so that the
+ * EVT_REFRESH/EVT_DOUPDATE event sequence will call the last
+ * connected event handler last, thus ensuring the update will not
+ * suddenly display a main window before an recently opened dialog,
+ * for instance.
+ *
+ * EventQueue will also emit events for global conditions, such as
+ * screen refresh request when pressing Ctrl-L.
+ *
+ * @section Unix Signals
+ *
+ * EventQueue will emit events on following Unix Signals
+ *
+ * - SIGWINCH (@c EVT_SIGWINCH)
+ * - SIGALRM (@c EVT_SIGALRM)
+ * - SIGUSR1 (@c EVT_SIGUSR1)
+ * - SIGUSR2 (@c EVT_SIGUSR2)
+ * - SIGINT (@c EVT_SIGINT)
+ *
+ * @section Terminal Resize
+ *
+ * If supported by the curses implementation, it consists of following
+ * event sequence:
+ *
+ * - EVT_TERMRESETUP (handled in Curses)
+ * - EVT_SIGWINCH (only classes derived from WindowBase should connect.)
+ * - EVT_REFRESH
+ * - EVT_DOUPDATE
+ *
+ * @section Complete Refresh
+ *
+ * A complete refresh is initiated by pressing Ctrl-L or KEY_REFRESH
+ * on the keyboard. It consists of following event sequence:
+ *
+ * - EVT_FORCEREFRESH
+ * - EVT_REFRESH
+ * - EVT_DOUPDATE
+ *
+ */
+class EventQueue {
+   private:
+    /// Used by blocksignal()/unblocksignal()
+    static sigset_t block_sigmask;
+    /// Used by blocksignal()/unblocksignal()
+    static sigset_t tmp_old_sigmask;
+    /// Used by setup_signal()/restore_signal()
+    static sigset_t old_sigmask;
+
+    static INTERNAL::Sigaction* sigwinch;
+    static INTERNAL::Sigaction* sigalrm;
+    static INTERNAL::Sigaction* sigusr1;
+    static INTERNAL::Sigaction* sigusr2;
+    static INTERNAL::Sigaction* sigint;
+    static INTERNAL::Sigaction* sigterm;
+    static INTERNAL::Sigaction* sigquit;
+    static INTERNAL::Sigaction* sigtstp;
+    static INTERNAL::Sigaction* sigcont;
+    static INTERNAL::Sigaction* siginfo;
+
+    static bool signal_blocked;
+    static std::queue<Event*> evt_queue;
+
     /**
-     * @ingroup Event
-     *
-     * The Event Queue dispatches Events submitted to the respective
-     * connectors.
-     *
-     * It is started by calling EventQueue::run(). It will then wait for
-     * keyboard input or Unix Signals and dispatch, aka. `emit`, the Event
-     * to all Event Connectors for the given event.
-     *
-     * The Event Queue will terminate upon submission of @c EVT_QUIT.
-     *
-     * Libyacurs counts on the order events are connected, so that the
-     * EVT_REFRESH/EVT_DOUPDATE event sequence will call the last
-     * connected event handler last, thus ensuring the update will not
-     * suddenly display a main window before an recently opened dialog,
-     * for instance.
-     *
-     * EventQueue will also emit events for global conditions, such as
-     * screen refresh request when pressing Ctrl-L.
-     *
-     * @section Unix Signals
-     *
-     * EventQueue will emit events on following Unix Signals
-     *
-     * - SIGWINCH (@c EVT_SIGWINCH)
-     * - SIGALRM (@c EVT_SIGALRM)
-     * - SIGUSR1 (@c EVT_SIGUSR1)
-     * - SIGUSR2 (@c EVT_SIGUSR2)
-     * - SIGINT (@c EVT_SIGINT)
-     *
-     * @section Terminal Resize
-     *
-     * If supported by the curses implementation, it consists of following
-     * event sequence:
-     *
-     * - EVT_TERMRESETUP (handled in Curses)
-     * - EVT_SIGWINCH (only classes derived from WindowBase should connect.)
-     * - EVT_REFRESH
-     * - EVT_DOUPDATE
-     *
-     * @section Complete Refresh
-     *
-     * A complete refresh is initiated by pressing Ctrl-L or KEY_REFRESH
-     * on the keyboard. It consists of following event sequence:
-     *
-     * - EVT_FORCEREFRESH
-     * - EVT_REFRESH
-     * - EVT_DOUPDATE
-     *
+     * EventConnectors are not removed immediately, instead remove
+     * requests are queue up for processing later.
      */
-    class EventQueue {
-        private:
-            /// Used by blocksignal()/unblocksignal()
-            static sigset_t block_sigmask;
-            /// Used by blocksignal()/unblocksignal()
-            static sigset_t tmp_old_sigmask;
-            /// Used by setup_signal()/restore_signal()
-            static sigset_t old_sigmask;
+    static std::list<EventConnectorBase*> evtconn_rem_request;
+    static std::map<EventType, std::list<EventConnectorBase*> > evtconn_map;
 
-            static INTERNAL::Sigaction* sigwinch;
-            static INTERNAL::Sigaction* sigalrm;
-            static INTERNAL::Sigaction* sigusr1;
-            static INTERNAL::Sigaction* sigusr2;
-            static INTERNAL::Sigaction* sigint;
-            static INTERNAL::Sigaction* sigterm;
-            static INTERNAL::Sigaction* sigquit;
-            static INTERNAL::Sigaction* sigtstp;
-            static INTERNAL::Sigaction* sigcont;
-	    static INTERNAL::Sigaction* siginfo;
+    /**
+     * LockScreen used on timeout
+     */
+    static LockScreen* __lockscreen;
 
-            static bool signal_blocked;
-            static std::queue<Event*> evt_queue;
+    /**
+     * Timeout for keyboard input.
+     *
+     * If for __timeout seconds no key (event) is pressed
+     * (received), the lock screen kicks in, if any.
+     */
+    static unsigned int __timeout;
 
-            /**
-             * EventConnectors are not removed immediately, instead remove
-             * requests are queue up for processing later.
-             */
-            static std::list<EventConnectorBase*> evtconn_rem_request;
-            static std::map<EventType,
-                            std::list<EventConnectorBase*> > evtconn_map;
+    static void setup_signal();
 
-            /**
-             * LockScreen used on timeout
-             */
-            static LockScreen* __lockscreen;
-
-            /**
-             * Timeout for keyboard input.
-             *
-             * If for __timeout seconds no key (event) is pressed
-             * (received), the lock screen kicks in, if any.
-             */
-            static unsigned int __timeout;
-
-            static void setup_signal();
-
-            static void restore_signal();
+    static void restore_signal();
 
 #ifdef SA_SIGINFO
-            static void signal_handler(int signo, siginfo_t* info, void* d);
+    static void signal_handler(int signo, siginfo_t* info, void* d);
 
 #else
-            static void signal_handler(int signo);
+    static void signal_handler(int signo);
 
-#endif // SA_SIGINFO
+#endif  // SA_SIGINFO
 
-            static void blocksignal();
+    static void blocksignal();
 
-            static void unblocksignal();
+    static void unblocksignal();
 
-            static void proc_rem_request();
+    static void proc_rem_request();
 
-            static void timeout_handler(Event& _e);
+    static void timeout_handler(Event& _e);
 
-        public:
-            /**
-             * Connect an event connector.
-             *
-             * Connect a (member) function to an Event. Please note, that
-             * only one function per object and Event can be connected. If
-             * two or more member functions of the same object will be
-             * connected to a single Event, each call to connect
-             * overwrites previous connections.
-             *
-             * @note the last event connector registered will be called
-             * first.
-             *
-             * @note any pending disconnect will be cancelled and the
-             * connector unsuspended.
-             *
-             * @param ec event connector to register.
-             */
-            static void connect_event(const EventConnectorBase& ec);
+   public:
+    /**
+     * Connect an event connector.
+     *
+     * Connect a (member) function to an Event. Please note, that
+     * only one function per object and Event can be connected. If
+     * two or more member functions of the same object will be
+     * connected to a single Event, each call to connect
+     * overwrites previous connections.
+     *
+     * @note the last event connector registered will be called
+     * first.
+     *
+     * @note any pending disconnect will be cancelled and the
+     * connector unsuspended.
+     *
+     * @param ec event connector to register.
+     */
+    static void connect_event(const EventConnectorBase& ec);
 
-            /**
-             * Disconnect an event connector.
-             *
-             * Disconnect the specified event connector.
-             *
-             * @note disconnecting does not immediately remove the
-             * connector. Instead it will be queued up for later
-             * removal. Until it is finally removed, it will be suspended.
-             * @note any pending removal will be cancelled by a
-             * (re-)connect and the connector will be unsuspended.
-             *
-             * @param ec event connector to disconnect.
-             */
-            static void disconnect_event(const EventConnectorBase& ec);
+    /**
+     * Disconnect an event connector.
+     *
+     * Disconnect the specified event connector.
+     *
+     * @note disconnecting does not immediately remove the
+     * connector. Instead it will be queued up for later
+     * removal. Until it is finally removed, it will be suspended.
+     * @note any pending removal will be cancelled by a
+     * (re-)connect and the connector will be unsuspended.
+     *
+     * @param ec event connector to disconnect.
+     */
+    static void disconnect_event(const EventConnectorBase& ec);
 
-            /// Suspend event
-            static void suspend(const EventConnectorBase& ec);
+    /// Suspend event
+    static void suspend(const EventConnectorBase& ec);
 
-            /// Suspend all events equal to a given event
-            static void suspend_all(const EventType _t);
+    /// Suspend all events equal to a given event
+    static void suspend_all(const EventType _t);
 
-            /// Suspend all events except the one given
-            static void suspend_except(const EventConnectorBase& ec);
+    /// Suspend all events except the one given
+    static void suspend_except(const EventConnectorBase& ec);
 
-            /// Unsuspend event
-            static void unsuspend(const EventConnectorBase& ec);
+    /// Unsuspend event
+    static void unsuspend(const EventConnectorBase& ec);
 
-            /// Unsuspend all events equal to a given event
-            static void unsuspend_all(const EventType _t);
+    /// Unsuspend all events equal to a given event
+    static void unsuspend_all(const EventType _t);
 
-            /// Unsuspend all events except the one given
-            static void unsuspend_except(const EventConnectorBase& ec);
+    /// Unsuspend all events except the one given
+    static void unsuspend_except(const EventConnectorBase& ec);
 
-            /// Add an event to the qeue
-            static void submit(const EventType _et);
+    /// Add an event to the qeue
+    static void submit(const EventType _et);
 
-            static void submit(const Event& ev);
+    static void submit(const Event& ev);
 
-            static void run();
+    static void run();
 
-            static void cleanup();
+    static void cleanup();
 
-            static void lock_screen(LockScreen* _ls);
+    static void lock_screen(LockScreen* _ls);
 
-            static LockScreen* lock_screen();
+    static LockScreen* lock_screen();
 
-            static void timeout(unsigned int _t);
+    static void timeout(unsigned int _t);
 
-            static unsigned int timeout();
+    static unsigned int timeout();
 
-	    static void __dump_event_conn_map();
-    };
-}
+    static void __dump_event_conn_map();
+};
+}  // namespace YACURS
 
-#endif // EVENTQUEUE_H
+#endif  // EVENTQUEUE_H

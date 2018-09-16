@@ -23,172 +23,167 @@
 #ifndef COLORS_H
 #define COLORS_H 1
 
-#include <vector>
 #include <string>
+#include <vector>
 
 #include "yacurscurses.h"
 
 namespace YACURS {
-    namespace INTERNAL {
-        /**
-         * Struct holding all information associated with Color
-         * Object.
-         */
-        struct CursColor {
-            /**
-             * Number of the pair.
-             *
-             * The number of the pair as used by (N)Curses. For
-             * NCurses, it has to start with at 1. X/Open Curses
-             * allows it to start at zero.
-             */
-            short no;
-
-            /**
-             * Foreground color.
-             *
-             * The foreground color of the color pair
-             */
-            short fg;
-
-            /**
-             * Background color.
-             *
-             * The background color of the pair.
-             */
-            short bg;
-
-            /**
-             * Attribute.
-             *
-             * The attribute used when no color is available.
-             */
-            int attr;
-
-            /**
-             * Initialize.
-             *
-             * Initialize all attributes to -1.
-             */
-            CursColor() : no(-1),
-                fg(-1),
-                bg(-1),
-                attr(-1) {
-            }
-        };
-    } // namespace INTERNAL
+namespace INTERNAL {
+/**
+ * Struct holding all information associated with Color
+ * Object.
+ */
+struct CursColor {
+    /**
+     * Number of the pair.
+     *
+     * The number of the pair as used by (N)Curses. For
+     * NCurses, it has to start with at 1. X/Open Curses
+     * allows it to start at zero.
+     */
+    short no;
 
     /**
-     * Color Objects
+     * Foreground color.
      *
-     * Color Object Names.
+     * The foreground color of the color pair
+     */
+    short fg;
+
+    /**
+     * Background color.
+     *
+     * The background color of the pair.
+     */
+    short bg;
+
+    /**
+     * Attribute.
+     *
+     * The attribute used when no color is available.
+     */
+    int attr;
+
+    /**
+     * Initialize.
+     *
+     * Initialize all attributes to -1.
+     */
+    CursColor() : no(-1), fg(-1), bg(-1), attr(-1) {}
+};
+}  // namespace INTERNAL
+
+/**
+ * Color Objects
+ *
+ * Color Object Names.
+ *
+ * @internal
+ *
+ *  Used as indices of the Color array.
+ */
+enum COLOROBJ {
+    /**
+     * Default color.
+     */
+    DEFAULT = 0,
+
+    DIALOG,
+
+    DIALOG_TITLE,
+
+    /**
+     * Color of Input Widget without focus.
+     */
+    INPUTWIDGET_NOFOCUS,
+
+    /**
+     * Color of Input Widget with focus.
+     */
+    INPUTWIDGET_FOCUS,
+
+    /**
+     * Color of hidden text in Input Widget.
+     */
+    INPUTWIDGET_HIDDEN,
+
+    /**
+     * Color of Button without focus.
+     */
+    BUTTON_NOFOCUS,
+
+    /**
+     * Color of Button with focus.
+     */
+    BUTTON_FOCUS,
+
+    /**
+     * Color of ListBox
+     */
+    LISTBOX,
+
+    /**
+     * Color of ListBox with Focus
+     */
+    LISTBOX_HILITE,
+
+    /**
+     * Color of Check Box Groups
+     */
+    CHECKBOXGROUP,
+
+    /**
+     * Color of Title Bar
+     */
+    TITLEBAR,
+
+    /**
+     * Color of Status Bar
+     */
+    STATUSBAR,
+
+    /**
+     * Number of Colors.
      *
      * @internal
      *
-     *  Used as indices of the Color array.
+     * Used by Colors to initialize color pairs as sentinel.
      */
-    enum COLOROBJ {
-        /**
-         * Default color.
-         */
-        DEFAULT = 0,
+    NUMBER_OF_COLOROBJ
+};
 
-        DIALOG,
-
-        DIALOG_TITLE,
-
-        /**
-         * Color of Input Widget without focus.
-         */
-        INPUTWIDGET_NOFOCUS,
-
-        /**
-         * Color of Input Widget with focus.
-         */
-        INPUTWIDGET_FOCUS,
-
-        /**
-         * Color of hidden text in Input Widget.
-         */
-        INPUTWIDGET_HIDDEN,
-
-        /**
-         * Color of Button without focus.
-         */
-        BUTTON_NOFOCUS,
-
-        /**
-         * Color of Button with focus.
-         */
-        BUTTON_FOCUS,
-
-        /**
-         * Color of ListBox
-         */
-        LISTBOX,
-
-        /**
-         * Color of ListBox with Focus
-         */
-        LISTBOX_HILITE,
-
-        /**
-         * Color of Check Box Groups
-         */
-        CHECKBOXGROUP,
-
-        /**
-         * Color of Title Bar
-         */
-        TITLEBAR,
-
-        /**
-         * Color of Status Bar
-         */
-        STATUSBAR,
-
-        /**
-         * Number of Colors.
-         *
-         * @internal
-         *
-         * Used by Colors to initialize color pairs as sentinel.
-         */
-        NUMBER_OF_COLOROBJ
-    };
+/**
+ * Initalizing colors and preparing colors
+ */
+class Colors {
+   private:
+    /**
+     * Flag, whether or not colors have been initialized.
+     */
+    static bool __initialized;
 
     /**
-     * Initalizing colors and preparing colors
+     * Array holding CursColor
+     *
+     * @internal
+     *
+     * The color pairs for curses are access by using the
+     * names defined in the @c COLOR enum.
      */
-    class Colors {
-        private:
-            /**
-             * Flag, whether or not colors have been initialized.
-             */
-            static bool __initialized;
+    static std::vector<INTERNAL::CursColor> __colors;
 
-            /**
-             * Array holding CursColor
-             *
-             * @internal
-             *
-             * The color pairs for curses are access by using the
-             * names defined in the @c COLOR enum.
-             */
-            static std::vector<INTERNAL::CursColor> __colors;
+   public:
+    /**
+     * Initializes Colors
+     *
+     * Initializes the color pairs used by curses if the
+     * terminal supports colors.
+     */
+    static void init_colors(const std::string& colorstr = std::string());
 
-        public:
-            /**
-             * Initializes Colors
-             *
-             * Initializes the color pairs used by curses if the
-             * terminal supports colors.
-             */
-            static void init_colors(const std::string& colorstr=
-                                        std::string() );
+    static int color_pair(COLOROBJ c);
+};
+}  // namespace YACURS
 
-            static int color_pair(COLOROBJ c);
-    };
-} // namespace YACURS
-
-#endif // COLORS_H
+#endif  // COLORS_H

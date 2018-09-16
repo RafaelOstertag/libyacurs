@@ -19,8 +19,8 @@
 //
 // $Id$
 
-#include <cstdlib>
 #include <cassert>
+#include <cstdlib>
 
 #include "messagebox.h"
 #include "yacursex.h"
@@ -30,8 +30,7 @@ using namespace YACURS;
 //
 // Private
 //
-MessageBox&
-MessageBox::operator=(const MessageBox&) {
+MessageBox& MessageBox::operator=(const MessageBox&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -44,12 +43,9 @@ MessageBox::operator=(const MessageBox&) {
 // Public
 //
 
-MessageBox::MessageBox(const std::string& _title,
-                       const std::string& _message,
-                       DIALOG_TYPE _dt) :
-    Dialog(_title, _dt),
-    __message(_message),
-    __vpack() {
+MessageBox::MessageBox(const std::string& _title, const std::string& _message,
+                       DIALOG_TYPE _dt)
+    : Dialog(_title, _dt), __message(_message), __vpack() {
     __message.color(DIALOG);
     // Required to make dynlabel work
     __vpack.always_dynamic(true);
@@ -57,5 +53,4 @@ MessageBox::MessageBox(const std::string& _title,
     widget(&__vpack);
 }
 
-MessageBox::~MessageBox() {
-}
+MessageBox::~MessageBox() {}

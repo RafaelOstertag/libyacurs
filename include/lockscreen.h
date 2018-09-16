@@ -25,42 +25,41 @@
 
 #include <string>
 
-#include "window.h"
-#include "unlockdialog.h"
 #include "messagebox.h"
+#include "unlockdialog.h"
+#include "window.h"
 
 namespace YACURS {
-    class LockScreen : public Window {
-        private:
-            unsigned int __timeout;
-            unsigned int __unlock_diag_timeout;
-            UnlockDialog* __unlock_dialog;
-            MessageBox* __msgbox;
-            // Not supported
-            LockScreen& operator=(const LockScreen&);
+class LockScreen : public Window {
+   private:
+    unsigned int __timeout;
+    unsigned int __unlock_diag_timeout;
+    UnlockDialog* __unlock_dialog;
+    MessageBox* __msgbox;
+    // Not supported
+    LockScreen& operator=(const LockScreen&);
 
-        protected:
-            virtual void key_event_handler(Event& _e);
+   protected:
+    virtual void key_event_handler(Event& _e);
 
-            virtual void window_close_event_handler(Event& _e);
+    virtual void window_close_event_handler(Event& _e);
 
-        public:
-            LockScreen(UnlockDialog* _unlock,
-                       unsigned int timeout,
-                       unsigned int ulck_timeout);
-            virtual ~LockScreen();
+   public:
+    LockScreen(UnlockDialog* _unlock, unsigned int timeout,
+               unsigned int ulck_timeout);
+    virtual ~LockScreen();
 
-            unsigned int timeout() const;
+    unsigned int timeout() const;
 
-            unsigned int unlock_dialog_timeout() const;
+    unsigned int unlock_dialog_timeout() const;
 
-            virtual void close_unlock_dialog();
+    virtual void close_unlock_dialog();
 
-            // From WindowBase
-            void show();
+    // From WindowBase
+    void show();
 
-            void close();
-    };
-}
+    void close();
+};
+}  // namespace YACURS
 
-#endif // LOCKSCREEN_H
+#endif  // LOCKSCREEN_H

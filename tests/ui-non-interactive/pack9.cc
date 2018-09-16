@@ -38,104 +38,101 @@ YACURS::Label* label14;
 YACURS::Label* label15;
 YACURS::Label* label16;
 
-void
-alrm(YACURS::Event& _e) {
+void alrm(YACURS::Event& _e) {
     static int i = 0;
 
     assert(_e == YACURS::EVT_SIGALRM);
 
     switch (i++) {
-    case 0:
-        YACURS::Curses::title()->line(
-            "Pack 9: always_dynamic=false, hinting=false");
-        hpack->always_dynamic(false);
-        hpack->hinting(false);
-        hpack1->always_dynamic(false);
-        hpack1->hinting(false);
-        hpack2->always_dynamic(false);
-        hpack2->hinting(false);
-        vpack1->always_dynamic(false);
-        vpack1->hinting(false);
-        vpack2->always_dynamic(false);
-        vpack2->hinting(false);
-        vpack2_1->always_dynamic(false);
-        vpack2_1->hinting(false);
-        vpack2_2->always_dynamic(false);
-        vpack2_2->hinting(false);
-        alarm(2);
-        break;
+        case 0:
+            YACURS::Curses::title()->line(
+                "Pack 9: always_dynamic=false, hinting=false");
+            hpack->always_dynamic(false);
+            hpack->hinting(false);
+            hpack1->always_dynamic(false);
+            hpack1->hinting(false);
+            hpack2->always_dynamic(false);
+            hpack2->hinting(false);
+            vpack1->always_dynamic(false);
+            vpack1->hinting(false);
+            vpack2->always_dynamic(false);
+            vpack2->hinting(false);
+            vpack2_1->always_dynamic(false);
+            vpack2_1->hinting(false);
+            vpack2_2->always_dynamic(false);
+            vpack2_2->hinting(false);
+            alarm(2);
+            break;
 
-    case 1:
-        YACURS::Curses::title()->line(
-            "Pack 9: always_dynamic=true, hinting=false");
-        hpack->always_dynamic(true);
-        hpack->hinting(false);
-        hpack1->always_dynamic(true);
-        hpack1->hinting(false);
-        hpack2->always_dynamic(true);
-        hpack2->hinting(false);
-        vpack1->always_dynamic(true);
-        vpack1->hinting(false);
-        vpack2->always_dynamic(true);
-        vpack2->hinting(false);
-        vpack2_1->always_dynamic(true);
-        vpack2_1->hinting(false);
-        vpack2_2->always_dynamic(true);
-        vpack2_2->hinting(false);
-        alarm(2);
-        break;
+        case 1:
+            YACURS::Curses::title()->line(
+                "Pack 9: always_dynamic=true, hinting=false");
+            hpack->always_dynamic(true);
+            hpack->hinting(false);
+            hpack1->always_dynamic(true);
+            hpack1->hinting(false);
+            hpack2->always_dynamic(true);
+            hpack2->hinting(false);
+            vpack1->always_dynamic(true);
+            vpack1->hinting(false);
+            vpack2->always_dynamic(true);
+            vpack2->hinting(false);
+            vpack2_1->always_dynamic(true);
+            vpack2_1->hinting(false);
+            vpack2_2->always_dynamic(true);
+            vpack2_2->hinting(false);
+            alarm(2);
+            break;
 
-    case 2:
-        YACURS::Curses::title()->line(
-            "Pack 9: always_dynamic=false, hinting=true");
-        hpack->always_dynamic(false);
-        hpack->hinting(true);
-        hpack1->always_dynamic(false);
-        hpack1->hinting(true);
-        hpack2->always_dynamic(false);
-        hpack2->hinting(true);
-        vpack1->always_dynamic(false);
-        vpack1->hinting(true);
-        vpack2->always_dynamic(false);
-        vpack2->hinting(true);
-        vpack2_1->always_dynamic(false);
-        vpack2_1->hinting(true);
-        vpack2_2->always_dynamic(false);
-        vpack2_2->hinting(true);
-        alarm(2);
-        break;
+        case 2:
+            YACURS::Curses::title()->line(
+                "Pack 9: always_dynamic=false, hinting=true");
+            hpack->always_dynamic(false);
+            hpack->hinting(true);
+            hpack1->always_dynamic(false);
+            hpack1->hinting(true);
+            hpack2->always_dynamic(false);
+            hpack2->hinting(true);
+            vpack1->always_dynamic(false);
+            vpack1->hinting(true);
+            vpack2->always_dynamic(false);
+            vpack2->hinting(true);
+            vpack2_1->always_dynamic(false);
+            vpack2_1->hinting(true);
+            vpack2_2->always_dynamic(false);
+            vpack2_2->hinting(true);
+            alarm(2);
+            break;
 
-    case 3:
-        YACURS::Curses::title()->line(
-            "Pack 9: always_dynamic=true, hinting=true");
-        hpack->always_dynamic(true);
-        hpack->hinting(true);
-        hpack1->always_dynamic(true);
-        hpack1->hinting(true);
-        hpack2->always_dynamic(true);
-        hpack2->hinting(true);
-        vpack1->always_dynamic(true);
-        vpack1->hinting(true);
-        vpack2->always_dynamic(true);
-        vpack2->hinting(true);
-        vpack2_1->always_dynamic(true);
-        vpack2_1->hinting(true);
-        vpack2_2->always_dynamic(true);
-        vpack2_2->hinting(true);
-        alarm(2);
-        break;
+        case 3:
+            YACURS::Curses::title()->line(
+                "Pack 9: always_dynamic=true, hinting=true");
+            hpack->always_dynamic(true);
+            hpack->hinting(true);
+            hpack1->always_dynamic(true);
+            hpack1->hinting(true);
+            hpack2->always_dynamic(true);
+            hpack2->hinting(true);
+            vpack1->always_dynamic(true);
+            vpack1->hinting(true);
+            vpack2->always_dynamic(true);
+            vpack2->hinting(true);
+            vpack2_1->always_dynamic(true);
+            vpack2_1->hinting(true);
+            vpack2_2->always_dynamic(true);
+            vpack2_2->hinting(true);
+            alarm(2);
+            break;
 
-    default:
-        YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT) );
-        break;
+        default:
+            YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
+            break;
     }
 }
 
-int
-main() {
+int main() {
     // test will not be run if stdout or stdin is not a tty.
-    if (isatty(STDOUT_FILENO)!=1 ||
-	isatty(STDIN_FILENO)!=1) exit(77);
+    if (isatty(STDOUT_FILENO) != 1 || isatty(STDIN_FILENO) != 1) exit(77);
 
 #if 0
     std::cout << getpid() << std::endl;
@@ -143,18 +140,17 @@ main() {
 #endif
 
 #ifdef YACURS_USE_WCHAR
-    if (setlocale(LC_ALL,"en_US.UTF-8")==0) exit(77);
+    if (setlocale(LC_ALL, "en_US.UTF-8") == 0) exit(77);
 #endif
 
     try {
         YACURS::Curses::init();
 
-        YACURS::TitleBar* title = new YACURS::TitleBar(
-            YACURS::TitleBar::POS_TOP,
-            "Pack 9:");
+        YACURS::TitleBar* title =
+            new YACURS::TitleBar(YACURS::TitleBar::POS_TOP, "Pack 9:");
         YACURS::Curses::title(title);
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0) );
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0));
         w1->frame(true);
 
         vpack = new YACURS::VPack;
@@ -263,8 +259,8 @@ main() {
 
         YACURS::Curses::mainwindow(w1);
 
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(
-                                              YACURS::EVT_SIGALRM, &alrm) );
+        YACURS::EventQueue::connect_event(
+            YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM, &alrm));
 
         alarm(5);
         YACURS::Curses::run();

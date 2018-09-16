@@ -41,32 +41,18 @@ using namespace YACURS::INTERNAL;
 // Public
 //
 
-EventQueueStats::EventQueueStats() {
-    clear();
-}
+EventQueueStats::EventQueueStats() { clear(); }
 
-void
-EventQueueStats::clear() {
-    evq_max_proc_time =
-        evt_max_proc_time =
-	ec_call_max_time =
-	evt_submitted =
-	evt_pending_cleanup =
-	evt_proc_total =
-	ec_max =
-	ec_calls_total =
-	ec_rm_total =
-	ec_rm_cancelled =
-	ec_rm_skipped =
-	evq_size_max =
-	ec_rmq_size_max = 0;
+void EventQueueStats::clear() {
+    evq_max_proc_time = evt_max_proc_time = ec_call_max_time = evt_submitted =
+        evt_pending_cleanup = evt_proc_total = ec_max = ec_calls_total =
+            ec_rm_total = ec_rm_cancelled = ec_rm_skipped = evq_size_max =
+                ec_rmq_size_max = 0;
 
     ec_min = (uint32_t)-1;
 
-    evq_min_proc_time =
-        evt_min_proc_time =
-            ec_call_min_time =
-                ~( ( (clock_t)1) << (sizeof (clock_t) * 8 - 1) );
+    evq_min_proc_time = evt_min_proc_time = ec_call_min_time =
+        ~(((clock_t)1) << (sizeof(clock_t) * 8 - 1));
 
     evt_submitted_by_type.clear();
     evt_proc_by_type.clear();
@@ -74,18 +60,18 @@ EventQueueStats::clear() {
     ec_max_by_type.clear();
 }
 
-void
-EventQueueStats::dump(std::ostream& _os) const {
-#define PRINTSTATS(t, v) _os.width(40);                                  \
-    _os.fill('.');                                                      \
-    _os.setf(std::ios_base::left, std::ios_base::adjustfield);           \
-    _os << t;                                                           \
-    _os.width(6);                                                       \
-    _os.fill(' ');                                                      \
-    _os.setf(std::ios_base::right, std::ios_base::adjustfield);          \
+void EventQueueStats::dump(std::ostream& _os) const {
+#define PRINTSTATS(t, v)                                        \
+    _os.width(40);                                              \
+    _os.fill('.');                                              \
+    _os.setf(std::ios_base::left, std::ios_base::adjustfield);  \
+    _os << t;                                                   \
+    _os.width(6);                                               \
+    _os.fill(' ');                                              \
+    _os.setf(std::ios_base::right, std::ios_base::adjustfield); \
     _os << v << std::endl
 
-        _os << "EventQueue Statistics" << std::endl;
+    _os << "EventQueue Statistics" << std::endl;
     _os << "=====================" << std::endl;
     _os << std::endl;
 
@@ -117,7 +103,7 @@ EventQueueStats::dump(std::ostream& _os) const {
         evt_submitted_by_type.begin();
 
     uint32_t total = 0;
-    while (map_it != evt_submitted_by_type.end() ) {
+    while (map_it != evt_submitted_by_type.end()) {
         PRINTSTATS(Event::evt2str(map_it->first), map_it->second);
         total += map_it->second;
         map_it++;
@@ -132,7 +118,7 @@ EventQueueStats::dump(std::ostream& _os) const {
     map_it = evt_proc_by_type.begin();
 
     total = 0;
-    while (map_it != evt_proc_by_type.end() ) {
+    while (map_it != evt_proc_by_type.end()) {
         PRINTSTATS(Event::evt2str(map_it->first), map_it->second);
         total += map_it->second;
         map_it++;
@@ -147,7 +133,7 @@ EventQueueStats::dump(std::ostream& _os) const {
     map_it = ec_call_by_type.begin();
 
     total = 0;
-    while (map_it != ec_call_by_type.end() ) {
+    while (map_it != ec_call_by_type.end()) {
         PRINTSTATS(Event::evt2str(map_it->first), map_it->second);
         total += map_it->second;
         map_it++;
@@ -162,7 +148,7 @@ EventQueueStats::dump(std::ostream& _os) const {
     map_it = ec_max_by_type.begin();
 
     total = 0;
-    while (map_it != ec_max_by_type.end() ) {
+    while (map_it != ec_max_by_type.end()) {
         PRINTSTATS(Event::evt2str(map_it->first), map_it->second);
         total += map_it->second;
         map_it++;

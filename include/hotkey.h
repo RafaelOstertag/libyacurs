@@ -24,23 +24,23 @@
 #define HOTKEY_H 1
 
 namespace YACURS {
-    class HotKey {
-        private:
-            int __key;
+class HotKey {
+   private:
+    int __key;
 
-        public:
-            HotKey(int _k);
-            HotKey(const HotKey& hk);
-            HotKey& operator=(const HotKey& hk);
+   public:
+    HotKey(int _k);
+    HotKey(const HotKey& hk);
+    HotKey& operator=(const HotKey& hk);
 
-            virtual ~HotKey();
+    virtual ~HotKey();
 
-            int key() const;
+    int key() const;
 
-            virtual void action() = 0;
+    virtual void action() = 0;
 
-            virtual HotKey* clone() const = 0;
-    };
-}
+    virtual HotKey* clone() const = 0;
+};
+}  // namespace YACURS
 
-#endif // HOTKEY_H
+#endif  // HOTKEY_H

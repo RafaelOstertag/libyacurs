@@ -34,84 +34,82 @@
 #include "messagebox2.h"
 
 namespace YACURS {
-    class FileDialog : public Dialog {
-        private:
-            MessageBox2* __errmsgbox;
-	    MessageBox2* __filetypemismatch;
-            DynLabel __path;
-            ListBox<> __directories;
-            ListBox<> __files;
-            Input<> __filename;
-            HPack __hpack;
-            VPack __vpack;
-	    bool __do_chdir;
-	    FILEDIALOG_SELECTION_TYPE __sel_type;
-	    std::string __suffix;
-	    
-            // Not supported
-            FileDialog& operator=(const FileDialog&);
+class FileDialog : public Dialog {
+   private:
+    MessageBox2* __errmsgbox;
+    MessageBox2* __filetypemismatch;
+    DynLabel __path;
+    ListBox<> __directories;
+    ListBox<> __files;
+    Input<> __filename;
+    HPack __hpack;
+    VPack __vpack;
+    bool __do_chdir;
+    FILEDIALOG_SELECTION_TYPE __sel_type;
+    std::string __suffix;
 
-	    std::string cleanup_path(const std::string& p) const;
+    // Not supported
+    FileDialog& operator=(const FileDialog&);
 
-        protected:
-            std::string dir_up(const std::string& dir);
+    std::string cleanup_path(const std::string& p) const;
 
-            void read_dir();
+   protected:
+    std::string dir_up(const std::string& dir);
 
-            void listbox_enter_handler(Event& _e);
+    void read_dir();
 
-	    void filename_readonly(bool _ro);
+    void listbox_enter_handler(Event& _e);
 
-	    std::string getcwd() const;
+    void filename_readonly(bool _ro);
 
-	    virtual void window_close_handler(Event& _e);
+    std::string getcwd() const;
 
-	    virtual void button_press_handler(Event& _e);
+    virtual void window_close_handler(Event& _e);
 
-	    /**
-	     * Test if the selected file path matches the requested
-	     * selection type.
-	     *
-	     * Be advised, if the method returns @c false, it has
-	     * created a dialog.
-	     *
-	     * @return @c true if the selected file matches the
-	     * requested selection type. @c false otherwise.
-	     */
-	    bool selection_type_match();
+    virtual void button_press_handler(Event& _e);
 
-        public:
-            FileDialog(const std::string& title,
-		       std::string _path=std::string(),
-		       bool _do_chdir=false,
-		       DIALOG_TYPE _dt=OKCANCEL);
+    /**
+     * Test if the selected file path matches the requested
+     * selection type.
+     *
+     * Be advised, if the method returns @c false, it has
+     * created a dialog.
+     *
+     * @return @c true if the selected file matches the
+     * requested selection type. @c false otherwise.
+     */
+    bool selection_type_match();
 
-            virtual ~FileDialog();
+   public:
+    FileDialog(const std::string& title, std::string _path = std::string(),
+               bool _do_chdir = false, DIALOG_TYPE _dt = OKCANCEL);
 
-            std::string filepath() const;
+    virtual ~FileDialog();
 
-            const std::string& directory() const;
+    std::string filepath() const;
 
-            std::string filename() const;
+    const std::string& directory() const;
 
-	    void do_chdir(bool _v);
+    std::string filename() const;
 
-	    bool do_chdir() const;
+    void do_chdir(bool _v);
 
-	    void selection_type(FILEDIALOG_SELECTION_TYPE _t);
+    bool do_chdir() const;
 
-	    FILEDIALOG_SELECTION_TYPE selection_type() const;
+    void selection_type(FILEDIALOG_SELECTION_TYPE _t);
 
-	    /**
-	     * File name suffix.
-	     *
-	     * String that is appended to file name and file path when
-	     * selection type is FILE.
-	     */
-	    void suffix(const std::string& _s);
+    FILEDIALOG_SELECTION_TYPE selection_type() const;
 
-            void refresh(bool immediate);
-    };
-}
+    /**
+     * File name suffix.
+     *
+     * String that is appended to file name and file path when
+     * selection type is FILE.
+     */
+    void suffix(const std::string& _s);
 
-#endif // FILEDIALOG_H
+    void refresh(bool immediate);
+};
+}  // namespace YACURS
+
+#endif  // FILEDIALOG_H

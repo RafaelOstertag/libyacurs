@@ -23,15 +23,15 @@
 #include "config.h"
 #endif
 
-#include <cerrno>
 #include <cassert>
+#include <cerrno>
 #include <cstdlib>
 
 #include "curs.h"
-#include "yacursex.h"
-#include "windowbase.h"
 #include "eventqueue.h"
+#include "windowbase.h"
 #include "yacursconst.h"
+#include "yacursex.h"
 
 using namespace YACURS;
 
@@ -42,8 +42,7 @@ WindowBase::WindowBase(const WindowBase& wb) {
     throw EXCEPTIONS::NotSupported();
 }
 
-WindowBase&
-WindowBase::operator=(const WindowBase&) {
+WindowBase& WindowBase::operator=(const WindowBase&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -51,18 +50,13 @@ WindowBase::operator=(const WindowBase&) {
 //
 // Protected
 //
-YACURS::INTERNAL::CursWin*
-WindowBase::curses_window() const {
+YACURS::INTERNAL::CursWin* WindowBase::curses_window() const {
     return __curses_window;
 }
 
-const Area&
-WindowBase::area() const {
-    return __area;
-}
+const Area& WindowBase::area() const { return __area; }
 
-Area
-WindowBase::widget_area() const {
+Area WindowBase::widget_area() const {
     Area widget_area;
 
     if (__frame) {
@@ -76,8 +70,7 @@ WindowBase::widget_area() const {
     return widget_area;
 }
 
-void
-WindowBase::unrealize() {
+void WindowBase::unrealize() {
     UNREALIZE_ENTER;
 
     assert(__curses_window != 0);
@@ -88,47 +81,35 @@ WindowBase::unrealize() {
     UNREALIZE_LEAVE;
 }
 
-bool
-WindowBase::on_close() {
-    return true;
-}
+bool WindowBase::on_close() { return true; }
 
 //
 // Public
 //
 
-WindowBase::WindowBase(const Margin& _m) :
-    __area(Coordinates(), Curses::inquiry_screensize() ),
-    __margin(_m),
-    __curses_window(0),
-    __frame(false),
-    __shown(false),
-    __color(DEFAULT) {
+WindowBase::WindowBase(const Margin& _m)
+    : __area(Coordinates(), Curses::inquiry_screensize()),
+      __margin(_m),
+      __curses_window(0),
+      __frame(false),
+      __shown(false),
+      __color(DEFAULT) {
     // We always want to receive this event. Therefore it was moved
     // from show() to ctor.
-    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_SIGWINCH,
-                                                                this,
-                                                                &WindowBase::
-                                                                resize_handler) );
+    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(
+        EVT_SIGWINCH, this, &WindowBase::resize_handler));
 }
 
 WindowBase::~WindowBase() {
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
-                                     EVT_REDRAW, this,
-                                     &WindowBase::redraw_handler) );
+        EVT_REDRAW, this, &WindowBase::redraw_handler));
 
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
-                                     EVT_FORCEREFRESH, this,
-                                     &WindowBase::force_refresh_handler) );
+        EVT_FORCEREFRESH, this, &WindowBase::force_refresh_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
-                                     EVT_REFRESH,
-                                     this,
-                                     &WindowBase
-                                     ::
-                                     refresh_handler) );
+        EVT_REFRESH, this, &WindowBase ::refresh_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
-                                     EVT_SIGWINCH, this,
-                                     &WindowBase::resize_handler) );
+        EVT_SIGWINCH, this, &WindowBase::resize_handler));
 
     if (realization() == REALIZED) {
         assert(__curses_window != 0);
@@ -136,62 +117,41 @@ WindowBase::~WindowBase() {
     }
 }
 
-void
-WindowBase::margin(const Margin& _m) {
+void WindowBase::margin(const Margin& _m) {
     if (realization() == REALIZED) throw EXCEPTIONS::AlreadyRealized();
     __margin = _m;
 }
 
-const Margin&
-WindowBase::margin() const {
-    return __margin;
-}
+const Margin& WindowBase::margin() const { return __margin; }
 
-bool
-WindowBase::frame() const {
-    return __frame;
-}
+bool WindowBase::frame() const { return __frame; }
 
-void
-WindowBase::frame(bool b) {
-    __frame = b;
-}
+void WindowBase::frame(bool b) { __frame = b; }
 
-void
-WindowBase::color(COLOROBJ c) {
-    __color = c;
-}
+void WindowBase::color(COLOROBJ c) { __color = c; }
 
 COLOROBJ
-WindowBase::color() const {
-    return __color;
-}
+WindowBase::color() const { return __color; }
 
-void
-WindowBase::show() {
+void WindowBase::show() {
     if (realization() != UNREALIZED) return;
 
     EventQueue::connect_event(EventConnectorMethod1<WindowBase>(
-                                  EVT_REDRAW, this,
-                                  &WindowBase::redraw_handler) );
+        EVT_REDRAW, this, &WindowBase::redraw_handler));
 
     EventQueue::connect_event(EventConnectorMethod1<WindowBase>(
-                                  EVT_FORCEREFRESH, this,
-                                  &WindowBase::force_refresh_handler) );
-    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(EVT_REFRESH,
-                                                                this,
-                                                                &WindowBase::
-                                                                refresh_handler) );
+        EVT_FORCEREFRESH, this, &WindowBase::force_refresh_handler));
+    EventQueue::connect_event(EventConnectorMethod1<WindowBase>(
+        EVT_REFRESH, this, &WindowBase::refresh_handler));
 
     realize();
     refresh(true);
-    EventQueue::submit(EventEx<WindowBase*>(EVT_WINDOW_SHOW, this) );
+    EventQueue::submit(EventEx<WindowBase*>(EVT_WINDOW_SHOW, this));
 
     __shown = true;
 }
 
-void
-WindowBase::close() {
+void WindowBase::close() {
     if (realization() != REALIZED) return;
 
     if (!on_close()) return;
@@ -199,18 +159,12 @@ WindowBase::close() {
     unrealize();
 
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
-                                     EVT_REDRAW, this,
-                                     &WindowBase::redraw_handler) );
+        EVT_REDRAW, this, &WindowBase::redraw_handler));
 
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
-                                     EVT_FORCEREFRESH, this,
-                                     &WindowBase::force_refresh_handler) );
+        EVT_FORCEREFRESH, this, &WindowBase::force_refresh_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<WindowBase>(
-                                     EVT_REFRESH,
-                                     this,
-                                     &WindowBase
-                                     ::
-                                     refresh_handler) );
+        EVT_REFRESH, this, &WindowBase ::refresh_handler));
 
     // We might have obstructed another window, so make sure it
     // receives a refresh.
@@ -225,18 +179,14 @@ WindowBase::close() {
     //
     // This caused problems with the focus manager, if a Label was
     // updated in the EVT_WINDOW_CLOSE handler.
-    EventQueue::submit(EventEx<WindowBase*>(EVT_WINDOW_CLOSE, this) );
+    EventQueue::submit(EventEx<WindowBase*>(EVT_WINDOW_CLOSE, this));
 
     __shown = false;
 }
 
-bool
-WindowBase::shown() const {
-    return __shown;
-}
+bool WindowBase::shown() const { return __shown; }
 
-void
-WindowBase::redraw_handler(Event& _e) {
+void WindowBase::redraw_handler(Event& _e) {
     if (realization() != REALIZED) return;
 
     assert(_e == EVT_REDRAW);
@@ -245,8 +195,7 @@ WindowBase::redraw_handler(Event& _e) {
     __curses_window->clear();
 }
 
-void
-WindowBase::force_refresh_handler(Event& _e) {
+void WindowBase::force_refresh_handler(Event& _e) {
     if (realization() != REALIZED) return;
 
     assert(_e == EVT_FORCEREFRESH);
@@ -255,21 +204,18 @@ WindowBase::force_refresh_handler(Event& _e) {
     __curses_window->touch();
 }
 
-void
-WindowBase::refresh_handler(Event& _e) {
+void WindowBase::refresh_handler(Event& _e) {
     assert(_e == EVT_REFRESH);
     refresh(false);
 }
 
-void
-WindowBase::resize_handler(Event& _e) {
+void WindowBase::resize_handler(Event& _e) {
     assert(_e == EVT_SIGWINCH);
     EventEx<Size>& winch = dynamic_cast<EventEx<Size>&>(_e);
-    resize(Area(Coordinates(0, 0), winch.data() ) );
+    resize(Area(Coordinates(0, 0), winch.data()));
 }
 
-void
-WindowBase::refresh(bool immediate) {
+void WindowBase::refresh(bool immediate) {
     if (realization() != REALIZED && realization() != REALIZING) return;
 
     assert(__curses_window != 0);
@@ -277,8 +223,7 @@ WindowBase::refresh(bool immediate) {
     __curses_window->refresh(immediate);
 }
 
-void
-WindowBase::resize(const Area& _a) {
+void WindowBase::resize(const Area& _a) {
     //
     // Keep in mind: a resize does not refresh!
     //
@@ -304,8 +249,7 @@ WindowBase::resize(const Area& _a) {
     realize();
 }
 
-void
-WindowBase::realize() {
+void WindowBase::realize() {
     REALIZE_ENTER;
 
     assert(__area.x() >= 0);
@@ -315,9 +259,7 @@ WindowBase::realize() {
 
     Area _tmp = __area - __margin;
 
-    if (_tmp.x() < 0 ||
-        _tmp.y() < 0 ||
-        _tmp.rows() < MIN_WINDOW_ROWS ||
+    if (_tmp.x() < 0 || _tmp.y() < 0 || _tmp.rows() < MIN_WINDOW_ROWS ||
         _tmp.cols() < MIN_WINDOW_COLS) {
         realization(UNREALIZED);
         return;

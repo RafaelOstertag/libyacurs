@@ -11,17 +11,14 @@
 
 #include "yacurs.h"
 
-void
-alrm(YACURS::Event& _e) {
+void alrm(YACURS::Event& _e) {
     assert(_e == YACURS::EVT_SIGALRM);
-    YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT) );
+    YACURS::EventQueue::submit(YACURS::Event(YACURS::EVT_QUIT));
 }
 
-int
-main() {
+int main() {
     // test will not be run if stdout or stdin is not a tty.
-    if (isatty(STDOUT_FILENO)!=1 ||
-	isatty(STDIN_FILENO)!=1) exit(77);
+    if (isatty(STDOUT_FILENO) != 1 || isatty(STDIN_FILENO) != 1) exit(77);
 
 #if 0
     std::cout << getpid() << std::endl;
@@ -29,18 +26,17 @@ main() {
 #endif
 
 #ifdef YACURS_USE_WCHAR
-    if (setlocale(LC_ALL,"en_US.UTF-8")==0) exit(77);
+    if (setlocale(LC_ALL, "en_US.UTF-8") == 0) exit(77);
 #endif
 
     try {
         YACURS::Curses::init();
 
-        YACURS::TitleBar* title = new YACURS::TitleBar(
-            YACURS::TitleBar::POS_TOP,
-            "Pack 1");
+        YACURS::TitleBar* title =
+            new YACURS::TitleBar(YACURS::TitleBar::POS_TOP, "Pack 1");
         YACURS::Curses::title(title);
 
-        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0) );
+        YACURS::Window* w1 = new YACURS::Window(YACURS::Margin(1, 0, 0, 0));
         w1->frame(true);
 
         YACURS::VPack* vpack = new YACURS::VPack;
@@ -63,8 +59,8 @@ main() {
 
         YACURS::Curses::mainwindow(w1);
 
-        YACURS::EventQueue::connect_event(YACURS::EventConnectorFunction1(
-                                              YACURS::EVT_SIGALRM, &alrm) );
+        YACURS::EventQueue::connect_event(
+            YACURS::EventConnectorFunction1(YACURS::EVT_SIGALRM, &alrm));
 
         alarm(3);
         YACURS::Curses::run();

@@ -26,59 +26,59 @@
 #include "widget.h"
 
 namespace YACURS {
+/**
+ * Display text on the screen.
+ *
+ * Simple widget for displaying text on the screen.
+ *
+ * Label is not dynamic, i.e. if the text is too long, it might happen
+ * that it cannot be realized() and throwing an exception.
+ */
+class Rule : public Widget {
+   private:
+    // Not supported
+    Rule& operator=(const Rule&);
+
+   protected:
+    COLOROBJ __color;
+
     /**
-     * Display text on the screen.
-     *
-     * Simple widget for displaying text on the screen.
-     *
-     * Label is not dynamic, i.e. if the text is too long, it might happen
-     * that it cannot be realized() and throwing an exception.
+     * The size the Label requires. Rows are always 1. Cols are
+     * __label.length(). Derrived classes may define other
+     * constraints.
      */
-    class Rule : public Widget {
-        private:
-            // Not supported
-            Rule& operator=(const Rule&);
+    Size __size;
 
-        protected:
-            COLOROBJ __color;
+   public:
+    /**
+     * Constructor.
+     *
+     * @param _l label
+     */
+    Rule();
 
-            /**
-             * The size the Label requires. Rows are always 1. Cols are
-             * __label.length(). Derrived classes may define other
-             * constraints.
-             */
-            Size __size;
+    virtual ~Rule();
 
-        public:
-            /**
-             * Constructor.
-             *
-             * @param _l label
-             */
-            Rule();
+    void color(COLOROBJ c);
 
-            virtual ~Rule();
+    COLOROBJ color() const;
 
-            void color(COLOROBJ c);
+    // From WidgetBase
 
-            COLOROBJ color() const;
+    Size size() const;
 
-            // From WidgetBase
+    /**
+     * Dummy. Does nothing.
+     *
+     * Rule is not a container Widget, hence it may not notified
+     * of size changes().
+     *
+     * @return always @false
+     */
+    bool size_change();
 
-            Size size() const;
+    void reset_size();
+};
+}  // namespace YACURS
 
-            /**
-             * Dummy. Does nothing.
-             *
-             * Rule is not a container Widget, hence it may not notified
-             * of size changes().
-             *
-             * @return always @false
-             */
-            bool size_change();
-
-            void reset_size();
-    };
-}
-
-#endif // RULE_H
+#endif  // RULE_H

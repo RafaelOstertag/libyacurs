@@ -40,62 +40,42 @@ using namespace YACURS;
 //
 // Public
 //
-EventConnectorBase::EventConnectorBase(const EventType _e, bool _s) :
-    evt(_e), __suspended(_s) {
+EventConnectorBase::EventConnectorBase(const EventType _e, bool _s)
+    : evt(_e), __suspended(_s) {}
+
+EventConnectorBase::~EventConnectorBase() {}
+
+bool EventConnectorBase::operator==(const EventConnectorBase& _ec) const {
+    return (evt == _ec.evt) && (id() == _ec.id());
 }
 
-EventConnectorBase::~EventConnectorBase() {
-}
-
-bool
-EventConnectorBase::operator==(const EventConnectorBase& _ec) const {
-    return (evt == _ec.evt) &&
-           (id() == _ec.id() );
-}
-
-bool
-EventConnectorBase::operator!=(const EventConnectorBase& _ec) const {
+bool EventConnectorBase::operator!=(const EventConnectorBase& _ec) const {
     return !operator==(_ec);
 }
 
-bool
-EventConnectorBase::operator==(const Event& _eb) const {
+bool EventConnectorBase::operator==(const Event& _eb) const {
     return _eb.type() == evt;
 }
 
-bool
-EventConnectorBase::operator!=(const Event& _eb) const {
+bool EventConnectorBase::operator!=(const Event& _eb) const {
     return !operator==(_eb);
 }
 
-bool
-EventConnectorBase::operator==(const EventType _et) const {
+bool EventConnectorBase::operator==(const EventType _et) const {
     return _et == evt;
 }
 
-bool
-EventConnectorBase::operator!=(const EventType _et) const {
+bool EventConnectorBase::operator!=(const EventType _et) const {
     return !operator==(_et);
 }
 
-const EventType
-EventConnectorBase::type() const {
-    return evt;
-}
+const EventType EventConnectorBase::type() const { return evt; }
 
-void
-EventConnectorBase::suspended(bool _s) {
-    __suspended = _s;
-}
+void EventConnectorBase::suspended(bool _s) { __suspended = _s; }
 
-bool
-EventConnectorBase::suspended() const {
-    return __suspended;
-}
+bool EventConnectorBase::suspended() const { return __suspended; }
 
-EventConnectorBase::operator const EventType() const {
-    return evt;
-}
+EventConnectorBase::operator const EventType() const { return evt; }
 
 ////////////////////////////////////////////////////////
 //
@@ -106,30 +86,25 @@ EventConnectorBase::operator const EventType() const {
 //
 // Protected
 //
-uintptr_t
-EventConnectorFunction1::id() const {
-    return (uintptr_t)__func;
-}
+uintptr_t EventConnectorFunction1::id() const { return (uintptr_t)__func; }
 
 //
 // Public
 //
 EventConnectorFunction1::EventConnectorFunction1(const EventType _e,
-                                                 fptr_t _func) :
-    EventConnectorBase(_e), __func(_func) {
+                                                 fptr_t _func)
+    : EventConnectorBase(_e), __func(_func) {
     assert(__func != 0);
 }
 
-void
-EventConnectorFunction1::call(Event& _e) const {
+void EventConnectorFunction1::call(Event& _e) const {
     assert(__func != 0);
 
-    if (suspended() ) return;
+    if (suspended()) return;
 
     __func(_e);
 }
 
-EventConnectorBase*
-EventConnectorFunction1::clone() const {
+EventConnectorBase* EventConnectorFunction1::clone() const {
     return new EventConnectorFunction1(*this);
 }

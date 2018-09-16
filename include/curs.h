@@ -26,130 +26,130 @@
 #include <string>
 
 #include "area.h"
-#include "titlebar.h"
-#include "statusbar.h"
-#include "window.h"
 #include "event.h"
+#include "statusbar.h"
+#include "titlebar.h"
+#include "window.h"
 #include "yacurscurses.h"
 
 /**
  * General name space of libyacurs.
  */
 namespace YACURS {
+/**
+ * Static class for starting/stopping Curses.
+ *
+ * Class taking care of initializing and unitializing curses, and
+ * running the application.
+ *
+ * It takes care of showing a title, status line, and/or main
+ * window.
+ */
+class Curses {
+   private:
     /**
-     * Static class for starting/stopping Curses.
+     * Screen size before suspending.
      *
-     * Class taking care of initializing and unitializing curses, and
-     * running the application.
-     *
-     * It takes care of showing a title, status line, and/or main
-     * window.
+     * Before suspending on SIGTSTP, the current screen size
+     * will be saved. When resumed by SIGCONT, the current
+     * screen size will be compared to this, and a resize
+     * performed if they differ.
      */
-    class Curses {
-        private:
-            /**
-             * Screen size before suspending.
-             *
-             * Before suspending on SIGTSTP, the current screen size
-             * will be saved. When resumed by SIGCONT, the current
-             * screen size will be compared to this, and a resize
-             * performed if they differ.
-             */
-            static Size suspend_scrsz;
+    static Size suspend_scrsz;
 
-            /**
-             * Pointer to StatusBar.
-             *
-             * Curses will not free the memory associated with StatuLine.
-             */
-            static StatusBar* __statusbar;
+    /**
+     * Pointer to StatusBar.
+     *
+     * Curses will not free the memory associated with StatuLine.
+     */
+    static StatusBar* __statusbar;
 
-            /**
-             * Pointer to a title LineObject.
-             *
-             * Curses will not free the memory associated with LineObject.
-             */
-            static TitleBar* __title;
+    /**
+     * Pointer to a title LineObject.
+     *
+     * Curses will not free the memory associated with LineObject.
+     */
+    static TitleBar* __title;
 
-            /**
-             * Pointer to the main window.
-             *
-             * Curses will not free the memory associated with Window.
-             */
-            static Window* __mainwindow;
+    /**
+     * Pointer to the main window.
+     *
+     * Curses will not free the memory associated with Window.
+     */
+    static Window* __mainwindow;
 
-            /**
-             * Flag indicating whether or not Curses has been initialized.
-             *
-             * It will be set by init() and removed by end().
-             */
-            static bool initialized;
+    /**
+     * Flag indicating whether or not Curses has been initialized.
+     *
+     * It will be set by init() and removed by end().
+     */
+    static bool initialized;
 
-            /**
-             * Flag indicating whether or not program has been suspended.
-             */
-            static volatile bool __suspended;
+    /**
+     * Flag indicating whether or not program has been suspended.
+     */
+    static volatile bool __suspended;
 
-	    /**
-	     * The terminals we know
-	     *
-	     * Holds the terminals we know that can have set the
-	     * title.
-	     */
-	    static const char* __xterm_list[];
+    /**
+     * The terminals we know
+     *
+     * Holds the terminals we know that can have set the
+     * title.
+     */
+    static const char* __xterm_list[];
 
-	    static bool is_xterm();
+    static bool is_xterm();
 
-        protected:
-            /**
-             * Handler for EVT_DOUPDATE event.
-             *
-             * @param e doupdate event.
-             */
-            static void doupdate_handler(Event& e);
+   protected:
+    /**
+     * Handler for EVT_DOUPDATE event.
+     *
+     * @param e doupdate event.
+     */
+    static void doupdate_handler(Event& e);
 
-            static void termresetup_handler(Event& e);
+    static void termresetup_handler(Event& e);
 
-            static void sigtstp_handler(Event& e);
+    static void sigtstp_handler(Event& e);
 
-            static void sigcont_handler(Event& e);
+    static void sigcont_handler(Event& e);
 
-        public:
-            static void init(const std::string& colors=std::string());
+   public:
+    static void init(const std::string& colors = std::string());
 
-            static void end();
+    static void end();
 
-            /**
-             * Start the application.
-             *
-             * Starts the application by initializing the Focus Manager,
-             * showing the title, status line and main window (if any),
-             * and starting the EventQueue..
-             *
-             * Upon termination of the EventQueue by an EVT_QUIT event,
-             * the title, status line and main window (if any) will be
-             * closed and the Focus Manager will be uninitialized.
-             */
-            static void run();
+    /**
+     * Start the application.
+     *
+     * Starts the application by initializing the Focus Manager,
+     * showing the title, status line and main window (if any),
+     * and starting the EventQueue..
+     *
+     * Upon termination of the EventQueue by an EVT_QUIT event,
+     * the title, status line and main window (if any) will be
+     * closed and the Focus Manager will be uninitialized.
+     */
+    static void run();
 
-            static void title(TitleBar* _title);
+    static void title(TitleBar* _title);
 
-            static TitleBar* title();
+    static TitleBar* title();
 
-            static void statusbar(StatusBar* _sl);
+    static void statusbar(StatusBar* _sl);
 
-            static StatusBar* statusbar();
+    static StatusBar* statusbar();
 
-            static void mainwindow(Window* _w);
+    static void mainwindow(Window* _w);
 
-            static Window* mainwindow();
+    static Window* mainwindow();
 
-            static Size current_screensize();
+    static Size current_screensize();
 
-            static Size inquiry_screensize();
+    static Size inquiry_screensize();
 
-	    static void set_terminal_title(const std::string& _str);
-    };
-}
+    static void set_terminal_title(const std::string& _str);
+};
+}  // namespace YACURS
 
 #endif

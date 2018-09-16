@@ -24,47 +24,47 @@
 #define YACURSCONST_H 1
 
 namespace YACURS {
+/**
+ * Resizing stops when any of those are underrun.
+ */
+enum {
     /**
-     * Resizing stops when any of those are underrun.
+     * Minimum columns. When actual screen size underruns MIN_COLS,
+     * no resize is performed.
      */
-    enum {
-        /**
-         * Minimum columns. When actual screen size underruns MIN_COLS,
-         * no resize is performed.
-         */
-        MIN_COLS = 15,
-
-        /**
-         * Minimum rows. When actual screen size underruns MIN_ROWS,
-         * no resize is performed.
-         */
-        MIN_ROWS = 15
-    };
+    MIN_COLS = 15,
 
     /**
-     * WindowBase will not realize when any those are underrun.
+     * Minimum rows. When actual screen size underruns MIN_ROWS,
+     * no resize is performed.
      */
-    enum {
-        /**
-         * Minimum columns. When WindowBase size underruns
-         * MIN_WINDOW_COLS, WindowBase will not realize.
-         */
-        MIN_WINDOW_COLS = 4,
+    MIN_ROWS = 15
+};
 
-        /**
-         * Minimum rows. When WindowBase size underruns
-         * MIN_WINDOW_ROWS, WindowBase will not realize.
-         */
-        MIN_WINDOW_ROWS = 1
-    };
+/**
+ * WindowBase will not realize when any those are underrun.
+ */
+enum {
+    /**
+     * Minimum columns. When WindowBase size underruns
+     * MIN_WINDOW_COLS, WindowBase will not realize.
+     */
+    MIN_WINDOW_COLS = 4,
 
-    enum {
-        /**
-         * Default buffer size used for getcwd() if call to pathconf()
-         * fails.
-         */
-        DEFCWDBUFSZ = 1024
-    };
-}
+    /**
+     * Minimum rows. When WindowBase size underruns
+     * MIN_WINDOW_ROWS, WindowBase will not realize.
+     */
+    MIN_WINDOW_ROWS = 1
+};
 
-#endif // YACURSCONST_H
+enum {
+    /**
+     * Default buffer size used for getcwd() if call to pathconf()
+     * fails.
+     */
+    DEFCWDBUFSZ = 1024
+};
+}  // namespace YACURS
+
+#endif  // YACURSCONST_H

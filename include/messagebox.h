@@ -29,23 +29,22 @@
 #include "dynlabel.h"
 
 namespace YACURS {
-    class MessageBox : public Dialog {
-        private:
-            DynLabel __message;
+class MessageBox : public Dialog {
+   private:
+    DynLabel __message;
 
-	protected:
-	    VPack __vpack;
+   protected:
+    VPack __vpack;
 
-            // Not supported
-            MessageBox& operator=(const MessageBox&);
+    // Not supported
+    MessageBox& operator=(const MessageBox&);
 
-        public:
-            MessageBox(const std::string& _title,
-                       const std::string& _message,
-                       DIALOG_TYPE _dt=OKCANCEL);
+   public:
+    MessageBox(const std::string& _title, const std::string& _message,
+               DIALOG_TYPE _dt = OKCANCEL);
 
-            virtual ~MessageBox();
-    };
-}
+    virtual ~MessageBox();
+};
+}  // namespace YACURS
 
-#endif // MESSAGEBOX_H
+#endif  // MESSAGEBOX_H

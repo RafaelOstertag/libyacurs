@@ -26,62 +26,45 @@
 #include <signal.h>
 
 namespace YACURS {
-    // Forward declaration because we want to be independent.
-    class Event;
+// Forward declaration because we want to be independent.
+class Event;
 
-    /// Type of the function pointer that will be called upon an
-    /// event.
-    typedef void (* fptr_t)(Event&);
+/// Type of the function pointer that will be called upon an
+/// event.
+typedef void (*fptr_t)(Event&);
 
-    enum SORT_ORDER {
-        ASCENDING,
-        DESCENDING,
-        UNSORTED
-    };
+enum SORT_ORDER { ASCENDING, DESCENDING, UNSORTED };
 
-    /**
-     * State of dialog.
-     */
-    enum DIALOG_STATE {
-	/// Dialog was confirmed
-	DIALOG_OK,
-	DIALOG_YES,
-	/// Dialog was cancelled
-	DIALOG_CANCEL,
-	DIALOG_NO
-    };
-    
-    enum DIALOG_TYPE {
-	OK_ONLY,
-	YES_ONLY,
-	OKCANCEL,
-	YESNO,
-	YESNOCANCEL
-    };
+/**
+ * State of dialog.
+ */
+enum DIALOG_STATE {
+    /// Dialog was confirmed
+    DIALOG_OK,
+    DIALOG_YES,
+    /// Dialog was cancelled
+    DIALOG_CANCEL,
+    DIALOG_NO
+};
 
-    enum DIALOG_SIZE {
-	AUTOMATIC,
-	FULLSIZE
-    };
+enum DIALOG_TYPE { OK_ONLY, YES_ONLY, OKCANCEL, YESNO, YESNOCANCEL };
 
-    /**
-     * File types allowed for selection in FileDialog.
-     */
-    enum FILEDIALOG_SELECTION_TYPE {
-	ANY,
-	DIRECTORY,
-	FILE
-    };
+enum DIALOG_SIZE { AUTOMATIC, FULLSIZE };
 
-    namespace INTERNAL {
+/**
+ * File types allowed for selection in FileDialog.
+ */
+enum FILEDIALOG_SELECTION_TYPE { ANY, DIRECTORY, FILE };
+
+namespace INTERNAL {
 #ifdef SA_SIGINFO
 
-        typedef void (* sig_handler)(int, siginfo_t*, void*);
+typedef void (*sig_handler)(int, siginfo_t*, void*);
 #else
 
-        typedef void (* sig_handler)(int);
+typedef void (*sig_handler)(int);
 #endif
-    }
-}
+}  // namespace INTERNAL
+}  // namespace YACURS
 
-#endif // YACURSTYPES_H
+#endif  // YACURSTYPES_H

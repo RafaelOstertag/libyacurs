@@ -19,8 +19,8 @@
 //
 // $Id$
 
-#include <cstdlib>
 #include <cassert>
+#include <cstdlib>
 
 #include "messagebox2.h"
 #include "yacursex.h"
@@ -30,8 +30,7 @@ using namespace YACURS;
 //
 // Private
 //
-MessageBox2&
-MessageBox2::operator=(const MessageBox2&) {
+MessageBox2& MessageBox2::operator=(const MessageBox2&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
@@ -46,12 +45,10 @@ MessageBox2::operator=(const MessageBox2&) {
 
 MessageBox2::MessageBox2(const std::string& _title,
                          const std::string& _message1,
-                         const std::string& _message2,
-                         DIALOG_TYPE _dt) : MessageBox(_title, _message1, _dt),
-					    __message2(_message2) {
+                         const std::string& _message2, DIALOG_TYPE _dt)
+    : MessageBox(_title, _message1, _dt), __message2(_message2) {
     __message2.color(DIALOG);
     __vpack.add_back(&__message2);
 }
 
-MessageBox2::~MessageBox2() {
-}
+MessageBox2::~MessageBox2() {}

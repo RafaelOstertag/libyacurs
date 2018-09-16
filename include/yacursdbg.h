@@ -28,26 +28,25 @@
 
 #if defined(DEBUG)
 namespace YACURS {
-    enum DBGTYPE {
-	DBG_EVT,
-	DBG_FOCUSGRP,
-	DBG_FOCUSMGR
-    };
+enum DBGTYPE { DBG_EVT, DBG_FOCUSGRP, DBG_FOCUSMGR };
 
-    class Debug {
-	private:
-	    static std::ofstream __debugfile;
+class Debug {
+   private:
+    static std::ofstream __debugfile;
 
-	public:
-	    static void out(DBGTYPE dt, const std::string& c);
-	    static void out(DBGTYPE dt, const std::ostringstream& os);
-    };
-}
-# define DEBUGOUT(t,x) { std::ostringstream __tmp_debug_ostring_stream;	\
-    __tmp_debug_ostring_stream << x; \
-    YACURS::Debug::out(t,__tmp_debug_ostring_stream); }
+   public:
+    static void out(DBGTYPE dt, const std::string& c);
+    static void out(DBGTYPE dt, const std::ostringstream& os);
+};
+}  // namespace YACURS
+#define DEBUGOUT(t, x)                                     \
+    {                                                      \
+        std::ostringstream __tmp_debug_ostring_stream;     \
+        __tmp_debug_ostring_stream << x;                   \
+        YACURS::Debug::out(t, __tmp_debug_ostring_stream); \
+    }
 #else
-# define DEBUGOUT(t,x)
+#define DEBUGOUT(t, x)
 #endif
 
-#endif // YACURSDBG_H
+#endif  // YACURSDBG_H

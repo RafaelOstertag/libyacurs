@@ -12,15 +12,13 @@
 #include "config.h"
 #endif
 
-#if defined(HAVE_CURSES_ENHANCED) && \
-    defined(HAVE_LOCALE_H) && \
-    defined(HAVE_CWCHAR) && \
-    !defined(DISABLE_WCHAR)
-# define YACURS_USE_WCHAR 1
-# include <clocale>
-# include <cwchar>
+#if defined(HAVE_CURSES_ENHANCED) && defined(HAVE_LOCALE_H) && \
+    defined(HAVE_CWCHAR) && !defined(DISABLE_WCHAR)
+#define YACURS_USE_WCHAR 1
+#include <clocale>
+#include <cwchar>
 #else
-# undef YACURS_USE_WCHAR
+#undef YACURS_USE_WCHAR
 #endif
 
 #ifdef __cplusplus
@@ -30,19 +28,13 @@ extern "C" {
 #ifdef YACURS_USE_WCHAR
 int __test_wget_wch(void*, std::wint_t* i);
 
-int
-wget_wch(void* wdc, std::wint_t* i) {
-    return __test_wget_wch(wdc, i);
-}
+int wget_wch(void* wdc, std::wint_t* i) { return __test_wget_wch(wdc, i); }
 
 #else
 // Forward declaration. Define those functions in your executable.
 int __test_wgetch(void*);
 
-int
-wgetch(void* wdc) {
-    return __test_wgetch(wdc);
-}
+int wgetch(void* wdc) { return __test_wgetch(wdc); }
 
 #endif
 

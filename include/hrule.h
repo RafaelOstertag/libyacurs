@@ -26,47 +26,47 @@
 #include "rule.h"
 
 namespace YACURS {
+/**
+ * Display text on the screen.
+ *
+ * Simple widget for displaying text on the screen.
+ *
+ * Label is not dynamic, i.e. if the text is too long, it might happen
+ * that it cannot be realized() and throwing an exception.
+ */
+class HRule : public Rule {
+   private:
+    // Not supported
+    HRule& operator=(const HRule&);
+
+   public:
     /**
-     * Display text on the screen.
+     * Constructor.
      *
-     * Simple widget for displaying text on the screen.
-     *
-     * Label is not dynamic, i.e. if the text is too long, it might happen
-     * that it cannot be realized() and throwing an exception.
+     * @param _l label
      */
-    class HRule : public Rule {
-        private:
-            // Not supported
-            HRule& operator=(const HRule&);
+    HRule();
 
-        public:
-            /**
-             * Constructor.
-             *
-             * @param _l label
-             */
-            HRule();
+    virtual ~HRule();
 
-            virtual ~HRule();
+    // From WidgetBase
 
-            // From WidgetBase
+    void size_available(const Size& _s);
 
-            void size_available(const Size& _s);
+    Size size_hint() const;
 
-            Size size_hint() const;
+    // From Realizeable
 
-            // From Realizeable
+    /**
+     * Refresh the HRule.
+     *
+     * Adds the HRule text to the subwin.
+     *
+     * @param immediate not directly used by HRule::refresh()
+     * but passed to Widget::refresh().
+     */
+    void refresh(bool immediate);
+};
+}  // namespace YACURS
 
-            /**
-             * Refresh the HRule.
-             *
-             * Adds the HRule text to the subwin.
-             *
-             * @param immediate not directly used by HRule::refresh()
-             * but passed to Widget::refresh().
-             */
-            void refresh(bool immediate);
-    };
-}
-
-#endif // HRULE_H
+#endif  // HRULE_H

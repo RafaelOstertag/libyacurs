@@ -27,23 +27,23 @@
 
 #include <unistd.h>
 
-#include "filedialog.h"
 #include "dynlabel.h"
+#include "filedialog.h"
 #include "input.h"
 #include "listbox.h"
 #include "messagebox2.h"
 
 namespace YACURS {
-    class FileLoadDialog : public FileDialog {
-        private:
-            // Not supported
-            FileLoadDialog& operator=(const FileLoadDialog&);
+class FileLoadDialog : public FileDialog {
+   private:
+    // Not supported
+    FileLoadDialog& operator=(const FileLoadDialog&);
 
-        public:
-            FileLoadDialog(std::string _path=std::string(), bool _do_chdir=false);
+   public:
+    FileLoadDialog(std::string _path = std::string(), bool _do_chdir = false);
 
-            virtual ~FileLoadDialog();
-    };
-}
+    virtual ~FileLoadDialog();
+};
+}  // namespace YACURS
 
-#endif // FILELOADDIALOG_H
+#endif  // FILELOADDIALOG_H

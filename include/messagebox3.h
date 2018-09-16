@@ -26,22 +26,20 @@
 #include "messagebox2.h"
 
 namespace YACURS {
-    class MessageBox3 : public MessageBox2 {
-        private:
-            DynLabel __message3;
+class MessageBox3 : public MessageBox2 {
+   private:
+    DynLabel __message3;
 
-            // Not supported
-            MessageBox3& operator=(const MessageBox3&);
+    // Not supported
+    MessageBox3& operator=(const MessageBox3&);
 
-        public:
-            MessageBox3(const std::string& _title,
-                        const std::string& _message1,
-                        const std::string& _message2,
-                        const std::string& _message3,
-                        DIALOG_TYPE _dt=OKCANCEL);
+   public:
+    MessageBox3(const std::string& _title, const std::string& _message1,
+                const std::string& _message2, const std::string& _message3,
+                DIALOG_TYPE _dt = OKCANCEL);
 
-            virtual ~MessageBox3();
-    };
-}
+    virtual ~MessageBox3();
+};
+}  // namespace YACURS
 
-#endif // MESSAGEBOX3_H
+#endif  // MESSAGEBOX3_H

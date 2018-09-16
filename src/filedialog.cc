@@ -25,22 +25,22 @@
 
 #include "gettext.h"
 
-#include <cstdlib>
 #include <cassert>
 #include <cerrno>
+#include <cstdlib>
 
-#include <unistd.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 #include <sys/stat.h>
 
 #ifdef HAVE_FCNTL_H
-# include <fcntl.h>
+#include <fcntl.h>
 #endif
 
+#include <dirent.h>
 #include <unistd.h>
 #include <climits>
-#include <dirent.h>
 
 #include "filedialog.h"
 #include "yacursconst.h"
@@ -50,24 +50,22 @@ using namespace YACURS;
 //
 // Private
 //
-FileDialog&
-FileDialog::operator=(const FileDialog&) {
+FileDialog& FileDialog::operator=(const FileDialog&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
 
-std::string
-FileDialog::cleanup_path(const std::string& p) const {
+std::string FileDialog::cleanup_path(const std::string& p) const {
     if (p.empty()) return p;
 
     std::string working_copy(p);
 
     if (working_copy.find("//") == std::string::npos) return working_copy;
 
-    std::string::size_type pos=0;
+    std::string::size_type pos = 0;
 
-    while ( (pos=working_copy.find("//")) != std::string::npos )
-	working_copy = working_copy.replace(pos, 2, "/");
+    while ((pos = working_copy.find("//")) != std::string::npos)
+        working_copy = working_copy.replace(pos, 2, "/");
 
     return working_copy;
 }
@@ -75,8 +73,7 @@ FileDialog::cleanup_path(const std::string& p) const {
 //
 // Protected
 //
-std::string
-FileDialog::dir_up(const std::string& dir) {
+std::string FileDialog::dir_up(const std::string& dir) {
     std::string::size_type pos = dir.rfind('/');
 
     std::string retval;
@@ -92,42 +89,39 @@ FileDialog::dir_up(const std::string& dir) {
     return retval;
 }
 
-void
-FileDialog::read_dir() {
+void FileDialog::read_dir() {
     std::list<std::string> _dirs;
     std::list<std::string> _files;
 
-    if (__path.label().empty() ) {
-	try {
-	    __path.label(getcwd());
-	} catch (EXCEPTIONS::SystemError& e) {
-	    if (e.errorno() == EACCES)
-		__path.label("/");
-	    else
-		throw;
-	}
+    if (__path.label().empty()) {
+        try {
+            __path.label(getcwd());
+        } catch (EXCEPTIONS::SystemError& e) {
+            if (e.errorno() == EACCES)
+                __path.label("/");
+            else
+                throw;
+        }
     }
 
-    DIR* dir = opendir(__path.label().c_str() );
-    if (dir == 0)
-        throw EXCEPTIONS::SystemError(errno);
+    DIR* dir = opendir(__path.label().c_str());
+    if (dir == 0) throw EXCEPTIONS::SystemError(errno);
 
-    if (__do_chdir && (chdir(__path.label().c_str())!=0)) {
-	int sav_errno=errno;
-	(void)closedir(dir);
-	throw EXCEPTIONS::SystemError(sav_errno);
+    if (__do_chdir && (chdir(__path.label().c_str()) != 0)) {
+        int sav_errno = errno;
+        (void)closedir(dir);
+        throw EXCEPTIONS::SystemError(sav_errno);
     }
 
-    std::string _base(__path.label() );
+    std::string _base(__path.label());
     assert(_base.length() > 0);
 
     // If _base.length()==1, then it is the root directory and we
     // don't append a slash
-    if (_base.length() > 1)
-        _base += "/";
+    if (_base.length() > 1) _base += "/";
 
     dirent* dent;
-    while (errno = 0, dent = readdir(dir) ) {
+    while (errno = 0, dent = readdir(dir)) {
         std::string _tmp(_base + dent->d_name);
 
         struct stat _stat;
@@ -155,8 +149,8 @@ FileDialog::read_dir() {
     // directory list. So, make sure at least `.' and `..' is in the
     // list.
     if (__directories.empty()) {
-	__directories.add(".");
-	__directories.add("..");
+        __directories.add(".");
+        __directories.add("..");
     }
 
     __files.set(_files);
@@ -166,82 +160,71 @@ FileDialog::read_dir() {
         throw EXCEPTIONS::SystemError(errno_save);
     }
 
-    if (closedir(dir) != 0)
-        throw EXCEPTIONS::SystemError(errno);
+    if (closedir(dir) != 0) throw EXCEPTIONS::SystemError(errno);
 }
 
-void
-FileDialog::listbox_enter_handler(Event& _e) {
+void FileDialog::listbox_enter_handler(Event& _e) {
     assert(_e == EVT_LISTBOX_ENTER);
 
     EventEx<ListBox<>*>& _evt = dynamic_cast<EventEx<ListBox<>*>&>(_e);
 
-    if (&__directories == _evt.data() ) {
-        if (__directories.selected() == ".")
-            return;
+    if (&__directories == _evt.data()) {
+        if (__directories.selected() == ".") return;
 
         if (__directories.selected() == "..") {
-            __path.label(dir_up(__path.label() ) );
+            __path.label(dir_up(__path.label()));
         } else {
             // If __path.label().length()==1, then it is the root
             // directory and we don't append a slash
             if (__path.label().length() > 1)
-                __path.label(__path.label() + "/" +
-                              __directories.selected() );
+                __path.label(__path.label() + "/" + __directories.selected());
             else
-                __path.label(__path.label() +
-                              __directories.selected() );
+                __path.label(__path.label() + __directories.selected());
         }
         try {
             read_dir();
         } catch (EXCEPTIONS::SystemError& ex) {
             std::string _tmp(_("Cannot change to ") + __path.label() + ":");
-            __errmsgbox = new MessageBox2(_("System Error"),
-                                          _tmp,
-                                          ex.what(),
-                                          OK_ONLY);
+            __errmsgbox =
+                new MessageBox2(_("System Error"), _tmp, ex.what(), OK_ONLY);
             __errmsgbox->show();
 
             // Most likely the directory is not accessible, so go
             // one up. If we happen to reach the root directory,
             // and that's not accessible too, the system probably
             // is messed up...
-            __path.label(dir_up(__path.label() ) );
+            __path.label(dir_up(__path.label()));
         }
         return;
     }
 
-    if (&__files == _evt.data() ) {
-        __filename.input(__files.selected() );
+    if (&__files == _evt.data()) {
+        __filename.input(__files.selected());
     }
 }
 
-void
-FileDialog::filename_readonly(bool _ro) {
-    __filename.readonly(_ro);
-}
+void FileDialog::filename_readonly(bool _ro) { __filename.readonly(_ro); }
 
-std::string
-FileDialog::getcwd() const {
+std::string FileDialog::getcwd() const {
     long path_max;
     if (__path.label().empty()) {
-	path_max = pathconf("/", _PC_PATH_MAX);
+        path_max = pathconf("/", _PC_PATH_MAX);
     } else {
-	path_max = pathconf(__path.label().c_str(), _PC_PATH_MAX);
+        path_max = pathconf(__path.label().c_str(), _PC_PATH_MAX);
     }
 
     if (path_max < 0) {
-	// probably something went wrong in call to pathconf(). Use
-	// the fallback size.
-	path_max = DEFCWDBUFSZ;
+        // probably something went wrong in call to pathconf(). Use
+        // the fallback size.
+        path_max = DEFCWDBUFSZ;
     }
 
     char* cwd = new char[path_max];
 
     char* ptr = ::getcwd(cwd, path_max);
     if (ptr == 0) {
-	delete[] cwd;
-	throw EXCEPTIONS::SystemError(errno);
+        delete[] cwd;
+        throw EXCEPTIONS::SystemError(errno);
     }
 
     std::string retval(ptr);
@@ -250,27 +233,25 @@ FileDialog::getcwd() const {
     return retval;
 }
 
-void
-FileDialog::window_close_handler(Event& _e) {
+void FileDialog::window_close_handler(Event& _e) {
     assert(_e == EVT_WINDOW_CLOSE);
 
     EventEx<WindowBase*>& _evt = dynamic_cast<EventEx<WindowBase*>&>(_e);
 
     if (__filetypemismatch == _evt.data()) {
-	delete __filetypemismatch;
-	__filetypemismatch = 0;
-	return;
+        delete __filetypemismatch;
+        __filetypemismatch = 0;
+        return;
     }
 
-    if (__errmsgbox == _evt.data() ) {
+    if (__errmsgbox == _evt.data()) {
         delete __errmsgbox;
         __errmsgbox = 0;
         return;
     }
 }
 
-void
-FileDialog::button_press_handler(Event& _e) {
+void FileDialog::button_press_handler(Event& _e) {
     // We hook in the button_press_handler of Dialog, so we can test
     // if the file selected matches the required criteria
 
@@ -279,93 +260,84 @@ FileDialog::button_press_handler(Event& _e) {
     // If any file type is ok, call Dialog's button press handler
     // immediately and return, since there is no work for us.
     if (__sel_type == ANY) {
-	Dialog::button_press_handler(_e);
-	return;
+        Dialog::button_press_handler(_e);
+        return;
     }
 
     assert(_e == EVT_BUTTON_PRESS);
     EventEx<Button*>& evt = dynamic_cast<EventEx<Button*>&>(_e);
 
     // make sure the event is intended for us
-    if (evt.data() != ok_button() &&
-	evt.data() != yes_button() &&
-	evt.data() != cancel_button() &&
-	evt.data() != no_button() )
-	return;
+    if (evt.data() != ok_button() && evt.data() != yes_button() &&
+        evt.data() != cancel_button() && evt.data() != no_button())
+        return;
 
     // only intercept ok or yes button, i.e. ignore cancel or no
     // button.
-    if (evt.data() != ok_button() &&
-	evt.data() != yes_button() ) {
-	Dialog::button_press_handler(_e);
-	return;
+    if (evt.data() != ok_button() && evt.data() != yes_button()) {
+        Dialog::button_press_handler(_e);
+        return;
     }
 
     if (!selection_type_match()) {
-	// the selection did not match the requested selection
-	// type. The method has raised a dialog to indicate the
-	// missmatch to the user. So we have to return and do nothing.
-	return;
+        // the selection did not match the requested selection
+        // type. The method has raised a dialog to indicate the
+        // missmatch to the user. So we have to return and do nothing.
+        return;
     }
 
     Dialog::button_press_handler(_e);
 }
 
-bool
-FileDialog::selection_type_match() {
+bool FileDialog::selection_type_match() {
     struct stat statbuf;
     if (stat(filepath().c_str(), &statbuf) != 0) {
-	// there is an error, it might be, that the selected file does
-	// not exist. In that case, we can't make any assertion about
-	// the file type and assume that it matches the selection
-	// criteria.
-	if (errno == ENOENT) {
-	    // ok, no such file
-	    return true;
-	}
+        // there is an error, it might be, that the selected file does
+        // not exist. In that case, we can't make any assertion about
+        // the file type and assume that it matches the selection
+        // criteria.
+        if (errno == ENOENT) {
+            // ok, no such file
+            return true;
+        }
 
-	// some other error
-	//
-	// get error message by using the SystemError exception
-	// which does the job for us...
-	EXCEPTIONS::SystemError _err(errno);
-	// ... and display it
-	assert(__errmsgbox==0);
-	__errmsgbox = new MessageBox2(_("System Error"),
-				      filepath(),
-				      _err.what(),
-				      OK_ONLY);
-	__errmsgbox->show();
-	return false;
+        // some other error
+        //
+        // get error message by using the SystemError exception
+        // which does the job for us...
+        EXCEPTIONS::SystemError _err(errno);
+        // ... and display it
+        assert(__errmsgbox == 0);
+        __errmsgbox = new MessageBox2(_("System Error"), filepath(),
+                                      _err.what(), OK_ONLY);
+        __errmsgbox->show();
+        return false;
     }
 
     // no error, let's see if the selection matches the expectation
     switch (__sel_type) {
-    case FILE:
-	if (S_ISREG(statbuf.st_mode)==0) {
-	    assert(__filetypemismatch==0);
-	    __filetypemismatch = new MessageBox2(_("Error"),
-						 filepath(),
-						 _("is not a file"),
-						 OK_ONLY);
-	    __filetypemismatch->show();
-	    return false;
-	}
-	break;
-    case DIRECTORY:
-	if (S_ISDIR(statbuf.st_mode)==0) {
-	    assert(__filetypemismatch==0);
-	    __filetypemismatch = new MessageBox2(_("Error"),
-						 filepath(),
-						 _("is not a directory"),
-						 OK_ONLY);
-	    __filetypemismatch->show();
-	    return false;
-	}
-	break;
-    default:
-	throw std::invalid_argument(_("Selection type unknown for FileDialog" ));
-	break;
+        case FILE:
+            if (S_ISREG(statbuf.st_mode) == 0) {
+                assert(__filetypemismatch == 0);
+                __filetypemismatch = new MessageBox2(
+                    _("Error"), filepath(), _("is not a file"), OK_ONLY);
+                __filetypemismatch->show();
+                return false;
+            }
+            break;
+        case DIRECTORY:
+            if (S_ISDIR(statbuf.st_mode) == 0) {
+                assert(__filetypemismatch == 0);
+                __filetypemismatch = new MessageBox2(
+                    _("Error"), filepath(), _("is not a directory"), OK_ONLY);
+                __filetypemismatch->show();
+                return false;
+            }
+            break;
+        default:
+            throw std::invalid_argument(
+                _("Selection type unknown for FileDialog"));
+            break;
     }
 
     return true;
@@ -375,38 +347,35 @@ FileDialog::selection_type_match() {
 // Public
 //
 
-FileDialog::FileDialog(const std::string& title,
-		       std::string _path,
-		       bool _do_chdir,
-		       DIALOG_TYPE _dt) :
-    Dialog(title, _dt, FULLSIZE),
-    __errmsgbox(0),
-    __filetypemismatch(0),
-    __path(_path),
-    __directories(),
-    __files(),
-    __filename(),
-    __hpack(),
-    __vpack(),
-    __do_chdir(_do_chdir),
-    __sel_type(ANY),
-    __suffix() {
-
+FileDialog::FileDialog(const std::string& title, std::string _path,
+                       bool _do_chdir, DIALOG_TYPE _dt)
+    : Dialog(title, _dt, FULLSIZE),
+      __errmsgbox(0),
+      __filetypemismatch(0),
+      __path(_path),
+      __directories(),
+      __files(),
+      __filename(),
+      __hpack(),
+      __vpack(),
+      __do_chdir(_do_chdir),
+      __sel_type(ANY),
+      __suffix() {
     __path.color(DIALOG);
     // Make sure the path specified by the user does not have a
     // trailing slash
     if (!__path.label().empty()) {
-	std::string tmp = cleanup_path(__path.label());
-	// is it the root directory, if so, don't touch it, if not,
-	// see if there is a trailing slash
-	if (tmp.length() == 1 && tmp[0]=='/') {
-	    __path.label(tmp);
-	} else { // ok, see if we have to remove a trailing slash
-	    if (tmp[tmp.length()-1]=='/')
-		__path.label(tmp.substr(0,tmp.length()-2));
-	    else
-		__path.label(tmp);
-	}
+        std::string tmp = cleanup_path(__path.label());
+        // is it the root directory, if so, don't touch it, if not,
+        // see if there is a trailing slash
+        if (tmp.length() == 1 && tmp[0] == '/') {
+            __path.label(tmp);
+        } else {  // ok, see if we have to remove a trailing slash
+            if (tmp[tmp.length() - 1] == '/')
+                __path.label(tmp.substr(0, tmp.length() - 2));
+            else
+                __path.label(tmp);
+        }
     }
 
     __directories.sort_order(ASCENDING);
@@ -430,27 +399,22 @@ FileDialog::FileDialog(const std::string& title,
     widget(&__vpack);
 
     EventQueue::connect_event(EventConnectorMethod1<FileDialog>(
-                                  EVT_LISTBOX_ENTER, this,
-                                  &FileDialog::listbox_enter_handler) );
+        EVT_LISTBOX_ENTER, this, &FileDialog::listbox_enter_handler));
     EventQueue::connect_event(EventConnectorMethod1<FileDialog>(
-                                  EVT_WINDOW_CLOSE, this,
-                                  &FileDialog::window_close_handler) );
+        EVT_WINDOW_CLOSE, this, &FileDialog::window_close_handler));
 }
 
 FileDialog::~FileDialog() {
     EventQueue::disconnect_event(EventConnectorMethod1<FileDialog>(
-                                     EVT_LISTBOX_ENTER, this,
-                                     &FileDialog::listbox_enter_handler) );
+        EVT_LISTBOX_ENTER, this, &FileDialog::listbox_enter_handler));
     EventQueue::disconnect_event(EventConnectorMethod1<FileDialog>(
-                                     EVT_WINDOW_CLOSE, this,
-                                     &FileDialog::window_close_handler) );
+        EVT_WINDOW_CLOSE, this, &FileDialog::window_close_handler));
 
     if (__errmsgbox) delete (__errmsgbox);
     if (__filetypemismatch) delete (__filetypemismatch);
 }
 
-std::string
-FileDialog::filepath() const {
+std::string FileDialog::filepath() const {
     std::string retval;
 
     if (__path.label() == "/")
@@ -461,72 +425,51 @@ FileDialog::filepath() const {
     return retval;
 }
 
-const std::string&
-FileDialog::directory() const {
-    return __path.label();
-}
+const std::string& FileDialog::directory() const { return __path.label(); }
 
-std::string
-FileDialog::filename() const {
-    if (__sel_type == FILE &&
-	!__suffix.empty()) {
+std::string FileDialog::filename() const {
+    if (__sel_type == FILE && !__suffix.empty()) {
+        if (__filename.input().length() < __suffix.length())
+            return __filename.input() + __suffix;
 
-	if (__filename.input().length() < __suffix.length())
-	    return __filename.input() + __suffix;
+        if (__filename.input().substr(__filename.input().length() -
+                                      __suffix.length()) != __suffix)
+            return __filename.input() + __suffix;
 
-	if (__filename.input().substr(__filename.input().length() -
-				      __suffix.length())!=__suffix)
-	    return __filename.input() + __suffix;
-
-	return __filename.input();
+        return __filename.input();
     } else {
-	return __filename.input();
+        return __filename.input();
     }
 }
 
-void
-FileDialog::do_chdir(bool _v) {
-    __do_chdir=_v;
-}
+void FileDialog::do_chdir(bool _v) { __do_chdir = _v; }
 
-bool
-FileDialog::do_chdir() const {
-    return __do_chdir;
-}
+bool FileDialog::do_chdir() const { return __do_chdir; }
 
-void
-FileDialog::selection_type(FILEDIALOG_SELECTION_TYPE _t) {
+void FileDialog::selection_type(FILEDIALOG_SELECTION_TYPE _t) {
     __sel_type = _t;
 }
 
 FILEDIALOG_SELECTION_TYPE
-FileDialog::selection_type() const {
-    return __sel_type;
-}
+FileDialog::selection_type() const { return __sel_type; }
 
-void
-FileDialog::suffix(const std::string& _s) {
-    __suffix=_s;
-}
+void FileDialog::suffix(const std::string& _s) { __suffix = _s; }
 
-void
-FileDialog::refresh(bool immediate) {
+void FileDialog::refresh(bool immediate) {
     Dialog::refresh(immediate);
 
     try {
         read_dir();
     } catch (EXCEPTIONS::SystemError& ex) {
         std::string _tmp(_("Cannot change to ") + __path.label() + ":");
-        __errmsgbox = new MessageBox2(_("System Error"),
-                                      _tmp,
-                                      ex.what(),
-                                      OK_ONLY);
+        __errmsgbox =
+            new MessageBox2(_("System Error"), _tmp, ex.what(), OK_ONLY);
         __errmsgbox->show();
 
         // Most likely the directory is not accessible, so go one
         // up. If we happen to reach the root directory, and
         // that's not accessible too, the system probably is
         // messed up...
-        __path.label(dir_up(__path.label() ) );
+        __path.label(dir_up(__path.label()));
     }
 }

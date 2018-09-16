@@ -28,48 +28,48 @@
 #include "label.h"
 
 namespace YACURS {
+/**
+ * Display text on the screen.
+ *
+ * Simple widget for displaying text on the screen.
+ *
+ * As opposed to Label, DynLabel is dynamic, and dynamically adjust to
+ * available space by truncating label text.
+ */
+class DynLabel : public Label {
+   private:
+    // Not supported
+    DynLabel& operator=(const DynLabel&);
+
+   public:
+    DynLabel(const std::string& _l = std::string());
+    virtual ~DynLabel();
+
+    // From Label
+    void label(const std::string& _l);
+
+    const std::string& label() const;
+
+    // From WidgetBase
+
+    void size_available(const Size& _s);
+
+    Size size_hint() const;
+
+    void reset_size();
+
+    // From Realizeable
+
     /**
-     * Display text on the screen.
+     * Refresh the label.
      *
-     * Simple widget for displaying text on the screen.
+     * Adds the Label text to the subwin.
      *
-     * As opposed to Label, DynLabel is dynamic, and dynamically adjust to
-     * available space by truncating label text.
+     * @param immediate not directly used by Label::refresh() but
+     * passed to Widget::refresh().
      */
-    class DynLabel : public Label {
-        private:
-            // Not supported
-            DynLabel& operator=(const DynLabel&);
+    void refresh(bool immediate);
+};
+}  // namespace YACURS
 
-        public:
-            DynLabel(const std::string& _l=std::string() );
-            virtual ~DynLabel();
-
-            // From Label
-            void label(const std::string& _l);
-
-            const std::string& label() const;
-
-            // From WidgetBase
-
-            void size_available(const Size& _s);
-
-            Size size_hint() const;
-
-            void reset_size();
-
-            // From Realizeable
-
-            /**
-             * Refresh the label.
-             *
-             * Adds the Label text to the subwin.
-             *
-             * @param immediate not directly used by Label::refresh() but
-             * passed to Widget::refresh().
-             */
-            void refresh(bool immediate);
-    };
-}
-
-#endif // DYNLABEL_H
+#endif  // DYNLABEL_H

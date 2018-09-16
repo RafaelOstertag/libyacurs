@@ -35,12 +35,10 @@ using namespace YACURS;
 // Private
 //
 
-Spacer&
-Spacer::operator=(const Spacer&) {
+Spacer& Spacer::operator=(const Spacer&) {
     throw EXCEPTIONS::NotSupported();
     return *this;
 }
-
 
 //
 // Protected
@@ -53,44 +51,26 @@ Spacer::Spacer() {}
 
 Spacer::~Spacer() {}
 
-bool
-Spacer::size_change() {
-    return false;
-}
+bool Spacer::size_change() { return false; }
 
-Size
-Spacer::size() const {
-    return Size(1,1);
-}
+Size Spacer::size() const { return Size(1, 1); }
 
-Size
-Spacer::size_hint() const {
-    return Size(1,1);
-}
+Size Spacer::size_hint() const { return Size(1, 1); }
 
-void
-Spacer::reset_hint() {
+void Spacer::reset_hint() {
     // Intentionally empty, since reset_size() is intended for
     // dynamically sized Widgets.
 }
 
-void
-Spacer::reset_size() {
+void Spacer::reset_size() {
     // Intentionally empty, since reset_size() is intended for
     // dynamically sized Widgets.
 }
 
-bool
-Spacer::can_focus() const {
-    return false;
-}
+bool Spacer::can_focus() const { return false; }
 
-void
-Spacer::refresh(bool) {}
+void Spacer::refresh(bool) {}
 
-void
-Spacer::resize(const Area&) {}
+void Spacer::resize(const Area&) {}
 
-void
-Spacer::realize() {}
-
+void Spacer::realize() {}

@@ -1,4 +1,4 @@
-DISTCHECK_CONFIGURE_FLAGS = --disable-nls LDFLAGS='-L/usr/local/lib'
+DISTCHECK_CONFIGURE_FLAGS = LDFLAGS='-L/usr/local/lib'
 ACLOCAL_AMFLAGS= -I m4
 SUBDIRS = po include src tests
 

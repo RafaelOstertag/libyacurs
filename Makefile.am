@@ -1,4 +1,4 @@
-DISTCHECK_CONFIGURE_FLAGS = --enable-nls
+DISTCHECK_CONFIGURE_FLAGS = --disable-nls
 ACLOCAL_AMFLAGS= -I m4
 SUBDIRS = po include src tests
 

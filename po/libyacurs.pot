@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Rafael Ostertag
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the libyacurs package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: libyacurs 0.1\n"
+"Project-Id-Version: libyacurs 1.0.0\n"
 "Report-Msgid-Bugs-To: https://bugs.guengel.ch\n"
-"POT-Creation-Date: 2014-02-11 18:02+0100\n"
+"POT-Creation-Date: 2018-09-16 15:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,186 +17,186 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/dialog.cc:196 src/dialog.cc:219
+#: src/dialog.cc:151 src/dialog.cc:174
 msgid "Cancel"
 msgstr ""
 
-#: src/dialog.cc:202
+#: src/dialog.cc:157
 msgid "OK"
 msgstr ""
 
-#: src/dialog.cc:207 src/dialog.cc:222
+#: src/dialog.cc:162 src/dialog.cc:177
 msgid "No"
 msgstr ""
 
-#: src/dialog.cc:213 src/dialog.cc:225
+#: src/dialog.cc:168 src/dialog.cc:180
 msgid "Yes"
 msgstr ""
 
-#: src/filesavedialog.cc:117
+#: src/filesavedialog.cc:109
 msgid "Confirmation"
 msgstr ""
 
-#: src/filesavedialog.cc:120
+#: src/filesavedialog.cc:110
 msgid "already exists. Do you want to overwrite?"
 msgstr ""
 
-#: src/filesavedialog.cc:127
+#: src/filesavedialog.cc:117
 msgid "Error"
 msgstr ""
 
-#: src/filesavedialog.cc:158
+#: src/filesavedialog.cc:143
 msgid "Save File"
 msgstr ""
 
-#: src/colorparser.cc:65
+#: src/colorparser.cc:63
 msgid " does not contain ':'"
 msgstr ""
 
-#: src/colorparser.cc:71
+#: src/colorparser.cc:69
 msgid "Color Object size invalid"
 msgstr ""
 
-#: src/colorparser.cc:77
+#: src/colorparser.cc:75
 msgid "Color size invalid"
 msgstr ""
 
-#: src/colorparser.cc:83
+#: src/colorparser.cc:81
 msgid " is not valid color object"
 msgstr ""
 
-#: src/colorparser.cc:90 src/colorparser.cc:97
+#: src/colorparser.cc:88 src/colorparser.cc:95
 msgid "not a valid color: "
 msgstr ""
 
-#: src/colorparser.cc:104
+#: src/colorparser.cc:102
 msgid "not a valid attribute: "
 msgstr ""
 
-#: src/yacursex.cc:46
+#: src/yacursex.cc:40
 msgid "() failed"
 msgstr ""
 
-#: src/yacursex.cc:50
+#: src/yacursex.cc:43
 msgid "unable to initialize curses"
 msgstr ""
 
-#: src/yacursex.cc:54
+#: src/yacursex.cc:45
 msgid "curses not initialized"
 msgstr ""
 
-#: src/yacursex.cc:58
+#: src/yacursex.cc:48
 msgid "curses has already been initialized"
 msgstr ""
 
-#: src/yacursex.cc:62
+#: src/yacursex.cc:50
 msgid "object already realized"
 msgstr ""
 
-#: src/yacursex.cc:66
+#: src/yacursex.cc:52
 msgid "object not realized"
 msgstr ""
 
-#: src/yacursex.cc:80
+#: src/yacursex.cc:59
 msgid "TIOCGWINSZ info invalid"
 msgstr ""
 
-#: src/yacursex.cc:84
+#: src/yacursex.cc:62
 msgid "unable to get window size"
 msgstr ""
 
-#: src/yacursex.cc:88
+#: src/yacursex.cc:64
 msgid "Cannot focus"
 msgstr ""
 
-#: src/yacursex.cc:92
+#: src/yacursex.cc:66
 msgid "Size is invalid"
 msgstr ""
 
-#: src/yacursex.cc:96
+#: src/yacursex.cc:69
 msgid "Unexpected event received"
 msgstr ""
 
-#: src/yacursex.cc:100
+#: src/yacursex.cc:72
 msgid "Colors not initialized"
 msgstr ""
 
-#: src/yacursex.cc:104
+#: src/yacursex.cc:75
 msgid "An object exceeded space constraints"
 msgstr ""
 
-#: src/yacursex.cc:108
+#: src/yacursex.cc:77
 msgid "Operation not supported"
 msgstr ""
 
-#: src/yacursex.cc:112
+#: src/yacursex.cc:79
 msgid "Invalid dialog type"
 msgstr ""
 
-#: src/cursorbuf.cc:285 src/cursorbuf.cc:311
+#: src/cursorbuf.cc:277 src/cursorbuf.cc:302
 msgid "_size must not be <2"
 msgstr ""
 
-#: src/lockscreen.cc:80
+#: src/lockscreen.cc:72
 msgid "Unlock Failed"
 msgstr ""
 
-#: src/lockscreen.cc:81
+#: src/lockscreen.cc:73
 msgid "Wrong Password"
 msgstr ""
 
-#: src/lockscreen.cc:110
+#: src/lockscreen.cc:101
 msgid "InputDialog may not be 0"
 msgstr ""
 
-#: src/curswin.cc:50
+#: src/curswin.cc:51
 msgid "argument 'win' must not be 0"
 msgstr ""
 
-#: src/curswin.cc:77
+#: src/curswin.cc:79
 msgid "Area must not be zero"
 msgstr ""
 
-#: src/fileloaddialog.cc:64
+#: src/fileloaddialog.cc:59
 msgid "Load File"
 msgstr ""
 
-#: src/unlockdiadefault.cc:47
+#: src/unlockdiadefault.cc:42
 msgid "Unlock Screen"
 msgstr ""
 
-#: src/unlockdiadefault.cc:50
+#: src/unlockdiadefault.cc:45
 msgid "Please enter password in order to unlock screen"
 msgstr ""
 
-#: src/event.cc:39
+#: src/event.cc:40
 msgid "Event names must not be greater than 63 characters."
 msgstr ""
 
-#: src/event.cc:42
+#: src/event.cc:43
 msgid "Event names must not be empty."
 msgstr ""
 
-#: src/checkbox.cc:176
+#: src/checkbox.cc:159
 msgid "CheckBox: index "
 msgstr ""
 
-#: src/checkbox.cc:177
+#: src/checkbox.cc:160
 msgid " out of range."
 msgstr ""
 
-#: src/checkbox.cc:190 src/checkbox.cc:210
+#: src/checkbox.cc:171 src/checkbox.cc:190
 msgid "Item '"
 msgstr ""
 
-#: src/checkbox.cc:190 src/checkbox.cc:210
+#: src/checkbox.cc:171 src/checkbox.cc:190
 msgid "' not found in CheckBox"
 msgstr ""
 
-#: src/checkbox.cc:196
+#: src/checkbox.cc:177
 msgid "CheckBox cursor out of range in set_selection()"
 msgstr ""
 
-#: src/radiobox.cc:67
+#: src/radiobox.cc:59
 msgid "RadioBox cursor out of range in set_selection()"
 msgstr ""

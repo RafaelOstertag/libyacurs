@@ -31,8 +31,8 @@
 namespace YACURS {
 class CurStr : public std::string {
    private:
-    Coordinates __position;
-    COLOROBJ __color;
+    Coordinates _position;
+    COLOROBJ _color;
 
    public:
     CurStr(const std::string& str, const Coordinates& pos = Coordinates::zero(),
@@ -41,8 +41,9 @@ class CurStr : public std::string {
     CurStr(const std::string& str, int y, int x, COLOROBJ c = DEFAULT);
 
     CurStr(const CurStr& cs);
-
     CurStr& operator=(const CurStr& cs);
+    CurStr(CurStr&& cs);
+    CurStr& operator=(CurStr&& cs);
 
     void position(const Coordinates& co);
 

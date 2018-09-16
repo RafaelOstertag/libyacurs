@@ -111,7 +111,7 @@ class EventQueueStats {
 
     void clear();
 
-    void update_ec_calls_by_type(const EventType _t);
+    void update_ec_calls_by_type(const EventType t);
 
     void update_ec_call_time(clock_t t0, clock_t t1);
 
@@ -123,14 +123,14 @@ class EventQueueStats {
 
     void update_ec_rm_skipped();
 
-    void update_evt_submitted_by_type(const EventType _t);
+    void update_evt_submitted_by_type(const EventType t);
 
     void update_ec_count(
-        const std::map<EventType, std::list<EventConnectorBase*> >& _ec_map);
+        const std::map<EventType, std::list<EventConnectorBase*> >& ec_map);
 
     void update_evq_size_max(uint16_t v);
 
-    void update_evt_proc_by_type(const EventType _t);
+    void update_evt_proc_by_type(const EventType t);
 
     void update_evt_pending_cleanup();
 
@@ -141,9 +141,9 @@ class EventQueueStats {
     void dump(std::ostream& _os) const;
 };
 
-inline void EventQueueStats::update_ec_calls_by_type(const EventType _t) {
+inline void EventQueueStats::update_ec_calls_by_type(const EventType t) {
     ec_calls_total++;
-    ec_call_by_type[_t]++;
+    ec_call_by_type[t]++;
 }
 
 inline void EventQueueStats::update_ec_call_time(clock_t t0, clock_t t1) {
@@ -161,19 +161,19 @@ inline void EventQueueStats::update_ec_rm_cancelled() { ec_rm_cancelled++; }
 
 inline void EventQueueStats::update_ec_rm_skipped() { ec_rm_skipped++; }
 
-inline void EventQueueStats::update_evt_submitted_by_type(const EventType _t) {
+inline void EventQueueStats::update_evt_submitted_by_type(const EventType t) {
     evt_submitted++;
-    evt_submitted_by_type[_t]++;
+    evt_submitted_by_type[t]++;
 }
 
 inline void EventQueueStats::update_ec_count(
-    const std::map<EventType, std::list<EventConnectorBase*> >& _ec_map) {
+    const std::map<EventType, std::list<EventConnectorBase*> >& ec_map) {
     std::map<EventType, std::list<EventConnectorBase*> >::const_iterator
-        map_it = _ec_map.begin();
+        map_it = ec_map.begin();
 
     uint32_t overall = 0;
 
-    while (map_it != _ec_map.end()) {
+    while (map_it != ec_map.end()) {
         overall += map_it->second.size();
         ec_max_by_type[map_it->first] =
             std::max(static_cast<std::list<EventConnectorBase*>::size_type>(
@@ -189,9 +189,9 @@ inline void EventQueueStats::update_evq_size_max(uint16_t v) {
     evq_size_max = std::max(evq_size_max, v);
 }
 
-inline void EventQueueStats::update_evt_proc_by_type(const EventType _t) {
+inline void EventQueueStats::update_evt_proc_by_type(const EventType t) {
     evt_proc_total++;
-    evt_proc_by_type[_t]++;
+    evt_proc_by_type[t]++;
 }
 
 inline void EventQueueStats::update_evt_pending_cleanup() {

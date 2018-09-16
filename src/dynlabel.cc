@@ -30,10 +30,6 @@ using namespace YACURS;
 //
 // Private
 //
-DynLabel& DynLabel::operator=(const DynLabel&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
 //
 // Protected
@@ -42,27 +38,27 @@ DynLabel& DynLabel::operator=(const DynLabel&) {
 //
 // Public
 //
-DynLabel::DynLabel(const std::string& _l) : Label(_l) {}
+DynLabel::DynLabel(const std::string& l) : Label(l) {}
 
 DynLabel::~DynLabel() {}
 
-void DynLabel::label(const std::string& _l) {
-    __label = _l;
+void DynLabel::label(const std::string& l) {
+    _label = l;
 
     if (realization() == REALIZED) refresh(true);
 }
 
-const std::string& DynLabel::label() const { return __label; }
+const std::string& DynLabel::label() const { return _label; }
 
-void DynLabel::size_available(const Size& _s) {
-    assert(_s.rows() > 0);
-    WidgetBase::size_available(_s);
-    __size = Size(1, _s.cols());
+void DynLabel::size_available(const Size& s) {
+    assert(s.rows() > 0);
+    WidgetBase::size_available(s);
+    _size = Size(1, s.cols());
 }
 
 Size DynLabel::size_hint() const { return Size(1, 0); }
 
-void DynLabel::reset_size() { __size = Size::zero(); }
+void DynLabel::reset_size() { _size = Size::zero(); }
 
 void DynLabel::refresh(bool immediate) {
     if (realization() != REALIZED && realization() != REALIZING) return;
@@ -73,7 +69,7 @@ void DynLabel::refresh(bool immediate) {
     // a call to label() case we're realized.
 
     widget_subwin()->erase();
-    CurStr tmp(__label, Coordinates(), color());
+    CurStr tmp(_label, Coordinates(), color());
     widget_subwin()->addstrx(tmp);
 
     Widget::refresh(immediate);

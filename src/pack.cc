@@ -64,17 +64,12 @@ void Pack::refresh_all_widgets(bool i) {
                      i));
 }
 
-void Pack::take_over(WidgetBase* _w) {
-    assert(_w != 0);
+void Pack::take_over(WidgetBase* w) {
+    assert(w != 0);
 
-    _w->parent(this);
-    _w->curses_window(WidgetBase::curses_window());
-    _w->focusgroup_id(WidgetBase::focusgroup_id());
-}
-
-Pack& Pack::operator=(const Pack& _p) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
+    w->parent(this);
+    w->curses_window(WidgetBase::curses_window());
+    w->focusgroup_id(WidgetBase::focusgroup_id());
 }
 
 //
@@ -96,7 +91,7 @@ void Pack::unrealize() {
 //
 // Public
 //
-Pack::Pack() : __hinting(true), __always_dynamic(false) {}
+Pack::Pack() : _hinting(true), _always_dynamic(false) {}
 
 Pack::~Pack() {
     // We don't unrealize widget, since they may be already deleted by
@@ -113,72 +108,72 @@ std::list<WidgetBase*>::size_type Pack::widgets() const {
     return widget_list.size();
 }
 
-void Pack::add_front(WidgetBase* _w) {
-    assert(_w != 0);
+void Pack::add_front(WidgetBase* w) {
+    assert(w != 0);
 
-    widget_list.push_front(_w);
-    take_over(_w);
+    widget_list.push_front(w);
+    take_over(w);
 
     if (realization() == REALIZED) {
-        if (_w->realization() == REALIZED) _w->unrealize();
+        if (w->realization() == REALIZED) w->unrealize();
 
         size_change();
     }
 }
 
-void Pack::add_back(WidgetBase* _w) {
-    assert(_w != 0);
+void Pack::add_back(WidgetBase* w) {
+    assert(w != 0);
 
-    widget_list.push_back(_w);
+    widget_list.push_back(w);
 
-    take_over(_w);
+    take_over(w);
 
     if (realization() == REALIZED) {
-        if (_w->realization() == REALIZED) _w->unrealize();
+        if (w->realization() == REALIZED) w->unrealize();
 
         size_change();
     }
 }
 
-void Pack::remove(WidgetBase* _w) {
-    assert(_w != 0);
+void Pack::remove(WidgetBase* w) {
+    assert(w != 0);
 
     //    if (realization()!=UNREALIZED) throw AlreadyRealized();
 
-    widget_list.remove(_w);
+    widget_list.remove(w);
 
-    if (_w->realization() != UNREALIZED) _w->unrealize();
+    if (w->realization() != UNREALIZED) w->unrealize();
 
-    _w->focusgroup_id(FocusManager::nfgid);
+    w->focusgroup_id(FocusManager::nfgid);
 
     if (realization() == REALIZED) size_change();
 }
 
-void Pack::curses_window(YACURS::INTERNAL::CursWin* _p) {
-    WidgetBase::curses_window(_p);
+void Pack::curses_window(YACURS::INTERNAL::CursWin* p) {
+    WidgetBase::curses_window(p);
 
     // We have to make sure that the associated widgets have the same
     // curses window as we do.
     set_all_curses_window();
 }
 
-void Pack::focusgroup_id(FocusManager::fgid_t _id) {
-    WidgetBase::focusgroup_id(_id);
+void Pack::focusgroup_id(FocusManager::fgid_t id) {
+    WidgetBase::focusgroup_id(id);
 
     // We have to make sure that the associated widgets have the same
     // Focus Group ID as we do.
     set_all_focusgroup_id();
 }
 
-void Pack::size_available(const Size& _s) {
-    WidgetBase::size_available(__size = _s);
+void Pack::size_available(const Size& s) {
+    WidgetBase::size_available(_size = s);
 }
 
 Size Pack::size() const {
     // If we are always dynamic, simply return the current value of
-    // __size, which may be Size::zero() if a call was made to
+    // _size, which may be Size::zero() if a call was made to
     // reset_size().
-    if (__always_dynamic) return __size;
+    if (_always_dynamic) return _size;
 
     // Since we are not always dynamic, see if we can figure out the
     // size. This only succeeds if there are no dynamically sized
@@ -186,26 +181,26 @@ Size Pack::size() const {
     Size non_dynamic = calc_size_non_dynamic();
     if (non_dynamic != Size::zero()) return non_dynamic;
 
-    // __size might have been set by a former call to size_available()
+    // _size might have been set by a former call to size_available()
     // so return that.
-    return __size;
+    return _size;
 }
 
-void Pack::hinting(bool _h) {
-    __hinting = _h;
+void Pack::hinting(bool h) {
+    _hinting = h;
     size_change();
 }
 
-bool Pack::hinting() const { return __hinting; }
+bool Pack::hinting() const { return _hinting; }
 
-void Pack::always_dynamic(bool _d) {
-    __always_dynamic = _d;
+void Pack::always_dynamic(bool d) {
+    _always_dynamic = d;
     size_change();
 }
 
-bool Pack::always_dynamic() const { return __always_dynamic; }
+bool Pack::always_dynamic() const { return _always_dynamic; }
 
-void Pack::reset_size() { __size = Size::zero(); }
+void Pack::reset_size() { _size = Size::zero(); }
 
 bool Pack::size_change() {
     if (parent() != 0) return parent()->size_change();
@@ -259,14 +254,14 @@ void Pack::refresh(bool immediate) {
     refresh_all_widgets(immediate);
 }
 
-void Pack::resize(const Area& _a) {
+void Pack::resize(const Area& a) {
     if (realization() != REALIZED) return;
 
     unrealize();
 
-    position(_a);
+    position(a);
 
-    size_available(_a);
+    size_available(a);
 
     realize();
 }

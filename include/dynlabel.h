@@ -37,22 +37,23 @@ namespace YACURS {
  * available space by truncating label text.
  */
 class DynLabel : public Label {
-   private:
-    // Not supported
-    DynLabel& operator=(const DynLabel&);
-
    public:
-    DynLabel(const std::string& _l = std::string());
+    DynLabel(const std::string& l = std::string());
+    DynLabel& operator=(const DynLabel&) = delete;
+    DynLabel& operator=(DynLabel&&) = delete;
+    DynLabel(const DynLabel&) = delete;
+    DynLabel(DynLabel&&) = delete;
+
     virtual ~DynLabel();
 
     // From Label
-    void label(const std::string& _l);
+    void label(const std::string& l);
 
     const std::string& label() const;
 
     // From WidgetBase
 
-    void size_available(const Size& _s);
+    void size_available(const Size& s);
 
     Size size_hint() const;
 

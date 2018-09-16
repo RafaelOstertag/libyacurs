@@ -35,13 +35,12 @@
 
 namespace YACURS {
 class FileLoadDialog : public FileDialog {
-   private:
-    // Not supported
-    FileLoadDialog& operator=(const FileLoadDialog&);
-
    public:
-    FileLoadDialog(std::string _path = std::string(), bool _do_chdir = false);
-
+    FileLoadDialog(std::string path = std::string(), bool do_chdir = false);
+    FileLoadDialog& operator=(const FileLoadDialog&) = delete;
+    FileLoadDialog& operator=(FileLoadDialog&&) = delete;
+    FileLoadDialog(FileLoadDialog&&) = delete;
+    FileLoadDialog(const FileLoadDialog&) = delete;
     virtual ~FileLoadDialog();
 };
 }  // namespace YACURS

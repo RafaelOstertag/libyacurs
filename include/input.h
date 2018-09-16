@@ -176,52 +176,49 @@ class Input : public Widget {
     typedef typename T::size_type tsz_t;
 
    private:
-    INTERNAL::CursorBuffer __buffer;
+    INTERNAL::CursorBuffer _buffer;
 
     /**
      * Length of the input line.
      *
      * May be zero when dynamically sized.
      */
-    int __length;
+    int _length;
 
     /**
      * Mode, whether or not editing is allowed.
      */
-    bool __read_only;
+    bool _read_only;
 
     /**
      * Mode, whether or not input is obscurred.
      */
-    bool __obscure_input;
+    bool _obscure_input;
 
     /**
      * Mode, whether or not input is hidden.
      */
-    bool __hide_input;
+    bool _hide_input;
 
     /**
      * Character used for obscurring input.
      */
-    char __obscure_char;
+    char _obscure_char;
 
     /**
      * The size of the Input Widget.
      *
      * May be Size::zero() when dynamically sized, else the
      */
-    Size __size;
+    Size _size;
 
     /**
      * Input filter.
      */
-    InputFilter* __filter;
-
-    // Not supported
-    Input<T>& operator=(const Input<T>& _i);
+    InputFilter* _filter;
 
    protected:
-    virtual void key_handler(Event& _e);
+    virtual void key_handler(Event& e);
 
     // From Realizeable
     void realize();
@@ -230,22 +227,27 @@ class Input : public Widget {
 
    public:
     /**
-     * @param _length the length (columns) the widget
+     * @param length the length (columns) the widget
      * requires. If zero, it will dynamically size. Default 0.
      *
-     * @param _max_size maximum size of input. Default 255.
+     * @param max_size maximum size of input. Default 255.
      *
-     * @param _t text to display initially. Default empty.
+     * @param t text to display initially. Default empty.
      */
-    Input(int _length = 0, tsz_t _max_size = 255, const T& _t = T());
+    Input(int length = 0, tsz_t max_size = 255, const T& t = T());
+    Input<T>& operator=(const Input<T>&) = delete;
+    Input<T>& operator=(Input<T>&&) = delete;
+    Input<T>(const Input<T>&) = delete;
+    Input<T>(Input<T>&&) = delete;
+
     virtual ~Input();
 
     /**
      * Set the content of the input buffer.
      *
-     * @param _i the content of the input buffer.
+     * @param i the content of the input buffer.
      */
-    virtual void input(const T& _i);
+    virtual void input(const T& i);
 
     /**
      * Return the content of the input buffer.
@@ -262,10 +264,10 @@ class Input : public Widget {
     /**
      * Set readonly mode.
      *
-     * @param _s @c true, no editing allowed. @c false,
+     * @param s @c true, no editing allowed. @c false,
      * editing allowed.
      */
-    void readonly(bool _s);
+    void readonly(bool s);
 
     /**
      * Get read-only mode
@@ -292,9 +294,9 @@ class Input : public Widget {
     /**
      * Set input obscure mode
      *
-     * @param _m @c true, will obscure input, @c false will show input.
+     * @param m @c true, will obscure input, @c false will show input.
      */
-    void obscure_input(bool _m);
+    void obscure_input(bool m);
 
     /**
      * Get obscure input mode.
@@ -308,14 +310,14 @@ class Input : public Widget {
      * @param c character used to obscure input. Only used when
      * obscuring input
      */
-    void obscure_char(char _c);
+    void obscure_char(char c);
 
     /**
      * @return character used to obscure input.
      */
     char obscure_char() const;
 
-    void hide_input(bool _m);
+    void hide_input(bool m);
 
     bool hide_input() const;
 
@@ -330,19 +332,19 @@ class Input : public Widget {
      * Setting a new filter does not affect characters already
      * in buffer.
      *
-     * @param _f reference to filter.
+     * @param f reference to filter.
      */
-    void filter(const InputFilter& _f);
+    void filter(const InputFilter& f);
 
     // From WidgetBase
 
-    void size_available(const Size& _s);
+    void size_available(const Size& s);
 
     /**
      * Size the Input Widget requires.
      *
-     * @return Either Size::zero() if __length is 0, or the
-     * Size(1, __length).
+     * @return Either Size::zero() if _length is 0, or the
+     * Size(1, _length).
      */
     Size size() const;
 
@@ -361,7 +363,7 @@ class Input : public Widget {
     /**
      * Reset size.
      *
-     * If __length is zero, resets __size. Else does nothing.
+     * If _length is zero, resets _size. Else does nothing.
      */
     void reset_size();
 
@@ -380,25 +382,20 @@ class Input : public Widget {
 // Private
 //
 
-template <class T>
-Input<T>& Input<T>::operator=(const Input<T>&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
 //
 // Protected
 //
 template <class T>
-void Input<T>::key_handler(Event& _e) {
-    assert(_e.type() == EVT_KEY);
+void Input<T>::key_handler(Event& e) {
+    assert(e.type() == EVT_KEY);
 
     if (!focus()) return;
 
 #ifdef YACURS_USE_WCHAR
-    EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(_e);
+    EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(e);
 #else
-    EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(_e);
+    EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(e);
 #endif
 
     switch (ekey.data()) {
@@ -416,60 +413,60 @@ void Input<T>::key_handler(Event& _e) {
             break;
 
         case KEY_DL:
-            if (__read_only) return;
-            __buffer.clear();
+            if (_read_only) return;
+            _buffer.clear();
             break;
 
         case KEY_CTRL_U:
-            if (__read_only) return;
-            __buffer.clear_sol();
+            if (_read_only) return;
+            _buffer.clear_sol();
             break;
 
         case KEY_EOL:
         case KEY_CTRL_K:
-            if (__read_only) return;
-            __buffer.clear_eol();
+            if (_read_only) return;
+            _buffer.clear_eol();
             break;
 
         case KEY_BKSPC_SOL:
         case KEY_BACKSPACE:
-            if (__read_only) return;
-            __buffer.backspace();
+            if (_read_only) return;
+            _buffer.backspace();
             break;
 
         case KEY_CTRL_D:
         case KEY_DC:  // Delete
-            if (__read_only) return;
-            __buffer.del();
+            if (_read_only) return;
+            _buffer.del();
             break;
 
         case KEY_HOME:
         case KEY_CTRL_A:
-            __buffer.home();
+            _buffer.home();
             break;
 
         case KEY_END:
         case KEY_CTRL_E:
-            __buffer.end();
+            _buffer.end();
             break;
 
         case KEY_LEFT:
         case KEY_CTRL_B:
-            __buffer.back_step();
+            _buffer.back_step();
             break;
 
         case KEY_RIGHT:
         case KEY_CTRL_F:
-            __buffer.forward_step();
+            _buffer.forward_step();
             break;
 
         default:  // regular key presses
-            if (__read_only) return;
+            if (_read_only) return;
 
             // Call the filter
-            if (!__filter->use(ekey.data())) return;
+            if (!_filter->use(ekey.data())) return;
 
-            __buffer.insert(ekey.data());
+            _buffer.insert(ekey.data());
             break;
     }
 
@@ -505,16 +502,16 @@ void Input<T>::unrealize() {
 // Public
 //
 template <class T>
-Input<T>::Input(int _length, tsz_t _max_size, const T& _t)
+Input<T>::Input(int length, tsz_t max_size, const T& t)
     : Widget(),
-      __buffer(_t, _max_size),
-      __length(_length),
-      __read_only(false),
-      __obscure_input(false),
-      __hide_input(false),
-      __obscure_char('*'),
-      __size(__length > 0 ? Size(1, __length) : Size::zero()),
-      __filter(new FilterPrint) {
+      _buffer(t, max_size),
+      _length(length),
+      _read_only(false),
+      _obscure_input(false),
+      _hide_input(false),
+      _obscure_char('*'),
+      _size(_length > 0 ? Size(1, _length) : Size::zero()),
+      _filter(new FilterPrint) {
     can_focus(true);
 }
 
@@ -523,128 +520,128 @@ Input<T>::~Input() {
     EventQueue::disconnect_event(
         EventConnectorMethod1<Input>(EVT_KEY, this, &Input<T>::key_handler));
 
-    assert(__filter != 0);
-    delete __filter;
+    assert(_filter != 0);
+    delete _filter;
 }
 
 template <class T>
 void Input<T>::input(const T& i) {
-    __buffer.set(i);
+    _buffer.set(i);
 
     refresh(true);
 }
 
 template <class T>
 const T& Input<T>::input() const {
-    return __buffer.string();
+    return _buffer.string();
 }
 
 template <class T>
 void Input<T>::clear() {
-    __buffer.clear();
+    _buffer.clear();
 }
 
 template <class T>
-void Input<T>::readonly(bool _s) {
-    __read_only = _s;
+void Input<T>::readonly(bool s) {
+    _read_only = s;
 }
 
 template <class T>
 bool Input<T>::readonly() const {
-    return __read_only;
+    return _read_only;
 }
 
 template <class T>
 void Input<T>::max_input(typename Input<T>::tsz_t max_input) {
-    __buffer.max_size(max_input);
+    _buffer.max_size(max_input);
 
     if (realization() == REALIZED) refresh(true);
 }
 
 template <class T>
 typename Input<T>::tsz_t Input<T>::max_input() const {
-    return __buffer.max_size();
+    return _buffer.max_size();
 }
 
 template <class T>
-void Input<T>::obscure_input(bool _m) {
-    if (_m && __hide_input) __hide_input = false;
+void Input<T>::obscure_input(bool m) {
+    if (m && _hide_input) _hide_input = false;
 
-    __obscure_input = _m;
+    _obscure_input = m;
 
     if (realization() == REALIZED) refresh(true);
 }
 
 template <class T>
 bool Input<T>::obscure_input() const {
-    return __obscure_input;
+    return _obscure_input;
 }
 
 template <class T>
-void Input<T>::obscure_char(char _c) {
-    __obscure_char = _c;
+void Input<T>::obscure_char(char c) {
+    _obscure_char = c;
 }
 
 template <class T>
 char Input<T>::obscure_char() const {
-    return __obscure_char;
+    return _obscure_char;
 }
 
 template <class T>
-void Input<T>::hide_input(bool _m) {
-    if (_m && __obscure_input) __obscure_input = false;
+void Input<T>::hide_input(bool m) {
+    if (m && _obscure_input) _obscure_input = false;
 
-    __hide_input = _m;
+    _hide_input = m;
 
     if (realization() == REALIZED) refresh(true);
 }
 
 template <class T>
 bool Input<T>::hide_input() const {
-    return __hide_input;
+    return _hide_input;
 }
 
 template <class T>
 bool Input<T>::changed() const {
-    return __buffer.changed();
+    return _buffer.changed();
 }
 
 template <class T>
-void Input<T>::filter(const InputFilter& _f) {
-    assert(__filter != 0);
-    delete __filter;
+void Input<T>::filter(const InputFilter& f) {
+    assert(_filter != 0);
+    delete _filter;
 
-    __filter = _f.clone();
-    assert(__filter != 0);
+    _filter = f.clone();
+    assert(_filter != 0);
 }
 
 template <class T>
-void Input<T>::size_available(const Size& _s) {
-    WidgetBase::size_available(_s);
+void Input<T>::size_available(const Size& s) {
+    WidgetBase::size_available(s);
 
-    // if we're dynamic, take the cols from _s as cols for our
-    // __size. Else, do nothing.
-    if (__length == 0) {
-        __size.rows(1);  // this is fixed for Input Widgets
-        __size.cols(_s.cols());
+    // if we're dynamic, take the cols from s as cols for our
+    // _size. Else, do nothing.
+    if (_length == 0) {
+        _size.rows(1);  // this is fixed for Input Widgets
+        _size.cols(s.cols());
     }
-    assert(__size.rows() <= _s.rows());
-    assert(__size.cols() <= _s.cols());
+    assert(_size.rows() <= s.rows());
+    assert(_size.cols() <= s.cols());
 }
 
 template <class T>
 Size Input<T>::size() const {
-    return __size;
+    return _size;
 }
 
 template <class T>
 Size Input<T>::size_hint() const {
-    // if __length != 0 then we're not dynmically sized, and the ctor
+    // if _length != 0 then we're not dynmically sized, and the ctor
     // has set the size, which we return. See also comment for
     // size_hint() in widgetbase.h.
-    if (__length != 0) return __size;
+    if (_length != 0) return _size;
 
-    return Size(1, __buffer.length());
+    return Size(1, _buffer.length());
 }
 
 template <class T>
@@ -654,11 +651,11 @@ bool Input<T>::size_change() {
 
 template <class T>
 void Input<T>::reset_size() {
-    // If __length != 0 then we are not dynamically sized, thus not
+    // If _length != 0 then we are not dynamically sized, thus not
     // resetting size.
-    if (__length != 0) return;
+    if (_length != 0) return;
 
-    __size = Size::zero();
+    _size = Size::zero();
 }
 
 template <class T>
@@ -682,20 +679,20 @@ void Input<T>::refresh(bool immediate) {
     // Make sure that in the following if/else block curs_pos is
     // set in any case.
 
-    if (__obscure_input) {
+    if (_obscure_input) {
         int16_t len;
 
-        __buffer.info(__size.cols(), &len, &curs_pos);
+        _buffer.info(_size.cols(), &len, &curs_pos);
         CurStr obs_out(
             "", Coordinates(),
             focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
-        obs_out.assign(len, __obscure_char);
+        obs_out.assign(len, _obscure_char);
         widget_subwin()->addlinex(obs_out);
     } else {
         CurStr out(
-            __buffer.string(__size.cols(), &curs_pos), Coordinates(),
+            _buffer.string(_size.cols(), &curs_pos), Coordinates(),
             focus() ? YACURS::INPUTWIDGET_FOCUS : YACURS::INPUTWIDGET_NOFOCUS);
-        if (__hide_input) {
+        if (_hide_input) {
             // first, give the widget nice color
             CurStr filler("", Coordinates(),
                           focus() ? YACURS::INPUTWIDGET_FOCUS

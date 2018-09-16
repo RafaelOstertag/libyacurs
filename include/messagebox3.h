@@ -28,15 +28,17 @@
 namespace YACURS {
 class MessageBox3 : public MessageBox2 {
    private:
-    DynLabel __message3;
-
-    // Not supported
-    MessageBox3& operator=(const MessageBox3&);
+    DynLabel _message3;
 
    public:
-    MessageBox3(const std::string& _title, const std::string& _message1,
-                const std::string& _message2, const std::string& _message3,
-                DIALOG_TYPE _dt = OKCANCEL);
+    MessageBox3(const std::string& title, const std::string& message1,
+                const std::string& message2, const std::string& message3,
+                DIALOG_TYPE dt = OKCANCEL);
+
+    MessageBox3& operator=(const MessageBox3&) = delete;
+    MessageBox3& operator=(MessageBox3&&) = delete;
+    MessageBox3(const MessageBox3&) = delete;
+    MessageBox3(MessageBox3&&) = delete;
 
     virtual ~MessageBox3();
 };

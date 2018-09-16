@@ -47,32 +47,28 @@ using namespace YACURS;
 //
 // Private
 //
-FileSaveDialog& FileSaveDialog::operator=(const FileSaveDialog&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
-void FileSaveDialog::window_close_handler(Event& _e) {
-    FileDialog::window_close_handler(_e);
+void FileSaveDialog::window_close_handler(Event& e) {
+    FileDialog::window_close_handler(e);
 
-    assert(_e == EVT_WINDOW_CLOSE);
+    assert(e == EVT_WINDOW_CLOSE);
 
-    EventEx<WindowBase*>& _evt = dynamic_cast<EventEx<WindowBase*>&>(_e);
+    EventEx<WindowBase*>& _evt = dynamic_cast<EventEx<WindowBase*>&>(e);
 
-    if (__errmsgbox == _evt.data()) {
-        delete __errmsgbox;
-        __errmsgbox = 0;
+    if (_errmsgbox == _evt.data()) {
+        delete _errmsgbox;
+        _errmsgbox = 0;
         return;
     }
 
-    if (__confirmdia != 0 && __confirmdia == _evt.data()) {
-        if (__confirmdia->dialog_state() == DIALOG_YES) {
+    if (_confirmdia != 0 && _confirmdia == _evt.data()) {
+        if (_confirmdia->dialog_state() == DIALOG_YES) {
             // It is ok to overwrite
             dialog_state(DIALOG_OK);
             close();
         }
-        delete __confirmdia;
-        __confirmdia = 0;
+        delete _confirmdia;
+        _confirmdia = 0;
         return;
     }
 }
@@ -80,14 +76,14 @@ void FileSaveDialog::window_close_handler(Event& _e) {
 //
 // Protected
 //
-void FileSaveDialog::button_press_handler(Event& _e) {
+void FileSaveDialog::button_press_handler(Event& e) {
     // We hook in the button_press_handler of Dialog, so we can test
     // if the file already exists when the ok button is pressed.
 
     if (realization() != REALIZED) return;
 
-    assert(_e == EVT_BUTTON_PRESS);
-    EventEx<Button*>& evt = dynamic_cast<EventEx<Button*>&>(_e);
+    assert(e == EVT_BUTTON_PRESS);
+    EventEx<Button*>& evt = dynamic_cast<EventEx<Button*>&>(e);
 
     if (evt.data() == ok_button() || evt.data() == yes_button()) {
         // This is also called in
@@ -108,19 +104,19 @@ void FileSaveDialog::button_press_handler(Event& _e) {
         struct stat wdc;
         int retval;
         if ((retval = stat(filepath().c_str(), &wdc)) == 0) {
-            assert(__confirmdia == 0);
-            __confirmdia = new MessageBox2(
+            assert(_confirmdia == 0);
+            _confirmdia = new MessageBox2(
                 _("Confirmation"), filepath(),
                 _("already exists. Do you want to overwrite?"), YESNO);
-            __confirmdia->show();
+            _confirmdia->show();
             return;
         } else {
             switch (errno) {
                 case EACCES:
-                    __errmsgbox = new MessageBox2(
+                    _errmsgbox = new MessageBox2(
                         _("Error"), filepath(),
                         EXCEPTIONS::SystemError(errno).what(), OK_ONLY);
-                    __errmsgbox->show();
+                    _errmsgbox->show();
                     return;
                     break;
 
@@ -136,18 +132,17 @@ void FileSaveDialog::button_press_handler(Event& _e) {
         }
     }
 
-    FileDialog::button_press_handler(_e);
+    FileDialog::button_press_handler(e);
 }
 
 //
 // Public
 //
 
-FileSaveDialog::FileSaveDialog(std::string _path, bool _do_chdir,
-                               DIALOG_TYPE _dt)
-    : FileDialog(std::string(_("Save File")), _path, _do_chdir, _dt),
-      __confirmdia(0),
-      __errmsgbox(0) {
+FileSaveDialog::FileSaveDialog(std::string path, bool do_chdir, DIALOG_TYPE dt)
+    : FileDialog(std::string(_("Save File")), path, do_chdir, dt),
+      _confirmdia(0),
+      _errmsgbox(0) {
     // Only allow files
     selection_type(YACURS::FILE);
 
@@ -159,6 +154,6 @@ FileSaveDialog::~FileSaveDialog() {
     EventQueue::disconnect_event(EventConnectorMethod1<FileSaveDialog>(
         EVT_WINDOW_CLOSE, this, &FileSaveDialog::window_close_handler));
 
-    if (__confirmdia) delete __confirmdia;
-    if (__errmsgbox) delete __errmsgbox;
+    if (_confirmdia) delete _confirmdia;
+    if (_errmsgbox) delete _errmsgbox;
 }

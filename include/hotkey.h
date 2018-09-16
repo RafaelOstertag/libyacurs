@@ -26,12 +26,10 @@
 namespace YACURS {
 class HotKey {
    private:
-    int __key;
+    int _key;
 
    public:
-    HotKey(int _k);
-    HotKey(const HotKey& hk);
-    HotKey& operator=(const HotKey& hk);
+    HotKey(int k);
 
     virtual ~HotKey();
 

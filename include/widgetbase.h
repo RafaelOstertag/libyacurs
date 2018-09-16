@@ -101,7 +101,7 @@ class WidgetBase : public Realizeable {
      * occupied. However, the pointer has to be valid for the
      * entire lifetime of the object.
      */
-    YACURS::INTERNAL::CursWin* __curses_window;
+    YACURS::INTERNAL::CursWin* _curses_window;
 
     /**
      * Focus Group ID
@@ -111,14 +111,14 @@ class WidgetBase : public Realizeable {
      * @note It should be set to @c FocusManager::nfgid when
      * unrealize()'d.
      */
-    FocusManager::fgid_t __fgid;
+    FocusManager::fgid_t _fgid;
 
     /**
      * Flag indicating whether or not the Widget can be focused.
      *
      * Set to @c false by ctor.
      */
-    bool __can_focus;
+    bool _can_focus;
 
     /**
      * Focus flag.
@@ -127,7 +127,7 @@ class WidgetBase : public Realizeable {
      *
      * Set to @c false by ctor.
      */
-    bool __focus;
+    bool _focus;
 
     /**
      * The parent of the widget. If the widget has no parent, it
@@ -136,32 +136,28 @@ class WidgetBase : public Realizeable {
      * Basically, only container widgets such as Packs can be
      * parents.
      */
-    WidgetBase* __parent;
+    WidgetBase* _parent;
 
     /**
      * Holds the position on the screen, where the widget will
      * display.
      */
-    Coordinates __position;
+    Coordinates _position;
 
     /**
      * Holds the Size available to the widget.
      *
      * Holds the Size available to the widget starting from
-     * __position.
+     * _position.
      *
      * This is mostly used for container widgets such as Pack or
      * Widgets dynamically adjust their size.
      *
      * This Size is also imperative for the Widget. If the size()
      * of a Widget is component wise greater than
-     * __size_available, the behavior is undefined.
+     * _size_available, the behavior is undefined.
      */
-    Size __size_available;
-
-    // Not supported
-    WidgetBase(const WidgetBase&);
-    WidgetBase& operator=(const WidgetBase&);
+    Size _size_available;
 
    protected:
     /**
@@ -194,7 +190,7 @@ class WidgetBase : public Realizeable {
     /**
      * Set whether or not Widget can be focused
      */
-    void can_focus(bool _can_focus);
+    void can_focus(bool can_focus);
 
    public:
     /**
@@ -209,6 +205,11 @@ class WidgetBase : public Realizeable {
      * - size available (i.e. Size::zero())
      */
     WidgetBase();
+    WidgetBase(const WidgetBase&) = delete;
+    WidgetBase& operator=(const WidgetBase&) = delete;
+    WidgetBase(WidgetBase&&) = delete;
+    WidgetBase& operator=(WidgetBase&&) = delete;
+
 
     virtual ~WidgetBase();
 
@@ -219,10 +220,10 @@ class WidgetBase : public Realizeable {
      *
      * This is usually not called by the user.
      *
-     * @param _p the parent. The pointer has to be valid during
+     * @param p the parent. The pointer has to be valid during
      * the lifetime of the widget.
      */
-    void parent(WidgetBase* _p);
+    void parent(WidgetBase* p);
 
     /**
      * Set the curses window of the widget.
@@ -232,40 +233,40 @@ class WidgetBase : public Realizeable {
      * This is usually not called by the user and is used for
      * creating subwin().
      *
-     * @param _p pointer to curses window. The pointer has to be
+     * @param p pointer to curses window. The pointer has to be
      * valid for the entire lifetime of the widget.
      *
      * @internal
      *
      * it is virtual because Pack implements its own version
      */
-    virtual void curses_window(YACURS::INTERNAL::CursWin* _p);
+    virtual void curses_window(YACURS::INTERNAL::CursWin* p);
 
     /**
      * Set Focus Group ID.
      *
-     * @param _id Focus Group ID.
+     * @param id Focus Group ID.
      *
      * @internal
      *
      * it is virtual because Pack implements its own version.
      */
-    virtual void focusgroup_id(FocusManager::fgid_t _id);
+    virtual void focusgroup_id(FocusManager::fgid_t id);
 
     /**
      * Set the position, where the widget will be displayed.
      *
-     * @param _c position where the widget will be displayed. The
-     * position is relative to __curses_window, since it is
+     * @param c position where the widget will be displayed. The
+     * position is relative to _curses_window, since it is
      * expected that widgets use derwin().
      */
-    void position(const Coordinates& _c);
+    void position(const Coordinates& c);
 
     /**
      * Get the the position of the widget.
      *
      * @return the position of the widget. The position is
-     * relative to the position of __curses_window.
+     * relative to the position of _curses_window.
      */
     const Coordinates& position() const;
 
@@ -276,10 +277,10 @@ class WidgetBase : public Realizeable {
      * parent widget, or the Window if the widget has no parent
      * Widget.
      *
-     * @param _s size available to the widget
+     * @param s size available to the widget
      *
      */
-    virtual void size_available(const Size& _s);
+    virtual void size_available(const Size& s);
 
     /**
      * Get the size available to the widget.
@@ -362,10 +363,10 @@ class WidgetBase : public Realizeable {
      * care of that. Else refreshing of overlapped windows/widgets
      * might get confused.
      *
-     * @param _f @c true if the Widget has focus, @c false
+     * @param f @c true if the Widget has focus, @c false
      * otherwise.
      */
-    virtual void focus(bool _f);
+    virtual void focus(bool f);
 
     /**
      * Get the focus status.

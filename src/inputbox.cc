@@ -29,10 +29,6 @@ using namespace YACURS;
 //
 // Private
 //
-InputBox& InputBox::operator=(const InputBox&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
 //
 // Protected
@@ -42,21 +38,21 @@ InputBox& InputBox::operator=(const InputBox&) {
 // Public
 //
 
-InputBox::InputBox(const std::string& _title, const std::string& _message,
-                   DIALOG_TYPE _dt)
-    : Dialog(_title, _dt), __message(_message), __input(), __vpack() {
-    __message.color(DIALOG);
+InputBox::InputBox(const std::string& title, const std::string& message,
+                   DIALOG_TYPE dt)
+    : Dialog(title, dt), _message(message), _input(), _vpack() {
+    _message.color(DIALOG);
 
-    __vpack.add_back(&__message);
-    __vpack.add_back(&__input);
-    __vpack.always_dynamic(true);
-    __vpack.hinting(true);
+    _vpack.add_back(&_message);
+    _vpack.add_back(&_input);
+    _vpack.always_dynamic(true);
+    _vpack.hinting(true);
 
-    widget(&__vpack);
+    widget(&_vpack);
 }
 
 InputBox::~InputBox() {}
 
-const std::string& InputBox::input() const { return __input.input(); }
+const std::string& InputBox::input() const { return _input.input(); }
 
-void InputBox::clear() { __input.clear(); }
+void InputBox::clear() { _input.clear(); }

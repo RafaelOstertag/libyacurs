@@ -51,10 +51,10 @@ AlreadyRealized::AlreadyRealized() : BaseCurEx(_("object already realized")) {}
 
 NotRealized::NotRealized() : BaseCurEx(_("object not realized")) {}
 
-SystemError::SystemError(int _errno)
-    : BaseCurEx(std::strerror(_errno)), __errno(_errno) {}
+SystemError::SystemError(int errorNo)
+    : BaseCurEx(std::strerror(errorNo)), _errno(errorNo) {}
 
-int SystemError::errorno() const { return __errno; }
+int SystemError::errorno() const { return _errno; }
 
 WinSizeInvalid::WinSizeInvalid() : BaseCurEx(_("TIOCGWINSZ info invalid")) {}
 

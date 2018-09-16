@@ -28,7 +28,7 @@ using namespace YACURS;
 //
 // Static
 //
-Margin Margin::__zero(0, 0, 0, 0);
+Margin Margin::_zero(0, 0, 0, 0);
 
 //
 // Private
@@ -41,48 +41,34 @@ Margin Margin::__zero(0, 0, 0, 0);
 //
 // Public
 //
-Margin::Margin(int _top, int _left, int _bottom, int _right)
-    : __top(_top), __bottom(_bottom), __left(_left), __right(_right) {}
-
-Margin::Margin(const Margin& m)
-    : __top(m.__top),
-      __bottom(m.__bottom),
-      __left(m.__left),
-      __right(m.__right) {}
+Margin::Margin(int top, int left, int bottom, int right)
+    : _top(top), _bottom(bottom), _left(left), _right(right) {}
 
 Margin::~Margin() {}
 
-void Margin::top(int i) { __top = i; }
+void Margin::top(int i) { _top = i; }
 
-void Margin::bottom(int i) { __bottom = i; }
+void Margin::bottom(int i) { _bottom = i; }
 
-void Margin::left(int i) { __left = i; }
+void Margin::left(int i) { _left = i; }
 
-void Margin::right(int i) { __right = i; }
+void Margin::right(int i) { _right = i; }
 
-int Margin::top() const { return __top; }
+int Margin::top() const { return _top; }
 
-int Margin::bottom() const { return __bottom; }
+int Margin::bottom() const { return _bottom; }
 
-int Margin::left() const { return __left; }
+int Margin::left() const { return _left; }
 
-int Margin::right() const { return __right; }
-
-Margin& Margin::operator=(const Margin& m) {
-    __top = m.__top;
-    __bottom = m.__bottom;
-    __left = m.__left;
-    __right = m.__right;
-    return *this;
-}
+int Margin::right() const { return _right; }
 
 Margin Margin::operator+(const Margin& m) const {
     Margin tmp = *this;
 
-    tmp.__top = std::max(__top, m.__top);
-    tmp.__bottom = std::max(__bottom, m.__bottom);
-    tmp.__left = std::max(__left, m.__left);
-    tmp.__right = std::max(__right, m.__right);
+    tmp._top = std::max(_top, m._top);
+    tmp._bottom = std::max(_bottom, m._bottom);
+    tmp._left = std::max(_left, m._left);
+    tmp._right = std::max(_right, m._right);
 
     return tmp;
 }
@@ -90,10 +76,10 @@ Margin Margin::operator+(const Margin& m) const {
 Margin Margin::operator-(const Margin& m) const {
     Margin tmp = *this;
 
-    tmp.__top = std::min(__top, m.__top);
-    tmp.__bottom = std::min(__bottom, m.__bottom);
-    tmp.__left = std::min(__left, m.__left);
-    tmp.__right = std::min(__right, m.__right);
+    tmp._top = std::min(_top, m._top);
+    tmp._bottom = std::min(_bottom, m._bottom);
+    tmp._left = std::min(_left, m._left);
+    tmp._right = std::min(_right, m._right);
 
     return tmp;
 }
@@ -101,10 +87,10 @@ Margin Margin::operator-(const Margin& m) const {
 bool Margin::operator==(const Margin& m) const {
     if (this == &m) return true;
 
-    return __top == m.__top && __bottom == m.__bottom && __left == m.__left &&
-           __right == m.__right;
+    return _top == m._top && _bottom == m._bottom && _left == m._left &&
+           _right == m._right;
 }
 
 bool Margin::operator!=(const Margin& m) const { return !operator==(m); }
 
-const Margin& Margin::zero() { return __zero; }
+const Margin& Margin::zero() { return _zero; }

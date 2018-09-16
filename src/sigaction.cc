@@ -30,12 +30,6 @@ using namespace YACURS::INTERNAL;
 //
 // Private
 //
-Sigaction::Sigaction(const Sigaction&) { throw EXCEPTIONS::NotSupported(); }
-
-Sigaction& Sigaction::operator=(const Sigaction&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
 //
 // Protected
@@ -46,26 +40,26 @@ Sigaction& Sigaction::operator=(const Sigaction&) {
 //
 
 Sigaction::Sigaction(int signo, sig_handler hndlr, sigset_t& mask)
-    : __signo(signo) {
+    : _signo(signo) {
 #ifdef SA_SIGINFO
-    __current_action.sa_sigaction = hndlr;
-    __current_action.sa_flags = SA_SIGINFO;
+    _current_action.sa_sigaction = hndlr;
+    _current_action.sa_flags = SA_SIGINFO;
 #else
-    __current_action.sa_handler = hndlr;
-    __current_action.sa_flags = 0;
+    _current_action.sa_handler = hndlr;
+    _current_action.sa_flags = 0;
 #endif
 
-    std::memcpy(&__current_action.sa_mask, &mask, sizeof(sigset_t));
+    std::memcpy(&_current_action.sa_mask, &mask, sizeof(sigset_t));
 
-    if (sigaction(__signo, &__current_action, &__saved_action) != 0)
+    if (sigaction(_signo, &_current_action, &_saved_action) != 0)
         throw EXCEPTIONS::SystemError(errno);
 }
 
-Sigaction::~Sigaction() { sigaction(__signo, &__saved_action, 0); }
+Sigaction::~Sigaction() { sigaction(_signo, &_saved_action, 0); }
 
 void Sigaction::reset() const {
     // We don't save the old action, since we already have that done
     // in the ctor.
-    if (sigaction(__signo, &__current_action, 0) != 0)
+    if (sigaction(_signo, &_current_action, 0) != 0)
         throw EXCEPTIONS::SystemError(errno);
 }

@@ -64,8 +64,8 @@ class EventType {
    private:
     enum { MAX_NAME_LENGTH = 64 };
 
-    char __name[MAX_NAME_LENGTH];
-    uint32_t __hashval;
+    char _name[MAX_NAME_LENGTH];
+    uint32_t _hashval;
 
    public:
     EventType(std::string name);
@@ -202,15 +202,15 @@ class Event {
      * Indicate whether or not the Event should not be
      * processed further.
      */
-    bool __stop;
+    bool _stop;
 
    public:
     /**
-     * @param _et the event type
+     * @param et the event type
      */
-    Event(const EventType _et);
+    Event(const EventType et);
 
-    Event(const Event &_e);
+    Event(const Event &e);
 
     virtual ~Event();
 
@@ -219,23 +219,23 @@ class Event {
     /**
      * Tests Event objects for equality.
      *
-     * @param _e reference to rhs
+     * @param e reference to rhs
      *
      * @return \c true if the event type of the events are
      * equal. \c false otherwise.
      */
-    virtual bool operator==(const Event &_e) const;
+    virtual bool operator==(const Event &e) const;
 
     /**
      * Tests whether the given event type is equal to type of this
      * object.
      *
-     * @param _et rhs EventType
+     * @param et rhs EventType
      *
      * @return \c true if the event types are equal, \c false
      * otherwise.
      */
-    bool operator==(const EventType _et) const;
+    bool operator==(const EventType et) const;
 
     /**
      * Get the event type of the object.
@@ -274,7 +274,7 @@ class Event {
 
     operator const EventType() const;
 
-    static std::string evt2str(const EventType _et);
+    static std::string evt2str(const EventType et);
 };
 
 /**
@@ -289,26 +289,26 @@ template <class T>
 class EventEx : public Event {
    private:
     /// The data transported by the event.
-    T __payload;
+    T _payload;
 
    public:
     /**
-     * @param _et the event type
+     * @param et the event type
      *
      * @param _payload reference to the data. The data will be copied to
      * an internal variable.
      */
-    EventEx<T>(const EventType _et, const T &_payload)
-        : Event(_et), __payload(_payload) {}
+    EventEx<T>(const EventType et, const T &_payload)
+        : Event(et), _payload(_payload) {}
 
-    EventEx<T>(const EventEx<T> &_e) : Event(_e), __payload(_e.__payload) {}
+    EventEx<T>(const EventEx<T> &e) : Event(e), _payload(e._payload) {}
 
     EventEx<T> &operator=(const EventEx<T> &_rhs) {
         if (this == &_rhs) return *this;
 
         Event::operator=(_rhs);
 
-        __payload = _rhs.__payload;
+        _payload = _rhs._payload;
 
         return *this;
     }
@@ -324,7 +324,7 @@ class EventEx : public Event {
     /**
      * @return a reference to the data of the event.
      */
-    virtual T &data() { return __payload; }
+    virtual T &data() { return _payload; }
 };
 }  // namespace YACURS
 

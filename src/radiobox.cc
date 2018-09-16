@@ -36,11 +36,6 @@ using namespace YACURS;
 // Private
 //
 
-RadioBox& RadioBox::operator=(const RadioBox&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
-
 //
 // Protected
 //
@@ -49,27 +44,27 @@ RadioBox& RadioBox::operator=(const RadioBox&) {
 // Public
 //
 
-RadioBox::RadioBox(const std::string& _title,
-                   const std::vector<std::string>& _items)
-    : CheckBox(_title, _items) {
-    __indicators[0] = "( ) ";
-    __indicators[1] = "(o) ";
+RadioBox::RadioBox(const std::string& title,
+                   const std::vector<std::string>& items)
+    : CheckBox(title, items) {
+    _indicators[0] = "( ) ";
+    _indicators[1] = "(o) ";
 }
 
 RadioBox::~RadioBox() {}
 
-void RadioBox::set_selection(unsigned short _cursor) {
-    if (_cursor >= __items.size())
+void RadioBox::set_selection(unsigned short cursor) {
+    if (cursor >= _items.size())
         throw std::out_of_range(
             _("RadioBox cursor out of range in set_selection()"));
 
-    for (std::vector<INTERNAL::Selectable>::size_type i = 0; i < __items.size();
+    for (std::vector<INTERNAL::Selectable>::size_type i = 0; i < _items.size();
          i++)
-        __items[i].selected = false;
+        _items[i].selected = false;
 
-    __items[_cursor].selected = true;
+    _items[cursor].selected = true;
 }
 
-void RadioBox::set_selection(const std::string& _i) {
-    CheckBox::set_selection(_i);
+void RadioBox::set_selection(const std::string& str) {
+    CheckBox::set_selection(str);
 }

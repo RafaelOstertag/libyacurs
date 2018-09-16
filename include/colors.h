@@ -161,7 +161,7 @@ class Colors {
     /**
      * Flag, whether or not colors have been initialized.
      */
-    static bool __initialized;
+    static bool _initialized;
 
     /**
      * Array holding CursColor
@@ -171,7 +171,7 @@ class Colors {
      * The color pairs for curses are access by using the
      * names defined in the @c COLOR enum.
      */
-    static std::vector<INTERNAL::CursColor> __colors;
+    static std::vector<INTERNAL::CursColor> _colors;
 
    public:
     /**

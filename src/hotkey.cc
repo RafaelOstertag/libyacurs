@@ -38,15 +38,8 @@ using namespace YACURS;
 //
 // Public
 //
-HotKey::HotKey(int _k) : __key(_k) {}
-
-HotKey::HotKey(const HotKey& hk) : __key(hk.__key) {}
-
-HotKey& HotKey::operator=(const HotKey& hk) {
-    __key = hk.__key;
-    return *this;
-}
+HotKey::HotKey(int k) : _key(k) {}
 
 HotKey::~HotKey() {}
 
-int HotKey::key() const { return __key; }
+int HotKey::key() const { return _key; }

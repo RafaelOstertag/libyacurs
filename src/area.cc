@@ -32,7 +32,7 @@ using namespace YACURS;
 //
 // Private
 //
-Area Area::__zero(0, 0, 0, 0);
+Area Area::_zero(0, 0, 0, 0);
 
 //
 // Protected

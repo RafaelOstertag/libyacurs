@@ -27,11 +27,12 @@
 
 namespace YACURS {
 class TitleBar : public LineObject {
-   private:
-    TitleBar& operator=(const TitleBar&);
-
    public:
-    TitleBar(POSITION _pos, const std::string& _t);
+    TitleBar(POSITION pos, const std::string& t);
+    TitleBar& operator=(const TitleBar&) = delete;
+    TitleBar& operator=(TitleBar&&) = delete;
+    TitleBar(const TitleBar&) = delete;
+    TitleBar(TitleBar&&) = delete;
 };
 }  // namespace YACURS
 

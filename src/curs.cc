@@ -58,13 +58,13 @@
 using namespace YACURS;
 
 Size Curses::suspend_scrsz;
-TitleBar* Curses::__title = 0;
-StatusBar* Curses::__statusbar = 0;
-Window* Curses::__mainwindow = 0;
+TitleBar* Curses::_titleBar = 0;
+StatusBar* Curses::_statusBar = 0;
+Window* Curses::_mainWindow = 0;
 bool Curses::initialized = false;
-volatile bool Curses::__suspended = false;
+volatile bool Curses::_suspended = false;
 
-const char* Curses::__xterm_list[] = {"xterm", "dtterm", "screen", 0};
+const char* Curses::_xterm_list[] = {"xterm", "dtterm", "screen", 0};
 
 //
 // Private
@@ -72,7 +72,7 @@ const char* Curses::__xterm_list[] = {"xterm", "dtterm", "screen", 0};
 
 bool Curses::is_xterm() {
 #ifdef HAVE_TERMNAME
-    const char** tmp = __xterm_list;
+    const char** tmp = _xterm_list;
     const char* tn = termname();
 
     while (*tmp != 0) {
@@ -124,7 +124,7 @@ void Curses::termresetup_handler(Event& e) {
 void Curses::sigtstp_handler(Event& e) {
     assert(e == EVT_SIGTSTP);
 
-    if (__suspended) return;
+    if (_suspended) return;
 
     int old_errno = errno;
 
@@ -141,7 +141,7 @@ void Curses::sigtstp_handler(Event& e) {
 
     endwin();
 
-    __suspended = true;
+    _suspended = true;
 
     // Put to sleep
     kill(getpid(), SIGSTOP);
@@ -157,7 +157,7 @@ void Curses::sigtstp_handler(Event& e) {
 void Curses::sigcont_handler(Event& e) {
     assert(e == EVT_SIGCONT);
 
-    if (!__suspended) return;
+    if (!_suspended) return;
 
     int old_errno = errno;
 
@@ -181,7 +181,7 @@ void Curses::sigcont_handler(Event& e) {
     EventQueue::submit(Event(EVT_DOUPDATE));
 #endif  // defined(HAVE_RESIZE_TERM) || defined(HAVE_RESIZETERM)
 
-    __suspended = false;
+    _suspended = false;
 
     errno = old_errno;
 }
@@ -271,34 +271,34 @@ void Curses::run() {
 
     FocusManager::init();
 
-    if (__title) __title->show();
+    if (_titleBar) _titleBar->show();
 
-    if (__statusbar) __statusbar->show();
+    if (_statusBar) _statusBar->show();
 
-    if (__mainwindow) __mainwindow->show();
+    if (_mainWindow) _mainWindow->show();
 
     EventQueue::run();
 
-    if (__mainwindow) __mainwindow->close();
+    if (_mainWindow) _mainWindow->close();
 
-    if (__statusbar) __statusbar->close();
+    if (_statusBar) _statusBar->close();
 
-    if (__title) __title->close();
+    if (_titleBar) _titleBar->close();
 
     FocusManager::uninit();
 }
 
-void Curses::title(TitleBar* _title) { __title = _title; }
+void Curses::title(TitleBar* titleBar) { _titleBar = titleBar; }
 
-TitleBar* Curses::title() { return __title; }
+TitleBar* Curses::title() { return _titleBar; }
 
-void Curses::statusbar(StatusBar* _sl) { __statusbar = _sl; }
+void Curses::statusbar(StatusBar* statusBar) { _statusBar = statusBar; }
 
-StatusBar* Curses::statusbar() { return __statusbar; }
+StatusBar* Curses::statusbar() { return _statusBar; }
 
-void Curses::mainwindow(Window* _w) { __mainwindow = _w; }
+void Curses::mainwindow(Window* window) { _mainWindow = window; }
 
-Window* Curses::mainwindow() { return __mainwindow; }
+Window* Curses::mainwindow() { return _mainWindow; }
 
 Size Curses::inquiry_screensize() {
     if (!initialized) throw EXCEPTIONS::NotInitialized();
@@ -358,9 +358,9 @@ Size Curses::current_screensize() {
     return Size(nrows, ncols);
 }
 
-void Curses::set_terminal_title(const std::string& _str) {
+void Curses::set_terminal_title(const std::string& title) {
     if (Curses::is_xterm()) {
-        fprintf(stdout, "%c]0;%s%c", '\033', _str.c_str(), '\007');
+        fprintf(stdout, "%c]0;%s%c", '\033', title.c_str(), '\007');
         fflush(stdout);
     }
 }

@@ -31,19 +31,16 @@ using namespace YACURS;
 //
 // Private
 //
-Label& Label::operator=(const Label&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
+
 
 size_t Label::label_length() const {
 #ifdef YACURS_USE_WCHAR
-    size_t mbslen = std::mbstowcs(0, __label.c_str(), 0);
+    size_t mbslen = std::mbstowcs(0, _label.c_str(), 0);
     if (mbslen == (size_t)-1) throw EXCEPTIONS::SystemError(errno);
 
     return mbslen;
 #else
-    return __label.length();
+    return _label.length();
 #endif
 }
 
@@ -54,27 +51,27 @@ size_t Label::label_length() const {
 //
 // Public
 //
-Label::Label(const std::string& _l)
+Label::Label(const std::string& l)
     : Widget(),
-      __color(DEFAULT),
-      __label(_l),
-      __size(Size(1, label_length())) {}
+      _color(DEFAULT),
+      _label(l),
+      _size(Size(1, label_length())) {}
 
 Label::~Label() {}
 
-void Label::label(const std::string& _l) {
-    __label = _l;
+void Label::label(const std::string& l) {
+    _label = l;
 
-    Size oldsize = __size;
+    Size oldsize = _size;
 
-    __size = Size(1, label_length());
+    _size = Size(1, label_length());
 
     // If parent is 0, we have nobody to inform about a possible
     // size change. If old size is the same as the new size, we simply
     // have to refresh immediately.
     //
     // In any case, we can leave the function.
-    if (parent() == 0 || oldsize.cols() >= __size.cols()) {
+    if (parent() == 0 || oldsize.cols() >= _size.cols()) {
         if (realization() == REALIZED) refresh(true);
         return;
     }
@@ -83,11 +80,11 @@ void Label::label(const std::string& _l) {
     parent()->size_change();
 }
 
-const std::string& Label::label() const { return __label; }
+const std::string& Label::label() const { return _label; }
 
-Size Label::size() const { return __size; }
+Size Label::size() const { return _size; }
 
-Size Label::size_hint() const { return __size; }
+Size Label::size_hint() const { return _size; }
 
 bool Label::size_change() {
     // We don't handle size changes since we're not a container
@@ -106,13 +103,13 @@ void Label::refresh(bool immediate) {
     assert(widget_subwin() != 0);
 
     widget_subwin()->erase();
-    CurStr tmp(__label, Coordinates(), color());
+    CurStr tmp(_label, Coordinates(), color());
     widget_subwin()->addstr(tmp);
 
     Widget::refresh(immediate);
 }
 
-void Label::color(COLOROBJ c) { __color = c; }
+void Label::color(COLOROBJ c) { _color = c; }
 
 COLOROBJ
-Label::color() const { return __color; }
+Label::color() const { return _color; }

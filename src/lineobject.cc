@@ -37,16 +37,16 @@ using namespace YACURS;
 
 void LineObject::compute_margin() {
 #ifndef NDEBUG
-    Margin __m_debug;
+    Margin _m_debug;
 #endif  // NDEBUG
-    switch (__position) {
+    switch (_position) {
         case POS_TOP:
 #ifdef NDEBUG
             margin(Margin(0, 0, area().rows() - 1, 0));
 #else   // NDEBUG
-            __m_debug = Margin(0, 0, area().rows() - 1, 0);
-            assert(__m_debug.bottom() >= 0);
-            margin(__m_debug);
+            _m_debug = Margin(0, 0, area().rows() - 1, 0);
+            assert(_m_debug.bottom() >= 0);
+            margin(_m_debug);
 #endif  // NDEBUG
             break;
 
@@ -54,29 +54,22 @@ void LineObject::compute_margin() {
 #ifdef NDEBUG
             margin(Margin(area().rows() - 1, 0, 0, 0));
 #else  // NDEBUG
-            __m_debug = Margin(area().rows() - 1, 0, 0, 0);
-            assert(__m_debug.top() >= 0);
-            margin(__m_debug);
+            _m_debug = Margin(area().rows() - 1, 0, 0, 0);
+            assert(_m_debug.top() >= 0);
+            margin(_m_debug);
 #endif
             break;
     }
 }
 
-LineObject::LineObject(const LineObject&) { throw EXCEPTIONS::NotSupported(); }
-
-LineObject& LineObject::operator=(const LineObject& lo) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
-
 size_t LineObject::text_length() const {
 #ifdef YACURS_USE_WCHAR
-    size_t mbslen = std::mbstowcs(0, __linetext.c_str(), 0);
+    size_t mbslen = std::mbstowcs(0, _linetext.c_str(), 0);
     if (mbslen == (size_t)-1) throw EXCEPTIONS::SystemError(errno);
 
     return mbslen;
 #else
-    return __linetext.length();
+    return _linetext.length();
 #endif
 }
 
@@ -95,11 +88,11 @@ void LineObject::put_line() {
     if (static_cast<std::string::size_type>(area().cols()) <= text_length()) {
         // Since we are here, the text is too big for the screen
         // width, so we can't align anyway.
-        CurStr tmp(__linetext, Coordinates(0, 0));
+        CurStr tmp(_linetext, Coordinates(0, 0));
         curses_window()->addstrx(tmp);
     } else {
         int hpos = 0;
-        switch (__alignment) {
+        switch (_alignment) {
             case LEFT:
                 // Nothing to do, since hpos is == 0
                 assert(hpos == 0);
@@ -118,7 +111,7 @@ void LineObject::put_line() {
                 break;
         }
 
-        CurStr tmp(__linetext, Coordinates(hpos, 0), color());
+        CurStr tmp(_linetext, Coordinates(hpos, 0), color());
         curses_window()->addstr(tmp);
     }
 }
@@ -126,30 +119,30 @@ void LineObject::put_line() {
 //
 // Public
 //
-LineObject::LineObject(POSITION _pos, const std::string& _t, COLOROBJ _color)
-    : __linetext(_t), __position(_pos), __alignment(LEFT) {
-    color(_color);
+LineObject::LineObject(POSITION pos, const std::string& t, COLOROBJ c)
+    : _linetext(t), _position(pos), _alignment(LEFT) {
+    color(c);
 }
 
 LineObject::~LineObject() {}
 
-void LineObject::line(const std::string& _str) {
-    __linetext = _str;
+void LineObject::line(const std::string& str) {
+    _linetext = str;
     // Refresh is responsible for taking care of whether or not the
     // refresh can happen, for instance, it cannot happen if the
     // object is not realized.
     refresh(true);
 }
 
-void LineObject::alignment(ALIGNMENT _a) {
-    __alignment = _a;
+void LineObject::alignment(ALIGNMENT a) {
+    _alignment = a;
 
     if (realization() == REALIZED) refresh(true);
 }
 
-LineObject::ALIGNMENT LineObject::alignment() const { return __alignment; }
+LineObject::ALIGNMENT LineObject::alignment() const { return _alignment; }
 
-std::string LineObject::line() const { return __linetext; }
+std::string LineObject::line() const { return _linetext; }
 
 void LineObject::realize() {
     REALIZE_ENTER;

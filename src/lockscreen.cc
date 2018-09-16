@@ -39,55 +39,50 @@ using namespace YACURS;
 // Private
 //
 
-LockScreen& LockScreen::operator=(const LockScreen&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
-
 //
 // Protected
 //
-void LockScreen::key_event_handler(Event& _e) {
-    assert(_e == EVT_KEY);
+void LockScreen::key_event_handler(Event& e) {
+    assert(e == EVT_KEY);
 
-    if (!__unlock_dialog->shown() && __msgbox == 0) {
-        __unlock_dialog->clear();
-        __unlock_dialog->show();
+    if (!_unlock_dialog->shown() && _msgbox == 0) {
+        _unlock_dialog->clear();
+        _unlock_dialog->show();
         // Set the timeout for the unlock dialog
-        EventQueue::timeout(__unlock_diag_timeout);
+        EventQueue::timeout(_unlock_diag_timeout);
 
         // The event should not be processed any further, else the key
         // might be passed on to the Unlock Dialog. Further key
         // presses must come thru, tough.
-        _e.stop(true);
+        e.stop(true);
     }
 }
 
-void LockScreen::window_close_event_handler(Event& _e) {
-    assert(_e == EVT_WINDOW_CLOSE);
+void LockScreen::window_close_event_handler(Event& e) {
+    assert(e == EVT_WINDOW_CLOSE);
 
-    EventEx<WindowBase*>& _evt = dynamic_cast<EventEx<WindowBase*>&>(_e);
+    EventEx<WindowBase*>& evt = dynamic_cast<EventEx<WindowBase*>&>(e);
 
-    if (_evt.data() == __unlock_dialog) {
-        if (__unlock_dialog->unlock()) {
+    if (evt.data() == _unlock_dialog) {
+        if (_unlock_dialog->unlock()) {
             close();
         } else {
-            if (__unlock_dialog->dialog_state() == DIALOG_OK) {
-                assert(__msgbox == 0);
-                __msgbox = new MessageBox(_("Unlock Failed"),
-                                          _("Wrong Password"), OK_ONLY);
-                __msgbox->show();
+            if (_unlock_dialog->dialog_state() == DIALOG_OK) {
+                assert(_msgbox == 0);
+                _msgbox = new MessageBox(_("Unlock Failed"),
+                                         _("Wrong Password"), OK_ONLY);
+                _msgbox->show();
             }
         }
         // Set the timeout back to the timeout until lock screen kicks
         // in
-        EventQueue::timeout(__timeout);
+        EventQueue::timeout(_timeout);
         return;
     }
 
-    if (_evt.data() == __msgbox) {
-        delete __msgbox;
-        __msgbox = 0;
+    if (evt.data() == _msgbox) {
+        delete _msgbox;
+        _msgbox = 0;
     }
 }
 
@@ -95,35 +90,35 @@ void LockScreen::window_close_event_handler(Event& _e) {
 // Public
 //
 
-LockScreen::LockScreen(UnlockDialog* _unlock, unsigned int timeout,
+LockScreen::LockScreen(UnlockDialog* unlock, unsigned int timeout,
                        unsigned int ulck_timeout)
     : Window(Margin::zero()),
-      __timeout(timeout),
-      __unlock_diag_timeout(ulck_timeout),
-      __unlock_dialog(_unlock),
-      __msgbox(0) {
-    if (!__unlock_dialog)
+      _timeout(timeout),
+      _unlock_diag_timeout(ulck_timeout),
+      _unlock_dialog(unlock),
+      _msgbox(0) {
+    if (!_unlock_dialog)
         throw std::invalid_argument(_("InputDialog may not be 0"));
 }
 
 LockScreen::~LockScreen() {}
 
-unsigned int LockScreen::timeout() const { return __timeout; }
+unsigned int LockScreen::timeout() const { return _timeout; }
 
 unsigned int LockScreen::unlock_dialog_timeout() const {
-    return __unlock_diag_timeout;
+    return _unlock_diag_timeout;
 }
 
 void LockScreen::close_unlock_dialog() {
-    if (__unlock_dialog->shown())
+    if (_unlock_dialog->shown())
         // We clear here, since the user might have entered the
         // password but not yet closed the dialog. If we simply would
         // close without reset, the Window Close handler would kick
         // in, ask the dialog if the password is OK (which we assume
         // it is) and unlock the screen.
-        __unlock_dialog->clear();
-    __unlock_dialog->close();
-    if (__msgbox != 0 && __msgbox->shown()) __msgbox->close();
+        _unlock_dialog->clear();
+    _unlock_dialog->close();
+    if (_msgbox != 0 && _msgbox->shown()) _msgbox->close();
 }
 
 void LockScreen::show() {

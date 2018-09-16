@@ -132,13 +132,13 @@ class SystemError : public BaseCurEx {
     /**
      * Error number
      */
-    int __errno;
+    int _errno;
 
    public:
     /**
-     * @param _errno error number
+     * @param errorNo error number
      */
-    SystemError(int _errno);
+    SystemError(int errorNo);
 
     /**
      * @return error number of the System Error.

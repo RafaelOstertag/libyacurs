@@ -60,7 +60,7 @@ class Pack : public WidgetBase {
      * Pack::size(). Pack::size() may even choose to use a
      * different size (@sa Pack::size()).
      */
-    Size __size;
+    Size _size;
 
     /**
      * When hinting is enabled (@c true) Pack::size_hint() queries
@@ -70,7 +70,7 @@ class Pack : public WidgetBase {
      *
      * Default @c true.
      */
-    bool __hinting;
+    bool _hinting;
 
     /**
      * Indicates whether or not the Pack should behave as
@@ -85,7 +85,7 @@ class Pack : public WidgetBase {
      *
      * Default @c false.
      */
-    bool __always_dynamic;
+    bool _always_dynamic;
 
     /**
      * Call curses_window() on all associated Widgets.
@@ -122,10 +122,7 @@ class Pack : public WidgetBase {
      */
     virtual Size calc_size_non_dynamic() const = 0;
 
-    void take_over(WidgetBase* _w);
-
-    // Not supported
-    Pack& operator=(const Pack&);
+    void take_over(WidgetBase* w);
 
    protected:
     /**
@@ -137,6 +134,12 @@ class Pack : public WidgetBase {
 
    public:
     Pack();
+
+    Pack& operator=(const Pack&) = delete;
+    Pack(const Pack&) = delete;
+    Pack& operator=(Pack&&) = delete;
+    Pack(Pack&&) = delete;
+
     virtual ~Pack();
 
     std::list<WidgetBase*>::size_type widgets() const;
@@ -150,11 +153,11 @@ class Pack : public WidgetBase {
      * has been realized. Attempt to do so will raise
      * AlreadyRealized exception
      *
-     * @param _w the widget to add. The pack does not create a
+     * @param w the widget to add. The pack does not create a
      * copy, so the pointer has to remain valid for the lifetime
      * of the pack.
      */
-    void add_front(WidgetBase* _w);
+    void add_front(WidgetBase* w);
 
     /**
      * Add a widget to the Pack. The widget will be added after
@@ -165,11 +168,11 @@ class Pack : public WidgetBase {
      * has been realized. Attempt to do so will raise
      * AlreadyRealized exception
      *
-     * @param _w the widget to add. The pack does not create a
+     * @param w the widget to add. The pack does not create a
      * copy, so the pointer has to remain valid for the lifetime
      * of the pack.
      */
-    void add_back(WidgetBase* _w);
+    void add_back(WidgetBase* w);
 
     /**
      * Remove a previously added widget.
@@ -179,10 +182,10 @@ class Pack : public WidgetBase {
      * has been realized. Attempt to do so will raise
      * AlreadyRealized exception
      *
-     * @param _w widget to be removed. Pack compares the address
+     * @param w widget to be removed. Pack compares the address
      * of the widget.
      */
-    void remove(WidgetBase* _w);
+    void remove(WidgetBase* w);
 
     /**
      * Set the curses window of the Pack and all associated
@@ -191,17 +194,17 @@ class Pack : public WidgetBase {
      * Pack has to maintain its curses window pointer as well as
      * the pointer of the associated widgets.
      *
-     * @param _p pointer to curses window
+     * @param p pointer to curses window
      */
-    void curses_window(YACURS::INTERNAL::CursWin* _p);
+    void curses_window(YACURS::INTERNAL::CursWin* p);
 
     /**
      * Set the Focus Group ID of the Pack and all associated
      * Widgets.
      *
-     * @param _id Focus Group ID.
+     * @param id Focus Group ID.
      */
-    void focusgroup_id(FocusManager::fgid_t _id);
+    void focusgroup_id(FocusManager::fgid_t id);
 
     /**
      * Set the available size.
@@ -209,9 +212,9 @@ class Pack : public WidgetBase {
      * Since Pack is dynamically sizeable, we have to react on
      * size_available(), unlike statically sized Widgets.
      *
-     * @param _s the size available to the Pack.
+     * @param s the size available to the Pack.
      */
-    void size_available(const Size& _s);
+    void size_available(const Size& s);
 
     Size size() const;
 
@@ -224,10 +227,10 @@ class Pack : public WidgetBase {
      *
      * By default, hinting is enabled.
      *
-     * @param _h @c true enables hinting, @c false disables
+     * @param h @c true enables hinting, @c false disables
      * hinting.
      */
-    void hinting(bool _h);
+    void hinting(bool h);
 
     /**
      * Query hinting mode.
@@ -251,10 +254,10 @@ class Pack : public WidgetBase {
      *
      * By default, always dynamic is disabled.
      *
-     * @param _d @c true to enable always dynamic mode, @c false
+     * @param d @c true to enable always dynamic mode, @c false
      * to disable it.
      */
-    void always_dynamic(bool _d);
+    void always_dynamic(bool d);
 
     /**
      * Query always dynamic mode.
@@ -297,9 +300,9 @@ class Pack : public WidgetBase {
      * This function relies on the implementation of realize() of
      * derived classes.
      *
-     * @param _a the new size available to the pack.
+     * @param a the new size available to the pack.
      */
-    void resize(const Area& _a);
+    void resize(const Area& a);
 
     //
     // Has to be implemented in derrived classes

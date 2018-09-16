@@ -46,8 +46,8 @@ class Size {
     /**
      * Object representing zero.
      */
-    static Size __zero;
-    int16_t __rows, __cols;
+    static Size _zero;
+    int16_t _rows, _cols;
 
    public:
     /**
@@ -56,10 +56,10 @@ class Size {
      * When no arguments are provided, it initializes the object
      * to zero, i.e. rows=, lines=0.
      *
-     * @param _rows amount of rows
-     * @param _cols amount of columns.
+     * @param rows amount of rows
+     * @param cols amount of columns.
      */
-    Size(int16_t _rows = 0, int16_t _cols = 0);
+    Size(int16_t rows = 0, int16_t cols = 0);
 
     /**
      * Get the colums.
@@ -81,9 +81,9 @@ class Size {
      * If number of columns is tried to set to a negative value, an
      * out_of_range exception is thrown.
      *
-     * @param _cols number of columns
+     * @param cols number of columns
      */
-    void cols(int16_t _cols);
+    void cols(int16_t cols);
 
     /**
      * Set the number of rows.
@@ -91,9 +91,9 @@ class Size {
      * If number of rows is tried to set to a negative value, an
      * out_of_range exception is thrown.
      *
-     * @param _rows number of rows
+     * @param rows number of rows
      */
-    void rows(int16_t _rows);
+    void rows(int16_t rows);
 
     /**
      * Add Size to this object.
@@ -173,50 +173,50 @@ Size operator-(const Size& lhs, const Size& rhs);
  */
 bool operator!=(const Size& lhs, const Size& rhs);
 
-inline Size::Size(int16_t _rows, int16_t _cols) : __rows(_rows), __cols(_cols) {
+inline Size::Size(int16_t rows, int16_t cols) : _rows(rows), _cols(cols) {
     // Please note: The two strings below will not be translated,
     // since that would require including "gettext.h" which is not
     // supposed to be installed.
-    if (__rows < 0) throw std::out_of_range("Rows cannot be <0");
-    if (__cols < 0) throw std::out_of_range("Columns cannot be <0");
-}
-
-inline int16_t Size::cols() const { return __cols; }
-
-inline int16_t Size::rows() const { return __rows; }
-
-inline void Size::cols(int16_t _cols) {
-    if (_cols < 0) throw std::out_of_range("Columns cannot be <0");
-    __cols = _cols;
-}
-
-inline void Size::rows(int16_t _rows) {
     if (_rows < 0) throw std::out_of_range("Rows cannot be <0");
-    __rows = _rows;
+    if (_cols < 0) throw std::out_of_range("Columns cannot be <0");
+}
+
+inline int16_t Size::cols() const { return _cols; }
+
+inline int16_t Size::rows() const { return _rows; }
+
+inline void Size::cols(int16_t cols) {
+    if (cols < 0) throw std::out_of_range("Columns cannot be <0");
+    _cols = cols;
+}
+
+inline void Size::rows(int16_t rows) {
+    if (rows < 0) throw std::out_of_range("Rows cannot be <0");
+    _rows = rows;
 }
 
 inline const Size& Size::operator+=(const Size& rhs) {
-    assert(rhs.__cols >= 0);
-    assert(rhs.__rows >= 0);
-    __cols += rhs.__cols;
-    __rows += rhs.__rows;
+    assert(rhs._cols >= 0);
+    assert(rhs._rows >= 0);
+    _cols += rhs._cols;
+    _rows += rhs._rows;
     return *this;
 }
 
 inline const Size& Size::operator-=(const Size& rhs) {
-    __cols -= rhs.__cols;
-    if (__cols < 0) __cols = 0;
+    _cols -= rhs._cols;
+    if (_cols < 0) _cols = 0;
 
-    __rows -= rhs.__rows;
-    if (__rows < 0) __rows = 0;
+    _rows -= rhs._rows;
+    if (_rows < 0) _rows = 0;
     return *this;
 }
 
 inline bool Size::operator==(const Size& rhs) const {
-    return __cols == rhs.__cols && __rows == rhs.__rows;
+    return _cols == rhs._cols && _rows == rhs._rows;
 }
 
-inline const Size& Size::zero() { return __zero; }
+inline const Size& Size::zero() { return _zero; }
 
 inline Size operator+(const Size& lhs, const Size& rhs) {
     Size tmp = lhs;

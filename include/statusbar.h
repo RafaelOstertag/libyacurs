@@ -36,14 +36,18 @@ namespace YACURS {
  */
 class StatusBar : public LineObject {
    private:
-    std::stack<std::string> __messages;
+    std::stack<std::string> _messages;
 
     void show_top_msg();
 
-    StatusBar& operator=(const StatusBar&);
-
    public:
     StatusBar();
+
+    StatusBar& operator=(const StatusBar&) = delete;
+    StatusBar& operator=(StatusBar&&) = delete;
+    StatusBar(const StatusBar&) = delete;
+    StatusBar(StatusBar&&) = delete;
+
     virtual ~StatusBar();
     /**
      * Push a message on the stack.

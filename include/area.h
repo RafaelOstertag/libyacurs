@@ -38,30 +38,30 @@ namespace YACURS {
  */
 class Area : public Coordinates, public Size {
    private:
-    static Area __zero;
+    static Area _zero;
 
    public:
     /**
      * Constructor.
      *
-     * @param _y value of y component
+     * @param y value of y component
      *
-     * @param _x value of x component
+     * @param x value of x component
      *
-     * @param _rows number of rows from (x/y)
+     * @param rows number of rows from (x/y)
      *
-     * @param _cols number of columns from (x/y)
+     * @param cols number of columns from (x/y)
      */
-    Area(int _y = 0, int _x = 0, int _rows = 0, int _cols = 0);
+    Area(int y = 0, int x = 0, int rows = 0, int cols = 0);
 
     /**
      * Initialize Area with Coordinates and Size.
      *
-     * @param _c reference to Coordinates object.
+     * @param c reference to Coordinates object.
      *
-     * @param _s reference to Size object.
+     * @param s reference to Size object.
      */
-    Area(const Coordinates& _c, const Size& _s);
+    Area(const Coordinates& c, const Size& s);
 
     /**
      * Copy constructor.
@@ -73,11 +73,11 @@ class Area : public Coordinates, public Size {
     /**
      * Assign another Area object.
      *
-     * @param _a reference to Area object.
+     * @param a reference to Area object.
      *
      * @return reference to @c this.
      */
-    Area& operator=(const Area& _a);
+    Area& operator=(const Area& a);
 
     /**
      * Assign Size object.
@@ -85,11 +85,11 @@ class Area : public Coordinates, public Size {
      * Only the Size part of Area will be affected. The
      * Coordinates part remains untouched.
      *
-     * @param _s reference to Size object.
+     * @param s reference to Size object.
      *
      * @return reference to @c this.
      */
-    Area& operator=(const Size& _s);
+    Area& operator=(const Size& s);
 
     /**
      * Assign Coordinates object.
@@ -97,27 +97,27 @@ class Area : public Coordinates, public Size {
      * Only the Coordinates part of Area will be affected. The
      * Size component remains untouched.
      *
-     * @param _c reference to Coordinates object.
+     * @param c reference to Coordinates object.
      *
      * @return reference to @c this.
      */
-    Area& operator=(const Coordinates& _c);
+    Area& operator=(const Coordinates& c);
 
     /**
      * Test two Area object for equality.
      *
      * Test whether Size and Position are equal.
      *
-     * @param _a right hand side.
+     * @param a right hand side.
      *
      * @return @c true if both objects are of identical
      * dimension. @c false otherwise.
      */
-    bool operator==(const Area& _a) const;
+    bool operator==(const Area& a) const;
 
-    bool operator==(const Size& _s) const;
+    bool operator==(const Size& s) const;
 
-    bool operator==(const Coordinates& _c) const;
+    bool operator==(const Coordinates& c) const;
 
     /**
      * Subtract Margin from Area.
@@ -141,12 +141,12 @@ class Area : public Coordinates, public Size {
 /**
  * Test two Area object for inequality.
  *
- * @param _a right hand side.
+ * @param a right hand side.
  *
  * @return @c true if objects are not equal, @c false
  * otherwise.
  */
-bool operator!=(const Area& lhs, const Area& _a);
+bool operator!=(const Area& lhs, const Area& a);
 
 /**
  * Subtract Margin from Area.
@@ -167,43 +167,43 @@ bool operator>(const Area& lhs, const Coordinates& rhs);
  */
 bool operator<(const Coordinates& lhs, const Area& rhs);
 
-inline Area::Area(int _y, int _x, int _rows, int _cols)
-    : Coordinates(_x, _y), Size(_rows, _cols) {}
+inline Area::Area(int y, int x, int rows, int cols)
+    : Coordinates(x, y), Size(rows, cols) {}
 
-inline Area::Area(const Coordinates& _c, const Size& _s)
-    : Coordinates(_c), Size(_s) {}
+inline Area::Area(const Coordinates& c, const Size& s)
+    : Coordinates(c), Size(s) {}
 
-inline Area::Area(const Area& _a) : Coordinates(_a), Size(_a) {}
+inline Area::Area(const Area& a) : Coordinates(a), Size(a) {}
 
-inline Area& Area::operator=(const Area& _a) {
-    Coordinates::operator=(_a);
-    Size::operator=(_a);
-
-    return *this;
-}
-
-inline Area& Area::operator=(const Size& _s) {
-    Size::operator=(_s);
+inline Area& Area::operator=(const Area& a) {
+    Coordinates::operator=(a);
+    Size::operator=(a);
 
     return *this;
 }
 
-inline Area& Area::operator=(const Coordinates& _c) {
-    Coordinates::operator=(_c);
+inline Area& Area::operator=(const Size& s) {
+    Size::operator=(s);
 
     return *this;
 }
 
-inline bool Area::operator==(const Area& _a) const {
-    return Coordinates::operator==(_a) && Size::operator==(_a);
+inline Area& Area::operator=(const Coordinates& c) {
+    Coordinates::operator=(c);
+
+    return *this;
 }
 
-inline bool Area::operator==(const Size& _s) const {
-    return Size::operator==(_s);
+inline bool Area::operator==(const Area& a) const {
+    return Coordinates::operator==(a) && Size::operator==(a);
 }
 
-inline bool Area::operator==(const Coordinates& _c) const {
-    return Coordinates::operator==(_c);
+inline bool Area::operator==(const Size& s) const {
+    return Size::operator==(s);
+}
+
+inline bool Area::operator==(const Coordinates& c) const {
+    return Coordinates::operator==(c);
 }
 
 inline Area& Area::operator-=(const Margin& rhs) {
@@ -219,7 +219,7 @@ inline Coordinates Area::end() const {
     return Coordinates(x() + cols(), y() + rows());
 }
 
-inline bool operator!=(const Area& lhs, const Area& _a) { return !(lhs == _a); }
+inline bool operator!=(const Area& lhs, const Area& a) { return !(lhs == a); }
 
 inline Area operator-(const Area& lhs, const Margin& rhs) {
     Area tmp = lhs;
@@ -236,7 +236,7 @@ inline bool operator<(const Coordinates& lhs, const Area& rhs) {
     return rhs > lhs;
 }
 
-inline const Area& Area::zero() { return Area::__zero; }
+inline const Area& Area::zero() { return Area::_zero; }
 }  // namespace YACURS
 
 #endif

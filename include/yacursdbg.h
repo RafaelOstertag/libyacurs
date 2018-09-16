@@ -32,7 +32,7 @@ enum DBGTYPE { DBG_EVT, DBG_FOCUSGRP, DBG_FOCUSMGR };
 
 class Debug {
    private:
-    static std::ofstream __debugfile;
+    static std::ofstream _debugfile;
 
    public:
     static void out(DBGTYPE dt, const std::string& c);
@@ -41,9 +41,9 @@ class Debug {
 }  // namespace YACURS
 #define DEBUGOUT(t, x)                                     \
     {                                                      \
-        std::ostringstream __tmp_debug_ostring_stream;     \
-        __tmp_debug_ostring_stream << x;                   \
-        YACURS::Debug::out(t, __tmp_debug_ostring_stream); \
+        std::ostringstream _tmp_debug_ostring_stream;     \
+        _tmp_debug_ostring_stream << x;                   \
+        YACURS::Debug::out(t, _tmp_debug_ostring_stream); \
     }
 #else
 #define DEBUGOUT(t, x)

@@ -32,30 +32,25 @@ using namespace YACURS;
 // Private
 //
 
-Widget& Widget::operator=(const Widget&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
-
 //
 // Protected
 //
-void Widget::redraw_handler(Event& _e) {
+void Widget::redraw_handler(Event& e) {
     if (realization() != REALIZED) return;
 
-    assert(_e == EVT_REDRAW);
-    assert(__widget_subwin != 0);
+    assert(e == EVT_REDRAW);
+    assert(_widget_subwin != 0);
 
-    __widget_subwin->clear();
+    _widget_subwin->clear();
 }
 
-void Widget::force_refresh_handler(Event& _e) {
+void Widget::force_refresh_handler(Event& e) {
     if (realization() != REALIZED) return;
 
-    assert(_e == EVT_FORCEREFRESH);
-    assert(__widget_subwin != 0);
+    assert(e == EVT_FORCEREFRESH);
+    assert(_widget_subwin != 0);
 
-    __widget_subwin->touch();
+    _widget_subwin->touch();
 }
 
 void Widget::unrealize() {
@@ -68,24 +63,24 @@ void Widget::unrealize() {
     EventQueue::disconnect_event(EventConnectorMethod1<Widget>(
         EVT_REDRAW, this, &Widget::redraw_handler));
 
-    assert(__widget_subwin != 0);
+    assert(_widget_subwin != 0);
 
     try {
         // We have to clear the window since the new size might be
         // smaller, and thus leaving artifacts on the screen if we omit to
         // clear the entire subwin()
-        __widget_subwin->clear();
+        _widget_subwin->clear();
 
-        delete __widget_subwin;
-        __widget_subwin = 0;
+        delete _widget_subwin;
+        _widget_subwin = 0;
 
         // This is also needed to remove artifacts on the screen
         curses_window()->touch();
         curses_window()->refresh();
     } catch (EXCEPTIONS::CursesException&) {
-        if (__widget_subwin != 0) delete __widget_subwin;
+        if (_widget_subwin != 0) delete _widget_subwin;
 
-        __widget_subwin = 0;
+        _widget_subwin = 0;
         realization(UNREALIZED);
         throw;
     }
@@ -94,14 +89,14 @@ void Widget::unrealize() {
 }
 
 YACURS::INTERNAL::CursWin* Widget::widget_subwin() const {
-    return __widget_subwin;
+    return _widget_subwin;
 }
 
 //
 // Public
 //
 
-Widget::Widget() : __widget_subwin(0) {}
+Widget::Widget() : _widget_subwin(0) {}
 
 Widget::~Widget() {
     EventQueue::disconnect_event(EventConnectorMethod1<Widget>(
@@ -111,21 +106,21 @@ Widget::~Widget() {
         EVT_REDRAW, this, &Widget::redraw_handler));
 
     if (realization() == REALIZED) {
-        assert(__widget_subwin != 0);
-        delete __widget_subwin;
+        assert(_widget_subwin != 0);
+        delete _widget_subwin;
     }
 }
 
 void Widget::refresh(bool immediate) {
     if (!(realization() == REALIZED || realization() == REALIZING)) return;
 
-    assert(__widget_subwin != 0);
+    assert(_widget_subwin != 0);
     assert(focusgroup_id() != FocusManager::nfgid);
 
-    __widget_subwin->refresh(immediate);
+    _widget_subwin->refresh(immediate);
 }
 
-void Widget::resize(const Area& _a) {
+void Widget::resize(const Area& a) {
     //
     // 1. Keep in mind: a resize does not refresh!
     //
@@ -135,8 +130,8 @@ void Widget::resize(const Area& _a) {
 
     unrealize();
 
-    position(_a);
-    size_available(_a);
+    position(a);
+    size_available(a);
 
     realize();
 }
@@ -167,17 +162,17 @@ void Widget::realize() {
         return;
 
     assert(curses_window() != 0);
-    assert(__widget_subwin == 0);
+    assert(_widget_subwin == 0);
 
     try {
-        __widget_subwin = curses_window()->subwin(Area(pos, _size));
-        __widget_subwin->scrollok(false);
-        __widget_subwin->leaveok(true);
+        _widget_subwin = curses_window()->subwin(Area(pos, _size));
+        _widget_subwin->scrollok(false);
+        _widget_subwin->leaveok(true);
     } catch (EXCEPTIONS::CursesException&) {
         realization(UNREALIZED);
-        if (__widget_subwin != 0) {
-            delete __widget_subwin;
-            __widget_subwin = 0;
+        if (_widget_subwin != 0) {
+            delete _widget_subwin;
+            _widget_subwin = 0;
         }
         throw;
     }

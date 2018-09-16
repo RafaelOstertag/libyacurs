@@ -29,26 +29,26 @@
 using namespace YACURS;
 
 const FocusManager::fgid_t FocusManager::nfgid = (FocusManager::fgid_t)-1;
-FocusManager::fgid_t FocusManager::__active_focusgroup = FocusManager::nfgid;
-std::vector<FocusGroup*> FocusManager::__focus_groups;
+FocusManager::fgid_t FocusManager::_active_focusgroup = FocusManager::nfgid;
+std::vector<FocusGroup*> FocusManager::_focus_groups;
 
 //
 // Private
 //
-void FocusManager::focus_change_handler(Event& _e) {
-    assert(_e == EVT_FOCUS_NEXT || _e == EVT_FOCUS_PREVIOUS);
+void FocusManager::focus_change_handler(Event& e) {
+    assert(e == EVT_FOCUS_NEXT || e == EVT_FOCUS_PREVIOUS);
 
-    if (__focus_groups.empty()) return;
-    assert(__active_focusgroup < __focus_groups.size());
-    assert(__focus_groups[__active_focusgroup] != 0);
-    assert(__focus_groups[__active_focusgroup]->active());
+    if (_focus_groups.empty()) return;
+    assert(_active_focusgroup < _focus_groups.size());
+    assert(_focus_groups[_active_focusgroup] != 0);
+    assert(_focus_groups[_active_focusgroup]->active());
 
-    if (_e.type() == EVT_FOCUS_NEXT) {
-        __focus_groups[__active_focusgroup]->focus_next();
-        DEBUGOUT(DBG_FOCUSMGR, "focus_next() on " << __active_focusgroup);
-    } else if (_e.type() == EVT_FOCUS_PREVIOUS) {
-        __focus_groups[__active_focusgroup]->focus_previous();
-        DEBUGOUT(DBG_FOCUSMGR, "focus_previous() on " << __active_focusgroup);
+    if (e.type() == EVT_FOCUS_NEXT) {
+        _focus_groups[_active_focusgroup]->focus_next();
+        DEBUGOUT(DBG_FOCUSMGR, "focus_next() on " << _active_focusgroup);
+    } else if (e.type() == EVT_FOCUS_PREVIOUS) {
+        _focus_groups[_active_focusgroup]->focus_previous();
+        DEBUGOUT(DBG_FOCUSMGR, "focus_previous() on " << _active_focusgroup);
     } else {
         throw EXCEPTIONS::UnexpectedEvent();
     }
@@ -77,55 +77,55 @@ void FocusManager::uninit() {
     EventQueue::disconnect_event(EventConnectorFunction1(
         EVT_FOCUS_PREVIOUS, FocusManager::focus_change_handler));
 
-    for (fgid_t i = 0; i < __focus_groups.size(); i++)
-        if (__focus_groups[i] != 0) {
-            delete __focus_groups[i];
-            __focus_groups[i] = 0;
+    for (fgid_t i = 0; i < _focus_groups.size(); i++)
+        if (_focus_groups[i] != 0) {
+            delete _focus_groups[i];
+            _focus_groups[i] = 0;
         }
 }
 
 FocusManager::fgid_t FocusManager::new_focus_group() {
-    fgid_t _id = FocusManager::nfgid;
+    fgid_t id = FocusManager::nfgid;
 
-    if (__focus_groups.empty()) {
-        _id = __focus_groups.size();  // == 0
-        __focus_groups.push_back(new FocusGroup);
+    if (_focus_groups.empty()) {
+        id = _focus_groups.size();  // == 0
+        _focus_groups.push_back(new FocusGroup);
         DEBUGOUT(DBG_FOCUSMGR, "New Focus Group (first) "
-                                   << (void*)(__focus_groups[_id])
-                                   << " with ID: " << _id);
+                                   << (void*)(_focus_groups[id])
+                                   << " with ID: " << id);
     } else {
         // Search for a free slot in the vector
-        for (fgid_t i = 0; i < __focus_groups.size(); i++) {
-            if (__focus_groups[i] == 0) {
+        for (fgid_t i = 0; i < _focus_groups.size(); i++) {
+            if (_focus_groups[i] == 0) {
                 // found free slot
-                _id = i;
-                __focus_groups[i] = new FocusGroup;
+                id = i;
+                _focus_groups[i] = new FocusGroup;
                 DEBUGOUT(DBG_FOCUSMGR, "New Focus Group (reuse slot) "
-                                           << (void*)(__focus_groups[_id])
-                                           << " with ID: " << _id);
+                                           << (void*)(_focus_groups[id])
+                                           << " with ID: " << id);
                 break;
             }
         }
 
-        // Check if we have found a free slot, i.e. _id has been set
-        if (_id == FocusManager::nfgid) {
+        // Check if we have found a free slot, i.e. id has been set
+        if (id == FocusManager::nfgid) {
             // No, no free slot, so create new slot.
-            _id = __focus_groups.size();
-            __focus_groups.push_back(new FocusGroup);
+            id = _focus_groups.size();
+            _focus_groups.push_back(new FocusGroup);
             DEBUGOUT(DBG_FOCUSMGR, "New Focus Group (new slot) "
-                                       << (void*)(__focus_groups[_id])
-                                       << " with ID: " << _id);
+                                       << (void*)(_focus_groups[id])
+                                       << " with ID: " << id);
         }
     }
 
-    assert(_id != FocusManager::nfgid);
-    assert(_id < __focus_groups.size());
-    return _id;
+    assert(id != FocusManager::nfgid);
+    assert(id < _focus_groups.size());
+    return id;
 }
 
-void FocusManager::destroy_focus_group(fgid_t _id) {
-    assert(!__focus_groups.empty());
-    assert(_id < __focus_groups.size());
+void FocusManager::destroy_focus_group(fgid_t id) {
+    assert(!_focus_groups.empty());
+    assert(id < _focus_groups.size());
 
     // check if the FocusGroup still exists.
     //
@@ -133,35 +133,34 @@ void FocusManager::destroy_focus_group(fgid_t _id) {
     // call to ::uninit() due to termination of the event loop, but
     // destruction of Windows were still not done. See the test
     // 'listbox2.cc' for an example of this bevavior
-    if (__focus_groups[_id] == 0) return;
+    if (_focus_groups[id] == 0) return;
 
     // Destructor of FocusGroup is supposed to take care of removing
     // focus, so we simply destroy the group.
-    delete __focus_groups[_id];
-    __focus_groups[_id] = 0;
-    DEBUGOUT(DBG_FOCUSMGR, "Destroy Focus Group "
-                               << (void*)(__focus_groups[_id])
-                               << " with ID: " << _id);
+    delete _focus_groups[id];
+    _focus_groups[id] = 0;
+    DEBUGOUT(DBG_FOCUSMGR, "Destroy Focus Group " << (void*)(_focus_groups[id])
+                                                  << " with ID: " << id);
 
-    if (__active_focusgroup == _id) __active_focusgroup = FocusManager::nfgid;
+    if (_active_focusgroup == id) _active_focusgroup = FocusManager::nfgid;
 }
 
-void FocusManager::focus_group_add(fgid_t _id, WidgetBase* _w) {
-    assert(_w != 0);
-    assert(!__focus_groups.empty());
-    assert(_id < __focus_groups.size());
-    assert(__focus_groups[_id] != 0);
+void FocusManager::focus_group_add(fgid_t id, WidgetBase* w) {
+    assert(w != 0);
+    assert(!_focus_groups.empty());
+    assert(id < _focus_groups.size());
+    assert(_focus_groups[id] != 0);
 
-    __focus_groups[_id]->add(_w);
+    _focus_groups[id]->add(w);
 
-    DEBUGOUT(DBG_FOCUSMGR, "Add widget " << (void*)(_w) << " to Focus Group "
-                                         << (void*)(__focus_groups[_id])
-                                         << " with ID: " << _id);
+    DEBUGOUT(DBG_FOCUSMGR, "Add widget " << (void*)(w) << " to Focus Group "
+                                         << (void*)(_focus_groups[id])
+                                         << " with ID: " << id);
 }
 
-void FocusManager::focus_group_remove(fgid_t _id, WidgetBase* _w) {
-    assert(_w != 0);
-    assert(_id != FocusManager::nfgid);
+void FocusManager::focus_group_remove(fgid_t id, WidgetBase* w) {
+    assert(w != 0);
+    assert(id != FocusManager::nfgid);
 
     // check if the FocusGroup still exists.
     //
@@ -169,70 +168,69 @@ void FocusManager::focus_group_remove(fgid_t _id, WidgetBase* _w) {
     // call to ::uninit() due to termination of the event loop, but
     // destruction of Windows were still not done. See the test
     // 'listbox2.cc' for an example of this bevavior
-    if (__focus_groups[_id] == 0) return;
+    if (_focus_groups[id] == 0) return;
 
-    __focus_groups[_id]->remove(_w);
+    _focus_groups[id]->remove(w);
 
-    DEBUGOUT(DBG_FOCUSMGR, "Remove widget " << (void*)(_w) << " to Focus Group "
-                                            << (void*)(__focus_groups[_id])
-                                            << " with ID: " << _id);
+    DEBUGOUT(DBG_FOCUSMGR, "Remove widget " << (void*)(w) << " to Focus Group "
+                                            << (void*)(_focus_groups[id])
+                                            << " with ID: " << id);
 }
 
-void FocusManager::focus_group_activate(fgid_t _id) {
-    assert(!__focus_groups.empty());
-    assert(_id < __focus_groups.size());
-    assert(__focus_groups[_id] != 0);
+void FocusManager::focus_group_activate(fgid_t id) {
+    assert(!_focus_groups.empty());
+    assert(id < _focus_groups.size());
+    assert(_focus_groups[id] != 0);
     // We cannot assert this here, because fgid_t is probably of
     // unsigned type and initially set to -1, so we cannot get past
     // this assertion, since the first call which would make
     // subsequent calls pass, always fails.
     //
-    // assert(__active_focusgroup<__focus_groups.size());
+    // assert(_active_focusgroup<_focus_groups.size());
 
     // Deactivate the current Active Focus Group, if any.
-    if (__active_focusgroup != FocusManager::nfgid &&  // not initialized yet
-        __focus_groups[__active_focusgroup] != 0 /* Focus Group destroyed */) {
-        assert(__active_focusgroup < __focus_groups.size());
-        __focus_groups[__active_focusgroup]->deactivate();
-        DEBUGOUT(DBG_FOCUSMGR,
-                 "Deactivated Focus Group "
-                     << (void*)(__focus_groups[__active_focusgroup])
-                     << " with ID: " << __active_focusgroup);
+    if (_active_focusgroup != FocusManager::nfgid &&  // not initialized yet
+        _focus_groups[_active_focusgroup] != 0 /* Focus Group destroyed */) {
+        assert(_active_focusgroup < _focus_groups.size());
+        _focus_groups[_active_focusgroup]->deactivate();
+        DEBUGOUT(DBG_FOCUSMGR, "Deactivated Focus Group "
+                                   << (void*)(_focus_groups[_active_focusgroup])
+                                   << " with ID: " << _active_focusgroup);
     }
 
-    __focus_groups[_id]->activate();
-    __active_focusgroup = _id;
+    _focus_groups[id]->activate();
+    _active_focusgroup = id;
     DEBUGOUT(DBG_FOCUSMGR, "Activated Focus Group "
-                               << (void*)(__focus_groups[_id])
-                               << " with ID: " << _id);
+                               << (void*)(_focus_groups[id])
+                               << " with ID: " << id);
 }
 
 void FocusManager::refocus() {
-    if (__focus_groups.empty()) return;
+    if (_focus_groups.empty()) return;
 
-    assert(__active_focusgroup != FocusManager::nfgid);
-    assert(__focus_groups[__active_focusgroup] != 0);
+    assert(_active_focusgroup != FocusManager::nfgid);
+    assert(_focus_groups[_active_focusgroup] != 0);
     // This would make many tests fail. Also, it should be no problem
     // if we don't assert.
     //
-    // assert(!__focus_groups.empty());
+    // assert(!_focus_groups.empty());
 
-    __focus_groups[__active_focusgroup]->refocus();
+    _focus_groups[_active_focusgroup]->refocus();
     DEBUGOUT(DBG_FOCUSMGR, "Refocus Focus Group "
-                               << (void*)(__focus_groups[__active_focusgroup])
-                               << " with ID: " << __active_focusgroup);
+                               << (void*)(_focus_groups[_active_focusgroup])
+                               << " with ID: " << _active_focusgroup);
 }
 
 void FocusManager::reset() {
-    if (__focus_groups.empty()) return;
-    assert(__active_focusgroup != FocusManager::nfgid);
-    assert(__focus_groups[__active_focusgroup] != 0);
-    __focus_groups[__active_focusgroup]->reset();
+    if (_focus_groups.empty()) return;
+    assert(_active_focusgroup != FocusManager::nfgid);
+    assert(_focus_groups[_active_focusgroup] != 0);
+    _focus_groups[_active_focusgroup]->reset();
     DEBUGOUT(DBG_FOCUSMGR, "Reset Focus Group "
-                               << (void*)(__focus_groups[__active_focusgroup])
-                               << " with ID: " << __active_focusgroup);
+                               << (void*)(_focus_groups[_active_focusgroup])
+                               << " with ID: " << _active_focusgroup);
 }
 
 FocusManager::fgid_t FocusManager::active_focus_group() {
-    return __active_focusgroup;
+    return _active_focusgroup;
 }

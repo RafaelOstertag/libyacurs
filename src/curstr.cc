@@ -36,28 +36,43 @@ using namespace YACURS;
 //
 
 CurStr::CurStr(const std::string& str, const Coordinates& pos, COLOROBJ c)
-    : std::string(str), __position(pos), __color(c) {}
+    : std::string{str}, _position{pos}, _color{c} {}
 
 CurStr::CurStr(const std::string& str, int y, int x, COLOROBJ c)
-    : std::string(str), __position(Coordinates(x, y)), __color(c) {}
+    : std::string{str}, _position{Coordinates(x, y)}, _color{c} {}
 
 CurStr::CurStr(const CurStr& cs)
-    : std::string(cs), __position(cs.__position), __color(cs.__color) {}
+    : std::string{cs}, _position{cs._position}, _color{cs._color} {}
 
 CurStr& CurStr::operator=(const CurStr& cs) {
     if (this == &cs) return *this;
     std::string::operator=(cs);
 
-    __position = cs.__position;
-    __color = cs.__color;
+    _position = cs._position;
+    _color = cs._color;
 
     return *this;
 }
 
-void CurStr::position(const YACURS::Coordinates& co) { __position = co; }
+CurStr::CurStr(CurStr&& cs)
+    : std::string{std::move(cs)},
+      _position{std::move(cs._position)},
+      _color{cs._color} {}
 
-const YACURS::Coordinates& CurStr::position() const { return __position; }
+CurStr& CurStr::operator=(CurStr&& cs) {
+    if (this == &cs) return *this;
+    std::string::operator=(cs);
 
-void CurStr::color(YACURS::COLOROBJ co) { __color = co; }
+    _position = std::move(cs._position);
+    _color = cs._color;
 
-YACURS::COLOROBJ CurStr::color() const { return __color; }
+    return *this;
+}
+
+void CurStr::position(const YACURS::Coordinates& co) { _position = co; }
+
+const YACURS::Coordinates& CurStr::position() const { return _position; }
+
+void CurStr::color(YACURS::COLOROBJ co) { _color = co; }
+
+YACURS::COLOROBJ CurStr::color() const { return _color; }

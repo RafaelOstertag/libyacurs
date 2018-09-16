@@ -56,42 +56,42 @@ class CursWin {
     /**
      * Pointer to Curses Window.
      */
-    WINDOW* __window;
+    WINDOW* _window;
 
     /**
      * Default color for Curses Window.
      */
-    COLOROBJ __def_color;
+    COLOROBJ _def_color;
 
     /**
      * Size and position of the Window.
      */
-    Area __area;
+    Area _area;
 
     /**
      * Area available to client.
      */
-    Area __client_area;
+    Area _client_area;
 
     /**
      * Flag whether or not Curses Window has a box.
      */
-    bool __box;
+    bool _box;
 
     /**
      * Flag indicating whether or not this is Subwindow.
      */
-    bool __subwin;
+    bool _subwin;
 
     /**
      * Horizontal character for box.
      */
-    chtype __horch;
+    chtype _horch;
 
     /**
      * Vertical character for box.
      */
-    chtype __verch;
+    chtype _verch;
 
    protected:
     /**
@@ -107,21 +107,17 @@ class CursWin {
     /**
      * Constructor.
      *
-     * @param _a area the occupied on screen
+     * @param a area the occupied on screen
      *
      * @param dc default color
      */
-    CursWin(const Area& _a, COLOROBJ dc = DEFAULT);
+    CursWin(const Area& a, COLOROBJ dc = DEFAULT);
 
-    /**
-     * Copy Constructor.
-     */
     CursWin(const CursWin& cw);
-
-    /**
-     * Assignment operator.
-     */
     CursWin& operator=(const CursWin& cw);
+    CursWin(CursWin&& cw);
+    CursWin& operator=(CursWin&& cw);
+
 
     /**
      * Destructor.

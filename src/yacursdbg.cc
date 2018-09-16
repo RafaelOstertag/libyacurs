@@ -28,14 +28,14 @@
 #if defined(DEBUG)
 using namespace YACURS;
 
-std::ofstream Debug::__debugfile;
+std::ofstream Debug::_debugfile;
 
 void Debug::out(DBGTYPE dt, const std::string& c) {
     try {
-        char* __debugfile_name__ = std::getenv("LIBYACURS_DEBUG_LOGFILE");
-        if (__debugfile_name__ != 0) {
-            if (!__debugfile.is_open())
-                __debugfile.open(__debugfile_name__,
+        char* _debugfile_name_ = std::getenv("LIBYACURS_DEBUG_LOGFILE");
+        if (_debugfile_name_ != 0) {
+            if (!_debugfile.is_open())
+                _debugfile.open(_debugfile_name_,
                                  std::ios::out | std::ios::trunc);
 
             std::string prefix;
@@ -60,7 +60,7 @@ void Debug::out(DBGTYPE dt, const std::string& c) {
                     break;
             }
 
-            __debugfile << prefix << " " << c << std::endl;
+            _debugfile << prefix << " " << c << std::endl;
         }
     } catch (...) {
     }

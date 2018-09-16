@@ -67,36 +67,32 @@ class WindowBase : public Realizeable {
      * The dimension of the screen. Used as cache to avoid calls
      * to Curses::inquiry_screensize().
      */
-    Area __area;
+    Area _area;
 
     /**
      * margin of the screen object.
      */
-    Margin __margin;
+    Margin _margin;
 
     /**
      * Curses window
      */
-    YACURS::INTERNAL::CursWin* __curses_window;
+    YACURS::INTERNAL::CursWin* _curses_window;
 
     /**
      * Whether or not the window has a border
      */
-    bool __frame;
+    bool _frame;
 
     /**
      * Flag whether or not Window is shown.
      */
-    bool __shown;
+    bool _shown;
 
     /**
      * Default color of window.
      */
-    COLOROBJ __color;
-
-    // No supported
-    WindowBase(const WindowBase&);
-    WindowBase& operator=(const WindowBase&);
+    COLOROBJ _color;
 
    protected:
     YACURS::INTERNAL::CursWin* curses_window() const;
@@ -127,16 +123,20 @@ class WindowBase : public Realizeable {
 
    public:
     /**
-     * @param _m margin to be used.
+     * @param m margin to be used.
      */
-    WindowBase(const Margin& _m = Margin());
+    WindowBase(const Margin& m = Margin());
+    WindowBase(const WindowBase&) = delete;
+    WindowBase& operator=(const WindowBase&) = delete;
+    WindowBase(WindowBase&&) = delete;
+    WindowBase& operator=(WindowBase&&) = delete;
     virtual ~WindowBase();
 
     /**
      * @todo when setting margin and window is realized, resize
      * it.
      */
-    void margin(const Margin& _m);
+    void margin(const Margin& m);
 
     const Margin& margin() const;
 
@@ -171,18 +171,18 @@ class WindowBase : public Realizeable {
     // Those handlers must be public, so that LockScreen can
     // suspend them.
 
-    virtual void redraw_handler(Event& _e);
+    virtual void redraw_handler(Event& e);
 
-    virtual void force_refresh_handler(Event& _e);
+    virtual void force_refresh_handler(Event& e);
 
-    virtual void refresh_handler(Event& _e);
+    virtual void refresh_handler(Event& e);
 
-    virtual void resize_handler(Event& _e);
+    virtual void resize_handler(Event& e);
 
     // Those are from Realizable
     void refresh(bool immediate);
 
-    void resize(const Area& _a);
+    void resize(const Area& a);
 
     void realize();
 };

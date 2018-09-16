@@ -36,93 +36,87 @@ using namespace YACURS;
 // Private
 //
 
-WidgetBase::WidgetBase(const WidgetBase&) { throw EXCEPTIONS::NotSupported(); }
-
-WidgetBase& WidgetBase::operator=(const WidgetBase&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
 //
 // Protected
 //
 YACURS::INTERNAL::CursWin* WidgetBase::curses_window() const {
-    return __curses_window;
+    return _curses_window;
 }
 
-FocusManager::fgid_t WidgetBase::focusgroup_id() const { return __fgid; }
+FocusManager::fgid_t WidgetBase::focusgroup_id() const { return _fgid; }
 
-WidgetBase* WidgetBase::parent() const { return __parent; }
+WidgetBase* WidgetBase::parent() const { return _parent; }
 
-void WidgetBase::can_focus(bool _can_focus) { __can_focus = _can_focus; }
+void WidgetBase::can_focus(bool can_focus) { _can_focus = can_focus; }
 
 //
 // Private
 //
 
 WidgetBase::WidgetBase()
-    : __curses_window(0),
-      __fgid(FocusManager::nfgid),
-      __can_focus(false),
-      __focus(false),
-      __parent(0) {}
+    : _curses_window(0),
+      _fgid(FocusManager::nfgid),
+      _can_focus(false),
+      _focus(false),
+      _parent(0) {}
 
 WidgetBase::~WidgetBase() {
-    if (__can_focus && __fgid != FocusManager::nfgid)
-        FocusManager::focus_group_remove(__fgid, this);
+    if (_can_focus && _fgid != FocusManager::nfgid)
+        FocusManager::focus_group_remove(_fgid, this);
 }
 
-void WidgetBase::parent(WidgetBase* _p) { __parent = _p; }
+void WidgetBase::parent(WidgetBase* p) { _parent = p; }
 
-void WidgetBase::curses_window(YACURS::INTERNAL::CursWin* _p) {
-    __curses_window = _p;
+void WidgetBase::curses_window(YACURS::INTERNAL::CursWin* p) {
+    _curses_window = p;
 }
 
-void WidgetBase::focusgroup_id(FocusManager::fgid_t _id) {
+void WidgetBase::focusgroup_id(FocusManager::fgid_t id) {
     // Only make changes to the Focus Group if Focus Group ID differs.
     //
     // This ensures that the currently focused Widget does not loose
     // the focus when resizing.
-    if (__can_focus && __fgid != _id) {
+    if (_can_focus && _fgid != id) {
         // Remove the widget from the current focus group, if possible
-        if (__fgid != FocusManager::nfgid)
-            FocusManager::focus_group_remove(__fgid, this);
+        if (_fgid != FocusManager::nfgid)
+            FocusManager::focus_group_remove(_fgid, this);
 
         // Add the widget to the new focus group if possible
-        if (_id != FocusManager::nfgid)
-            FocusManager::focus_group_add(_id, this);
+        if (id != FocusManager::nfgid)
+            FocusManager::focus_group_add(id, this);
     }
-    __fgid = _id;
+    _fgid = id;
 }
 
-void WidgetBase::position(const Coordinates& _c) {
-    assert(_c.x() > -1);
-    assert(_c.y() > -1);
-    __position = _c;
+void WidgetBase::position(const Coordinates& c) {
+    assert(c.x() > -1);
+    assert(c.y() > -1);
+    _position = c;
 }
 
-const Coordinates& WidgetBase::position() const { return __position; }
+const Coordinates& WidgetBase::position() const { return _position; }
 
-void WidgetBase::size_available(const Size& _s) {
-    assert(_s.rows() > 0);
-    assert(_s.cols() > 0);
-    __size_available = _s;
+void WidgetBase::size_available(const Size& s) {
+    assert(s.rows() > 0);
+    assert(s.cols() > 0);
+    _size_available = s;
 }
 
-const Size& WidgetBase::size_available() const { return __size_available; }
+const Size& WidgetBase::size_available() const { return _size_available; }
 
-bool WidgetBase::can_focus() const { return __can_focus; }
+bool WidgetBase::can_focus() const { return _can_focus; }
 
-void WidgetBase::focus(bool _f) {
-    if (!__can_focus) throw EXCEPTIONS::CannotFocus();
+void WidgetBase::focus(bool f) {
+    if (!_can_focus) throw EXCEPTIONS::CannotFocus();
 
-    __focus = _f;
+    _focus = f;
 }
 
 bool WidgetBase::focus() const {
-    if (!__can_focus) throw EXCEPTIONS::CannotFocus();
+    if (!_can_focus) throw EXCEPTIONS::CannotFocus();
 
-    return __focus;
+    return _focus;
 }
 
 void WidgetBase::unrealize() {

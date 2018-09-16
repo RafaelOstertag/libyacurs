@@ -55,9 +55,9 @@ class LineObject : public WindowBase {
     enum ALIGNMENT { CENTER, LEFT, RIGHT };
 
    private:
-    std::string __linetext;
-    POSITION __position;
-    ALIGNMENT __alignment;
+    std::string _linetext;
+    POSITION _position;
+    ALIGNMENT _alignment;
 
     /**
      * Compute and sets the margin of WindowBase to achieve the
@@ -65,25 +65,26 @@ class LineObject : public WindowBase {
      */
     void compute_margin();
 
-    // Not supported
-    LineObject(const LineObject&);
-    LineObject& operator=(const LineObject&);
-
     size_t text_length() const;
 
    protected:
     void put_line();
 
    public:
-    LineObject(POSITION _pos, const std::string& _t = std::string(),
-               COLOROBJ _color = DEFAULT);
+    LineObject(POSITION _pos, const std::string& t = std::string(),
+               COLOROBJ c = DEFAULT);
+    LineObject(const LineObject&) = delete;
+    LineObject& operator=(const LineObject&) = delete;
+    LineObject(LineObject&&) = delete;
+    LineObject& operator=(LineObject&&) = delete;
+
     virtual ~LineObject();
 
-    void alignment(ALIGNMENT _a);
+    void alignment(ALIGNMENT a);
 
     ALIGNMENT alignment() const;
 
-    void line(const std::string& _str);
+    void line(const std::string& str);
 
     std::string line() const;
 

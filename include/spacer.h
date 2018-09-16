@@ -34,11 +34,12 @@ namespace YACURS {
  */
 class Spacer : public WidgetBase {
    private:
-    // Not supported
-    Spacer& operator=(const Spacer&);
-
    public:
     Spacer();
+    Spacer& operator=(const Spacer&) = delete;
+    Spacer& operator=(Spacer&&) = delete;
+    Spacer(const Spacer&) = delete;
+    Spacer(Spacer&&) = delete;
     virtual ~Spacer();
 
     // from WidgetBase

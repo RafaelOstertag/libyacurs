@@ -29,11 +29,12 @@
 
 namespace YACURS {
 class UnlockDialog : public Dialog {
-   private:
-    UnlockDialog& operator=(const UnlockDialog&);
-
    public:
-    UnlockDialog(const std::string& _title);
+    UnlockDialog(const std::string& title);
+    UnlockDialog& operator=(const UnlockDialog&) = delete;
+    UnlockDialog& operator=(UnlockDialog&&) = delete;
+    UnlockDialog(const UnlockDialog&) = delete;
+    UnlockDialog(UnlockDialog&&) = delete;
     virtual ~UnlockDialog();
 
     // From Dialog

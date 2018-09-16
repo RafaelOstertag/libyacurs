@@ -35,10 +35,6 @@ namespace YACURS {
  * that it cannot be realized() and throwing an exception.
  */
 class HRule : public Rule {
-   private:
-    // Not supported
-    HRule& operator=(const HRule&);
-
    public:
     /**
      * Constructor.
@@ -46,12 +42,16 @@ class HRule : public Rule {
      * @param _l label
      */
     HRule();
+    HRule& operator=(const HRule&) = delete;
+    HRule& operator=(HRule&&) = delete;
+    HRule(const HRule&) = delete;
+    HRule(HRule&&) = delete;
 
     virtual ~HRule();
 
     // From WidgetBase
 
-    void size_available(const Size& _s);
+    void size_available(const Size& s);
 
     Size size_hint() const;
 

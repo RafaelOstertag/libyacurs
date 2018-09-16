@@ -52,8 +52,8 @@ namespace VPACK {
  */
 class VRealizeWidgets {
    public:
-    void operator()(WidgetBase* _w) {
-        assert(_w != 0);
+    void operator()(WidgetBase* w) {
+        assert(w != 0);
         // It is possible, that upon a resize the
         // widget became to big for the screen, or
         // overshoots it due to its position and
@@ -61,9 +61,9 @@ class VRealizeWidgets {
         // statically sized become too big when
         // stacked.
         try {
-            _w->realize();
+            w->realize();
         } catch (EXCEPTIONS::BaseCurEx&) {
-            _w->focusgroup_id(FocusManager::nfgid);
+            w->focusgroup_id(FocusManager::nfgid);
         }
     }
 };
@@ -149,25 +149,25 @@ class VSetSizeHinted {
         return *this;
     }
 
-    void operator()(WidgetBase* _w) {
-        assert(_w != 0);
-        assert(_w->size_hint().rows() > 0);
+    void operator()(WidgetBase* w) {
+        assert(w != 0);
+        assert(w->size_hint().rows() > 0);
 
         // _sa is supposed to hold the constant row
         // value and the hinted cols value as
         // retrieved from calling size_hint() on the
         // Widget
         Size _sa(__const_cols);
-        _sa.rows(_w->size_hint().rows());
+        _sa.rows(w->size_hint().rows());
 
         // Finally, set the available size on the
         // Widget
-        _w->size_available(_sa);
+        w->size_available(_sa);
 
         // Add the hinted cols to __size_used, so that
         // they can be deducted from the total size
         // available to the pack.
-        __size_used.rows(__size_used.rows() + _w->size_hint().rows());
+        __size_used.rows(__size_used.rows() + w->size_hint().rows());
     }
 
     const Size& size_used() const { return __size_used; }
@@ -183,40 +183,40 @@ class VSetSizeHinted {
  */
 class VCalcNSetSize {
    private:
-    Size __size;
+    Size _size;
     Size __size_available;
     std::list<WidgetBase*> __dyn_widgets;
     std::list<WidgetBase*> __hinted_widgets;
 
    public:
     VCalcNSetSize(const Size& _av)
-        : __size(), __size_available(_av), __dyn_widgets(), __hinted_widgets() {
+        : _size(), __size_available(_av), __dyn_widgets(), __hinted_widgets() {
         assert(__size_available.rows() > 0);
         assert(__size_available.cols() > 0);
     }
 
     VCalcNSetSize(const VCalcNSetSize& _c)
-        : __size(_c.__size),
+        : _size(_c._size),
           __size_available(_c.__size_available),
           __dyn_widgets(_c.__dyn_widgets),
           __hinted_widgets(_c.__hinted_widgets) {}
 
     VCalcNSetSize& operator=(const VCalcNSetSize& _c) {
-        __size = _c.__size;
+        _size = _c._size;
         __size_available = _c.__size_available;
         __dyn_widgets = _c.__dyn_widgets;
         __hinted_widgets = _c.__hinted_widgets;
         return *this;
     }
 
-    void operator()(WidgetBase* _w) {
-        assert(_w != 0);
+    void operator()(WidgetBase* w) {
+        assert(w != 0);
 
         // First, reset the size, so that we can
         // identify dynamically sized Widgets
-        _w->reset_size();
+        w->reset_size();
 
-        if (_w->size() == Size::zero()) {
+        if (w->size() == Size::zero()) {
             // That's a dynamically sized widget, thus
             // add it to one of the lists for later
             // processing.
@@ -226,25 +226,25 @@ class VCalcNSetSize {
             // is treated separately from
             // __dyn_widgets. But only if the hint
             // does not exceed the available size.
-            if (_w->size_hint().rows() > 0 &&
-                _w->size_hint().rows() <= __size_available.rows())
-                __hinted_widgets.push_back(_w);
+            if (w->size_hint().rows() > 0 &&
+                w->size_hint().rows() <= __size_available.rows())
+                __hinted_widgets.push_back(w);
             else
-                __dyn_widgets.push_back(_w);
+                __dyn_widgets.push_back(w);
 
             return;
         }
 
-        __size.rows(__size.rows() + _w->size().rows());
-        __size.cols(std::max(__size.cols(), _w->size().cols()));
-        if (__size.rows() > __size_available.rows() ||
-            __size.cols() > __size_available.cols())
+        _size.rows(_size.rows() + w->size().rows());
+        _size.cols(std::max(_size.cols(), w->size().cols()));
+        if (_size.rows() > __size_available.rows() ||
+            _size.cols() > __size_available.cols())
             throw EXCEPTIONS::AreaExceeded();
         // Also set the size availabe for the
         // widget. Dynamically sized widgets are
         // handled when CalcNSetSize::finish() is
         // called.
-        _w->size_available(_w->size());
+        w->size_available(w->size());
     }
 
     void finish() {
@@ -269,14 +269,14 @@ class VCalcNSetSize {
         // There are dynamically sized widgets. So
         // let's find out the how much space is
         // available for them
-        Size remaining_size(__size_available - __size);
+        Size remaining_size(__size_available - _size);
 
         remaining_size -= hinted_size.size_used();
 
         // We ignore remaining_size.cols() because we
         // vertically stack widgets and the
         // dynamically sized widgets get the amount of
-        // __size.cols()
+        // _size.cols()
         if (remaining_size.rows() < 1) throw EXCEPTIONS::InvalidSize();
 
         // This gives the size for each dynamically
@@ -310,41 +310,41 @@ class VCalcNSetSize {
  */
 class VCalcSizeNonDynamic {
    private:
-    Size __size;
-    bool __had_dynamic;
+    Size _size;
+    bool _had_dynamic;
 
    public:
-    VCalcSizeNonDynamic() : __size(), __had_dynamic(false) {}
+    VCalcSizeNonDynamic() : _size(), _had_dynamic(false) {}
 
-    VCalcSizeNonDynamic(const VCalcSizeNonDynamic& _r)
-        : __size(_r.__size), __had_dynamic(_r.__had_dynamic) {}
+    VCalcSizeNonDynamic(const VCalcSizeNonDynamic& r)
+        : _size(r._size), _had_dynamic(r._had_dynamic) {}
 
-    VCalcSizeNonDynamic& operator=(const VCalcSizeNonDynamic& _r) {
-        __size = _r.__size;
-        __had_dynamic = _r.__had_dynamic;
+    VCalcSizeNonDynamic& operator=(const VCalcSizeNonDynamic& r) {
+        _size = r._size;
+        _had_dynamic = r._had_dynamic;
         return *this;
     }
 
-    void operator()(const WidgetBase* _w) {
-        assert(_w != 0);
+    void operator()(const WidgetBase* w) {
+        assert(w != 0);
 
         // Do nothing if we already found a dynamic
         // widget
-        if (__had_dynamic) return;
+        if (_had_dynamic) return;
 
-        if (_w->size() == Size::zero()) {
+        if (w->size() == Size::zero()) {
             // found a dynamic widget. Reset size and
             // mark
-            __had_dynamic = true;
-            __size = Size::zero();
+            _had_dynamic = true;
+            _size = Size::zero();
             return;
         }
 
-        __size.rows(__size.rows() + _w->size().rows());
-        __size.cols(std::max(__size.cols(), _w->size().cols()));
+        _size.rows(_size.rows() + w->size().rows());
+        _size.cols(std::max(_size.cols(), w->size().cols()));
     }
 
-    const Size& size() const { return __size; }
+    const Size& size() const { return _size; }
 };
 
 /**
@@ -364,27 +364,27 @@ class VSetPosWidget {
      * Position of wich is used in the call to
      * WidgetBase::position().
      */
-    Coordinates __pos;
+    Coordinates _pos;
 
    public:
     /**
-     * @param __start the first call of the object
+     * @param _start the first call of the object
      * will put the Widget at this position.
      */
-    VSetPosWidget(const Coordinates& __start) : __pos(__start) {}
+    VSetPosWidget(const Coordinates& _start) : _pos(_start) {}
 
-    VSetPosWidget(const VSetPosWidget& _o) : __pos(_o.__pos) {}
+    VSetPosWidget(const VSetPosWidget& o) : _pos(o._pos) {}
 
     /**
      * Call WidgetBase::postion().
      *
-     * Call WidgetBase::position() and update __pos;
+     * Call WidgetBase::position() and update _pos;
      *
-     * @param _w pointer to Widget.
+     * @param w pointer to Widget.
      */
-    void operator()(WidgetBase* _w) {
-        _w->position(__pos);
-        __pos.y(__pos.y() + _w->size().rows());
+    void operator()(WidgetBase* w) {
+        w->position(_pos);
+        _pos.y(_pos.y() + w->size().rows());
     }
 };
 }  // namespace VPACK
@@ -394,10 +394,6 @@ class VSetPosWidget {
 //
 // Private
 //
-VPack& VPack::operator=(const VPack&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
 //
 // Protected
@@ -424,6 +420,8 @@ Size VPack::calc_size_non_dynamic() const {
 //
 // Public
 //
+VPack::VPack() : Pack{} {}
+
 VPack::~VPack() {}
 
 Size VPack::size_hint() const {

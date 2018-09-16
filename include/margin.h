@@ -26,12 +26,11 @@
 namespace YACURS {
 class Margin {
    private:
-    static Margin __zero;
-    int __top, __bottom, __left, __right;
+    static Margin _zero;
+    int _top, _bottom, _left, _right;
 
    public:
-    Margin(int _top = 0, int _left = 0, int _bottom = 0, int _right = 0);
-    Margin(const Margin& m);
+    Margin(int top = 0, int left = 0, int bottom = 0, int right = 0);
     ~Margin();
 
     void top(int i);
@@ -49,8 +48,6 @@ class Margin {
     int left() const;
 
     int right() const;
-
-    Margin& operator=(const Margin& m);
 
     Margin operator+(const Margin& m) const;
 

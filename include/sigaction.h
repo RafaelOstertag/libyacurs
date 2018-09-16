@@ -45,17 +45,14 @@ class Sigaction {
      *
      * Third argument to sigaction().
      */
-    struct sigaction __saved_action;
+    struct sigaction _saved_action;
 
-    struct sigaction __current_action;
+    struct sigaction _current_action;
 
     /**
      * Signal Number.
      */
-    int __signo;
-
-    Sigaction(const Sigaction&);
-    Sigaction& operator=(const Sigaction&);
+    int _signo;
 
    public:
     /**
@@ -70,6 +67,11 @@ class Sigaction {
      */
     Sigaction(int signo, sig_handler hndlr, sigset_t& mask);
 
+      Sigaction(const Sigaction&) = delete;
+    Sigaction& operator=(const Sigaction&)=delete;
+ Sigaction(Sigaction&&) = delete;
+    Sigaction& operator=(Sigaction&&)=delete;
+
     /**
      * Restores sigaction.
      *
@@ -83,7 +85,7 @@ class Sigaction {
      *
      * @returns the signal.
      */
-    int signo() const { return __signo; }
+    int signo() const { return _signo; }
 
     /**
      * Set the signal again

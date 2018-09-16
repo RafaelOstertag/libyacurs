@@ -35,27 +35,22 @@ namespace YACURS {
  * that it cannot be realized() and throwing an exception.
  */
 class Rule : public Widget {
-   private:
-    // Not supported
-    Rule& operator=(const Rule&);
-
    protected:
-    COLOROBJ __color;
+    COLOROBJ _color;
 
     /**
      * The size the Label requires. Rows are always 1. Cols are
-     * __label.length(). Derrived classes may define other
+     * _label.length(). Derrived classes may define other
      * constraints.
      */
-    Size __size;
+    Size _size;
 
    public:
-    /**
-     * Constructor.
-     *
-     * @param _l label
-     */
     Rule();
+    Rule& operator=(const Rule&) = delete;
+    Rule& operator=(Rule&&) = delete;
+    Rule(const Rule&) = delete;
+    Rule(Rule&&) = delete;
 
     virtual ~Rule();
 

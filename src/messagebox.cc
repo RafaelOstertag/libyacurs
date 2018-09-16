@@ -30,10 +30,6 @@ using namespace YACURS;
 //
 // Private
 //
-MessageBox& MessageBox::operator=(const MessageBox&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
 //
 // Protected
@@ -43,14 +39,14 @@ MessageBox& MessageBox::operator=(const MessageBox&) {
 // Public
 //
 
-MessageBox::MessageBox(const std::string& _title, const std::string& _message,
-                       DIALOG_TYPE _dt)
-    : Dialog(_title, _dt), __message(_message), __vpack() {
-    __message.color(DIALOG);
+MessageBox::MessageBox(const std::string& title, const std::string& message,
+                       DIALOG_TYPE dt)
+    : Dialog(title, dt), _message(message), _vpack() {
+    _message.color(DIALOG);
     // Required to make dynlabel work
-    __vpack.always_dynamic(true);
-    __vpack.add_back(&__message);
-    widget(&__vpack);
+    _vpack.always_dynamic(true);
+    _vpack.add_back(&_message);
+    widget(&_vpack);
 }
 
 MessageBox::~MessageBox() {}

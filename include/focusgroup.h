@@ -55,17 +55,17 @@ class FocusGroup {
      * @c true means the Focus Group is active, @c false it is
      * inactive.
      */
-    bool __active;
+    bool _active;
 
     /**
      * All the widgets belonging to the Focus Group.
      */
-    std::list<WidgetBase*> __widgets;
+    std::list<WidgetBase*> _widgets;
 
     /**
      * The Widget having the focus in the group if active.
      */
-    std::list<WidgetBase*>::iterator __focus;
+    std::list<WidgetBase*>::iterator _focus;
 
    public:
     /**
@@ -76,14 +76,11 @@ class FocusGroup {
      */
     FocusGroup();
 
-    /**
-     * Copy Constructor.
-     *
-     * @parma _f reference to FocusGroup.
-     */
-    FocusGroup(const FocusGroup& _f);
+    FocusGroup(const FocusGroup& f);
+    FocusGroup& operator=(const FocusGroup& f);
+    FocusGroup(FocusGroup&& f);
+    FocusGroup& operator=(FocusGroup&& f);
     ~FocusGroup();
-    FocusGroup& operator=(const FocusGroup& _f);
 
     /**
      * Activate Focus Group
@@ -118,18 +115,18 @@ class FocusGroup {
      * has to be valid for the entire life time of the Focus
      * Group.
      *
-     * @param _w pointer to the Widget.
+     * @param w pointer to the Widget.
      */
-    void add(WidgetBase* _w);
+    void add(WidgetBase* w);
 
     /**
      * Remove Widget from Focus Group.
      *
      * Remove Widget from Focus Group.
      *
-     * @param _w pointer to Widget to be removed.
+     * @param w pointer to Widget to be removed.
      */
-    void remove(WidgetBase* _w);
+    void remove(WidgetBase* w);
 
     /**
      * Focus next Widget.

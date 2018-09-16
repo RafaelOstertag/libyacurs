@@ -38,16 +38,17 @@ namespace YACURS {
  */
 class UnlockDialogDefault : public UnlockDialog {
    private:
-    std::string __secret;
-    VPack __vpack;
-    Label __text;
-    Input<> __secret_input;
-
-    UnlockDialogDefault& operator=(const UnlockDialogDefault&);
+    std::string _secret;
+    VPack _vpack;
+    Label _text;
+    Input<> _secret_input;
 
    public:
-    UnlockDialogDefault(const std::string& _secret);
-
+    UnlockDialogDefault(const std::string& secret);
+    UnlockDialogDefault& operator=(const UnlockDialogDefault&) = delete;
+    UnlockDialogDefault(const UnlockDialogDefault&) = delete;
+    UnlockDialogDefault& operator=(UnlockDialogDefault&&) = delete;
+    UnlockDialogDefault(UnlockDialogDefault&&) = delete;
     ~UnlockDialogDefault();
 
     bool unlock();

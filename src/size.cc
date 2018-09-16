@@ -30,7 +30,7 @@ using namespace YACURS;
 //
 // Static
 //
-Size Size::__zero(0, 0);
+Size Size::_zero(0, 0);
 
 //
 // Private

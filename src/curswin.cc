@@ -41,147 +41,176 @@ using namespace YACURS::INTERNAL;
 // Protected
 //
 CursWin::CursWin(WINDOW* win, COLOROBJ dc, bool subwin)
-    : __window(win),
-      __def_color(dc),
-      __box(false),
-      __subwin(subwin),
-      __horch(0),
-      __verch(0) {
+    : _window{win},
+      _def_color{dc},
+      _box{false},
+      _subwin{subwin},
+      _horch{0},
+      _verch{0} {
     if (win == 0)
         throw std::invalid_argument(_("argument 'win' must not be 0"));
 
     int x, y;
-    getbegyx(__window, y, x);
-    __area.x(x);
-    __area.y(y);
+    getbegyx(_window, y, x);
+    _area.x(x);
+    _area.y(y);
 
-    getmaxyx(__window, y, x);
-    __area.cols(x);
-    __area.rows(y);
+    getmaxyx(_window, y, x);
+    _area.cols(x);
+    _area.rows(y);
 
-    __client_area = __area;
+    _client_area = _area;
 
-    set_bg(__def_color);
-    set_color(__def_color);
+    set_bg(_def_color);
+    set_color(_def_color);
 }
 
 //
 // Public
 //
-CursWin::CursWin(const Area& _a, COLOROBJ c)
-    : __window(0),
-      __def_color(c),
-      __box(false),
-      __subwin(false),
-      __horch(0),
-      __verch(0) {
-    if (_a == Area::zero()) {
+CursWin::CursWin(const Area& a, COLOROBJ c)
+    : _window{0},
+      _def_color{c},
+      _box{false},
+      _subwin{false},
+      _horch{0},
+      _verch{0} {
+    if (a == Area::zero()) {
         throw std::invalid_argument(_("Area must not be zero"));
     }
 
-    __area = __client_area = _a;
+    _area = _client_area = a;
 
-    if ((__window =
-             newwin(__area.rows(), __area.cols(), __area.y(), __area.x())) == 0)
+    if ((_window = newwin(_area.rows(), _area.cols(), _area.y(), _area.x())) ==
+        0)
         throw EXCEPTIONS::CursesException("newwin");
 
-    set_bg(__def_color);
-    set_color(__def_color);
+    set_bg(_def_color);
+    set_color(_def_color);
 }
 
 CursWin::CursWin(const CursWin& cw)
-    : __window(dupwin(cw.__window)),
-      __def_color(cw.__def_color),
-      __area(cw.__area),
-      __client_area(cw.__client_area),
-      __box(cw.__box),
-      __subwin(cw.__subwin),
-      __horch(cw.__horch),
-      __verch(cw.__verch) {
-    if (__window == 0) throw EXCEPTIONS::CursesException("dupwin");
+    : _window{dupwin(cw._window)},
+      _def_color{cw._def_color},
+      _area{cw._area},
+      _client_area{cw._client_area},
+      _box{cw._box},
+      _subwin{cw._subwin},
+      _horch{cw._horch},
+      _verch{cw._verch} {
+    if (_window == 0) throw EXCEPTIONS::CursesException("dupwin");
+}
+
+CursWin::CursWin(CursWin&& cw)
+    : _window(cw._window),
+      _def_color(cw._def_color),
+      _area(std::move(cw._area)),
+      _client_area(std::move(cw._client_area)),
+      _box(cw._box),
+      _subwin(cw._subwin),
+      _horch(cw._horch),
+      _verch(cw._verch) {
+    cw._window = nullptr;
 }
 
 CursWin& CursWin::operator=(const CursWin& cw) {
     if (this == &cw) return *this;
 
-    if (__window != 0) {
-        if (delwin(__window) == ERR)
-            throw EXCEPTIONS::CursesException("delwin");
+    if (_window != 0) {
+        if (delwin(_window) == ERR) throw EXCEPTIONS::CursesException("delwin");
 
-        __window = 0;
+        _window = 0;
     }
 
-    __window = cw.__window;
-    __def_color = cw.__def_color;
+    _window = cw._window;
+    _def_color = cw._def_color;
 
-    __box = cw.__box;
-    __subwin = cw.__subwin;
-    __area = cw.__area;
-    __client_area = cw.__client_area;
+    _box = cw._box;
+    _subwin = cw._subwin;
+    _area = cw._area;
+    _client_area = cw._client_area;
 
-    __horch = cw.__horch;
-    __verch = cw.__verch;
+    _horch = cw._horch;
+    _verch = cw._verch;
+
+    return *this;
+}
+
+CursWin& CursWin::operator=(CursWin&& cw) {
+    if (this == &cw) return *this;
+
+    _window = cw._window;
+    cw._window = nullptr;
+    _def_color = cw._def_color;
+
+    _box = cw._box;
+    _subwin = cw._subwin;
+    _area = std::move(cw._area);
+    _client_area = std::move(cw._client_area);
+
+    _horch = cw._horch;
+    _verch = cw._verch;
 
     return *this;
 }
 
 CursWin::~CursWin() {
-    if (__window != 0) delwin(__window);
+    if (_window != 0) delwin(_window);
 }
 
-const YACURS::Area& CursWin::area() const { return __area; }
+const YACURS::Area& CursWin::area() const { return _area; }
 
-const YACURS::Area& CursWin::client_area() const { return __client_area; }
+const YACURS::Area& CursWin::client_area() const { return _client_area; }
 
 CursWin& CursWin::refresh(bool immediate) {
     if (immediate) {
-        if (wrefresh(__window) == ERR)
+        if (wrefresh(_window) == ERR)
             throw EXCEPTIONS::CursesException("wrefresh");
     } else {
-        if (wnoutrefresh(__window) == ERR)
+        if (wnoutrefresh(_window) == ERR)
             throw EXCEPTIONS::CursesException("wnoutrefresh");
     }
     return *this;
 }
 
-bool CursWin::issubwin() const { return __subwin; }
+bool CursWin::issubwin() const { return _subwin; }
 
-bool CursWin::has_box() const { return __box; }
+bool CursWin::has_box() const { return _box; }
 
 CursWin& CursWin::box(chtype verch, chtype horch) {
-    __verch = verch;
-    __horch = horch;
+    _verch = verch;
+    _horch = horch;
     // X/Open has trouble with colors and ACS_* characters, as used
     // with borders. Therefore, we fall back to non ACS_*
     // characters. Beware, NCurses also defines _XOPEN_CURSES,
     // though.
 #if !defined(_XOPEN_CURSES) || defined(NCURSES_VERSION)
-    if (::box(__window, __verch, __horch) == ERR)
+    if (::box(_window, _verch, _horch) == ERR)
         throw EXCEPTIONS::CursesException("box");
 #else
-    if (wborder(__window, __verch == 0 ? '|' : __verch,
-                __verch == 0 ? '|' : __verch, __horch == 0 ? '-' : __horch,
-                __horch == 0 ? '-' : __horch, '+', '+', '+', '+') == ERR)
+    if (wborder(_window, _verch == 0 ? '|' : _verch, _verch == 0 ? '|' : _verch,
+                _horch == 0 ? '-' : _horch, _horch == 0 ? '-' : _horch, '+',
+                '+', '+', '+') == ERR)
         throw EXCEPTIONS::CursesException("wborder");
 #endif
 
-    __box = true;
-    __client_area = __area - Margin(1, 1, 1, 1);
+    _box = true;
+    _client_area = _area - Margin(1, 1, 1, 1);
 
     return *this;
 }
 
 CursWin& CursWin::bkgd(chtype ch) {
-    if (wbkgd(__window, ch) == ERR) throw EXCEPTIONS::CursesException("wbkgd");
+    if (wbkgd(_window, ch) == ERR) throw EXCEPTIONS::CursesException("wbkgd");
 
     return *this;
 }
 
 CursWin& CursWin::set_color(COLOROBJ c) {
 #if NCURSES_VERSION_PATCH < 20100313
-    wattrset(__window, Colors::color_pair(c));
+    wattrset(_window, Colors::color_pair(c));
 #else
-    if (wattrset(__window, Colors::color_pair(c)) == ERR)
+    if (wattrset(_window, Colors::color_pair(c)) == ERR)
         throw EXCEPTIONS::CursesException("wattrset");
 #endif
     return *this;
@@ -193,8 +222,8 @@ CursWin& CursWin::set_bg(COLOROBJ c) {
 }
 
 CursWin& CursWin::unset_box() {
-    __client_area = __area;
-    __box = false;
+    _client_area = _area;
+    _box = false;
 
     return *this;
 }
@@ -202,62 +231,61 @@ CursWin& CursWin::unset_box() {
 YACURS::Coordinates CursWin::get_cursor() const {
     int y, x;
 
-    getyx(__window, y, x);
+    getyx(_window, y, x);
 
     return Coordinates(x, y);
 }
 
 CursWin& CursWin::move(const Coordinates& pos) {
-    if (wmove(__window, pos.y(), pos.x()) == ERR)
+    if (wmove(_window, pos.y(), pos.x()) == ERR)
         throw EXCEPTIONS::CursesException("wmove");
 
     return *this;
 }
 
 CursWin& CursWin::clear() {
-    if (wclear(__window) == ERR) throw EXCEPTIONS::CursesException("wclear");
+    if (wclear(_window) == ERR) throw EXCEPTIONS::CursesException("wclear");
 
     // This has been introduced with the EVT_REDRAW event.
     //
     // After a erase, the box is gone, so we assume that when we have
     // a box, it should stay.
-    if (__box) box(__verch, __horch);
+    if (_box) box(_verch, _horch);
 
     return *this;
 }
 
 CursWin& CursWin::clrtobot() {
-    if (wclrtobot(__window) == ERR)
+    if (wclrtobot(_window) == ERR)
         throw EXCEPTIONS::CursesException("wclrtobot");
 
     return *this;
 }
 
 CursWin& CursWin::erase() {
-    if (werase(__window) == ERR) throw EXCEPTIONS::CursesException("werase");
+    if (werase(_window) == ERR) throw EXCEPTIONS::CursesException("werase");
 
     // After a erase, the box is gone, so we assume that when we have
     // a box, it should stay.
-    if (__box) box(__verch, __horch);
+    if (_box) box(_verch, _horch);
 
     return *this;
 }
 
 CursWin& CursWin::touch() {
-    if (touchwin(__window) == ERR)
-        throw EXCEPTIONS::CursesException("touchwin");
+    if (touchwin(_window) == ERR) throw EXCEPTIONS::CursesException("touchwin");
 
     return *this;
 }
 
 CursWin& CursWin::untouch() {
-    if (untouchwin(__window) == ERR)
+    if (untouchwin(_window) == ERR)
         throw EXCEPTIONS::CursesException("untouchwin");
 
     return *this;
 }
 
-bool CursWin::is_touched() const { return is_wintouched(__window) == TRUE; }
+bool CursWin::is_touched() const { return is_wintouched(_window) == TRUE; }
 
 CursWin& CursWin::addstr(const CurStr& str) { return addnstr(str, -1); }
 
@@ -267,11 +295,11 @@ CursWin& CursWin::addstr(const std::string& str) {
 
 CursWin& CursWin::addstrx(const CurStr& str) {
     // space available to string
-    int16_t space = __client_area.cols() - str.position().x() + (__box ? 1 : 0);
+    int16_t space = _client_area.cols() - str.position().x() + (_box ? 1 : 0);
 
     if (space == 1) {
         set_color(str.color());
-        if (__box) {
+        if (_box) {
             // mvaddch advances cursor, but does not move characters
             // under cursor, which is ideal when placing character
             // rigtht next to the border.
@@ -283,7 +311,7 @@ CursWin& CursWin::addstrx(const CurStr& str) {
             // next to the cursor is moved off the window.
             mvinsch(str.position(), '>');
         }
-        set_color(__def_color);
+        set_color(_def_color);
         return *this;
     }
 
@@ -310,7 +338,7 @@ CursWin& CursWin::addstrx(const CurStr& str) {
         addstr(str);
     }
 #endif
-    set_color(__def_color);
+    set_color(_def_color);
 
     return *this;
 }
@@ -320,8 +348,7 @@ CursWin& CursWin::addstrx(const std::string& str) {
 }
 
 CursWin& CursWin::addlinex(const CurStr& str) {
-    CurStr tmp(str, Coordinates(__box ? 1 : 0, str.position().y()),
-               str.color());
+    CurStr tmp(str, Coordinates(_box ? 1 : 0, str.position().y()), str.color());
 
     size_t mylen;
 
@@ -332,8 +359,8 @@ CursWin& CursWin::addlinex(const CurStr& str) {
     mylen = tmp.length();
 #endif
 
-    if (static_cast<int16_t>(mylen + (__box ? 1 : 0)) <= __client_area.cols()) {
-        tmp.append(__client_area.cols() - mylen, ' ');
+    if (static_cast<int16_t>(mylen + (_box ? 1 : 0)) <= _client_area.cols()) {
+        tmp.append(_client_area.cols() - mylen, ' ');
         return addstrx(tmp);
     }
 
@@ -361,24 +388,24 @@ CursWin& CursWin::addnstr(const CurStr& str, int n) {
     }
     wbuffer[retval] = L'\0';
 
-    if (mvwaddnwstr(__window, str.position().y(), str.position().x(), wbuffer,
+    if (mvwaddnwstr(_window, str.position().y(), str.position().x(), wbuffer,
                     n) == ERR &&
         (str.position().x() + (n == -1 ? static_cast<int16_t>(retval) : n)) <
-            __client_area.cols()) {
+            _client_area.cols()) {
         delete[] wbuffer;
         throw EXCEPTIONS::CursesException("mvwaddnwstr");
     }
 
     delete[] wbuffer;
 #else
-    if (mymvwaddnstr(__window, str.position().y(), str.position().x(),
+    if (mymvwaddnstr(_window, str.position().y(), str.position().x(),
                      str.c_str(), n) == ERR &&
         (str.position().x() + (n == -1 ? static_cast<int16_t>(str.length())
-                                       : n)) < __client_area.cols())
+                                       : n)) < _client_area.cols())
         throw EXCEPTIONS::CursesException("mvwaddnstr");
 #endif
 
-    set_color(__def_color);
+    set_color(_def_color);
 
     return *this;
 }
@@ -388,12 +415,12 @@ CursWin& CursWin::addnstr(const std::string& str, int n) {
 }
 
 CursWin& CursWin::addch(const chtype ch) {
-    Coordinates end(__area.cols() - 1, __area.rows() - 1);
+    Coordinates end(_area.cols() - 1, _area.rows() - 1);
 
     if (get_cursor() == end) {
-        (void)waddch(__window, ch);
+        (void)waddch(_window, ch);
     } else {
-        if (waddch(__window, ch) == ERR)
+        if (waddch(_window, ch) == ERR)
             throw EXCEPTIONS::CursesException("waddch");
     }
 
@@ -401,40 +428,39 @@ CursWin& CursWin::addch(const chtype ch) {
 }
 
 CursWin& CursWin::mvaddch(const Coordinates& pos, const chtype ch) {
-    Coordinates end(__area.cols() - 1, __area.rows() - 1);
+    Coordinates end(_area.cols() - 1, _area.rows() - 1);
 
     if (pos == end) {
-        (void)mvwaddch(__window, pos.y(), pos.x(), ch);
+        (void)mvwaddch(_window, pos.y(), pos.x(), ch);
     } else {
-        if (mvwaddch(__window, pos.y(), pos.x(), ch) == ERR)
+        if (mvwaddch(_window, pos.y(), pos.x(), ch) == ERR)
             throw EXCEPTIONS::CursesException("mvwaddch");
     }
     return *this;
 }
 
 CursWin& CursWin::insch(const chtype ch) {
-    if (winsch(__window, ch) == ERR)
-        throw EXCEPTIONS::CursesException("winsch");
+    if (winsch(_window, ch) == ERR) throw EXCEPTIONS::CursesException("winsch");
 
     return *this;
 }
 
 CursWin& CursWin::mvinsch(const Coordinates& pos, const chtype ch) {
-    if (mvwinsch(__window, pos.y(), pos.x(), ch) == ERR)
+    if (mvwinsch(_window, pos.y(), pos.x(), ch) == ERR)
         throw EXCEPTIONS::CursesException("mvwinsch");
 
     return *this;
 }
 
 CursWin& CursWin::mvdelch(const Coordinates& pos) {
-    if (mvwdelch(__window, pos.y(), pos.x()) == ERR)
+    if (mvwdelch(_window, pos.y(), pos.x()) == ERR)
         throw EXCEPTIONS::CursesException("mvwdelch");
 
     return *this;
 }
 
 CursWin& CursWin::delch() {
-    if (wdelch(__window) == ERR) throw EXCEPTIONS::CursesException("wdelch");
+    if (wdelch(_window) == ERR) throw EXCEPTIONS::CursesException("wdelch");
 
     return *this;
 }
@@ -442,17 +468,16 @@ CursWin& CursWin::delch() {
 CursWin& CursWin::hrule(const Coordinates& ypos) {
     Coordinates where(ypos);
 
-    where.x(__box ? 1 : 0);
+    where.x(_box ? 1 : 0);
     if (ypos == Coordinates::zero()) {
-        where.y(__box ? 1 : 0);
+        where.y(_box ? 1 : 0);
     }
 
 #if !defined(_XOPEN_CURSES) || defined(NCURSES_VERSION)
-    if (mvwhline(__window, where.y(), where.x(), 0, __client_area.cols()) ==
-        ERR)
+    if (mvwhline(_window, where.y(), where.x(), 0, _client_area.cols()) == ERR)
         throw EXCEPTIONS::CursesException("mvwhline");
 #else
-    if (mvwhline(__window, where.y(), where.x(), '_', __client_area.cols()) ==
+    if (mvwhline(_window, where.y(), where.x(), '_', _client_area.cols()) ==
         ERR)
         throw EXCEPTIONS::CursesException("mvwhline");
 #endif
@@ -463,17 +488,16 @@ CursWin& CursWin::hrule(const Coordinates& ypos) {
 CursWin& CursWin::vrule(const Coordinates& xpos) {
     Coordinates where(xpos);
 
-    where.y(__box ? 1 : 0);
+    where.y(_box ? 1 : 0);
     if (xpos == Coordinates::zero()) {
-        where.x(__box ? 1 : 0);
+        where.x(_box ? 1 : 0);
     }
 
 #if !defined(_XOPEN_CURSES) || defined(NCURSES_VERSION)
-    if (mvwvline(__window, where.y(), where.x(), 0, __client_area.rows()) ==
-        ERR)
+    if (mvwvline(_window, where.y(), where.x(), 0, _client_area.rows()) == ERR)
         throw EXCEPTIONS::CursesException("mvwvline");
 #else
-    if (mvwvline(__window, where.y(), where.x(), '|', __client_area.rows()) ==
+    if (mvwvline(_window, where.y(), where.x(), '|', _client_area.rows()) ==
         ERR)
         throw EXCEPTIONS::CursesException("mvwvline");
 #endif
@@ -482,38 +506,38 @@ CursWin& CursWin::vrule(const Coordinates& xpos) {
 }
 
 CursWin& CursWin::clearok(bool fl) {
-    if (::clearok(__window, fl ? TRUE : FALSE) == ERR)
+    if (::clearok(_window, fl ? TRUE : FALSE) == ERR)
         throw EXCEPTIONS::CursesException("clearok");
 
     return *this;
 }
 
 CursWin& CursWin::scrollok(bool fl) {
-    if (::scrollok(__window, fl ? TRUE : FALSE) == ERR)
+    if (::scrollok(_window, fl ? TRUE : FALSE) == ERR)
         throw EXCEPTIONS::CursesException("scrollok");
 
     return *this;
 }
 
 CursWin& CursWin::leaveok(bool fl) {
-    if (::leaveok(__window, fl ? TRUE : FALSE) == ERR)
+    if (::leaveok(_window, fl ? TRUE : FALSE) == ERR)
         throw EXCEPTIONS::CursesException("leaveok");
 
     return *this;
 }
 
 CursWin* CursWin::derwin(const Area& a) const {
-    WINDOW* _subwin = ::derwin(__window, a.rows(), a.cols(), a.y(), a.x());
+    WINDOW* _subwin = ::derwin(_window, a.rows(), a.cols(), a.y(), a.x());
     if (_subwin == 0) throw EXCEPTIONS::CursesException("derwin");
 
-    return new CursWin(_subwin, __def_color, true);
+    return new CursWin(_subwin, _def_color, true);
 }
 
 CursWin* CursWin::subwin(const Area& a) const {
-    WINDOW* _subwin = ::subwin(__window, a.rows(), a.cols(), a.y(), a.x());
+    WINDOW* _subwin = ::subwin(_window, a.rows(), a.cols(), a.y(), a.x());
     if (_subwin == 0) throw EXCEPTIONS::CursesException("subwin");
 
-    return new CursWin(_subwin, __def_color, true);
+    return new CursWin(_subwin, _def_color, true);
 }
 
 CursWin& CursWin::operator+=(const CurStr& str) { return addstrx(str); }

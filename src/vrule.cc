@@ -30,10 +30,6 @@ using namespace YACURS;
 //
 // Private
 //
-VRule& VRule::operator=(const VRule&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
 //
 // Protected
@@ -46,10 +42,10 @@ VRule::VRule() : Rule() {}
 
 VRule::~VRule() {}
 
-void VRule::size_available(const Size& _s) {
-    assert(_s.cols() > 0);
-    WidgetBase::size_available(_s);
-    __size = Size(_s.rows(), 1);
+void VRule::size_available(const Size& s) {
+    assert(s.cols() > 0);
+    WidgetBase::size_available(s);
+    _size = Size(s.rows(), 1);
 }
 
 Size VRule::size_hint() const { return Size(0, 1); }
@@ -59,8 +55,8 @@ void VRule::refresh(bool immediate) {
 
     assert(widget_subwin() != 0);
 
-    widget_subwin()->set_color(__color);
-    widget_subwin()->set_bg(__color);
+    widget_subwin()->set_color(_color);
+    widget_subwin()->set_bg(_color);
     widget_subwin()->vrule();
 
     Widget::refresh(immediate);

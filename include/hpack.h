@@ -34,16 +34,19 @@ namespace YACURS {
  * realize().
  */
 class HPack : public Pack {
-   private:
-    // Not supported
-    HPack& operator=(const HPack&);
-
    protected:
     void recalc_size();
 
     Size calc_size_non_dynamic() const;
 
    public:
+    HPack();
+
+    HPack& operator=(const HPack&) = delete;
+    HPack& operator=(HPack&&) = delete;
+    HPack(const HPack&) = delete;
+    HPack(HPack&&) = delete;
+
     virtual ~HPack();
 
     Size size_hint() const;

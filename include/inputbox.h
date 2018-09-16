@@ -32,17 +32,18 @@
 namespace YACURS {
 class InputBox : public Dialog {
    private:
-    Label __message;
-    Input<> __input;
-    VPack __vpack;
-
-    // Not supported
-    InputBox& operator=(const InputBox&);
+    Label _message;
+    Input<> _input;
+    VPack _vpack;
 
    public:
-    InputBox(const std::string& _title, const std::string& _message,
-             DIALOG_TYPE _dt = OKCANCEL);
+    InputBox(const std::string& title, const std::string& message,
+             DIALOG_TYPE dt = OKCANCEL);
 
+    InputBox& operator=(const InputBox&) = delete;
+    InputBox& operator=(InputBox&&) = delete;
+    InputBox(const InputBox&) = delete;
+    InputBox(InputBox&&) = delete;
     virtual ~InputBox();
 
     const std::string& input() const;

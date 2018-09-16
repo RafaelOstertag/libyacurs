@@ -26,7 +26,7 @@ using namespace YACURS;
 //
 // Static
 //
-Coordinates Coordinates::__zero(0, 0);
+Coordinates Coordinates::_zero(0, 0);
 
 //
 // Private

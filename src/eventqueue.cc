@@ -55,7 +55,7 @@
 using namespace YACURS;
 
 static INTERNAL::EventQueueStats statistics;
-static std::ofstream __statsfile;
+static std::ofstream _statsfile;
 
 sigset_t EventQueue::block_sigmask;
 sigset_t EventQueue::tmp_old_sigmask;
@@ -78,8 +78,8 @@ std::queue<Event*> EventQueue::evt_queue;
 std::list<EventConnectorBase*> EventQueue::evtconn_rem_request;
 std::map<EventType, std::list<EventConnectorBase*> > EventQueue::evtconn_map;
 
-LockScreen* EventQueue::__lockscreen = 0;
-unsigned int EventQueue::__timeout = 0;
+LockScreen* EventQueue::_lockscreen = 0;
+unsigned int EventQueue::_timeout = 0;
 
 //
 // Functors
@@ -93,25 +93,25 @@ namespace EVENTQUEUE {
  */
 class EventConnectorEqual {
    private:
-    const EventConnectorBase& __eb;
+    const EventConnectorBase& _eb;
 
    public:
     /**
-     * @param _eb EventConnector which others are
+     * @param eb EventConnector which others are
      * compared to.
      */
-    EventConnectorEqual(const EventConnectorBase& _eb) : __eb(_eb) {}
+    EventConnectorEqual(const EventConnectorBase& eb) : _eb(eb) {}
 
     /**
      * @param eb pointer to EventConnector which is
-     * compared to __eb.
+     * compared to _eb.
      *
-     * @return @c true if __eb == *eb, @c false
+     * @return @c true if _eb == *eb, @c false
      * otherwise.
      */
     bool operator()(EventConnectorBase* eb) {
         assert(eb != 0);
-        return *eb == __eb;
+        return *eb == _eb;
     }
 };
 
@@ -123,24 +123,24 @@ class EventConnectorEqual {
  */
 class EvtConnSetSuspend {
    private:
-    const EventType __evt;
-    bool __suspend;
+    const EventType _evt;
+    bool _suspend;
 
    public:
     /**
-     * @param _e Event the EventConnector has to
+     * @param e Event the EventConnector has to
      * connect in order to be suspended/unsuspended.
      *
-     * @param _s suspend state to set: @c true to
+     * @param s suspend state to set: @c true to
      * suspend the EventConnector, @c false to
      * unsuspend the EventConnector.
      */
-    EvtConnSetSuspend(const EventType _e, bool _s) : __evt(_e), __suspend(_s) {}
+    EvtConnSetSuspend(const EventType e, bool s) : _evt(e), _suspend(s) {}
 
     void operator()(EventConnectorBase* eb) {
         assert(eb != 0);
-        if (*eb == __evt) {
-            if (__suspend) {
+        if (*eb == _evt) {
+            if (_suspend) {
                 DEBUGOUT(DBG_EVT, "Suspend: " << (void*)(eb->id()) << ": "
                                               << Event::evt2str(*eb));
                 eb->suspended(true);
@@ -161,26 +161,26 @@ class EvtConnSetSuspend {
  */
 class EvtConnSetSuspendExcept {
    private:
-    const EventConnectorBase& __evt;
-    bool __suspend;
+    const EventConnectorBase& _evt;
+    bool _suspend;
 
    public:
     /**
-     * @param _e all EventConnectors having the same
+     * @param e all EventConnectors having the same
      * EventType as this, will have set their suspend
-     * state. _e will not be changed, though.
+     * state. e will not be changed, though.
      *
-     * @param _s suspend state to set: @c true to
+     * @param s suspend state to set: @c true to
      * suspend the EventConnector, @c false to
      * unsuspend the EventConnector.
      */
-    EvtConnSetSuspendExcept(const EventConnectorBase& _e, bool _s)
-        : __evt(_e), __suspend(_s) {}
+    EvtConnSetSuspendExcept(const EventConnectorBase& e, bool s)
+        : _evt(e), _suspend(s) {}
 
     void operator()(EventConnectorBase* eb) {
         assert(eb != 0);
-        if (*eb == __evt.type() && !(__evt == *eb)) {
-            if (__suspend) {
+        if (*eb == _evt.type() && !(_evt == *eb)) {
+            if (_suspend) {
                 DEBUGOUT(DBG_EVT, "Suspend Except: " << (void*)(eb->id())
                                                      << ": "
                                                      << Event::evt2str(*eb));
@@ -225,36 +225,36 @@ class CallEventConnector {
      * EventConnectors to be called, and passed to
      * them if called.
      */
-    Event& __eb;
+    Event& _eb;
 
    public:
     /**
-     * @param _eb Event for which EventConnectors are
+     * @param eb Event for which EventConnectors are
      * called.
      */
-    CallEventConnector(Event& _eb) : __eb(_eb) {}
+    CallEventConnector(Event& eb) : _eb(eb) {}
 
     /**
      * Calls the given EventConnector conditionally.
      *
      * Calls the given Eventconnector only if it
-     * connects to the same EventType as __eb. __eb
+     * connects to the same EventType as _eb. _eb
      * will be passed as argument to the
      * EventConnector call.
      *
      * @param _ec EventConnector which will be called
      * conditionally if it connects to the same
-     * EventType as __eb is.
+     * EventType as _eb is.
      */
     void operator()(EventConnectorBase* _ec) {
         assert(_ec != 0);
-        if (_ec->type() == __eb.type() && __eb.stop() == false) {
+        if (_ec->type() == _eb.type() && _eb.stop() == false) {
             statistics.update_ec_calls_by_type(_ec->type());
 
             DEBUGOUT(DBG_EVT, "Call: " << (void*)(_ec->id()) << ": "
                                        << Event::evt2str(*_ec));
             clock_t t0 = clock();
-            _ec->call(__eb);
+            _ec->call(_eb);
             statistics.update_ec_call_time(t0, clock());
         }
     }
@@ -574,7 +574,7 @@ EventQueue::signal_handler(int signo)
 
 #ifdef SIGINFO
         case SIGINFO:
-            __dump_event_conn_map();
+            _dump_event_conn_map();
             break;
 #endif
     }
@@ -639,17 +639,17 @@ void EventQueue::proc_rem_request() {
     evtconn_rem_request.clear();
 }
 
-void EventQueue::timeout_handler(Event& _e) {
-    assert(_e == EVT_SIGALRM);
+void EventQueue::timeout_handler(Event& e) {
+    assert(e == EVT_SIGALRM);
 
-    if (__lockscreen == 0) return;
+    if (_lockscreen == 0) return;
 
-    if (__lockscreen->shown()) {
-        __lockscreen->close_unlock_dialog();
+    if (_lockscreen->shown()) {
+        _lockscreen->close_unlock_dialog();
         return;
     }
 
-    __lockscreen->show();
+    _lockscreen->show();
 }
 
 //
@@ -684,10 +684,10 @@ void EventQueue::connect_event(const EventConnectorBase& ec) {
         //  - Refreshing
         //
         // It ensures proper display of overlapping windows.
-        EventConnectorBase* __tmp = ec.clone();
-        list.push_back(__tmp);
+        EventConnectorBase* _tmp = ec.clone();
+        list.push_back(_tmp);
 
-        DEBUGOUT(DBG_EVT, "Connect: " << (void*)__tmp->id() << ": "
+        DEBUGOUT(DBG_EVT, "Connect: " << (void*)_tmp->id() << ": "
                                       << Event::evt2str(ec));
     }
 
@@ -777,11 +777,11 @@ void EventQueue::suspend(const EventConnectorBase& ec) {
     (*it)->suspended(true);
 }
 
-void EventQueue::suspend_all(const EventType _t) {
-    std::list<EventConnectorBase*>& list = evtconn_map[_t];
+void EventQueue::suspend_all(const EventType t) {
+    std::list<EventConnectorBase*>& list = evtconn_map[t];
 
     std::for_each(list.begin(), list.end(),
-                  FUNCTORS::EVENTQUEUE::EvtConnSetSuspend(_t, true));
+                  FUNCTORS::EVENTQUEUE::EvtConnSetSuspend(t, true));
 }
 
 void EventQueue::suspend_except(const EventConnectorBase& ec) {
@@ -806,10 +806,10 @@ void EventQueue::unsuspend(const EventConnectorBase& ec) {
     (*it)->suspended(false);
 }
 
-void EventQueue::unsuspend_all(const EventType _t) {
-    std::list<EventConnectorBase*>& list = evtconn_map[_t];
+void EventQueue::unsuspend_all(const EventType t) {
+    std::list<EventConnectorBase*>& list = evtconn_map[t];
     std::for_each(list.begin(), list.end(),
-                  FUNCTORS::EVENTQUEUE::EvtConnSetSuspend(_t, false));
+                  FUNCTORS::EVENTQUEUE::EvtConnSetSuspend(t, false));
 }
 
 void EventQueue::unsuspend_except(const EventConnectorBase& ec) {
@@ -851,9 +851,9 @@ void EventQueue::run() {
     // statistics.clear();
 
     for (;;) {
-        if (__lockscreen != 0) {
+        if (_lockscreen != 0) {
             // Adding lockscreen will set timeout.
-            timeout(__timeout);
+            timeout(_timeout);
         }
 
         // This is to move the cursor to the focused widget. Before
@@ -984,48 +984,48 @@ void EventQueue::cleanup() {
     char* stats_fn;
     if ((stats_fn = std::getenv("LIBYACURS_EVT_STATS")) != 0) {
         try {
-            if (!__statsfile.is_open())
-                __statsfile.open(stats_fn, std::ios::out | std::ios::trunc);
-            statistics.dump(__statsfile);
+            if (!_statsfile.is_open())
+                _statsfile.open(stats_fn, std::ios::out | std::ios::trunc);
+            statistics.dump(_statsfile);
 
-            __statsfile.close();
+            _statsfile.close();
         } catch (...) {
         }
     }
 }
 
-void EventQueue::lock_screen(LockScreen* _ls) {
-    __lockscreen = _ls;
-    if (__lockscreen == 0) {
+void EventQueue::lock_screen(LockScreen* ls) {
+    _lockscreen = ls;
+    if (_lockscreen == 0) {
         timeout(0);
         disconnect_event(
             EventConnectorFunction1(EVT_SIGALRM, &EventQueue::timeout_handler));
     } else {
-        timeout(__lockscreen->timeout());
+        timeout(_lockscreen->timeout());
         connect_event(
             EventConnectorFunction1(EVT_SIGALRM, &EventQueue::timeout_handler));
     }
 }
 
-LockScreen* EventQueue::lock_screen() { return __lockscreen; }
+LockScreen* EventQueue::lock_screen() { return _lockscreen; }
 
-void EventQueue::timeout(unsigned int _t) {
-    __timeout = _t;
-    alarm(__timeout);
+void EventQueue::timeout(unsigned int t) {
+    _timeout = t;
+    alarm(_timeout);
     // On Solaris 10/11 when using Sys V curses, letting a unlock
     // dialog time out twice in a row, results in signal handler for
     // SIGALRM to be lost, i.e. SIG_DFL appears to be in place. Thus,
     // we reset the action.
-#if defined(__sun) && defined(_CURSES_H) && !defined(_XOPEN_CURSES)
+#if defined(_sun) && defined(_CURSES_H) && !defined(_XOPEN_CURSES)
 #warning "SYSV curses workaround for Solaris enabled"
     // We may be called with sigalrm not being initialized yet
     if (sigalrm != 0) sigalrm->reset();
 #endif
 }
 
-unsigned int EventQueue::timeout() { return __timeout; }
+unsigned int EventQueue::timeout() { return _timeout; }
 
-void EventQueue::__dump_event_conn_map() {
+void EventQueue::_dump_event_conn_map() {
     if (std::getenv("LIBYACURS_EVTCONNMAP_DBGFN") == 0) return;
 
     try {
@@ -1038,7 +1038,7 @@ void EventQueue::__dump_event_conn_map() {
         while (it != evtconn_map.end()) {
             f << static_cast<std::string>((*it).first) << "(" << (*it).first
               << ")" << std::endl;
-            f << "_____________________" << std::endl;
+            f << "___________" << std::endl;
             std::list<EventConnectorBase*>& conlist = (*it).second;
             std::list<EventConnectorBase*>::iterator it2 = conlist.begin();
 

@@ -40,23 +40,19 @@ class HotKeyEsc;
 
 class Dialog : public Window {
    private:
-    VPack* __vpack;
-    HPack* __hpack;
-    Button* __byes;
-    Button* __bok;
-    Spacer* __ok_spacer;
-    Button* __bcancel;
-    Button* __bno;
-    HRule* __hrule;
-    DIALOG_STATE __dstate;
-    DIALOG_TYPE __dialog_type;
-    DIALOG_SIZE __dialog_size;
+    VPack* _vpack;
+    HPack* _hpack;
+    Button* _byes;
+    Button* _bok;
+    Spacer* _ok_spacer;
+    Button* _bcancel;
+    Button* _bno;
+    HRule* _hrule;
+    DIALOG_STATE _dstate;
+    DIALOG_TYPE _dialog_type;
+    DIALOG_SIZE _dialog_size;
 
-    std::string __title;
-
-    // Not supported
-    Dialog(const Dialog&);
-    Dialog& operator=(const Dialog&);
+    std::string _title;
 
    protected:
     const Button* const ok_button() const;
@@ -83,7 +79,7 @@ class Dialog : public Window {
      */
     void add_button(Spacer* s);
 
-    virtual void button_press_handler(Event& _e);
+    virtual void button_press_handler(Event& e);
 
     /**
      * Called on OK button press.
@@ -118,13 +114,18 @@ class Dialog : public Window {
     virtual void on_no_button();
 
    public:
-    Dialog(const std::string& _title, DIALOG_TYPE _dt = OKCANCEL,
-           DIALOG_SIZE _ds = AUTOMATIC);
+    Dialog(const std::string& title, DIALOG_TYPE dialogType = OKCANCEL,
+           DIALOG_SIZE dialogSize = AUTOMATIC);
+           // Not supported
+    Dialog(const Dialog&)=delete;
+    Dialog& operator=(const Dialog&)=delete;
+    Dialog(Dialog&&) = delete;
+    Dialog& operator=(Dialog&&) = delete;
     virtual ~Dialog();
     DIALOG_STATE dialog_state() const;
     DIALOG_TYPE dialog_type() const;
 
-    void title(const std::string& _title);
+    void title(const std::string& title);
 
     std::string title() const;
 
@@ -133,9 +134,9 @@ class Dialog : public Window {
      *
      * Add widget to front of vpack.
      *
-     * @param _w widget to be added.
+     * @param widgetBase widget to be added.
      */
-    void widget(WidgetBase* _w);
+    void widget(WidgetBase* widgetBase);
 
     // Those are from Realizable
     void refresh(bool immediate);

@@ -39,17 +39,17 @@ class Coordinates {
     /**
      * Object representing zero.
      */
-    static Coordinates __zero;
+    static Coordinates _zero;
 
     /**
      * y component.
      */
-    int16_t __y;
+    int16_t _y;
 
     /**
      * x component
      */
-    int16_t __x;
+    int16_t _x;
 
    public:
     /**
@@ -58,10 +58,10 @@ class Coordinates {
      * When no arguments are provided, it initializes the object
      * to zero, i.e. x=0, y=0.
      *
-     * @param _x x-component
-     * @param _y y-component
+     * @param x x-component
+     * @param y y-component
      */
-    Coordinates(int16_t _x = 0, int16_t _y = 0);
+    Coordinates(int16_t x = 0, int16_t y = 0);
 
     /**
      * Get x component.
@@ -80,16 +80,16 @@ class Coordinates {
     /**
      * Set x component.
      *
-     * @param _x value of x
+     * @param x value of x
      */
-    void x(int16_t _x);
+    void x(int16_t x);
 
     /**
      * Set y component.
      *
-     * @param _y value of y
+     * @param y value of y
      */
-    void y(int16_t _y);
+    void y(int16_t y);
 
     /**
      * Add and assign another Coordinates object.
@@ -170,33 +170,33 @@ Coordinates operator-(const Coordinates& lhs, const Coordinates& rhs);
  */
 bool operator!=(const Coordinates& lhs, const Coordinates& rhs);
 
-inline Coordinates::Coordinates(int16_t _x, int16_t _y) : __y(_y), __x(_x) {}
+inline Coordinates::Coordinates(int16_t x, int16_t y) : _y(y), _x(x) {}
 
-inline int16_t Coordinates::x() const { return __x; }
+inline int16_t Coordinates::x() const { return _x; }
 
-inline int16_t Coordinates::y() const { return __y; }
+inline int16_t Coordinates::y() const { return _y; }
 
-inline void Coordinates::x(int16_t _x) { __x = _x; }
+inline void Coordinates::x(int16_t x) { _x = x; }
 
-inline void Coordinates::y(int16_t _y) { __y = _y; }
+inline void Coordinates::y(int16_t y) { _y = y; }
 
 inline Coordinates& Coordinates::operator+=(const Coordinates& rhs) {
-    __x += rhs.__x;
-    __y += rhs.__y;
+    _x += rhs._x;
+    _y += rhs._y;
     return *this;
 }
 
 inline Coordinates& Coordinates::operator-=(const Coordinates& rhs) {
-    __x -= rhs.__x;
-    __y -= rhs.__y;
+    _x -= rhs._x;
+    _y -= rhs._y;
     return *this;
 }
 
 inline bool Coordinates::operator==(const Coordinates& rhs) const {
-    return __x == rhs.__x && __y == rhs.__y;
+    return _x == rhs._x && _y == rhs._y;
 }
 
-inline const Coordinates& Coordinates::zero() { return __zero; }
+inline const Coordinates& Coordinates::zero() { return _zero; }
 
 inline Coordinates operator+(const Coordinates& lhs, const Coordinates& rhs) {
     Coordinates tmp = lhs;

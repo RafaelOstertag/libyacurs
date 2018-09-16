@@ -85,7 +85,7 @@ class ColorParser {
     /**
      * Default Colors.
      */
-    static const std::string __default_colors;
+    static const std::string _default_colors;
 
     std::map<std::string, short> color_name_map;
     std::map<char, short> curs_colors_map;
@@ -99,8 +99,10 @@ class ColorParser {
 
    public:
     ColorParser();
+    ColorParser(ColorParser&& cp);
     ColorParser(const ColorParser& cp);
     ColorParser& operator=(const ColorParser& cp);
+    ColorParser& operator=(ColorParser&& cp);
 
     std::vector<CursColor> operator()(
         const std::string& colorstr = default_colors());

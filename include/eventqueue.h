@@ -119,15 +119,15 @@ class EventQueue {
     /**
      * LockScreen used on timeout
      */
-    static LockScreen* __lockscreen;
+    static LockScreen* _lockscreen;
 
     /**
      * Timeout for keyboard input.
      *
-     * If for __timeout seconds no key (event) is pressed
+     * If for _timeout seconds no key (event) is pressed
      * (received), the lock screen kicks in, if any.
      */
-    static unsigned int __timeout;
+    static unsigned int _timeout;
 
     static void setup_signal();
 
@@ -147,7 +147,7 @@ class EventQueue {
 
     static void proc_rem_request();
 
-    static void timeout_handler(Event& _e);
+    static void timeout_handler(Event& e);
 
    public:
     /**
@@ -188,7 +188,7 @@ class EventQueue {
     static void suspend(const EventConnectorBase& ec);
 
     /// Suspend all events equal to a given event
-    static void suspend_all(const EventType _t);
+    static void suspend_all(const EventType t);
 
     /// Suspend all events except the one given
     static void suspend_except(const EventConnectorBase& ec);
@@ -197,13 +197,13 @@ class EventQueue {
     static void unsuspend(const EventConnectorBase& ec);
 
     /// Unsuspend all events equal to a given event
-    static void unsuspend_all(const EventType _t);
+    static void unsuspend_all(const EventType t);
 
     /// Unsuspend all events except the one given
     static void unsuspend_except(const EventConnectorBase& ec);
 
     /// Add an event to the qeue
-    static void submit(const EventType _et);
+    static void submit(const EventType et);
 
     static void submit(const Event& ev);
 
@@ -211,15 +211,15 @@ class EventQueue {
 
     static void cleanup();
 
-    static void lock_screen(LockScreen* _ls);
+    static void lock_screen(LockScreen* ls);
 
     static LockScreen* lock_screen();
 
-    static void timeout(unsigned int _t);
+    static void timeout(unsigned int t);
 
     static unsigned int timeout();
 
-    static void __dump_event_conn_map();
+    static void _dump_event_conn_map();
 };
 }  // namespace YACURS
 

@@ -39,16 +39,16 @@
 
 namespace YACURS {
 
-template <class _T = std::string>
+template <class T = std::string>
 class ListBox : public Widget {
    public:
-    static bool cmp_asc(const _T& a, const _T& b) { return a < b; }
+    static bool cmp_asc(const T& a, const T& b) { return a < b; }
 
-    static bool cmp_dsc(const _T& a, const _T& b) { return a > b; }
+    static bool cmp_dsc(const T& a, const T& b) { return a > b; }
 
-    typedef typename std::list<_T>::size_type lsz_t;
+    typedef typename std::list<T>::size_type lsz_t;
 
-    typedef typename _T::size_type tsz_t;
+    typedef typename T::size_type tsz_t;
 #define __cast_lt(x) (static_cast<lsz_t>(x))
 #define __cast_st(x) (static_cast<tsz_t>(x))
    private:
@@ -60,44 +60,38 @@ class ListBox : public Widget {
      * cannot create an empty element in selected() and return a
      * reference to it.
      */
-    _T __empty;
+    T _empty;
 
-    typename std::list<_T> __list;
+    typename std::list<T> _list;
 
     /**
      * Offset into the list.
      */
-    lsz_t __offset;
+    lsz_t _offset;
 
     /**
      * Position of the cursor in the visiable area
      */
-    lsz_t __curs_pos;
+    lsz_t _curs_pos;
 
     /**
      * Size of the Widget.
      *
      * May be Size::zero() since dynamically size.
      */
-    Size __size;
+    Size _size;
 
     /**
      * Sort order of the list.
      *
      * Sort order maintained by the list.
      */
-    SORT_ORDER __sort_order;
+    SORT_ORDER _sort_order;
 
-    // Not supported
-    ListBox<_T>& operator=(const ListBox<_T>&) {
-        throw EXCEPTIONS::NotSupported();
-        return *this;
-    }
-
-    lsz_t pagesize() const { return __size.rows() - 2; }
+    lsz_t pagesize() const { return _size.rows() - 2; }
 
    protected:
-    virtual void key_handler(Event& _e);
+    virtual void key_handler(Event& e);
 
     void sort();
 
@@ -106,11 +100,15 @@ class ListBox : public Widget {
      */
     ListBox();
 
+    ListBox(ListBox&&) = delete;
+    ListBox(const ListBox&) = delete;
+    ListBox& operator=(ListBox&&) = delete;
+    ListBox& operator=(const ListBox&) = delete;
     virtual ~ListBox();
 
-    void add(const _T& _i);
+    void add(const T& i);
 
-    void set(const std::list<_T>& _l);
+    void set(const std::list<T>& l);
 
     /**
      * Replace item.
@@ -124,9 +122,9 @@ class ListBox : public Widget {
      *
      * @param index position where to set the value.
      */
-    virtual void set(const _T& item, lsz_t index);
+    virtual void set(const T& item, lsz_t index);
 
-    const std::list<_T>& list() const;
+    const std::list<T>& list() const;
 
     bool empty() const;
 
@@ -134,22 +132,22 @@ class ListBox : public Widget {
 
     void clear();
 
-    void sort_order(SORT_ORDER _sort_order);
+    void sort_order(SORT_ORDER sort_order);
 
     SORT_ORDER sort_order() const;
 
     lsz_t selected_index() const;
 
-    const _T& selected() const;
+    const T& selected() const;
 
     /**
      * Replace the selected item.
      *
-     * Replaced he selected item by @c _item
+     * Replaced he selected item by @c item
      *
-     * @param _item new value of selected item.
+     * @param item new value of selected item.
      */
-    void selected(_T& _item);
+    void selected(T& item);
 
     /**
      * Delete selected item.
@@ -168,7 +166,7 @@ class ListBox : public Widget {
 
     // From WidgetBase
 
-    void size_available(const Size& _s);
+    void size_available(const Size& s);
 
     /**
      * Size the Input Widget requires.
@@ -193,7 +191,7 @@ class ListBox : public Widget {
     /**
      * Reset size.
      *
-     * If __length is zero, resets __size. Else does nothing.
+     * If __length is zero, resets _size. Else does nothing.
      */
     void reset_size();
 
@@ -214,23 +212,23 @@ class ListBox : public Widget {
 //
 // Protected
 //
-template <class _T>
-void ListBox<_T>::key_handler(Event& _e) {
-    assert(_e == EVT_KEY);
+template <class T>
+void ListBox<T>::key_handler(Event& e) {
+    assert(e == EVT_KEY);
 
     if (!focus()) return;
 
 #ifdef YACURS_USE_WCHAR
-    EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(_e);
+    EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(e);
 #else
-    EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(_e);
+    EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(e);
 #endif
 
     switch (ekey.data()) {
         case KEY_ENTER:
         case KEY_RETURN:
         case KEY_RETURN2:
-            EventQueue::submit(EventEx<ListBox<_T>*>(EVT_LISTBOX_ENTER, this));
+            EventQueue::submit(EventEx<ListBox<T>*>(EVT_LISTBOX_ENTER, this));
             break;
 
         case KEY_TAB:
@@ -244,16 +242,15 @@ void ListBox<_T>::key_handler(Event& _e) {
         case KEY_DOWN:
         case KEY_CTRL_N:  // Emacs key
         case 'j':         // VIM key
-            if ((__offset + __curs_pos) > __list.size() || __list.empty())
-                break;
+            if ((_offset + _curs_pos) > _list.size() || _list.empty()) break;
 
             // We have to take the box into account, hence
-            // __size.rows()-3
-            if (__curs_pos < __cast_lt(__size.rows()) - 3 &&
-                __curs_pos < __list.size() - 1) {
-                __curs_pos++;
+            // _size.rows()-3
+            if (_curs_pos < __cast_lt(_size.rows()) - 3 &&
+                _curs_pos < _list.size() - 1) {
+                _curs_pos++;
             } else {
-                if (__offset + __curs_pos + 1 < __list.size()) __offset++;
+                if (_offset + _curs_pos + 1 < _list.size()) _offset++;
             }
 
             break;
@@ -261,12 +258,12 @@ void ListBox<_T>::key_handler(Event& _e) {
         case KEY_UP:
         case KEY_CTRL_P:  // Emacs key
         case 'k':         // VIM key
-            if ((__offset == 0 && __curs_pos == 0) || __list.empty()) break;
+            if ((_offset == 0 && _curs_pos == 0) || _list.empty()) break;
 
-            if (__curs_pos > 0)
-                __curs_pos--;
+            if (_curs_pos > 0)
+                _curs_pos--;
             else
-                __offset--;
+                _offset--;
 
             break;
 
@@ -275,7 +272,7 @@ void ListBox<_T>::key_handler(Event& _e) {
         // it has code `27' which is ESC.
         case KEY_HOME:
         case KEY_CTRL_A:
-            __offset = __curs_pos = 0;
+            _offset = _curs_pos = 0;
             break;
 
         // Solaris' X/Open Curses and System Curses do not
@@ -283,49 +280,49 @@ void ListBox<_T>::key_handler(Event& _e) {
         // it has code `27' which is ESC.
         case KEY_END:
         case KEY_CTRL_E:
-            if (__list.empty()) break;
+            if (_list.empty()) break;
 
-            if (__list.size() <= pagesize()) {
-                __curs_pos = __list.size() - 1;
+            if (_list.size() <= pagesize()) {
+                _curs_pos = _list.size() - 1;
             } else {
-                __offset = __list.size() - __size.rows() + 2;
-                __curs_pos = __size.rows() - 3;
+                _offset = _list.size() - _size.rows() + 2;
+                _curs_pos = _size.rows() - 3;
             }
             break;
 
         case KEY_NPAGE:
-            if (__list.size() <= pagesize() || __list.empty()) break;
+            if (_list.size() <= pagesize() || _list.empty()) break;
 
-            if (__cast_lt(__offset + pagesize()) <=
-                __list.size() - __size.rows() + 2)
-                __offset += pagesize();
+            if (__cast_lt(_offset + pagesize()) <=
+                _list.size() - _size.rows() + 2)
+                _offset += pagesize();
             else
-                __offset = __list.size() - __size.rows() + 2;
+                _offset = _list.size() - _size.rows() + 2;
 
             break;
 
         case KEY_PPAGE:
-            if (__list.size() <= pagesize() || __list.empty()) break;
+            if (_list.size() <= pagesize() || _list.empty()) break;
 
-            if (__offset > pagesize())
-                __offset -= pagesize();
+            if (_offset > pagesize())
+                _offset -= pagesize();
             else
-                __offset = 0;
+                _offset = 0;
             break;
     }
 
     refresh(true);
 }
 
-template <class _T>
-void ListBox<_T>::sort() {
-    switch (__sort_order) {
+template <class T>
+void ListBox<T>::sort() {
+    switch (_sort_order) {
         case ASCENDING:
-            __list.sort(ListBox<_T>::cmp_asc);
+            _list.sort(ListBox<T>::cmp_asc);
             break;
 
         case DESCENDING:
-            __list.sort(ListBox<_T>::cmp_dsc);
+            _list.sort(ListBox<T>::cmp_dsc);
             break;
 
         case UNSORTED:
@@ -336,55 +333,55 @@ void ListBox<_T>::sort() {
 //
 // Public
 //
-template <class _T>
-ListBox<_T>::ListBox()
+template <class T>
+ListBox<T>::ListBox()
     : Widget(),
-      __empty(),
-      __list(),
-      __offset(0),
-      __curs_pos(0),
-      __size(Size::zero()),
-      __sort_order(UNSORTED) {
+      _empty(),
+      _list(),
+      _offset(0),
+      _curs_pos(0),
+      _size(Size::zero()),
+      _sort_order(UNSORTED) {
     can_focus(true);
 }
 
-template <class _T>
-ListBox<_T>::~ListBox() {
+template <class T>
+ListBox<T>::~ListBox() {
     EventQueue::disconnect_event(
         EventConnectorMethod1<ListBox>(EVT_KEY, this, &ListBox::key_handler));
 }
 
 /**
  */
-template <class _T>
-void ListBox<_T>::add(const _T& _i) {
-    __list.push_back(_i);
+template <class T>
+void ListBox<T>::add(const T& i) {
+    _list.push_back(i);
 
     sort();
 
     if (realization() == REALIZED) refresh(true);
 }
 
-template <class _T>
-void ListBox<_T>::set(const std::list<_T>& _l) {
-    __list = _l;
+template <class T>
+void ListBox<T>::set(const std::list<T>& l) {
+    _list = l;
 
     sort();
 
     // Reset these. I don't see a proper way of maintaining
     // these when a completely new `data set' is set.
-    __offset = 0;
-    __curs_pos = 0;
+    _offset = 0;
+    _curs_pos = 0;
 
     if (realization() == REALIZED) refresh(true);
 }
 
-template <class _T>
-void ListBox<_T>::set(const _T& item, lsz_t index) {
-    if (index >= __list.size())
+template <class T>
+void ListBox<T>::set(const T& item, lsz_t index) {
+    if (index >= _list.size())
         throw std::out_of_range("ListBox<>::set() position out of range");
 
-    typename std::list<_T>::iterator it = __list.begin();
+    typename std::list<T>::iterator it = _list.begin();
     std::advance(it, index);
 
     *it = item;
@@ -392,136 +389,135 @@ void ListBox<_T>::set(const _T& item, lsz_t index) {
     sort();
 }
 
-template <class _T>
-const std::list<_T>& ListBox<_T>::list() const {
-    return __list;
+template <class T>
+const std::list<T>& ListBox<T>::list() const {
+    return _list;
 }
 
-template <class _T>
-typename ListBox<_T>::lsz_t ListBox<_T>::count() const {
-    return __list.size();
+template <class T>
+typename ListBox<T>::lsz_t ListBox<T>::count() const {
+    return _list.size();
 }
 
-template <class _T>
-bool ListBox<_T>::empty() const {
-    return __list.empty();
+template <class T>
+bool ListBox<T>::empty() const {
+    return _list.empty();
 }
 
-template <class _T>
-void ListBox<_T>::clear() {
-    __list.clear();
-    __offset = 0;
-    __curs_pos = 0;
+template <class T>
+void ListBox<T>::clear() {
+    _list.clear();
+    _offset = 0;
+    _curs_pos = 0;
 
     if (realization() == REALIZED) refresh(true);
 }
 
-template <class _T>
-void ListBox<_T>::sort_order(SORT_ORDER _sort_order) {
-    __sort_order = _sort_order;
+template <class T>
+void ListBox<T>::sort_order(SORT_ORDER sort_order) {
+    _sort_order = sort_order;
 
     sort();
 
     if (realization() == REALIZED) refresh(true);
 }
 
-template <class _T>
-SORT_ORDER ListBox<_T>::sort_order() const {
-    return __sort_order;
+template <class T>
+SORT_ORDER ListBox<T>::sort_order() const {
+    return _sort_order;
 }
 
-template <class _T>
-typename ListBox<_T>::lsz_t ListBox<_T>::selected_index() const {
-    return __curs_pos + __offset;
+template <class T>
+typename ListBox<T>::lsz_t ListBox<T>::selected_index() const {
+    return _curs_pos + _offset;
 }
 
-template <class _T>
-const _T& ListBox<_T>::selected() const {
-    if (__list.empty()) return __empty;
+template <class T>
+const T& ListBox<T>::selected() const {
+    if (_list.empty()) return _empty;
 
-    assert((__curs_pos + __offset) < __list.size());
+    assert((_curs_pos + _offset) < _list.size());
 
-    typename std::list<_T>::const_iterator it = __list.begin();
-    std::advance(it, __curs_pos + __offset);
+    typename std::list<T>::const_iterator it = _list.begin();
+    std::advance(it, _curs_pos + _offset);
 
     return *it;
 }
 
-template <class _T>
-void ListBox<_T>::selected(_T& _item) {
-    assert((__curs_pos + __offset) < __list.size());
+template <class T>
+void ListBox<T>::selected(T& item) {
+    assert((_curs_pos + _offset) < _list.size());
 
-    typename std::list<_T>::iterator it = __list.begin();
-    std::advance(it, __curs_pos + __offset);
+    typename std::list<T>::iterator it = _list.begin();
+    std::advance(it, _curs_pos + _offset);
 
-    *it = _item;
+    *it = item;
 
     sort();
 
     if (realization() == REALIZED) refresh(true);
 }
 
-template <class _T>
-void ListBox<_T>::delete_selected() {
-    if (__list.empty()) return;
+template <class T>
+void ListBox<T>::delete_selected() {
+    if (_list.empty()) return;
 
-    assert((__curs_pos + __offset) < __list.size());
+    assert((_curs_pos + _offset) < _list.size());
 
-    typename std::list<_T>::iterator it = __list.begin();
-    std::advance(it, __curs_pos + __offset);
+    typename std::list<T>::iterator it = _list.begin();
+    std::advance(it, _curs_pos + _offset);
 
-    __list.erase(it);
+    _list.erase(it);
 
     // Adjust cursor position
-    if (__offset > 0) {
-        __offset--;
+    if (_offset > 0) {
+        _offset--;
     } else {
-        if (__curs_pos > 0) __curs_pos--;
+        if (_curs_pos > 0) _curs_pos--;
     }
 
     if (realization() == REALIZED) refresh(true);
 }
 
-template <class _T>
-void ListBox<_T>::high_light(lsz_t pos) {
-    if (pos >= __list.size())
+template <class T>
+void ListBox<T>::high_light(lsz_t pos) {
+    if (pos >= _list.size())
         throw std::out_of_range(
             "ListBox<>::high_light() position out of range");
 
-    typename std::list<_T>::iterator it = __list.begin();
+    typename std::list<T>::iterator it = _list.begin();
     std::advance(it, pos);
 
-    if (__list.size() > pagesize() && pos > (__list.size() - pagesize())) {
-        __offset = __list.size() - pagesize();
-        __curs_pos = pos - __offset;
+    if (_list.size() > pagesize() && pos > (_list.size() - pagesize())) {
+        _offset = _list.size() - pagesize();
+        _curs_pos = pos - _offset;
     } else {
-        __offset = (pos / pagesize()) * pagesize();
-        __curs_pos = pos - __offset;
+        _offset = (pos / pagesize()) * pagesize();
+        _curs_pos = pos - _offset;
     }
 
-    assert(__offset + __curs_pos < __list.size());
+    assert(_offset + _curs_pos < _list.size());
 
     if (realization() == REALIZED) refresh(true);
 }
 
-template <class _T>
+template <class T>
 template <class _Pred>
-bool ListBox<_T>::search(_Pred p, lsz_t start, lsz_t* pos) {
-    if (start >= __list.size()) return false;
+bool ListBox<T>::search(_Pred p, lsz_t start, lsz_t* pos) {
+    if (start >= _list.size()) return false;
 
-    typename std::list<_T>::iterator start_it = __list.begin();
+    typename std::list<T>::iterator start_it = _list.begin();
 
     std::advance(start_it, start);
 
-    typename std::list<_T>::iterator it =
-        std::find_if(start_it, __list.end(), p);
+    typename std::list<T>::iterator it = std::find_if(start_it, _list.end(), p);
     // see if we have a match
-    if (it != __list.end()) {
-        typename std::list<_T>::difference_type dist = 0;
+    if (it != _list.end()) {
+        typename std::list<T>::difference_type dist = 0;
 #if defined(__SUNPRO_CC) && (__SUNPRO_CC < 0x5150)
-        std::distance(__list.begin(), it, dist);
+        std::distance(_list.begin(), it, dist);
 #else
-        dist = std::distance(__list.begin(), it);
+        dist = std::distance(_list.begin(), it);
 #endif
 
         if (pos != 0) *pos = dist;
@@ -535,9 +531,9 @@ bool ListBox<_T>::search(_Pred p, lsz_t start, lsz_t* pos) {
 }
 
 // From WidgetBase
-template <class _T>
-void ListBox<_T>::size_available(const Size& _s) {
-    WidgetBase::size_available(__size = _s);
+template <class T>
+void ListBox<T>::size_available(const Size& s) {
+    WidgetBase::size_available(_size = s);
 }
 
 /**
@@ -546,13 +542,13 @@ void ListBox<_T>::size_available(const Size& _s) {
  * @return Either Size::zero() if __length is 0, or the
  * Size(1, __length).
  */
-template <class _T>
-Size ListBox<_T>::size() const {
-    return __size;
+template <class T>
+Size ListBox<T>::size() const {
+    return _size;
 }
 
-template <class _T>
-Size ListBox<_T>::size_hint() const {
+template <class T>
+Size ListBox<T>::size_hint() const {
     return Size::zero();
 }
 
@@ -564,22 +560,22 @@ Size ListBox<_T>::size_hint() const {
  *
  * @return always @c false
  */
-template <class _T>
-bool ListBox<_T>::size_change() {
+template <class T>
+bool ListBox<T>::size_change() {
     return false;
 }
 
 /**
  * Reset size.
  */
-template <class _T>
-void ListBox<_T>::reset_size() {
-    __size = Size::zero();
+template <class T>
+void ListBox<T>::reset_size() {
+    _size = Size::zero();
 }
 
 // From Realizeable
-template <class _T>
-void ListBox<_T>::realize() {
+template <class T>
+void ListBox<T>::realize() {
     REALIZE_ENTER;
 
     Widget::realize();
@@ -592,8 +588,8 @@ void ListBox<_T>::realize() {
     REALIZE_LEAVE;
 }
 
-template <class _T>
-void ListBox<_T>::unrealize() {
+template <class T>
+void ListBox<T>::unrealize() {
     UNREALIZE_ENTER;
 
     EventQueue::disconnect_event(
@@ -606,8 +602,8 @@ void ListBox<_T>::unrealize() {
     UNREALIZE_LEAVE;
 }
 
-template <class _T>
-void ListBox<_T>::refresh(bool immediate) {
+template <class T>
+void ListBox<T>::refresh(bool immediate) {
     if (realization() != REALIZED) return;
 
     assert(widget_subwin() != 0);
@@ -623,28 +619,28 @@ void ListBox<_T>::refresh(bool immediate) {
 
     widget_subwin()->erase();
 
-    typename std::list<_T>::iterator it = __list.begin();
+    typename std::list<T>::iterator it = _list.begin();
 
     // Make sure cursor position is not off the list, i.e. on
     // the border of the widget.
-    __curs_pos = __curs_pos > __cast_lt(__size.rows()) - 3 ? __size.rows() - 3
-                                                           : __curs_pos;
+    _curs_pos =
+        _curs_pos > __cast_lt(_size.rows()) - 3 ? _size.rows() - 3 : _curs_pos;
 
     // Make sure the offset will not produce an out of bound,
     // for instance due to a screen resize.
-    if (pagesize() > __list.size() ||
-        __cast_lt(pagesize() + __offset) > __list.size())
-        __offset = 0;  // we must not use an offset.
+    if (pagesize() > _list.size() ||
+        __cast_lt(pagesize() + _offset) > _list.size())
+        _offset = 0;  // we must not use an offset.
 
     // Advance to offset
-    std::advance(it, __offset);
+    std::advance(it, _offset);
 
-    for (typename std::list<_T>::size_type i = 0;
+    for (typename std::list<T>::size_type i = 0;
          i <
-         std::min<typename std::list<_T>::size_type>(pagesize(), __list.size());
+         std::min<typename std::list<T>::size_type>(pagesize(), _list.size());
          it++, i++) {
         CurStr line(*it, Coordinates(0, i + 1),
-                    i == __curs_pos ? YACURS::LISTBOX_HILITE : YACURS::LISTBOX);
+                    i == _curs_pos ? YACURS::LISTBOX_HILITE : YACURS::LISTBOX);
 
         widget_subwin()->addlinex(line);
     }
@@ -671,19 +667,19 @@ void ListBox<_T>::refresh(bool immediate) {
     }
 
     // set scroll markers
-    if (__list.size() > pagesize()) {
-        // Can we scroll up? This is indicated by an __offset
+    if (_list.size() > pagesize()) {
+        // Can we scroll up? This is indicated by an _offset
         // > 0
-        if (__offset > 0)
-            widget_subwin()->mvaddch(Coordinates(__size.cols() - 1, 1), '^');
+        if (_offset > 0)
+            widget_subwin()->mvaddch(Coordinates(_size.cols() - 1, 1), '^');
         // can we scroll further down?
-        if (__offset + pagesize() < __list.size())
+        if (_offset + pagesize() < _list.size())
             widget_subwin()->mvaddch(
-                Coordinates(__size.cols() - 1, __size.rows() - 2), 'v');
+                Coordinates(_size.cols() - 1, _size.rows() - 2), 'v');
     }
 
     // set sort order indicator
-    switch (__sort_order) {
+    switch (_sort_order) {
         case ASCENDING:
             widget_subwin()->mvaddch(Coordinates(1, 0), '^');
             break;
@@ -697,10 +693,10 @@ void ListBox<_T>::refresh(bool immediate) {
     }
 
     // Set the cursor at the right position if we have focus.
-    if (focus() && !__list.empty()) {
+    if (focus() && !_list.empty()) {
         curs_set(1);
         widget_subwin()->leaveok(false);
-        widget_subwin()->move(Coordinates(1, __curs_pos + 1));
+        widget_subwin()->move(Coordinates(1, _curs_pos + 1));
     } else {
         curs_set(0);
         widget_subwin()->leaveok(true);

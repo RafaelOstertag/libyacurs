@@ -35,11 +35,6 @@ using namespace YACURS;
 // Private
 //
 
-Spacer& Spacer::operator=(const Spacer&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
-
 //
 // Protected
 //

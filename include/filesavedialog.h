@@ -36,20 +36,21 @@
 namespace YACURS {
 class FileSaveDialog : public FileDialog {
    private:
-    MessageBox2* __confirmdia;
-    MessageBox2* __errmsgbox;
-
-    // Not supported
-    FileSaveDialog& operator=(const FileSaveDialog&);
+    MessageBox2* _confirmdia;
+    MessageBox2* _errmsgbox;
 
    protected:
-    virtual void window_close_handler(Event& _e);
+    virtual void window_close_handler(Event& e);
 
-    virtual void button_press_handler(Event& _e);
+    virtual void button_press_handler(Event& e);
 
    public:
-    FileSaveDialog(std::string _path = std::string(), bool _do_chdir = false,
-                   DIALOG_TYPE _dt = OKCANCEL);
+    FileSaveDialog(std::string path = std::string(), bool do_chdir = false,
+                   DIALOG_TYPE dt = OKCANCEL);
+    FileSaveDialog& operator=(const FileSaveDialog&) = delete;
+    FileSaveDialog& operator=(FileSaveDialog&&) = delete;
+    FileSaveDialog(const FileSaveDialog&) = delete;
+    FileSaveDialog(FileSaveDialog&&) = delete;
 
     virtual ~FileSaveDialog();
 };

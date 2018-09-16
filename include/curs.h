@@ -62,21 +62,21 @@ class Curses {
      *
      * Curses will not free the memory associated with StatuLine.
      */
-    static StatusBar* __statusbar;
+    static StatusBar* _statusBar;
 
     /**
      * Pointer to a title LineObject.
      *
      * Curses will not free the memory associated with LineObject.
      */
-    static TitleBar* __title;
+    static TitleBar* _titleBar;
 
     /**
      * Pointer to the main window.
      *
      * Curses will not free the memory associated with Window.
      */
-    static Window* __mainwindow;
+    static Window* _mainWindow;
 
     /**
      * Flag indicating whether or not Curses has been initialized.
@@ -88,7 +88,7 @@ class Curses {
     /**
      * Flag indicating whether or not program has been suspended.
      */
-    static volatile bool __suspended;
+    static volatile bool _suspended;
 
     /**
      * The terminals we know
@@ -96,7 +96,7 @@ class Curses {
      * Holds the terminals we know that can have set the
      * title.
      */
-    static const char* __xterm_list[];
+    static const char* _xterm_list[];
 
     static bool is_xterm();
 
@@ -132,15 +132,15 @@ class Curses {
      */
     static void run();
 
-    static void title(TitleBar* _title);
+    static void title(TitleBar* titleBar);
 
     static TitleBar* title();
 
-    static void statusbar(StatusBar* _sl);
+    static void statusbar(StatusBar* statusBar);
 
     static StatusBar* statusbar();
 
-    static void mainwindow(Window* _w);
+    static void mainwindow(Window* window);
 
     static Window* mainwindow();
 
@@ -148,7 +148,7 @@ class Curses {
 
     static Size inquiry_screensize();
 
-    static void set_terminal_title(const std::string& _str);
+    static void set_terminal_title(const std::string& title);
 };
 }  // namespace YACURS
 

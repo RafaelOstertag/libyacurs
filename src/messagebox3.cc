@@ -28,10 +28,6 @@ using namespace YACURS;
 //
 // Private
 //
-MessageBox3& MessageBox3::operator=(const MessageBox3&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
 //
 // Protected
@@ -41,13 +37,13 @@ MessageBox3& MessageBox3::operator=(const MessageBox3&) {
 // Public
 //
 
-MessageBox3::MessageBox3(const std::string& _title,
-                         const std::string& _message1,
-                         const std::string& _message2,
-                         const std::string& _message3, DIALOG_TYPE _dt)
-    : MessageBox2(_title, _message1, _message2, _dt), __message3(_message3) {
-    __message3.color(DIALOG);
-    __vpack.add_back(&__message3);
+MessageBox3::MessageBox3(const std::string& title,
+                         const std::string& message1,
+                         const std::string& message2,
+                         const std::string& message3, DIALOG_TYPE dt)
+    : MessageBox2(title, message1, message2, dt), _message3(message3) {
+    _message3.color(DIALOG);
+    _vpack.add_back(&_message3);
 }
 
 MessageBox3::~MessageBox3() {}

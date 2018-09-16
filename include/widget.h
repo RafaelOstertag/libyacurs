@@ -48,15 +48,12 @@ class Widget : public WidgetBase {
     /**
      * curses subwin used by widgets
      */
-    YACURS::INTERNAL::CursWin* __widget_subwin;
-
-    // Not supported
-    Widget& operator=(const Widget&);
+    YACURS::INTERNAL::CursWin* _widget_subwin;
 
    protected:
-    void redraw_handler(Event& _e);
+    void redraw_handler(Event& e);
 
-    void force_refresh_handler(Event& _e);
+    void force_refresh_handler(Event& e);
 
     void unrealize();
 
@@ -64,7 +61,10 @@ class Widget : public WidgetBase {
 
    public:
     Widget();
-
+    Widget& operator=(const Widget&) = delete;
+    Widget& operator=(Widget&&) = delete;
+    Widget(const Widget&) = delete;
+    Widget(Widget&&) = delete;
     virtual ~Widget();
 
     // Must be overriden in derived classes
@@ -73,7 +73,7 @@ class Widget : public WidgetBase {
     // Inherited from Realizeable
     void refresh(bool immediate);
 
-    void resize(const Area& _a);
+    void resize(const Area& a);
 
     /**
      * Realize the widget.

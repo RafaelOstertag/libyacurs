@@ -38,10 +38,7 @@ namespace YACURS {
  */
 class Label : public Widget {
    private:
-    // Not supported
-    Label& operator=(const Label&);
-
-    COLOROBJ __color;
+    COLOROBJ _color;
 
     /**
      * Length of label.
@@ -55,26 +52,30 @@ class Label : public Widget {
     /**
      * The text to be displayed.
      */
-    std::string __label;
+    std::string _label;
 
     /**
      * The size the Label requires. Rows are always 1. Cols are
-     * __label.length(). Derrived classes may define other
+     * _label.length(). Derrived classes may define other
      * constraints.
      */
-    Size __size;
+    Size _size;
 
    public:
     /**
      * Constructor.
      *
-     * @param _l label
+     * @param l label
      */
-    Label(const std::string& _l = std::string());
+    Label(const std::string& l = std::string());
+    Label& operator=(const Label&) = delete;
+    Label& operator=(Label&&) = delete;
+    Label(const Label&) = delete;
+    Label(Label&&) = delete;
 
     virtual ~Label();
 
-    virtual void label(const std::string& _l);
+    virtual void label(const std::string& l);
 
     virtual const std::string& label() const;
 

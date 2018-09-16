@@ -27,17 +27,17 @@
 
 namespace YACURS {
 class RadioBox : public CheckBox {
-   private:
-    RadioBox& operator=(const RadioBox& _i);
-
    public:
-    RadioBox(const std::string& _title, const std::vector<std::string>& _items);
-
+    RadioBox(const std::string& title, const std::vector<std::string>& items);
+    RadioBox(const RadioBox&) = delete;
+    RadioBox(RadioBox&&) = delete;
+    RadioBox& operator=(const RadioBox&) = delete;
+    RadioBox& operator=(RadioBox&&) = delete;
     virtual ~RadioBox();
 
-    virtual void set_selection(unsigned short _cursor);
+    virtual void set_selection(unsigned short cursor);
 
-    virtual void set_selection(const std::string& _i);
+    virtual void set_selection(const std::string& str);
 };
 }  // namespace YACURS
 

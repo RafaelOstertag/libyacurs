@@ -33,10 +33,6 @@ using namespace YACURS;
 //
 // Private
 //
-UnlockDialog& UnlockDialog::operator=(const UnlockDialog&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
 //
 // Protected
@@ -46,8 +42,8 @@ UnlockDialog& UnlockDialog::operator=(const UnlockDialog&) {
 // Public
 //
 
-UnlockDialog::UnlockDialog(const std::string& _title)
-    : Dialog(_title, OKCANCEL, AUTOMATIC) {}
+UnlockDialog::UnlockDialog(const std::string& title)
+    : Dialog(title, OKCANCEL, AUTOMATIC) {}
 
 UnlockDialog::~UnlockDialog() {}
 

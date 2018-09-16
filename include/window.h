@@ -75,9 +75,9 @@ class WidgetBase;
  */
 class Window : public WindowBase {
    private:
-    std::map<int, HotKey*> __hot_keys;
+    std::map<int, HotKey*> _hot_keys;
 
-    WidgetBase* __widget;
+    WidgetBase* _widget;
 
     /**
      * ID of the Focus Group.
@@ -85,22 +85,22 @@ class Window : public WindowBase {
      * The ID of the Focus Group belonging to this
      * Window. Supposed to be passed along Widget(s).
      */
-    FocusManager::fgid_t __fgid;
-
-    // Not supported
-    Window(const Window&);
-    Window& operator=(const Window&);
+    FocusManager::fgid_t _fgid;
 
    protected:
-    virtual void key_event_handler(Event& _e);
+    virtual void key_event_handler(Event& e);
 
     void unrealize();
 
    public:
     Window(const Margin& m = Margin());
+    Window(const Window&) = delete;
+    Window& operator=(const Window&) = delete;
+    Window(Window&&) = delete;
+    Window& operator=(Window&&);
     virtual ~Window();
 
-    void widget(WidgetBase* _w);
+    void widget(WidgetBase* w);
 
     WidgetBase* widget() const;
 
@@ -111,8 +111,6 @@ class Window : public WindowBase {
     // Those are from Realizable
     void refresh(bool immediate);
 
-    // Does nothing, everything handled in parent.
-    // void resize(const Area& _a);
     void realize();
 };
 }  // namespace YACURS

@@ -30,10 +30,6 @@ using namespace YACURS;
 //
 // Private
 //
-HRule& HRule::operator=(const HRule&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
 //
 // Protected
@@ -46,10 +42,10 @@ HRule::HRule() : Rule() {}
 
 HRule::~HRule() {}
 
-void HRule::size_available(const Size& _s) {
-    assert(_s.rows() > 0);
-    WidgetBase::size_available(_s);
-    __size = Size(1, _s.cols());
+void HRule::size_available(const Size& s) {
+    assert(s.rows() > 0);
+    WidgetBase::size_available(s);
+    _size = Size(1, s.cols());
 }
 
 Size HRule::size_hint() const { return Size(1, 0); }
@@ -59,8 +55,8 @@ void HRule::refresh(bool immediate) {
 
     assert(widget_subwin() != 0);
 
-    widget_subwin()->set_color(__color);
-    widget_subwin()->set_bg(__color);
+    widget_subwin()->set_color(_color);
+    widget_subwin()->set_bg(_color);
     widget_subwin()->hrule();
 
     Widget::refresh(immediate);

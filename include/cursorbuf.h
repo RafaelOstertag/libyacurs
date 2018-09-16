@@ -43,45 +43,45 @@ class CursorBuffer {
     /**
      * The input
      */
-    std::wstring __buffer;
+    std::wstring _buffer;
 
     /**
      * Cache
      *
-     * Holds __buffer converted to multibyte
+     * Holds _buffer converted to multibyte
      * string. Reference returned by string().
      */
-    mutable std::string __mbs_cache;
+    mutable std::string _mbs_cache;
 
     /**
      * Cache Valid Flag
      *
-     * Flag indicating whether or not __mbs_cache is
+     * Flag indicating whether or not _mbs_cache is
      * valid, or has to be re-calculated.
      */
-    mutable bool __mbs_cache_valid;
+    mutable bool _mbs_cache_valid;
 
     /**
      * Flag indicating whether or not buffer has been changed.
      */
-    bool __changed;
+    bool _changed;
 
     /**
      * Displayed Cursor position. (Scrolling)
      */
-    tss_t __curs_pos;
+    tss_t _curs_pos;
 
     /**
      * Window offset. (Srolling)
      */
-    tsz_t __offset;
+    tsz_t _offset;
 
     /**
      * Maximum size of of buffer.
      *
      * If it is 0, there is no limit.
      */
-    tsz_t __max_size;
+    tsz_t _max_size;
 
    public:
     /**
@@ -99,18 +99,20 @@ class CursorBuffer {
     CursorBuffer(const std::string& _buffer = std::string(),
                  tsz_t _max_size = 255);
 
-    CursorBuffer(const CursorBuffer& _cb);
-    CursorBuffer& operator=(const CursorBuffer& _cb);
+    CursorBuffer(const CursorBuffer& cb);
+    CursorBuffer& operator=(const CursorBuffer& cb);
+    CursorBuffer(CursorBuffer&& cb);
+    CursorBuffer& operator=(CursorBuffer&& cb);
 
     /**
      * Set new buffer content.
      */
-    void set(const std::wstring& _b);
+    void set(const std::wstring& buffer);
 
     /**
      * Set new buffer content.
      */
-    void set(const std::string& _b);
+    void set(const std::string& buffer);
 
     /**
      * Get length of buffer.

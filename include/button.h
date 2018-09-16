@@ -40,15 +40,12 @@ class Button : public Label {
     /**
      * Flag whether or not button is enabled
      */
-    bool __enabled;
+    bool _enabled;
 
     /**
      * Temporary string used when returning label.
      */
-    std::string __tmp_label;
-
-    // Not supported
-    Button& operator=(const Button&);
+    std::string _tmp_label;
 
    protected:
     /**
@@ -56,9 +53,9 @@ class Button : public Label {
      *
      * Handles @c EVT_KEY events.
      *
-     * @param _e EventEx<int>.
+     * @param e EventEx<int>.
      */
-    virtual void key_handler(Event& _e);
+    virtual void key_handler(Event& e);
 
     // From Realizeable
     virtual void realize();
@@ -69,18 +66,23 @@ class Button : public Label {
     /**
      * Constructor.
      *
-     * @param _b label
+     * @param b label
      */
-    Button(const std::string& _b);
+    Button(const std::string& b);
 
     virtual ~Button();
+    // Not supported
+    Button(const Button&) = delete;
+    Button(Button&&) = delete;
+    Button& operator=(const Button&) = delete;
+    Button& operator=(Button&&) = delete;
 
     /**
      * Set label.
      *
-     * @param _l label
+     * @param l label
      */
-    void label(const std::string& _l);
+    void label(const std::string& l);
 
     /**
      * Get label.
@@ -89,7 +91,7 @@ class Button : public Label {
      */
     const std::string& label() const;
 
-    void enabled(bool _f);
+    void enabled(bool f);
 
     bool enabled() const;
 

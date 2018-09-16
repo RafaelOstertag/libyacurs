@@ -80,15 +80,15 @@ class Realizeable {
     /**
      * The realization state of the object.
      */
-    REALIZATION_STATE __realization_state;
+    REALIZATION_STATE _realization_state;
 
    protected:
     /**
      * Set realization state.
      *
-     * @param _s state of the object.
+     * @param s state of the object.
      */
-    virtual void realization(REALIZATION_STATE _s);
+    virtual void realization(REALIZATION_STATE s);
 
    public:
     Realizeable();

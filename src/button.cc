@@ -34,23 +34,18 @@ using namespace YACURS;
 // Private
 //
 
-Button& Button::operator=(const Button&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
-
 //
 // Protected
 //
-void Button::key_handler(Event& _e) {
-    assert(_e.type() == EVT_KEY);
+void Button::key_handler(Event& e) {
+    assert(e.type() == EVT_KEY);
 
     if (!focus()) return;
 
 #ifdef YACURS_USE_WCHAR
-    EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(_e);
+    EventEx<wint_t>& ekey = dynamic_cast<EventEx<wint_t>&>(e);
 #else
-    EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(_e);
+    EventEx<int>& ekey = dynamic_cast<EventEx<int>&>(e);
 #endif
 
     switch (ekey.data()) {
@@ -69,7 +64,7 @@ void Button::key_handler(Event& _e) {
         case KEY_ENTER:
         case KEY_RETURN:
         case KEY_RETURN2:
-            if (!__enabled) return;
+            if (!_enabled) return;
             EventQueue::submit(EventEx<Button*>(EVT_BUTTON_PRESS, this));
             break;
     }
@@ -105,12 +100,12 @@ void Button::unrealize() {
 // Public
 //
 
-Button::Button(const std::string& _b) : __enabled(true) {
+Button::Button(const std::string& b) : _enabled(true) {
     can_focus(true);
 
     // We want our label() to be called, so we don't use the Label()
     // constructor to set the label
-    label(_b);
+    label(b);
 }
 
 Button::~Button() {
@@ -118,23 +113,23 @@ Button::~Button() {
         EventConnectorMethod1<Button>(EVT_KEY, this, &Button::key_handler));
 }
 
-void Button::label(const std::string& _l) {
-    __tmp_label = _l;
-    if (__enabled)
-        Label::label("[ " + _l + " ]");
+void Button::label(const std::string& l) {
+    _tmp_label = l;
+    if (_enabled)
+        Label::label("[ " + l + " ]");
     else
-        Label::label("( " + _l + " )");
+        Label::label("( " + l + " )");
 }
 
-const std::string& Button::label() const { return __tmp_label; }
+const std::string& Button::label() const { return _tmp_label; }
 
 void Button::enabled(bool _f) {
-    __enabled = _f;
+    _enabled = _f;
     // Re-set label
-    label(__tmp_label);
+    label(_tmp_label);
 }
 
-bool Button::enabled() const { return __enabled; }
+bool Button::enabled() const { return _enabled; }
 
 void Button::refresh(bool immediate) {
     if (realization() != REALIZED) return;

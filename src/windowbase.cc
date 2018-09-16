@@ -38,33 +38,25 @@ using namespace YACURS;
 //
 // Private
 //
-WindowBase::WindowBase(const WindowBase& wb) {
-    throw EXCEPTIONS::NotSupported();
-}
-
-WindowBase& WindowBase::operator=(const WindowBase&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
 //
 // Protected
 //
 YACURS::INTERNAL::CursWin* WindowBase::curses_window() const {
-    return __curses_window;
+    return _curses_window;
 }
 
-const Area& WindowBase::area() const { return __area; }
+const Area& WindowBase::area() const { return _area; }
 
 Area WindowBase::widget_area() const {
     Area widget_area;
 
-    if (__frame) {
+    if (_frame) {
         // we have to take the frame into account, thus
         // minus Margin(1,1,1,1)
-        widget_area = (__area - __margin) - Margin(1, 1, 1, 1);
+        widget_area = (_area - _margin) - Margin(1, 1, 1, 1);
     } else {
-        widget_area = __area - __margin;
+        widget_area = _area - _margin;
     }
 
     return widget_area;
@@ -73,10 +65,10 @@ Area WindowBase::widget_area() const {
 void WindowBase::unrealize() {
     UNREALIZE_ENTER;
 
-    assert(__curses_window != 0);
+    assert(_curses_window != 0);
 
-    delete __curses_window;
-    __curses_window = 0;
+    delete _curses_window;
+    _curses_window = 0;
 
     UNREALIZE_LEAVE;
 }
@@ -87,13 +79,13 @@ bool WindowBase::on_close() { return true; }
 // Public
 //
 
-WindowBase::WindowBase(const Margin& _m)
-    : __area(Coordinates(), Curses::inquiry_screensize()),
-      __margin(_m),
-      __curses_window(0),
-      __frame(false),
-      __shown(false),
-      __color(DEFAULT) {
+WindowBase::WindowBase(const Margin& m)
+    : _area(Coordinates(), Curses::inquiry_screensize()),
+      _margin(m),
+      _curses_window(0),
+      _frame(false),
+      _shown(false),
+      _color(DEFAULT) {
     // We always want to receive this event. Therefore it was moved
     // from show() to ctor.
     EventQueue::connect_event(EventConnectorMethod1<WindowBase>(
@@ -112,26 +104,26 @@ WindowBase::~WindowBase() {
         EVT_SIGWINCH, this, &WindowBase::resize_handler));
 
     if (realization() == REALIZED) {
-        assert(__curses_window != 0);
-        delete __curses_window;
+        assert(_curses_window != 0);
+        delete _curses_window;
     }
 }
 
-void WindowBase::margin(const Margin& _m) {
+void WindowBase::margin(const Margin& m) {
     if (realization() == REALIZED) throw EXCEPTIONS::AlreadyRealized();
-    __margin = _m;
+    _margin = m;
 }
 
-const Margin& WindowBase::margin() const { return __margin; }
+const Margin& WindowBase::margin() const { return _margin; }
 
-bool WindowBase::frame() const { return __frame; }
+bool WindowBase::frame() const { return _frame; }
 
-void WindowBase::frame(bool b) { __frame = b; }
+void WindowBase::frame(bool b) { _frame = b; }
 
-void WindowBase::color(COLOROBJ c) { __color = c; }
+void WindowBase::color(COLOROBJ c) { _color = c; }
 
 COLOROBJ
-WindowBase::color() const { return __color; }
+WindowBase::color() const { return _color; }
 
 void WindowBase::show() {
     if (realization() != UNREALIZED) return;
@@ -148,7 +140,7 @@ void WindowBase::show() {
     refresh(true);
     EventQueue::submit(EventEx<WindowBase*>(EVT_WINDOW_SHOW, this));
 
-    __shown = true;
+    _shown = true;
 }
 
 void WindowBase::close() {
@@ -181,49 +173,49 @@ void WindowBase::close() {
     // updated in the EVT_WINDOW_CLOSE handler.
     EventQueue::submit(EventEx<WindowBase*>(EVT_WINDOW_CLOSE, this));
 
-    __shown = false;
+    _shown = false;
 }
 
-bool WindowBase::shown() const { return __shown; }
+bool WindowBase::shown() const { return _shown; }
 
-void WindowBase::redraw_handler(Event& _e) {
+void WindowBase::redraw_handler(Event& e) {
     if (realization() != REALIZED) return;
 
-    assert(_e == EVT_REDRAW);
-    assert(__curses_window != 0);
+    assert(e == EVT_REDRAW);
+    assert(_curses_window != 0);
 
-    __curses_window->clear();
+    _curses_window->clear();
 }
 
-void WindowBase::force_refresh_handler(Event& _e) {
+void WindowBase::force_refresh_handler(Event& e) {
     if (realization() != REALIZED) return;
 
-    assert(_e == EVT_FORCEREFRESH);
-    assert(__curses_window != 0);
+    assert(e == EVT_FORCEREFRESH);
+    assert(_curses_window != 0);
 
-    __curses_window->touch();
+    _curses_window->touch();
 }
 
-void WindowBase::refresh_handler(Event& _e) {
-    assert(_e == EVT_REFRESH);
+void WindowBase::refresh_handler(Event& e) {
+    assert(e == EVT_REFRESH);
     refresh(false);
 }
 
-void WindowBase::resize_handler(Event& _e) {
-    assert(_e == EVT_SIGWINCH);
-    EventEx<Size>& winch = dynamic_cast<EventEx<Size>&>(_e);
+void WindowBase::resize_handler(Event& e) {
+    assert(e == EVT_SIGWINCH);
+    EventEx<Size>& winch = dynamic_cast<EventEx<Size>&>(e);
     resize(Area(Coordinates(0, 0), winch.data()));
 }
 
 void WindowBase::refresh(bool immediate) {
     if (realization() != REALIZED && realization() != REALIZING) return;
 
-    assert(__curses_window != 0);
+    assert(_curses_window != 0);
 
-    __curses_window->refresh(immediate);
+    _curses_window->refresh(immediate);
 }
 
-void WindowBase::resize(const Area& _a) {
+void WindowBase::resize(const Area& a) {
     //
     // Keep in mind: a resize does not refresh!
     //
@@ -233,18 +225,18 @@ void WindowBase::resize(const Area& _a) {
         // our disposition.
         //
         // This was mainly introduced for the screen unlock dialog.
-        __area = _a;
+        _area = a;
         return;
     }
 
-    assert(_a.x() > -1);
-    assert(_a.y() > -1);
-    assert(_a.rows() > 0);
-    assert(_a.cols() > 0);
+    assert(a.x() > -1);
+    assert(a.y() > -1);
+    assert(a.rows() > 0);
+    assert(a.cols() > 0);
 
     unrealize();
 
-    __area = _a;
+    _area = a;
 
     realize();
 }
@@ -252,12 +244,12 @@ void WindowBase::resize(const Area& _a) {
 void WindowBase::realize() {
     REALIZE_ENTER;
 
-    assert(__area.x() >= 0);
-    assert(__area.y() >= 0);
-    assert(__area.rows() > 0);
-    assert(__area.cols() > 0);
+    assert(_area.x() >= 0);
+    assert(_area.y() >= 0);
+    assert(_area.rows() > 0);
+    assert(_area.cols() > 0);
 
-    Area _tmp = __area - __margin;
+    Area _tmp = _area - _margin;
 
     if (_tmp.x() < 0 || _tmp.y() < 0 || _tmp.rows() < MIN_WINDOW_ROWS ||
         _tmp.cols() < MIN_WINDOW_COLS) {
@@ -265,19 +257,19 @@ void WindowBase::realize() {
         return;
     }
 
-    assert(__curses_window == 0);
+    assert(_curses_window == 0);
     try {
-        __curses_window = new YACURS::INTERNAL::CursWin(_tmp, __color);
-        __curses_window->scrollok(false);
-        __curses_window->leaveok(true);
+        _curses_window = new YACURS::INTERNAL::CursWin(_tmp, _color);
+        _curses_window->scrollok(false);
+        _curses_window->leaveok(true);
 
-        if (__frame) {
-            __curses_window->box();
+        if (_frame) {
+            _curses_window->box();
         }
     } catch (EXCEPTIONS::CursesException&) {
-        if (__curses_window != 0) {
-            delete __curses_window;
-            __curses_window = 0;
+        if (_curses_window != 0) {
+            delete _curses_window;
+            _curses_window = 0;
         }
         realization(UNREALIZED);
         throw;

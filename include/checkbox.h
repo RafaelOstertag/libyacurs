@@ -43,13 +43,13 @@ struct Selectable {
      */
     Selectable() : selected(false) {}
 
-    Selectable(const std::string& _str) : selected(false), item(_str) {}
+    Selectable(const std::string& str) : selected(false), item(str) {}
 
-    Selectable(const Selectable& _s) : selected(_s.selected), item(_s.item) {}
+    Selectable(const Selectable& s) : selected(s.selected), item(s.item) {}
 
-    Selectable& operator=(const Selectable& _s) {
-        selected = _s.selected;
-        item = _s.item;
+    Selectable& operator=(const Selectable& s) {
+        selected = s.selected;
+        item = s.item;
         return *this;
     }
 };
@@ -62,39 +62,41 @@ class CheckBox : public Widget {
     /**
      * The size of the CheckBox
      */
-    Size __size;
+    Size _size;
 
     /**
      *
      */
-    unsigned short __cursor;
+    unsigned short _cursor;
 
-    std::string __title;
+    std::string _title;
 
-    CheckBox& operator=(const CheckBox& _i);
 
    protected:
-    std::string __indicators[2];
+    std::string _indicators[2];
 
-    std::vector<INTERNAL::Selectable> __items;
+    std::vector<INTERNAL::Selectable> _items;
 
-    virtual void key_handler(Event& _e);
+    virtual void key_handler(Event& e);
 
    public:
-    CheckBox(const std::string& _title, const std::vector<std::string>& _items);
-
+    CheckBox(const std::string& title, const std::vector<std::string>& items);
     virtual ~CheckBox();
+    CheckBox(const CheckBox&) = delete;
+    CheckBox(CheckBox&&) = delete;
+    CheckBox& operator=(const CheckBox&) = delete;
+    CheckBox& operator=(CheckBox&&) = delete;
 
-    bool selected(unsigned short _i);
+    bool selected(unsigned short i);
 
-    bool selected(const std::string& _i);
+    bool selected(const std::string& str);
 
-    virtual void set_selection(unsigned short _cursor);
+    virtual void set_selection(unsigned short cursor);
 
-    virtual void set_selection(const std::string& _i);
+    virtual void set_selection(const std::string& str);
 
     // From WidgetBase
-    void size_available(const Size& _s);
+    void size_available(const Size& s);
 
     /**
      */

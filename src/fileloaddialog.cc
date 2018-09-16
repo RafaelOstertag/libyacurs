@@ -46,10 +46,6 @@ using namespace YACURS;
 //
 // Private
 //
-FileLoadDialog& FileLoadDialog::operator=(const FileLoadDialog&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
-}
 
 //
 // Protected
@@ -59,8 +55,8 @@ FileLoadDialog& FileLoadDialog::operator=(const FileLoadDialog&) {
 // Public
 //
 
-FileLoadDialog::FileLoadDialog(std::string _path, bool _do_chdir)
-    : FileDialog(std::string(_("Load File")), _path, _do_chdir, OKCANCEL) {
+FileLoadDialog::FileLoadDialog(std::string path, bool do_chdir)
+    : FileDialog(std::string(_("Load File")), path, do_chdir, OKCANCEL) {
     filename_readonly(true);
     // Only allow files
     selection_type(YACURS::FILE);

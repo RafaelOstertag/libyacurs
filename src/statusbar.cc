@@ -32,15 +32,10 @@ using namespace YACURS;
 //
 
 void StatusBar::show_top_msg() {
-    if (__messages.empty())
+    if (_messages.empty())
         line(std::string());
     else
-        line(__messages.top());
-}
-
-StatusBar& StatusBar::operator=(const StatusBar&) {
-    throw EXCEPTIONS::NotSupported();
-    return *this;
+        line(_messages.top());
 }
 
 //
@@ -56,20 +51,20 @@ StatusBar::StatusBar() : LineObject(POS_BOTTOM, std::string(), STATUSBAR) {}
 StatusBar::~StatusBar() {}
 
 void StatusBar::push(const std::string& m) {
-    __messages.push(m);
+    _messages.push(m);
     show_top_msg();
 }
 
 void StatusBar::set(const std::string& m) {
-    if (!__messages.empty()) __messages.pop();
+    if (!_messages.empty()) _messages.pop();
 
-    __messages.push(m);
+    _messages.push(m);
 
     show_top_msg();
 }
 
 void StatusBar::pop() {
-    if (__messages.empty()) return;
-    __messages.pop();
+    if (_messages.empty()) return;
+    _messages.pop();
     show_top_msg();
 }

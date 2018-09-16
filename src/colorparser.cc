@@ -35,7 +35,7 @@ using namespace YACURS::INTERNAL;
 //
 // Private
 //
-const std::string ColorParser::__default_colors(
+const std::string ColorParser::_default_colors(
     "DEF:wk0;DIA:wb0;DIT:bw3;IWN:kw3;IWF:kg3;IWH:yy7;BTN:wk0;BTF:kg3;LBX:wk0;"
     "LBH:kg3;CBG:yc0;TLB:bw0;STB:bw0");
 
@@ -171,9 +171,14 @@ ColorParser::ColorParser() {
 }
 
 ColorParser::ColorParser(const ColorParser& cp)
-    : color_name_map(cp.color_name_map),
-      curs_colors_map(cp.curs_colors_map),
-      curs_attrs_map(cp.curs_attrs_map) {}
+    : color_name_map{cp.color_name_map},
+      curs_colors_map{cp.curs_colors_map},
+      curs_attrs_map{cp.curs_attrs_map} {}
+
+ColorParser::ColorParser(ColorParser&& cp)
+    : color_name_map{std::move(cp.color_name_map)},
+      curs_colors_map{std::move(cp.curs_colors_map)},
+      curs_attrs_map{std::move(cp.curs_attrs_map)} {}
 
 ColorParser& ColorParser::operator=(const ColorParser& cp) {
     if (this == &cp) return *this;
@@ -181,6 +186,16 @@ ColorParser& ColorParser::operator=(const ColorParser& cp) {
     color_name_map = cp.color_name_map;
     curs_colors_map = cp.curs_colors_map;
     curs_attrs_map = cp.curs_attrs_map;
+
+    return *this;
+}
+
+ColorParser& ColorParser::operator=(ColorParser&& cp) {
+    if (this == &cp) return *this;
+
+    color_name_map = std::move(cp.color_name_map);
+    curs_colors_map = std::move(cp.curs_colors_map);
+    curs_attrs_map = std::move(cp.curs_attrs_map);
 
     return *this;
 }
@@ -217,4 +232,4 @@ std::vector<CursColor> ColorParser::operator()(const std::string& colorstr) {
     return retval;
 }
 
-const std::string& ColorParser::default_colors() { return __default_colors; }
+const std::string& ColorParser::default_colors() { return _default_colors; }

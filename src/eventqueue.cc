@@ -632,7 +632,7 @@ EventQueue::proc_rem_request() {
 
         EventConnectorBase* ecb = *it_erq;
 
-        std::list<EventConnectorBase*>& list = evtconn_map[*ecb];
+        std::list<EventConnectorBase*>& list = evtconn_map[ecb->type()];
 
         std::list<EventConnectorBase*>::iterator it =
             std::find_if(list.begin(),
@@ -678,7 +678,7 @@ EventQueue::connect_event(const EventConnectorBase& ec) {
     // Only one event handler per event per object can be connected
     //
 
-    std::list<EventConnectorBase*>& list = evtconn_map[ec];
+    std::list<EventConnectorBase*>& list = evtconn_map[ec.type()];
 
     std::list<EventConnectorBase*>::iterator it =
         std::find_if(list.begin(),
@@ -767,7 +767,7 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
     // However, the event connector must not be called anymore,
     // because the object might have been destroyed meanwhile.
 
-    std::list<EventConnectorBase*>& list = evtconn_map[ec];
+    std::list<EventConnectorBase*>& list = evtconn_map[ec.type()];
 
     std::list<EventConnectorBase*>::iterator it =
         std::find_if(list.begin(),
@@ -782,7 +782,7 @@ EventQueue::disconnect_event(const EventConnectorBase& ec) {
 
 void
 EventQueue::suspend(const EventConnectorBase& ec) {
-    std::list<EventConnectorBase*>& list = evtconn_map[ec];
+    std::list<EventConnectorBase*>& list = evtconn_map[ec.type()];
 
     std::list<EventConnectorBase*>::iterator it =
         std::find_if(list.begin(),
@@ -807,7 +807,7 @@ EventQueue::suspend_all(const EventType _t) {
 
 void
 EventQueue::suspend_except(const EventConnectorBase& ec) {
-    std::list<EventConnectorBase*>& list = evtconn_map[ec];
+    std::list<EventConnectorBase*>& list = evtconn_map[ec.type()];
 
     std::for_each(list.begin(),
                   list.end(),
@@ -816,7 +816,7 @@ EventQueue::suspend_except(const EventConnectorBase& ec) {
 
 void
 EventQueue::unsuspend(const EventConnectorBase& ec) {
-    std::list<EventConnectorBase*>& list = evtconn_map[ec];
+    std::list<EventConnectorBase*>& list = evtconn_map[ec.type()];
 
     std::list<EventConnectorBase*>::iterator it =
         std::find_if(list.begin(),
@@ -840,7 +840,7 @@ EventQueue::unsuspend_all(const EventType _t) {
 
 void
 EventQueue::unsuspend_except(const EventConnectorBase& ec) {
-    std::list<EventConnectorBase*>& list = evtconn_map[ec];
+    std::list<EventConnectorBase*>& list = evtconn_map[ec.type()];
     std::for_each(list.begin(),
                   list.end(),
                   FUNCTORS::EVENTQUEUE::EvtConnSetSuspendExcept(ec, false) );
@@ -959,7 +959,7 @@ EventQueue::run() {
 
             DEBUGOUT(DBG_EVT,"Processing: " << Event::evt2str(*evt) );
             clock_t evt_t0 = clock();
-            std::list<EventConnectorBase*>& list = evtconn_map[*evt];
+            std::list<EventConnectorBase*>& list = evtconn_map[evt->type()];
             std::for_each(list.begin(),
                           list.end(),
                           FUNCTORS::EVENTQUEUE::CallEventConnector(*evt) );

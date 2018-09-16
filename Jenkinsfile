@@ -53,6 +53,18 @@ pipeline {
                                 }
                             }
                         }
+
+                        stage("Build distribution") {
+                            when { 
+                                branch 'release/*'
+                            }
+
+                            steps {
+                                dir("obj") {
+                                    sh '$MAKE distcheck'
+                                }
+                            }
+                        }
                     }
                 } // stage("FreeBSD")
 

@@ -20,7 +20,7 @@ pipeline {
                         label "freebsd"
                     }
                     stages {
-                        stage("Bootstrap Build") {
+                        stage("(FB) Bootstrap Build") {
                              steps {
                                 sh "git log --stat > ChangeLog"
                                 dir("libyacurs") {
@@ -30,7 +30,7 @@ pipeline {
                             }
                         }
 
-                        stage("Configure") {
+                        stage("(FB) Configure") {
                             steps {
                                 dir("obj") {
                                     sh "../configure --enable-debug --disable-silent-rules"
@@ -38,7 +38,7 @@ pipeline {
                             }
                         }
 
-                        stage("Build") {
+                        stage("(FB) Build") {
                             steps {
                                 dir("obj") {
                                     sh '$MAKE all CXXFLAGS="${PEDANTIC_FLAGS}"'
@@ -46,10 +46,34 @@ pipeline {
                             }
                         }
 
-                        stage("Test") {
+                        stage("(FB) Test") {
                             steps {
                                 dir("obj") {
                                     sh '$MAKE check CXXFLAGS="${PEDANTIC_FLAGS}"'
+                                }
+                            }
+                        }
+
+                        stage("Build distribution") {
+                            when { 
+                                branch 'release/*'
+                            }
+
+                            steps {
+                                dir("obj") {
+                                    sh '$MAKE distcheck'
+                                }
+                            }
+
+                            post {
+                                always {
+                                    // If distcheck fails, it leaves certain directories with read-only permissions.
+                                    // We unconditionally set write mode
+                                    dir("obj") {
+                                        sh "chmod -R u+w ."
+                                    }
+
+                                    cleanWs notFailBuild: true
                                 }
                             }
                         }
@@ -61,7 +85,7 @@ pipeline {
 						label "linux"
 					}
 					stages {
-						stage("Bootstrap Build") {
+						stage("(LX) Bootstrap Build") {
                              steps {
                                 sh "touch ChangeLog"
                                 dir("libyacurs") {
@@ -71,7 +95,7 @@ pipeline {
                             }
                         }
 
-                        stage("Configure") {
+                        stage("(LX) Configure") {
                             steps {
                                 dir("obj") {
                                     sh "../configure --enable-debug --disable-silent-rules"
@@ -79,7 +103,7 @@ pipeline {
                             }
                         }
 
-						stage("Build") {
+						stage("(LX) Build") {
                             steps {
                                 dir("obj") {
                                     sh '$MAKE all CXXFLAGS="${PEDANTIC_FLAGS}"'
@@ -87,7 +111,7 @@ pipeline {
                              }
                         }
 
-                        stage("Test") {
+                        stage("(LX) Test") {
                             steps {
                                 dir("obj") {
                                     sh '$MAKE check CXXFLAGS="${PEDANTIC_FLAGS}"'
@@ -102,7 +126,7 @@ pipeline {
 						label "openbsd"
 					}
 					stages {
-						stage("Bootstrap Build") {
+						stage("(OB) Bootstrap Build") {
                              steps {
                                 sh "touch ChangeLog"
                                 dir("libyacurs") {
@@ -112,7 +136,7 @@ pipeline {
                             }
                         }
 
-                        stage("Configure") {
+                        stage("(OB) Configure") {
                             steps {
                                 dir("obj") {
                                     sh "../configure --enable-debug --disable-silent-rules CC=cc CXX=c++"
@@ -120,7 +144,7 @@ pipeline {
                             }
                         }
 
-						stage("Build") {
+						stage("(OB) Build") {
                             steps {
                                 dir("obj") {
                                     sh '$MAKE all CXXFLAGS="${PEDANTIC_FLAGS}"'
@@ -128,7 +152,7 @@ pipeline {
                              }
                         }
 
-                        stage("Test") {
+                        stage("(OB) Test") {
                             steps {
                                 dir("obj") {
                                     sh '$MAKE check CXXFLAGS="${PEDANTIC_FLAGS}"'
@@ -143,7 +167,7 @@ pipeline {
 						label "netbsd"
 					}
 					stages {
-						stage("Bootstrap Build") {
+						stage("(NB) Bootstrap Build") {
                              steps {
                                 sh "touch ChangeLog"
                                 dir("libyacurs") {
@@ -153,7 +177,7 @@ pipeline {
                             }
                         }
 
-                        stage("Configure") {
+                        stage("(NB) Configure") {
                             steps {
                                 dir("obj") {
                                     sh "../configure --enable-debug --disable-silent-rules"
@@ -161,7 +185,7 @@ pipeline {
                             }
                         }
 
-						stage("Build") {
+						stage("(NB) Build") {
                             steps {
                                 dir("obj") {
                                     sh '$MAKE all CXXFLAGS="${PEDANTIC_FLAGS}"'
@@ -169,7 +193,7 @@ pipeline {
                              }
                         }
 
-                        stage("Test") {
+                        stage("(NB) Test") {
                             steps {
                                 dir("obj") {
                                     sh '$MAKE check CXXFLAGS="${PEDANTIC_FLAGS}"'

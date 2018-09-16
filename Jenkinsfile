@@ -193,4 +193,16 @@ pipeline {
     		} // parallel
         } // stage("OS Build")
     } // stages
+
+    post {
+        always {
+            // If distcheck fails, it leaves certain directories with read-only permissions.
+            // We unconditionally set write mode
+            dir("obj") {
+                sh "chmod -R u+w ."
+            }
+
+            cleanWs notFailBuild: true
+        }
+    }
 }

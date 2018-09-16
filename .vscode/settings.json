@@ -1,0 +1,10 @@
+{
+    "editor.formatOnSave": true,
+    "files.associations": {
+        "ratio": "cpp",
+        "cerrno": "cpp",
+        "typeinfo": "cpp",
+        "condition_variable": "cpp",
+        "future": "cpp"
+    }
+}

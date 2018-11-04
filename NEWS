@@ -1,6 +1,9 @@
 NEWS
 ===
 
+1.0.1
+  * Update preload tests
+
 1.0.0
   * Drop support for Solaris
   * Require C++14

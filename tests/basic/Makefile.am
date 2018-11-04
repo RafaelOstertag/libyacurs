@@ -25,7 +25,7 @@ AM_CXXFLAGS = $(STDCXX98_FLAG)
 
 check-local: $(interactive_tests)
 	for f in $(interactive_tests) ; do \
-		$(LIBTOOL) --mode=execute env LD_PRELOAD="$(top_builddir)/tests/preloadlib/.libs/libtestpreload.so" $(builddir)/$$f ; \
+		$(LIBTOOL) --mode=execute env LD_PRELOAD="$${EXTRA_LD_PRELOAD}$(top_builddir)/tests/preloadlib/.libs/libtestpreload.so" $(builddir)/$$f ; \
 		test "x$$?" = "x0" -o "x$$?" = "x77" || { echo "*** $$f failed" ; exit 1 ; } ; \
 	done
 endif

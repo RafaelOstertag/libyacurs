@@ -21,7 +21,7 @@ AM_CXXFLAGS = $(STDCXX98_FLAG)
 
 check-local: $(check_PROGRAMS)
 	for f in $(check_PROGRAMS) ; do \
-		$(LIBTOOL) --mode=execute env LD_PRELOAD="$(top_builddir)/tests/preloadlib/.libs/libtestpreload.so" $(builddir)/$$f ; \
+		$(LIBTOOL) --mode=execute env LD_PRELOAD="$${EXTRA_LD_PRELOAD}$(top_builddir)/tests/preloadlib/.libs/libtestpreload.so" $(builddir)/$$f ; \
 		retval=$$? ; \
 		if test "x$$retval" = "x77" ; then \
 			echo "*** $$f skipped" ; \

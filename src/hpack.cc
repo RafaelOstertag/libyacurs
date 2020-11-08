@@ -437,8 +437,7 @@ void HPack::realize() {
         recalc_size();
     } catch (EXCEPTIONS::AreaExceeded&) {
         // Back off
-        std::for_each(widget_list.begin(), widget_list.end(),
-                      std::mem_fun(&WidgetBase::unrealize));
+        std::for_each(widget_list.begin(), widget_list.end(),[](auto &x) { x->unrealize(); });
         realization(UNREALIZED);
         return;
     }
@@ -451,7 +450,7 @@ void HPack::realize() {
     //
     //    std::for_each(widget_list.begin(),
     //		  widget_list.end(),
-    //		  std::mem_fun(&WidgetBase::realize));
+    //		  std::mem_fn(&WidgetBase::realize));
     //
     // can't be used for that.
     std::for_each(widget_list.begin(), widget_list.end(),

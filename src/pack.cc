@@ -42,26 +42,22 @@ using namespace YACURS;
 // Private
 //
 void Pack::set_all_curses_window() {
-    std::for_each(
-        widget_list.begin(), widget_list.end(),
-        std::bind2nd(std::mem_fun<void, WidgetBase, YACURS::INTERNAL::CursWin*>(
-                         &WidgetBase ::curses_window),
-                     WidgetBase::curses_window()));
+    std::for_each(widget_list.begin(),
+     widget_list.end(),
+     [this](auto &x) { x->curses_window(WidgetBase::curses_window()); }
+    );
 }
 
 void Pack::set_all_focusgroup_id() {
-    std::for_each(
-        widget_list.begin(), widget_list.end(),
-        std::bind2nd(std::mem_fun<void, WidgetBase, FocusManager::fgid_t>(
-                         &WidgetBase ::focusgroup_id),
-                     WidgetBase::focusgroup_id()));
+    std::for_each(widget_list.begin(),
+     widget_list.end(),
+    [this](auto &x) { x->focusgroup_id(WidgetBase::focusgroup_id());});
 }
 
 void Pack::refresh_all_widgets(bool i) {
-    std::for_each(
-        widget_list.begin(), widget_list.end(),
-        std::bind2nd(std::mem_fun<void, WidgetBase, bool>(&WidgetBase::refresh),
-                     i));
+    std::for_each(widget_list.begin(),
+     widget_list.end(),
+     [i](auto &x) { x->refresh(i); });
 }
 
 void Pack::take_over(WidgetBase* w) {
@@ -79,8 +75,7 @@ void Pack::unrealize() {
     UNREALIZE_ENTER;
     WidgetBase::unrealize();
 
-    std::for_each(widget_list.begin(), widget_list.end(),
-                  std::mem_fun(&WidgetBase::unrealize));
+    std::for_each(widget_list.begin(), widget_list.end(),[](auto &x){x->unrealize();});
 
     // Required since pack is a dynamically sized Widget.
     reset_size();

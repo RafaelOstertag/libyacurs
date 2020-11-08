@@ -294,7 +294,7 @@ class VCalcNSetSize {
         //
         // std::for_each(__dyn_widgets.begin(),
         //                __dyn_widgets.end(),
-        //                std::bind2nd(std::mem_fun<void,WidgetBase,const
+        //                std::bind2nd(std::mem_fn<void,WidgetBase,const
         //                Size&>(&WidgetBase::size_available),per_dyn_widget));
         std::for_each(__dyn_widgets.begin(), __dyn_widgets.end(),
                       VSetSizeAvail(per_dyn_widget));
@@ -446,7 +446,7 @@ void VPack::realize() {
     } catch (EXCEPTIONS::AreaExceeded&) {
         // Back off
         std::for_each(widget_list.begin(), widget_list.end(),
-                      std::mem_fun(&WidgetBase::unrealize));
+                      std::mem_fn(&WidgetBase::unrealize));
 
         realization(UNREALIZED);
         return;
@@ -461,7 +461,7 @@ void VPack::realize() {
     //
     //    std::for_each(widget_list.begin(),
     //		  widget_list.end(),
-    //		  std::mem_fun(&WidgetBase::realize));
+    //		  std::mem_fn(&WidgetBase::realize));
     //
     // can't be used for that.
     std::for_each(widget_list.begin(), widget_list.end(),

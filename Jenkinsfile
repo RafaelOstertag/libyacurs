@@ -56,7 +56,7 @@ pipeline {
 
                         stage("Build distribution") {
                             when { 
-                                branch 'release/*'
+                                branch 'master'
                             }
 
                             steps {

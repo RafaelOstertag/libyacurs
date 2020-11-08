@@ -1,12 +1,15 @@
 NEWS
 ===
 
+1.0.2
+  * Remove deprecated C++ features.
+
 1.0.1
-  * Update preload tests
+  * Update preload tests.
 
 1.0.0
-  * Drop support for Solaris
-  * Require C++14
+  * Drop support for Solaris.
+  * Require C++14.
 
 0.4
   * Check if `-std=c++98` is supported by compiler, before using it.
@@ -16,8 +19,8 @@ NEWS
   * Fixed version in configure.ac.
 
 0.2
-  * Builds with clang 6.0
-  * Fixed compiler warnings
+  * Builds with clang 6.0.
+  * Fixed compiler warnings.
 
 0.1
   * Initial release.

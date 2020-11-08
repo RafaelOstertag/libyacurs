@@ -161,47 +161,6 @@ pipeline {
                         }
 					}
 				} // stage("OpenBSD")
-
-				stage("NetBSD") {
-					agent {
-						label "netbsd"
-					}
-					stages {
-						stage("(NB) Bootstrap Build") {
-                             steps {
-                                sh "touch ChangeLog"
-                                dir("libyacurs") {
-                                    sh "touch ChangeLog"
-                                }
-                                sh "autoreconf -I m4 -i"
-                            }
-                        }
-
-                        stage("(NB) Configure") {
-                            steps {
-                                dir("obj") {
-                                    sh "../configure --enable-debug --disable-silent-rules"
-                                }
-                            }
-                        }
-
-						stage("(NB) Build") {
-                            steps {
-                                dir("obj") {
-                                    sh '$MAKE all CXXFLAGS="${PEDANTIC_FLAGS}"'
-                                }
-                             }
-                        }
-
-                        stage("(NB) Test") {
-                            steps {
-                                dir("obj") {
-                                    sh '$MAKE check CXXFLAGS="${PEDANTIC_FLAGS}"'
-                                }
-                            }
-                        }
-					}
-				} // stage("NetBSD")
     		} // parallel
         } // stage("OS Build")
     } // stages

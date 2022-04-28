@@ -45,3 +45,4 @@ config.log
 config.status
 libtool
 po/POTFILES
+.idea

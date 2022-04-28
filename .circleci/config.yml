@@ -1,0 +1,78 @@
+version: 2.1
+
+orbs:
+  c: rafaelostertag/common-orb@1.19.0
+
+executors:
+  cpp-builder:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: medium
+
+commands:
+  setup:
+    steps:
+      - run:
+          name: Install ncurses dev
+          command: |
+            sudo apt install -y libncurses-dev
+  configure:
+    steps:
+      - run:
+          name: Prepare build
+          command: |
+            git log --stat > ChangeLog
+            autoreconf -I m4 -i
+            mkdir obj
+      - run:
+          name: Configure
+          command: |
+            cd obj
+            ../configure --enable-debug --disable-silent-rules
+  make:
+    parameters:
+      target:
+        type: string
+    steps:
+      - run:
+          name: make <<parameters.target>>
+          command: |
+            cd obj
+            make  CXXFLAGS="-Wall -pedantic -Werror -O3 -Wno-unknown-pragmas" <<parameters.target>> </dev/null
+  dist-check:
+    steps:
+      - run:
+          name: Distcheck
+          command: |
+            cd obj
+            make distcheck </dev/null
+jobs:
+  build:
+    executor: cpp-builder
+    steps:
+      - setup
+      - checkout
+      - configure
+      - make:
+          target: all
+      - make:
+          target: check
+
+  dist-check:
+    executor: cpp-builder
+    steps:
+      - setup
+      - checkout
+      - configure
+      - dist-check
+
+workflows:
+  build:
+    jobs:
+      - build
+      - dist-check:
+          filters:
+            branches:
+              only:
+                - master
+
